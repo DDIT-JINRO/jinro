@@ -23,7 +23,9 @@ public class TestController {
 	@GetMapping("/select")
 	public String testController () {
 		
-		log.info("testController -> ok");
+		log.info("asdf");
+		
+		System.out.println("dd11");
 		
 		List<TestVO> testVoList = testService.test();
 		
