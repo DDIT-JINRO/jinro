@@ -1,0 +1,34 @@
+package kr.or.ddit.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import kr.or.ddit.service.TestService;
+import kr.or.ddit.vo.TestVO;
+import lombok.extern.slf4j.Slf4j;
+
+@RequestMapping("/test")
+@Slf4j
+@RestController
+public class TestController {
+	
+	@Autowired
+	TestService testService;
+	
+	@GetMapping("/select")
+	public String testController () {
+		
+		log.info("testController -> ok");
+		
+		List<TestVO> testVoList = testService.test();
+		
+		return testVoList.toString();
+		
+	}
+	
+}
