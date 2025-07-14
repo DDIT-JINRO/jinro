@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>kr.or.ddit</groupId>
-	<artifactId>ceg</artifactId>
+	<artifactId>jinro</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ceg</name>
 	<description>Demo project for Spring Boot</description>
