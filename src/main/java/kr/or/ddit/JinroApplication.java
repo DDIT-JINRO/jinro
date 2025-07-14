@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 
 @SpringBootApplication
-public class CegApplication {
+public class JinroApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CegApplication.class, args);
+		SpringApplication.run(JinroApplication.class, args);
 	}
 
 }
