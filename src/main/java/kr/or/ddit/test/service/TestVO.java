@@ -1,4 +1,4 @@
-package kr.or.ddit.test;
+package kr.or.ddit.test.service;
 
 import lombok.Data;
 

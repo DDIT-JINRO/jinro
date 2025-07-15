@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.or.ddit.test.TestService;
-import kr.or.ddit.test.TestVO;
+import kr.or.ddit.test.service.TestService;
+import kr.or.ddit.test.service.TestVO;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("/test")
