@@ -1,13 +1,13 @@
-package kr.or.ddit.service.Impl;
+package kr.or.ddit.test.Impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.or.ddit.mapper.TestMapper;
-import kr.or.ddit.service.TestService;
-import kr.or.ddit.vo.TestVO;
+import kr.or.ddit.test.TestMapper;
+import kr.or.ddit.test.TestService;
+import kr.or.ddit.test.TestVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Service

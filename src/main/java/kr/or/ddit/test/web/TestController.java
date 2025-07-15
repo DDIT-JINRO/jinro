@@ -1,4 +1,4 @@
-package kr.or.ddit.controller;
+package kr.or.ddit.test.web;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.or.ddit.service.TestService;
-import kr.or.ddit.vo.TestVO;
+import kr.or.ddit.test.TestService;
+import kr.or.ddit.test.TestVO;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("/test")
