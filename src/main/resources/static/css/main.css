@@ -1,0 +1,185 @@
+@charset "UTF-8";
+
+@keyframes slideDownFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+.main-loadmap-banner.animate-in {
+  animation: slideDownFade 1s ease-out;
+}
+
+.main-loadmap-banner {
+	width: 100%;
+	height: 750px;
+	background-color: #CCDCFE;
+	padding: 0px 20px;
+
+	animation: fadeSlideDown 1s ease forwards; /* ✅ 핵심: forwards */
+    animation-delay: 0.2s;
+}
+
+.banner-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	max-width: 1200px;
+	margin: auto;
+}
+
+.banner-left {
+	flex: 1;
+	padding: 40px 0;
+	padding-top: 250px;
+}
+
+.banner-left h3 {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.banner-left img {
+	padding-bottom: 20px;
+}
+
+.banner-left p {
+	font-size: 18px;
+	color: black;
+	line-height: 1.6;
+	margin-bottom: 40px;
+	margin-left: 10px;
+	font-weight: bold;
+}
+
+.main-title-banner {
+	font-size: 50px;
+	font-weight: bold;
+	margin-left: 10px;
+	padding-bottom: 10px;
+}
+
+.view-button {
+	background-color: black;
+	color: white;
+	border: none;
+	padding: 12px 24px;
+	border-radius: 30px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	margin-left: 10px;
+	width: 170px;
+	height: 50px;
+	font-size: 16px;
+}
+
+.view-button:hover {
+	background-color: #333;
+}
+
+.banner-right {
+	flex: 1;
+	position: relative;
+	height: 300px;
+}
+
+.float-icon1 {
+	position: absolute;
+	width: 90px;
+	animation: floatUpDown 3s ease-in-out infinite;
+	z-index: 1;
+}
+
+.float-icon2 {
+	position: absolute;
+	width: 150px;
+	animation: floatUpDown 3s ease-in-out infinite;
+	z-index: 2;
+}
+
+.float-icon3 {
+	position: absolute;
+	width: 160px;
+	animation: floatUpDown 3s ease-in-out infinite;
+	z-index: 1;
+}
+
+.float-icon-charactor {
+	position: absolute;
+	width: 100%;
+	animation: floatUpDown 3s ease-in-out infinite;
+	z-index: 2;
+}
+
+.delay1 {
+	top: 20px;
+	left: 50px;
+	animation-delay: 0s;
+}
+
+.delay2 {
+	top: 0px;
+	left: 70px;
+	animation-delay: 0.3s;
+}
+
+.delay3 {
+	top: 10px;
+	left: 400px;
+	animation-delay: 1.6s;
+}
+
+.delay4 {
+	top: 500px;
+	left: 500px;
+	animation-delay: 0.9s;
+}
+
+.delay5 {
+	top: 400px;
+	left: 100px;
+	animation-delay: 0.6s;
+}
+
+.delay6 {
+	top: 180px;
+	left: 0px;
+	animation-delay: 1.3s;
+}
+
+.delay7 {
+	top: 40px;
+	left: 600px;
+	animation-delay: 0.6s;
+}
+
+.delay8 {
+	top: 300px;
+	left: 600px;
+	animation-delay: 0.9s;
+}
+
+@keyframes floatUpDown {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+
+/*********************** 홍보 / 광고성배너  ************************/
+
+.main-event-banner{
+	justify-content: center;
+	width: 100%;
+	height: 830px;
+}
+
+.center-jr {
+
+}

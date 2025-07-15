@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+body {
+	margin: 0;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.main-content {
+	margin-left: 260px;
+	padding: 5 20px;
+}
