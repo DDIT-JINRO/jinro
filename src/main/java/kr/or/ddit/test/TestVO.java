@@ -1,4 +1,4 @@
-package kr.or.ddit.vo;
+package kr.or.ddit.test;
 
 import lombok.Data;
 

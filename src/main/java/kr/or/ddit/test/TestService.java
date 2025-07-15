@@ -1,8 +1,7 @@
-package kr.or.ddit.service;
+package kr.or.ddit.test;
 
 import java.util.List;
 
-import kr.or.ddit.vo.TestVO;
 
 public interface TestService {
 
