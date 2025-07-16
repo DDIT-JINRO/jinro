@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="#">
+<link rel="shortcut icon" href="/images/crppvc.png">
 <link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/footer.css">
 <link rel="stylesheet" href="/css/channel.css">
@@ -54,7 +54,7 @@
 		<a href="/admin"><img src="/images/manager.png" alt="관리자" class="icon-btn"></a>
 		<a href=""><img src="/images/profile.png" alt="프로필" class="icon-btn" /></a>
 		<a href=""><img src="/images/alarm.png" alt="알림" class="icon-btn" /></a>
-		<a href=""><img src="/images/login.png" alt="로그인" class="icon-btn" /></a>
+		<a href="/login"><img src="/images/login.png" alt="로그인" class="icon-btn" /></a>
 	</div>
 </div>
 
