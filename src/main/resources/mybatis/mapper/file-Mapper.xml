@@ -53,9 +53,26 @@
 	    WHERE FILE_GROUP_ID = #{groupId} AND FILE_SEQ = #{seq}
 	</select>
 	
+	<!-- 파일디테일 단일 삭제 -->
 	<delete id="deleteFile">
 	    DELETE FROM FILE_DETAIL
 	    WHERE FILE_GROUP_ID = #{groupId} AND FILE_SEQ = #{seq}
+	</delete>
+	
+	<!-- 실제 폴더에도 삭제를 위해 파일 정보를 가져옴 -->
+	<select id="selectFileList" resultType="kr.or.ddit.util.file.service.FileDetailVO">
+	    SELECT * FROM FILE_DETAIL WHERE FILE_GROUP_ID = #{groupId}
+	    ORDER BY FILE_SEQ ASC
+	</select>
+	
+	<!-- 파일디테일에 파일그룹 묵음 삭제 -->
+	<delete id="deleteFilesByGroupId">
+	    DELETE FROM FILE_DETAIL WHERE FILE_GROUP_ID = #{groupId}
+	</delete>
+	
+	<!-- 파일 그룹 삭제 -->
+	<delete id="deleteFileGroup">
+    	DELETE FROM FILE_GROUP WHERE FILE_GROUP_ID = #{groupId}
 	</delete>
 
 

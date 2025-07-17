@@ -114,14 +114,42 @@ public class FileServiceImpl implements FileService {
 	        return false;
 	    }
 	}
+	
+	@Override
+	public boolean deleteFileGroup(String groupId) {
+	    List<FileDetailVO> fileList = fileMapper.selectFileList(groupId);
+	    if (fileList == null || fileList.isEmpty()) return false;
+
+	    for (FileDetailVO detail : fileList) {
+	        String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+	        Path fullPath = Paths.get("C:/upload", datePath, detail.getFileSaveName());
+
+	        try {
+	            Files.deleteIfExists(fullPath);
+	        } catch (IOException e) {
+	            e.printStackTrace(); // 삭제 실패해도 계속 진행
+	        }
+	    }
+
+	    // 모든 파일 삭제 후 DB 삭제
+	    // 1. 파일 메타 삭제
+	    fileMapper.deleteFilesByGroupId(groupId);
+
+	    // 2. 그룹 정보 삭제
+	    fileMapper.deleteFileGroup(groupId);
+	    
+	    log.info("삭제 대상 파일 수: {}", fileList.size());
+	    log.info("FILE_DETAIL, FILE_GROUP 삭제 완료");
+
+	    return true;
+	}
 
 
 
 
 	@Override
-	public List<FileDetailVO> getFilesByGroupId(String fileGroupId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<FileDetailVO> getFileList(String groupId) {
+		 return fileMapper.selectFileList(groupId);
 	}
 
 

@@ -1,5 +1,7 @@
 package kr.or.ddit.util.file.service.impl;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,5 +26,11 @@ public interface FileMapper {
     FileDetailVO selectFile(@Param("groupId") String groupId, @Param("seq") int seq);
     
     int deleteFile(@Param("groupId") String groupId, @Param("seq") int seq);
+    
+    List<FileDetailVO> selectFileList(String groupId);
+    
+    int deleteFilesByGroupId(String groupId);
+
+	public void deleteFileGroup(String groupId);
 
 }

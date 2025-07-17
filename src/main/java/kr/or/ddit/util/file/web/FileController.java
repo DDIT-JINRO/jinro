@@ -72,5 +72,29 @@ public class FileController {
         }
     }
 
+    
+    @PostMapping("/delete/group")
+    public ResponseEntity<String> deleteFileGroup(@RequestParam String groupId) {
+        boolean result = fileService.deleteFileGroup(groupId);
+
+        if (result) {
+            return ResponseEntity.ok("그룹 전체 파일 삭제 완료");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 그룹에 파일이 없습니다.");
+        }
+    }
+
+    
+    @GetMapping("/list")
+    public ResponseEntity<List<FileDetailVO>> getFileList(@RequestParam String groupId) {
+        List<FileDetailVO> list = fileService.getFileList(groupId);
+
+        if (list == null || list.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204 No Content
+        }
+
+        return ResponseEntity.ok(list); // 200 OK + JSON 목록 반환
+    }
+
 
 }

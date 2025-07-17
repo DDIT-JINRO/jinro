@@ -13,11 +13,13 @@ public interface FileService {
     
     boolean deleteFile(String fileId, int seq);
     
-    List<FileDetailVO> getFilesByGroupId(String fileGroupId);
-    
     Resource downloadFile(String fileGroupId, int fileSeq) throws IOException;
     
     FileDetailVO getFileDetail(String fileGroupId, int fileSeq);
+
+	boolean deleteFileGroup(String groupId);
+
+	List<FileDetailVO> getFileList(String groupId);
     
 
 }
