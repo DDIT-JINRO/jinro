@@ -1,5 +1,6 @@
 package kr.or.ddit.util.file.service.impl;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -88,11 +89,34 @@ public class FileServiceImpl implements FileService {
 	    return new UrlResource(filePath.toUri());
 	}
 
+	
 	@Override
-	public boolean deleteFile(String fileId) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteFile(String groupId, int seq) {
+	    FileDetailVO detail = fileMapper.selectFile(groupId, seq);
+	    if (detail == null) return false;
+
+	    // 📌 파일 저장 경로 계산 (yyyy/MM/dd)
+	    String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+	    Path fullPath = Paths.get("C:/upload", datePath, detail.getFileSaveName());
+
+	    log.info("삭제 시도 파일 경로: " + fullPath);
+
+	    try {
+	        // 1. 파일 삭제 (존재하면)
+	        Files.deleteIfExists(fullPath);
+
+	        // 2. DB 삭제
+	        fileMapper.deleteFile(groupId, seq);
+
+	        return true;
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
+
+
+
 
 	@Override
 	public List<FileDetailVO> getFilesByGroupId(String fileGroupId) {

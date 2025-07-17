@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.util.file.service.impl.FileMapper">
+
+	<!-- 가장 큰 그룹 ID 조회 -->
+	<select id="getMaxFileGroupId" resultType="String">
+	    SELECT MAX(FILE_GROUP_ID)
+	    FROM FILE_GROUP
+	    WHERE FILE_GROUP_ID LIKE #{prefix} || '%'
+	</select>
+	
+	<!-- 그룹 insert -->
+	<insert id="insertFileGroup">
+	    INSERT INTO FILE_GROUP (FILE_GROUP_ID, FILE_GROUP_DATE)
+	    VALUES (#{fileGroupId}, #{fileGroupDate})
+	</insert>
+	
+	<!-- 상세 insert (여러 개일 경우 batch) -->
+	<insert id="insertFileDetail">
+	
+	 <selectKey keyProperty="fileId" resultType="long" order="BEFORE">
+        SELECT NVL(MAX(FILE_ID),0)+1 AS fileId FROM FILE_DETAIL
+    </selectKey>
+		
+	    INSERT INTO FILE_DETAIL (
+	        FILE_ID, FILE_GROUP_ID, FILE_ORG_NAME,
+	        FILE_SAVE_NAME, FILE_SIZE, FILE_EXT,
+	        FILE_MIME, FILE_SAVE_DATE, FILE_SEQ
+	    )
+	    VALUES (
+	        #{fileId}, #{fileGroupId}, #{fileOrgName},
+	        #{fileSaveName}, #{fileSize}, #{fileExt},
+	        #{fileMime}, #{fileSaveDate}, #{fileSeq}
+	    )
+	</insert>
+	
+	<select id="getFileDetailByGroupAndSeq" resultType="kr.or.ddit.util.file.service.FileDetailVO">
+	    SELECT *
+	    FROM FILE_DETAIL
+	    WHERE FILE_GROUP_ID = #{fileGroupId}
+	      AND FILE_SEQ = #{fileSeq}
+	</select>
+	
+	
+	<select id="getFileDetailById" resultType="kr.or.ddit.util.file.service.FileDetailVO">
+	    SELECT * FROM FILE_DETAIL WHERE FILE_ID = #{fileId}
+	</select>
+	
+
+	
+	<select id="selectFile" resultType="kr.or.ddit.util.file.service.FileDetailVO">
+	    SELECT * FROM FILE_DETAIL
+	    WHERE FILE_GROUP_ID = #{groupId} AND FILE_SEQ = #{seq}
+	</select>
+	
+	<delete id="deleteFile">
+	    DELETE FROM FILE_DETAIL
+	    WHERE FILE_GROUP_ID = #{groupId} AND FILE_SEQ = #{seq}
+	</delete>
+
+
+</mapper>
