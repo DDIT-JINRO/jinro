@@ -17,20 +17,20 @@ public interface FileMapper {
 
 	public void insertFileDetail(FileDetailVO detail);
 
-	public FileDetailVO getFileDetailByGroupAndSeq(@Param("fileGroupId") String fileGroupId, @Param("fileSeq") int fileSeq);
-	
-    public FileDetailVO getFileDetailById(String fileId);
-    
-    FileDetailVO selectFile(@Param("groupId") String groupId, @Param("seq") int seq);
-    
-    int deleteFile(@Param("groupId") String groupId, @Param("seq") int seq);
-    
-    List<FileDetailVO> selectFileList(String groupId);
-    
-    int deleteFilesByGroupId(String groupId);
+	public FileDetailVO getFileDetailByGroupAndSeq(@Param("fileGroupId") String fileGroupId,@Param("fileSeq") int fileSeq);
+
+	public FileDetailVO getFileDetailById(String fileId);
+
+	FileDetailVO selectFile(@Param("groupId") String groupId, @Param("seq") int seq);
+
+	int deleteFile(@Param("groupId") String groupId, @Param("seq") int seq);
+
+	List<FileDetailVO> selectFileList(String groupId);
+
+	int deleteFilesByGroupId(String groupId);
 
 	public void deleteFileGroup(String groupId);
-	
+
 	int getMaxFileSeq(String fileGroupId);
 
 }
