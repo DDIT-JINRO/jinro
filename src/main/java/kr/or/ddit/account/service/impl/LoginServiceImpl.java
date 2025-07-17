@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import kr.or.ddit.account.service.LoginService;
 import kr.or.ddit.account.service.MemDelVO;
 import kr.or.ddit.account.service.MemberPenaltyVO;
+import kr.or.ddit.config.jwt.JwtProperties;
+import kr.or.ddit.config.jwt.JwtUtil;
 import kr.or.ddit.main.service.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,12 +19,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoginServiceImpl implements LoginService {
 
+	
+    @Autowired
+    JwtUtil jwtUtil;
+
 	@Autowired
 	LoginMapper loginMapper;
-
+	
 	private final BCryptPasswordEncoder passwordEncoder;
 
-	public LoginServiceImpl(BCryptPasswordEncoder passwordEncoder) {
+	public LoginServiceImpl(BCryptPasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -45,7 +51,7 @@ public class LoginServiceImpl implements LoginService {
 			resultMap.put("status", "failed");
 			return resultMap;
 		}
-
+		
 		String encodedPwFromDb = resMemVO.getMemPassword();
 		boolean result = passwordEncoder.matches(inputPw, encodedPwFromDb);
 
@@ -66,8 +72,17 @@ public class LoginServiceImpl implements LoginService {
 				}
 
 			}
-
 			resultMap.put("status", "success");
+			
+			if("success".equals(resultMap.get("status"))) {
+		    	String memId = resMemVO.getMemId()+"";
+		    	
+				String token = jwtUtil.createAccessToken(memId);
+				jwtUtil.validateToken(token);
+				
+		    }
+			
+			
 			return resultMap;
 
 		} else {
