@@ -27,7 +27,7 @@
 					<label id="saveId"><input type="checkbox"> 아이디 저장</label>
 				</div>
 
-				<button class="login-btn">로그인</button>
+				<button class="login-btn" onclick ="loginBtn()">로그인</button>
 
 				<div class="find-links">
 					아이디, 비밀번호를 잊으셨나요? <a href="#">아이디 찾기</a><a href="#">비밀번호 찾기</a>
@@ -50,18 +50,31 @@
 </html>
 <script>
 	// 스크립트 작성 해주시면 됩니다.
-function test(){
+function loginBtn(){
 	
-// 	  fetch('/loginTest',{
-// 		  method: "POST",	  
-// 	  })  // 요청 보낼 URL
-// 	  .then(response => response.json())  // 응답을 JSON으로 변환
-// 	  .then(data => {
-// 	    console.log('받은 데이터:', data);  // 데이터 처리
-// 	  })
-// 	  .catch(error => {
-// 	    console.error('에러 발생:', error);  // 에러 처리
-// 	  });
+	const getUserId = document.getElementById('login-user-email').value
+	const getUserPw = document.getElementById('login-user-password').value
+		
+	  fetch('/memberLogin',{
+		  method: "POST",
+		  headers :  {
+			  "Content-Type": "application/json"
+			  },
+		  body: JSON.stringify({
+			  
+			  memEmail : getUserId,
+			  memPassword : getUserPw,
+			  loginType : "normal"
+			  
+		  })
+	  }) 
+	  .then(response => response.json())  
+	  .then(data => {
+	    console.log('받은 데이터:', data);
+	  })
+	  .catch(error => {
+	    console.error('에러 발생:', error);
+	  });
 		
  	}
 </script>
