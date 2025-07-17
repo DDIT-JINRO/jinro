@@ -33,15 +33,20 @@ public class FileController {
      * @return 업로드된 파일들의 상세 정보 리스트
      */
     @PostMapping("/upload")
-    public ResponseEntity<List<FileDetailVO>> uploadFiles( @RequestParam("files") List<MultipartFile> files) throws IOException {
-        // 1. 그룹 생성
-        String fileGroupId = fileService.createFileGroup();
+    public ResponseEntity<List<FileDetailVO>> uploadFiles(
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam(required = false) String groupId // 수정 시 기존 그룹ID 전달
+    ) throws IOException {
 
-        // 2. 파일 저장 및 메타데이터 저장
+        String fileGroupId = groupId;
+        if (fileGroupId == null || fileGroupId.isBlank()) {
+            fileGroupId = fileService.createFileGroup(); // 신규 작성 시에만 생성
+        }
+
         List<FileDetailVO> uploadedFiles = fileService.uploadFiles(fileGroupId, files);
-
         return ResponseEntity.ok(uploadedFiles);
     }
+
     
     @GetMapping("/download")
     public ResponseEntity<Resource> download(

@@ -32,5 +32,7 @@ public interface FileMapper {
     int deleteFilesByGroupId(String groupId);
 
 	public void deleteFileGroup(String groupId);
+	
+	int getMaxFileSeq(String fileGroupId);
 
 }

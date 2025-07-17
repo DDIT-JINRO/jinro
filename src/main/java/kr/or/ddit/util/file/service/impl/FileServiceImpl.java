@@ -56,7 +56,9 @@ public class FileServiceImpl implements FileService {
 	public List<FileDetailVO> uploadFiles(String fileGroupId, List<MultipartFile> files) throws IOException {
 	    List<FileDetailVO> detailList = new ArrayList<>();
 
-	    int fileSeq = 1;
+	    // ✅ 기존 그룹이면 max seq 조회
+	    int fileSeq = fileMapper.getMaxFileSeq(fileGroupId) + 1;
+
 	    for (MultipartFile file : files) {
 	        FileDetailVO detail = fileUtil.saveFile(file, fileGroupId, fileSeq++);
 	        fileMapper.insertFileDetail(detail);
