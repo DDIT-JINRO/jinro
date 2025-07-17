@@ -10,7 +10,7 @@ public class MainController {
 
 	@GetMapping
 	public String main() {
-
+		System.out.println("dfd");
 		return "content/main";
 	}
 }
