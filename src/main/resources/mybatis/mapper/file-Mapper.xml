@@ -9,7 +9,6 @@
 	    WHERE FILE_GROUP_ID LIKE #{prefix} || '%'
 	</select>
 	
-	
 	<!-- 그룹 insert -->
 	<insert id="insertFileGroup">
 	    INSERT INTO FILE_GROUP (FILE_GROUP_ID, FILE_GROUP_DATE)
@@ -19,10 +18,10 @@
 	<!-- 상세 insert (여러 개일 경우 batch) -->
 	<insert id="insertFileDetail">
 	
-	 <selectKey keyProperty="fileId" resultType="long" order="BEFORE">
-        SELECT NVL(MAX(FILE_ID),0)+1 AS fileId FROM FILE_DETAIL
-    </selectKey>
-		
+	 	<selectKey keyProperty="fileId" resultType="long" order="BEFORE">
+	       	SELECT NVL(MAX(FILE_ID),0)+1 AS fileId FROM FILE_DETAIL
+		</selectKey>
+	
 	    INSERT INTO FILE_DETAIL (
 	        FILE_ID, FILE_GROUP_ID, FILE_ORG_NAME,
 	        FILE_SAVE_NAME, FILE_SIZE, FILE_EXT,
@@ -42,12 +41,9 @@
 	      AND FILE_SEQ = #{fileSeq}
 	</select>
 	
-	
 	<select id="getFileDetailById" resultType="kr.or.ddit.util.file.service.FileDetailVO">
 	    SELECT * FROM FILE_DETAIL WHERE FILE_ID = #{fileId}
 	</select>
-	
-
 	
 	<select id="selectFile" resultType="kr.or.ddit.util.file.service.FileDetailVO">
 	    SELECT * FROM FILE_DETAIL
@@ -81,7 +77,4 @@
 	    FROM FILE_DETAIL
 	    WHERE FILE_GROUP_ID = #{fileGroupId}
 	</select>
-	
-
-
 </mapper>

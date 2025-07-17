@@ -11,8 +11,6 @@ import kr.or.ddit.util.file.service.FileGroupVO;
 @Mapper
 public interface FileMapper {
 
-	
-
 	public void insertFileGroup(FileGroupVO vo);
 
 	public String getMaxFileGroupId(String today);

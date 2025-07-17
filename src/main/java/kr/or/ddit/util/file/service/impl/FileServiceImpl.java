@@ -50,7 +50,6 @@ public class FileServiceImpl implements FileService {
 	    return fileGroupId;
 	}
 
-
 	@Override
 	@Transactional
 	public List<FileDetailVO> uploadFiles(String fileGroupId, List<MultipartFile> files) throws IOException {
@@ -146,14 +145,8 @@ public class FileServiceImpl implements FileService {
 	    return true;
 	}
 
-
-
-
 	@Override
 	public List<FileDetailVO> getFileList(String groupId) {
 		 return fileMapper.selectFileList(groupId);
 	}
-
-
-
 }

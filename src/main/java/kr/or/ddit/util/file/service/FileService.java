@@ -20,6 +20,4 @@ public interface FileService {
 	boolean deleteFileGroup(String groupId);
 
 	List<FileDetailVO> getFileList(String groupId);
-    
-
 }
