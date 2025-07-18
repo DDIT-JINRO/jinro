@@ -7,6 +7,8 @@ import kr.or.ddit.main.service.MemberVO;
 
 public interface LoginService {
 
-	Map<String, Object> loginProcess(MemberVO memVO);
+	public Map<String, Object> loginProcess(MemberVO memVO);
+
+	public MemberVO getRefreshToken(String refreshToken);
 
 }

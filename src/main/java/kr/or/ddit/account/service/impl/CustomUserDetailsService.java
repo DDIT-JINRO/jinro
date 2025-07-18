@@ -11,7 +11,7 @@ import kr.or.ddit.main.service.MemberVO;
 
 import java.util.List;
 
-@Service // ✅ 여기서 빈으로 등록됨
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -22,15 +22,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         
     	int intMemId = Integer.parseInt(memId);
     	
-    	MemberVO member = loginMapper.selectById(intMemId); // 구현된 쿼리 기준으로 수정 필요
+    	MemberVO member = loginMapper.selectById(intMemId); 
         if (member == null) {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + memId);
         }
-
+        
+        
         return new User(
             member.getSMemId(),
             member.getMemPassword(),
-            List.of(new SimpleGrantedAuthority("ROLE_USER")) // 권한은 상황에 맞게 처리
+            List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
     }
 }

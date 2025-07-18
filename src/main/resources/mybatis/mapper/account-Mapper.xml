@@ -57,5 +57,9 @@
 		WHERE MEM_ID
 		=#{memId}
 	</select>
-
+	
+	<select id="getRefreshToken" parameterType="String" resultType="kr.or.ddit.main.service.MemberVO">
+	
+	</select>
+	
 </mapper>

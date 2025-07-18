@@ -70,11 +70,14 @@ function loginBtn(){
 	  }) 
 	  .then(response => response.json())  
 	  .then(data => {
-	    console.log('받은 데이터:', data);
+	    if(data.status=='success'){
+	    	
+	    	
+	    	location.href='/';
+	    }
 	  })
 	  .catch(error => {
 	    console.error('에러 발생:', error);
 	  });
-		
  	}
 </script>

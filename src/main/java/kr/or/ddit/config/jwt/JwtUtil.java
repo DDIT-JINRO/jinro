@@ -104,9 +104,7 @@ public class JwtUtil {
         
 		if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
-            	System.out.println("cookie : "+cookie.getName());
-                if ("accessToken".equals(cookie.getName())) {
-                	System.out.println(cookie.getValue());
+                if ("accessToken".equals(cookie.getName())) {              	
                 	return cookie.getValue(); // 토큰 반환
                 }
             }

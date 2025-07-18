@@ -25,7 +25,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/secure/**").authenticated() // "/secure/**" 경로만 인증 필요
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/test").authenticated() // requestMatcheres 내부에 권한이 필요한 요청은 넣어주어야합니다.
 				.anyRequest().permitAll()).csrf(csrf -> csrf.disable()) // CSRF 비활성화 (개발용)
 				.formLogin(form -> form.disable()) // 로그인 폼 비활성화
 				.httpBasic(httpBasic -> httpBasic.disable()) // HTTP Basic 인증 비활성화
@@ -51,7 +51,7 @@ public class SecurityConfig {
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
+	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();

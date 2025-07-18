@@ -23,6 +23,8 @@ public interface LoginMapper {
 
 	public MemberVO selectById(int intMemId);
 
+	public MemberVO getRefreshToken(String refreshToken);
+
 	
 
 	

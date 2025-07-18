@@ -54,12 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null) {
-            System.out.println("권한: " + auth.getAuthorities());
-        } else {
-            System.out.println("인증 객체가 없음");
-        }
-
+        
         // 다음 필터로 진행
         filterChain.doFilter(request, response);
     }

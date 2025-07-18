@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpServletResponse;
 import kr.or.ddit.account.service.LoginService;
 import kr.or.ddit.account.service.MemDelVO;
 import kr.or.ddit.account.service.MemberPenaltyVO;
-import kr.or.ddit.config.jwt.JwtProperties;
 import kr.or.ddit.config.jwt.JwtUtil;
 import kr.or.ddit.main.service.MemberVO;
 import lombok.extern.slf4j.Slf4j;
@@ -86,9 +84,6 @@ public class LoginServiceImpl implements LoginService {
 				String refreshToken = jwtUtil.createRefreshToken(memId);
 				jwtUtil.validateToken(accessToken);
 				
-				log.info("액세스 토큰 : "+accessToken);
-				log.info("리프레시 토큰 : "+refreshToken);
-				
 				Map<String, Object> paramMap = new HashMap<>();
 				paramMap.put("refreshToken", refreshToken);
 				paramMap.put("memId", memId);
@@ -117,6 +112,12 @@ public class LoginServiceImpl implements LoginService {
 		}
 
 		return resultMap;
+	}
+
+	@Override
+	public MemberVO getRefreshToken(String refreshToken) {
+
+		return this.loginMapper.getRefreshToken(refreshToken);
 	}
 
 }
