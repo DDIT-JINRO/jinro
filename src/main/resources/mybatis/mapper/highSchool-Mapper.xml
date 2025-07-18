@@ -55,5 +55,32 @@
         FROM HIGH_SCHOOL
         WHERE HS_ID = #{hsId}
     </select>
+    
+    <!-- 
+	// 특정 고등학교 이름을 파라미터로 받아 HighSchoolVO 리스트를 반환
+	public List<HighSchoolVO> selectHighSchoolsByName(@Param("schoolName") String schoolName);
+    -->
+    <select id="selectHighSchoolsByName" parameterType="string" resultType="kr.or.ddit.highSchool.service.HighSchoolVO">
+       SELECT HS_ID
+            , HS_CODE
+            , HS_NAME
+            , HS_REGION_CODE AS hsRegion
+            , HS_JURIS_CODE AS hsJurisCode
+            , HS_FOUND_TYPE AS hsFoundType
+            , HS_ZIPCODE AS hsZipcode
+            , HS_ADDR AS hsAddr
+            , HS_ADDR_DETAIL AS hsAddrDetail
+            , HS_TEL AS hsTel
+            , HS_HOMEPAGE AS hsHomepage
+            , HS_COEDU_TYPE AS hsCoeduType
+            , HS_TYPE_NAME AS hsTypeName
+            , HS_GENERAL_TYPE AS hsGeneralType
+            , HS_FOUND_DATE AS hsFoundDate
+            , HS_ANNIV_AT AS hsAnnivAt
+            , HS_LAT AS hsLat
+            , HS_LOT AS hsLot
+       FROM HIGH_SCHOOL
+       WHERE HS_NAME LIKE '%' || #{schoolName} || '%'  -- Oracle/MySQL/PostgreSQL 등에서 사용
+    </select>
 
 </mapper>

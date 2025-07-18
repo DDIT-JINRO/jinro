@@ -63,4 +63,15 @@ public class HighSchoolController {
         return new ResponseEntity<>(highSchool, HttpStatus.OK); // 200 OK와 데이터 반환
     }
     
+    /**
+     * 특정 고등학교의 위도, 경도 정보를 JSON 형태로 반환하는 API 엔드포인트입니다.
+     */
+    @GetMapping("/api/highschools/search")
+    @ResponseBody
+    public ResponseEntity<List<HighSchoolVO>> searchHighSchoolCoordinatesApi(@RequestParam("name") String schoolName){
+    	
+    	List<HighSchoolVO> schools = highSchoolService.getHighSchoolsByName(schoolName);
+    	
+    	return ResponseEntity.ok(schools);
+    }
 }
