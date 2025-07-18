@@ -29,7 +29,20 @@ public class SecurityConfig {
 				.anyRequest().permitAll()).csrf(csrf -> csrf.disable()) // CSRF 비활성화 (개발용)
 				.formLogin(form -> form.disable()) // 로그인 폼 비활성화
 				.httpBasic(httpBasic -> httpBasic.disable()) // HTTP Basic 인증 비활성화
-				.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),UsernamePasswordAuthenticationFilter.class)
+				.logout(logout -> logout
+					    .logoutUrl("/logout")
+					    .logoutSuccessHandler((request, response, authentication) -> {
+					        String referer = request.getHeader("Referer");
+					        if (referer != null) {
+					            response.sendRedirect(referer);
+					        } else {
+					            response.sendRedirect("/");
+					        }
+					    })
+					    .invalidateHttpSession(true)
+					    .deleteCookies("JSESSIONID", "accessToken", "refreshToken")
+					);
 		return http.build();
 	}
 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,12 +50,23 @@
 	</div>
 
 	<div class="public-topbar-right">
-		<a href="/cnsLeader"><img src="/images/cnsLeader.png" alt="상담센터장" class="icon-btn"></a>
-		<a href="/cns"><img src="/images/counselor.png" alt="상담사" class="icon-btn"></a>
-		<a href="/admin"><img src="/images/manager.png" alt="관리자" class="icon-btn"></a>
+		<sec:authorize access="hasRole('ROLE_CNSLEADER')">
+			<a href="/cnsLeader"><img src="/images/cnsLeader.png" alt="상담센터장" class="icon-btn"></a>
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_COUNSEL')">
+			<a href="/cns"><img src="/images/counselor.png" alt="상담사" class="icon-btn"></a>
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<a href="/admin"><img src="/images/manager.png" alt="관리자" class="icon-btn"></a>
+		</sec:authorize>
 		<a href=""><img src="/images/profile.png" alt="프로필" class="icon-btn" /></a>
 		<a href=""><img src="/images/alarm.png" alt="알림" class="icon-btn" /></a>
+		<sec:authorize access="!isAuthenticated()">
 		<a href="/login"><img src="/images/login.png" alt="로그인" class="icon-btn" /></a>
+		</sec:authorize>
+		<sec:authorize access="isAuthenticated()">
+		<a href="/logout"><img src="/images/logout.png" alt="로그아웃" class="icon-btn" /></a>
+		</sec:authorize>
 	</div>
 </div>
 

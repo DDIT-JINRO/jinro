@@ -47,4 +47,15 @@
 	</select>
 
 
+	<select id="selectById" parameterType="int"
+		resultType="kr.or.ddit.main.service.MemberVO">
+		SELECT MEM_ID, MEM_EMAIL, MEM_PASSWORD, MEM_NICKNAME,
+		MEM_PHONE_NUMBER, MEM_NAME, MEM_GEN, MEM_BIRTH, MEM_ALARM,
+		MEM_STUDENT, MEM_ROLE, MEM_POINT, CREATED_AT, PW_UPDATED_AT, DEL_YN,
+		FILE_PROFILE, FILE_ETC, LOGIN_TYPE, MEM_TOKEN
+		FROM MEMBER
+		WHERE MEM_ID
+		=#{memId}
+	</select>
+
 </mapper>
