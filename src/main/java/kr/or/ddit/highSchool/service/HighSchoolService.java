@@ -7,4 +7,7 @@ public interface HighSchoolService {
 	//모든 고등학교 리스트
 	public List<HighSchoolVO> getAllHighSchools();
 
+	//고등학교 상세
+	public HighSchoolVO getHighSchoolById(Long hsId);
+
 }

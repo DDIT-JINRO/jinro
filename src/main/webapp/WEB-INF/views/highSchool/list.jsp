@@ -31,7 +31,7 @@
                     <td>${school.hsId}</td>
                     <td>
                         <%-- 학교명 클릭 시 상세 페이지로 이동하는 링크 추가 --%>
-                        <a href="${pageContext.request.contextPath}/test/highDetail?hsId=${school.hsId}" class="school-name-link">
+                        <a href="${pageContext.request.contextPath}/highSchool/detail?hsId=${school.hsId}" class="school-name-link">
                             ${school.hsName}
                         </a>
                     </td>

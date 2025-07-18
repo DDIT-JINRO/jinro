@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.highSchool.service.HighSchoolService;
 import kr.or.ddit.highSchool.service.HighSchoolVO;
@@ -35,4 +36,16 @@ public class HighSchoolController {
     	
     	return "highSchool/list";
     }
+    
+    //고등학교 상세 
+    @GetMapping("/detail")
+    public String highSchoolDetailPage(@RequestParam("hsId") Long hsId, Model model) {
+        HighSchoolVO highSchool = highSchoolService.getHighSchoolById(hsId); // DB에서 상세 정보를 조회
+
+        
+
+        model.addAttribute("highSchool", highSchool); // HighSchoolVO 객체 자체를 JSP로 전달
+        return "highSchool/detail";
+    }
+    
 }

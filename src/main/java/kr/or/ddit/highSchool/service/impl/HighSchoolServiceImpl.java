@@ -21,4 +21,10 @@ public class HighSchoolServiceImpl implements HighSchoolService {
 		return highSchoolMapper.selectAllHighSchools();
 	}
 
+	//고등학교 상세
+	@Override
+	public HighSchoolVO getHighSchoolById(Long hsId) {
+		
+		return highSchoolMapper.selectHighSchoolById(hsId);
+	}
 }
