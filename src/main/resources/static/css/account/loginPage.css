@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+.login-req-tag {
+	display: flex;
+	justify-content: center;
+}
+
 .public-wrapper-main {
 	display: flex;
 	justify-content: center;

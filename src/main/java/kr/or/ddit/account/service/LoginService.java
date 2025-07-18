@@ -11,4 +11,8 @@ public interface LoginService {
 
 	public MemberVO getRefreshToken(String refreshToken);
 
+	public MemberVO selectById(int userId);
+
+
+
 }

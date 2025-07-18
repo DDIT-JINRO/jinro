@@ -37,7 +37,7 @@ public class LoginRestController {
 		accessTokenCookie.setHttpOnly(true);
 		accessTokenCookie.setSecure(true);
 		accessTokenCookie.setPath("/");
-		accessTokenCookie.setMaxAge(60 * 31); // 일부러 토큰만료시간보다 1분 더 넣었습니다.
+		accessTokenCookie.setMaxAge(60 * 31);
 
 		refreshTokenCookie.setHttpOnly(true);
 		refreshTokenCookie.setSecure(true);
@@ -85,6 +85,11 @@ public class LoginRestController {
 		}
 		
 		return ResponseEntity.ok().body("Access token refreshed");
+	}
+	
+	@PostMapping("/api/fetchTest")
+	public String asddsa() {
+		return "asd";
 	}
 	
 }

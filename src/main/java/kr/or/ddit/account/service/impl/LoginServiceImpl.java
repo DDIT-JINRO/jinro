@@ -120,4 +120,15 @@ public class LoginServiceImpl implements LoginService {
 		return this.loginMapper.getRefreshToken(refreshToken);
 	}
 
+	@Override
+	public MemberVO selectById(int userId) {
+
+		
+		return this.loginMapper.selectById(userId);
+	}
+
+	
+
+	
+
 }

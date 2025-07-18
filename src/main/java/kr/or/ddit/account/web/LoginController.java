@@ -18,4 +18,15 @@ public class LoginController {
 		return "account/login";
 	}
 	
+	@GetMapping("/test")
+	public String testPg() {
+		return "account/test";
+	}
+	
+	@GetMapping("/error/logReq")
+	public String errorLogReq() {
+		
+		return ("account/loginReq");
+	}
+	
 }

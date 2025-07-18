@@ -26,7 +26,7 @@ public class JwtUtil {
 
     private final LoginController loginController;
 
-	private final long accessTokenExpire = 1000 * 60 * 30; // 30분
+	private final long accessTokenExpire = 1000 * 60 * 30 ; // 30분
 
 	@Autowired
 	LoginMapper loginMapper;
@@ -39,6 +39,9 @@ public class JwtUtil {
     }
 
 	public String createAccessToken(String memId) {
+		long now = System.currentTimeMillis(); 
+		Date issuedAt = new Date(now);
+		Date expiration = new Date(now + accessTokenExpire); 
 		
 		int intMemId = Integer.parseInt(memId);
 		
@@ -49,44 +52,40 @@ public class JwtUtil {
 		if (auth.equals("R01001")) {
 			return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE) // 헤더 typ:JWT
 					.claim("roles", List.of("ROLE_USER")).setIssuer(this.jwtProperties.getIssuer()).setSubject(memId)
-					.setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + accessTokenExpire))
+					.setIssuedAt(issuedAt).setExpiration(expiration).setId(UUID.randomUUID().toString())
 					.signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey()).compact();
 		}else if(auth.equals("R01002")) {
 			return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE) // 헤더 typ:JWT
 					.claim("roles", List.of("ROLE_USER", "ROLE_ADMIN")).setIssuer(this.jwtProperties.getIssuer())
-					.setSubject(memId).setIssuedAt(new Date())
-					.setExpiration(new Date(System.currentTimeMillis() + accessTokenExpire))
+					.setSubject(memId).setIssuedAt(issuedAt)
+					.setExpiration(expiration).setId(UUID.randomUUID().toString())
 					.signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey()).compact();			
 		}else if(auth.equals("R01003")){
 			return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE) // 헤더 typ:JWT
 					.claim("roles", List.of("ROLE_USER", "ROLE_COUNSEL")).setIssuer(this.jwtProperties.getIssuer())
-					.setSubject(memId).setIssuedAt(new Date())
-					.setExpiration(new Date(System.currentTimeMillis() + accessTokenExpire))
+					.setSubject(memId).setIssuedAt(issuedAt)
+					.setExpiration(expiration).setId(UUID.randomUUID().toString())
 					.signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey()).compact();
 			
 		}else {
 			return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE) // 헤더 typ:JWT
 					.claim("roles", List.of("ROLE_USER", "ROLE_CNSLEADER")).setIssuer(this.jwtProperties.getIssuer())
-					.setSubject(memId).setIssuedAt(new Date())
-					.setExpiration(new Date(System.currentTimeMillis() + accessTokenExpire))
+					.setSubject(memId).setIssuedAt(issuedAt)
+					.setExpiration(expiration).setId(UUID.randomUUID().toString())
 					.signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey()).compact();
 		}
 	}
 
 	public String createRefreshToken(String memId) {
-		// 예: 1_550e8400-e29b-41d4-a716-446655440000
 		return memId + "_" + UUID.randomUUID().toString();
 	}
 
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(token);
-			log.info("유효한 토큰입니다.");
 			return true;
 		} catch (ExpiredJwtException e) {
-			log.info("만료된 토큰입니다.");
 		} catch (JwtException e) {
-			log.info("유효하지 않은 토큰입니다.");
 		}
 		return false;
 	}
@@ -111,24 +110,42 @@ public class JwtUtil {
         }
         return null;
     }
+
+	public String resolveRefreshToken(HttpServletRequest request) {
+		if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("refreshToken".equals(cookie.getName())) {              	
+                	return cookie.getValue(); // 토큰 반환
+                }
+            }
+        }
+        return null;
+	}
 	
-	// JWT에서 username (subject) 추출
 	public String getUsernameFromToken(String token) {
 	    Claims claims = getClaims(token);
-	    return claims.getSubject(); // .setSubject() 했던 값 (예: 사용자 ID)
+	    return claims.getSubject();
 	}
 
-	// JWT에서 roles 추출
 	public List<String> getRolesFromToken(String token) {
 	    Claims claims = getClaims(token);
-	    return claims.get("roles", List.class); // .claim("roles", List.of(...)) 했던 값
+	    return claims.get("roles", List.class);
 	}
 
-	// JWT에서 Claims 추출 (공통 유틸)
+
 	private Claims getClaims(String token) {
 	    return Jwts.parser()
-	            .setSigningKey(jwtProperties.getSecretKey()) // 시크릿 키 사용
+	            .setSigningKey(jwtProperties.getSecretKey())
 	            .parseClaimsJws(token)
-	            .getBody(); // JWT의 Payload 부분
+	            .getBody();
+	}
+	public String getRefreshTokenFromDb(String username) {
+	    
+		int memId = Integer.parseInt(username);
+		
+		MemberVO member = loginMapper.selectById(memId);
+		String rfToken =member.getMemToken();
+		
+	    return rfToken;
 	}
 }
