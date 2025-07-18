@@ -1,4 +1,4 @@
-package kr.or.ddit.util.exception;
+package kr.or.ddit.exception;
 
 public class CustomException extends RuntimeException {
     private final ErrorCode errorCode;

@@ -1,4 +1,4 @@
-package kr.or.ddit.util.exception;
+package kr.or.ddit.exception;
 
 import org.springframework.http.HttpStatus;
 
