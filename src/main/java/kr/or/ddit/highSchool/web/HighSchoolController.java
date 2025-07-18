@@ -2,11 +2,15 @@ package kr.or.ddit.highSchool.web;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.highSchool.service.HighSchoolService;
 import kr.or.ddit.highSchool.service.HighSchoolVO;
@@ -46,6 +50,17 @@ public class HighSchoolController {
 
         model.addAttribute("highSchool", highSchool); // HighSchoolVO 객체 자체를 JSP로 전달
         return "highSchool/detail";
+    }
+    
+    //특정 고등학교 ID로 상세 정보를 JSON 형태로 반환하는 API 엔드포인트
+    @GetMapping("/api/highschools/{hsId}") // 이 경로로 요청이 오면
+    @ResponseBody // HighSchoolVO 객체를 JSON으로 변환하여 HTTP 응답 본문에 씀
+    public ResponseEntity<HighSchoolVO> getHighSchoolByIdApi(@PathVariable("hsId") Long hsId) {
+        HighSchoolVO highSchool = highSchoolService.getHighSchoolById(hsId);
+        if (highSchool == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found
+        }
+        return new ResponseEntity<>(highSchool, HttpStatus.OK); // 200 OK와 데이터 반환
     }
     
 }
