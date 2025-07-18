@@ -17,7 +17,8 @@ public class GlobalExceptionHandler {
                 errorCode.getStatus().value(),
                 errorCode.getStatus().name(),
                 errorCode.getCode(),
-                errorCode.getMessage()
+                errorCode.getMessage(),
+                e.getMessage()
         );
 
         return ResponseEntity.status(errorCode.getStatus()).body(response);
@@ -32,7 +33,9 @@ public class GlobalExceptionHandler {
                 errorCode.getStatus().value(),
                 errorCode.getStatus().name(),
                 errorCode.getCode(),
-                e.getMessage() != null ? e.getMessage() : errorCode.getMessage()
+                errorCode.getMessage(),
+                e.getMessage()
+                		
         );
 
         return ResponseEntity.status(errorCode.getStatus()).body(response);
