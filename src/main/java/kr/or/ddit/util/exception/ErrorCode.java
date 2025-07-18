@@ -12,5 +12,5 @@ public enum ErrorCode {
 
 	
 	  private final String code;
-	  private final String description;
+	  private final String message;
 }
