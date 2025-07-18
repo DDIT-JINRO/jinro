@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ public class HTMLtoPdfServiceImpl implements HTMLtoPdfService {
 
 	private static final String DEFAULT_FONT_PATH = "C:/Windows/Fonts/malgun.ttf";
 	private static final String MAC_FONT_PATH = "/System/Library/Fonts/AppleGothic.ttf";
-	private static final String RESOURCE_FONT_PATH = "fonts/NanumGothic.ttf";
 
 	@Override
 	public byte[] convertHtmlToPdf(String htmlContent, String cssContent) throws DocumentException, IOException {
@@ -65,86 +63,93 @@ public class HTMLtoPdfServiceImpl implements HTMLtoPdfService {
 
 	@Override
 	public String buildFullHtmlDocument(String htmlContent, String cssContent) {
-	        
-	        StringBuilder fullHtml = new StringBuilder();
-	        fullHtml.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-	        fullHtml.append("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-	        fullHtml.append("<head>");
-	        fullHtml.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
-	        fullHtml.append("<title>PDF Document</title>");
-	        fullHtml.append("<style type=\"text/css\">");
-	        fullHtml.append(getDefaultStyles());
-	        if (cssContent != null && !cssContent.trim().isEmpty()) {
-	            fullHtml.append(cssContent);
-	        }
-	        fullHtml.append("</style>");
-	        fullHtml.append("</head>");
-	        fullHtml.append("<body>");
-	        fullHtml.append(htmlContent);
-	        fullHtml.append("</body>");
-	        fullHtml.append("</html>");
-	        
-	        return fullHtml.toString();
+
+
+        StringBuilder fullHtml = new StringBuilder();
+        fullHtml.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+        fullHtml.append("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+        fullHtml.append("<head>");
+        fullHtml.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+        fullHtml.append("<title>PDF Document</title>");
+        fullHtml.append("<style type=\"text/css\">");
+        fullHtml.append(getDefaultStyles());
+        if (cssContent != null && !cssContent.trim().isEmpty()) {
+            fullHtml.append(cssContent);
+        }
+        fullHtml.append("</style>");
+        fullHtml.append("</head>");
+        fullHtml.append("<body>");
+        fullHtml.append(htmlContent);
+        fullHtml.append("</body>");
+        fullHtml.append("</html>");
+
+        return fullHtml.toString();
 	}
 
 	/**
 	 * pdf만들때 추가할 html기본문서 css양식
 	 */
 	private String getDefaultStyles() {
-        return """
-                body { 
-                    font-family: 'Malgun Gothic', 'Apple Gothic', 'NanumGothic', sans-serif; 
-                    margin: 20px; 
-                    line-height: 1.6;
-                    color: #333;
-                    font-size: 12px;
-                }
-                h1, h2, h3, h4, h5, h6 { 
-                    color: #2c3e50; 
-                    margin-top: 0;
-                    margin-bottom: 10px;
-                }
-                h1 { font-size: 24px; }
-                h2 { font-size: 20px; }
-                h3 { font-size: 16px; }
-                table { 
-                    width: 100%; 
-                    border-collapse: collapse; 
-                    margin: 20px 0;
-                    font-size: 11px;
-                }
-                th, td { 
-                    border: 1px solid #ddd; 
-                    padding: 8px; 
-                    text-align: left; 
-                }
-                th { 
-                    background-color: #f8f9fa; 
-                    font-weight: bold; 
-                }
-                .header { 
-                    text-align: center; 
-                    margin-bottom: 30px; 
-                }
-                .footer { 
-                    text-align: center; 
-                    margin-top: 30px; 
-                    font-size: 10px; 
-                    color: #666; 
-                }
-                p { 
-                    margin: 0 0 10px 0; 
-                }
-                .highlight { 
-                    background-color: #fff3cd; 
-                    padding: 5px; 
-                }
-                .text-center { text-align: center; }
-                .text-right { text-align: right; }
-                .bold { font-weight: bold; }
-                """;
+		String defaultStyles = """
+            body {
+                font-family: 'Malgun Gothic', 'Apple Gothic', 'NanumGothic', sans-serif;
+                margin: 20px;
+                line-height: 1.6;
+                color: #333;
+                font-size: 12px;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                color: #2c3e50;
+                margin-top: 0;
+                margin-bottom: 10px;
+            }
+            h1 { font-size: 24px; }
+            h2 { font-size: 20px; }
+            h3 { font-size: 16px; }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                font-size: 11px;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .footer {
+                text-align: center;
+                margin-top: 30px;
+                font-size: 10px;
+                color: #666;
+            }
+            p {
+                margin: 0 0 10px 0;
+            }
+            .highlight {
+                background-color: #fff3cd;
+                padding: 5px;
+            }
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            .bold { font-weight: bold; }
+
+            <!-- font family class -->
+            .malgun { font-family: 'Malgun Gothic'; }
+            .nanum { font-family: 'NanumGothic'; }
+            .jeju { font-family: 'JejuGothic'; }
+            """;
+        return defaultStyles;
 	}
-	
+
    /**
      * 폰트설정 (한글 폰트 하나라도 있으면 한글 가능, 나머지 폰트 추가해서 커스텀 가능)
      */
@@ -166,9 +171,9 @@ public class HTMLtoPdfServiceImpl implements HTMLtoPdfService {
             // 클래스패스 리소스 폰트들 추가
             // 혹시나 사용하고 싶은 폰트가 있으면 파일 다운로드 받아서 resources/static/fonts 경로에 추가하고 아래에 String값 한줄 추가
             List<String> resourceFonts = Arrays.asList(
-                "static/font/NanumGothic.ttf",
-                "static/font/JejuGothic.ttf",
-                "static/font/폰트파일명"			// 이런식으로 한줄 추가하면됨
+                "static/fonts/NanumGothic.ttf",
+                "static/fonts/JejuGothic.ttf",
+                "static/fonts/폰트파일명"			// 이런식으로 한줄 추가하면됨
             );
             for (String path : resourceFonts) {
                 try {
@@ -182,7 +187,7 @@ public class HTMLtoPdfServiceImpl implements HTMLtoPdfService {
                 }
             }
 
-            
+
             // 최종 폰트 등록
             if (!fontPaths.isEmpty()) {
             	int seq = 1;
