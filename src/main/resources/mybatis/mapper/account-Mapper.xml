@@ -9,7 +9,7 @@
 		MEM_NAME, MEM_GEN, MEM_BIRTH, MEM_ALARM, MEM_STUDENT, MEM_ROLE,
 		MEM_POINT, CREATED_AT, PW_UPDATED_AT, DEL_YN, FILE_PROFILE, FILE_ETC,
 		LOGIN_TYPE, MEM_TOKEN
-		FROM TEST_MEM
+		FROM MEMBER
 		WHERE MEM_EMAIL = #{inputEmail} AND
 		LOGIN_TYPE = 'G33001'
 	</select>
@@ -21,13 +21,22 @@
 		WHERE MEM_ID = #{memId}
 	</select>
 
-	<select id="selectMemPnt" parameterType="int" resultType="kr.or.ddit.account.service.MemberPenaltyVO">
+	<select id="selectMemPnt" parameterType="int"
+		resultType="kr.or.ddit.account.service.MemberPenaltyVO">
 		SELECT
-		MP_ID, REPORT_ID, MP_WARN_REASON, MP_WARN_DATE, MEM_ID, MP_TYPE,
+		MP_ID, REPORT_ID, MP_WARN_REASON, MP_WARN_DATE,
+		MEM_ID, MP_TYPE,
 		MP_STARTDE_AT, MP_COMPLETE_AT, FILE_GROUP_NO
-		FROM MEMBER_PENALTY
+		FROM
+		MEMBER_PENALTY
 		WHERE MEM_ID = #{memId}
 	</select>
+
+	<update id="memTokenInsert" parameterType="map">
+		UPDATE MEMBER
+		SET MEM_TOKEN = #{refreshToken}
+		WHERE MEM_ID = #{memId}
+	</update>
 
 
 </mapper>

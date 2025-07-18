@@ -1,5 +1,7 @@
 package kr.or.ddit.account.service.impl;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.account.service.MemDelVO;
@@ -14,6 +16,10 @@ public interface LoginMapper {
 	public MemDelVO selectMemDelStat(int memId);
 
 	public MemberPenaltyVO selectMemPnt(int memId);
+
+	public int memTokenInsert(Map<String, Object> paramMap);
+
+	
 
 	
 	
