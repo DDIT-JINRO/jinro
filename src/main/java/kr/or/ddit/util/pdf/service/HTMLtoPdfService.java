@@ -15,9 +15,5 @@ public interface HTMLtoPdfService {
      * 완전한 HTML 문서 생성
      */
 	String buildFullHtmlDocument(String htmlContent, String cssContent);
-	
-    /**
-     * 기본 CSS 스타일 반환
-     */
-	String getDefaultStyles();
+
 }
