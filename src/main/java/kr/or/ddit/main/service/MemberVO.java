@@ -27,4 +27,8 @@ public class MemberVO {
 	private int fileProfile;
 	private int fileEtc;
 	
+	public String getSMemId() {
+		return memId+"";
+	}
+	
 }

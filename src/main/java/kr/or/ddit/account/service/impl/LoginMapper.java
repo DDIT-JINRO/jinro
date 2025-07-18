@@ -19,6 +19,10 @@ public interface LoginMapper {
 
 	public int memTokenInsert(Map<String, Object> paramMap);
 
+	public MemberVO selectAuthByMemId(int intMemId);
+
+	public MemberVO selectById(int intMemId);
+
 	
 
 	
