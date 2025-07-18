@@ -2,6 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.highSchool.service.impl.HighSchoolMapper">
 
-	
+	<!-- 
+	// 모든 고등학교 정보를 조회하는 메서드 (주소 포함)
+	public List<HighSchoolVO> selectAllHighSchools();
+	 -->
+	 <select id="selectAllHighSchools" resultType="kr.or.ddit.highSchool.service.HighSchoolVO">
+	 	SELECT HS_ID
+		     , HS_CODE
+		     , HS_NAME
+		     , HS_REGION_CODE
+		     , HS_JURIS_CODE
+		     , HS_FOUND_TYPE
+		     , HS_ZIPCODE
+		     , HS_ADDR
+		     , HS_ADDR_DETAIL
+		     , HS_TEL
+		     , HS_HOMEPAGE
+		     , HS_COEDU_TYPE
+		     , HS_TYPE_NAME
+		     , HS_GENERAL_TYPE
+		     , HS_FOUND_DATE
+		     , HS_ANNIV_AT
+		     , HS_LAT
+		     , HS_LOT
+		FROM HIGH_SCHOOL
+	 </select>
 
 </mapper>
