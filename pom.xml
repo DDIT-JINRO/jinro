@@ -173,6 +173,25 @@
 			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
 		<!-- 스프링 시큐리티 끝 -->
+		
+		<!-- Pdf 파일생성을 위한 라이브러리 -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.3</version>
+		</dependency>
+		<!-- 한글 폰트 지원을 위한 iText Asian 폰트 -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itext-asian</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+		<!-- html요소를 pdf형식으로 변환하기 위한 라이브러리 -->
+		<dependency>
+			<groupId>org.xhtmlrenderer</groupId>
+			<artifactId>flying-saucer-pdf-itext5</artifactId>
+			<version>9.1.22</version>
+		</dependency>
 	</dependencies>
 
 	<build>
