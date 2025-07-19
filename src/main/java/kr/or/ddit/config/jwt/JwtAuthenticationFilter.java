@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, authorities);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				
+	
 				filterChain.doFilter(request, response);
 			} else if (token != null && !jwtUtil.validateToken(token)) {
 				String refreshToken = jwtUtil.resolveRefreshToken(request);
@@ -79,17 +79,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         String username = jwtUtil.getUsernameFromToken(newAccessToken);
         				List<String> roles = jwtUtil.getRolesFromToken(newAccessToken);
 
-        				// 3. UserDetails 생성
         				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         				List<GrantedAuthority> authorities = roles.stream().map(SimpleGrantedAuthority::new)
         						.collect(Collectors.toList());
 
-        				// 4. 인증 객체 생성 및 SecurityContext에 저장
         				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
         						userDetails, null, authorities);
         				SecurityContextHolder.getContext().setAuthentication(authentication);
         				
         				filterChain.doFilter(request, response);
+					}else {
+						SecurityContextHolder.clearContext();
 					}
 				}
 			} else {

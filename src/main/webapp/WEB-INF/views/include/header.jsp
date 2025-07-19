@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="/js/tokenUtil.js"></script>
 <link rel="shortcut icon" href="/images/crppvc.png">
 <link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/footer.css">

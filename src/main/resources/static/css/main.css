@@ -124,14 +124,14 @@
 }
 
 .delay2 {
-	top: 0px;
+	top: -70px;
 	left: 70px;
 	animation-delay: 0.3s;
 }
 
 .delay3 {
 	top: 10px;
-	left: 400px;
+	left: 600px;
 	animation-delay: 1.6s;
 }
 
