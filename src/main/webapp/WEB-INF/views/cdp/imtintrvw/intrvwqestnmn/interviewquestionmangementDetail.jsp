@@ -24,7 +24,7 @@
 		    <div class="tab active"><a href="/imtintrvw/bsintrvw">면접의 기본</a></div>
 		    <div class="tab"><a href="/imtintrvw/intrvwqestnlst">질문 리스트</a></div>
 		    <div class="tab"><a href="/imtintrvw/intrvwqestnmn">면접 질문 관리</a></div>
-		    <div class="tab"><a href="">AI 모의 면접</a></div>
+		    <div class="tab"><a href="/imtintrvw/aiimtintrvw">AI 모의 면접</a></div>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">

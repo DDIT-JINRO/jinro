@@ -28,9 +28,8 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			면접 질문 관리
+  			AI모의 면접 디테일
   			</br></br></br></br>
-  			<a href="/imtintrvw/intrvwqestnmn/detail.do">면접 질문 관리 디테일</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>
