@@ -1,7 +1,11 @@
 package kr.or.ddit.worldcup.service;
 
 import java.util.Date;
+import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class JobsVO {
 	private String jobCode;
 	private String jobName;
@@ -26,4 +30,6 @@ public class JobsVO {
 	private int outlookStable;
 	private int outlookSlightDecrease;
 	private int outlookDecrease;
+	
+	private List<String> jobsRel;
 }

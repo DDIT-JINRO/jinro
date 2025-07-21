@@ -30,8 +30,11 @@ public class WorldCupServiceImpl implements WorldCupService {
 
 	@Override
 	public JobsVO selectJobById(JobsVO jobsVO) {
-		// TODO Auto-generated method stub
-		return worldCupMapper.selectJobById(jobsVO);
+		
+		jobsVO = worldCupMapper.selectJobById(jobsVO);
+		List<String> relatedJobs = worldCupMapper.selectRelatedJobNames(jobsVO);
+		jobsVO.setJobsRel(relatedJobs);
+		return jobsVO;
 	}
 
 	@Override
@@ -39,5 +42,4 @@ public class WorldCupServiceImpl implements WorldCupService {
 		// TODO Auto-generated method stub
 		return worldCupMapper.insertWorldcupResult(worldCupVO);
 	}
-
 }

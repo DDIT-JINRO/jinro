@@ -18,4 +18,6 @@ public interface WorldCupMapper {
 	public JobsVO selectJobById(JobsVO jobsVO);
 
 	public int insertWorldcupResult(WorldCupVO worldCupVO);
+	
+	public List<String> selectRelatedJobNames(JobsVO jobsVO);
 }

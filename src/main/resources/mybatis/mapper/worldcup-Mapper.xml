@@ -26,13 +26,20 @@
 
 <!-- 최종 결과 1등 직업 -->
 <select id="selectJobById" parameterType="kr.or.ddit.worldcup.service.JobsVO" resultType="kr.or.ddit.worldcup.service.JobsVO">
-	SELECT JOB_ID, JOB_CODE, JOB_NAME, JOB_LCL, JOB_MCL, JOB_SAL,
-			JOB_SATIS, JOB_PROSPECT, JOB_REQ_EDU,
-			JOB_RELATED_CERT, JOB_MAIN_DUTY
-	FROM JOBS
-	WHERE JOB_ID = {jobId}
+	SELECT JOB_CODE, JOB_NAME, JOB_LCL, JOB_SAL, JOB_SATIS,
+            JOB_WAY, JOB_RELATED_CERT, JOB_MAIN_DUTY
+	FROM JOBS 
+	WHERE JOB_CODE = #{jobCode}
 </select>
 
+<!-- 1등결과 관련 직종 가져오기 -->
+<select id="selectRelatedJobNames" parameterType="kr.or.ddit.worldcup.service.JobsVO" resultType="String">
+	SELECT JOB_NAME AS JOBS_REL
+	FROM JOBS
+	WHERE JOB_CODE IN (SELECT JR_CODE
+						FROM JOBS_REL
+						WHERE JOB_CODE = #{jobCode})
+</select>
 
 <!-- 월드컵 데이터에 삽입 -->
 <insert id="insertWorldcupResult" parameterType="kr.or.ddit.worldcup.service.WorldCupVO">
