@@ -20,7 +20,7 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <div class="tab"><a href="/mpg/mif/inq/selectMyInfoView.do">조회 및 수정</a></div>
+		    <div class="tab"><a href="/mpg/mif/inq/selectMyInquiryView.do">조회 및 수정</a></div>
 		    <div class="tab"><a href="/mpg/mif/pswdchg/selectPasswordChangeView.do">비밀번호 변경</a></div>
 		    <div class="tab active"><a href="/mpg/mif/whdwl/selectWithdrawalView.do">회원 탈퇴</a></div>
   		</div>
