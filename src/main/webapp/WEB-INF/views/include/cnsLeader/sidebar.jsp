@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <!-- 사이드바 -->
-<link rel="stylesheet" href="/css/counselor/cnsSideBar.css">
+<link rel="stylesheet" href="/css/cnsLeader/cnsLeaderSideBar.css">
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 	 const sidebar = document.querySelector('.admin-side-sidebar');
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	<div class="admin-side-logo-container">
 		<img class="admin-side-logo" alt="logo" src="/images/logoWhite.png">
 	</div>
-	<div class="admin-side-logo-text">Counselor</div>
+	<div class="admin-side-logo-text">Counselor Leader</div>
 	<div class="admin-side-mainMove">
 		<a href="/"><img alt="바로가기" src="/images/mainPortal.png">
 		<p class="admin-side-portaltext">사이트 바로가기</p></a>
@@ -66,25 +66,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			<a href="javascript:void(0)">스케줄</a>
 			<ul class="admin-side-submenu" id="scheduleManagement">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/counselor/counselorMoveController.do?target=scm/scheduleManagement">스케줄 관리</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/cnsLeader/cnsLeaderMoveController.do?target=scm/scheduleManagement">스케줄 관리</a>
 				</li>
 			</ul>
 		</li>
 
 		<li class="admin-side-menu-item" onclick="toggleSubmenu('counselingLog')">
-			<a href="javascript:void(0)">상담 일지</a>
+			<a href="javascript:void(0)">상담사 관리</a>
 			<ul class="admin-side-submenu" id="counselingLog">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/counselor/counselorMoveController.do?target=csl/counselingLog">상담 일지 작성</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/cnsLeader/cnsLeaderMoveController.do?target=csm/counselingLogManagement">상담일지 관리</a>
 				</li>
-			</ul>
-		</li>
-
-		<li class="admin-side-menu-item" onclick="toggleSubmenu('vacationMenu')">
-			<a href="javascript:void(0)">연차/휴가</a>
-			<ul class="admin-side-submenu" id="vacationMenu">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/counselor/counselorMoveController.do?target=vac/vacation">연차/휴가 신청 및 목록</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/cnsLeader/cnsLeaderMoveController.do?target=csm/counselorVacationManagement">연차/휴가 관리</a>
 				</li>
 			</ul>
 		</li>
