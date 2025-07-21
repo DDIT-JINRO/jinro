@@ -11,22 +11,18 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/prg/ctt/cttList.do">공모전</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/prg/act/vol/volList.do">대외활동</a></div>
+		<div class="channel-sub-section-item"><a href="/prg/ctt/cttList.do">공모전</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-itemIn"><a href="/prg/act/vol/volList.do">대외활동</a></div>
 		<div class="channel-sub-section-item"><a href="/prg/std/stdGroupList.do">스터디그룹</a></div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
-		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			공모전목록
+  			스터디그룹 상세
+  			${stdGroupId} 번 글
   			<br/>
-			<a href="/prg/ctt/cttDetail.do?cttId=1">공모전 상세 1번글</a>
-  			<br/>
-			<a href="/prg/ctt/cttDetail.do?cttId=1">공모전 상세 2번글</a>
-  			<br/>
-			<a href="/prg/ctt/cttDetail.do?cttId=1">공모전 상세 3번글</a>
+			<a href="/prg/std/stdGroupList.do">목록으로</a>
   		</div>
 	</div>
 </div>
@@ -34,5 +30,5 @@
 </body>
 </html>
 <script>
-	// 스크립트 작성 해주시면 됩니다.
+
 </script>

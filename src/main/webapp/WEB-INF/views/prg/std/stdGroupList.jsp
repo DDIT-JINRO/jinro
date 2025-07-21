@@ -20,8 +20,13 @@
 	<div class="public-wrapper">
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			스터디그룹
-			<div></div>
+  			스터디그룹목록
+  			<br/>
+			<a href="/prg/std/stdGroupDetail.do?stdGroupId=1">스터디그룹 상세 1번글</a>
+  			<br/>
+			<a href="/prg/std/stdGroupDetail.do?stdGroupId=2">스터디그룹 상세 2번글</a>
+  			<br/>
+			<a href="/prg/std/stdGroupDetail.do?stdGroupId=3">스터디그룹 상세 3번글</a>
   		</div>
 	</div>
 </div>

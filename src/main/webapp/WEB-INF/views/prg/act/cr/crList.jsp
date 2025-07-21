@@ -26,8 +26,13 @@
 		    <div class="tab" id="sup"><a href="/prg/act/sup/supList.do">서포터즈</a></div>
   		</div>
   		<div class="public-wrapper-main">
-  			대외활동
-			<div></div>
+  			직업체험목록
+  			<br/>
+			<a href="/prg/act/cr/crDetail.do?crId=1">직업체험 상세 1번글</a>
+  			<br/>
+			<a href="/prg/act/cr/crDetail.do?crId=2">직업체험 상세 2번글</a>
+  			<br/>
+			<a href="/prg/act/cr/crDetail.do?crId=3">직업체험 상세 3번글</a>
   		</div>
 	</div>
 </div>

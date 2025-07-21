@@ -26,8 +26,13 @@
 		    <div class="tab" id="sup"><a href="/prg/act/sup/supList.do">서포터즈</a></div>
   		</div>
   		<div class="public-wrapper-main">
-  			대외활동
-			<div></div>
+  			봉사활동목록
+  			<br/>
+			<a href="/prg/act/vol/volDetail.do?volId=1">봉사활동 상세 1번글</a>
+			<br/>
+			<a href="/prg/act/vol/volDetail.do?volId=2">봉사활동 상세 2번글</a>
+			<br/>
+			<a href="/prg/act/vol/volDetail.do?volId=3">봉사활동 상세 3번글</a>
   		</div>
 	</div>
 </div>
