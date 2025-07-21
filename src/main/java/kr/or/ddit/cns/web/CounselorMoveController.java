@@ -1,4 +1,4 @@
-package kr.or.ddit.admin.web;
+package kr.or.ddit.cns.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,28 +8,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/cns")
 @Slf4j
-public class AdminMoveController {
-
-
+public class CounselorMoveController {
 	
 	@GetMapping
 	public String movePage() {
 
-		return "admin/dashboard";
+		return "cns/dashboard";
 	}
 	
-	// admin의 move페이지의 jsp로 forward
-	@GetMapping("/adminMoveController.do")
+	// counselor의 move페이지의 jsp로 forward
+	@GetMapping("/cnsMoveController.do")
 	public String movePage(@RequestParam String target) {
 
 		log.info("movePage : "+target);
 
-		return "admin/"+target;
+		return "cns/"+target;
 	}
-
-	
-
 	
 }

@@ -151,6 +151,8 @@ body {
 	font-size: 18px;
 }
 
+
+
 .tab-container::after {
 	content: "";
 	position: absolute;
@@ -170,6 +172,7 @@ body {
 	position: relative;
 	color: black;
 	z-index: 1;
+	text-decoration: none;
 }
 
 .tab.active {

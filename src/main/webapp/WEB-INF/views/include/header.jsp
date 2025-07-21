@@ -49,7 +49,8 @@
 	</div>
 
 	<div class="public-topbar-right">
-		<a href="/counselor"><img src="/images/counselor.png" alt="상담사" class="icon-btn"></a>
+		<a href="/cnsLeader"><img src="/images/cnsLeader.png" alt="상담센터장" class="icon-btn"></a>
+		<a href="/cns"><img src="/images/counselor.png" alt="상담사" class="icon-btn"></a>
 		<a href="/admin"><img src="/images/manager.png" alt="관리자" class="icon-btn"></a>
 		<a href=""><img src="/images/profile.png" alt="프로필" class="icon-btn" /></a>
 		<a href=""><img src="/images/alarm.png" alt="알림" class="icon-btn" /></a>

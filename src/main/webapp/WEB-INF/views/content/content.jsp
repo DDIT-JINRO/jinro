@@ -19,11 +19,10 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <a class="tab">대학 검색</a>
-		    <a class="tab active">학과 정보</a>
-		    <a class="tab">입시 정보</a>
-
-  		</div>
+		    <a href="#" class="tab">대학 검색</a>
+		    <a href="#" class="tab active">학과 정보</a>
+		    <a href="#" class="tab">입시 정보</a>
+  	</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
   			여기가 작성해야할 공간입니다.
