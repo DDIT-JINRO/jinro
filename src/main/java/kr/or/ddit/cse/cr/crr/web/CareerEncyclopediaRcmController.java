@@ -12,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 public class CareerEncyclopediaRcmController {
 	
 	@GetMapping("/cr/crr/selectCareerRcmList.do")
-	public String selectCareerList () {
+	public String selectCareerRcmList () {
 		return "cse/cr/crr/careerEncyclopediaRcmList";
 	}
 	
 	@GetMapping("/cr/crr/selectCareerRcmDetail.do")
-	public String selectCareerDetail () {
+	public String selectCareerRcmDetail () {
 		return "cse/cr/crr/careerEncyclopediaRcmDetail";
 	}
 }

@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PasswordChangeController {
 
 	@GetMapping("/mif/pswdchg/selectPasswordChangeView.do")
-	public String selectCareerList () {
+	public String selectPasswordChangeView () {
 		return "mpg/mif/pswdchg/selectPasswordChangeView";
 	}
 	

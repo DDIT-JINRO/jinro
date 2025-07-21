@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class WithdrawalController {
 
 	@GetMapping("/mif/whdwl/selectWithdrawalView.do")
-	public String selectCareerList () {
+	public String selectWithdrawalView () {
 		return "mpg/mif/whdwl/selectWithdrawalView";
 	}
 	

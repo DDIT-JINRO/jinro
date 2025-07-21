@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MyInfoController {
 
 	@GetMapping("/mif/inq/selectMyInfoView.do")
-	public String selectCareerList () {
+	public String selectMyInfoView () {
 		return "mpg/mif/inq/selectMyInfoView";
 	}
 	
