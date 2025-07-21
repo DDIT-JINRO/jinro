@@ -11,8 +11,8 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/comm/peer/teen/teenList.do">또래 게시판</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/comm/path/pathList.do">진로/진학 게시판</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/comm/peer/teen/teenList.do">또래 게시판</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/comm/path/pathList.do">진로/진학 게시판</a></div>
 	</div>
 </section>
 <div>

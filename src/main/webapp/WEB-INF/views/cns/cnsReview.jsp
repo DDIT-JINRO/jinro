@@ -7,7 +7,7 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">진로 탐색</div> 
+		<div class="channel-title-text">상담</div> 
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->

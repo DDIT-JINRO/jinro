@@ -22,7 +22,7 @@
 		    <a href="#" class="tab">대학 검색</a>
 		    <a href="#" class="tab active">학과 정보</a>
 		    <a href="#" class="tab">입시 정보</a>
-  		</div>
+  	</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
   			여기가 작성해야할 공간입니다.

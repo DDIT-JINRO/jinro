@@ -7,7 +7,7 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">진로 탐색</div> 
+		<div class="channel-title-text">상담</div> 
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
@@ -21,8 +21,8 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <div class="tab "><a href="/cnslt/cht/chattingReservation.do">상담 예약</a></div>
-		    <div class="tab active"><a href="/cnslt/cht/chattingReservationHistory.do">상담 내역</a></div>
+		    <a class="tab" href="/cnslt/cht/chattingReservation.do">상담 예약</a>
+		    <a class="tab active" href="/cnslt/cht/chattingReservationHistory.do">상담 내역</a>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
