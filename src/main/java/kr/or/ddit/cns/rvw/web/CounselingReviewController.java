@@ -1,4 +1,4 @@
-package kr.or.ddit.csc.faq.web;
+package kr.or.ddit.cns.rvw.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,13 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-//FAQ컨트롤러
-@RequestMapping("/csc")
-public class FAQController {
-
-	// FAQ 리스트
-	@GetMapping("/FAQList.do")
-	public String noticeList() {
-		return "csc/faqList";
+@RequestMapping("/cnslt/rvw")
+public class CounselingReviewController {
+	
+	@GetMapping("/cnsReview.do")
+	public String cnsReview() {
+		return "cns/cnsReview";
 	}
 }
