@@ -27,7 +27,7 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			질문 리스트 
+  			자기소개서 작성 
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>

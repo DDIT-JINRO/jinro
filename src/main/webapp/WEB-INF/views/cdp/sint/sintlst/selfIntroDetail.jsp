@@ -23,7 +23,7 @@
 		<div class="tab-container" id="tabs">
 		    <div class="tab"><a href="/qestnlst">질문 리스트</a></div>
 		    <div class="tab active"><a href="/sintlst">자기소개서 리스트</a></div>
-		    <div class="tab"><a href="/">자기소개서 작성</a></div>
+		    <div class="tab"><a href="/sintwrt">자기소개서 작성</a></div>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
