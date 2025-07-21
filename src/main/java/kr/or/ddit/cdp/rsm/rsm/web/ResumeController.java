@@ -18,7 +18,7 @@ public class ResumeController {
 		return "cdp/rsm/rsm/resume"; // /WEB-INF/views/resume/resume.jsp
 	}
 	
-	@GetMapping("/detail")
+	@GetMapping("/detail.do")
 	public String resumedeatilPage() {
 		return "cdp/rsm/rsm/resumeDetail"; // /WEB-INF/views/resume/resume.jsp
 	}
