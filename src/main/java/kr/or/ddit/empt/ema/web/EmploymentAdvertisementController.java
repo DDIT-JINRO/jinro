@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/empt")
-public class EmploymentPostingController {
+public class EmploymentAdvertisementController {
 	
-	@GetMapping("/emp/employmentPosting.do")
-	public String emplymentPostingList() {
-		return "empt/emp/employmentPosting";
+	@GetMapping("/ema/employmentAdvertisement.do")
+	public String emplymentAdvertisementList() {
+		return "empt/ema/employmentAdvertisement";
 	}
 	
 }

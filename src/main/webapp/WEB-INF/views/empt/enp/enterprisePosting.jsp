@@ -11,7 +11,7 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/empt/emp/employmentPosting.do">채용공고</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/empt/ema/employmentAdvertisement.do">채용공고</a></div> <!-- 중분류 -->
 		<div class="channel-sub-section-itemIn"><a href="/empt/enp/enterprisePosting.do">기업정보</a></div>
 		<div class="channel-sub-section-item"><a href="/empt/ivfb/interViewFeedback.do">면접후기</a></div>
 		<div class="channel-sub-section-item"><a href="/empt/cte/careerTechnicalEducation.do">직업교육</a></div>
