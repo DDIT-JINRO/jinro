@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	</div>
 	<ul class="admin-side-menu">
 		<li class="admin-side-menu-item">
-			<a href="/admin"">관리자 대시보드</a>
+			<a href="/admin">관리자 대시보드</a>
 		</li>
 
 		<!-- 필요한 항목이 있을때 이곳을 복사하거나 수정하면됩니다. -->
@@ -66,10 +66,13 @@ document.addEventListener('DOMContentLoaded', function () {
 			<a href="javascript:void(0)">사용자 관리</a>
 			<ul class="admin-side-submenu" id="adminSideUsers">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=umg/memberManagement">회원 관리</a>
 				</li>
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univAdd">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=umg/counselorManagement">상담사 관리</a>
+				</li>
+				<li>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=umg/sanctionsDescription">제재 내역</a>
 				</li>
 			</ul>
 		</li>
@@ -78,13 +81,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			<a href="javascript:void(0)">콘텐츠 관리</a>
 			<ul class="admin-side-submenu" id="adminSideContens">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=cmg/univManagement">대학 관리</a>
 				</li>
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=cmg/enterpriseManagement">기업 관리</a>
 				</li>
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=cmg/contestManagement">공모전 관리</a>
+				</li>
+				<li>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=cmg/activityManagement">대외활동 관리</a>
+				</li>
+				<li>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=cmg/bannerManagement">배너 관리</a>
 				</li>
 			</ul>
 		</li>
@@ -93,13 +102,13 @@ document.addEventListener('DOMContentLoaded', function () {
 			<a href="javascript:void(0)">고객 센터</a>
 			<ul class="admin-side-submenu" id="adminSideInqMenu">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=csc/faqManagement">FAQ</a>
 				</li>
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=csc/inquiryManagement">1:1 문의</a>
 				</li>
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=csc/noticeManagement">공지사항</a>
 				</li>
 			</ul>
 		</li>
@@ -108,22 +117,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			<a href="javascript:void(0)">로그 및 통계</a>
 			<ul class="admin-side-submenu" id="adminSideLogMenu">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=las/accessUsageStatistics">접속/이용 통계</a>
 				</li>
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=las/memberActivityLog">회원 활동 로그</a>
 				</li>
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=las/consultationLogsStatistics">상담 로그 및 통계</a>
 				</li>
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=las/contentUsageStatistics">컨텐츠 이용 통계</a>
 				</li>
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
-				</li>
-				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=univList">테스트</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=las/paymentPremiumServiceStatistics">결제/프리미엄 서비스 통계</a>
 				</li>
 			</ul>
 		</li>
