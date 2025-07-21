@@ -1,4 +1,4 @@
-package kr.or.ddit.rsm.rsm.web;
+package kr.or.ddit.cdp.rsm.rsm.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,19 +8,19 @@ import lombok.extern.slf4j.Slf4j;
 
 
 
-@RequestMapping("/resume")
+@RequestMapping("/rsm")
 @Controller
 @Slf4j
 public class ResumeController {
 
 	@GetMapping()
 	public String resumePage() {
-		return "rsm/rsm/resume"; // /WEB-INF/views/resume/resume.jsp
+		return "cdp/rsm/rsm/resume"; // /WEB-INF/views/resume/resume.jsp
 	}
 	
-	@GetMapping("/resumedetail")
+	@GetMapping("/detail")
 	public String resumedeatilPage() {
-		return "rsm/rsm/resumeDetail"; // /WEB-INF/views/resume/resume.jsp
+		return "cdp/rsm/rsm/resumeDetail"; // /WEB-INF/views/resume/resume.jsp
 	}
 	
 }
