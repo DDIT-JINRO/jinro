@@ -16,7 +16,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.or.ddit.account.service.impl.LoginMapper;
-import kr.or.ddit.account.web.LoginController;
 import kr.or.ddit.main.service.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtUtil {
 
-    private final LoginController loginController;
+    
 
 	private final long accessTokenExpire = 1000 * 60 * 30 ; // 30분
 
@@ -34,9 +33,7 @@ public class JwtUtil {
 	@Autowired
 	JwtProperties jwtProperties;
 
-    JwtUtil(LoginController loginController) {
-        this.loginController = loginController;
-    }
+   
 
 	public String createAccessToken(String memId) {
 		long now = System.currentTimeMillis(); 
@@ -81,9 +78,13 @@ public class JwtUtil {
 	}
 
 	public boolean validateToken(String token) {
+		
+		System.out.println("토큰벨리데이트 : " + token);
 		try {
-			Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(token);
-			return true;
+			if(token!=null && token!="") {
+				Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(token);
+				return true;
+			}
 		} catch (ExpiredJwtException e) {
 		} catch (JwtException e) {
 		}
@@ -102,6 +103,7 @@ public class JwtUtil {
 	public String resolveToken(HttpServletRequest request) {
         
 		if (request.getCookies() != null) {
+			
             for (Cookie cookie : request.getCookies()) {
                 if ("accessToken".equals(cookie.getName())) {              	
                 	return cookie.getValue(); // 토큰 반환

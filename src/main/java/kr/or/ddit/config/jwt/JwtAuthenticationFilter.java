@@ -44,9 +44,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		// 1. 쿠키나 헤더에서 JWT 꺼내기
 		try {
 			String token = jwtUtil.resolveToken(request);
-
+			System.out.println("토큰 유효성 검증 시도 : " + token);
 			// 2. 토큰이 유효하면
-			if (token != null && jwtUtil.validateToken(token)) {
+			if (token != null && token !="" && jwtUtil.validateToken(token)) {
+				
 				
 				String username = jwtUtil.getUsernameFromToken(token);
 				List<String> roles = jwtUtil.getRolesFromToken(token); // 클레임에서 roles 꺼내기
@@ -58,11 +59,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 				// 4. 인증 객체 생성 및 SecurityContext에 저장
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-						userDetails, null, authorities);
+						username, null, authorities);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-	
+			
+				
 				filterChain.doFilter(request, response);
-			} else if (token != null && !jwtUtil.validateToken(token)) {
+			} else if (token != null && token !="" && !jwtUtil.validateToken(token)) {
 				String refreshToken = jwtUtil.resolveRefreshToken(request);
 				if (refreshToken != null) {
 					String userId = refreshToken.split("_")[0];
