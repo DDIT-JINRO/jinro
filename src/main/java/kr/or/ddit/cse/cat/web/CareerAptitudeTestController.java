@@ -11,8 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CareerAptitudeTestController {
 	
-	@GetMapping("/cse/cat/CareerAptitudeTest.do")
+	@GetMapping("/cse/cat/careerAptitudeTest.do")
 	public String selectCareerList () {
-		return "cse/cat/CareerAptitudeTest";
+		return "cse/cat/careerAptitudeTest";
 	}
 }
