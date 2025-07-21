@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import kr.or.ddit.cdp.rsm.rsm.web.ResumeController;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/imtintrvw/qestnlst")
+@RequestMapping("/imtintrvw/intrvwqestnlst")
 @Controller
 @Slf4j
 public class InterviewQuestionListController {
 	@GetMapping()
-	public String questionListPage() {
+	public String interviewQuestionListPage() {
 		return "cdp/imtintrvw/intrvwqestnlst/intrvwquestionList";
 	}
 	

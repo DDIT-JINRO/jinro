@@ -28,8 +28,9 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			질문 리스트
+  			면접 질문 관리
   			</br></br></br></br>
+  			<a href="/imtintrvw/intrvwqestnmn/detail.do">면접 질문 관리 디테일</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>
