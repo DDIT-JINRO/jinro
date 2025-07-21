@@ -11,8 +11,8 @@
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-itemIn"><a href="/career/cse/cat/careerAptitudeTest.do">진로 심리검사</a></div>
-		<div class="channel-sub-section-item"><a href="/career/cse/cr/crl/selectCareerList.do">직업백과</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/cse/cat/careerAptitudeTest.do">진로 심리검사</a></div>
+		<div class="channel-sub-section-item"><a href="/cse/cr/crl/selectCareerList.do">직업백과</a></div>
 	</div>
 </section>
 <div>

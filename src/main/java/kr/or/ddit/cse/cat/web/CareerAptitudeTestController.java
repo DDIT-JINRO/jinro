@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/career")
+@RequestMapping("/cse")
 @Slf4j
 public class CareerAptitudeTestController {
 	
-	@GetMapping("/cse/cat/careerAptitudeTest.do")
+	@GetMapping("/cat/careerAptitudeTest.do")
 	public String selectCareerList () {
 		return "cse/cat/careerAptitudeTest";
 	}

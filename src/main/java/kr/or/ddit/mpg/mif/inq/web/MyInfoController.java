@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/mypage")
+@RequestMapping("/mpg")
 @Slf4j
 public class MyInfoController {
 
-	@GetMapping("/mpg/mif/inq/selectMyInfoView.do")
+	@GetMapping("/mif/inq/selectMyInfoView.do")
 	public String selectCareerList () {
 		return "mpg/mif/inq/selectMyInfoView";
 	}
