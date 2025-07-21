@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FAQController {
 
 	// FAQ 리스트
-	@GetMapping("/FAQList.do")
+	@GetMapping("/faqList.do")
 	public String noticeList() {
 		return "csc/faqList";
 	}

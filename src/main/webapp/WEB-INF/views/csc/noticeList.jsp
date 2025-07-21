@@ -12,8 +12,8 @@
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
 		<div class="channel-sub-section-itemIn"><a href="/csc/noticeList.do">공지사항</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/csc/FAQList.do">FAQ</a></div>
-		<div class="channel-sub-section-item"><a href="/csc/INQRYList.do">1:1문의</a></div>
+		<div class="channel-sub-section-item"><a href="/csc/faqList.do">FAQ</a></div>
+		<div class="channel-sub-section-item"><a href="/csc/inqryList.do">1:1문의</a></div>
 	</div>
 </section>
 <div>

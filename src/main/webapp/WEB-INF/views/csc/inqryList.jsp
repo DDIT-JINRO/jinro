@@ -11,9 +11,9 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/csc/noticeList.do"  style="text-decoration: none; color: inherit;">공지사항</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/csc/FAQList.do"  style="text-decoration: none; color: inherit;">FAQ</a></div>
-		<div class="channel-sub-section-item"><a href="/csc/INQRYList.do"  style="text-decoration: none; color: inherit;">1:1문의</a></div>
+		<div class="channel-sub-section-item"><a href="/csc/noticeList.do"  style="text-decoration: none; color: inherit;">공지사항</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/csc/faqList.do"  style="text-decoration: none; color: inherit;">FAQ</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/csc/inqryList.do"  style="text-decoration: none; color: inherit;">1:1문의</a></div>
 	</div>
 </section>
 <div>

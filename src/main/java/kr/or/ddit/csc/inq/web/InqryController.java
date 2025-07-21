@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/csc")
 public class InqryController {
 	// 1:1문의 리스트
-	@GetMapping("/INQRYList.do")
+	@GetMapping("/inqryList.do")
 	public String noticeList() {
 		return "csc/inqryList";
 	}
