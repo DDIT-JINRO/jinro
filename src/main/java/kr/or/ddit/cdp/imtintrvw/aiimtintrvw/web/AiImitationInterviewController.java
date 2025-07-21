@@ -15,4 +15,9 @@ public class AiImitationInterviewController {
 	public String aiImitationInterviewPage() {
 		return "cdp/imtintrvw/aiimtintrvw/aiImitationInterview";
 	}
+	
+	@GetMapping("detail.do")
+	public String aiImitationInterviewDetailPage() {
+		return "cdp/imtintrvw/aiimtintrvw/aiImitationInterviewDetail";
+	}
 }
