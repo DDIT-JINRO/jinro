@@ -7,12 +7,12 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">경력개발</div>
+		<div class="channel-title-text">경력관리</div>
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-itemIn"><a href="/rsm">이력서</a></div>
-		<div class="channel-sub-section-itemIn"><a href="#">자기소개서</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/qestnlst">자기소개서</a></div>
 		<div class="channel-sub-section-itemIn"><a href="#">모의면접</a></div>
 		<div class="channel-sub-section-itemIn"><a href="#">AI 피드백</a></div>
 	</div>
