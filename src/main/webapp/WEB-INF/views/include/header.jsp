@@ -37,7 +37,7 @@
 		<ul class="public-nav-menu">
 			<li><img src="/images/menuAll.png" alt="메뉴 아이콘"
 				class="public-menu-icon" id="menuToggle" /></li>
-			<li><a href="/cse/cat/careerAptitudeTest.do">진로</a></li>
+			<li><a href="/pse/cat/careerAptitudeTest.do">진로</a></li>
 			<li><a href="/univ/selectUnivList.do">진학</a></li>
 			<li><a href="/empt/ema/employmentAdvertisement.do">취업</a></li>
 			<li><a href="/rsm/rsm">경력관리</a></li>
