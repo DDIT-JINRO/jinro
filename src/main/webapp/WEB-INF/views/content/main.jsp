@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="/css/main.css" />
-<%@ include file="../include/header.jsp"%>
+<%@ include file="/WEB-INF/views/include/header.jsp"%>
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function () {
 	  const banner = document.querySelector('.main-loadmap-banner');
@@ -37,4 +37,4 @@ document.addEventListener('DOMContentLoaded', function () {
 		</div>
 	</section>
 </div>
-<%@ include file="../include/footer.jsp"%>
+<%@ include file="/WEB-INF/views/include/footer.jsp"%>
