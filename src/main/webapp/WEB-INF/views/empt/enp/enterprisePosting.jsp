@@ -7,25 +7,28 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">진로 탐색</div>
+		<div class="channel-title-text">취업 정보</div> 
 	</div>
-	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-itemIn"><a href="#">진로 심리검사</a></div>
-		<div class="channel-sub-section-item"><a href="#">직업백과</a></div>
+		<!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/empt/emp/employmentPosting.do">채용공고</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-itemIn"><a href="/empt/enp/enterprisePosting.do">기업정보</a></div>
+		<div class="channel-sub-section-item"><a href="/empt/ivfb/interViewFeedback.do">면접후기</a></div>
+		<div class="channel-sub-section-item"><a href="/empt/cte/careerTechnicalEducation.do">직업교육</a></div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
-		<div class="tab-container" id="tabs">
-		    <div class="tab ">대학 검색</div>
-		    <div class="tab active">학과 정보</div>
-		    <div class="tab">입시 정보</div>
-  		</div>
+<!-- 		<div class="tab-container" id="tabs"> -->
+<!-- 		    <div class="tab ">대학 검색</div> -->
+<!-- 		    <div class="tab active">학과 정보</div> -->
+<!-- 		    <div class="tab">입시 정보</div> -->
+<!-- 		    <div class="tab">입시 정보</div> -->
+<!--   		</div> -->
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			여기가 작성해야할 공간입니다.
+  			기업 정보 페이지
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>
