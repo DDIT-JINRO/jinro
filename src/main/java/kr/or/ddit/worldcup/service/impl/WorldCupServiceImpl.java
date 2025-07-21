@@ -1,0 +1,43 @@
+package kr.or.ddit.worldcup.service.impl;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.worldcup.service.ComCodeVO;
+import kr.or.ddit.worldcup.service.JobsVO;
+import kr.or.ddit.worldcup.service.WorldCupService;
+import kr.or.ddit.worldcup.service.WorldCupVO;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class WorldCupServiceImpl implements WorldCupService {
+
+	private final WorldCupMapper worldCupMapper;
+
+	@Override
+	public List<ComCodeVO> selectCategories(String round) {
+		// TODO Auto-generated method stub
+		return worldCupMapper.selectCategories(round);
+	}
+
+	@Override
+	public List<JobsVO> selectJobsByCategory(ComCodeVO comCodeVO) {
+		// TODO Auto-generated method stub
+		return worldCupMapper.selectJobsByCategory(comCodeVO);
+	}
+
+	@Override
+	public JobsVO selectJobById(JobsVO jobsVO) {
+		// TODO Auto-generated method stub
+		return worldCupMapper.selectJobById(jobsVO);
+	}
+
+	@Override
+	public int insertWorldcupResult(WorldCupVO worldCupVO) {
+		// TODO Auto-generated method stub
+		return worldCupMapper.insertWorldcupResult(worldCupVO);
+	}
+
+}
