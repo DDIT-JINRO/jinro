@@ -2,6 +2,9 @@ package kr.or.ddit.worldcup.service;
 
 import java.util.Date;
 
+import lombok.Data;
+
+@Data
 public class ComCodeVO {
 	private String ccId;
 	private String clCode;
