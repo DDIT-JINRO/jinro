@@ -44,7 +44,7 @@
 			<li><a href="/test">상담</a></li>
 			<li><a href="/test">프로그램</a></li>
 			<li><a href="/test">커뮤니티</a></li>
-			<li><a href="/test">고객센터</a></li>
+			<li><a href="/noticeList">고객센터</a></li>
 		</ul>
 	</div>
 
