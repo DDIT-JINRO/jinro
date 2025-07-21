@@ -41,10 +41,10 @@
 			<li><a href="/test">진학</a></li>
 			<li><a href="/test">취업</a></li>
 			<li><a href="/test">경력개발</a></li>
-			<li><a href="/test">상담</a></li>
+			<li><a href="/InsertCareerCounselingRESVE.do">상담</a></li>
 			<li><a href="/test">프로그램</a></li>
 			<li><a href="/test">커뮤니티</a></li>
-			<li><a href="/noticeList">고객센터</a></li>
+			<li><a href="/csc/noticeList.do">고객센터</a></li>
 		</ul>
 	</div>
 
