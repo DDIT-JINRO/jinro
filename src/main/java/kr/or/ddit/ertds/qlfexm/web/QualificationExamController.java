@@ -11,12 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QualificationExamController {
 
-	//검정고시
+	// 검정고시
 	@GetMapping("/selectQlfexmList.do")
-    public String qlfexmListPage() {
-	     
+	public String qlfexmListPage() {
+
 		return "ertds/qlfexm/list"; // /WEB-INF/views/erds/qlfexm/list.jsp
-	    
+
 	}
 
 }
