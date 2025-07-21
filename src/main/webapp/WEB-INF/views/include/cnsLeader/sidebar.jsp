@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	</div>
 	<ul class="admin-side-menu">
 		<li class="admin-side-menu-item">
-			<a href="/counselor">대시보드</a>
+			<a href="/cnsLeader">대시보드</a>
 		</li>
 
 		<!-- 필요한 항목이 있을때 이곳을 복사하거나 수정하면됩니다. -->
