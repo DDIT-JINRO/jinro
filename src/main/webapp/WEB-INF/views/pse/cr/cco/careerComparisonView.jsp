@@ -11,8 +11,8 @@
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-item"><a href="/cse/cat/careerAptitudeTest.do">진로 심리검사</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/cse/cr/crl/selectCareerList.do">직업백과</a></div>
+		<div class="channel-sub-section-item"><a href="/pse/cat/careerAptitudeTest.do">진로 심리검사</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/pse/cr/crl/selectCareerList.do">직업백과</a></div>
 	</div>
 </section>
 <div>
@@ -20,7 +20,7 @@
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
   			이곳은 직업 비교페이지입니다.
-  			<a href="/cse/cr/crl/selectCareerList.do">목록 가기</a>
+  			<a href="/pse/cr/crl/selectCareerList.do">목록 가기</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>
