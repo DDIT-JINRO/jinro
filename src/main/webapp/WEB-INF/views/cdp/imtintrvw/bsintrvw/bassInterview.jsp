@@ -21,14 +21,15 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <div class="tab"><a href="/rsm">이력서</a></div>
-		    <div class="tab active"><a href="/rsmb">이력서 템플릿 게시판</a></div>
+		    <div class="tab active"><a href="/bsintrvw">면접의 기본</a></div>
+		    <div class="tab"><a href="">질몬 리스트</a></div>
+		    <div class="tab"><a href="">면접 질문 관리</a></div>
+		    <div class="tab"><a href="">AI 모의 면접</a></div>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			이력서 템플릿 게시판
+  			면접의 기본
   			</br></br></br></br>
-  			<a href="/rsmb/detail.do">이력서 템플릿 디테일</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>

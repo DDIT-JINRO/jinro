@@ -13,7 +13,7 @@
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-itemIn"><a href="/rsm">이력서</a></div>
 		<div class="channel-sub-section-itemIn"><a href="/qestnlst">자기소개서</a></div>
-		<div class="channel-sub-section-itemIn"><a href="#">모의면접</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/bsintrvw">모의면접</a></div>
 		<div class="channel-sub-section-itemIn"><a href="#">AI 피드백</a></div>
 	</div>
 </section>
