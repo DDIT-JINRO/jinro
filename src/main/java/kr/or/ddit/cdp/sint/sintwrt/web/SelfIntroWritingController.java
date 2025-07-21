@@ -1,4 +1,4 @@
-package kr.or.ddit.cdp.sintwrt.wrb;
+package kr.or.ddit.cdp.sint.sintwrt.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
