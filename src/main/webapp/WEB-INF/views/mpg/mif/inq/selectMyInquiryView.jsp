@@ -11,9 +11,9 @@
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-itemIn"><a href="/mpg/mif/inq/selectMyInfoView.do">내 정보</a></div>
-		<div class="channel-sub-section-item"><a href="#">나의 활동</a></div>
-		<div class="channel-sub-section-item"><a href="#">결제 구독내역</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/mpg/mif/inq/selectMyInquiryView.do">내 정보</a></div>
+		<div class="channel-sub-section-item"><a href="/mpg/mat/bmk/selectBookMarkList.do">나의 활동</a></div>
+		<div class="channel-sub-section-item"><a href="/mpg/pay/selectPaymentView.do">결제 구독내역</a></div>
 	</div>
 </section>
 <div>

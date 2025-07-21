@@ -9,11 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/mpg")
 @Slf4j
-public class MyInfoController {
+public class MyInquiryController {
 
-	@GetMapping("/mif/inq/selectMyInfoView.do")
-	public String selectMyInfoView () {
-		return "mpg/mif/inq/selectMyInfoView";
+	@GetMapping("/mif/inq/selectMyInquiryView.do")
+	public String selectMyInquiryView () {
+		return "mpg/mif/inq/selectMyInquiryView";
 	}
 	
 }
