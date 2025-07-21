@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <!-- 사이드바 -->
-<link rel="stylesheet" href="/css/counselor/cnsSideBar.css">
+<link rel="stylesheet" href="/css/cns/cnsSideBar.css">
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 	 const sidebar = document.querySelector('.admin-side-sidebar');
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	</div>
 	<ul class="admin-side-menu">
 		<li class="admin-side-menu-item">
-			<a href="/counselor">대시보드</a>
+			<a href="/cns">대시보드</a>
 		</li>
 
 		<!-- 필요한 항목이 있을때 이곳을 복사하거나 수정하면됩니다. -->
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			<a href="javascript:void(0)">스케줄</a>
 			<ul class="admin-side-submenu" id="scheduleManagement">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/counselor/counselorMoveController.do?target=scm/scheduleManagement">스케줄 관리</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/cns/cnsMoveController.do?target=scm/scheduleManagement">스케줄 관리</a>
 				</li>
 			</ul>
 		</li>
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			<a href="javascript:void(0)">상담 일지</a>
 			<ul class="admin-side-submenu" id="counselingLog">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/counselor/counselorMoveController.do?target=csl/counselingLog">상담 일지 작성</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/cns/cnsMoveController.do?target=csl/counselingLog">상담 일지 작성</a>
 				</li>
 			</ul>
 		</li>
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			<a href="javascript:void(0)">연차/휴가</a>
 			<ul class="admin-side-submenu" id="vacationMenu">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/counselor/counselorMoveController.do?target=vac/vacation">연차/휴가 신청 및 목록</a>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/cns/cnsMoveController.do?target=vac/vacation">연차/휴가 신청 및 목록</a>
 				</li>
 			</ul>
 		</li>

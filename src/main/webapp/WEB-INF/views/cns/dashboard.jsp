@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ include file="/WEB-INF/views/include/counselor/sidebar.jsp"%>
+<%@ include file="/WEB-INF/views/include/cns/sidebar.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="/css/admin/admDashboard.css">
+<link rel="stylesheet" href="/css/cns/cnsDashboard.css">
 <title>상담사 메인</title>
 <script>
 
