@@ -29,7 +29,7 @@
 
 <div class="public-topbar">
 	<div class="public-topbar-left">
-		<a href="/main"><img src="/images/logo.png" alt="로고" class="logo"
+		<a href="/"><img src="/images/logo.png" alt="로고" class="logo"
 			id="logo" /></a>
 	</div>
 
@@ -37,13 +37,13 @@
 		<ul class="public-nav-menu">
 			<li><img src="/images/menuAll.png" alt="메뉴 아이콘"
 				class="public-menu-icon" id="menuToggle" /></li>
-			<li><a href="/test">진로</a></li>
-			<li><a href="/test">진학</a></li>
-			<li><a href="/test">취업</a></li>
+			<li><a href="/cse/cat/careerAptitudeTest.do">진로</a></li>
+			<li><a href="/univ/selectUnivList.do">진학</a></li>
+			<li><a href="/empt/ema/employmentAdvertisement.do">취업</a></li>
 			<li><a href="/rsm/rsm">경력관리</a></li>
-			<li><a href="/InsertCareerCounselingRESVE.do">상담</a></li>
-			<li><a href="/test">프로그램</a></li>
-			<li><a href="/test">커뮤니티</a></li>
+			<li><a href="/cnslt/off/offlineReservation.do">상담</a></li>
+			<li><a href="/prg/ctt/cttList.do">프로그램</a></li>
+			<li><a href="/comm/peer/teen/teenList.do">커뮤니티</a></li>
 			<li><a href="/csc/noticeList.do">고객센터</a></li>
 		</ul>
 	</div>
