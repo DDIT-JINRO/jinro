@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QualificationExamController {
 
-	//검정
+	//검정고시
 	@GetMapping("/selectQlfexmList.do")
     public String qlfexmListPage() {
 	     

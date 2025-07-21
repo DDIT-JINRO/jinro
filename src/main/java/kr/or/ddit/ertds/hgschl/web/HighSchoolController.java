@@ -10,8 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 public class HighSchoolController {
-	
-	
+		
 	//고등학교 리스트
 	@GetMapping("/selectHgschList.do")
 	public String highSchoolListPage() {
