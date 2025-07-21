@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import kr.or.ddit.cdp.sint.qestnlst.web.QuestionListController;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/sintlst")
+@RequestMapping("/sint/sintlst")
 @Controller
 @Slf4j
 public class SelfIntroListController {

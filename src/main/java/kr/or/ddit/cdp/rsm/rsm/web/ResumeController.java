@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 
-@RequestMapping("/rsm")
+@RequestMapping("/rsm/rsm")
 @Controller
 @Slf4j
 public class ResumeController {

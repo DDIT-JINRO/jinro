@@ -11,9 +11,9 @@
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-itemIn"><a href="/rsm">이력서</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/qestnlst">자기소개서</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/bsintrvw">모의면접</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/rsm/rsm">이력서</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/sint/qestnlst">자기소개서</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/imtintrvw/bsintrvw">모의면접</a></div>
 		<div class="channel-sub-section-itemIn"><a href="#">AI 피드백</a></div>
 	</div>
 </section>
@@ -21,14 +21,14 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <div class="tab"><a href="/rsm">이력서</a></div>
-		    <div class="tab active"><a href="/rsmb">이력서 템플릿 게시판</a></div>
+		    <div class="tab"><a href="/rsm/rsm">이력서</a></div>
+		    <div class="tab active"><a href="/rsm/rsmb">이력서 템플릿 게시판</a></div>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
   			이력서 템플릿 게시판
   			</br></br></br></br>
-  			<a href="/rsmb/detail.do">이력서 템플릿 디테일</a>
+  			<a href="/rsm/rsmb/detail.do">이력서 템플릿 디테일</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>
