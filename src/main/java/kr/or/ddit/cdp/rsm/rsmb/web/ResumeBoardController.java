@@ -13,11 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ResumeBoardController {
 	@GetMapping()
 	public String resumeBoardPage() {
-		return "cdp/rsm/rsmb/resumeBoard"; // /WEB-INF/views/resume/resume.jsp
+		return "cdp/rsm/rsmb/resumeBoard";
 	}
 	
 	@GetMapping("/detail.do")
 	public String resumeBoardDetailPage() {
-		return "cdp/rsm/rsmb/resumeBoardDetail"; // /WEB-INF/views/resume/resume.jsp
+		return "cdp/rsm/rsmb/resumeBoardDetail";
 	}
 }

@@ -12,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QuestionListController {
 	@GetMapping()
-	public String QuestionListPage() {
-		return "cdp/sint/qestnlst/questionList"; // /WEB-INF/views/resume/resume.jsp
+	public String questionListPage() {
+		return "cdp/sint/qestnlst/questionList";
 	}
+	
+	
 }

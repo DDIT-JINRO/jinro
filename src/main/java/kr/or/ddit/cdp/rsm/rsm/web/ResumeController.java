@@ -15,12 +15,12 @@ public class ResumeController {
 
 	@GetMapping()
 	public String resumePage() {
-		return "cdp/rsm/rsm/resume"; // /WEB-INF/views/resume/resume.jsp
+		return "cdp/rsm/rsm/resume";
 	}
 	
 	@GetMapping("/detail.do")
 	public String resumedeatilPage() {
-		return "cdp/rsm/rsm/resumeDetail"; // /WEB-INF/views/resume/resume.jsp
+		return "cdp/rsm/rsm/resumeDetail";
 	}
 	
 }
