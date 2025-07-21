@@ -19,8 +19,8 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <div class="tab"><a href="/comm/peer/teen/teenList.do">청소년 게시판</a></div>
-		    <div class="tab active"><a href="/comm/peer/youth/youthList.do">청년 게시판</a></div>
+		    <a class="tab" href="/comm/peer/teen/teenList.do">청소년 게시판</a>
+		    <a class="tab active" href="/comm/peer/youth/youthList.do">청년 게시판</a>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">

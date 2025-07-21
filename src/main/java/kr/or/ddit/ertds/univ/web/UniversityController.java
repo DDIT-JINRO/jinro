@@ -31,7 +31,7 @@ public class UniversityController {
 		return "ertds/univ/compare"; // /WEB-INF/views/erds/univ/compare.jsp
 	}
 
-	// 대학비교
+	// 대학
 	@GetMapping("/selectDetail.do")
 	public String univDetailPage() {
 

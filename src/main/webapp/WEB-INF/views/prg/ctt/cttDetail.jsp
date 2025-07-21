@@ -11,8 +11,8 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/prg/ctt/cttList.do">공모전</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/prg/act/vol/volList.do">대외활동</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/prg/ctt/cttList.do">공모전</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/prg/act/vol/volList.do">대외활동</a></div>
 		<div class="channel-sub-section-item"><a href="/prg/std/stdGroupList.do">스터디그룹</a></div>
 	</div>
 </section>

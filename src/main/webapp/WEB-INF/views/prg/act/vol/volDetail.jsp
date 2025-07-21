@@ -21,9 +21,9 @@
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <div class="tab active" id="vol"><a href="/prg/act/vol/volList.do">봉사활동</a></div>
-		    <div class="tab" id="cr"><a href="/prg/act/cr/crList.do">직업체험</a></div>
-		    <div class="tab" id="sup"><a href="/prg/act/sup/supList.do">서포터즈</a></div>
+		    <a class="tab active" href="/prg/act/vol/volList.do">봉사활동</a>
+		    <a class="tab" href="/prg/act/cr/crList.do">직업체험</a>
+		    <a class="tab" href="/prg/act/sup/supList.do">서포터즈</a>
   		</div>
   		<div class="public-wrapper-main">
   			봉사활동 상세

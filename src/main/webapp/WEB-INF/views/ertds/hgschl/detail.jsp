@@ -19,11 +19,12 @@
 <div>
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
-		<div class="tab-container" id="tabs">
-<!-- 		    <div class="tab active ">고등학교 검색</div> -->
-<!-- 		    <div class="tab">학과 정보</div> -->
-		    
-  		</div>
+		<!--
+			<div class="tab-container" id="tabs">
+	 		    <div class="tab active ">고등학교 검색</div>
+				<div class="tab">학과 정보</div>
+	  		</div>
+  		-->
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
   			여기가 작성해야할 공간입니다. 고등학교 상세

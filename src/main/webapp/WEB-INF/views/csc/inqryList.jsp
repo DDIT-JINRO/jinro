@@ -7,13 +7,13 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">진로 탐색</div> 
+		<div class="channel-title-text">고객센터</div> 
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/csc/noticeList.do"  style="text-decoration: none; color: inherit;">공지사항</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/csc/faqList.do"  style="text-decoration: none; color: inherit;">FAQ</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/csc/inqryList.do"  style="text-decoration: none; color: inherit;">1:1문의</a></div>
+		<div class="channel-sub-section-item"><a href="/csc/noticeList.do">공지사항</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/csc/faqList.do">FAQ</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/csc/inqryList.do">1:1문의</a></div>
 	</div>
 </section>
 <div>
