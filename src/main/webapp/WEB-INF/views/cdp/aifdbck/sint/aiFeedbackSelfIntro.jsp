@@ -21,14 +21,14 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <div class="tab active"><a href="/aifdbck/rsm">이력서</a></div>
-		    <div class="tab"><a href="/aifdbck/sint">자기소개서</a></div>
+		    <div class="tab"><a href="/aifdbck/rsm">이력서</a></div>
+		    <div class="tab active"><a href="/aifdbck/sint">자기소개서</a></div>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			AI 피드백 이력서
+  			AI 피드백 자소서
   			</br></br></br></br>
-  			<a href="/aifdbck/rsm/detail.do">AI 피드백 이력서 디테일</a>
+  			<a href="/aifdbck/sint/detail.do">AI 피드백 자소서 디테일</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>
