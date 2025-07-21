@@ -7,25 +7,26 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">진로 탐색</div>
+		<div class="channel-title-text">진로 탐색</div> 
 	</div>
-	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-itemIn"><a href="#">진로 심리검사</a></div>
-		<div class="channel-sub-section-item"><a href="#">직업백과</a></div>
+		<!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/cnslt/off/offlineReservation.do">오프라인 상담</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/cnslt/vid/videoReservation.do">화상 상담</a></div>
+		<div class="channel-sub-section-item"><a href="/cnslt/cht/chattingReservation.do">채팅상담</a></div>
+		<div class="channel-sub-section-item"><a href="/cnslt/rvw/cnsReview.do">상담 후기</a></div>		
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <div class="tab ">대학 검색</div>
-		    <div class="tab active">학과 정보</div>
-		    <div class="tab">입시 정보</div>
+		    <div class="tab "><a href="/cnslt/vid/videoReservation.do">상담 예약</a></div>
+		    <div class="tab active"><a href="/cnslt/vid/videoReservationHistory.do">상담 내역</a></div>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			여기가 작성해야할 공간입니다.
+  			<h3>화상상담 내역 JSP</h3>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>

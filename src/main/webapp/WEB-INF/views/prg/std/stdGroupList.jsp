@@ -7,29 +7,26 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">진로 탐색</div>
+		<div class="channel-title-text">프로그램</div> 
 	</div>
-	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-itemIn"><a href="#">진로 심리검사</a></div>
-		<div class="channel-sub-section-item"><a href="#">직업백과</a></div>
+		<!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/prg/ctt/cttList.do">공모전</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/prg/act/vol/volList.do">대외활동</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/prg/std/stdGroupList.do">스터디그룹</a></div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
-		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
-		<div class="tab-container" id="tabs">
-		    <div class="tab ">대학 검색</div>
-		    <div class="tab active">학과 정보</div>
-		    <div class="tab">입시 정보</div>
-  		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			여기가 작성해야할 공간입니다.
-  			</br></br></br></br>
-  			</br></br></br></br>
-  			</br></br></br></br>
-  			</br></br></br></br>
+  			스터디그룹목록
+  			<br/>
+			<a href="/prg/std/stdGroupDetail.do?stdGroupId=1">스터디그룹 상세 1번글</a>
+  			<br/>
+			<a href="/prg/std/stdGroupDetail.do?stdGroupId=2">스터디그룹 상세 2번글</a>
+  			<br/>
+			<a href="/prg/std/stdGroupDetail.do?stdGroupId=3">스터디그룹 상세 3번글</a>
   		</div>
 	</div>
 </div>
