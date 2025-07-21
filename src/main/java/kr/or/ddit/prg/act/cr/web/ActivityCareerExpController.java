@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/prg/act/cr")
-public class ActivityCarrerExpController {
+public class ActivityCareerExpController {
 	
 	@GetMapping("/crList.do")
 	public String selectCrList() {
