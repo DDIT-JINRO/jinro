@@ -17,16 +17,10 @@
 </section>
 <div>
 	<div class="public-wrapper">
-		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
-		<div class="tab-container" id="tabs">
-		    <div class="tab"><a href="/cse/cr/crl/selectCareerList.do">직업 목록</a></div>
-		    <div class="tab active"><a href="/cse/cr/crr/selectCareerRcmList.do">추천 직업</a></div>
-  		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			이곳은 목록 입니다.
-  			<a href="/cse/cr/crr/selectCareerRcmDetail.do">상세 화면 가기</a>
-  			<a href="/cse/cr/cco/careerComparisonView.do">비교 화면 가기</a>
+  			이곳은 직업 비교페이지입니다.
+  			<a href="/cse/cr/crl/selectCareerList.do">목록 가기</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>

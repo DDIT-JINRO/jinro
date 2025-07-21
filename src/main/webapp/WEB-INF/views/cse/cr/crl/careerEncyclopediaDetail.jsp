@@ -25,7 +25,7 @@
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
   			이곳은 직업 상세정보입니다.
-  			<a href="selectCareerList.do">목록 가기</a>
+  			<a href="/cse/cr/crl/selectCareerList.do">목록 가기</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>
