@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.rdm.service.impl.RoadmapMapper">
+
+	
+	<select id="selectMemberRoadmap" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
+		SELECT
+			ROAD_ID
+			, MEM_ID
+			, RS_ID
+			, ROAD_COMPLETE
+			, COMPLETE_AT
+			, CREATED_AT
+		FROM
+			ROADMAP
+		WHERE
+			MEM_ID = #{memId}
+		ORDER BY
+			ROAD_ID DESC
+	</select>
+
+	<insert id="insertMemberRoadmap" parameterType="int">
+		INSERT
+			INTO
+			ROADMAP
+		(
+				ROAD_ID
+				, MEM_ID
+				, RS_ID
+				, ROAD_COMPLETE
+				, CREATED_AT
+			)
+		VALUES(ROADMAP_SEQ.NEXTVAL, #{memId}, 1, 'N', SYSDATE)
+	</insert>
+</mapper>
