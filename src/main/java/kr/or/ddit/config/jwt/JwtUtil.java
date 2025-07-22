@@ -15,7 +15,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import kr.or.ddit.account.service.impl.LoginMapper;
+import kr.or.ddit.account.lgn.service.impl.LoginMapper;
 import kr.or.ddit.main.service.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 

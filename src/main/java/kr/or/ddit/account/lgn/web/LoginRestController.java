@@ -1,4 +1,4 @@
-package kr.or.ddit.account.web;
+package kr.or.ddit.account.lgn.web;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.or.ddit.account.service.LoginService;
+import kr.or.ddit.account.lgn.service.LoginService;
 import kr.or.ddit.config.jwt.JwtUtil;
 import kr.or.ddit.main.service.MemberVO;
 import lombok.extern.slf4j.Slf4j;

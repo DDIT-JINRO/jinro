@@ -1,4 +1,4 @@
-package kr.or.ddit.account.service.impl;
+package kr.or.ddit.account.lgn.service.impl;
 
 
 

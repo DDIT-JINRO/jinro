@@ -1,11 +1,11 @@
-package kr.or.ddit.account.service.impl;
+package kr.or.ddit.account.lgn.service.impl;
 
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import kr.or.ddit.account.service.MemDelVO;
-import kr.or.ddit.account.service.MemberPenaltyVO;
+import kr.or.ddit.account.lgn.service.MemDelVO;
+import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.main.service.MemberVO;
 
 @Mapper

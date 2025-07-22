@@ -34,12 +34,12 @@
 				</div>
 
 				<div class="sns-login">
-					<button class="kakao">카카오톡 계정으로 로그인</button>
-					<button class="naver">네이버 계정으로 로그인</button>
+					<button class="kakao"><img alt="" src="/images/free-icon-kakao-talk-2111466.png">카카오톡 계정으로 로그인</button>
+					<button class="naver"><img alt="" src="/images/naver.png">네이버 계정으로 로그인</button>
 				</div>
 
 				<div class="signup-box">
-					아직 커리어 패스의 회원이 아니신가요? <a href="#">회원가입</a>
+					아직 커리어 패스의 회원이 아니신가요? <a href="/join/joinpage.do">회원가입</a>
 				</div>
 			</div>
 		</div>

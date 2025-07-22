@@ -116,11 +116,31 @@
 .kakao {
 	background-color: #fee500;
 	color: #3c1e1e;
+	height: 45px;
+	display: flex;
+	justify-content: center;
+}
+
+.kakao img {
+	width: 25px;
+	height: 25px;
+	padding-right: 10px;
 }
 
 .naver {
 	background-color: #03c75a;
 	color: white;
+	height: 45px;
+	display: flex;
+	justify-content: center;
+}
+
+.naver img {
+	padding-top: 4px;
+	width: 15px;
+	height: 15px;
+	padding-right: 10px;
+	
 }
 
 .signup-box {

@@ -1,4 +1,4 @@
-package kr.or.ddit.account.web;
+package kr.or.ddit.account.lgn.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

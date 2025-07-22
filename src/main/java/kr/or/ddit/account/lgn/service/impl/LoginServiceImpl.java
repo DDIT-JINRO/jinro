@@ -1,4 +1,4 @@
-package kr.or.ddit.account.service.impl;
+package kr.or.ddit.account.lgn.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import kr.or.ddit.account.service.LoginService;
-import kr.or.ddit.account.service.MemDelVO;
-import kr.or.ddit.account.service.MemberPenaltyVO;
+import kr.or.ddit.account.lgn.service.LoginService;
+import kr.or.ddit.account.lgn.service.MemDelVO;
+import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.config.jwt.JwtUtil;
 import kr.or.ddit.main.service.MemberVO;
 import lombok.extern.slf4j.Slf4j;
