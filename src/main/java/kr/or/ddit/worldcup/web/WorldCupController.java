@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.or.ddit.worldcup.service.ComCodeVO;
 import kr.or.ddit.worldcup.service.JobsVO;
 import kr.or.ddit.worldcup.service.WorldCupService;
+import kr.or.ddit.worldcup.service.WorldCupVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,14 +55,17 @@ public class WorldCupController {
 
 	}
 	
-//	@PostMapping("/insertWorldcupResult")
-//	public ResponseEntity<int> insertWorldcupResult(@RequestBody JobsVO jobsVO) {
-//
-//		int cnt = worldCupService.insertWorldcupResult(jobsVO);
-//		
-//		return ResponseEntity.ok();
-//
-//	}
+	@PostMapping("/insertWorldcupResult")
+	public ResponseEntity<Integer> insertWorldcupResult(@AuthenticationPrincipal String memId,@RequestBody JobsVO jobsVO) {
+
+		int id = Integer.valueOf(memId);
+		
+		int cnt = worldCupService.insertWorldcupResult(jobsVO,id);
+		
+		log.info("cnt : "+cnt);
+		return (ResponseEntity<Integer>) ResponseEntity.ok();
+
+	}
 	
 	
 	

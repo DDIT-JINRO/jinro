@@ -38,8 +38,12 @@ public class WorldCupServiceImpl implements WorldCupService {
 	}
 
 	@Override
-	public int insertWorldcupResult(WorldCupVO worldCupVO) {
-		// TODO Auto-generated method stub
+	public int insertWorldcupResult(JobsVO jobsVO,int id) {
+		
+		WorldCupVO worldCupVO= new WorldCupVO();
+		worldCupVO.setMemId(id);
+		worldCupVO.setWdResult(jobsVO.getJobCode());
+		
 		return worldCupMapper.insertWorldcupResult(worldCupVO);
 	}
 }

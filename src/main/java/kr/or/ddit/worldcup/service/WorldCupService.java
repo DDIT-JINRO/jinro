@@ -10,5 +10,5 @@ public interface WorldCupService {
 
 	public JobsVO selectJobById(JobsVO jobsVO);
 
-	public int insertWorldcupResult(WorldCupVO worldCupVO);
+	public int insertWorldcupResult(JobsVO jobsVO,int id);
 }

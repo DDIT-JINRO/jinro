@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class WorldCupVO {
 	private int wdId;
-	private int wdResult;
+	private String wdResult;
 	private Date createdAt;
 	private int memId;
 }
