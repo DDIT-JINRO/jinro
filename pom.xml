@@ -30,6 +30,11 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+		<!-- java 메일 샌드를 위한 라이브러리 -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 		<!-- jwt 사용하기 위한 라이브러리-->
 		<dependency>
     		<groupId>io.jsonwebtoken</groupId>
