@@ -20,7 +20,7 @@
 <select id="selectJobsByCategory" parameterType="kr.or.ddit.worldcup.service.ComCodeVO" resultType="kr.or.ddit.worldcup.service.JobsVO">
 	SELECT JOB_CODE, JOB_NAME, JOB_LCL, JOB_RELATED_CERT, JOB_MAIN_DUTY
 		FROM JOBS
-		WHERE JOB_LCL = {ccId}
+		WHERE JOB_LCL = #{ccId}
 		ORDER BY 1
 </select>
 
