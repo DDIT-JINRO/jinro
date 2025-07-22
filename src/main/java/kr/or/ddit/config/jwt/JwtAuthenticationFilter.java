@@ -64,6 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			
 				
 				filterChain.doFilter(request, response);
+				return;
 			} else if (token != null && token !="" && !jwtUtil.validateToken(token)) {
 				String refreshToken = jwtUtil.resolveRefreshToken(request);
 				if (refreshToken != null) {
@@ -90,6 +91,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         				SecurityContextHolder.getContext().setAuthentication(authentication);
         				
         				filterChain.doFilter(request, response);
+        				return;
 					}else {
 						SecurityContextHolder.clearContext();
 					}
