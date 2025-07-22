@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.account.service.impl.LoginMapper">
+
+	<select id="selectMemberByEmail"
+		resultType="kr.or.ddit.main.service.MemberVO" parameterType="String">
+		SELECT
+		MEM_ID, MEM_EMAIL, MEM_PASSWORD, MEM_NICKNAME, MEM_PHONE_NUMBER,
+		MEM_NAME, MEM_GEN, MEM_BIRTH, MEM_ALARM, MEM_STUDENT, MEM_ROLE,
+		MEM_POINT, CREATED_AT, PW_UPDATED_AT, DEL_YN, FILE_PROFILE, FILE_ETC,
+		LOGIN_TYPE, MEM_TOKEN
+		FROM MEMBER
+		WHERE MEM_EMAIL = #{inputEmail} AND
+		LOGIN_TYPE = 'G33001'
+	</select>
+
+	<select id="selectMemDelStat" parameterType="int"
+		resultType="kr.or.ddit.account.service.MemDelVO">
+		SELECT MD_STATUS
+		FROM MEM_DEL
+		WHERE MEM_ID = #{memId}
+	</select>
+
+	<select id="selectMemPnt" parameterType="int"
+		resultType="kr.or.ddit.account.service.MemberPenaltyVO">
+		SELECT
+		MP_ID, REPORT_ID, MP_WARN_REASON, MP_WARN_DATE,
+		MEM_ID, MP_TYPE,
+		MP_STARTDE_AT, MP_COMPLETE_AT, FILE_GROUP_NO
+		FROM
+		MEMBER_PENALTY
+		WHERE MEM_ID = #{memId}
+	</select>
+
+	<update id="memTokenInsert" parameterType="map">
+		UPDATE MEMBER
+		SET
+		MEM_TOKEN = #{refreshToken}
+		WHERE MEM_ID = #{memId}
+	</update>
+
+	<select id="selectAuthByMemId" parameterType="int"
+		resultType="kr.or.ddit.main.service.MemberVO">
+		SELECT MEM_ROLE
+		FROM MEMBER
+		WHERE MEM_ID = #{memId}
+	</select>
+
+
+	<select id="selectById" parameterType="int"
+		resultType="kr.or.ddit.main.service.MemberVO">
+		SELECT MEM_ID, MEM_EMAIL, MEM_PASSWORD, MEM_NICKNAME,
+		MEM_PHONE_NUMBER, MEM_NAME, MEM_GEN, MEM_BIRTH, MEM_ALARM,
+		MEM_STUDENT, MEM_ROLE, MEM_POINT, CREATED_AT, PW_UPDATED_AT, DEL_YN,
+		FILE_PROFILE, FILE_ETC, LOGIN_TYPE, MEM_TOKEN
+		FROM MEMBER
+		WHERE MEM_ID
+		=#{memId}
+	</select>
+	
+	<select id="getRefreshToken" parameterType="String" resultType="kr.or.ddit.main.service.MemberVO">
+	
+	</select>
+	
+</mapper>

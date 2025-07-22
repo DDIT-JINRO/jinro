@@ -1,0 +1,140 @@
+@charset "UTF-8";
+
+.login-req-tag {
+	display: flex;
+	justify-content: center;
+}
+
+.public-wrapper-main {
+	display: flex;
+	justify-content: center;
+}
+
+.login-container {
+	justify-content: center;
+	background: white;
+	border: 1px solid #E8ECEF;
+	border-radius: 12px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+	padding: 40px 32px;
+	width: 400px;
+}
+
+.login-container-imgBox {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 24px;
+}
+
+.login-container label {
+	display: block;
+	font-weight: 600;
+	margin: 16px 0 6px;
+}
+
+.login-container input,
+.login-container button {
+  box-sizing: border-box;
+}
+
+.login-container input[type="email"], .login-container input[type="password"]
+	{
+	width: 100%;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	padding-left: 12px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 14px;
+}
+
+.login-options {
+	display: flex;
+	align-items: center;
+	margin: 12px 0;
+}
+
+.login-options label {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	font-weight: 500;
+	padding-right: 10px;
+}
+
+.login-options input[type="checkbox"] {
+	margin-right: 6px;
+}
+
+.login-btn {
+	width: 100%;
+	padding: 10px;
+	background-color: #7881f5;
+	border: none;
+	border-radius: 6px;
+	color: white;
+	font-weight: bold;
+	font-size: 16px;
+	cursor: pointer;
+	margin-top: 16px;
+}
+
+.login-btn:hover {
+	
+	 transform: scale(0.99);
+	
+}
+
+.find-links {
+	justify-content: space-between;
+	text-align: right;
+	font-size: 13px;
+	margin-top: 10px;
+}
+
+.find-links a {
+	color: #7881f5;
+	text-decoration: none;
+	margin-left: 8px;
+}
+
+.sns-login {
+	margin-top: 20px;
+}
+
+.sns-login button {
+	width: 100%;
+	padding: 12px;
+	margin-top: 10px;
+	font-weight: bold;
+	font-size: 15px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.kakao {
+	background-color: #fee500;
+	color: #3c1e1e;
+}
+
+.naver {
+	background-color: #03c75a;
+	color: white;
+}
+
+.signup-box {
+	margin-top: 24px;
+	padding: 12px;
+	text-align: center;
+	background-color: #e7f7fd;
+	border-radius: 6px;
+	font-size: 14px;
+}
+
+.signup-box a {
+	color: #7881f5;
+	text-decoration: none;
+	margin-left: 6px;
+	font-weight: bold;
+}
