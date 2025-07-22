@@ -12,5 +12,5 @@ public class ChatRoomVO {
 	private int targetId;		//	채팅방이 열린 게시글 혹은 상담의 번호
 	private String crTitle;		//	채팅방 제목
 	private int crMaxCnt;		//	채팅방 제한 인원
-	private LocalDateTime createdAt;		//	채팅방 생성일
+	private LocalDateTime createdAt;	//	채팅방 생성일
 }

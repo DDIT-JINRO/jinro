@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.chat.service.impl.ChatMapper">
+	
+	<!-- 현재 내가 참여한 채팅방 목록 (스터디그룹만) -->
+	<select id="findRoomsByMemId" resultType="kr.or.ddit.chat.service.ChatRoomVO" parameterType="String" > 
+		SELECT
+		       CR.CR_ID
+		     , CC_ID
+		     , TARGET_ID
+		     , CR_TITLE
+		     , CR_MAX_CNT
+		     , CREATED_AT
+		  FROM CHAT_ROOM CR
+		 INNER JOIN CHAT_MEMBER CM
+		          ON CR.CR_ID = CM.CR_ID
+		 WHERE CM.MEM_ID = #{memId}
+		   AND CR.CC_ID = 'G04001'
+		   AND CM.IS_EXITED = 'N'
+	</select>
+
+</mapper>
