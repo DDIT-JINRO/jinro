@@ -2,21 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.rdm.service.impl.RoadmapMapper">
 
-	
 	<select id="selectMemberRoadmap" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
 		SELECT
-			ROAD_ID
-			, MEM_ID
-			, RS_ID
-			, ROAD_COMPLETE
-			, COMPLETE_AT
-			, CREATED_AT
+			MEM_ID
 		FROM
 			ROADMAP
 		WHERE
 			MEM_ID = #{memId}
-		ORDER BY
-			ROAD_ID DESC
 	</select>
 
 	<insert id="insertMemberRoadmap" parameterType="int">
@@ -32,4 +24,40 @@
 			)
 		VALUES(ROADMAP_SEQ.NEXTVAL, #{memId}, 1, 'N', SYSDATE)
 	</insert>
+	
+	<select id="selectCurrentCharPosition" resultType="int" parameterType="int">
+		SELECT
+		   MAX(RS_ID) AS RS_ID
+		FROM
+		   ROADMAP
+		WHERE
+		   MEM_ID = #{memId}
+	</select>
+	
+	<select id="selectProgressMissionList" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
+		SELECT
+			RS_ID
+			, CREATED_AT
+		FROM
+			ROADMAP
+		WHERE
+			ROAD_COMPLETE = 'N'
+			AND MEM_ID = #{memId}
+		ORDER BY
+			RS_ID DESC
+	</select>
+	
+	<select id="selectCompletedMissionList" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
+		SELECT
+		   RS_ID
+		   , CREATED_AT
+		   , ROAD_COMPLETE
+		FROM
+		   ROADMAP
+		WHERE
+		   ROAD_COMPLETE = 'Y'
+		   AND MEM_ID = #{memId}
+		ORDER BY
+		   RS_ID DESC
+	</select>
 </mapper>

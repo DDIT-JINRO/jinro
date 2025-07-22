@@ -15,4 +15,10 @@ public interface RoadmapMapper {
 
 	int selectCurrentStage(int memId);
 
+	int selectCurrentCharPosition(int memId);
+
+	List<RoadmapVO> selectProgressMissionList(int memId);
+
+	List<RoadmapVO> selectCompletedMissionList(int memId);
+
 }

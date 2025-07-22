@@ -1,9 +1,9 @@
 package kr.or.ddit.rdm.service;
 
-import java.util.List;
+import java.util.Map;
 
 public interface RoadmapService {
 
-	public List<RoadmapVO> selectMemberRoadmap(int memId);
+	public Map<String, Object> selectMemberRoadmap(int memId);
 
 }

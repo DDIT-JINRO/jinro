@@ -1,6 +1,6 @@
 package kr.or.ddit.rdm.web;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.ddit.config.jwt.JwtUtil;
 import kr.or.ddit.rdm.service.RoadmapService;
-import kr.or.ddit.rdm.service.RoadmapVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -29,11 +28,13 @@ public class RoadmapController {
 	RoadmapService roadmapService;
 	
 	@GetMapping("/selectMemberRoadmap")
-	public ResponseEntity<List<RoadmapVO>> selectMemberRoadmap(@AuthenticationPrincipal String memId) {
-		List<RoadmapVO> roadmap = this.roadmapService.selectMemberRoadmap(Integer.parseInt(memId));
+	public ResponseEntity<Map<String, Object>> selectMemberRoadmap(@AuthenticationPrincipal String memId) {
+		log.info("멤버의 아이디 입니다 : " + memId);
 		
-		log.info("로드맵 결과111 : " + roadmap);
+		Map<String, Object> roadmapInfo = this.roadmapService.selectMemberRoadmap(Integer.parseInt(memId));
 		
-		return new ResponseEntity<List<RoadmapVO>>(roadmap, HttpStatus.OK);
+		log.info("로드맵 정보입니다. : " + roadmapInfo);
+		
+		return new ResponseEntity<Map<String, Object>>(roadmapInfo, HttpStatus.OK);
 	}
 }
