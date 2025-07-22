@@ -21,14 +21,28 @@
   		<div class="public-wrapper-main">
   			스터디그룹 상세
   			${stdGroupId} 번 글
+  			<button onclick="getChatRooms()">현재 채팅방 불러오기</button>
   			<br/>
 			<a href="/prg/std/stdGroupList.do">목록으로</a>
+			<a href="/prg/std/stdChatTest.do">채팅방 테스트</a>
   		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
-</html>
 <script>
-
+// 현재 참여중인 스터디그룹 채팅방 목록 가져오기
+function getChatRooms(){
+	fetch('/api/chat/rooms')
+	.then(resp =>{
+		return resp.json(); 
+	})
+	.then(data =>{
+		console.log(data);
+	})
+	.catch(err=>{
+		console.log(err);
+	})
+}
 </script>
+</html>

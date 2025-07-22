@@ -32,7 +32,8 @@ public class SecurityConfig {
 	
 	public WebSecurityCustomizer configure() {
 		return (web)->web.ignoring()
-				.requestMatchers(new AntPathRequestMatcher("/static/**"));
+				.requestMatchers(new AntPathRequestMatcher("/static/**")
+								, new AntPathRequestMatcher("/ws-stomp/**"));
 	}
 
 	@Bean

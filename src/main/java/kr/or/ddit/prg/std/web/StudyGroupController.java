@@ -28,4 +28,9 @@ public class StudyGroupController {
 		return "prg/std/stdGroupDetail";
 	}
 	
+	@GetMapping("/stdChatTest.do")
+	public String stdChatTest() {
+		return "prg/std/stdChatTest";
+	}
+	
 }
