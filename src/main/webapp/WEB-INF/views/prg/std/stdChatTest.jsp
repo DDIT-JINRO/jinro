@@ -80,7 +80,9 @@ let stompClient = null;
 function connect() {
     const socket = new SockJS("/ws-stomp");         // 서버의 config 에서 설정한 엔드포인트로 연결 소켓생성
     stompClient = Stomp.over(socket);               // 연결한 소켓을 Stomp로 (전송, 구독 형태)
-    stompClient.connect({}, function () {
+    stompClient.connect({
+        memId : sender                              // 채팅 추적을 위한 헤더에 보내는 사람 아이디값 추가
+    }, function () {
         stompClient.subscribe('/sub/chat/room/' + roomId, function (msg) {
             const container = document.getElementById('chat-container');
             const msgVO = JSON.parse(msg.body);
@@ -92,7 +94,6 @@ function connect() {
             }
             container.innerHTML += chatMsg;
             container.scrollTop = container.scrollHeight;
-
 
         });
 

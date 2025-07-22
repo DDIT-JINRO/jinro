@@ -1,5 +1,6 @@
 package kr.or.ddit.chat.web;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -44,9 +46,13 @@ public class ChatController {
 	
 	// 채팅 메시지 전송
 	@MessageMapping("/chat/message")  // 클라이언트에서 /pub/chat/message로 전송 시 매핑
-	public void sendMessage(ChatMessageVO chatMessageVO) {
+	public void sendMessage(ChatMessageVO chatMessageVO, SimpMessageHeaderAccessor headerAccessor) {
+		//log.info("sendMessage -> headerAccessor.getSessionId() : "+headerAccessor.getSessionId());
+		//log.info("sendMessage -> headerAccessor.getDestination() : "+headerAccessor.getDestination());
+		//log.info("sendMessage -> headerAccessor.getSubscriptionId() : "+headerAccessor.getSubscriptionId());
 		System.out.println("chat : "+chatMessageVO);
 		// 클라이언트에서 /sub/chat/room 경로로 구독중이면 전송 발생
 		messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessageVO.getCrId(), chatMessageVO);
 	}
+	
 }
