@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -36,19 +36,6 @@ public class SecurityConfig {
 		
 	}
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-        	.cors(withDefaults())
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // 모든 요청 허용
-            )
-            .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (개발용)
-            .formLogin(form -> form.disable()) // 로그인 폼 비활성화
-            .httpBasic(httpBasic -> httpBasic.disable()); // HTTP Basic 인증 비활성화
-
-        return http.build();
-    }
     
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -64,7 +51,9 @@ public class SecurityConfig {
     }
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth -> auth
+		http
+				.cors(Customizer.withDefaults())
+				.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/test").hasRole("USER") // 모든 사용자는 유저권한을 포함시켜놨습니다. 로그인이 필요한 서비스는 여기에 넣어주시면 됩니다.
 				.anyRequest().permitAll()).csrf(csrf -> csrf.disable())
 				.exceptionHandling(ex -> ex
