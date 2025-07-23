@@ -37,4 +37,12 @@
     </where>
 </select>
 
+<!-- 자소서 직종 공통코드 가져오기 -->
+<select id="selectSelfIntroComCodeList" resultType="kr.or.ddit.com.ComCodeVO">
+	SELECT CC_ID, CL_CODE, CC_NAME
+	FROM COM_CODE
+	WHERE CL_CODE ='G36'
+	ORDER BY 1
+</select>
+
 </mapper>

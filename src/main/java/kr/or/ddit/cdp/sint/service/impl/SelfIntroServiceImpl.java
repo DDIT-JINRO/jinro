@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroService;
+import kr.or.ddit.com.ComCodeVO;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +25,12 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 	public int selectSelfIntroQCount(SelfIntroQVO selfIntroQVO) {
 		// TODO Auto-generated method stub
 		return selfIntroMapper.selectSelfIntroQCount(selfIntroQVO);
+	}
+
+	@Override
+	public List<ComCodeVO> selectSelfIntroComCodeList() {
+		// TODO Auto-generated method stub
+		return selfIntroMapper.selectSelfIntroComCodeList();
 	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.or.ddit.cdp.rsm.rsm.web.ResumeController;
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroService;
+import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.util.ArticlePage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,16 +38,17 @@ public class QuestionListController {
 		selfIntroQVO.setStartRow(startRow);
 		selfIntroQVO.setEndRow(endRow);
 
-		log.info("questionList -> " + selfIntroQVO);
 		// 서비스 호출
+		List<ComCodeVO> codeVOList = selfIntroService.selectSelfIntroComCodeList();
+		log.info("codeVOList",codeVOList);
+		
 		int total = selfIntroService.selectSelfIntroQCount(selfIntroQVO);
-		log.info("questionList -> total" + total);
-		List<SelfIntroQVO> selfIntroQVOLsit = selfIntroService.selectSelfIntroQList(selfIntroQVO);
-		log.info("questionList -> selfIntroQVOLsit" + selfIntroQVOLsit);
+		List<SelfIntroQVO> selfIntroQVOList = selfIntroService.selectSelfIntroQList(selfIntroQVO);
 
-		ArticlePage<SelfIntroQVO> page = new ArticlePage<>(total, currentPage, size, selfIntroQVOLsit, keyword);
+		ArticlePage<SelfIntroQVO> page = new ArticlePage<>(total, currentPage, size, selfIntroQVOList, keyword);
 		page.setUrl("/sint/qestnlst");
 
+		model.addAttribute("codeVOList",codeVOList);
 		model.addAttribute("articlePage", page);
 		model.addAttribute("siqJobFilter", siqJob); // 직무 필터 유지용
 		return "cdp/sint/qestnlst/questionList"; // JSP
