@@ -4,7 +4,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <link rel="stylesheet" href="/css/pagenation.css">
+<link rel="stylesheet" href="/css/cdp/sint/qestnlst/questionList.css">
+<script type="text/javascript">
+		window.currentMemId = '<c:out value="${memId}" default="" />';
+</script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/cdp/sint/qestnlst/questionList.js">
+</script>
+
 <!-- 스타일 여기 적어주시면 가능 -->
+<style>
+
+</style>
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
@@ -36,34 +47,40 @@
 			      <input type="text" name="keyword" value="${articlePage.keyword}" placeholder="질문 검색" />
 			      <select name="siqJob">
 			        <option value="">전체 직무</option>
-			        <option value="사업관리" <c:if test="${siqJobFilter == '사업관리'}">selected</c:if>>사업관리</option>
-			        <option value="보건의료" <c:if test="${siqJobFilter == '보건의료'}">selected</c:if>>보건·의료</option>
-			        <option value="금융보험" <c:if test="${siqJobFilter == '금융보험'}">selected</c:if>>금융보험</option>
-			        <!-- 필요한 직무 추가 -->
+					<c:forEach var="code" items="${codeVOList}">
+					  <option value="${code.ccId}" <c:if test="${siqJobFilter == code.ccId}">selected</c:if>>${code.ccName}</option>
+					</c:forEach>
 			      </select>
 			      <button type="submit">검색</button>
 			    </div>
 			  </form>
-			
-			  <form method="post" action="/sint/create">
-			    <table border="1" width="100%" style="margin-top: 20px;">
-			      <thead>
-			        <tr>
-			          <th width="5%"></th>
-			          <th>질문 내용</th>
-			        </tr>
-			      </thead>
-			      <tbody>
-			        <c:forEach var="q" items="${articlePage.content}">
-			          <tr>
-			            <td><input type="checkbox" name="selectedQIds" value="${q.siqId}" /></td>
-			            <td>${q.siqContent}</td>
-			          </tr>
-			        </c:forEach>
-			      </tbody>
-			    </table>
-			  </form>
-			
+
+				<form id="cartForm" method="post" action="/sint/qestnlst/cart">
+					<input type="hidden" id="questionIds" name="questionIds" />
+
+					<div class="question-list">
+						<c:forEach var="q" items="${articlePage.content}">
+						  <div class="question">
+							  <div class="question-left">
+							    <div class="question-tag">${codeMap[q.siqJob]}</div>
+							    <div class="question-text">${q.siqContent}</div>
+							  </div>
+							  <div class="question-right">
+							    <input type="checkbox"
+							      data-id="${q.siqId}"
+							      onchange="toggleQuestion(this, '${q.siqId}', '${q.siqContent}')"/>
+							  </div>
+							</div>
+						</c:forEach>
+					</div>
+
+					<!-- 오른쪽 패널 -->
+					<div class="cart-panel">
+						<div id="cartSidebar"></div>
+						<button type="button" onclick="submitCartForm()">자기소개서 작성</button>
+					</div>
+				</form>
+
 				<div class="card-footer clearfix">
 					<ul class="pagination">
 						<!-- Previous -->
@@ -96,5 +113,7 @@
 </body>
 </html>
 <script>
-	// 스크립트 작성 해주시면 됩니다.
+
 </script>
+
+

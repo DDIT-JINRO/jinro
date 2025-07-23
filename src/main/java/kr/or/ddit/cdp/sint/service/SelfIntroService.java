@@ -12,4 +12,8 @@ public interface SelfIntroService {
 	public int selectSelfIntroQCount(SelfIntroQVO selfIntroQVO);
 
 	public List<ComCodeVO> selectSelfIntroComCodeList();
+	
+	public int insertIntro(SelfIntroVO selfIntroVO,List<Long> questionIds);
+	
+	public SelfIntroContentVO selectBySelfIntroContentId(SelfIntroVO selfIntroVO);
 }

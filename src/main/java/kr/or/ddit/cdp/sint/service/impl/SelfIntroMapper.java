@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.or.ddit.cdp.sint.service.SelfIntroContentVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
+import kr.or.ddit.cdp.sint.service.SelfIntroVO;
 import kr.or.ddit.com.ComCodeVO;
 
 @Mapper
@@ -17,4 +19,14 @@ public interface SelfIntroMapper {
 	public int selectSelfIntroQCount(SelfIntroQVO selfIntroQVO);
 
 	public List<ComCodeVO> selectSelfIntroComCodeList();
+	
+	public int selectMaxIntroId();
+	
+	public int insertIntro(SelfIntroVO selfIntroVO);
+	
+	public int selectMaxSICId();
+	
+	public int insertContent(SelfIntroContentVO SelfIntroContentVO);
+	
+	public SelfIntroContentVO selectBySelfIntroContentId(SelfIntroVO selfIntroVO);
 }

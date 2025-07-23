@@ -45,4 +45,37 @@
 	ORDER BY 1
 </select>
 
+<select id="selectMaxIntroId" resultType="int">
+	SELECT NVL(MAX(SI_ID),0)+1 FROM SELF_INTRO
+</select>
+
+<!-- 카트 선택한 질문들 자소서 작성에 띄워주기 위해 저장 -->
+<insert id="insertIntro" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
+
+	INSERT INTO SELF_INTRO(SI_ID, MEM_ID, SI_STATUS)
+	VALUES (#{siId},#{memId},'작성중')
+</insert>
+
+
+<select id="selectMaxSICId" resultType="int">
+		SELECT NVL(MAX(SIC_ID),0)+1 FROM SELF_INTRO_CONTENT
+</select>
+<!-- 자소서 항목별 저장 -->
+<insert id="insertContent" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroContentVO">
+
+		INSERT INTO SELF_INTRO_CONTENT
+		(SIC_ID,SI_ID, SIQ_ID, SIC_LIMIT, SIC_ORDER)
+		VALUES
+		(#{sicId},#{siId}, #{siqId}, #{sicLimit}, #{sicOrder})
+</insert>
+
+<select id="selectBySelfIntroContentId" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroContentVO">
+	SELECT SIC_ID, SI_ID, SIQ_ID, SIC_CONTENT, SIC_LIMIT, SIC_COUNT,
+	SIC_ORDER
+	FROM SELF_INTRO_CONTENT
+	WHERE SI_ID = #{siId}
+	ORDER BY SIC_ORDER
+</select>
+
+
 </mapper>
