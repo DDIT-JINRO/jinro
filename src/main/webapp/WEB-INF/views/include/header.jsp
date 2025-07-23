@@ -52,8 +52,8 @@
       worldcup.addEventListener("click", () => {
           const worldcupUrl = 'http://localhost:5173/worldcup';
           
-          const width  = 1084;
-          const height = 736;
+          const width  = 1200;
+          const height = 740;
           const screenWidth  = window.screen.width;
           const screenHeight = window.screen.height;
              const left = Math.floor((screenWidth - width) / 2);
