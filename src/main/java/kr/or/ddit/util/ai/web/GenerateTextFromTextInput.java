@@ -37,7 +37,7 @@ public class GenerateTextFromTextInput {
 	//테스트용 JSP
 	@GetMapping("/ai")
 	public String openJSP() {
-		return "AIChat/AIChatUI";
+		return "aiChat/aiChatUI";
 	}
 	
 
@@ -46,7 +46,7 @@ public class GenerateTextFromTextInput {
     public String geminiChat(@RequestBody Map<String, String> message) {
         
         // 제미니 api 연결
-        Client client = Client.builder().apiKey("AIzaSyA8qDS5UDxsmNB9MmHCCinfgQrfhY94IXc").build();
+        Client client = Client.builder().apiKey(apiKey).build();
 
         String prompt = systemPrompt1 + "\n" + message.get("message");
 
