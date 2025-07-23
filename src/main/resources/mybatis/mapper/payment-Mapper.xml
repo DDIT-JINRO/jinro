@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="kr.or.ddit.util.payment.service.impl.PaymentMapper">
+
+	<resultMap id="paymentMap" type="kr.or.ddit.util.payment.service.PaymentVO">
+		<id property="payId" column="PAY_ID" />
+		<result property="memId" column="MEM_ID"  />
+		<result property="subId" column="SUB_ID" />
+		<result property="impUid" column="IMP_UID" />
+		<result property="merchantUid" column="MERCHANT_UID" />
+		<result property="payAmount" column="PAY_AMOUNT" />
+		<result property="payDate" column="PAY_DATE" />
+		<result property="payStatus" column="PAY_STATUS" />
+		<result property="payResumeCnt" column="PAY_RESUME_CNT" />
+		<result property="payCoverCnt" column="PAY_COVER_CNT" />
+		<result property="payConsultCnt" column="PAY_CONSULT_CNT" />
+		<result property="payMockCnt" column="PAY_MOCK_CNT" />
+	</resultMap>
+
+
+	<!--  새로운 결제 정보를 데이터베이스에 삽입.
+	public int insertPayment(PaymentVO paymentVO); -->
+	<insert id="insertPayment" parameterType="kr.or.ddit.util.payment.service.PaymentVO">
+		<selectKey keyProperty="payId" resultType="long" order="BEFORE">
+            SELECT	PAYMENT_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO PAYMENT (
+             PAY_ID
+            ,MEM_ID
+            ,SUB_ID
+            ,IMP_UID
+            ,MERCHANT_UID
+            ,PAY_AMOUNT
+            ,PAY_DATE
+            ,PAY_STATUS
+            ,PAY_RESUME_CNT
+            ,PAY_COVER_CNT
+            ,PAY_CONSULT_CNT
+            ,PAY_MOCK_CNT
+        ) 
+        VALUES (
+			
+            #{payId}
+           ,#{memId}
+           ,#{subId}
+           ,#{impUid}
+           ,#{merchantUid}
+           ,#{payAmount}
+           ,SYSDATE
+           ,#{payStatus}
+           ,NVL(#{payResumeCnt}, 0)
+           ,NVL(#{payCoverCnt}, 0)
+           ,NVL(#{payConsultCnt}, 0)
+           ,NVL(#{payMockCnt}, 0)
+        )
+	</insert>
+	
+	<!-- impUid를 기반으로 결제 정보를 조회
+	public PaymentVO selectPaymentByImpUid(String impUid); -->
+	<select id="selectPaymentByImpUid" parameterType="String" resultMap="paymentMap">
+		SELECT	PAY_ID
+	           ,MEM_ID
+	           ,SUB_ID
+	           ,IMP_UID
+	           ,MERCHANT_UID
+	           ,PAY_AMOUNT
+	           ,PAY_DATE
+	           ,PAY_STATUS
+	           ,PAY_RESUME_CNT
+	           ,PAY_COVER_CNT
+	           ,PAY_CONSULT_CNT
+	           ,PAY_MOCK_CNT
+        FROM	PAYMENT
+        WHERE	IMP_UID = #{impUid} 
+	</select>
+
+    
+	<!-- merchantUid를 기반으로 결제 정보를 조회
+	public PaymentVO selectPaymentByMerchantUid(String merchantUid); -->
+	<select id="selectPaymentByMerchantUid" parameterType="String" resultMap="paymentMap">
+		SELECT	PAY_ID
+	           ,MEM_ID
+	           ,SUB_ID
+	           ,IMP_UID
+	           ,MERCHANT_UID
+	           ,PAY_AMOUNT
+	           ,PAY_DATE
+	           ,PAY_STATUS
+	           ,PAY_RESUME_CNT
+	           ,PAY_COVER_CNT
+	           ,PAY_CONSULT_CNT
+	           ,PAY_MOCK_CNT
+        FROM	PAYMENT
+        WHERE	MERCHANT_UID = #{merchantUid} 
+	</select>
+    
+	<!-- 결제 상태를 업데이트
+	public int updatePaymentStatus(PaymentVO paymentVO); -->
+	<update id="updatePaymentStatus">
+		UPDATE 	PAYMENT
+		SET		PAY_STATUS = #{payStatus}
+		WHERE	IMP_UID = #{impUid} 
+	</update>
+
+</mapper>

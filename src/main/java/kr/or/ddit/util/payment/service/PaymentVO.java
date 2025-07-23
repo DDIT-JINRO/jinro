@@ -27,5 +27,4 @@ public class PaymentVO {
 	private Integer payConsultCnt; // PAY_CONSULT_CNT (결제 상담 횟수)
 	private Integer payMockCnt; // PAY_MOCK_CNT (모의면접 횟수)
 
-
 }

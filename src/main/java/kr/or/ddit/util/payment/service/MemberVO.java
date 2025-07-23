@@ -14,5 +14,4 @@ import lombok.NoArgsConstructor;
 public class MemberVO {
     private Long memId; // 회원 고유 ID (PK)
     
-
 }

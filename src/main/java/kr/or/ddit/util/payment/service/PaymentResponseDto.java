@@ -52,7 +52,5 @@ public class PaymentResponseDto {
 		return Objects.equals(message, other.message) && Objects.equals(orderId, other.orderId)
 				&& Objects.equals(status, other.status);
 	}
-    
-    
 
 }
