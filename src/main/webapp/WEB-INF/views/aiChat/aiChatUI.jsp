@@ -86,8 +86,7 @@
 }
 </style>
 
-<!-- Axios CDN -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/axios.min.js"></script>
 </head>
 <body>
 
@@ -113,9 +112,18 @@
 
 <!-- 스크립트 -->
 <script>
+let isFirstOpen = true; // 첫 번째 모달 열기인지 확인하는 플래그
+
 function openChatModal() {
   const modal = document.getElementById("chatModal");
   modal.style.display = "block";
+  
+  // 첫 번째 모달 열기일 때만 환영 메시지 표시
+  if (isFirstOpen) {
+    showWelcomeMessage();
+    isFirstOpen = false;
+  }
+  
   setTimeout(() => document.getElementById("chatInput").focus(), 100);
 }
 
@@ -132,6 +140,16 @@ function outsideClick(event) {
 document.addEventListener("keydown", function(e) {
   if (e.key === "Escape") closeChatModal();
 });
+
+function showWelcomeMessage() {
+  const welcomeText = "안녕하세요. 찾아주셔서 감사합니다.\n\n" +
+                     "저는 심리상담을 담당하는 AI 챗봇입니다.\n\n" +
+                     "이곳은 당신의 마음을 편안하게 이야기하고, 함께 어려움을 헤쳐나갈 수 있도록 돕는 공간이에요. " +
+                     "어떤 이야기든 괜찮으니, 지금 어떤 기분이신지, 혹은 어떤 고민이 있으신지 편하게 이야기해주시면 " +
+                     "제가 귀 기울여 듣고 함께 생각해볼게요.";
+  
+  addMessage(welcomeText, 'received', true);
+}
 
 function sendMessage() {
   const input = document.getElementById("chatInput");
@@ -153,14 +171,18 @@ function sendMessage() {
     });
 }
 
-function addMessage(text, type) {
+function addMessage(text, type, isWelcome = false) {
   const chatBody = document.getElementById("chatBody");
   const messageDiv = document.createElement("div");
   messageDiv.className = "chat-message " + type;
+  
+  if (isWelcome) {
+    messageDiv.classList.add("welcome-message");
+  }
 
   const textDiv = document.createElement("div");
   textDiv.className = "text";
-  textDiv.textContent = text;
+  textDiv.innerHTML = text.replace(/\n/g, '<br>');
 
   const timeDiv = document.createElement("div");
   timeDiv.className = "time";
