@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	<section class="main-event-banner">
 		<div class="center-jr">
 			<img alt="" src="/images/logo.png">
+			<h3><a href="/main/youtube">유튜브 API 확인 </a></h3>
 		</div>
 	</section>
 </div>
