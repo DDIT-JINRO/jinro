@@ -31,6 +31,12 @@ public interface LoginMapper {
 
 	public MemberVO selectMemberByEmailForKakao(String memEmail);
 
+	public MemberVO selectByEmailForNaver(MemberVO member);
+
+	public int naverInsert(MemberVO member);
+
+	public MemberVO selectMemberByEmailForNaver(String memEmail);
+
 	
 
 	

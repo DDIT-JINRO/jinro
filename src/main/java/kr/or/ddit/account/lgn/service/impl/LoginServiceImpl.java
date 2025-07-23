@@ -194,4 +194,77 @@ public class LoginServiceImpl implements LoginService {
 			}
 		}
 	}
+
+	@Override
+	public Map<String, Object> naverLgnProcess(MemberVO member) {
+		MemberVO result = this.loginMapper.selectByEmailForNaver(member);
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		if (result != null) {
+			String memId = result.getMemId() + "";
+
+			String accessToken = jwtUtil.createAccessToken(memId);
+			String refreshToken = jwtUtil.createRefreshToken(memId);
+
+			jwtUtil.validateToken(accessToken);
+
+			Map<String, Object> paramMap = new HashMap<>();
+			paramMap.put("refreshToken", refreshToken);
+			paramMap.put("memId", memId);
+
+			int tokenResult = loginMapper.memTokenInsert(paramMap);
+
+			if (tokenResult == 1) {
+				log.info("리프레쉬 토큰 db 저장 성공");
+			} else {
+				log.info("리프레쉬 토큰 db 저장 중 에러 발생");
+			}
+
+			resultMap.put("status", "success");
+			resultMap.put("accessToken", accessToken);
+			resultMap.put("refreshToken", refreshToken);
+
+			return resultMap;
+
+		} else {
+			
+			int res = this.loginMapper.naverInsert(member);
+			
+			if(res == 0) {
+				resultMap.put("status", "failed");
+				return resultMap;
+			}else if(res == 1) {
+				MemberVO nvMem = loginMapper.selectMemberByEmailForNaver(member.getMemEmail());
+				
+				int nvMemId = nvMem.getMemId();
+				
+				String memId = nvMemId+"";
+				
+				String accessToken = jwtUtil.createAccessToken(memId);
+				String refreshToken = jwtUtil.createRefreshToken(memId);
+
+				jwtUtil.validateToken(accessToken);
+
+				Map<String, Object> paramMap = new HashMap<>();
+				paramMap.put("refreshToken", refreshToken);
+				paramMap.put("memId", memId);
+
+				int tokenResult = loginMapper.memTokenInsert(paramMap);
+
+				if (tokenResult == 1) {
+					log.info("리프레쉬 토큰 db 저장 성공");
+				} else {
+					log.info("리프레쉬 토큰 db 저장 중 에러 발생");
+				}
+
+				resultMap.put("status", "success");
+				resultMap.put("accessToken", accessToken);
+				resultMap.put("refreshToken", refreshToken);
+
+				return resultMap;
+			}else {
+				return null;
+			}
+		}
+	}
 }

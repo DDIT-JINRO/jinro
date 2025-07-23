@@ -275,12 +275,12 @@
 
 	form.addEventListener("submit", function(e) {
 	 if (!isEmailVerified) {
-	   	e.preventDefault(); // 폼 제출 막기
+	   	e.preventDefault();
        	showCustomAlert("이메일 인증이 필요합니다.");
-       	// 이메일 입력 필드 포커스 가능
+       	
        	document.getElementById("email").focus();
       }
-	   // 인증 완료 시는 제출 정상 진행
+	   
 	});
 	
 	const nicknameInput = document.getElementById("nickname");

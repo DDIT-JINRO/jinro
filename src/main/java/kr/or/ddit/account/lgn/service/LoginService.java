@@ -15,6 +15,8 @@ public interface LoginService {
 
 	public Map<String, Object> kakaoLgnProcess(MemberVO member);
 
+	public Map<String, Object> naverLgnProcess(MemberVO member);
+
 
 
 }

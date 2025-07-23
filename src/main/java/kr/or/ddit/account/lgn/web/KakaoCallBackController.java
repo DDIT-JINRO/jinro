@@ -43,6 +43,8 @@ public class KakaoCallBackController {
 		String birthyear = (String) kakaoAccount.get("birthyear");
 		String birthday = (String) kakaoAccount.get("birthday");
 		String email = (String) kakaoAccount.get("email");
+//		String image = (String) kakaoAccount.get("thumbnail_image_url");
+		
 		MemberVO member = new MemberVO();
 
 		if (gender != null && gender != "") {
@@ -56,6 +58,11 @@ public class KakaoCallBackController {
 		String formatPhone = "";
 		if (phone.startsWith("+82")) {
 			formatPhone = phone.replace("+82", "0").replaceAll("[^0-9]", "");
+			if (formatPhone.length() == 11) {
+		        formatPhone = formatPhone.replaceFirst("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
+		    } else if (formatPhone.length() == 10) {
+		        formatPhone = formatPhone.replaceFirst("(\\d{3})(\\d{3})(\\d{4})", "$1-$2-$3");
+		    }
 			member.setMemPhoneNumber(formatPhone);
 		}
 

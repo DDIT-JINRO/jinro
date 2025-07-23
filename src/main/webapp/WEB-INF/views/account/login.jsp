@@ -40,7 +40,7 @@
 						<img alt="" src="/images/free-icon-kakao-talk-2111466.png">카카오톡
 						계정으로 로그인
 					</button>
-					<button class="naver">
+					<button class="naver" onclick="naverLogin()">
 						<img alt="" src="/images/naver.png">네이버 계정으로 로그인
 					</button>
 				</div>
@@ -58,13 +58,21 @@
 <script>
 	// 스크립트 작성 해주시면 됩니다.
 
+function naverLogin(){
+	const CLIENT_ID = '6jr00nIpv6PsMVmb3qzS';
+	const CALLBACK_URL = 'http://localhost:8080/lgn/naverCallback.do';	
+		
+	const naverAuthURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=\${CLIENT_ID}&state=STATE_STRING&redirect_uri=\${CALLBACK_URL}`
+	
+	window.location.href = naverAuthURL;
+}
+	
 function kakaoLogin() {
   const REST_API_KEY = '1802c81999ddbc08d235c5cf064b15c8';
   const REDIRECT_URI = 'http://localhost:8080/lgn/kakaoCallback.do';
 
   const kakaoAuthURL = 
     `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=\${REST_API_KEY}&redirect_uri=\${REDIRECT_URI}&prompt=login`;
-    console.log(kakaoAuthURL);
 
   window.location.href = kakaoAuthURL;
 }
