@@ -1,8 +1,11 @@
 package kr.or.ddit.rdm.service.impl;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,27 +17,32 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class RoadmapServiceImpl implements RoadmapService{
+public class RoadmapServiceImpl implements RoadmapService {
+
+	private static final Set<String> ALLOWED_TABLE_NAMES = new HashSet<>(
+			Arrays.asList("INTEREST_CN", "APTITUDE_TEST", "WORLDCUP", "BOOKMARK", "CHAT_MEMBER", "COUNSELING", "BOARD",
+					"RESUME", "SELF_INTRO", "MOCK_INTERVIEW_HISTORY"));
 
 	@Autowired
 	RoadmapMapper roadmapMapper;
-	
+
 	// 특정 사용자의 로드맵 정보 조회
 	@Override
 	public Map<String, Object> selectMemberRoadmap(int memId) {
-		if(this.roadmapMapper.selectMemberRoadmap(memId).isEmpty()) {
+		if (this.roadmapMapper.selectMemberRoadmap(memId).isEmpty()) {
 			this.roadmapMapper.insertMemberRoadmap(memId);
 		}
 		// 현재 캐릭터 위치
 		int currentCharPosition = this.roadmapMapper.selectCurrentCharPosition(memId);
-		
+
 		// 현재 받은 미션들
 		List<RoadmapVO> progressMissions = this.roadmapMapper.selectProgressMissionList(memId);
-		
+
 		// 완료한 미션들
 		List<RoadmapVO> completedMissions = this.roadmapMapper.selectCompletedMissionList(memId);
-		
-		return Map.of("currentCharPosition", currentCharPosition, "progressMissions", progressMissions, "completedMissions", completedMissions);
+
+		return Map.of("currentCharPosition", currentCharPosition, "progressMissions", progressMissions,
+				"completedMissions", completedMissions);
 	}
 
 	// 로드맵 노드별 미션 리스트
@@ -46,24 +54,44 @@ public class RoadmapServiceImpl implements RoadmapService{
 	// 특정 사용자의 미션 완료 확인 메서드
 	@Override
 	public String updateCompleteMission(String memId, int rsId) {
-		String result = "fail";
 		String tableName = this.roadmapMapper.selectTableName(rsId);
 		
+	    if (!ALLOWED_TABLE_NAMES.contains(tableName)) {
+	        throw new IllegalArgumentException("허용되지 않은 테이블 이름입니다: " + tableName);
+	    }
+
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put("tableName", tableName);
 		parameter.put("memId", memId);
 		parameter.put("rsId", rsId);
-		
+
 		int searchResult = this.roadmapMapper.isCompleteExists(parameter);
-		
-		if(searchResult > 0) {
-			int updateResult = this.roadmapMapper.updateCompleteMission(parameter);
-			result = "complete";
-		}
-		
-		return result;
+
+		if (searchResult <= 0)
+			return "fail";
+
+		int updateResult = this.roadmapMapper.updateCompleteMission(parameter);
+
+		if (updateResult <= 0)
+			return "fail";
+
+		return "success";
 	}
 
+	// 특정 사용자의 미션 등록 메서드
+	@Override
+	public String insertMission(String memId, int rsId) {
+		RoadmapVO roadmapVO = new RoadmapVO();
+		roadmapVO.setMemId(Integer.parseInt(memId));
+		roadmapVO.setRsId(rsId);
 
+		int result = this.roadmapMapper.insertMission(roadmapVO);
+		log.info("인서트 결과값 입니다 : " + result);
+
+		if (result > 0)
+			return "success";
+
+		return "fail";
+	}
 
 }

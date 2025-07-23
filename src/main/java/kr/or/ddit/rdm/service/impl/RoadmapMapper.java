@@ -38,5 +38,8 @@ public interface RoadmapMapper {
 	// 미션 완료 시 완료 여부 업데이트
 	int updateCompleteMission(Map<String, Object> parameter);
 
+	// 특정 사용자의 미션 등록 메서드
+	int insertMission(RoadmapVO roadmapVO);
+
 
 }

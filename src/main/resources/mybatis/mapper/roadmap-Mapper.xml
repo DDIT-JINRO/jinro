@@ -16,8 +16,7 @@
 	<insert id="insertMemberRoadmap" parameterType="int">
 		INSERT
 			INTO
-			ROADMAP
-		(
+			ROADMAP(
 				ROAD_ID
 				, MEM_ID
 				, RS_ID
@@ -30,11 +29,18 @@
 	<!-- 특정 사용자의 로드맵의 현재 캐릭터의 위치 조회 -->
 	<select id="selectCurrentCharPosition" resultType="int" parameterType="int">
 		SELECT
-		   MAX(RS_ID) AS RS_ID
+			RS_ID
 		FROM
-		   ROADMAP
+			ROADMAP
 		WHERE
-		   MEM_ID = #{memId}
+			ROAD_ID = (
+				SELECT
+					MAX(ROAD_ID)
+				FROM
+					ROADMAP
+				WHERE
+					MEM_ID = 1
+			)
 	</select>
 	
 	<!-- 특정 사용자의 진행 중인 미션 리스트 조회 -->
@@ -80,11 +86,10 @@
 		FROM
 			ROADMAP_STEP A
 		INNER JOIN COM_CODE B ON
-			(
-				A.RS_TYPE = B.CC_ID
-			)
+			(A.RS_TYPE = B.CC_ID)
 	</select>
 	
+	<!-- 파라미터 단계에 해당하는 테이블명 조회 -->
 	<select id="selectTableName" parameterType="int" resultType="String">
 		SELECT
 			CC_NAME
@@ -101,6 +106,7 @@
 			)
 	</select>
 	
+	<!-- 미션 완료 확인 여부 조회 -->
 	<select id="isCompleteExists" parameterType="map" resultType="int">
 		SELECT
 			COUNT(*)
@@ -108,8 +114,13 @@
 			${tableName}
 		WHERE
 			MEM_ID = #{memId}
+		<if test="tableName == 'BOOKMARK'">
+		AND
+			BM_CATEGORY_ID = 'G03004'
+		</if>
 	</select>
 	
+	<!-- 미션 완료 시 완료 여부 업데이트 -->
 	<update id="updateCompleteMission" parameterType="map">
 		UPDATE
 		   ROADMAP
@@ -121,4 +132,35 @@
 		AND
 		   RS_ID = #{rsId}
 	</update>
+	
+	<!-- 특정 사용자의 미션 등록 메서드 -->
+	<insert id="insertMission" parameterType="kr.or.ddit.rdm.service.RoadmapVO">
+		INSERT
+			INTO
+			ROADMAP (
+				ROAD_ID
+				, MEM_ID
+				, RS_ID
+				, ROAD_COMPLETE
+				, CREATED_AT
+			)
+		SELECT
+			ROADMAP_SEQ.NEXTVAL
+			, #{memId}
+			, #{rsId}
+			, 'N'
+			, SYSDATE
+		FROM
+			DUAL
+		WHERE
+			NOT EXISTS (
+				SELECT
+					1
+				FROM
+					ROADMAP
+				WHERE
+					MEM_ID = #{memId}
+					AND RS_ID = #{rsId}
+			)
+	</insert>
 </mapper>

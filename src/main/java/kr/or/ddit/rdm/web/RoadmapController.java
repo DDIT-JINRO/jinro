@@ -56,4 +56,14 @@ public class RoadmapController {
 		
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
+	
+	// 특정 사용자의 미션 등록 메서드
+	@PostMapping("/insertMission")
+	public ResponseEntity<String> insertMission(@AuthenticationPrincipal String memId, @RequestBody RoadmapVO request) {
+		log.info("request가 정상적으로 왔음 : " + request);
+		
+		String result = this.roadmapService.insertMission(memId, request.getRsId());
+
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
 }
