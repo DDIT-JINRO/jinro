@@ -100,16 +100,7 @@ public class QuestionListController {
         
         int siId = selfIntroService.insertIntro(selfIntroVO,questionIdList);
         log.info("siId : "+siId);
-        session.setAttribute("siId", siId);
-        return "redirect:/sint/qestnlst/sintwrt";
-    }
-    
-    @GetMapping("/sintwrt")
-    public String writeForm(Model model, HttpSession session) {
-    	int siId = (Integer) session.getAttribute("siId");
-		log.info("siId : "+siId);
-		model.addAttribute("siId", siId);
-		return "cdp/sint/sintwrt/selfIntroWriting";
+        return "redirect:/sint/sintwrt?siId="+siId;
     }
     
 }
