@@ -20,8 +20,15 @@ public class MemberJoinServiceImpl implements MemberJoinService{
 
 	@Override
 	public boolean isNicknameExists(String nickname) {
-		// TODO Auto-generated method stub
-		return this.memberJoinMapper.isNicknameExists(nickname);
+		String result = this.memberJoinMapper.isNicknameExists(nickname);
+		
+		boolean tf = true;
+		
+		if(result.equals("false")) {
+			tf=false;
+		}
+		
+		return tf;
 	}
 
 }

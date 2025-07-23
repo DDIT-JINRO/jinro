@@ -30,12 +30,6 @@
 				<p id="timer" style="margin-top: 10px;"></p>
 			</div>
 		</div>
-		<div id="customAlert" class="custom-alert hidden">
-			<div class="custom-alert-content">
-				<p id="alertMessage">알림 내용입니다.</p>
-				<button onclick="closeCustomAlert()">확인</button>
-			</div>
-		</div>
 		<div class="public-wrapper-main">
 			<div class="dpfx2">
 				<div class="signup-container2">
@@ -49,37 +43,38 @@
 					<form>
 						<div class="input-row">
 							<label for="email">이메일</label> <input class="inputWt"
-								type="email" id="email" placeholder="이메일을 입력해주세요." required />
+								type="email" id="email" placeholder="이메일을 입력해주세요." />
 							<button type="button" onclick="emailCheck()">이메일 인증</button>
 						</div>
+						<p id="emailError"></p>
 
 						<div class="input-row">
 							<label for="nickname">닉네임</label> <input type="text"
-								class="inputWt" id="nickname" placeholder="닉네임을 입력해주세요."
-								required />
-							
-							<button type="button">중복 확인</button>
+								class="inputWt" id="nickname" placeholder="닉네임을 입력해주세요." />
+
+							<button id="nicknameCheck" type="button">중복 확인</button>
 						</div>
-							<p id="nicknameError"></p>
+						<p id="nicknameError"></p>
 
 						<div class="input-row2">
 							<label for="password">비밀번호</label> <input type="password"
 								class="inputWt2" class="line-flex" id="password"
-								placeholder="비밀번호를 입력해주세요." required />
+								placeholder="비밀번호를 입력해주세요." />
 						</div>
 						<div class="input-row2">
 							<label for="passwordConfirm">비밀번호 확인</label> <input
 								class="inputWt2" type="password" id="passwordConfirm"
-								placeholder="비밀번호를 한 번 더 입력해주세요." required />
+								placeholder="비밀번호를 한 번 더 입력해주세요." />
 						</div>
+						<p id="passwordError"></p>
 						<div class="input-row2">
 							<label for="name">이름</label> <input class="inputWt2" type="text"
-								id="name" placeholder="이름을 입력해주세요." required />
+								id="name" placeholder="이름을 입력해주세요." />
 						</div>
+						<p id="nameError"></p>
 						<div class="input-row">
 							<label for="phone">핸드폰 번호</label> <input type="tel"
-								class="inputWt" id="phone" placeholder="핸드폰 번호를 입력해주세요."
-								required />
+								class="inputWt" id="phone" placeholder="핸드폰 번호를 입력해주세요." />
 							<button type="button">전화번호 인증</button>
 						</div>
 
@@ -93,18 +88,18 @@
 						<!-- 						</div> -->
 
 						<!-- 						<label for="birth">생년월일</label> <input type="date" id="birth" -->
-						<!-- 							placeholder="생년월일" required /> -->
+						<!-- 							placeholder="생년월일" /> -->
 
 						<div class="checkboxes">
 							<div class="reqAgree">
-								<label><input id="chk" type="checkbox" required /> 이용약관
-									동의 <span class="minimal" style="color: red;">필수</span></label>
+								<label><input id="reqchk" type="checkbox" /> 이용약관 동의 <span
+									class="minimal" style="color: red;">필수</span></label>
 								<div class="agreeBorder">내용보기</div>
 							</div>
 
 							<div class="solAgree">
-								<label><input type="checkbox" required /> 개인정보 수집 및 이용
-									동의 <span class="minimal" style="color: red;">필수</span></label>
+								<label><input id="infochk" type="checkbox" /> 개인정보 수집 및 이용 동의 <span
+									class="minimal" style="color: red;">필수</span></label>
 								<div class="agreeBorder">내용보기</div>
 							</div>
 							<div class="eventAgree">
@@ -118,8 +113,10 @@
 								<div class="agreeBorder">내용보기</div>
 							</div>
 						</div>
-
-						<button class="btn-signup" type="submit">회원가입</button>
+						<div class="tooltip-wrapper">
+							<button class="btn-signup" type="submit" disabled="disabled">회원가입</button>
+							<span class="tooltip-text">모든 필수사항을 입력해주세요</span>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -132,34 +129,121 @@
 </html>
 <script>
 	let isEmailVerified = false;
-	
-	function showCustomAlert(message) {
-		document.getElementById("alertMessage").innerText = message;
-		document.getElementById("customAlert").classList.remove("hidden");
-	}
-	function closeCustomAlert() {
-		document.getElementById("customAlert").classList.add("hidden");
-	}
+	let isNicknameValid = false;
+	let isPasswordValid = false;
+	let isNameValid = false;
+// 	let isPhoneValid = false;
+	let isReqCheck = false;
+	let isInfoCheck = false;
 
+	const submitBtn = document.querySelector(".btn-signup");
+
+	function updateSubmitButtonState() {
+	  
+      console.log(isEmailVerified);
+      console.log(isNicknameValid);
+      console.log(isPasswordValid);
+      console.log(isNameValid);
+      console.log(isReqCheck);
+      console.log(isInfoCheck);
+	  
+	  const allValid = isEmailVerified && isNicknameValid && isPasswordValid && isNameValid && isReqCheck && isInfoCheck;
+	  
+	  submitBtn.disabled = !allValid;
+	  
+	}
+	
+	const chkTerms = document.getElementById("reqchk");
+	const chkPrivacy = document.getElementById("infochk");
+
+	chkTerms.addEventListener("change", () => {
+	  isReqCheck = chkTerms.checked;
+	  updateSubmitButtonState();
+	});
+
+	chkPrivacy.addEventListener("change", () => {
+	  isInfoCheck = chkPrivacy.checked;
+	  updateSubmitButtonState();
+	});
+	
+	const nameInput = document.getElementById("name");
+	const nameError = document.getElementById("nameError");
+
+	nameInput.addEventListener("input", () => {
+	  const name = nameInput.value.trim();
+	  const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
+
+	  if (name === "") {
+	    nameError.className = "name-message error";
+	    nameError.textContent = "이름을 입력해주세요.";
+	    isNameValid = false;
+	  } else if (!nameRegex.test(name)) {
+	    nameError.className = "name-message error";
+	    nameError.textContent = "이름은 공백 없이 한글 또는 영문 2~20자로 입력해주세요.";
+	    isNameValid = false;
+	  } else {
+	    nameError.className = "name-message success";
+	    nameError.textContent = "사용 가능한 이름입니다.";
+	    isNameValid = true;
+	  }
+	  updateSubmitButtonState();
+	});
+	
+	
+	const passwordInput = document.getElementById("password");
+	const passwordConfirmInput = document.getElementById("passwordConfirm");
+	const errorMsg = document.getElementById("pwMismatchMsg");
+
+	passwordConfirmInput.addEventListener("input", function () {
+		
+	  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
+		
+	  const pw = passwordInput.value;
+	  const pwConfirm = passwordConfirmInput.value;
+	  
+	  if (pw === "" && pwConfirm === ""){
+		passwordError.className = "password-message error";
+		passwordError.textContent = "";
+		isPasswordValid = false;
+	  }
+	  else if (!passwordRegex.test(pw)) {
+	    passwordError.className = "password-message error";
+	    passwordError.textContent = "비밀번호는 최소 8자 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다.";
+	    isPasswordValid = false;
+	  }
+	  else if (pw !== pwConfirm) {  
+		passwordError.className = "password-message error";
+		passwordError.textContent = "비밀번호가 일치하지않습니다.";
+		isPasswordValid = false;
+	  } 
+	  else {
+		passwordError.className = "password-message success";
+		passwordError.textContent = "사용 가능한 비밀번호 입니다.";
+		isPasswordValid = true;
+	  }
+	  updateSubmitButtonState();
+	  
+	});
+	
 	function emailCheck() {
 		const emailInput = document.getElementById("email");
 		const email = emailInput.value.trim();
 
-		// 이메일 형식 정규표현식
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 		if (email === "") {
-			showCustomAlert("이메일을 입력해주세요.");
+			emailError.className = "email-message error";
+			emailError.textContent = "이메일을 입력해주세요.";
 			emailInput.focus();
 			return;
 		}
 
 		if (!emailRegex.test(email)) {
-			showCustomAlert("올바른 이메일 형식이 아닙니다.");
+			emailError.className = "email-message error";
+			emailError.textContent = "올바른 이메일 형식이 아닙니다.";
 			emailInput.focus();
 			return;
 		}
-		
 		
 		fetch("/join/emailCheck.do", {
 			  method: "POST",
@@ -172,9 +256,12 @@
 			.then(result => {
 				console.log(result)
 			  if (result === "failed") {
-				  showCustomAlert("중복된 이메일입니다.");
+				  	emailError.className = "email-message error";
+					emailError.textContent = "중복된 이메일입니다.";
 					emailInput.focus();
 			  } else if (result === "access") {
+				  emailError.className = "email-message success";
+				  emailError.textContent = " ";
 				  showEmailModal(email);
 			  }
 			})
@@ -183,8 +270,8 @@
 			  message.textContent = "서버 오류가 발생했습니다.";
 			  message.style.color = "red";
 			});
-
 	}
+	
 	const modal = document.getElementById("emailModal");
 	const closeBtn = document.querySelector(".close");
 	const sendBtn = document.getElementById("sendEmailBtn");
@@ -219,7 +306,6 @@
 	        alert("서버 오류가 발생했습니다.");
 	      })
 	      .finally(() => {
-	        // 요청 끝나면 버튼 활성화 (필요하면 그대로 비활성화 할 수도 있음)
 	        sendBtn.disabled = false;
 	        sendBtn.textContent = "인증 메일 전송";
 	      })
@@ -261,7 +347,7 @@
 		  .then(res => res.text())
 		  .then(result => {
 		    if (result === "success") {
-		      showCustomAlert("이메일 인증 성공!");
+		      alert("인증 완료");
 		      modal.style.display = "none";
 		      clearInterval(timerInterval);
 		      isEmailVerified = true;
@@ -271,28 +357,19 @@
 		  });
 		};
 		
-	const form = document.querySelector("form");
-
-	form.addEventListener("submit", function(e) {
-	 if (!isEmailVerified) {
-	   	e.preventDefault();
-       	showCustomAlert("이메일 인증이 필요합니다.");
-       	
-       	document.getElementById("email").focus();
-      }
-	   
-	});
-	
+	const nicknameCheck = document.getElementById("nicknameCheck");
 	const nicknameInput = document.getElementById("nickname");
 	const nicknameError = document.getElementById("nicknameError");
 
-	nicknameInput.addEventListener("blur", () => {
+	nicknameCheck.addEventListener("click", () => {
 	  const nickname = nicknameInput.value.trim();
 
 	  const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,10}$/;
 
 	  if (!nickname) {
 	    nicknameError.textContent = "닉네임을 입력해주세요.";
+	    nicknameError.className = "nickname-message error";
+	    
 	    return;
 	  }
 
@@ -309,12 +386,14 @@
 		})
 		  .then(res => res.json())
 		  .then(result => {
-		    if (result.exists) {
+		    if (result.duplicate) {
 		      nicknameError.className = "nickname-message error";
 		      nicknameError.textContent = "이미 사용 중인 닉네임입니다.";
 		    } else {
 		      nicknameError.className = "nickname-message success";
 		      nicknameError.textContent = "사용 가능한 닉네임입니다.";
+		      isNicknameValid = true;
+		      
 		    }
 		  })
 		  .catch(err => {

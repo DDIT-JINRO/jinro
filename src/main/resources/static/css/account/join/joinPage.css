@@ -1,5 +1,57 @@
 @charset "UTF-8";
 
+.name-message {
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  text-align: right; 
+}
+
+.name-message.success {
+  color: green;
+}
+
+.name-message.error {
+  color: red;
+}
+
+.password-message {
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  text-align: right; 
+}
+
+.password-message.success {
+  color: green;
+}
+
+.password-message.error {
+  color: red;
+}
+
+.email-message {
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  text-align: right; 
+}
+
+.email-message.success {
+  color: green;
+}
+
+.email-message.error {
+  color: red;
+}
+
+.emailTag {
+	padding: 0;
+	margin: 0;
+}
 .nickname-message {
   font-size: 12px;
   font-weight: 500;
@@ -146,61 +198,17 @@
 	animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {from { opacity:0;
-	transform: translateY(-20px);
+@keyframes fadeIn {
+	from { opacity:0;
+		transform: translateY(-20px);
+	}	to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 }
 
-to {
-	opacity: 1;
-	transform: translateY(0);
-}
 
-}
-.custom-alert {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	z-index: 9999;
-	animation: fadeInBg 0.3s ease-out;
-}
 
-.custom-alert-content {
-	background-color: #fff;
-	width: 400px;
-	padding: 30px;
-	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-	text-align: center;
-	transform: translateY(-20px);
-	animation: slideIn 0.4s ease-out forwards;
-}
-
-.custom-alert-content p {
-	font-size: 18px;
-	font-weight: 500;
-	color: #333;
-	margin-bottom: 20px;
-}
-
-.custom-alert-content button {
-	background-color: #7b88f9;
-	color: white;
-	border: none;
-	padding: 5px 20px;
-	font-size: 16px;
-	border-radius: 10px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-}
-
-.custom-alert-content button:hover {
-	background-color: #5a6ee0;
-}
 
 .hidden {
 	display: none;
@@ -392,6 +400,51 @@ to {
 	color: #777;
 }
 
+.tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.btn-signup {
+  width: 100%; /* 고정 너비가 없다면 추가 */
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #ccc;
+  color: white;
+}
+
+.btn-signup:disabled {
+  background-color: #c0c4cc;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.tooltip-text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 10;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.tooltip-wrapper:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
 .btn-signup {
 	margin-top: 24px;
 	width: 100%;
@@ -401,7 +454,6 @@ to {
 	color: white;
 	border: none;
 	border-radius: 10px;
-	cursor: pointer;
 }
 
 .btn-signup:hover {
@@ -409,6 +461,12 @@ to {
 	transform: translateY(-1px);
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 	transition: all 0.2s ease;
+}
+
+.btn-signup:disabled:hover {
+  background-color: #a0a7f5;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .top-text {

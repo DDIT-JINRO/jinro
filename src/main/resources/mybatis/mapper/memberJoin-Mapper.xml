@@ -11,10 +11,12 @@
 		'G33001'
 	</select>
 
-	<select id="existsByNickname" resultType="boolean"
+	<select id="isNicknameExists" resultType="String"
 		parameterType="String">
-		SELECT COUNT(*) > 0 FROM MEMBER WHERE MEM_NICKNAME =
-		#{nickname}
+		SELECT CASE WHEN COUNT(*) > 0 THEN 'true' ELSE 'false'
+		END AS isExists
+		FROM MEMBER
+		WHERE MEM_NICKNAME = #{nickName}
 	</select>
 
 </mapper>

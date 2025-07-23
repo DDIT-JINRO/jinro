@@ -9,6 +9,6 @@ public interface MemberJoinMapper {
 
 	MemberVO selectUserEmail(String email);
 
-	boolean isNicknameExists(String nickname);
+	String isNicknameExists(String nickname);
 
 }
