@@ -2,7 +2,11 @@ package kr.or.ddit.chat.service.impl;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,13 +16,21 @@ import org.springframework.stereotype.Service;
 import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatMessageVO;
 import kr.or.ddit.chat.service.ChatReceiverVO;
+import kr.or.ddit.chat.service.ChatMemberVO;
+import kr.or.ddit.chat.service.ChatMessageVO;
+import kr.or.ddit.chat.service.ChatReceiverVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Slf4j
 @Service
 public class ChatServiceImpl implements ChatService {
+	
+	@Autowired
+	ChatRoomSessionManager chatRoomSessionManager;
 	
 	@Autowired
 	ChatRoomSessionManager chatRoomSessionManager;

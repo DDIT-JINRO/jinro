@@ -2,11 +2,15 @@ package kr.or.ddit.chat.service.impl;
 
 import java.security.Principal;
 import java.util.Collections;
+import java.security.Principal;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
@@ -16,6 +20,7 @@ import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Slf4j
 @Component
 public class ChatRoomSessionManager {
@@ -154,6 +159,9 @@ public class ChatRoomSessionManager {
      */
     public Set<Integer> getOpendUser(int crId) {
         return roomSessionMap.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(crId))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
                 .filter(entry -> entry.getValue().equals(crId))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
