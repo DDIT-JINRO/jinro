@@ -11,34 +11,127 @@
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-item"><a href="/rsm/rsm">이력서</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/sint/qestnlst">자기소개서</a></div>
-		<div class="channel-sub-section-item"><a href="/imtintrvw/bsintrvw">모의면접</a></div>
-		<div class="channel-sub-section-item"><a href="/aifdbck/rsm">AI 피드백</a></div>
+		<div class="channel-sub-section-item">
+			<a href="/rsm/rsm">이력서</a>
+		</div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/sint/qestnlst">자기소개서</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/imtintrvw/bsintrvw">모의면접</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/aifdbck/rsm">AI 피드백</a>
+		</div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <a class="tab" href="/sint/qestnlst">질문 리스트</a>
-		    <a class="tab" href="/sint/sintlst">자기소개서 리스트</a>
-		    <a class="tab active" href="/sint/sintwrt">자기소개서 작성</a>
-  		</div>
+			<a class="tab" href="/sint/qestnlst">질문 리스트</a> <a class="tab"
+				href="/sint/sintlst">자기소개서 리스트</a> <a class="tab active"
+				href="/sint/sintwrt">자기소개서 작성</a>
+		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-  		<div class="public-wrapper-main">
-  			자기소개서 작성
-  			<p>${siId}</p>
-  			</br></br></br></br>
-  			</br></br></br></br>
-  			</br></br></br></br>
-  			</br></br></br></br>
-  		</div>
+		<div class="public-wrapper-main">
+
+			<section class="selfintro-write-form">
+				<form action="/sint/save" method="post">
+					<!-- 제목 -->
+					<div class="section-title">
+						<h2>자기소개서 제목을 입력하세요.</h2>
+						<input type="text" name="siTitle" value="${selfIntroVO.siTitle}"
+							placeholder="제목을 입력하세요." class="title-input" /> <input
+							type="hidden" name="siId" value="${selfIntroVO.siId}" />
+					</div>
+
+					<!--  ➤ 질문 추가 버튼 -->
+					<div class="btn-add-wrapper">
+						<button id="btn-add-question" type="button" class="btn-add">+
+							질문 추가</button>
+					</div>
+
+					<!--  ➤ 질문·답변 블록이 들어갈 컨테이너 -->
+					<div id="questionContainer">
+						<!-- 수정 모드: 기존 질문·답변 있을 때 그대로 보여주기 -->
+						<c:if test="${not empty selfIntroContentVOList}">
+							<c:forEach var="content" items="${selfIntroContentVOList}"
+								varStatus="st">
+								<div class="qa-block">
+									<div class="question-block">
+										<span class="question-number">${st.index + 1}.</span>
+										<!-- 질문 텍스트만 보여주기 -->
+										<span class="question-text">${selfIntroQVOList[st.index].siqContent}</span>
+										<button type="button" class="btn-remove">삭제</button>
+									</div>
+									<div class="answer-block">
+										<textarea name="sicContentList" class="answer-textarea"
+											placeholder="답변을 작성해주세요.">${content.sicContent}</textarea>
+										<input type="hidden" name="siqIdList" value="${content.siqId}" />
+									</div>
+								</div>
+							</c:forEach>
+						</c:if>
+					</div>
+
+					<!--  ➤ 버튼 그룹 -->
+					<div class="btn-group">
+						<button type="button" class="btn-temp-save">임시저장</button>
+						<button type="button" class="btn-preview">미리보기</button>
+						<button type="submit" class="btn-submit">작성완료</button>
+					</div>
+				</form>
+
+				<!--  ➤ 템플릿: 새 질문+답변을 추가할 때 이걸 복제 -->
+				<template id="question-template">
+					<div class="qa-block">
+						<div class="question-block">
+							<span class="question-number"></span> <input type="text"
+								name="newQuestionList" class="question-input"
+								placeholder="질문을 입력하세요." />
+							<button type="button" class="btn-remove">삭제</button>
+						</div>
+						<div class="answer-block">
+							<textarea name="newAnswerList" class="answer-textarea"
+								placeholder="답변을 작성해주세요."></textarea>
+						</div>
+					</div>
+				</template>
+			</section>
+		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
 <script>
-	// 스크립트 작성 해주시면 됩니다.
+  const btnAdd = document.getElementById('btn-add-question');
+  const container = document.getElementById('questionContainer');
+  const template = document.getElementById('question-template');
+
+  // 순번 업데이트
+  function updateNumbers() {
+    container.querySelectorAll('.question-number').forEach((el, idx) => {
+      el.textContent = `${idx + 1}.`;
+    });
+  }
+
+  // 새 블록 추가
+  btnAdd.addEventListener('click', () => {
+    const clone = template.content.cloneNode(true);
+    container.appendChild(clone);
+    updateNumbers();
+  });
+
+  // 삭제 (이벤트 위임)
+  container.addEventListener('click', e => {
+    if (e.target.classList.contains('btn-remove')) {
+      e.target.closest('.qa-block').remove();
+      updateNumbers();
+    }
+  });
+
+  // 초기 로드 시 순번 세팅 (수정 모드)
+  document.addEventListener('DOMContentLoaded', updateNumbers);
 </script>

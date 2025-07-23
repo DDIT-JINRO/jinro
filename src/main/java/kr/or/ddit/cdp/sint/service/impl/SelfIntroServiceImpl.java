@@ -64,9 +64,21 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 
 
 	@Override
-	public SelfIntroContentVO selectBySelfIntroContentId(SelfIntroVO selfIntroVO) {
+	public List<SelfIntroContentVO> selectBySelfIntroContentIdList(SelfIntroVO selfIntroVO) {
 		// TODO Auto-generated method stub
-		return null;
+		return selfIntroMapper.selectBySelfIntroContentIdList(selfIntroVO);
+	}
+
+	@Override
+	public SelfIntroQVO selectBySelfIntroQId(SelfIntroContentVO selfIntroContentVO) {
+		// TODO Auto-generated method stub
+		return selfIntroMapper.selectBySelfIntroQId(selfIntroContentVO);
+	}
+
+	@Override
+	public SelfIntroVO selectBySelfIntroId(SelfIntroVO selfIntroVO) {
+		// TODO Auto-generated method stub
+		return selfIntroMapper.selectBySelfIntroId(selfIntroVO);
 	}
 
 }

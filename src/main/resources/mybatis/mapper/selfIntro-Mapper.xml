@@ -68,14 +68,26 @@
 		VALUES
 		(#{sicId},#{siId}, #{siqId}, #{sicLimit}, #{sicOrder})
 </insert>
-
-<select id="selectBySelfIntroContentId" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroContentVO">
-	SELECT SIC_ID, SI_ID, SIQ_ID, SIC_CONTENT, SIC_LIMIT, SIC_COUNT,
-	SIC_ORDER
+<!-- 항목별 자소서내용가져오기 -->
+<select id="selectBySelfIntroContentIdList" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroContentVO">
+	SELECT SIC_ID, SI_ID, SIQ_ID, SIC_CONTENT,
+	SIC_LIMIT, SIC_COUNT,SIC_ORDER
 	FROM SELF_INTRO_CONTENT
 	WHERE SI_ID = #{siId}
-	ORDER BY SIC_ORDER
+	ORDER
+	BY SIC_ORDER
 </select>
-
+<!-- 자소서 질문 가져오기 -->
+<select id="selectBySelfIntroQId" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroContentVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroQVO">
+	select SIQ_ID, SIQ_JOB, SIQ_CONTENT
+	from SELF_INTRO_Q
+	where SIQ_ID = #{siqId}
+</select>
+<!-- 자소서 정보 가져오기 -->
+<select id="selectBySelfIntroId" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
+	SELECT SI_ID, MEM_ID, SI_TITLE, SI_STATUS
+	FROM SELF_INTRO
+	WHERE SI_ID= #{siId}
+</select>
 
 </mapper>

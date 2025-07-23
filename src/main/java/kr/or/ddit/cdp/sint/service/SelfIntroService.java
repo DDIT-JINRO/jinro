@@ -15,5 +15,9 @@ public interface SelfIntroService {
 	
 	public int insertIntro(SelfIntroVO selfIntroVO,List<Long> questionIds);
 	
-	public SelfIntroContentVO selectBySelfIntroContentId(SelfIntroVO selfIntroVO);
+	public List<SelfIntroContentVO> selectBySelfIntroContentIdList(SelfIntroVO selfIntroVO);
+	
+	public SelfIntroQVO selectBySelfIntroQId(SelfIntroContentVO selfIntroContentVO);
+	
+	public SelfIntroVO selectBySelfIntroId(SelfIntroVO selfIntroVO);
 }
