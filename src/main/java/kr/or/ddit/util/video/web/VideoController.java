@@ -34,14 +34,15 @@ public class VideoController {
 		OkHttpClient client = new OkHttpClient();
 
 		MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-		RequestBody body = RequestBody.create(mediaType, "callType=P2P&liveMode=false&maxJoinCount=4&liveMaxJoinCount=100&layoutType=4&sfuIncludeAll=true&passwd=12341234&roomTitle=%EC%A7%84%EB%A1%9C%EC%9D%B4%EC%A6%88%EB%B0%B1");
+		RequestBody body = RequestBody.create(mediaType,
+				"callType=P2P&liveMode=false&maxJoinCount=4&liveMaxJoinCount=100&layoutType=4&sfuIncludeAll=true&passwd=12341234&roomTitle=%EC%A7%84%EB%A1%9C%EC%9D%B4%EC%A6%88%EB%B0%B1");
 		Request request = new Request.Builder()
-		  .url("https://openapi.gooroomee.com/api/v1/room")
-		  .post(body)
-		  .addHeader("accept", "application/json")
-		  .addHeader("content-type", "application/x-www-form-urlencoded")
-		  .addHeader("X-GRM-AuthToken", "12056163501988613cf51b7b51cdd8140bb172761d02211a8b")
-		  .build();
+				.url("https://openapi.gooroomee.com/api/v1/room")
+				.post(body)
+				.addHeader("accept", "application/json")
+				.addHeader("content-type", "application/x-www-form-urlencoded")
+				.addHeader("X-GRM-AuthToken", "12056163501988613cf51b7b51cdd8140bb172761d02211a8b")
+				.build();
 
 		// 💡 응답 처리 및 파싱
 		try (Response response = client.newCall(request).execute()) {
@@ -74,9 +75,12 @@ public class VideoController {
 		// 요청 데이터 생성자
 		OkHttpClient client = new OkHttpClient();
 
-		Request request = new Request.Builder().url("https://openapi.gooroomee.com/api/v1/room/list").get()
+		Request request = new Request.Builder()
+				.url("https://openapi.gooroomee.com/api/v1/room/list")
+				.get()
 				.addHeader("accept", "application/json")
-				.addHeader("X-GRM-AuthToken", "12056163501988613cf51b7b51cdd8140bb172761d02211a8b").build();
+				.addHeader("X-GRM-AuthToken", "12056163501988613cf51b7b51cdd8140bb172761d02211a8b")
+				.build();
 
 		log.info("request : " + request);
 
@@ -113,50 +117,49 @@ public class VideoController {
 
 		MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 
-	    String payload1 = "roomId=" + roomId +
-	                     "&username=테스터" +
-	                     "&roleId=participant" +
-	                     "&apiUserId=gooroomee-tester" +
-	                     "&ignorePasswd=false";
+		String payload1 = "roomId=" + roomId + 
+						"&username=테스터" + 
+						"&roleId=participant" + 
+						"&apiUserId=gooroomee-tester" +
+						"&ignorePasswd=false";
 
-	    String payload2 = "roomId=" + roomId +
-		                "&username=마스터" +
-		                "&roleId=speaker" +
-		                "&apiUserId=gooroomee-master" +
-		                "&ignorePasswd=false";
-	    
+		String payload2 = "roomId=" + roomId + 
+						"&username=마스터" + 
+						"&roleId=speaker" + 
+						"&apiUserId=gooroomee-master" +
+						"&ignorePasswd=false";
+
 		RequestBody body1 = RequestBody.create(mediaType, payload1);
 		RequestBody body2 = RequestBody.create(mediaType, payload2);
 		String data1 = body1.toString();
 		String data2 = body2.toString();
-		log.info("body(참가자) : "+data1);
-		log.info("body(상담사) : "+data2);
-		
+		log.info("body(참가자) : " + data1);
+		log.info("body(상담사) : " + data2);
+
 		Request request = new Request.Builder()
-		  .url("https://openapi.gooroomee.com/api/v1/room/user/otp/url")
-		  .post(body1)
-		  .addHeader("accept", "application/json")
-		  .addHeader("content-type", "application/x-www-form-urlencoded")
-		  .addHeader("X-GRM-AuthToken", "12056163501988613cf51b7b51cdd8140bb172761d02211a8b")
-		  .build();
-		log.info("requst : "+request);
-		
+				.url("https://openapi.gooroomee.com/api/v1/room/user/otp/url")
+				.post(body1)
+				.addHeader("accept", "application/json")
+				.addHeader("content-type", "application/x-www-form-urlencoded")
+				.addHeader("X-GRM-AuthToken", "12056163501988613cf51b7b51cdd8140bb172761d02211a8b")
+				.build();
+		log.info("requst : " + request);
+
 		Request request2 = new Request.Builder()
-				  .url("https://openapi.gooroomee.com/api/v1/room/user/otp/url")
-				  .post(body2)
-				  .addHeader("accept", "application/json")
-				  .addHeader("content-type", "application/x-www-form-urlencoded")
-				  .addHeader("X-GRM-AuthToken", "12056163501988613cf51b7b51cdd8140bb172761d02211a8b")
-				  .build();
-		log.info("requst : "+request2);
-		
-		
+				.url("https://openapi.gooroomee.com/api/v1/room/user/otp/url")
+				.post(body2)
+				.addHeader("accept", "application/json")
+				.addHeader("content-type", "application/x-www-form-urlencoded")
+				.addHeader("X-GRM-AuthToken", "12056163501988613cf51b7b51cdd8140bb172761d02211a8b")
+				.build();
+		log.info("requst : " + request2);
+
 		try {
 
 			Response response = client.newCall(request).execute();
 			String responseBody = response.body().string();
 			log.info("room/enter(참가자) : " + responseBody);
-			
+
 			response = client.newCall(request2).execute();
 			responseBody = response.body().string();
 			log.info("room/enter(상담사) : " + responseBody);
