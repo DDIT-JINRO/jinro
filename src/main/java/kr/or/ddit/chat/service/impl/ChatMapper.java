@@ -10,9 +10,7 @@ import kr.or.ddit.chat.service.ChatMessageVO;
 import kr.or.ddit.chat.service.ChatReceiverVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 
-/**
- * 
- */
+
 @Mapper
 public interface ChatMapper {
 
