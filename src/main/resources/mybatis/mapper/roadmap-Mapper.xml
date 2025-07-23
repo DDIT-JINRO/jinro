@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.rdm.service.impl.RoadmapMapper">
 
+	<!-- 특정 사용자의 로드맵있는지에 대한 여부 조회 -->
 	<select id="selectMemberRoadmap" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
 		SELECT
 			MEM_ID
@@ -11,6 +12,7 @@
 			MEM_ID = #{memId}
 	</select>
 
+	<!-- 로드맵이 없는 사용자의 첫 로드맵 생성 -->
 	<insert id="insertMemberRoadmap" parameterType="int">
 		INSERT
 			INTO
@@ -25,6 +27,7 @@
 		VALUES(ROADMAP_SEQ.NEXTVAL, #{memId}, 1, 'N', SYSDATE)
 	</insert>
 	
+	<!-- 특정 사용자의 로드맵의 현재 캐릭터의 위치 조회 -->
 	<select id="selectCurrentCharPosition" resultType="int" parameterType="int">
 		SELECT
 		   MAX(RS_ID) AS RS_ID
@@ -34,6 +37,7 @@
 		   MEM_ID = #{memId}
 	</select>
 	
+	<!-- 특정 사용자의 진행 중인 미션 리스트 조회 -->
 	<select id="selectProgressMissionList" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
 		SELECT
 			RS_ID
@@ -47,11 +51,13 @@
 			RS_ID DESC
 	</select>
 	
+	<!-- 특정 사용자의 완료된 미션 리스트 조회 -->
 	<select id="selectCompletedMissionList" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
 		SELECT
 		   RS_ID
 		   , CREATED_AT
 		   , ROAD_COMPLETE
+		   , COMPLETE_AT
 		FROM
 		   ROADMAP
 		WHERE
@@ -60,4 +66,59 @@
 		ORDER BY
 		   RS_ID DESC
 	</select>
+	
+	<!-- 로드맵 노드별 미션 리스트 -->
+	<resultMap type="kr.or.ddit.rdm.service.RoadmapStepVO" id="roadmapStepMap">
+		<result property="rsId" column="RS_ID"/>
+		<result property="stepName" column="STEP_NAME"/>
+	</resultMap>
+	
+	<select id="selectMissionList" resultMap="roadmapStepMap">
+		SELECT
+			A.RS_ID
+			, B.CC_ETC AS STEP_NAME
+		FROM
+			ROADMAP_STEP A
+		INNER JOIN COM_CODE B ON
+			(
+				A.RS_TYPE = B.CC_ID
+			)
+	</select>
+	
+	<select id="selectTableName" parameterType="int" resultType="String">
+		SELECT
+			CC_NAME
+		FROM
+			COM_CODE
+		WHERE
+			CC_ID = (
+				SELECT
+					RS_TYPE
+				FROM
+					ROADMAP_STEP
+				WHERE
+					RS_ID = #{rsId}
+			)
+	</select>
+	
+	<select id="isCompleteExists" parameterType="map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			${tableName}
+		WHERE
+			MEM_ID = #{memId}
+	</select>
+	
+	<update id="updateCompleteMission" parameterType="map">
+		UPDATE
+		   ROADMAP
+		SET 
+		   ROAD_COMPLETE = 'Y',
+		   COMPLETE_AT = SYSDATE
+		WHERE
+		   MEM_ID = #{memId}
+		AND
+		   RS_ID = #{rsId}
+	</update>
 </mapper>
