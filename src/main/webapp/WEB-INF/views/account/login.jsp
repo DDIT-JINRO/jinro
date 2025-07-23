@@ -18,24 +18,31 @@
 				<div class="login-container-imgBox">
 					<img alt="" src="/images/logo.png">
 				</div>
-				<label for="login-user-email">이메일</label> <input type="email" id="login-user-email"
-					placeholder="이메일을 입력해주세요."> <label for="login-user-password">비밀번호</label>
-				<input type="password" id="login-user-password" placeholder="비밀번호를 입력해주세요.">
+				<label for="login-user-email">이메일</label> <input type="email"
+					id="login-user-email" placeholder="이메일을 입력해주세요."> <label
+					for="login-user-password">비밀번호</label> <input type="password"
+					id="login-user-password" placeholder="비밀번호를 입력해주세요.">
 
 				<div class="login-options">
-					<label id="autoLogin"><input type="checkbox"> 자동 로그인</label>
-					<label id="saveId"><input type="checkbox"> 아이디 저장</label>
+					<label id="autoLogin"><input type="checkbox"> 자동
+						로그인</label> <label id="saveId"><input type="checkbox"> 아이디
+						저장</label>
 				</div>
 
-				<button class="login-btn" onclick ="loginBtn()">로그인</button>
+				<button class="login-btn" onclick="loginBtn()">로그인</button>
 
 				<div class="find-links">
 					아이디, 비밀번호를 잊으셨나요? <a href="#">아이디 찾기</a><a href="#">비밀번호 찾기</a>
 				</div>
 
 				<div class="sns-login">
-					<button class="kakao"><img alt="" src="/images/free-icon-kakao-talk-2111466.png">카카오톡 계정으로 로그인</button>
-					<button class="naver"><img alt="" src="/images/naver.png">네이버 계정으로 로그인</button>
+					<button class="kakao" onclick="kakaoLogin()">
+						<img alt="" src="/images/free-icon-kakao-talk-2111466.png">카카오톡
+						계정으로 로그인
+					</button>
+					<button class="naver">
+						<img alt="" src="/images/naver.png">네이버 계정으로 로그인
+					</button>
 				</div>
 
 				<div class="signup-box">
@@ -50,6 +57,18 @@
 </html>
 <script>
 	// 스크립트 작성 해주시면 됩니다.
+
+function kakaoLogin() {
+  const REST_API_KEY = '1802c81999ddbc08d235c5cf064b15c8';
+  const REDIRECT_URI = 'http://localhost:8080/lgn/kakaoCallback.do';
+
+  const kakaoAuthURL = 
+    `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=\${REST_API_KEY}&redirect_uri=\${REDIRECT_URI}&prompt=login`;
+    console.log(kakaoAuthURL);
+
+  window.location.href = kakaoAuthURL;
+}
+
 function loginBtn(){
 	
 	const getUserId = document.getElementById('login-user-email').value

@@ -13,6 +13,8 @@ public interface LoginService {
 
 	public MemberVO selectById(int userId);
 
+	public Map<String, Object> kakaoLgnProcess(MemberVO member);
+
 
 
 }

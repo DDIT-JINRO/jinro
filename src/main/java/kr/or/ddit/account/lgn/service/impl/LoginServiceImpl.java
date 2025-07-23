@@ -18,15 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoginServiceImpl implements LoginService {
 
-	
-    @Autowired
-    JwtUtil jwtUtil;
+	@Autowired
+	JwtUtil jwtUtil;
 
 	@Autowired
 	LoginMapper loginMapper;
-	
-	
-	
+
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	public LoginServiceImpl(BCryptPasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
@@ -52,7 +49,7 @@ public class LoginServiceImpl implements LoginService {
 			resultMap.put("status", "failed");
 			return resultMap;
 		}
-		
+
 		String encodedPwFromDb = resMemVO.getMemPassword();
 		boolean result = passwordEncoder.matches(inputPw, encodedPwFromDb);
 
@@ -67,7 +64,6 @@ public class LoginServiceImpl implements LoginService {
 				} else {
 					MemberPenaltyVO pntStat = loginMapper.selectMemPnt(resMemVO.getMemId());
 
-					
 					resultMap.put("mpWarnReason", pntStat.getMpWarnReason());
 					resultMap.put("mpCompleteAt", pntStat.getMpCompleteAt());
 					resultMap.put("status", "suspend");
@@ -76,35 +72,34 @@ public class LoginServiceImpl implements LoginService {
 
 			}
 			resultMap.put("status", "success");
-			
-			if("success".equals(resultMap.get("status"))) {
-		    	String memId = resMemVO.getMemId()+"";
-		    	
+
+			if ("success".equals(resultMap.get("status"))) {
+				String memId = resMemVO.getMemId() + "";
+
 				String accessToken = jwtUtil.createAccessToken(memId);
 				String refreshToken = jwtUtil.createRefreshToken(memId);
 				jwtUtil.validateToken(accessToken);
-				
+
 				Map<String, Object> paramMap = new HashMap<>();
 				paramMap.put("refreshToken", refreshToken);
 				paramMap.put("memId", memId);
-				
+
 				int tokenResult = loginMapper.memTokenInsert(paramMap);
-				
-				if(tokenResult == 1) {
+
+				if (tokenResult == 1) {
 					log.info("리프레쉬 토큰 db 저장 성공");
-				}else {
+				} else {
 					log.info("리프레쉬 토큰 db 저장 중 에러 발생");
 				}
-				
+
 				resultMap.put("status", "success");
-		        resultMap.put("accessToken", accessToken);
-		        resultMap.put("refreshToken", refreshToken);
-				
-		    }else {
-		    	resultMap.put("status", "failed");
-		    }
-			
-			
+				resultMap.put("accessToken", accessToken);
+				resultMap.put("refreshToken", refreshToken);
+
+			} else {
+				resultMap.put("status", "failed");
+			}
+
 			return resultMap;
 
 		} else {
@@ -123,12 +118,80 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public MemberVO selectById(int userId) {
 
-		
 		return this.loginMapper.selectById(userId);
 	}
 
-	
+	@Override
+	public Map<String, Object> kakaoLgnProcess(MemberVO member) {
 
-	
+		MemberVO result = this.loginMapper.selectByEmailForKakao(member);
 
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		if (result != null) {
+			String memId = result.getMemId() + "";
+
+			String accessToken = jwtUtil.createAccessToken(memId);
+			String refreshToken = jwtUtil.createRefreshToken(memId);
+
+			jwtUtil.validateToken(accessToken);
+
+			Map<String, Object> paramMap = new HashMap<>();
+			paramMap.put("refreshToken", refreshToken);
+			paramMap.put("memId", memId);
+
+			int tokenResult = loginMapper.memTokenInsert(paramMap);
+
+			if (tokenResult == 1) {
+				log.info("리프레쉬 토큰 db 저장 성공");
+			} else {
+				log.info("리프레쉬 토큰 db 저장 중 에러 발생");
+			}
+
+			resultMap.put("status", "success");
+			resultMap.put("accessToken", accessToken);
+			resultMap.put("refreshToken", refreshToken);
+
+			return resultMap;
+
+		} else {
+			
+			int res = this.loginMapper.kakaoInsert(member);
+			
+			if(res == 0) {
+				resultMap.put("status", "failed");
+				return resultMap;
+			}else if(res == 1) {
+				MemberVO kaMem = loginMapper.selectMemberByEmailForKakao(member.getMemEmail());
+				
+				int kaMemId = kaMem.getMemId();
+				
+				String memId = kaMemId+"";
+				
+				String accessToken = jwtUtil.createAccessToken(memId);
+				String refreshToken = jwtUtil.createRefreshToken(memId);
+
+				jwtUtil.validateToken(accessToken);
+
+				Map<String, Object> paramMap = new HashMap<>();
+				paramMap.put("refreshToken", refreshToken);
+				paramMap.put("memId", memId);
+
+				int tokenResult = loginMapper.memTokenInsert(paramMap);
+
+				if (tokenResult == 1) {
+					log.info("리프레쉬 토큰 db 저장 성공");
+				} else {
+					log.info("리프레쉬 토큰 db 저장 중 에러 발생");
+				}
+
+				resultMap.put("status", "success");
+				resultMap.put("accessToken", accessToken);
+				resultMap.put("refreshToken", refreshToken);
+
+				return resultMap;
+			}else {
+				return null;
+			}
+		}
+	}
 }

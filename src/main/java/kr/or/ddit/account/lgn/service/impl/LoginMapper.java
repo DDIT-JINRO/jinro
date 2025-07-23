@@ -25,6 +25,12 @@ public interface LoginMapper {
 
 	public MemberVO getRefreshToken(String refreshToken);
 
+	public MemberVO selectByEmailForKakao(MemberVO member);
+
+	public int kakaoInsert(MemberVO member);
+
+	public MemberVO selectMemberByEmailForKakao(String memEmail);
+
 	
 
 	
