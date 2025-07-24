@@ -28,4 +28,12 @@ public interface SelfIntroService {
 	public List<SelfIntroQVO> selectCommonQuestions();
 
 	public void cheakselfIntrobyMemId(SelfIntroVO selfIntroVO, String memId);
+	//신규 자소서 정보등롯	
+	public int insertIntroId(SelfIntroVO intro);
+	 /** 개별 질문·답변 콘텐츠 삽입 */
+	public void insertContent(int newSiId, Long questionId, String answer, int i);
+	// 이미 있을 때 수정 제목과 상태
+	 public void updateIntro(SelfIntroVO selfIntroVO);
+
+	 public void updateContent(int sicId, int siqId, String content, int i);
 }

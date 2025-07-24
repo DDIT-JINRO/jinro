@@ -62,7 +62,8 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 			selfIntroMapper.insertContent(selfIntroContentVO);
 			cnt++;
 		}
-
+		
+		
 		for (int i = 0; i < questionIds.size(); i++) {
 
 			int sicId = selfIntroMapper.selectMaxSICId();
@@ -96,7 +97,7 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 		// TODO Auto-generated method stub
 		selfIntroVO = selfIntroMapper.selectBySelfIntroId(selfIntroVO);
 		if (selfIntroVO == null) {
-			throw new CustomException(ErrorCode.INVALID_INPUT);
+			throw new CustomException(ErrorCode.INVALID_INPUT,"/sint/sintwrt");
 		}
 		return selfIntroMapper.selectBySelfIntroId(selfIntroVO);
 	}
@@ -121,8 +122,43 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 
 		// 2) 자소서가 없거나 작성자 정보가 없거나, 작성자가 아니면 모두 403
 		if (! (siId ==loginMemId)) {
-			throw new CustomException(ErrorCode.ACCESS_DENIED);
+			throw new CustomException(ErrorCode.ACCESS_DENIED,"/sint/sintwrt");
 		}
+	}
+
+	@Override
+	public int insertIntroId(SelfIntroVO selfIntroVO) {
+		int siId = selfIntroMapper.selectMaxIntroId();
+		int cnt = 1;
+		selfIntroVO.setSiId(siId);
+		selfIntroMapper.insertIntro(selfIntroVO);
+		return siId;
+	}
+
+	@Override
+	public void insertContent(int newSiId, Long questionId, String answer, int i) {
+		int sicId = selfIntroMapper.selectMaxSICId();
+        SelfIntroContentVO vo = new SelfIntroContentVO();
+        vo.setSicId(sicId);
+        vo.setSiId(newSiId);
+        vo.setSiqId(questionId.intValue());
+        vo.setSicContent(answer);
+        vo.setSicLimit(1500);
+        vo.setSicOrder(i);
+        selfIntroMapper.insertContent(vo);
+		
+	}
+
+	@Override
+	public void updateIntro(SelfIntroVO selfIntroVO) {
+		selfIntroMapper.updateIntro(selfIntroVO);
+		
+	}
+
+	@Override
+	public void updateContent(int sicId, int siqId, String sicContent, int sicOrder) {
+		selfIntroMapper.updateContent(sicId, siqId, sicContent, sicOrder);
+		
 	}
 
 }

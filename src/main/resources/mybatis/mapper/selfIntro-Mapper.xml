@@ -53,10 +53,28 @@
 
 <!-- 카트 선택한 질문들 자소서 작성에 띄워주기 위해 저장 -->
 <insert id="insertIntro" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
-
-	INSERT INTO SELF_INTRO(SI_ID, MEM_ID, SI_STATUS)
-	VALUES (#{siId},#{memId},'작성중')
+  INSERT INTO SELF_INTRO (
+      SI_ID,
+      MEM_ID,
+      SI_TITLE,   -- 항상 이 컬럼을 넣고
+      SI_STATUS   -- 항상 이 컬럼을 넣습니다
+  ) VALUES (
+      #{siId},
+      #{memId},
+      <!-- siTitle 이 있을 땐 값, 없으면 null 바인딩 -->
+      #{siTitle,jdbcType=VARCHAR},
+      <!-- siStatus 이 있을 땐 그 값, 없으면 '작성중' 기본값 -->
+      <choose>
+        <when test="siStatus != null and siStatus != ''">
+          #{siStatus}
+        </when>
+        <otherwise>
+          '작성중'
+        </otherwise>
+      </choose>
+  )
 </insert>
+
 
 
 <select id="selectMaxSICId" resultType="int">
@@ -64,12 +82,32 @@
 </select>
 <!-- 자소서 항목별 저장 -->
 <insert id="insertContent" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroContentVO">
-
-		INSERT INTO SELF_INTRO_CONTENT
-		(SIC_ID,SI_ID, SIQ_ID, SIC_LIMIT, SIC_ORDER)
-		VALUES
-		(#{sicId},#{siId}, #{siqId}, #{sicLimit}, #{sicOrder})
+  INSERT INTO SELF_INTRO_CONTENT
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    SIC_ID,
+    SI_ID,
+    SIQ_ID,
+    <!-- 값이 있을 때만 컬럼 포함 -->
+    <if test="sicContent != null and sicContent != ''">
+      SIC_CONTENT,
+    </if>
+    SIC_LIMIT,
+    SIC_ORDER
+  </trim>
+  VALUES
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    #{sicId},
+    #{siId},
+    #{siqId},
+    <!-- 값이 있으면 바인딩, 없으면 NULL 리터럴 -->
+      <if test="sicContent != null and sicContent != ''">
+        #{sicContent},
+    </if>
+    #{sicLimit},
+    #{sicOrder}
+  </trim>
 </insert>
+
 <!-- 항목별 자소서내용가져오기 -->
 <select id="selectBySelfIntroContentIdList" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroContentVO">
 	SELECT SIC_ID, SI_ID, SIQ_ID, SIC_CONTENT,
@@ -110,5 +148,28 @@
   WHERE SIQ_JOB IS NULL
   ORDER BY SIQ_ID
 </select>
+
+ <update id="updateIntro" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
+    UPDATE SELF_INTRO
+    <set>
+      <if test="siTitle != null">
+        SI_TITLE = #{siTitle},
+      </if>
+      <if test="siStatus != null">
+        SI_STATUS = #{siStatus},
+      </if>
+    </set>
+    WHERE SI_ID  = #{siId}
+      AND MEM_ID = #{memId}
+  </update>
+
+  <!-- 2-2) 콘텐츠 한 행 업데이트 -->
+  <update id="updateContent" parameterType="map">
+    UPDATE SELF_INTRO_CONTENT
+       SET SIQ_ID      = #{siqId},
+           SIC_CONTENT = #{sicContent},
+           SIC_ORDER   = #{sicOrder}
+     WHERE SIC_ID     = #{sicId}
+  </update>
 
 </mapper>

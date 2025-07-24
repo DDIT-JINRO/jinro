@@ -3,6 +3,7 @@ package kr.or.ddit.cdp.sint.service.impl;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import kr.or.ddit.cdp.sint.service.SelfIntroContentVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
@@ -39,4 +40,8 @@ public interface SelfIntroMapper {
 	
 	//공통질문 가져오기
 	public List<SelfIntroQVO> selectCommonQuestions();
+
+	public void updateIntro(SelfIntroVO selfIntroVO);
+
+	public void updateContent( @Param("sicId") int sicId, @Param("siqId") int siqId,@Param("sicContent") String sicContent,@Param("sicOrder")  int sicOrder);
 }

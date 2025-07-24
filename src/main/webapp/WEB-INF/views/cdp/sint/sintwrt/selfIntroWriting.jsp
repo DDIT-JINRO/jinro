@@ -1,14 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="">
+<link rel="stylesheet" href="/css/cdp/sint/sintwrt/selfIntroWriting.css">
 <!-- 스타일 여기 적어주시면 가능 -->
+
 <c:if test="${not empty errorMessage}">
   <script type="text/javascript">
-    // 브라우저 콘솔에 출력
-    console.log('오류 발생:', '${errorMessage}');
-    // 팝업창으로도 알림
-    alert('${errorMessage}');
+    alert('${fn:escapeXml(errorMessage)}');
   </script>
 </c:if>
 <section class="channel">
@@ -45,13 +43,14 @@
 		<div class="public-wrapper-main">
 
 			<section class="selfintro-write-form">
-				<form action="/sint/save" method="post">
+				<form action="/sint/sintwrt/save" method="post">
 					<!-- 제목 -->
 					<div class="section-title">
 						<h2>자기소개서 제목을 입력하세요.</h2>
 						<input type="text" name="siTitle" value="${selfIntroVO.siTitle}"
-							placeholder="제목을 입력하세요." class="title-input" /> <input
-							type="hidden" name="siId" value="${selfIntroVO.siId}" />
+							placeholder="제목을 입력하세요." class="title-input" /> 
+							<input type="hidden" name="siId" value="${selfIntroVO.siId}" />
+							<input type="text" name="memId" value="${selfIntroVO.memId}" />
 					</div>
 
 
@@ -62,8 +61,8 @@
 							<div class="qa-block">
 								<div class="question-block">
 									<span class="question-number">${st.index + 1}.</span> <span
-										class="question-text">${q.siqContent}</span> <input
-										type="hidden" name="siqIdList" value="${q.siqId}" />
+										class="question-text">${q.siqContent}</span><input
+											type="hidden" name="siqIdList" value="${q.siqId}" />
 								</div>
 								<div class="answer-block">
 									<textarea name="sicContentList" placeholder="답변을 작성해주세요."></textarea>
@@ -83,9 +82,7 @@
 									</div>
 									<div class="answer-block">
 										<!-- contentList와 인덱스가 맞도록 -->
-										<textarea name="sicContentList" placeholder="답변을 작성해주세요.">
-          ${selfIntroContentVOList[st.index].sicContent}
-        </textarea>
+										<textarea name="sicContentList" placeholder="답변을 작성해주세요.">${selfIntroContentVOList[st.index].sicContent}</textarea>
 									</div>
 								</div>
 							</c:forEach>
@@ -108,17 +105,6 @@
 </body>
 </html>
 <script>
-  const btnAdd = document.getElementById('btn-add-question');
-  const container = document.getElementById('questionContainer');
-  const template = document.getElementById('question-template');
 
-  // 순번 업데이트
-  function updateNumbers() {
-    container.querySelectorAll('.question-number').forEach((el, idx) => {
-      el.textContent = `${idx + 1}.`;
-    });
-  }
 
-  // 초기 로드 시 순번 세팅 (수정 모드)
-  document.addEventListener('DOMContentLoaded', updateNumbers);
 </script>
