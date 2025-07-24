@@ -20,4 +20,12 @@ public interface SelfIntroService {
 	public SelfIntroQVO selectBySelfIntroQId(SelfIntroContentVO selfIntroContentVO);
 	
 	public SelfIntroVO selectBySelfIntroId(SelfIntroVO selfIntroVO);
+	
+	//자기소개서 번호로 선택한 자기소개서 질문 가져오기
+	public List<SelfIntroQVO> selectQuestionsBySiId(int siId);
+	
+	//공통질문 가져오기
+	public List<SelfIntroQVO> selectCommonQuestions();
+
+	public void cheakselfIntrobyMemId(SelfIntroVO selfIntroVO, String memId);
 }

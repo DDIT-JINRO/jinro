@@ -9,6 +9,7 @@
             SELECT SIQ_ID, SIQ_JOB, SIQ_CONTENT
             FROM SELF_INTRO_Q
             <where>
+            	SIQ_JOB IS NOT NULL
                 <if test="keyword != null and keyword != ''">
                     AND SIQ_CONTENT LIKE '%' || #{keyword} || '%'
                 </if>
@@ -28,6 +29,7 @@
     SELECT COUNT(*)
     FROM SELF_INTRO_Q
     <where>
+    	SIQ_JOB IS NOT NULL
         <if test="keyword != null and keyword != ''">
             AND SIQ_CONTENT LIKE '%' || #{keyword} || '%'
         </if>
@@ -88,6 +90,25 @@
 	SELECT SI_ID, MEM_ID, SI_TITLE, SI_STATUS
 	FROM SELF_INTRO
 	WHERE SI_ID= #{siId}
+</select>
+<!-- 자소서 Id별로 선택한 질문가져오기 -->
+<select id="selectQuestionsBySiId"
+        parameterType="int"
+        resultType="kr.or.ddit.cdp.sint.service.SelfIntroQVO">
+  SELECT q.SIQ_ID
+       , q.SIQ_JOB
+       , q.SIQ_CONTENT
+  FROM SELF_INTRO_CONTENT c
+  INNER JOIN SELF_INTRO_Q      q ON c.SIQ_ID = q.SIQ_ID
+  WHERE c.SI_ID = #{siId}
+  ORDER BY c.SIC_ORDER
+</select>
+<!-- 공통 질문 가져오기 -->
+<select id="selectCommonQuestions" resultType="kr.or.ddit.cdp.sint.service.SelfIntroQVO">
+  SELECT SIQ_ID, SIQ_JOB, SIQ_CONTENT
+  FROM SELF_INTRO_Q
+  WHERE SIQ_JOB IS NULL
+  ORDER BY SIQ_ID
 </select>
 
 </mapper>

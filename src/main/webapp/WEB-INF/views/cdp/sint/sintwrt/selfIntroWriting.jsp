@@ -3,6 +3,14 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="">
 <!-- 스타일 여기 적어주시면 가능 -->
+<c:if test="${not empty errorMessage}">
+  <script type="text/javascript">
+    // 브라우저 콘솔에 출력
+    console.log('오류 발생:', '${errorMessage}');
+    // 팝업창으로도 알림
+    alert('${errorMessage}');
+  </script>
+</c:if>
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
@@ -46,34 +54,44 @@
 							type="hidden" name="siId" value="${selfIntroVO.siId}" />
 					</div>
 
-					<!--  ➤ 질문 추가 버튼 -->
-					<div class="btn-add-wrapper">
-						<button id="btn-add-question" type="button" class="btn-add">+
-							질문 추가</button>
-					</div>
 
 					<!--  ➤ 질문·답변 블록이 들어갈 컨테이너 -->
 					<div id="questionContainer">
-						<!-- 수정 모드: 기존 질문·답변 있을 때 그대로 보여주기 -->
-						<c:if test="${not empty selfIntroContentVOList}">
-							<c:forEach var="content" items="${selfIntroContentVOList}"
-								varStatus="st">
+						<!-- 1) 공통 질문 -->
+						<c:forEach var="q" items="${commonQList}" varStatus="st">
+							<div class="qa-block">
+								<div class="question-block">
+									<span class="question-number">${st.index + 1}.</span> <span
+										class="question-text">${q.siqContent}</span> <input
+										type="hidden" name="siqIdList" value="${q.siqId}" />
+								</div>
+								<div class="answer-block">
+									<textarea name="sicContentList" placeholder="답변을 작성해주세요."></textarea>
+								</div>
+							</div>
+						</c:forEach>
+
+						<!-- 2) 선택된 질문(수정 모드) -->
+						<c:if test="${not empty selfIntroQVOList}">
+							<c:forEach var="q" items="${selfIntroQVOList}" varStatus="st">
 								<div class="qa-block">
 									<div class="question-block">
-										<span class="question-number">${st.index + 1}.</span>
-										<!-- 질문 텍스트만 보여주기 -->
-										<span class="question-text">${selfIntroQVOList[st.index].siqContent}</span>
-										<button type="button" class="btn-remove">삭제</button>
+										<!-- commonQList.size() + index 로 번호 매기기 -->
+										<span class="question-number"> ${commonQList.size() + st.index + 1}.
+										</span> <span class="question-text">${q.siqContent}</span> <input
+											type="hidden" name="siqIdList" value="${q.siqId}" />
 									</div>
 									<div class="answer-block">
-										<textarea name="sicContentList" class="answer-textarea"
-											placeholder="답변을 작성해주세요.">${content.sicContent}</textarea>
-										<input type="hidden" name="siqIdList" value="${content.siqId}" />
+										<!-- contentList와 인덱스가 맞도록 -->
+										<textarea name="sicContentList" placeholder="답변을 작성해주세요.">
+          ${selfIntroContentVOList[st.index].sicContent}
+        </textarea>
 									</div>
 								</div>
 							</c:forEach>
 						</c:if>
 					</div>
+
 
 					<!--  ➤ 버튼 그룹 -->
 					<div class="btn-group">
@@ -82,22 +100,6 @@
 						<button type="submit" class="btn-submit">작성완료</button>
 					</div>
 				</form>
-
-				<!--  ➤ 템플릿: 새 질문+답변을 추가할 때 이걸 복제 -->
-				<template id="question-template">
-					<div class="qa-block">
-						<div class="question-block">
-							<span class="question-number"></span> <input type="text"
-								name="newQuestionList" class="question-input"
-								placeholder="질문을 입력하세요." />
-							<button type="button" class="btn-remove">삭제</button>
-						</div>
-						<div class="answer-block">
-							<textarea name="newAnswerList" class="answer-textarea"
-								placeholder="답변을 작성해주세요."></textarea>
-						</div>
-					</div>
-				</template>
 			</section>
 		</div>
 	</div>
@@ -116,21 +118,6 @@
       el.textContent = `${idx + 1}.`;
     });
   }
-
-  // 새 블록 추가
-  btnAdd.addEventListener('click', () => {
-    const clone = template.content.cloneNode(true);
-    container.appendChild(clone);
-    updateNumbers();
-  });
-
-  // 삭제 (이벤트 위임)
-  container.addEventListener('click', e => {
-    if (e.target.classList.contains('btn-remove')) {
-      e.target.closest('.qa-block').remove();
-      updateNumbers();
-    }
-  });
 
   // 초기 로드 시 순번 세팅 (수정 모드)
   document.addEventListener('DOMContentLoaded', updateNumbers);
