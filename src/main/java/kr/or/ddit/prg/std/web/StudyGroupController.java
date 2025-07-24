@@ -10,15 +10,19 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
 import kr.or.ddit.mpg.mat.bmk.web.BookMarkController;
@@ -26,18 +30,20 @@ import kr.or.ddit.prg.std.service.StdBoardVO;
 import kr.or.ddit.prg.std.service.StudyGroupService;
 import kr.or.ddit.prg.std.service.impl.StudyGroupServiceImpl;
 import kr.or.ddit.util.ArticlePage;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/prg/std")
 public class StudyGroupController {
 
 	@Autowired
 	StudyGroupService studyGroupService;
-	
+
 	@Autowired
 	ChatService chatService;
 
-	
+
 	@GetMapping("/stdGroupList.do")
 	public String selectStdGroupList(@RequestParam(required = false) String region,
 		    						@RequestParam(required = false) String gender,
@@ -63,17 +69,17 @@ public class StudyGroupController {
 		System.out.println("======================================================================");
 		if(stdBoardVO!=null && stdBoardVO.getSize() == 0) stdBoardVO.setSize(size);
 		if(stdBoardVO!=null && stdBoardVO.getCurrentPage() == 0) stdBoardVO.setCurrentPage(currentPage);
-		
+
 		int totalCount = this.studyGroupService.selectStudyGroupTotalCount(stdBoardVO);
 		List<StdBoardVO> list = this.studyGroupService.selectStudyGroupList(stdBoardVO);
-		
+
 		ArticlePage<StdBoardVO> articlePage = new ArticlePage<>(totalCount, currentPage, size, list, searchKeyword);
 		String baseUrl = buildQueryString(region, gender, interest, maxPeople, searchType, searchKeyword, size);
 		articlePage.setUrl(baseUrl);
 		articlePage.setPagingArea("");
-		
+
 		Map<String, String> interestMap = this.studyGroupService.getInterestsMap();
-		
+
 		if(principal!=null && !principal.getName().equals("anonymousUser")) {
 			List<ChatRoomVO> roomList = chatService.findRoomsByMemId(principal.getName());
 			Set<Integer> myChatRoomIds = roomList.stream()
@@ -81,19 +87,25 @@ public class StudyGroupController {
 				    .collect(Collectors.toSet());
 			model.addAttribute("myRoomSet", myChatRoomIds);
 		}
-		
+
 		model.addAttribute("articlePage", articlePage);
 		model.addAttribute("interestMap", interestMap);
 		return "prg/std/stdGroupList";
 	}
-	
+
 	@GetMapping("/stdGroupDetail.do")
 	public String selectStdGroupDetail(@RequestParam int stdGroupId, Model model) {
 		model.addAttribute("stdGroupId", stdGroupId);
-		
+		// 단일 게시글 전체 내용에 댓글 리스트 + 채팅방정보 챙겨오기
+		// 게시글이 존재하지 않으면 badRequest 리턴 (파라미터값 임의로 변경시 스터디그룹이 아니면 막아야함)
+		StdBoardVO stdBoardVO = this.studyGroupService.selectStudyGroupDetail(stdGroupId);
+		model.addAttribute("stdBoardVO", stdBoardVO);
+
 		return "prg/std/stdGroupDetail";
 	}
-	
+
+
+	// page번호 버튼에 url 입력을 위한 base 쿼리스트링 구성
 	private String buildQueryString(String region,String gender, String interest, Integer maxPeople
 								, String searchType, String searchKeyword, int size) {
 		StringBuilder sb = new StringBuilder();
@@ -108,41 +120,17 @@ public class StudyGroupController {
 
 		return sb.toString();
 	}
-	
-	private String buildPagingArea(ArticlePage<StdBoardVO> pagingVO, String baseUrl) {
-	    StringBuilder sb = new StringBuilder();
 
-	    sb.append("<div class='col-sm-12 col-md-7'>");
-	    sb.append("<div class='dataTables_paginate paging_simple_numbers' id='example2_paginate'>");
-	    sb.append("<ul class='pagination'>");
-
-	    // Previous
-	    sb.append("<li class='paginate_button page-item previous ");
-	    if (pagingVO.getStartPage() < 6) sb.append("disabled ");
-	    sb.append("'>");
-	    sb.append("<a href='").append(baseUrl)
-	      .append("&currentPage=").append(pagingVO.getStartPage() - 5)
-	      .append("' class='page-link'>Previous</a></li>");
-
-	    // Pages
-	    for (int pNo = pagingVO.getStartPage(); pNo <= pagingVO.getEndPage(); pNo++) {
-	        sb.append("<li class='paginate_button page-item ");
-	        if (pagingVO.getCurrentPage() == pNo) sb.append("active");
-	        sb.append("'>");
-	        sb.append("<a href='").append(baseUrl)
-	          .append("&currentPage=").append(pNo)
-	          .append("' class='page-link'>").append(pNo).append("</a></li>");
-	    }
-
-	    // Next
-	    sb.append("<li class='paginate_button page-item next ");
-	    if (pagingVO.getEndPage() >= pagingVO.getTotalPages()) sb.append("disabled");
-	    sb.append("'>");
-	    sb.append("<a href='").append(baseUrl)
-	      .append("&currentPage=").append(pagingVO.getStartPage() + 5)
-	      .append("' class='page-link'>Next</a></li>");
-
-	    sb.append("</ul></div></div>");
-	    return sb.toString();
+	@PostMapping("/enterStdGroup")
+	public ResponseEntity<String> enterStdGroup(@RequestBody ChatMemberVO chatMemberVO){
+		log.info("enterStdGroup -> chatMemberVO : "+chatMemberVO);
+		try {
+			this.chatService.participateChatRoom(chatMemberVO);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().build();
+		}
 	}
+
 }

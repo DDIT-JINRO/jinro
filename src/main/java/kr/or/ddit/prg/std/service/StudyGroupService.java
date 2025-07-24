@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 public interface StudyGroupService {
-	
+
 	/**
 	 * 목록 조회. 필터링, 검색 조건 추가
 	 * @param stdBoardVO
 	 * @return
 	 */
 	List<StdBoardVO> selectStudyGroupList(StdBoardVO stdBoardVO);
-	
+
 	/**
 	 * BOARD 테이블에 스터디그룹 게시글 데이터 삽입
 	 * content 는 json형식의 clob
@@ -26,13 +26,24 @@ public interface StudyGroupService {
 	 * @return
 	 */
 	int insertStdBoard(StdBoardVO stdBoardVO);
-	
+
 	/**
 	 * 목록 조회 -> 조회된 갯수만 가져오기
 	 * @param stdBoardVO
 	 * @return
 	 */
 	int selectStudyGroupTotalCount(StdBoardVO stdBoardVO);
-	
+
+	/**
+	 * 목록 조회 때 같이 전송할 키워드 값 영문명과 한글명 맵
+	 * @return
+	 */
 	Map<String, String> getInterestsMap();
+
+	/**
+	 * 단일 스터디그룹 게시글 조회
+	 * @param stdGroupId
+	 * @return
+	 */
+	StdBoardVO selectStudyGroupDetail(int stdGroupId);
 }

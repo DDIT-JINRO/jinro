@@ -15,18 +15,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import kr.or.ddit.chat.service.impl.ChatMapper;
 import kr.or.ddit.prg.std.service.StdBoardVO;
+import kr.or.ddit.prg.std.service.StdReplyVO;
 import kr.or.ddit.prg.std.service.StudyGroupService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class StudyGroupServiceImpl implements StudyGroupService{
-	
+
 	@Autowired
 	StudyGroupMapper studyGroupMapper;
-	
+
 	private final Map<String, String> regionMap = new HashMap<>();
-	
+
 	@PostConstruct
 	public void setRegionMap() {
 		List<Map<String, Object>> regionCodeList = this.studyGroupMapper.selectRegionNamesFromComCode();
@@ -37,7 +38,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		}
 		log.info("regionMap 초기화 완료: {}", regionMap);
 	}
-	
+
 	@Override
 	public List<StdBoardVO> selectStudyGroupList(StdBoardVO stdBoardVO) {
 		List<StdBoardVO> list = this.studyGroupMapper.selectStudyGroupList(stdBoardVO);
@@ -58,7 +59,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 				e.printStackTrace();
 			}
 		}
-		
+
 		return list;
 	}
 
@@ -71,7 +72,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	public int selectStudyGroupTotalCount(StdBoardVO stdBoardVO) {
 		return this.studyGroupMapper.selectStudyGroupTotalCount(stdBoardVO);
 	}
-	
+
 	@Override
 	public Map<String, String> getInterestsMap(){
 		Map<String, String> interestMap = Map.ofEntries(
@@ -94,5 +95,39 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 			);
 		return interestMap;
 	}
-	
+
+	@Override
+	public StdBoardVO selectStudyGroupDetail(int stdGroupId) {
+		StdBoardVO stdBoardVO =this.studyGroupMapper.selectStudyGroupDetail(stdGroupId);
+
+		List<StdReplyVO> parentReplyList = stdBoardVO.getStdReplyVOList();
+		if(parentReplyList != null && !parentReplyList.isEmpty() && parentReplyList.get(0).getReplyContent() != null) {
+			for(StdReplyVO stdReplyVO : parentReplyList) {
+				int childCount =stdReplyVO.getChildCount();
+				if(childCount == 0) continue;
+
+		         if (childCount > 0) {
+		                int parentReplyId = stdReplyVO.getReplyId();
+		                List<StdReplyVO> childReplies = getChildReplies(parentReplyId);
+		                // 자식댓글 리스트 세팅
+		                stdReplyVO.setChildReplyVOList(childReplies);
+		         }
+			}
+		}else {
+			parentReplyList.clear();
+		}
+		return stdBoardVO;
+	}
+
+	private List<StdReplyVO> getChildReplies(int replyId){
+		List<StdReplyVO> replyList = this.studyGroupMapper.selectChildReplyList(replyId);
+		for(StdReplyVO replyVO : replyList) {
+			if(replyVO.getChildCount() == 0) continue;
+            int parentReplyId = replyVO.getReplyId();
+            List<StdReplyVO> childReplies = getChildReplies(parentReplyId);
+            // 자식댓글 리스트 세팅
+            replyVO.setChildReplyVOList(childReplies);
+		}
+		return replyList;
+	}
 }

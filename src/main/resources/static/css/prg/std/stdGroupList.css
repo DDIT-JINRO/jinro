@@ -7,6 +7,15 @@
   margin-bottom: 20px;
   border: 2px solid #e8ecef;
   border-radius: 10px;
+  transition: all 0.2s ease; /* 부드러운 전환 */
+}
+
+/* 마우스 오버 효과 */
+.group-card:hover {
+  border-color: #c0d4e5;
+  background-color: #f9fcff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
 }
 
 .group-tags {
