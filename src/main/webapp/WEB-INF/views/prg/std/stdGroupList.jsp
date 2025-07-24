@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/prg/std/stdGroupList.css">
+<link rel="stylesheet" href="/css/prg/std/stdGroupList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -19,6 +20,7 @@
 <div>
 	<div class="public-wrapper">
 		<!-- 여기부터 작성해 주시면 됩니다 -->
+		
 		
   		<div class="public-wrapper-main">
   			스터디그룹목록
@@ -140,6 +142,37 @@
 			<a href="/prg/std/stdGroupDetail.do?stdGroupId=2">스터디그룹 상세 2번글</a>
   			<br/>
 			<a href="/prg/std/stdGroupDetail.do?stdGroupId=3">스터디그룹 상세 3번글</a>
+
+			<div class="card-footer clearfix">
+				<ul class="pagination">
+					<!-- Previous -->
+					<li>
+						<a 
+						href="${articlePage.url }&currentPage=${articlePage.startPage - 5}"
+						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
+							← Previous </a>
+					</li>
+
+					<!-- Page Numbers -->
+					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
+						<li>
+							<a
+							href="${articlePage.url }&currentPage=${pNo}"
+							class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>"> ${pNo} </a>
+						</li>
+					</c:forEach>
+
+					<!-- Next -->
+					<li>
+						<a
+						href="${articlePage.url }&currentPage=${articlePage.startPage + 5}"
+						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
+							Next → </a>
+					</li>
+				</ul>
+			</div>
+		</div>
+  		<!-- /wrapper main -->
 
 			<div class="card-footer clearfix">
 				<ul class="pagination">

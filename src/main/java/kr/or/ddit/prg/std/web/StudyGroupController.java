@@ -109,4 +109,40 @@ public class StudyGroupController {
 		return sb.toString();
 	}
 	
+	private String buildPagingArea(ArticlePage<StdBoardVO> pagingVO, String baseUrl) {
+	    StringBuilder sb = new StringBuilder();
+
+	    sb.append("<div class='col-sm-12 col-md-7'>");
+	    sb.append("<div class='dataTables_paginate paging_simple_numbers' id='example2_paginate'>");
+	    sb.append("<ul class='pagination'>");
+
+	    // Previous
+	    sb.append("<li class='paginate_button page-item previous ");
+	    if (pagingVO.getStartPage() < 6) sb.append("disabled ");
+	    sb.append("'>");
+	    sb.append("<a href='").append(baseUrl)
+	      .append("&currentPage=").append(pagingVO.getStartPage() - 5)
+	      .append("' class='page-link'>Previous</a></li>");
+
+	    // Pages
+	    for (int pNo = pagingVO.getStartPage(); pNo <= pagingVO.getEndPage(); pNo++) {
+	        sb.append("<li class='paginate_button page-item ");
+	        if (pagingVO.getCurrentPage() == pNo) sb.append("active");
+	        sb.append("'>");
+	        sb.append("<a href='").append(baseUrl)
+	          .append("&currentPage=").append(pNo)
+	          .append("' class='page-link'>").append(pNo).append("</a></li>");
+	    }
+
+	    // Next
+	    sb.append("<li class='paginate_button page-item next ");
+	    if (pagingVO.getEndPage() >= pagingVO.getTotalPages()) sb.append("disabled");
+	    sb.append("'>");
+	    sb.append("<a href='").append(baseUrl)
+	      .append("&currentPage=").append(pagingVO.getStartPage() + 5)
+	      .append("' class='page-link'>Next</a></li>");
+
+	    sb.append("</ul></div></div>");
+	    return sb.toString();
+	}
 }
