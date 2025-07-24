@@ -50,7 +50,7 @@
 						<input type="text" name="siTitle" value="${selfIntroVO.siTitle}"
 							placeholder="제목을 입력하세요." class="title-input" /> 
 							<input type="hidden" name="siId" value="${selfIntroVO.siId}" />
-							<input type="text" name="memId" value="${selfIntroVO.memId}" />
+							<input type="hidden" name="memId" value="${selfIntroVO.memId}" />
 					</div>
 
 
