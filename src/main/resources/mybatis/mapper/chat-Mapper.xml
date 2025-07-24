@@ -31,7 +31,7 @@
 		    , CR_TITLE, CR_MAX_CNT, CREATED_AT
 		)VALUES(
 		   #{crId}, #{ccId}, #{targetId}, #{crTitle}, #{crMaxCnt}, SYSTIMESTAMP
-		);
+		)
 	</insert>
 
 	<!-- 채팅방 입장 및 재입장 merge구문 -->
@@ -83,6 +83,7 @@
 		                       FROM CHAT_MEMBER
 		                      WHERE CR_ID = #{crId}
 		                        AND MEM_ID = #{memId})
+	     ORDER BY M.SENT_AT , MSG_ID
 	</select>
 
 	<!-- 입장한 채팅방 읽음시각 현재시간으로 수정하기 -->
@@ -99,19 +100,21 @@
 		INSERT INTO CHAT_RECEIVER(
 			MSG_ID, RECEIVER_ID, READ_AT
 		)VALUES(
-			#{msgId}, #{receiverId}, SYSTIMESTAMP
+			#{msgId}, #{receiverId}, #{readAt}
 		)
 	</insert>
 
 	<!-- 현재 입장한 채팅방 수신된 메시지 읽음 시각 전체 업데이트 -->
-	<update id="receverReadAtUpdate" parameterType="kr.or.ddit.chat.service.ChatMemberVO">
+	<update id="receiverReadAtUpdate" parameterType="kr.or.ddit.chat.service.ChatMemberVO">
 		UPDATE CHAT_RECEIVER
 		   SET READ_AT = SYSTIMESTAMP
 		 WHERE RECEIVER_ID = #{memId}
 		   AND MSG_ID IN (SELECT MSG_ID
 		                    FROM CHAT_MESSAGE
 		                   WHERE CR_ID = #{crId})
+		   AND READ_AT IS NULL
 	</update>
+
 
 	<!-- 채팅메시지 테이블에 삽입 -->
 	<insert id="insertChatMessage" parameterType="kr.or.ddit.chat.service.ChatMessageVO">
@@ -135,5 +138,56 @@
 		 WHERE RECEIVER_ID = #{memId}
 		   AND READ_AT IS NULL
 	</select>
-
+	
+	<!-- 채팅방에 입장해있는지 체크 -->
+	<select id="selectChatMember" resultType="kr.or.ddit.chat.service.ChatMemberVO" parameterType="kr.or.ddit.chat.service.ChatMemberVO">
+		SELECT MEM_ID, CR_ID, LAST_READ_TIME
+			 , JOINED_AT, EXITED_AT, IS_EXITED
+		  FROM CHAT_MEMBER
+		 WHERE MEM_ID = #{memId}
+		   AND CR_ID = #{crId}
+		   AND IS_EXITED = 'N'
+	</select>
+	
+	<!-- 채팅방 번호로 해당 채팅방 멤버id 리스트로 뽑아오기 (수신자 테이블 삽입을 위함) -->
+	<select id="findChatMemberIdsByCrId" resultType="int" parameterType="int">
+	    SELECT MEM_ID
+	      FROM CHAT_MEMBER
+	     WHERE CR_ID = #{crId}
+	       AND IS_EXITED = 'N'
+	</select>
+	
+	<!-- 수신자테이블에서 전체회원 회원별로 안읽은 갯수 뽑아오기 -->
+	<select id="selectUnreadCountGroupByMemId" resultType="kr.or.ddit.chat.service.ChatReceiverVO">
+		SELECT 
+		       COUNT(*) UNREAD_CNT
+		     , RECEIVER_ID
+		  FROM CHAT_RECEIVER
+		 WHERE READ_AT IS NULL
+		 GROUP BY RECEIVER_ID
+	</select>
+	
+	<!-- 수신자테이블에서 특정회원의 전체 안읽은 갯수 뽑아오기 -->
+	<select id="selectUnreadCountByMemId" resultType="kr.or.ddit.chat.service.ChatReceiverVO" parameterType="int">
+		SELECT 
+		       COUNT(*) UNREAD_CNT
+		     , RECEIVER_ID
+		  FROM CHAT_RECEIVER
+		 WHERE RECEIVER_ID = #{memId}
+		   AND READ_AT IS NULL
+		 GROUP BY RECEIVER_ID
+	</select>
+	
+	<!-- 수신자테이블에서 특정회원 채팅방별 안읽은 갯수 뽑아오기 -->
+	<select id="selectUnreadCountOfRoomsByMemId" parameterType="int" resultType="kr.or.ddit.chat.service.ChatReceiverVO">
+	  SELECT
+	      	 M.CR_ID
+	       , COUNT(*) AS UNREAD_CNT
+	    FROM CHAT_RECEIVER R
+	    JOIN CHAT_MESSAGE M
+	      ON R.MSG_ID = M.MSG_ID
+	   WHERE R.RECEIVER_ID = #{memId}
+	     AND R.READ_AT IS NULL
+	   GROUP BY M.CR_ID
+	</select>
 </mapper>

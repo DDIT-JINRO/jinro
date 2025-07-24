@@ -1,14 +1,98 @@
 package kr.or.ddit.prg.std.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.or.ddit.prg.std.service.StudyGroupService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.PostConstruct;
+import kr.or.ddit.chat.service.impl.ChatMapper;
+import kr.or.ddit.prg.std.service.StdBoardVO;
+import kr.or.ddit.prg.std.service.StudyGroupService;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class StudyGroupServiceImpl implements StudyGroupService{
 	
 	@Autowired
 	StudyGroupMapper studyGroupMapper;
+	
+	private final Map<String, String> regionMap = new HashMap<>();
+	
+	@PostConstruct
+	public void setRegionMap() {
+		List<Map<String, Object>> regionCodeList = this.studyGroupMapper.selectRegionNamesFromComCode();
+		for(Map<String, Object> map : regionCodeList) {
+	        String codeId = String.valueOf(map.get("CC_ID"));
+	        String codeName = String.valueOf(map.get("CC_ETC"));
+	        regionMap.put(codeId, codeName);
+		}
+		log.info("regionMap 초기화 완료: {}", regionMap);
+	}
+	
+	@Override
+	public List<StdBoardVO> selectStudyGroupList(StdBoardVO stdBoardVO) {
+		List<StdBoardVO> list = this.studyGroupMapper.selectStudyGroupList(stdBoardVO);
+		// content에 json형식의 문자열이 들어가있고 해당 값을 그대로 받아왔기때문에 처리단계.
+		ObjectMapper mapper = new ObjectMapper();
+		for (StdBoardVO board : list) {
+		    JsonNode json;
+			try {
+				json = mapper.readTree(board.getBoardContent());
+			    board.setRegion(regionMap.get(json.path("region").asText()));
+			    board.setGender(json.path("gender").asText());
+			    board.setInterest(json.path("interest").asText());
+			    board.setMaxPeople(json.path("maxPeople").asInt());
+			    board.setParsedContent(json.path("content").asText());
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
+
+	@Override
+	public int insertStdBoard(StdBoardVO stdBoardVO) {
+		return this.studyGroupMapper.insertStdBoard(stdBoardVO);
+	}
+
+	@Override
+	public int selectStudyGroupTotalCount(StdBoardVO stdBoardVO) {
+		return this.studyGroupMapper.selectStudyGroupTotalCount(stdBoardVO);
+	}
+	
+	@Override
+	public Map<String, String> getInterestsMap(){
+		Map<String, String> interestMap = Map.ofEntries(
+			    Map.entry("study.general", "공부"),
+			    Map.entry("study.exam", "수능준비"),
+			    Map.entry("study.assignment", "과제"),
+			    Map.entry("study.etc", "기타"),
+
+			    Map.entry("career.path", "진로"),
+			    Map.entry("career.admission", "진학"),
+			    Map.entry("career.etc", "기타"),
+
+			    Map.entry("job.prepare", "취업준비"),
+			    Map.entry("job.concern", "취업고민"),
+			    Map.entry("job.etc", "기타"),
+
+			    Map.entry("social.neighbor", "동네친구"),
+			    Map.entry("social.talk", "잡담"),
+			    Map.entry("social.etc", "기타")
+			);
+		return interestMap;
+	}
 	
 }

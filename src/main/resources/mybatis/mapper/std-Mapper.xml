@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.prg.std.service.impl.StudyGroupMapper">
+
+	<resultMap id="stdBoardMap" type="kr.or.ddit.prg.std.service.StdBoardVO">
+	    <id property="boardId" column="BOARD_ID" />
+	    <result property="boardTitle" column="BOARD_TITLE" />
+	    <result property="boardContent" column="BOARD_CONTENT" />
+	    <result property="boardCnt" column="BOARD_CNT" />
+	    <result property="boardCreatedAt" column="BOARD_CREATED_AT" />
+		<result property="boardUpdatedAt" column="BOARD_UPDATED_AT"/>
+	    <result property="replyCnt" column="REPLY_COUNT" />
+	    <result property="curJoinCnt" column="CUR_CNT" />
+	    <result property="boardId" column="BOARD_ID"/>
+		<result property="memId" column="MEM_ID"/>
+		<result property="boardDelYn" column="BOARD_DEL_YN"/>
+	
+	    <association property="chatRoomVO" javaType="kr.or.ddit.chat.service.ChatRoomVO">
+	        <id     property="crId"        column="CR_ID" />
+	        <result property="ccId"        column="CR_CC_ID" />
+	        <result property="targetId"    column="CR_TARGET_ID" />
+	        <result property="crTitle"     column="CR_TITLE" />
+	        <result property="crMaxCnt"    column="CR_MAX_CNT" />
+	        <result property="createdAt"   column="CR_CREATED_AT" />
+	    </association>
+	</resultMap>
+	
+	<!-- 목록조회. board테이블에서 스터디그룹게시글과 연계된 chat_room테이블&chat_member테이블 -->
+	<select id="selectStudyGroupList" resultMap="stdBoardMap" parameterType="kr.or.ddit.prg.std.service.StdBoardVO">
+		SELECT A.*
+		FROM 
+		  (
+		  SELECT 
+		    ROWNUM RN,
+		    B.BOARD_ID,
+		    B.BOARD_TITLE,
+		    B.BOARD_CONTENT,
+		    B.BOARD_CNT,
+		    B.BOARD_CREATED_AT,
+		    C.CR_ID,
+		    C.CC_ID AS CR_CC_ID,
+		    C.TARGET_ID AS CR_TARGET_ID,
+		    C.CR_TITLE,
+		    C.CR_MAX_CNT,
+		    C.CREATED_AT AS CR_CREATED_AT,
+		    NVL(CM.CUR_CNT, 0) AS CUR_CNT,
+		    NVL(R.REPLY_COUNT, 0) AS REPLY_COUNT
+		  FROM BOARD B
+		  LEFT JOIN CHAT_ROOM C
+		    ON C.TARGET_ID = B.BOARD_ID AND C.CC_ID = 'G04001'
+		  LEFT JOIN (
+		    SELECT CR_ID, COUNT(*) AS CUR_CNT
+		    FROM CHAT_MEMBER
+		    WHERE IS_EXITED = 'N'
+		    GROUP BY CR_ID
+		  ) CM ON CM.CR_ID = C.CR_ID
+		  LEFT JOIN (
+		    SELECT BOARD_ID, COUNT(*) AS REPLY_COUNT
+		    FROM REPLY
+		    WHERE REPLY_DEL_YN = 'N'
+		    GROUP BY BOARD_ID
+		  ) R ON R.BOARD_ID = B.BOARD_ID
+		  <where>
+		    B.CC_ID = 'G09005'
+		    AND B.BOARD_DEL_YN = 'N'
+		
+		    <if test="region != null and region != ''">
+		      AND JSON_VALUE(B.BOARD_CONTENT, '$.region') = #{region}
+		    </if>
+		    <if test="gender != null and gender != ''">
+		      AND JSON_VALUE(B.BOARD_CONTENT, '$.gender') = #{gender}
+		    </if>
+		    <if test="interest != null and interest != ''">
+		      AND JSON_VALUE(B.BOARD_CONTENT, '$.interest') = #{interest}
+		    </if>
+		    <if test="maxPeople != null and maxPeople != 0">
+		      AND JSON_VALUE(B.BOARD_CONTENT, '$.maxPeople') = #{maxPeople}
+		    </if>
+		
+		    <if test="searchType == 'title' and searchKeyword != null and searchKeyword != ''">
+		      AND LOWER(B.BOARD_TITLE) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+		    </if>
+		    <if test="searchType == 'content' and searchKeyword != null and searchKeyword != ''">
+		      AND LOWER(JSON_VALUE(B.BOARD_CONTENT, '$.content')) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+		    </if>
+		  </where>
+		  ) A
+		  WHERE A.RN > #{startNo}
+		    AND A.RN <![CDATA[<=]]> #{endNo}
+	</select>
+	
+	<select id="selectStudyGroupTotalCount" resultType="int" parameterType="kr.or.ddit.prg.std.service.StdBoardVO">
+	  SELECT COUNT(*)
+	  FROM BOARD B
+	  <where>
+	    B.CC_ID = 'G09005'
+	    AND B.BOARD_DEL_YN = 'N'
+	
+	    <if test="region != null and region != ''">
+	      AND JSON_VALUE(B.BOARD_CONTENT, '$.region') = #{region}
+	    </if>
+	    <if test="gender != null and gender != '' and gender != 'all'">
+	      AND JSON_VALUE(B.BOARD_CONTENT, '$.gender') = #{gender}
+	    </if>
+	    <if test="interest != null and interest != ''">
+	      AND JSON_VALUE(B.BOARD_CONTENT, '$.interest') = #{interest}
+	    </if>
+	    <if test="maxPeople != null and maxPeople != ''">
+	      AND JSON_VALUE(B.BOARD_CONTENT, '$.maxPeople') = #{maxPeople}
+	    </if>
+	
+	    <if test="searchType == 'title' and searchKeyword != null and searchKeyword != ''">
+	      AND LOWER(B.BOARD_TITLE) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+	    </if>
+	    <if test="searchType == 'content' and searchKeyword != null and searchKeyword != ''">
+	      AND LOWER(JSON_VALUE(B.BOARD_CONTENT, '$.content')) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+	    </if>
+	  </where>
+	</select>
+	
+	<!-- Board 테이블에 스터디그룹게시판 데이터 삽입 -->
+	<insert id="insertStdBoard" parameterType="kr.or.ddit.prg.std.service.StdBoardVO">
+		<selectKey keyProperty="boardId" resultType="int" order="BEFORE">
+			SELECT NVL(MAX(BOARD_ID),0)+1
+			FROM BOARD
+		</selectKey>
+		INSERT INTO BOARD (
+			BOARD_ID, MEM_ID, CC_ID, BOARD_TITLE
+			, BOARD_CONTENT, BOARD_CREATED_AT, BOARD_UPDATED_AT, BOARD_DEL_YN
+		)VALUES(
+			#{boardId}
+			, #{memId}
+			, #{ccId}
+			, #{boardTitle}
+			, #{boardContent}
+			, SYSDATE
+			, SYSDATE
+			, 'N'
+		)		
+	</insert>
+	
+	<select id="selectRegionNamesFromComCode" resultType="hashMap">
+		SELECT 
+		       CC_ID
+		     , CC_NAME
+		     , CC_ETC
+		  FROM COM_CODE
+		 WHERE CL_CODE = 'G23'
+		   AND USE_YN = 'Y'
+	</select>	
+</mapper>

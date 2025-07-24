@@ -211,30 +211,7 @@
 			<artifactId>flying-saucer-pdf-itext5</artifactId>
 			<version>9.1.22</version>
 		</dependency>
-				<!-- 유튜브 시작-->
-		<dependency>
-			<groupId>com.google.apis</groupId>
-			<artifactId>google-api-services-youtube</artifactId>
-			<version>v3-rev20250714-2.0.0</version>
-		</dependency>
-		<!-- 유튜브 끝-->
-		<dependency>
-			<groupId>com.google.genai</groupId>
-			<artifactId>google-genai</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<!-- 구르미 API 관련 디펜던시 시작-->
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.10.1</version> <!-- 최신 버전 기준 -->
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-			<version>4.12.0</version> <!-- 또는 안정적인 최신 버전 -->
-		</dependency>
-		<!-- 구르미 API 관련 디펜던시 끝-->
+				
 		<!-- 웹소켓 기본 기능 + STOMP 지원 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -252,6 +229,23 @@
 			<artifactId>stomp-websocket</artifactId>
 			<version>2.3.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.genai</groupId>
+			<artifactId>google-genai</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- 구르미 API 관련 디펜던시 시작-->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10.1</version> <!-- 최신 버전 기준 -->
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.12.0</version> <!-- 또는 안정적인 최신 버전 -->
+		</dependency>
+		<!-- 구르미 API 관련 디펜던시 끝-->
 	</dependencies>
 
 	<build>
