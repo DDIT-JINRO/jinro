@@ -106,23 +106,11 @@ public class LoginController {
 	public String findPw(@RequestBody Map<String, String> data) {
 	    String email = data.get("email");
 	    String name = data.get("name");
-	    String rawPhone = data.get("phone");
-	    String phone = "";
-	    
-	    
-	    if (rawPhone.length() == 11) {
-	         phone = rawPhone.replaceFirst("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
-	    } else if (rawPhone.length() == 10) {
-	        phone = rawPhone.replaceFirst("(\\d{3})(\\d{3})(\\d{4})", "$1-$2-$3");
-	    } else {
-	        phone = rawPhone;
-	    }
 	    
 	    MemberVO inputMem = new MemberVO();
 	    
 	    inputMem.setMemEmail(email);
 	    inputMem.setMemName(name);
-	    inputMem.setMemPhoneNumber(phone);
 	    
 	    MemberVO resultMem = loginService.validateUser(inputMem);
 	    if (resultMem !=null) {

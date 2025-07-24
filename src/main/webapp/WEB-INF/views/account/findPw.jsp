@@ -22,8 +22,6 @@
 					id="findEmail-user-email" name="email" placeholder="이메일을 입력해주세요.">
 				<label for="findEmail-user-name">이름</label> <input type="email"
 					id="findEmail-user-name" name="name" placeholder="이름을 입력해주세요.">
-				<label for="findEmail-user-phone">전화번호</label> <input type="email"
-					id="findEmail-user-phone" name="phone" placeholder="전화번호를 입력해주세요.">
 
 
 				<button class="findEmail-btn" id="reissueBtn" onclick="ReissuePwBtn()">임시
@@ -47,10 +45,9 @@
 	function ReissuePwBtn() {
 		const email = document.getElementById("findEmail-user-email").value.trim();
 		const name = document.getElementById("findEmail-user-name").value.trim();
-		const phone = document.getElementById("findEmail-user-phone").value.trim();
 		const button = document.getElementById("reissueBtn");
 		
-		if (!email || !name || !phone) {
+		if (!email || !name ) {
 		  alert("모든 항목을 입력해주세요.");
 		  return;
 		}
@@ -67,7 +64,6 @@
 		  body: JSON.stringify({
 		    email: email,
 		    name: name,
-		    phone: phone
 		  })
 		})
 		.then(response => response.text())
