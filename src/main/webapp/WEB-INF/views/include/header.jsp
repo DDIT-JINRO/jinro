@@ -85,10 +85,14 @@
 </div>
 
 <div class="right-fixed-bar">
-  <ul>
-    <li><img src="" alt="홈" /></li>
-    <li><img src="" alt="로드맵" /></li>
-    <li><img src="" alt="위로가기" /></li>
-  </ul>
+	<button class="right-fixed-btn">
+		<img src="/images/worldCup.png" alt="월드컵">
+	</button>
+	<button class="right-fixed-btn">
+		<img src="/images/chaticon.png" alt="채팅">
+	</button>
+	<button class="right-fixed-btn">
+		<img src="/images/roadmapicon.png" alt="진로탐색">
+	</button>
 </div>
 <body>
