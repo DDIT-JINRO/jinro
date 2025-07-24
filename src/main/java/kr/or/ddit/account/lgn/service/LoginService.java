@@ -1,5 +1,6 @@
 package kr.or.ddit.account.lgn.service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -16,6 +17,8 @@ public interface LoginService {
 	public Map<String, Object> kakaoLgnProcess(MemberVO member);
 
 	public Map<String, Object> naverLgnProcess(MemberVO member);
+
+	public List<MemberVO> findEmailStringByNameAndPhone(MemberVO member);
 
 
 

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="../include/header.jsp"%>
+<%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/account/loginPage.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 
@@ -31,7 +31,7 @@
 				<button class="login-btn" onclick ="loginBtn()">로그인</button>
 
 				<div class="find-links">
-					아이디, 비밀번호를 잊으셨나요? <a href="#">아이디 찾기</a><a href="#">비밀번호 찾기</a>
+					아이디, 비밀번호를 잊으셨나요? <a href="/lgn/findId.do">아이디 찾기</a><a href="/lgn/findPw.do">비밀번호 찾기</a>
 				</div>
 
 				<div class="sns-login">
@@ -46,7 +46,7 @@
 		</div>
 	</div>
 </div>
-<%@ include file="../include/footer.jsp"%>
+<%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
 <script>

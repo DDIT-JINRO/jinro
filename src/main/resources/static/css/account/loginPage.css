@@ -13,11 +13,10 @@
 .login-container {
 	justify-content: center;
 	background: white;
-	border: 1px solid #E8ECEF;
-	border-radius: 12px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 	padding: 40px 32px;
 	width: 400px;
+	border-radius: 16px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .login-container-imgBox {

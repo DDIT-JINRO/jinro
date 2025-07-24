@@ -1,6 +1,7 @@
 package kr.or.ddit.account.lgn.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -267,4 +268,12 @@ public class LoginServiceImpl implements LoginService {
 			}
 		}
 	}
+
+	@Override
+	public List<MemberVO> findEmailStringByNameAndPhone(MemberVO member) {
+		// TODO Auto-generated method stub
+		return loginMapper.findEmailStringByNameAndPhone(member);
+	}
+
+	
 }
