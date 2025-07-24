@@ -205,69 +205,73 @@
     flex-grow: 1;
 }
 
-.dropdown-box {
+/* Select 박스 스타일링 */
+.question-select {
     box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 15px 14px;
-    gap: 10px;
-    
     width: 100%;
     height: 49px;
+    padding: 12px 12px;
     
     background: #FFFFFF;
     border: 1px solid #D8D8D8;
     border-radius: 5px;
-    
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    
-    width: 100%;
-    height: 19px;
-    
-    flex: none;
-    order: 0;
-    flex-grow: 1;
-}
-
-.dropdown-text {
-    height: 19px;
     
     font-family: 'Noto Sans KR', sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 19px;
+    color: #000000;
     
-    color: #9D9D9D;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
     
-    flex: none;
-    order: 0;
-    flex-grow: 1;
-}
-
-.dropdown-arrow {
-    width: 13px;
-    height: 12px;
+    /* 기본 select 화살표 숨기기 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     
-    background: url('/images/imtintrvw/polygon.png') no-repeat center;
-    border-radius: 1px;
+    /* 커스텀 화살표 추가 */
+    background-image: url('/images/imtintrvw/polygon.png');
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 13px 12px;
+    
     flex: none;
     order: 1;
+    align-self: stretch;
     flex-grow: 0;
+}
+
+.question-select:focus {
+    border-color: #848EFB;
+    box-shadow: 0 0 0 2px rgba(132, 142, 251, 0.2);
+}
+
+.question-select option {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
+    padding: 10px;
+    color: #000000;
+    background: #FFFFFF;
+}
+
+/* placeholder 스타일 */
+.question-select option:disabled {
+    color: #9D9D9D;
+    font-style: italic;
+}
+
+/* 로딩 상태 표시 */
+.question-select.loading {
+    background-image: none;
+    cursor: wait;
+}
+
+.loading-text {
+    color: #9D9D9D;
+    font-style: italic;
 }
 
 /* 시작 전 확인사항 섹션 */
@@ -574,10 +578,10 @@
                 
                 <!-- 태그 영역 -->
                 <div class="tag-container">
-                    <div class="tag active">
+                    <div class="tag active" data-type="saved">
                         <div class="tag-text">저장 질문 면접</div>
                     </div>
-                    <div class="tag">
+                    <div class="tag" data-type="random">
                         <div class="tag-text">랜덤 질문 면접</div>
                     </div>
                 </div>
@@ -590,12 +594,10 @@
                             <div class="asterisk-icon"></div>
                             <div class="section-title">사용 질문 리스트</div>
                         </div>
-                        <div class="dropdown-box">
-                            <div class="dropdown-content">
-                                <div class="dropdown-text">면접 질문 리스트를 선택하세요.</div>
-                                <div class="dropdown-arrow"></div>
-                            </div>
-                        </div>
+                        <!-- dropdown-box를 select 요소로 변경 -->
+                        <select class="question-select" id="questionSelect">
+                            <option value="" disabled selected>면접 질문 리스트를 선택하세요.</option>
+                        </select>
                     </div>
                     
                     <!-- 시작 전 확인사항 섹션 -->
@@ -660,7 +662,95 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 
 <script>
-//모든 체크박스가 체크되었는지 확인하는 함수
+// 전역 변수
+let selectedInterviewType = 'saved'; // 기본값: 저장 질문 면접
+let questionLists = []; // 서버에서 가져온 질문 리스트
+
+// 서버에서 질문 리스트를 가져오는 함수
+function loadQuestionLists() {
+    const select = document.getElementById('questionSelect');
+    
+    // 로딩 상태 표시
+    select.classList.add('loading');
+    select.innerHTML = '<option value="" disabled selected class="loading-text">질문 리스트를 불러오는 중...</option>';
+    
+    // AJAX 요청
+    fetch('/imtintrvw/aiimtintrvw/getQuestionLists', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        questionLists = data;
+        populateQuestionSelect(data);
+        select.classList.remove('loading');
+    })
+    .catch(error => {
+        console.error('질문 리스트 로딩 오류:', error);
+        select.classList.remove('loading');
+        select.innerHTML = '<option value="" disabled selected>질문 리스트를 불러올 수 없습니다. 새로고침 후 다시 시도해주세요.</option>';
+    });
+}
+
+// Select 옵션 채우기
+function populateQuestionSelect(data) {
+    const select = document.getElementById('questionSelect');
+    
+    // 기존 옵션 제거 (placeholder 제외)
+    select.innerHTML = '<option value="" disabled selected>면접 질문 리스트를 선택하세요.</option>';
+    
+    // 데이터가 없는 경우
+    if (!data || data.length === 0) {
+        select.innerHTML = '<option value="" disabled selected>등록된 질문 리스트가 없습니다.</option>';
+        return;
+    }
+    
+    // 데이터로 옵션 생성
+    data.forEach(item => {
+        const option = document.createElement('option');
+        option.textContent = item.idlTitle
+        
+        // 추가 정보가 있다면 data 속성으로 저장
+        if (item.description) {
+            option.setAttribute('data-description', item.description);
+        }
+        if (item.questionCount) {
+            option.setAttribute('data-question-count', item.questionCount);
+            option.textContent += ` (${item.questionCount}개 질문)`;
+        }
+        
+        select.appendChild(option);
+    });
+}
+
+// 면접 타입에 따른 질문 리스트 업데이트
+function updateQuestionListByType(type) {
+    selectedInterviewType = type;
+    
+    if (type === 'random') {
+        // 랜덤 질문 면접의 경우 select 숨기기 또는 비활성화
+        const select = document.getElementById('questionSelect');
+        select.innerHTML = '<option value="random" selected>랜덤 질문이 자동으로 생성됩니다.</option>';
+        select.disabled = true;
+    } else {
+        // 저장 질문 면접의 경우 질문 리스트 로드
+        const select = document.getElementById('questionSelect');
+        select.disabled = false;
+        loadQuestionLists();
+    }
+    
+    // 버튼 상태 업데이트
+    updateStartButton();
+}
+
+// 모든 체크박스가 체크되었는지 확인하는 함수
 function checkAllChecked() {
     const checkboxes = document.querySelectorAll('.checkbox');
     let allChecked = true;
@@ -674,17 +764,29 @@ function checkAllChecked() {
     return allChecked;
 }
 
+// 질문 리스트가 선택되었는지 확인하는 함수
+function checkQuestionListSelected() {
+    const select = document.getElementById('questionSelect');
+    
+    if (selectedInterviewType === 'random') {
+        return true; // 랜덤 면접의 경우 항상 true
+    }
+    
+    return select.value !== '' && select.value !== null;
+}
+
 // 시작 버튼 상태 업데이트 함수
 function updateStartButton() {
     const button = document.getElementById('startButton');
     const allChecked = checkAllChecked();
+    const questionSelected = checkQuestionListSelected();
     
-    if (allChecked) {
-        // 모든 체크박스가 체크됨 - 버튼 활성화
+    if (allChecked && questionSelected) {
+        // 모든 조건이 만족됨 - 버튼 활성화
         button.classList.remove('disabled');
         button.disabled = false;
     } else {
-        // 체크되지 않은 체크박스가 있음 - 버튼 비활성화
+        // 조건이 만족되지 않음 - 버튼 비활성화
         button.classList.add('disabled');
         button.disabled = true;
     }
@@ -692,11 +794,14 @@ function updateStartButton() {
 
 // 모의면접 시작 함수
 function startMockInterview() {
-	// 버튼이 비활성화 상태면 실행하지 않음
+    // 버튼이 비활성화 상태면 실행하지 않음
     if (document.getElementById('startButton').classList.contains('disabled')) {
         return;
     }
-	
+    
+    const select = document.getElementById('questionSelect');
+    const selectedQuestionListId = select.value;
+    
     const button = document.getElementById('startButton');
     const spinner = document.getElementById('loadingSpinner');
     
@@ -718,9 +823,17 @@ function startMockInterview() {
             // 권한 허용됨 - 스트림 정리
             stream.getTracks().forEach(track => track.stop());
             
+            // 면접 설정 정보를 URL 파라미터로 전달
+            let popupUrl = 'http://localhost:5173/mock-interview';
+            const params = new URLSearchParams({
+                type: selectedInterviewType,
+                questionListId: selectedQuestionListId || ''
+            });
+            popupUrl += '?' + params.toString();
+            
             // 팝업 창 열기
             const popup = window.open(
-            	'http://localhost:5173/mock-interview', // React 앱 경로
+                popupUrl,
                 'mockInterview',
                 'width=1400,height=900,scrollbars=yes,resizable=yes,location=no,menubar=no,toolbar=no'
             );
@@ -778,7 +891,7 @@ function resetButton() {
     spinner.style.display = 'none';
 }
 
-// 체크박스 토글 기능
+// 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
     // 미디어 장치 지원 여부 확인
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -790,7 +903,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
- 	// 초기 버튼 상태 설정 (비활성화)
+    // 초기 질문 리스트 로드
+    loadQuestionLists();
+    
+    // 초기 버튼 상태 설정 (비활성화)
     updateStartButton();
     
     // 체크박스 클릭 이벤트
@@ -806,7 +922,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.add('checked');
             }
             
-         	// 버튼 상태 업데이트
+            // 버튼 상태 업데이트
             updateStartButton();
         });
     });
@@ -819,7 +935,16 @@ document.addEventListener('DOMContentLoaded', function() {
             tags.forEach(t => t.classList.remove('active'));
             // 클릭한 태그에 active 클래스 추가
             this.classList.add('active');
+            
+            // 면접 타입 변경
+            const type = this.getAttribute('data-type');
+            updateQuestionListByType(type);
         });
+    });
+    
+    // Select 변경 이벤트
+    document.getElementById('questionSelect').addEventListener('change', function() {
+        updateStartButton();
     });
 });
 </script>
