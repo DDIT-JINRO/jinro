@@ -1,4 +1,4 @@
-package kr.or.ddit.util.payment.service.impl;
+package kr.or.ddit.util.setle.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import kr.or.ddit.util.payment.service.SubscriptionVO;
+import kr.or.ddit.util.setle.service.SubscriptionVO;
 
 /**
  * SUBSCRIBE 테이블에 대한 데이터베이스 작업을 정의하는 매퍼 인터페이스입니다.

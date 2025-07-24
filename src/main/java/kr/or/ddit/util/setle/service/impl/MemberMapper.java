@@ -1,8 +1,8 @@
-package kr.or.ddit.util.payment.service.impl;
+package kr.or.ddit.util.setle.service.impl;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import kr.or.ddit.util.payment.service.MemberVO;
+import kr.or.ddit.util.setle.service.MemberVO;
 
 /**
  * MEMBER 테이블에 대한 데이터베이스 작업을 정의하는 매퍼 인터페이스입니다. 
