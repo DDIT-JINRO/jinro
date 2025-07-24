@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kr.or.ddit.cdp.rsm.rsm.web.ResumeController;
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
@@ -82,7 +83,8 @@ public class QuestionListController {
     public String saveCart(
         @RequestParam("questionIds") String questionIds,
         HttpSession session,
-        @AuthenticationPrincipal String memId
+        @AuthenticationPrincipal String memId,
+        HttpServletRequest  requset
     ) {
     	int id = Integer.parseInt(memId);
         // "1,3,5" → List<Long>
@@ -100,6 +102,8 @@ public class QuestionListController {
         
         int siId = selfIntroService.insertIntro(selfIntroVO,questionIdList);
         log.info("siId : "+siId);
+        
+        requset.setAttribute("siId", siId);
         return "redirect:/sint/sintwrt?siId="+siId;
     }
     
