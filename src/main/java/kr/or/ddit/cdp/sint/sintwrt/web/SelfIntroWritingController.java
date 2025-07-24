@@ -35,31 +35,34 @@ public class SelfIntroWritingController {
 	public String showSelfIntroWrite(
 			@RequestParam(value = "siId", required = false) String siId ,
 			Model model,
-			@AuthenticationPrincipal String memId) {
+			Principal principal) {
 		// 1) 공통 질문: SIQ_JOB IS NULL
 		List<SelfIntroQVO> commonQList = Collections.emptyList();
 		
-		log.info("memId : "+memId);
-		log.info("siId : "+siId);
-
 		SelfIntroVO selfIntroVO = new SelfIntroVO();
+		
+		String memId = principal.getName();
 		selfIntroVO.setMemId(Integer.parseInt(memId));
+		
 		// 2) 이미 저장된 자기소개서(siId)가 있으면, 그에 딸린 질문·답변
 		List<SelfIntroQVO> selfIntroQVOList = Collections.emptyList();
 		List<SelfIntroContentVO> selfIntroContentVOList = Collections.emptyList();
+		
 		 if (siId != null) {
 		        int id = Integer.parseInt(siId);
 		        selfIntroVO.setSiId(id);
 		        selfIntroVO.setMemId(Integer.parseInt(memId));
 		        
-		        
-		        //맴버 아이디 확인 후 아닐경우 에러 반환
+		        //자소서가 존재하지 않을 경우 에러 반환
 				selfIntroVO = selfIntroService.selectBySelfIntroId(selfIntroVO);
-
+				
+				//맴버 아이디 확인 후 아닐경우 에러 반환
 				selfIntroService.cheakselfIntrobyMemId(selfIntroVO, memId);
+				
+				//자소서 Id로 자소서 내용 리스트 반환 
 				List<SelfIntroContentVO> contentList = selfIntroService.selectBySelfIntroContentIdList(selfIntroVO);
+				
 				// contentList 기반으로 질문 VO 리스트
-				log.info("contentList : " + contentList);
 				List<SelfIntroQVO> qList = contentList.stream().map(c -> selfIntroService.selectBySelfIntroQId(c))
 						.collect(Collectors.toList());
 
@@ -108,13 +111,10 @@ public class SelfIntroWritingController {
 	    if (siId == 0) {
 	        // 신규 저장
 	        // 1-1) SELF_INTRO INSERT → newSiId 리턴
-	        int newSiId = selfIntroService.insertIntroId(selfIntroVO); // 
-	        // 1-2) 각 질문별 내용 INSERT
-	        for (int i = 0; i < siqIdList.size(); i++) {
-	            Long questionId = siqIdList.get(i); // 질문 아이디 
-	            String answer    = sicContentList.get(i); // 질문 답변
-	            selfIntroService.insertContent(newSiId, questionId, answer, i + 1);
-	        }
+	    	//selfIntroVO 에 맴버, 제목, 상태를 넣고 저소서 아이디 구한 후 insert 자소서 아이디 return
+	        int newSiId = selfIntroService.insertIntroId(selfIntroVO); 
+	        
+            selfIntroService.insertContent(newSiId, siqIdList, sicContentList);
 
 	    } else {
 	        // 기존 글 업데이트
@@ -133,18 +133,7 @@ public class SelfIntroWritingController {
 	            ));
 
 	        // 3) 전달받은 siqIdList, sicContentList 순회하며 업데이트
-	        for(int i = 0; i < siqIdList.size(); i++) {
-	            int siqId    = siqIdList.get(i).intValue();
-	            String content= sicContentList.get(i);
-	            int sicId = qToSicId.get(siqId);
-	            // sicId가 null일 일 없으므로 바로 호출
-	            selfIntroService.updateContent(
-	                sicId,           // 수정할 PK
-	                siqId,           // 질문 ID
-	                content,         // 답변 텍스트
-	                i + 1            // 순서(order)
-	            );
-	        }
+            selfIntroService.updateContent(siqIdList,qToSicId,sicContentList);
 	    }
 
 	    return "redirect:/sint/sintlst";

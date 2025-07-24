@@ -1,6 +1,7 @@
 package kr.or.ddit.cdp.sint.service;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.or.ddit.com.ComCodeVO;
 
@@ -13,7 +14,7 @@ public interface SelfIntroService {
 
 	public List<ComCodeVO> selectSelfIntroComCodeList();
 	
-	public int insertIntro(SelfIntroVO selfIntroVO,List<Long> questionIds);
+	public int insertIntroToQList(SelfIntroVO selfIntroVO,List<Long> questionIds);
 	
 	public List<SelfIntroContentVO> selectBySelfIntroContentIdList(SelfIntroVO selfIntroVO);
 	
@@ -30,10 +31,11 @@ public interface SelfIntroService {
 	public void cheakselfIntrobyMemId(SelfIntroVO selfIntroVO, String memId);
 	//신규 자소서 정보등롯	
 	public int insertIntroId(SelfIntroVO intro);
-	 /** 개별 질문·답변 콘텐츠 삽입 */
-	public void insertContent(int newSiId, Long questionId, String answer, int i);
+
 	// 이미 있을 때 수정 제목과 상태
 	 public void updateIntro(SelfIntroVO selfIntroVO);
 
-	 public void updateContent(int sicId, int siqId, String content, int i);
+	 public void insertContent(int newSiId, List<Long> siqIdList, List<String> sicContentList);
+
+	 public void updateContent(List<Long> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList);
 }

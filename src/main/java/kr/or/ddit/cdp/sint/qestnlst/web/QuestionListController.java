@@ -100,7 +100,7 @@ public class QuestionListController {
         
         log.info("selfIntroVO"+selfIntroVO);
         
-        int siId = selfIntroService.insertIntro(selfIntroVO,questionIdList);
+        int siId = selfIntroService.insertIntroToQList(selfIntroVO,questionIdList);
         log.info("siId : "+siId);
         
         requset.setAttribute("siId", siId);

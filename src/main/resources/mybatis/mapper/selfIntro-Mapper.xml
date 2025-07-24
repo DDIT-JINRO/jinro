@@ -56,14 +56,12 @@
   INSERT INTO SELF_INTRO (
       SI_ID,
       MEM_ID,
-      SI_TITLE,   -- 항상 이 컬럼을 넣고
-      SI_STATUS   -- 항상 이 컬럼을 넣습니다
+      SI_TITLE,
+      SI_STATUS
   ) VALUES (
       #{siId},
       #{memId},
-      <!-- siTitle 이 있을 땐 값, 없으면 null 바인딩 -->
       #{siTitle,jdbcType=VARCHAR},
-      <!-- siStatus 이 있을 땐 그 값, 없으면 '작성중' 기본값 -->
       <choose>
         <when test="siStatus != null and siStatus != ''">
           #{siStatus}
@@ -80,6 +78,7 @@
 <select id="selectMaxSICId" resultType="int">
 		SELECT NVL(MAX(SIC_ID),0)+1 FROM SELF_INTRO_CONTENT
 </select>
+
 <!-- 자소서 항목별 저장 -->
 <insert id="insertContent" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroContentVO">
   INSERT INTO SELF_INTRO_CONTENT
@@ -117,6 +116,7 @@
 	ORDER
 	BY SIC_ORDER
 </select>
+
 <!-- 자소서 질문 가져오기 -->
 <select id="selectBySelfIntroQId" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroContentVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroQVO">
 	select SIQ_ID, SIQ_JOB, SIQ_CONTENT
@@ -129,6 +129,7 @@
 	FROM SELF_INTRO
 	WHERE SI_ID= #{siId}
 </select>
+
 <!-- 자소서 Id별로 선택한 질문가져오기 -->
 <select id="selectQuestionsBySiId"
         parameterType="int"
@@ -137,7 +138,7 @@
        , q.SIQ_JOB
        , q.SIQ_CONTENT
   FROM SELF_INTRO_CONTENT c
-  INNER JOIN SELF_INTRO_Q      q ON c.SIQ_ID = q.SIQ_ID
+  INNER JOIN SELF_INTRO_Q q ON c.SIQ_ID = q.SIQ_ID
   WHERE c.SI_ID = #{siId}
   ORDER BY c.SIC_ORDER
 </select>
