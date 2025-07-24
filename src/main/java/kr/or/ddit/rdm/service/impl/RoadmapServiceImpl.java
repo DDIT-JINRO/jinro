@@ -83,17 +83,25 @@ public class RoadmapServiceImpl implements RoadmapService {
 
 	// 특정 사용자의 미션 등록 메서드
 	@Override
-	public String insertMission(String memId, int rsId) {
-		RoadmapVO roadmapVO = new RoadmapVO();
-		roadmapVO.setMemId(Integer.parseInt(memId));
-		roadmapVO.setRsId(rsId);
+	public String insertMission(String memId, RoadmapVO request) {
+		request.setMemId(Integer.parseInt(memId));
 
-		int result = this.roadmapMapper.insertMission(roadmapVO);
-		log.info("인서트 결과값 입니다 : " + result);
-
-		if (result > 0)
-			return "success";
-
+		int result = this.roadmapMapper.insertMission(request);
+		
+		if (result > 0) return "success";
+		
+		return "fail";
+	}
+	
+	// 특정 사용자의 미션 완료 날짜 업데이트
+	@Override
+	public String updateDueDate(String memId, RoadmapVO request) {
+		request.setMemId(Integer.parseInt(memId));
+		
+		int result = this.roadmapMapper.updateDueDate(request);
+		
+		if (result > 0) return "success";
+		
 		return "fail";
 	}
 

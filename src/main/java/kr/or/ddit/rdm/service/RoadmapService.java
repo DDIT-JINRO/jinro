@@ -15,6 +15,9 @@ public interface RoadmapService {
 	public String updateCompleteMission(String memId, int rsId);
 
 	// 특정 사용자의 미션 등록 메서드
-	public String insertMission(String memId, int rsId);
+	public String insertMission(String memId, RoadmapVO request);
+
+	// 특정 사용자의 미션 완료 날짜 업데이트
+	public String updateDueDate(String memId, RoadmapVO request);
 
 }

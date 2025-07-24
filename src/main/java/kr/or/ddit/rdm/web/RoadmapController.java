@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.ddit.config.jwt.JwtUtil;
@@ -60,10 +59,16 @@ public class RoadmapController {
 	// 특정 사용자의 미션 등록 메서드
 	@PostMapping("/insertMission")
 	public ResponseEntity<String> insertMission(@AuthenticationPrincipal String memId, @RequestBody RoadmapVO request) {
-		log.info("request가 정상적으로 왔음 : " + request);
-		
-		String result = this.roadmapService.insertMission(memId, request.getRsId());
+		String result = this.roadmapService.insertMission(memId, request);
 
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	// 특정 사용자의 미션 완료 날짜 업데이트
+	@PostMapping("/updateDueDate")
+	public ResponseEntity<String> updateDueDate(@AuthenticationPrincipal String memId, @RequestBody RoadmapVO request) {
+		String result = this.roadmapService.updateDueDate(memId, request);
+		
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 }

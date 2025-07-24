@@ -13,4 +13,5 @@ public class RoadmapVO {
 	private String roadComplete;
 	private Date completeAt;
 	private Date createdAt;
+	private Date dueDate;
 }

@@ -29,25 +29,29 @@
 	<!-- 특정 사용자의 로드맵의 현재 캐릭터의 위치 조회 -->
 	<select id="selectCurrentCharPosition" resultType="int" parameterType="int">
 		SELECT
-			RS_ID
-		FROM
-			ROADMAP
+		    RS_ID
+		FROM(
+	        SELECT
+	            A.RS_ID
+	        FROM
+	            ROADMAP A
+	        INNER JOIN
+	            ROADMAP_STEP B ON (A.RS_ID = B.RS_ID)
+	        WHERE
+	            A.MEM_ID = #{memId}
+	        ORDER BY
+	            A.ROAD_ID DESC,
+	            B.RS_STEP DESC
+		)
 		WHERE
-			ROAD_ID = (
-				SELECT
-					MAX(ROAD_ID)
-				FROM
-					ROADMAP
-				WHERE
-					MEM_ID = 1
-			)
+		    ROWNUM = 1
 	</select>
 	
 	<!-- 특정 사용자의 진행 중인 미션 리스트 조회 -->
 	<select id="selectProgressMissionList" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
 		SELECT
 			RS_ID
-			, CREATED_AT
+			, DUE_DATE
 		FROM
 			ROADMAP
 		WHERE
@@ -143,6 +147,7 @@
 				, RS_ID
 				, ROAD_COMPLETE
 				, CREATED_AT
+				, DUE_DATE
 			)
 		SELECT
 			ROADMAP_SEQ.NEXTVAL
@@ -150,6 +155,7 @@
 			, #{rsId}
 			, 'N'
 			, SYSDATE
+			, #{dueDate}
 		FROM
 			DUAL
 		WHERE
@@ -163,4 +169,11 @@
 					AND RS_ID = #{rsId}
 			)
 	</insert>
+	
+	<update id="updateDueDate" parameterType="kr.or.ddit.rdm.service.RoadmapVO">
+		UPDATE ROADMAP
+		SET DUE_DATE = #{dueDate}
+		WHERE MEM_ID = #{memId}
+		AND RS_ID = #{rsId}	
+	</update>
 </mapper>

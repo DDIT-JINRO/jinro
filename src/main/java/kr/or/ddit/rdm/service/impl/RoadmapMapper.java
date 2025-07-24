@@ -41,5 +41,8 @@ public interface RoadmapMapper {
 	// 특정 사용자의 미션 등록 메서드
 	int insertMission(RoadmapVO roadmapVO);
 
+	// 특정 사용자의 미션 완료 날짜 업데이트
+	int updateDueDate(RoadmapVO request);
+
 
 }
