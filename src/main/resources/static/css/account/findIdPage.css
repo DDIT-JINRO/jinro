@@ -1,5 +1,16 @@
 @charset "UTF-8";
 
+.tempPw{
+	color:  rgb(120, 129, 245);
+}
+
+button:disabled,
+button.disabled-btn {
+  background-color: rgb(192, 196, 204);;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 .email-list {
   list-style: none;           
   padding: 0;                 
@@ -144,12 +155,3 @@
 	border-radius: 6px;
 	font-size: 14px;
 }
-
-
-
-
-
-
-
-
-

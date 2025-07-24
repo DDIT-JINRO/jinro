@@ -275,5 +275,17 @@ public class LoginServiceImpl implements LoginService {
 		return loginMapper.findEmailStringByNameAndPhone(member);
 	}
 
+	@Override
+	public MemberVO validateUser(MemberVO inputMem) {
+		// TODO Auto-generated method stub
+		return loginMapper.validateUser(inputMem);
+	}
+
+	@Override
+	public int insertEncodePass(MemberVO memVO) {
+		// TODO Auto-generated method stub
+		return loginMapper.insertEncodePass(memVO);
+	}
+
 	
 }

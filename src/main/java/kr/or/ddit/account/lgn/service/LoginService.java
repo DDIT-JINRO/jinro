@@ -20,6 +20,10 @@ public interface LoginService {
 
 	public List<MemberVO> findEmailStringByNameAndPhone(MemberVO member);
 
+	public MemberVO validateUser(MemberVO inputMem);
+
+	public int insertEncodePass(MemberVO memVO);
+
 
 
 }

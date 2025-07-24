@@ -18,7 +18,41 @@ public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
+    
+    
+    
+    public void sendReissuePw(String toEmail) {
+    	log.info("코드발급 및 전송 도착");
+    	
+    	try {
+    		MimeMessage message = mailSender.createMimeMessage();
+    		MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+    		
+    		// 👇 여기서 이름 포함해서 설정 가능
+    		try {
+    			helper.setFrom("jooth5501@gmail.com", "Career Path");
+    		} catch (UnsupportedEncodingException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    		helper.setTo(toEmail);
+    		helper.setSubject("비밀번호 재발급");
+    		String htmlContent = "<div style='font-family:sans-serif;'>"
+    		        + "<h3>커리어패스 임시 비밀번호 발급 안내</h3>"
+    		        + "<p>아래 버튼을 눌러 임시 비밀번호를 발급받으세요.</p><br/>"
+    		        + "<a href='http://localhost:8080/lgn/reissuePwPage.do?email=" + toEmail + "' style='"
+    		        + "display: inline-block; padding: 10px 20px; background-color: rgb(120, 129, 245); color: white; "
+    		        + "text-decoration: none; border-radius: 5px;'>임시 비밀번호 발급</a>"
+    		        + "</div>";
 
+            helper.setText(htmlContent, true); // HTML true
+    		
+    		mailSender.send(message);
+    	} catch (MessagingException e) {
+    		log.error("메일 발송 실패", e);
+    		throw new RuntimeException("메일 발송 실패");
+    	}
+    }
     public String sendAuthCode(String toEmail) {
         log.info("코드발급 및 전송 도착");
 
