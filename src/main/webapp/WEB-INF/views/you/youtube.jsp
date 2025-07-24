@@ -20,13 +20,15 @@ iframe {
 
     	document.addEventListener("DOMContentLoaded",()=>{
     		let html = "";
+    		console.log("channelId : ","${channelId}");
+    		console.log("result : ","${result}");
     		
     		axios.get('https://youtube.googleapis.com/youtube/v3/search', {
     		    params: {
     		    	"part":"snippet",
     		    	"maxResults":5,
-    		    	"channelId":"UCFCtZJTuJhE18k8IXwmXTYQ",
-    			    "q":"적성|취업|적성",
+    		    	"channelId": "${channelId}",
+    		    	"q": "${result}",
     			    "regionCode":"kr",
     			    "key":"AIzaSyBFbyrGwjuDTxWcD0_Wg9M5WP3vRUz8Xwk"
     		    }
