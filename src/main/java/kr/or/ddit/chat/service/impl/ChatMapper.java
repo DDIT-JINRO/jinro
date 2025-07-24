@@ -85,6 +85,12 @@ public interface ChatMapper {
 	 * @return
 	 */
 	ChatReceiverVO selectUnreadCountByMemId(int memId); 
+	/**
+	 * 수신자테이블에서 특정회원의 전체 안읽은 갯수 받아오기
+	 * @param memId
+	 * @return
+	 */
+	ChatReceiverVO selectUnreadCountByMemId(int memId); 
 	
 	/**
 	 * 채팅방 입장 시 해당 채팅방 안읽었던 메시지 전체 읽음 처리 
