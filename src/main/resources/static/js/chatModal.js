@@ -132,6 +132,15 @@ function subscribeToUnreadDetail() {
 					showUnreadBadge(crId);
 				})	
 			}
+			
+			if(data.length >= 1){
+				data.forEach(unreadVO =>{
+					const crId = unreadVO.crId;
+					const unreadCnt = unreadVO.unreadCnt;
+					unreadCounts[crId] = unreadCnt;
+					showUnreadBadge(crId);
+				})	
+			}
         });
     }
 }
