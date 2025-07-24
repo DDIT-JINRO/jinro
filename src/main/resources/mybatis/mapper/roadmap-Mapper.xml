@@ -22,8 +22,9 @@
 				, RS_ID
 				, ROAD_COMPLETE
 				, CREATED_AT
+				, DUE_DATE
 			)
-		VALUES(ROADMAP_SEQ.NEXTVAL, #{memId}, 1, 'N', SYSDATE)
+		VALUES(ROADMAP_SEQ.NEXTVAL, #{memId}, 1, 'N', SYSDATE, SYSDATE)
 	</insert>
 	
 	<!-- 특정 사용자의 로드맵의 현재 캐릭터의 위치 조회 -->
@@ -122,6 +123,10 @@
 		AND
 			BM_CATEGORY_ID = 'G03004'
 		</if>
+		<if test="tableName == 'SELF_INTRO'">
+		AND
+			SI_STATUS = '완료'
+		</if>
 	</select>
 	
 	<!-- 미션 완료 시 완료 여부 업데이트 -->
@@ -176,4 +181,19 @@
 		WHERE MEM_ID = #{memId}
 		AND RS_ID = #{rsId}	
 	</update>
+	
+	<insert id="insertCompleteRoadmap" parameterType="String">
+		INSERT
+			INTO
+			ROADMAP(
+				ROAD_ID
+				, MEM_ID
+				, RS_ID
+				, ROAD_COMPLETE
+				, COMPLETE_AT
+				, CREATED_AT
+				, DUE_DATE
+			)
+		VALUES(ROADMAP_SEQ.NEXTVAL, #{memId}, 11, 'Y', SYSDATE, SYSDATE, SYSDATE)
+	</insert>
 </mapper>

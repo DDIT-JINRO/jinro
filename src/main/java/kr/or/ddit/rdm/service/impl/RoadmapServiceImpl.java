@@ -56,6 +56,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 	public String updateCompleteMission(String memId, int rsId) {
 		String tableName = this.roadmapMapper.selectTableName(rsId);
 		if (rsId == 11) {
+			this.roadmapMapper.insertCompleteRoadmap(memId);
 			return "complete";
 		}
 		

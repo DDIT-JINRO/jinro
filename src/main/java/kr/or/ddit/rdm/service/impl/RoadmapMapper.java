@@ -44,5 +44,8 @@ public interface RoadmapMapper {
 	// 특정 사용자의 미션 완료 날짜 업데이트
 	int updateDueDate(RoadmapVO request);
 
+	// 로드맵 전체 완성 여부 반환
+	void insertCompleteRoadmap(String memId);
+
 
 }
