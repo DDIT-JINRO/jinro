@@ -40,7 +40,7 @@ public class QuestionListController {
 			Model model,
 			@AuthenticationPrincipal String memId) {
 		
-		int size = 5; // 한 페이지에 10개
+		int size = 5; // 한 페이지에 5개
 		int startRow = (currentPage - 1) * size + 1;
 		int endRow = currentPage * size;
 
@@ -66,6 +66,7 @@ public class QuestionListController {
 		}
 		
 		int total = selfIntroService.selectSelfIntroQCount(selfIntroQVO);
+		
 		List<SelfIntroQVO> selfIntroQVOList = selfIntroService.selectSelfIntroQList(selfIntroQVO);
 
 		ArticlePage<SelfIntroQVO> page = new ArticlePage<>(total, currentPage, size, selfIntroQVOList, keyword);

@@ -58,7 +58,7 @@
   margin-left: 8px;
 }
 .answer-block textarea {
-  width: 100%;
+  width: 96.5%;
   min-height: 120px;
   padding: 12px;
   font-size: 1rem;
@@ -75,10 +75,10 @@
 
 /* 버튼 그룹 */
 .btn-group {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 32px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 30px;
 }
 .btn-group button {
   padding: 10px 24px;
@@ -88,6 +88,14 @@
   cursor: pointer;
   border: none;
   transition: background 0.2s, color 0.2s;
+}
+/* 오른쪽 버튼 그룹 묶음 */
+.btn-right-group {
+	display: flex;
+	gap: 10px;
+}
+.btn-left-group {
+	display: flex;
 }
 .btn-temp-save {
   background: transparent;
@@ -114,14 +122,32 @@
   background: #4a2fb8;
 }
 
+/* 삭제 버튼 스타일 */
+.btn-delete {
+	background-color: #ff6262;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 14px;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.btn-delete:hover {
+	background-color: #d9363e;
+}
+
 /* 반응형 */
 @media (max-width: 600px) {
-  .public-wrapper-main {
-    padding: 16px 8px;
-  }
   .btn-group {
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: stretch;
+  }
+  .btn-left-group,
+  .btn-right-group {
+    justify-content: center;
+    margin-top: 8px;
   }
   .btn-group button {
     width: 100%;

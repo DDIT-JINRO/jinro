@@ -159,6 +159,7 @@
       <if test="siStatus != null">
         SI_STATUS = #{siStatus},
       </if>
+    	SI_UPDATED_AT = sysdate
     </set>
     WHERE SI_ID  = #{siId}
       AND MEM_ID = #{memId}
@@ -172,5 +173,40 @@
            SIC_ORDER   = #{sicOrder}
      WHERE SIC_ID     = #{sicId}
   </update>
+  
+  <select id="selectSelfIntroBymemId" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
+	SELECT * FROM (
+		SELECT ROWNUM AS RNUM, B.*
+		FROM (
+			SELECT
+				SI_ID,
+				SI_TITLE,
+				SI_STATUS,
+				SI_UPDATED_AT
+			FROM
+				SELF_INTRO
+			WHERE
+				MEM_ID = #{memId}
+				<if test="keyword != null and keyword != ''">
+					AND SI_TITLE LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="status != null and status != ''">
+					AND SI_STATUS = #{status}
+				</if>
+			ORDER BY SI_UPDATED_AT DESC
+			) B
+		WHERE ROWNUM <![CDATA[<]]>= #{endNo}
+	)
+	WHERE RNUM<![CDATA[>]]>= #{startNo}
+  </select>
 
+<delete id="deleteselfIntro" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
+	DELETE FROM SELF_INTRO
+	WHERE SI_ID = #{siId}
+</delete>
+
+<delete id="deleteselfIntroContent" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
+	DELETE FROM SELF_INTRO_CONTENT
+	WHERE SI_ID = #{siId}
+</delete>
 </mapper>

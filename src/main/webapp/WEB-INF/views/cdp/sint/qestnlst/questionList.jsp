@@ -86,7 +86,7 @@
 						<!-- 익명(비로그인) 사용자에게는 로그인 페이지로 -->
 						<sec:authorize access="!isAuthenticated()">
 							<button type="button"
-								onclick="location.href='${pageContext.request.contextPath}/login?redirectUrl=${pageContext.request.requestURI}'">
+								onclick="location.href='${pageContext.request.contextPath}/login?'">
 								로그인 후 작성</button>
 						</sec:authorize>
 					</div>

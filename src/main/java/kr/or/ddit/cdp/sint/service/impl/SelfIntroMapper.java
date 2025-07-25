@@ -60,4 +60,12 @@ public interface SelfIntroMapper {
 
 	//-- 파라미터 map: sicId, siqId, sicContent, sicOrder를 바인딩하여 SELF_INTRO_CONTENT에서 SIC_ID=#{sicId} 조건으로 SIQ_ID, SIC_CONTENT, SIC_ORDER를 업데이트
 	public void updateContent( @Param("sicId") int sicId, @Param("siqId") int siqId,@Param("sicContent") String sicContent,@Param("sicOrder")  int sicOrder);
+
+	//사용자 id로 자소서리스트 가져오기 memId 로 Self_Intro 검색 List 반환
+	public List<SelfIntroVO> selectSelfIntroBymemId(SelfIntroVO selfIntroVO);
+
+	//자소서 삭제
+	public void deleteselfIntro(SelfIntroVO selfIntroVO);
+	//자소서 상세 삭제
+	public void deleteselfIntroContent(SelfIntroVO selfIntroVO);
 }

@@ -36,6 +36,12 @@ public class SelfIntroWritingController {
 			@RequestParam(value = "siId", required = false) String siId ,
 			Model model,
 			Principal principal) {
+		
+	      if(principal==null || principal.getName().equals("anonymousUser")) {
+	          return"redirect:/login";
+	       }
+		
+		
 		// 1) 공통 질문: SIQ_JOB IS NULL
 		List<SelfIntroQVO> commonQList = Collections.emptyList();
 		
@@ -89,24 +95,18 @@ public class SelfIntroWritingController {
 	    @RequestParam("siId") Integer siId,
 	    @RequestParam("siqIdList") List<Long> siqIdList,
 	    @RequestParam("sicContentList") List<String> sicContentList,
-	    @RequestParam("memId") String memId
+	    @RequestParam("memId") String memId,
+	    @RequestParam("siStatus") String siStatus
 	) {
 
 	    int memberId = Integer.parseInt(memId);
-
-		
-		log.info("memId : " + memId); //memId memId : 1
-		log.info("siTitle : " + siTitle); //제목 siTitle : 나의 자소서 1
-		log.info("siId : " + siId); // 자소서 아이디 새로만든 거면 0 siId : 1
-		log.info("siqIdList : " + siqIdList); // 질문 리스트 번호 siqIdList : [161, 162, 163, 1, 2]
-		log.info("sicContentList : " + sicContentList); //[공통1, 공통2, 공통3, 선택1, 선택2]
 		
 
 	    // 1) SelfIntroVO 셋팅
 	    SelfIntroVO selfIntroVO = new SelfIntroVO();
 	    selfIntroVO.setMemId(memberId);
 	    selfIntroVO.setSiTitle(siTitle);
-	    selfIntroVO.setSiStatus("완료");
+	    selfIntroVO.setSiStatus(siStatus);
 
 	    if (siId == 0) {
 	        // 신규 저장
@@ -138,5 +138,18 @@ public class SelfIntroWritingController {
 
 	    return "redirect:/sint/sintlst";
 	}
-
+	
+	@PostMapping("/delete.do")
+	public String selfIntroDelete(@RequestParam(required = true) String siId) {
+		log.info("asd");
+		
+		SelfIntroVO selfIntroVO = new SelfIntroVO();
+		selfIntroVO.setSiId(Integer.parseInt(siId));;
+		
+		//자소서 전체 삭제
+		selfIntroService.deleteSelfIntro(selfIntroVO);
+		
+		return "redirect:/sint/sintlst";
+	}
+	
 }

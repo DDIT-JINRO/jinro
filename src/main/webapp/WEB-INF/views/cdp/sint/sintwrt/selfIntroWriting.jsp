@@ -3,11 +3,14 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/cdp/sint/sintwrt/selfIntroWriting.css">
 <!-- 스타일 여기 적어주시면 가능 -->
-
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/cdp/sint/sintwrt/selfIntroWriting.js">
+	
+</script>
 <c:if test="${not empty errorMessage}">
-  <script type="text/javascript">
-    alert('${fn:escapeXml(errorMessage)}');
-  </script>
+	<script type="text/javascript">
+		alert('${fn:escapeXml(errorMessage)}');
+	</script>
 </c:if>
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -48,9 +51,10 @@
 					<div class="section-title">
 						<h2>자기소개서 제목을 입력하세요.</h2>
 						<input type="text" name="siTitle" value="${selfIntroVO.siTitle}"
-							placeholder="제목을 입력하세요." class="title-input" /> 
-							<input type="hidden" name="siId" value="${selfIntroVO.siId}" />
-							<input type="hidden" name="memId" value="${selfIntroVO.memId}" />
+							placeholder="제목을 입력하세요." class="title-input" /> <input
+							type="hidden" name="siId" value="${selfIntroVO.siId}" /> <input
+							type="hidden" name="memId" value="${selfIntroVO.memId}" /> <input
+							type="hidden" name="siStatus" id="siStatus" value="완료">
 					</div>
 
 
@@ -62,7 +66,7 @@
 								<div class="question-block">
 									<span class="question-number">${st.index + 1}.</span> <span
 										class="question-text">${q.siqContent}</span><input
-											type="hidden" name="siqIdList" value="${q.siqId}" />
+										type="hidden" name="siqIdList" value="${q.siqId}" />
 								</div>
 								<div class="answer-block">
 									<textarea name="sicContentList" placeholder="답변을 작성해주세요."></textarea>
@@ -92,9 +96,19 @@
 
 					<!--  ➤ 버튼 그룹 -->
 					<div class="btn-group">
-						<button type="button" class="btn-temp-save">임시저장</button>
-						<button type="button" class="btn-preview">미리보기</button>
-						<button type="submit" class="btn-submit">작성완료</button>
+						<!-- 왼쪽: 삭제 버튼 -->
+						<c:if test="${not empty selfIntroVO.siId}">
+							<div class="btn-left-group">
+								<button type="button" class="btn-delete">삭제하기</button>
+							</div>
+						</c:if>
+
+						<!-- 오른쪽: 임시저장/미리보기/작성완료 -->
+						<div class="btn-right-group">
+							<button type="button" class="btn-temp-save">임시저장</button>
+							<button type="button" class="btn-preview">미리보기</button>
+							<button type="submit" class="btn-submit">작성완료</button>
+						</div>
 					</div>
 				</form>
 			</section>
@@ -105,6 +119,5 @@
 </body>
 </html>
 <script>
-
-
+	
 </script>

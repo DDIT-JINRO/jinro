@@ -38,4 +38,9 @@ public interface SelfIntroService {
 	 public void insertContent(int newSiId, List<Long> siqIdList, List<String> sicContentList);
 
 	 public void updateContent(List<Long> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList);
+
+	 public List<SelfIntroVO> selectSelfIntroBymemId(SelfIntroVO selfIntroVO);
+
+	 //자소서 전체 삭제
+	 public void deleteSelfIntro(SelfIntroVO selfIntroVO);
 }

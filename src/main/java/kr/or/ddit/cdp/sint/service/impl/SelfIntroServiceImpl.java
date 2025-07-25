@@ -182,4 +182,17 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 
 	}
 
+	@Override
+	public List<SelfIntroVO> selectSelfIntroBymemId(SelfIntroVO selfIntroVO) {
+		// TODO Auto-generated method stub
+		return selfIntroMapper.selectSelfIntroBymemId(selfIntroVO);
+	}
+
+	@Override
+	@Transactional
+	public void deleteSelfIntro(SelfIntroVO selfIntroVO) {
+		selfIntroMapper.deleteselfIntro(selfIntroVO);
+		selfIntroMapper.deleteselfIntroContent(selfIntroVO);
+	}
+
 }
