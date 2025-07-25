@@ -29,4 +29,16 @@ document.addEventListener('DOMContentLoaded', function(){
 			}
 		})
 	})
+	
+	
+	const replyContentEl = document.getElementById('replyContent');
+	replyContentEl.addEventListener('input', function(){
+		let replyContent = replyContentEl.value;
+		let charCountEl = document.getElementById('char-count');
+		
+		let charCountArr = charCountEl.textContent.split(' / ');
+		charCountArr[0] = replyContent.length;
+		
+		charCountEl.textContent = charCountArr.join(' / ');
+	})
 })

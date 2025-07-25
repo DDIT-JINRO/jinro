@@ -126,9 +126,9 @@
 			<!-- 댓글 입력창 -->
 			<form action="/studyGroup/reply/write" method="post" class="comment-form">
 			  <input type="hidden" name="boardId" value="${stdBoardVO.boardId}" />
-			  <textarea name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
+			  <textarea id="replyContent" name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
 			  <div class="comment-footer">
-			    <span class="char-count">0 / 300</span>
+			    <span class="char-count" id="char-count">0 / 300</span>
 			    <button type="submit" class="btn-submit">등록</button>
 			  </div>
 			</form>
