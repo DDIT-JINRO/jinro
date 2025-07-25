@@ -37,18 +37,20 @@
 			}
 		});
 		
-		roadmap.addEventListener("click", () => {
-			const roadmapUrl = 'http://localhost:5173/roadmap';
-			
-			const width  = 1084;
-			const height = 736;
-			const screenWidth  = window.screen.width;
-			const screenHeight = window.screen.height;
-            const left = Math.floor((screenWidth - width) / 2);
-            const top  = Math.floor((screenHeight - height) / 2);
-			
-			window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
-		});
+		if(roadmap) {
+			roadmap.addEventListener("click", () => {
+				const roadmapUrl = 'http://localhost:5173/roadmap';
+				
+				const width  = 1084;
+				const height = 736;
+				const screenWidth  = window.screen.width;
+				const screenHeight = window.screen.height;
+	            const left = Math.floor((screenWidth - width) / 2);
+	            const top  = Math.floor((screenHeight - height) / 2);
+				
+				window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+			});
+		}
 		
 		window.addEventListener("message", (event) => {
 		    
@@ -89,7 +91,7 @@
 	});
 </script>
 </head>
-
+<body>
 <div class="public-topbar">
 	<div class="public-topbar-left">
 		<a href="/"><img src="/images/logo.png" alt="로고" class="logo"

@@ -2,11 +2,15 @@
 	pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="/css/main.css" />
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
+<script src="/js/content/main.js"></script>
 <script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function () {
-	  const banner = document.querySelector('.main-loadmap-banner');
-	  banner.classList.add('animate-in');
-});
+
+	document.addEventListener('DOMContentLoaded', function() {
+		fn_init();
+        <sec:authorize access="isAuthenticated()">
+        	roadmapPopup();
+    	</sec:authorize>
+	});
 </script>
 <div class="mainContainer">
 	<section class="main-loadmap-banner">
