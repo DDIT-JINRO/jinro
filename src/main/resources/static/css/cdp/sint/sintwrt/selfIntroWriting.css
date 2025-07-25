@@ -111,13 +111,14 @@
   border: 1px solid #5a3fdb;
 }
 .btn-preview:hover {
-  background: #5a3fdb;
+  background: #717bfb;
   color: #fff;
 }
 .btn-submit {
-  background: #5a3fdb;
+  background: #717bfb;
   color: #fff;
 }
+
 .btn-submit:hover {
   background: #4a2fb8;
 }
