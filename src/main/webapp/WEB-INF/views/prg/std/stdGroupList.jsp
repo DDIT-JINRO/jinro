@@ -110,7 +110,7 @@
 			</sec:authorize>
 			<p>${memId}</p>
 			<c:forEach var="stdBoardVO" varStatus="stat" items="${articlePage.content }">
-				<div class="group-card">
+				<div class="group-card" data-stdb-id="${stdBoardVO.boardId }">
 					<div class="group-info">
 						<div class="group-tags">
 							
