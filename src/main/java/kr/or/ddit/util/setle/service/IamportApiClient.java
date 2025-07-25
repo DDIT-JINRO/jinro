@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.util.Value;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 아임포트 REST API와 통신하는 클라이언트 클래스입니다. 아임포트 API 키를 통해 토큰을 발급받고, 결제 정보를 조회하며, 정기 결제
@@ -165,9 +165,7 @@ public class IamportApiClient {
 			 System.err.println("Failed to schedule subscription payment for customer_uid " + customerUid + ": " + e.getMessage());
 			 return null;
 		}
-		
 	}
-
 
     /**
      * customer_uid(고객 고유 식별자)를 사용하여 빌링키로 즉시 결제를 수행하는 메서드입니다.
@@ -212,8 +210,5 @@ public class IamportApiClient {
 			System.err.println("Failed to perform payAgain for customer_uid " + customerUid + ": " + e.getMessage());
 			return null;
 		}
-
-		
 	}
-
 }

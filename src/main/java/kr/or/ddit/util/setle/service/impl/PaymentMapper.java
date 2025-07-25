@@ -30,12 +30,7 @@ public interface PaymentMapper {
      */
 	public PaymentVO selectPaymentByMerchantUid(String merchantUid);
 
-    /**
-     * 결제 상태를 업데이트합니다.
-     * @param payment 업데이트할 Payment VO/엔티티 객체 (impUid와 payStatus 필드 사용)
-     * @return 업데이트된 행의 수
-     */
-	public int updatePaymentStatus(PaymentVO paymentVO);
+   
 
     // 필요하다면 다른 조회, 업데이트, 삭제 메서드 추가
 	
