@@ -2,7 +2,7 @@
 .public-wrapper-main {
   max-width: 800px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 24px 60px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -19,7 +19,7 @@
   margin-bottom: 8px;
 }
 .title-input {
-  width: 100%;
+  width: 95.5%;
   padding: 12px 16px;
   font-size: 1rem;
   border: 1px solid #ddd;
@@ -103,7 +103,7 @@
   border: 1px solid #ccc;
 }
 .btn-temp-save:hover {
-  background: #f0f0f0;
+  background: #e2e2e2;
 }
 .btn-preview {
   background: #fff;
@@ -136,6 +136,12 @@
 
 .btn-delete:hover {
 	background-color: #d9363e;
+}
+.char-count {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: right;
 }
 
 /* 반응형 */
