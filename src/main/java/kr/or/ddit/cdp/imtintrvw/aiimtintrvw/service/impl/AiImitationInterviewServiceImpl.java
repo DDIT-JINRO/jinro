@@ -7,16 +7,32 @@ import org.springframework.stereotype.Service;
 
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.AiImitationInterviewService;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO;
+import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO;
 
 @Service
 public class AiImitationInterviewServiceImpl implements AiImitationInterviewService {
 
 	@Autowired
-	InterviewDetailListMapper interviewDetailListMapper; 
+	InterviewListMapper interviewListMapper; 
 	
 	@Override
-	public List<InterviewDetailListVO> getQuestionList() {
-		return interviewDetailListMapper.getQuestionList();
-	}
+    public List<InterviewDetailListVO> getCustomQuestionList() {
+        return interviewListMapper.getCustomQuestionList();
+    }
+
+    @Override
+    public List<InterviewQuestionVO> getIndustryList() {
+        return interviewListMapper.getIndustryList();
+    }
+    
+    @Override
+    public List<InterviewQuestionVO> getQuestionsByDetailListId(String idlId) {
+        return interviewListMapper.getQuestionsByDetailListId(idlId);
+    }
+    
+    @Override
+    public List<InterviewQuestionVO> getRandomQuestionsByIndustry(String industryCode, int questionCount) {
+        return interviewListMapper.getRandomQuestionsByIndustry(industryCode, questionCount);
+    }
 
 }
