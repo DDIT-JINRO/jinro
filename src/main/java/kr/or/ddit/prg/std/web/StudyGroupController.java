@@ -61,17 +61,6 @@ public class StudyGroupController {
 		    						StdBoardVO stdBoardVO,
 		    						Principal principal,
 		    						Model model) {
-		System.out.println("===================stdGroupList.do 파라미터조회==========================");
-		System.out.println("region : "+region);
-		System.out.println("gender : "+gender);
-		System.out.println("interest : "+interest);
-		System.out.println("maxPeople : "+maxPeople);
-		System.out.println("searchType : "+searchType);
-		System.out.println("searchKeyword : "+searchKeyword);
-		System.out.println("stdBoardVO : "+stdBoardVO);
-		System.out.println("currentPage : "+currentPage);
-		System.out.println("size : "+size);
-		System.out.println("======================================================================");
 		if(stdBoardVO!=null && stdBoardVO.getSize() == 0) stdBoardVO.setSize(size);
 		if(stdBoardVO!=null && stdBoardVO.getCurrentPage() == 0) stdBoardVO.setCurrentPage(currentPage);
 

@@ -24,6 +24,7 @@
 		
   		<div class="public-wrapper-main">
   			스터디그룹목록
+  			${myRoomSet }
 			<div class="group-search">
 				<form class="group-search form" action="/prg/std/stdGroupList.do" method="get">
 					<div class="filter-box">
@@ -108,14 +109,12 @@
 			<sec:authorize access="isAuthenticated()">
 				<sec:authentication property="principal" var="memId" />
 			</sec:authorize>
-			<p>${memId}</p>
 			<c:forEach var="stdBoardVO" varStatus="stat" items="${articlePage.content }">
 				<div class="group-card" data-stdb-id="${stdBoardVO.boardId }">
 					<div class="group-info">
 						<div class="group-tags">
-							
 							<c:choose>
-								<c:when test="${myChatRoomIds.contains(stdBoardVO.chatRoomVO.crId) }"><span class="status-tag tag  entered">참여중</span></c:when>
+								<c:when test="${myRoomSet.contains(stdBoardVO.chatRoomVO.crId) }"><span class="status-tag tag  entered">참여중</span></c:when>
 								<c:when test="${stdBoardVO.maxPeople <= stdBoardVO.curJoinCnt }"><span class="status-tag tag disabled">참여불가</span></c:when>
 								<c:otherwise><span class="status-tag available">참여가능</span></c:otherwise>
 							</c:choose>

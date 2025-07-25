@@ -66,7 +66,7 @@
 							    </button>
 					    	</c:when>
 					    	<c:when test="${stdBoardVO.maxPeople <= stdBoardVO.curJoinCnt}">
- 								<button id="enterChatBtn" class="btn-enter-chat disalbed">
+ 								<button id="enterChatBtn" class="btn-enter-chat disabled">
 							      ❌ 입장 불가
 							    </button>
 					    	</c:when>
