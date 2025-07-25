@@ -4,13 +4,16 @@
 
 document.addEventListener('DOMContentLoaded', function(){
 	document.getElementById('enterChatBtn').addEventListener('click', function(){
+		if(this.classList.contains('disabled')) return;
+		if(this.classList.contains('entered')) return;
+		
 		if(!memId || memId =='anonymousUser'){
 			console.log("로그인필요");
 			sessionStorage.setItem('redirectUrl', location.href);
 			location.href="/login";
 		}
 		const data = {crId, memId};
-		fetch('/prg/std/enterStdGroup',{
+		fetch('/prg/std/api/enterStdGroup',{
 			method : "POST",
 			headers : {"Content-Type" : "application/json;charset=utf-8"},
 			body : JSON.stringify(data),

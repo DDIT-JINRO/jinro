@@ -73,4 +73,12 @@ public interface ChatService {
 	 */
 	int insertChatRoom(ChatRoomVO chatRoomVO);
 	
+	/**
+	 * 채팅 입장버튼 등의 제한을 위해 현재 입장해있는지 확인
+	 * @param crId
+	 * @param memIdStr
+	 * @return
+	 */
+	boolean isEntered(int crId, String memIdStr);
+	
 }

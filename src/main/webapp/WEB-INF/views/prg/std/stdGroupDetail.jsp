@@ -33,15 +33,56 @@
 					  <img class="profile-image" src="<c:out value="${not empty stdBoardVO.fileProfile ? stdBoardVO.fileProfile : '/images/defaultProfileImg.png' }"/>" alt="user profile"/>
 					</div>
 			      	<span class="writer">${stdBoardVO.memNickname}</span>
-			      	<span class="created">${stdBoardVO.boardCreatedAt}</span>
+			      	<span class="created"><fmt:formatDate value="${stdBoardVO.boardCreatedAt}"/></span>
 			    </div>
 			  </div>
 
 			  <div class="post-content">
-			  	${stdBoardVO.boardContent}
-			  	<button class="chat-floating-btn" id="enterChatBtn">
-				  💬 채팅방 입장
-				</button>
+			  	<div class="std-group-info-box">
+				  <h2 class="info-title">모집 정보</h2>
+				  <ul class="info-list">
+				    <li><strong>지역:</strong> ${stdBoardVO.region }</li>
+				    <c:choose>
+				    	<c:when test="${stdBoardVO.gender =='all' }">
+				    		<li><strong>성별:</strong> 성별무관 </li>
+				    	</c:when>
+				    	<c:when test="${stdBoardVO.gender =='men' }">
+				    		<li><strong>성별:</strong> 남자만</li>
+				    	</c:when>
+				    	<c:when test="${stdBoardVO.gender =='women' }">
+				    		<li><strong>성별:</strong> 여자만 </li>
+				    	</c:when>
+				    </c:choose>
+				    <li><strong>관심 분야:</strong> ${interestMap[stdBoardVO.interest] }</li>
+				    <li><strong>모집 인원:</strong> ${stdBoardVO.maxPeople }명</li>
+				    <li><strong>참여 인원:</strong> ${stdBoardVO.curJoinCnt }명</li>
+				  </ul>
+				  
+				    <div class="enter-btn-wrapper">
+				    	<c:choose>
+					    	<c:when test="${isEntered }">
+								<button id="enterChatBtn" class="btn-enter-chat entered">
+							      💬 이미 참여 중
+							    </button>
+					    	</c:when>
+					    	<c:when test="${stdBoardVO.maxPeople <= stdBoardVO.curJoinCnt}">
+ 								<button id="enterChatBtn" class="btn-enter-chat disalbed">
+							      ❌ 입장 불가
+							    </button>
+					    	</c:when>
+					    	<c:otherwise>
+							    <button id="enterChatBtn" class="btn-enter-chat">
+							      💬 채팅방 입장
+							    </button>
+					    	</c:otherwise>
+					    </c:choose>
+					</div>
+				
+				  <div class="group-description">
+				    <h3 class="desc-title">소개글</h3>
+				    <p>${stdBoardVO.parsedContent }</p>
+				  </div>
+				</div>
 			  </div>
 			</div>
 
@@ -58,7 +99,7 @@
 				  </div>
 				  <div class="writer-info">
 				    <div class="reply-nickname">${reply.memNickname}</div>
-				    <div class="reply-date">${reply.replyCreatedAt}</div>
+				    <div class="reply-date"><fmt:formatDate value="${reply.replyCreatedAt}"/></div>
 				  </div>
 				</div>
 				  <div class="reply-content">${reply.replyContent }</div>
@@ -73,7 +114,7 @@
 				        </div>
 				        <div class="writer-info">
 				          <div class="reply-nickname">${child.memNickname}</div>
-				          <div class="reply-date">${child.replyCreatedAt}</div>
+				          <div class="reply-date"><fmt:formatDate value="${child.replyCreatedAt}" /></div>
 				        </div>
 				      </div>
 				      <div class="reply-content">${child.replyContent}</div>

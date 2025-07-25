@@ -87,6 +87,7 @@
   white-space: nowrap;
 }
 
+
 /* 참여 가능 (available) - 연녹색 */
 .status-tag.available {
   background-color: #a4d18c; /* 부드러운 연녹색 */
@@ -105,3 +106,4 @@
   color: #666;               /* 텍스트는 중회색 */
   cursor: not-allowed;
 }
+

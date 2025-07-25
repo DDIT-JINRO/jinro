@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.or.ddit.chat.service.ChatMemberVO;
@@ -90,20 +93,34 @@ public class StudyGroupController {
 
 		model.addAttribute("articlePage", articlePage);
 		model.addAttribute("interestMap", interestMap);
+		model.addAttribute("genderMap", Map.of("all", "성별무관", "men", "남자만", "women", "여자만"));
 		return "prg/std/stdGroupList";
 	}
 
 	@GetMapping("/stdGroupDetail.do")
-	public String selectStdGroupDetail(@RequestParam int stdGroupId, Model model) {
+	public String selectStdGroupDetail(@RequestParam int stdGroupId, Model model, Principal principal)  {
 		model.addAttribute("stdGroupId", stdGroupId);
 		// 단일 게시글 전체 내용에 댓글 리스트 + 채팅방정보 챙겨오기
-		// 게시글이 존재하지 않으면 badRequest 리턴 (파라미터값 임의로 변경시 스터디그룹이 아니면 막아야함)
-		StdBoardVO stdBoardVO = this.studyGroupService.selectStudyGroupDetail(stdGroupId);
-		model.addAttribute("stdBoardVO", stdBoardVO);
 
+		StdBoardVO stdBoardVO = this.studyGroupService.selectStudyGroupDetail(stdGroupId);
+		if(stdBoardVO == null) {
+			// 게시글이 존재하지 않으면 badRequest 리턴 (파라미터값 임의로 변경시 스터디그룹이 아니면 막아야함)
+		}else {
+
+		}
+		
+		
+		// 채팅방 참여했는지 여부를 체크하는 값 가져오기
+		ChatRoomVO chatRoomVO = stdBoardVO.getChatRoomVO();
+		if(principal!= null && !principal.getName().equals("unonymousUser") && chatRoomVO != null) {
+			boolean isEntered = this.chatService.isEntered(chatRoomVO.getCrId(), principal.getName());
+			model.addAttribute("isEntered", isEntered);
+		}
+		
+		model.addAttribute("stdBoardVO", stdBoardVO);
+		model.addAttribute("interestMap", this.studyGroupService.getInterestsMap());
 		return "prg/std/stdGroupDetail";
 	}
-
 
 	// page번호 버튼에 url 입력을 위한 base 쿼리스트링 구성
 	private String buildQueryString(String region,String gender, String interest, Integer maxPeople
@@ -121,7 +138,7 @@ public class StudyGroupController {
 		return sb.toString();
 	}
 
-	@PostMapping("/enterStdGroup")
+	@PostMapping("/api/enterStdGroup")
 	public ResponseEntity<String> enterStdGroup(@RequestBody ChatMemberVO chatMemberVO){
 		log.info("enterStdGroup -> chatMemberVO : "+chatMemberVO);
 		try {

@@ -118,6 +118,20 @@ public class ChatServiceImpl implements ChatService {
 	public int insertChatRoom(ChatRoomVO chatRoomVO) {
 		return this.chatMapper.insertChatRoom(chatRoomVO);
 	}
+
+	@Override
+	public boolean isEntered(int crId, String memIdStr) {
+		List<ChatRoomVO> rooms = this.findRoomsByMemId(memIdStr);
+		if(rooms == null || rooms.size() == 0) return false;
+		
+		for(ChatRoomVO chatRoomVO : rooms) {
+			if(chatRoomVO.getCrId() == crId) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 
 }

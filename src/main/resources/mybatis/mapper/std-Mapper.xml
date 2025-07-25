@@ -37,6 +37,8 @@
 		<result property="boardCnt" column="BOARD_CNT"/>
 		<result property="boardDelYn" column="BOARD_DEL_YN"/>
 		<result property="filegroupId" column="FILEGROUP_ID"/>
+		
+		<result property="curJoinCnt" column="CUR_JOIN_CNT"/>
 
 		<result property="memGen" column="MEM_GEN"/>
 		<result property="memName" column="MEM_NAME"/>
@@ -150,7 +152,7 @@
 	    <if test="region != null and region != ''">
 	      AND JSON_VALUE(B.BOARD_CONTENT, '$.region') = #{region}
 	    </if>
-	    <if test="gender != null and gender != '' and gender != 'all'">
+	    <if test="gender != null and gender != ''">
 	      AND JSON_VALUE(B.BOARD_CONTENT, '$.gender') = #{gender}
 	    </if>
 	    <if test="interest != null and interest != ''">
@@ -216,6 +218,10 @@
 
 	        -- 채팅방 정보
 	        CR.CR_ID, CR.TARGET_ID, CR.CR_TITLE, CR.CR_MAX_CNT, CR.CREATED_AT,
+	        (   SELECT COUNT(*)
+	        	FROM CHAT_MEMBER CM
+	        	WHERE CM.CR_ID = CR.CR_ID AND CM.IS_EXITED = 'N'
+	        ) AS CUR_JOIN_CNT,
 
 	        -- 댓글 정보
 	        R.REPLY_ID, R.BOARD_ID AS R_BOARD_ID, R.REPLY_PARENT_ID, R.MEM_ID AS R_MEM_ID,

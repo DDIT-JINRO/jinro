@@ -99,6 +99,22 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	@Override
 	public StdBoardVO selectStudyGroupDetail(int stdGroupId) {
 		StdBoardVO stdBoardVO =this.studyGroupMapper.selectStudyGroupDetail(stdGroupId);
+		if(stdBoardVO == null) return stdBoardVO;
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			JsonNode json = objectMapper.readTree(stdBoardVO.getBoardContent());
+			stdBoardVO.setRegion(regionMap.get(json.path("region").asText()));
+			stdBoardVO.setGender(json.path("gender").asText());
+			stdBoardVO.setInterest(json.path("interest").asText());
+			stdBoardVO.setMaxPeople(json.path("maxPeople").asInt());
+			stdBoardVO.setParsedContent(json.path("content").asText());
+			
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 
 		List<StdReplyVO> parentReplyList = stdBoardVO.getStdReplyVOList();
 		if(parentReplyList != null && !parentReplyList.isEmpty() && parentReplyList.get(0).getReplyContent() != null) {
