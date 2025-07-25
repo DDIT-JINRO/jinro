@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" href="/css/admin/test.css">
 <link rel="stylesheet" href="/css/csc/adminNotice.css">
-<script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
+<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/46.0.0/ckeditor5.css">
 <script type="text/javascript" src="/js/csc/adminNoticeList.js"></script>
 <h3>고객센터 > 공지사항</h3><br>
 <div class="template-container">
@@ -95,23 +95,5 @@
 </div>
 <!--ckeditor -->
 <script type="text/javascript">
-if (typeof CKEDITOR !== 'undefined') {
-    CKEDITOR.replace('noticeContent', {
-      height: 300,
-      toolbarGroups: [
-        { name: 'clipboard',    groups: ['clipboard','undo'] },
-        { name: 'basicstyles',  groups: ['basicstyles','cleanup'] },
-        { name: 'paragraph',    groups: ['list','indent','blocks','align'] },
-        { name: 'links' },
-        { name: 'insert' },
-        { name: 'styles' },
-        { name: 'colors' },
-        { name: 'tools' }
-      ],
-      removeButtons: 'Save,NewPage,Print,Preview,Scayt,Templates'
-    });
-  } else {
-    console.error("CKEDITOR is undefined. CDN 스크립트가 제대로 로드되었는지 확인하세요.");
-  }
 
 </script>
