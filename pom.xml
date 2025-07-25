@@ -206,6 +206,13 @@
 			<artifactId>flying-saucer-pdf-itext5</artifactId>
 			<version>9.1.22</version>
 		</dependency>
+		<!-- 유튜브 시작-->
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-youtube</artifactId>
+			<version>v3-rev20250714-2.0.0</version>
+		</dependency>
+		<!-- 유튜브 끝-->
 		<dependency>
 			<groupId>com.google.genai</groupId>
 			<artifactId>google-genai</artifactId>
