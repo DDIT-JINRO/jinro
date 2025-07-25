@@ -24,6 +24,7 @@ public class StdBoardVO {
 
 	private int curJoinCnt;        // 현재 참여자 수 (IS_EXITED = 'N')
 	private int replyCnt;		   // 작성된 댓글 수
+	private String chatTitle;	   // 폼태그 입력시 받아올 채팅방제목
 
 	// 작성자 정보 받아올 필드 추가
 	private String memGen;

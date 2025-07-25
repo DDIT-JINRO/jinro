@@ -23,7 +23,7 @@ public interface StudyGroupService {
 		    "maxPeople": 20
 		  }'
 	 * @param stdBoardVO
-	 * @return
+	 * @return 생성 완료된 게시글 번호를 반환합니다
 	 */
 	int insertStdBoard(StdBoardVO stdBoardVO);
 
@@ -46,4 +46,10 @@ public interface StudyGroupService {
 	 * @return
 	 */
 	StdBoardVO selectStudyGroupDetail(int stdGroupId);
+	
+	/**
+	 * 지역코드 맵 불러오기
+	 * @return
+	 */
+	Map<String, String> getRegionMap();
 }

@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -148,6 +150,35 @@ public class StudyGroupController {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().build();
 		}
+	}
+	
+	@GetMapping("/createStdGroup.do")
+	public String createStdGroup(@AuthenticationPrincipal String memId, Model model) {
+		// jsp 측에서 막아놨지만 혹시 몰라서 걸어둠.
+		System.out.println("@@@@@@@@@@@@@@memId : "+memId);
+		if(memId == null || memId.equals("anonymousUser")) {
+			return "/login";
+		}
+		
+		Map<String, String> interestMap = this.studyGroupService.getInterestsMap();
+		Map<String, String> regionMap = this.studyGroupService.getRegionMap();
+		
+		model.addAttribute("interestMap", interestMap);
+		model.addAttribute("regionMap", regionMap);
+		
+		return "prg/std/createStdGroup";
+	}
+	
+	@PostMapping("/createStdGroup.do")
+	public String createStdGroupPost(StdBoardVO stdBoardVO) {
+		log.info("createStdGroupPost -> stdBoardVO : "+ stdBoardVO);
+		int resultBoardId = this.studyGroupService.insertStdBoard(stdBoardVO);
+		if(resultBoardId > 0) {
+			return "redirect:/prg/std/stdGroupDetail.do?stdGroupId="+resultBoardId;
+		}
+		
+		
+		return "redirect:/prg/std/createStdGroup.do";
 	}
 
 }

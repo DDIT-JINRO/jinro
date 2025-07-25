@@ -13,6 +13,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.PostConstruct;
+import kr.or.ddit.chat.service.ChatMemberVO;
+import kr.or.ddit.chat.service.ChatRoomVO;
+import kr.or.ddit.chat.service.ChatService;
 import kr.or.ddit.chat.service.impl.ChatMapper;
 import kr.or.ddit.prg.std.service.StdBoardVO;
 import kr.or.ddit.prg.std.service.StdReplyVO;
@@ -25,6 +28,9 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 
 	@Autowired
 	StudyGroupMapper studyGroupMapper;
+	
+	@Autowired
+	ChatService chatService;
 
 	private final Map<String, String> regionMap = new HashMap<>();
 
@@ -65,7 +71,34 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 
 	@Override
 	public int insertStdBoard(StdBoardVO stdBoardVO) {
-		return this.studyGroupMapper.insertStdBoard(stdBoardVO);
+		int result = 0;
+		int boardId = 0;
+		result += this.studyGroupMapper.insertStdBoard(stdBoardVO);
+		
+		ChatRoomVO chatRoomVO = new ChatRoomVO();
+		chatRoomVO.setTargetId(stdBoardVO.getBoardId());
+		chatRoomVO.setCrTitle(stdBoardVO.getChatTitle());
+		chatRoomVO.setCcId("G04001");
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			JsonNode json = objectMapper.readTree(stdBoardVO.getBoardContent());
+			chatRoomVO.setCrMaxCnt(json.path("maxPeople").asInt());
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		result += this.chatService.insertChatRoom(chatRoomVO);
+		
+		ChatMemberVO chatMemberVO = new ChatMemberVO();
+		chatMemberVO.setCrId(chatRoomVO.getCrId());
+		chatMemberVO.setMemId(stdBoardVO.getMemId());
+		if(result >= 2) {
+			boardId = stdBoardVO.getBoardId();
+		}
+		this.chatService.participateChatRoom(chatMemberVO);
+		
+		return boardId;
 	}
 
 	@Override
@@ -145,5 +178,10 @@ public class StudyGroupServiceImpl implements StudyGroupService{
             replyVO.setChildReplyVOList(childReplies);
 		}
 		return replyList;
+	}
+
+	@Override
+	public Map<String, String> getRegionMap() {
+		return this.regionMap;
 	}
 }
