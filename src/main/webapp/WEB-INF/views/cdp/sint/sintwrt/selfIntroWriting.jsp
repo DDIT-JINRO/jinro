@@ -49,10 +49,9 @@
 				<form action="/sint/sintwrt/save" method="post">
 					<!-- 제목 -->
 					<div class="section-title">
-						<h2>자기소개서 제목을 입력하세요.</h2>
 						<input type="text" name="siTitle" value="${selfIntroVO.siTitle}"
-							placeholder="제목을 입력하세요." class="title-input" /> <input
-							type="hidden" name="siId" value="${selfIntroVO.siId}" /> <input
+							placeholder="제목을 입력하세요." class="title-input" required="required" />
+						<input type="hidden" name="siId" value="${selfIntroVO.siId}" /> <input
 							type="hidden" name="memId" value="${selfIntroVO.memId}" /> <input
 							type="hidden" name="siStatus" id="siStatus" value="완료">
 					</div>
@@ -69,7 +68,12 @@
 										type="hidden" name="siqIdList" value="${q.siqId}" />
 								</div>
 								<div class="answer-block">
-									<textarea name="sicContentList" placeholder="답변을 작성해주세요."></textarea>
+									<textarea name="sicContentList" placeholder="답변을 작성해주세요."
+										rows="7" maxlength="2000"
+										oninput="countChars(this, ${st.index})"></textarea>
+									<div class="char-count">
+										글자 수: <span id="charCount-${st.index}">0</span> / 2000
+									</div>
 								</div>
 							</div>
 						</c:forEach>
@@ -77,19 +81,25 @@
 						<!-- 2) 선택된 질문(수정 모드) -->
 						<c:if test="${not empty selfIntroQVOList}">
 							<c:forEach var="q" items="${selfIntroQVOList}" varStatus="st">
+								<c:set var="globalIndex"
+									value="${commonQList.size() + st.index}" />
 								<div class="qa-block">
 									<div class="question-block">
-										<!-- commonQList.size() + index 로 번호 매기기 -->
-										<span class="question-number"> ${commonQList.size() + st.index + 1}.
-										</span> <span class="question-text">${q.siqContent}</span> <input
+										<span class="question-number">${globalIndex + 1}.</span> <span
+											class="question-text">${q.siqContent}</span> <input
 											type="hidden" name="siqIdList" value="${q.siqId}" />
 									</div>
 									<div class="answer-block">
-										<!-- contentList와 인덱스가 맞도록 -->
-										<textarea name="sicContentList" placeholder="답변을 작성해주세요.">${selfIntroContentVOList[st.index].sicContent}</textarea>
+										<textarea name="sicContentList" placeholder="답변을 작성해주세요."
+											rows="7" maxlength="2000"
+											oninput="countChars(this, ${globalIndex})">${selfIntroContentVOList[st.index].sicContent}</textarea>
+										<div class="char-count">
+											글자 수: <span id="charCount-${globalIndex}">0</span> / 2000
+										</div>
 									</div>
 								</div>
 							</c:forEach>
+
 						</c:if>
 					</div>
 
@@ -97,11 +107,12 @@
 					<!--  ➤ 버튼 그룹 -->
 					<div class="btn-group">
 						<!-- 왼쪽: 삭제 버튼 -->
-						<c:if test="${not empty selfIntroVO.siId}">
-							<div class="btn-left-group">
+						<div class="btn-left-group">
+							<c:if
+								test="${selfIntroVO.siId != 0 && not empty selfIntroVO.siId}">
 								<button type="button" class="btn-delete">삭제하기</button>
-							</div>
-						</c:if>
+							</c:if>
+						</div>
 
 						<!-- 오른쪽: 임시저장/미리보기/작성완료 -->
 						<div class="btn-right-group">
@@ -119,5 +130,5 @@
 </body>
 </html>
 <script>
-	
+
 </script>
