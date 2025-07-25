@@ -56,6 +56,8 @@ public class SelfIntroListController {
 			
 			model.addAttribute("articlePage",articlePage);
 			
+		}else {
+			return"redirect:/login";
 		}
 
 		return "cdp/sint/sintlst/selfIntroList";
