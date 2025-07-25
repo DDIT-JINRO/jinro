@@ -2,6 +2,7 @@ package kr.or.ddit.account.lgn.service.impl;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,8 +15,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class KakaoCallBackService {
-
-	private final String REST_API_KEY = "1802c81999ddbc08d235c5cf064b15c8";
+	
+	@Value("${DEV.KAKAO.REST_API_KEY}")
+	private String REST_API_KEY;
 	private final String REDIRECT_URI = "http://localhost:8080/lgn/kakaoCallback.do";
 	
 	
@@ -56,4 +58,9 @@ public class KakaoCallBackService {
 
         return response.getBody(); // 그대로 반환
     }
+
+	public String getRestApiKey() {
+		// TODO Auto-generated method stub
+		return REST_API_KEY;
+	}
 }	

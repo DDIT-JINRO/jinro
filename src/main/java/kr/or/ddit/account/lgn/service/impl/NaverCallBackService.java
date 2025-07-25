@@ -2,6 +2,7 @@ package kr.or.ddit.account.lgn.service.impl;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -10,9 +11,11 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class NaverCallBackService {
-
-    private final String CLIENT_ID = "6jr00nIpv6PsMVmb3qzS";
-    private final String CLIENT_SECRET = "oiSTwODKXB";
+	
+	@Value("${DEV.NAVER.CLIENT_ID}")
+    private String CLIENT_ID;
+	@Value("${DEV.NAVER.CLIENT_SECRET}")
+    private String CLIENT_SECRET;
     private final String REDIRECT_URI = "http://localhost:8080/lgn/naverCallback.do";
 
     public Map<String, Object> loginWithNaver(String code) {
@@ -53,4 +56,9 @@ public class NaverCallBackService {
 
         return response.getBody(); // "response" 키 안에 사용자 정보가 들어있음
     }
+
+	public String getClientKey() {
+		// TODO Auto-generated method stub
+		return CLIENT_ID;
+	}
 }

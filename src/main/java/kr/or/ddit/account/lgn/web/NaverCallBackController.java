@@ -6,10 +6,13 @@ import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +32,16 @@ public class NaverCallBackController {
 	
 	@Autowired
 	NaverCallBackService naverCallBackService;
+	
+	
+	@PostMapping("/naverClientKey.do")
+	@ResponseBody
+	public String naverClientKey() {
+		
+		String clientKey = naverCallBackService.getClientKey();
+		
+		return clientKey;
+	}
 	
 	@GetMapping("/naverCallback.do")
 	public String naverLgnPage(@RequestParam("code") String code, HttpSession session, HttpServletResponse resp) {
