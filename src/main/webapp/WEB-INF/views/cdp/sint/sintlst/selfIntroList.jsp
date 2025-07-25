@@ -36,7 +36,6 @@
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			자기소개서 리스트
 			<form method="get" action="/sint/sintlst" class="intro-search-filter">
 				<!-- 검색어 입력 -->
 				<input type="text" name="keyword" value="${keyword.param}"
@@ -55,7 +54,9 @@
 				<button type="submit" class="intro-search-btn">검색</button>
 			</form>
 			<div class="intro-list-section">
-				<div class="intro-list-header">총 ${articlePage.total}건</div>
+				<sec:authorize access="isAuthenticated()">
+					<div class="intro-list-header">총 ${articlePage.total}건</div>
+				</sec:authorize>
 
 				<c:forEach var="intro" items="${articlePage.content}">
 					<div class="intro-card">
@@ -76,9 +77,6 @@
 							href="/sint/sintwrt?siId=${intro.siId}"> 자기소개서 수정하러 가기 </a>
 					</div>
 				</c:forEach>
-			</div>
-			<div class="intro-list-footer">
-				<a class="intro-list-btn" href="/sint/sintlst">자기소개서 리스트</a>
 			</div>
 		</div>
 	</div>
