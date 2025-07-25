@@ -2,27 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.cdp.sint.service.impl.SelfIntroMapper">
 <!-- 리스트 조회 쿼리 -->
-<select id="selectSelfIntroQList" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroQVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroQVO">
+<select id="selectSelfIntroQList" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO" resultType="kr.or.ddit.cdp.sint.service.SelfIntroQVO">
     SELECT * FROM (
         SELECT ROWNUM AS RNUM, B.*
         FROM (
             SELECT SIQ_ID, SIQ_JOB, SIQ_CONTENT
             FROM SELF_INTRO_Q
             <where>
-            	SIQ_JOB IS NOT NULL
+                SIQ_JOB IS NOT NULL
                 <if test="keyword != null and keyword != ''">
                     AND SIQ_CONTENT LIKE '%' || #{keyword} || '%'
                 </if>
-                <if test="siqJobFilter != null and siqJobFilter != ''">
-                    AND SIQ_JOB = #{siqJobFilter}
+                <if test="siqJobFilter != null and siqJobFilter.size() > 0">
+                    AND SIQ_JOB IN
+                    <foreach item="item" collection="siqJobFilter" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
                 </if>
             </where>
-            ORDER BY SIQ_ID 
+            ORDER BY SIQ_ID
         ) B
-        WHERE ROWNUM &lt;= #{endRow}
+        WHERE ROWNUM <![CDATA[<=]]> #{endRow}
     )
-    WHERE RNUM &gt;= #{startRow}
+    WHERE RNUM <![CDATA[>=]]> #{startRow}
 </select>
+
+
 
 <!-- 갯수 조회 하기  -->
 <select id="selectSelfIntroQCount" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroQVO" resultType="int">
@@ -33,9 +38,12 @@
         <if test="keyword != null and keyword != ''">
             AND SIQ_CONTENT LIKE '%' || #{keyword} || '%'
         </if>
-        <if test="siqJobFilter != null and siqJobFilter != ''">
-            AND SIQ_JOB = #{siqJobFilter}
-        </if>
+         <if test="siqJobFilter != null and siqJobFilter.size() > 0">
+             AND SIQ_JOB IN
+             <foreach item="item" collection="siqJobFilter" open="(" close=")" separator=",">
+                 #{item}
+             </foreach>
+         </if>
     </where>
 </select>
 

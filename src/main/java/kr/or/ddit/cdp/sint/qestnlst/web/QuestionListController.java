@@ -1,12 +1,12 @@
 package kr.or.ddit.cdp.sint.qestnlst.web;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import kr.or.ddit.cdp.rsm.rsm.web.ResumeController;
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroService;
 import kr.or.ddit.cdp.sint.service.SelfIntroVO;
@@ -36,17 +35,23 @@ public class QuestionListController {
 
 	@GetMapping()
 	public String questionList(@RequestParam(defaultValue = "1") int currentPage,
-			@RequestParam(required = false) String keyword, @RequestParam(required = false) String siqJob,
+			@RequestParam(required = false) String keyword,
+			@RequestParam(value = "siqJobFilter", required = false) List<String> siqJobFilter,
 			Model model,
 			@AuthenticationPrincipal String memId) {
+		log.info("siqJobFilter : "+siqJobFilter);
 		
 		int size = 5; // 한 페이지에 5개
 		int startRow = (currentPage - 1) * size + 1;
 		int endRow = currentPage * size;
+		
+	    if (siqJobFilter == null || (siqJobFilter.size() == 1 && siqJobFilter.get(0).isEmpty())) {
+	        siqJobFilter = new ArrayList<>(); // 빈 리스트로 초기화
+	    }
 
 		SelfIntroQVO selfIntroQVO = new SelfIntroQVO();
 		selfIntroQVO.setKeyword(keyword);
-		selfIntroQVO.setSiqJobFilter(siqJob);
+		selfIntroQVO.setSiqJobFilter(siqJobFilter);
 		selfIntroQVO.setStartRow(startRow);
 		selfIntroQVO.setEndRow(endRow);
 
@@ -76,7 +81,7 @@ public class QuestionListController {
 		model.addAttribute("codeMap",codeMap);
 		model.addAttribute("codeVOList",codeVOList);
 		model.addAttribute("articlePage", page);
-		model.addAttribute("siqJobFilter", siqJob); // 직무 필터 유지용
+		model.addAttribute("siqJobFilter", siqJobFilter); // 직무 필터 유지용
 		return "cdp/sint/qestnlst/questionList"; // JSP
 	}
 	
