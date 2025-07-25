@@ -21,36 +21,72 @@
 <script src="/js/include/header.js"></script>
 <script>
 	document.addEventListener("DOMContentLoaded",() => {
-      const menuIcon = document.getElementById("menuToggle");
-      const dropdown = document.getElementById("dropdownMenu");
-      const worldcup = document.getElementById("worldcup");
-	  header();
+		const menuIcon = document.getElementById("menuToggle");
+		const dropdown = document.getElementById("dropdownMenu");
+		const worldcup = document.getElementById("worldcup");
+		const roadmap  = document.getElementById("roadmap");
+		header();
 
-      menuIcon.addEventListener("click",() => {
-        dropdown.classList.toggle("hidden");
-      });
+		menuIcon.addEventListener("click",() => {
+			dropdown.classList.toggle("hidden");
+		});
 
-      document.addEventListener("click",(event) => {
-            if (!dropdown.contains(event.target) && !menuIcon.contains(event.target)) {
-               dropdown.classList.add("hidden");
-            }
-          });
-      
-      worldcup.addEventListener("click", () => {
-          const worldcupUrl = 'http://localhost:5173/worldcup';
-          
-          const width  = 1200;
-          const height = 800;
-          const screenWidth  = window.screen.width;
-          const screenHeight = window.screen.height;
-             const left = Math.floor((screenWidth - width) / 2);
-             const top  = Math.floor((screenHeight - height) / 2);
-          
-          window.open(worldcupUrl, 'worldcup', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
-       });
-       
-   	});
-	const memId = '<sec:authentication property="name" />'
+		document.addEventListener("click",(event) => {
+			if (!dropdown.contains(event.target) && !menuIcon.contains(event.target)) {
+			dropdown.classList.add("hidden");
+			}
+		});
+		
+		roadmap.addEventListener("click", () => {
+			const roadmapUrl = 'http://localhost:5173/roadmap';
+			
+			const width  = 1084;
+			const height = 736;
+			const screenWidth  = window.screen.width;
+			const screenHeight = window.screen.height;
+            const left = Math.floor((screenWidth - width) / 2);
+            const top  = Math.floor((screenHeight - height) / 2);
+			
+			window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+		});
+		
+		window.addEventListener("message", (event) => {
+		    
+		    if (event.origin !== 'http://localhost:5173') {
+		        console.warn(`신뢰할 수 없는 출처(${event.origin})로부터의 메시지를 무시합니다.`);
+		        return;
+		    }
+
+		    const messageData = event.data;
+
+		    if (messageData && messageData.type === 'navigateParent') {
+		        
+		        const targetUrl = messageData.url;
+		        if (targetUrl) {
+		            window.location.href = targetUrl;
+		        } else {
+		            console.error('메시지에 이동할 URL이 없습니다.');
+		        }
+		    }
+		});
+		
+		worldcup.addEventListener("click", () => {
+			const worldcupUrl = 'http://localhost:5173/worldcup';
+			
+			const width  = 1200;
+			const height = 800;
+			const screenWidth  = window.screen.width;
+			const screenHeight = window.screen.height;
+				const left = Math.floor((screenWidth - width) / 2);
+				const top  = Math.floor((screenHeight - height) / 2);
+			
+			window.open(worldcupUrl, 'worldcup', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+		});
+		
+		});
+		const memId = '<sec:authentication property="name" />'
+		
+	});
 </script>
 </head>
 
