@@ -1,0 +1,34 @@
+/**
+ * 
+ */
+
+function loginBtn(){
+	
+	const getUserId = document.getElementById('login-user-email').value
+	const getUserPw = document.getElementById('login-user-password').value
+		
+	  fetch('/memberLogin',{
+		  method: "POST",
+		  headers :  {
+			  "Content-Type": "application/json"
+			  },
+		  body: JSON.stringify({
+			  
+			  memEmail : getUserId,
+			  memPassword : getUserPw,
+			  loginType : "normal"
+			  
+		  })
+	  }) 
+	  .then(response => response.json())  
+	  .then(data => {
+	    if(data.status=='success'){
+	    	
+	    	
+	    	location.href='/';
+	    }
+	  })
+	  .catch(error => {
+	    console.error('에러 발생:', error);
+	  });
+ 	}

@@ -13,11 +13,10 @@
 .login-container {
 	justify-content: center;
 	background: white;
-	border: 1px solid #E8ECEF;
-	border-radius: 12px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 	padding: 40px 32px;
 	width: 400px;
+	border-radius: 16px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .login-container-imgBox {
@@ -77,12 +76,13 @@
 	font-size: 16px;
 	cursor: pointer;
 	margin-top: 16px;
+	transition: all 0.3s ease;
 }
 
 .login-btn:hover {
-	
-	 transform: scale(0.99);
-	
+	background-color: #5c68f2; /* 더 진한 파랑 */
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .find-links {
@@ -116,11 +116,44 @@
 .kakao {
 	background-color: #fee500;
 	color: #3c1e1e;
+	height: 45px;
+	display: flex;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+
+.kakao:hover {
+	background-color: #f2d400;
+	transform: scale(1.03); /* 살짝 커짐 */
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
+}
+
+.kakao img {
+	width: 25px;
+	height: 25px;
+	padding-right: 10px;
 }
 
 .naver {
 	background-color: #03c75a;
 	color: white;
+	height: 45px;
+	display: flex;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+.naver:hover {
+	background-color: #02b14f; /* 더 진한 녹색 */
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.naver img {
+	padding-top: 4px;
+	width: 15px;
+	height: 15px;
+	padding-right: 20px;
+	
 }
 
 .signup-box {

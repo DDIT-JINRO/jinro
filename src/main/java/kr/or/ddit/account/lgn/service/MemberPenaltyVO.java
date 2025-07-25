@@ -1,4 +1,4 @@
-package kr.or.ddit.account.service;
+package kr.or.ddit.account.lgn.service;
 
 import java.util.Date;
 
