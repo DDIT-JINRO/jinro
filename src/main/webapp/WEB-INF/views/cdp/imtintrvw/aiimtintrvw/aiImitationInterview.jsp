@@ -660,12 +660,12 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 
 <script>
-// 전역 변수
+//전역 변수
 let selectedInterviewType = 'saved'; // 기본값: 저장 질문 면접
-let questionLists = []; // 서버에서 가져온 질문 리스트
+let questionList = []; // 서버에서 가져온 질문 리스트
 
 // 서버에서 질문 리스트를 가져오는 함수
-function loadQuestionLists() {
+function loadCustomQuestionList() {
     const select = document.getElementById('questionSelect');
     
     // 로딩 상태 표시
@@ -673,7 +673,7 @@ function loadQuestionLists() {
     select.innerHTML = '<option value="" disabled selected class="loading-text">질문 리스트를 불러오는 중...</option>';
     
     // AJAX 요청
-    fetch('/imtintrvw/aiimtintrvw/getQuestionLists', {
+    fetch('/imtintrvw/aiimtintrvw/getCustomQuestionList', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -686,8 +686,8 @@ function loadQuestionLists() {
         return response.json();
     })
     .then(data => {
-        questionLists = data;
-        populateQuestionSelect(data);
+        questionList = data;
+        populateQuestionSelect(data, 'custom');
         select.classList.remove('loading');
     })
     .catch(error => {
@@ -697,31 +697,69 @@ function loadQuestionLists() {
     });
 }
 
+function loadIndustryList() {
+    const select = document.getElementById('questionSelect');
+    
+    // 로딩 상태 표시
+    select.classList.add('loading');
+    select.innerHTML = '<option value="" disabled selected class="loading-text">업종 리스트를 불러오는 중...</option>';
+    
+    // AJAX 요청
+    fetch('/imtintrvw/aiimtintrvw/getIndustryList', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        questionList = data;
+        populateQuestionSelect(data, 'industry');
+        select.classList.remove('loading');
+    })
+    .catch(error => {
+        console.error('업종 리스트 로딩 오류:', error);
+        select.classList.remove('loading');
+        select.innerHTML = '<option value="" disabled selected>업종 리스트를 불러올 수 없습니다. 새로고침 후 다시 시도해주세요.</option>';
+    });
+}
+
 // Select 옵션 채우기
-function populateQuestionSelect(data) {
+function populateQuestionSelect(data, type) {
     const select = document.getElementById('questionSelect');
     
     // 기존 옵션 제거 (placeholder 제외)
-    select.innerHTML = '<option value="" disabled selected>면접 질문 리스트를 선택하세요.</option>';
+    const placeholder = type === 'industry' ? '업종을 선택하세요.' : '면접 질문 리스트를 선택하세요.';
+    select.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
     
     // 데이터가 없는 경우
     if (!data || data.length === 0) {
-        select.innerHTML = '<option value="" disabled selected>등록된 질문 리스트가 없습니다.</option>';
+        const noDataText = type === 'industry' ? '등록된 업종이 없습니다.' : '등록된 질문 리스트가 없습니다.';
+        select.innerHTML = `<option value="" disabled selected>${noDataText}</option>`;
         return;
     }
     
     // 데이터로 옵션 생성
     data.forEach(item => {
         const option = document.createElement('option');
-        option.textContent = item.idlTitle
         
-        // 추가 정보가 있다면 data 속성으로 저장
-        if (item.description) {
-            option.setAttribute('data-description', item.description);
-        }
-        if (item.questionCount) {
-            option.setAttribute('data-question-count', item.questionCount);
-            option.textContent += ` (${item.questionCount}개 질문)`;
+        if (type === 'industry') {
+            // 업종 리스트의 경우
+            option.value = item.iqGubun;
+            option.textContent = item.industryName;
+        } else {
+            // 커스텀 질문 리스트의 경우
+            option.value = item.idlId;
+            option.textContent = item.idlTitle;
+            
+            if (item.questionCount) {
+                option.textContent += ` (${item.questionCount}개 질문)`;
+            }
         }
         
         select.appendChild(option);
@@ -731,17 +769,19 @@ function populateQuestionSelect(data) {
 // 면접 타입에 따른 질문 리스트 업데이트
 function updateQuestionListByType(type) {
     selectedInterviewType = type;
+    const select = document.getElementById('questionSelect');
+    const sectionTitle = document.querySelector('.question-list-section .section-title');
     
     if (type === 'random') {
-        // 랜덤 질문 면접의 경우 select 숨기기 또는 비활성화
-        const select = document.getElementById('questionSelect');
-        select.innerHTML = '<option value="random" selected>랜덤 질문이 자동으로 생성됩니다.</option>';
-        select.disabled = true;
+        // 랜덤 질문 면접의 경우 업종별 리스트 로드
+        select.disabled = false;
+        sectionTitle.textContent = '업종 선택';
+        loadIndustryList();
     } else {
         // 저장 질문 면접의 경우 질문 리스트 로드
-        const select = document.getElementById('questionSelect');
         select.disabled = false;
-        loadQuestionLists();
+        sectionTitle.textContent = '사용 질문 리스트';
+        loadCustomQuestionList();
     }
     
     // 버튼 상태 업데이트
@@ -765,12 +805,7 @@ function checkAllChecked() {
 // 질문 리스트가 선택되었는지 확인하는 함수
 function checkQuestionListSelected() {
     const select = document.getElementById('questionSelect');
-    
-    if (selectedInterviewType === 'random') {
-        return true; // 랜덤 면접의 경우 항상 true
-    }
-    
-    return select.value !== '' && select.value !== null;
+    return select.value !== '' && select.value !== null && !select.disabled;
 }
 
 // 시작 버튼 상태 업데이트 함수
@@ -790,6 +825,68 @@ function updateStartButton() {
     }
 }
 
+//면접 질문 데이터 가져오기 (단순 검증용 - React에서 실제 데이터 로드)
+function validateInterviewSettings(selectedValue) {
+    return new Promise((resolve, reject) => {
+        console.log('=== 면접 설정 검증 시작 ===');
+        console.log('selectedValue:', selectedValue);
+        console.log('selectedInterviewType:', selectedInterviewType);
+        
+        const params = new URLSearchParams({
+            type: selectedInterviewType
+        });
+        
+        if (selectedInterviewType === 'saved') {
+            if (!selectedValue) {
+                reject(new Error('질문 리스트를 선택해주세요.'));
+                return;
+            }
+            params.append('questionListId', selectedValue);
+        } else {
+            if (!selectedValue) {
+                reject(new Error('업종을 선택해주세요.'));
+                return;
+            }
+            params.append('industryCode', selectedValue);
+            params.append('questionCount', '10');
+        }
+        
+        let url = "/imtintrvw/aiimtintrvw/getInterviewQuestions?" + params.toString();
+        console.log("🔍 검증 URL:", url);
+        
+        // 간단한 검증만 수행 (실제 데이터는 React에서 로드)
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            console.log('📡 검증 응답:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('✅ 검증 성공:', data);
+            if (data.success && data.questions && data.questions.length > 0) {
+                resolve({
+                    type: selectedInterviewType,
+                    selectedValue: selectedValue,
+                    totalCount: data.totalCount
+                });
+            } else {
+                reject(new Error(data.message || '질문 데이터가 없습니다.'));
+            }
+        })
+        .catch(error => {
+            console.error('❌ 검증 실패:', error);
+            reject(error);
+        });
+    });
+}
+
 // 모의면접 시작 함수
 function startMockInterview() {
     // 버튼이 비활성화 상태면 실행하지 않음
@@ -798,7 +895,7 @@ function startMockInterview() {
     }
     
     const select = document.getElementById('questionSelect');
-    const selectedQuestionListId = select.value;
+    const selectedValue = select.value;
     
     const button = document.getElementById('startButton');
     const spinner = document.getElementById('loadingSpinner');
@@ -821,43 +918,17 @@ function startMockInterview() {
             // 권한 허용됨 - 스트림 정리
             stream.getTracks().forEach(track => track.stop());
             
-            // 면접 설정 정보를 URL 파라미터로 전달
-            let popupUrl = 'http://localhost:5173/mock-interview';
-            const params = new URLSearchParams({
-                type: selectedInterviewType,
-                questionListId: selectedQuestionListId || ''
-            });
-            popupUrl += '?' + params.toString();
-            
-            // 팝업 창 열기
-            const popup = window.open(
-                popupUrl,
-                'mockInterview',
-                'width=1400,height=900,scrollbars=yes,resizable=yes,location=no,menubar=no,toolbar=no'
-            );
-            
-            if (!popup) {
-                alert('팝업이 차단되었습니다. 팝업 차단을 해제한 후 다시 시도해주세요.');
-                resetButton();
-                return;
-            }
-            
-            // 팝업 포커스
-            popup.focus();
-            
-            // 팝업 창이 닫힐 때까지 모니터링
-            const checkClosed = setInterval(function() {
-                if (popup.closed) {
-                    clearInterval(checkClosed);
-                    console.log('모의면접 완료');
+            // 간단한 설정 검증 후 팝업 열기
+            validateInterviewSettings(selectedValue)
+                .then(interviewSettings => {
+                    console.log('✅ 면접 설정 검증 완료:', interviewSettings);
+                    openMockInterviewPopup(interviewSettings);
+                })
+                .catch(error => {
+                    console.error('❌ 면접 설정 검증 실패:', error);
+                    alert(error.message || '면접 설정을 확인할 수 없습니다.');
                     resetButton();
-                    
-                    // 면접 완료 후 처리 (예: 결과 페이지로 이동, 새로고침 등)
-                    // location.href = '/imtintrvw/result'; // 결과 페이지가 있다면
-                }
-            }, 1000);
-            
-            resetButton();
+                });
         })
         .catch(function(error) {
             console.error('미디어 장치 접근 오류:', error);
@@ -877,6 +948,105 @@ function startMockInterview() {
             alert(errorMessage);
             resetButton();
         });
+}
+
+// 면접 질문 데이터 가져오기
+function fetchInterviewQuestions(selectedValue) {
+    return new Promise((resolve, reject) => {
+        const params = new URLSearchParams({
+            type: selectedInterviewType
+        });
+        
+        if (selectedInterviewType === 'saved') {
+            params.append('questionListId', selectedValue);
+        } else {
+            params.append('industryCode', selectedValue);
+            params.append('questionCount', '10'); // 기본 10개 질문
+        }
+        
+        let url = "/imtintrvw/aiimtintrvw/getInterviewQuestions?" + params.toString();
+        console.log("url : ", url);
+        
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                resolve(data);
+            } else {
+                reject(new Error(data.message || '질문 데이터를 가져오는데 실패했습니다.'));
+            }
+        })
+        .catch(error => {
+            reject(error);
+        });
+    });
+}
+
+// Mock Interview 팝업 열기 (React로 데이터 전달)
+function openMockInterviewPopup(interviewSettings) {
+    console.log('=== openMockInterviewPopup (단순화 버전) ===');
+    console.log('📦 interviewSettings:', interviewSettings);
+    
+    try {
+        // React 애플리케이션 URL 생성
+        let popupUrl = 'http://localhost:5173/mock-interview';
+        const params = new URLSearchParams({
+            type: interviewSettings.type,
+            totalCount: interviewSettings.totalCount
+        });
+        
+        if (interviewSettings.type === 'saved') {
+            params.append('questionListId', interviewSettings.selectedValue);
+        } else {
+            params.append('industryCode', interviewSettings.selectedValue);
+            params.append('questionCount', '10');
+        }
+        
+        popupUrl += '?' + params.toString();
+        console.log('🚀 팝업 URL:', popupUrl);
+        
+        // 팝업 창 열기
+        const popup = window.open(
+            popupUrl,
+            'mockInterview',
+            'width=1400,height=900,scrollbars=yes,resizable=yes,location=no,menubar=no,toolbar=no'
+        );
+        
+        if (!popup) {
+            alert('팝업이 차단되었습니다. 팝업 차단을 해제한 후 다시 시도해주세요.');
+            resetButton();
+            return;
+        }
+        
+        console.log('✅ 팝업 창 열기 성공');
+        popup.focus();
+        
+        // 팝업 창 모니터링
+        const checkClosed = setInterval(function() {
+            if (popup.closed) {
+                clearInterval(checkClosed);
+                console.log('🔄 모의면접 완료');
+                resetButton();
+            }
+        }, 1000);
+        
+        resetButton();
+        
+    } catch (error) {
+        console.error('❌ 팝업 열기 실패:', error);
+        alert('면접을 시작할 수 없습니다. 다시 시도해주세요.');
+        resetButton();
+    }
 }
 
 // 버튼 상태 리셋 함수
@@ -902,7 +1072,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 초기 질문 리스트 로드
-    loadQuestionLists();
+    loadCustomQuestionList();
     
     // 초기 버튼 상태 설정 (비활성화)
     updateStartButton();
