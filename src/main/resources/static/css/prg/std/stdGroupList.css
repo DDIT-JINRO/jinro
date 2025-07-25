@@ -107,3 +107,25 @@
   cursor: not-allowed;
 }
 
+.group-write-btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 40px;
+  padding: 0 10px;
+}
+
+.btn-write-group {
+  background-color: #4E575E;
+  color: white;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-write-group:hover {
+  background-color: #3c4349;
+  cursor : pointer;
+}

@@ -36,8 +36,8 @@
 						<label for="searchKeyword">검색 :
 						<input id="searchKeyword" type="text" placeholder="검색어를 입력해주세요" name="searchKeyword"/>
 						</label>
-						<label for="region">지역 : 
-							<select id="region" name="region">
+						<label for="region">지역 :
+							<select id="region" name="region" class="select-box select-box--tall">
 								<option value="">전체</option>
 								<option value="G23001">서울</option>
 								<option value="G23002">부산</option>
@@ -136,44 +136,11 @@
 						${stdBoardVO.replyCnt} &nbsp;&nbsp;<fmt:formatDate value="${stdBoardVO.boardCreatedAt}"/></div>
 				</div>
 			</c:forEach>
-  			<br/>
-			<a href="/prg/std/stdGroupDetail.do?stdGroupId=1">스터디그룹 상세 1번글</a>
-  			<br/>
-			<a href="/prg/std/stdGroupDetail.do?stdGroupId=2">스터디그룹 상세 2번글</a>
-  			<br/>
-			<a href="/prg/std/stdGroupDetail.do?stdGroupId=3">스터디그룹 상세 3번글</a>
-
-			<div class="card-footer clearfix">
-				<ul class="pagination">
-					<!-- Previous -->
-					<li>
-						<a 
-						href="${articlePage.url }&currentPage=${articlePage.startPage - 5}"
-						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
-							← Previous </a>
-					</li>
-
-					<!-- Page Numbers -->
-					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
-						<li>
-							<a
-							href="${articlePage.url }&currentPage=${pNo}"
-							class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>"> ${pNo} </a>
-						</li>
-					</c:forEach>
-
-					<!-- Next -->
-					<li>
-						<a
-						href="${articlePage.url }&currentPage=${articlePage.startPage + 5}"
-						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
-							Next → </a>
-					</li>
-				</ul>
+			<div class="group-write-btn-wrapper">
+			  <button class="btn-write-group" id="btnWrite">
+			    ✏️ 글 작성하기
+			  </button>
 			</div>
-		</div>
-  		<!-- /wrapper main -->
-
 			<div class="card-footer clearfix">
 				<ul class="pagination">
 					<!-- Previous -->
@@ -210,5 +177,13 @@
 </body>
 </html>
 <script>
-	// 스크립트 작성 해주시면 됩니다.
+document.addEventListener('DOMContentLoaded', function(){
+	const cardList = document.querySelectorAll('.group-card');
+	cardList.forEach(card =>{
+		card.addEventListener('click', function(){
+			location.href = '/prg/std/stdGroupDetail.do?stdGroupId='+this.dataset.stdbId;
+		})
+	})
+})
 </script>
+<script src="/js/prg/std/stdGroupList.js"></script>
