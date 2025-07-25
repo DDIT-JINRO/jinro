@@ -17,7 +17,6 @@ public class youtubeApiController {
 	@Autowired
 	YoutubeService service;
 	
-	//AIzaSyA8qDS5UDxsmNB9MmHCCinfgQrfhY94IXc
 	@Value("${DEV.YOUTUBE.API_KEY}")
 	private String API_KEY;
 	
