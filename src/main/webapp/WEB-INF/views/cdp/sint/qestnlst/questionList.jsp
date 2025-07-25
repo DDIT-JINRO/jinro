@@ -48,34 +48,33 @@
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			질문 리스트
 			<div class="public-wrapper-main">
 				<form method="get" action="/sint/qestnlst">
 					<div class="search-wrapper">
 						<input type="text" name="keyword" value="${articlePage.keyword}"
 							placeholder="질문 검색" class="search-input" />
-
 						<!-- 기본 필터 -->
 						<div class="filter-section">
-							<div class="filter-title">기본 필터</div>
+							<div class="filter-title">직무 필터</div>
 							<div class="filter-options">
 								<c:forEach var="code" items="${codeVOList}">
 									<label class="filter-item"> <input type="checkbox"
 										class="filter-checkbox" name="siqJobFilter"
 										value="${code.ccId}" data-name="${code.ccName}"
-										data-id="${code.ccId}" /> ${code.ccName}
+										data-id="${code.ccId}" /> <span class="filter-label">${code.ccName}</span>
 									</label>
 								</c:forEach>
 							</div>
 						</div>
 
-						<!-- 필터 조건 -->
-						<div class="filter-section">
-							<div class="filter-title">필터 조건</div>
-							<div class="filter-options" id="selected-filters">
-								<!-- 선택된 필터가 여기에 나타납니다. -->
+						<!-- 선택된 필터 표시 영역 -->
+						<div class="filter-section selected-filters-wrapper">
+							<div class="filter-title">선택된 필터</div>
+							<div class="selected-filters" id="selected-filters">
+								<!-- 선택된 항목 JS로 표시 -->
 							</div>
 						</div>
+
 
 						<button type="submit" class="search-button">검색</button>
 					</div>

@@ -56,7 +56,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	});
 	
-	
+	document.querySelectorAll('.filter-checkbox').forEach(cb => {
+	  const parent = cb.closest('.filter-item');
+	  // 초기 체크 상태 반영 (수정 검색 등)
+	  if (cb.checked) {
+	    parent.classList.add('checked');
+	  }
+
+	  cb.addEventListener('change', () => {
+	    if (cb.checked) {
+	      parent.classList.add('checked');
+	    } else {
+	      parent.classList.remove('checked');
+	    }
+	  });
+	});
+
 
 	// 필터를 선택했을 때, 필터 조건에 추가
 	function addFilterToConditions(name, id) {
@@ -70,13 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
 	// 필터를 제거할 때, 필터 조건에서 삭제
 	window.removeFilter = function(id) {
 		const filterItem = document.querySelector(`.selected-filter[data-id="${id}"]`);
-		if (filterItem) {
-			filterItem.remove();
-			const checkbox = document.querySelector(`.filter-checkbox[data-id="${id}"]`);
-			if (checkbox) {
-				checkbox.checked = false; // 체크박스도 해제
+			if (filterItem) {
+				filterItem.remove();
+
+				const checkbox = document.querySelector(`.filter-checkbox[data-id="${id}"]`);
+				if (checkbox) {
+					checkbox.checked = false; // 체크박스 해제
+
+					// ✅ 상단 필터에서 .checked 클래스 제거
+					const parent = checkbox.closest('.filter-item');
+					if (parent) {
+						parent.classList.remove('checked');
+					}
+				}
 			}
-		}
 	}
 });
 
