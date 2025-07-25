@@ -71,4 +71,12 @@ public class RoadmapController {
 		
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
+	
+	// 특정 사용자의 완료 로드맵 정보
+	@GetMapping("/selectResultData")
+	public ResponseEntity<String> selectResultData(@AuthenticationPrincipal String memId) {
+		String result = this.roadmapService.selectResultData(memId);
+		
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
 }

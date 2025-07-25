@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.rdm.service.RoadmapService;
 import kr.or.ddit.rdm.service.RoadmapStepVO;
 import kr.or.ddit.rdm.service.RoadmapVO;
@@ -104,6 +105,14 @@ public class RoadmapServiceImpl implements RoadmapService {
 		if (result > 0) return "success";
 		
 		return "fail";
+	}
+
+	// 특정 사용자의 완료 로드맵 정보
+	@Override
+	public String selectResultData(String memId) {
+		String memName = this.roadmapMapper.selectMember(memId).getMemName();
+		
+		return memName;
 	}
 
 }

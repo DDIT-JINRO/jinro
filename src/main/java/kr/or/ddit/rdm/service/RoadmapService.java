@@ -20,4 +20,7 @@ public interface RoadmapService {
 	// 특정 사용자의 미션 완료 날짜 업데이트
 	public String updateDueDate(String memId, RoadmapVO request);
 
+	// 특정 사용자의 완료 로드맵 정보
+	public String selectResultData(String memId);
+
 }

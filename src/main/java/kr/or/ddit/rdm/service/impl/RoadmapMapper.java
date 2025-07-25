@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.rdm.service.RoadmapStepVO;
 import kr.or.ddit.rdm.service.RoadmapVO;
 
@@ -46,6 +47,9 @@ public interface RoadmapMapper {
 
 	// 로드맵 전체 완성 여부 반환
 	void insertCompleteRoadmap(String memId);
+
+	// 사용자 정보 조회
+	MemberVO selectMember(String memId);
 
 
 }
