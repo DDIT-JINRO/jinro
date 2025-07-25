@@ -1,0 +1,223 @@
+@charset "UTF-8";
+
+/* ──────────────────────────────────────────────────────────
+   컨테이너 & 패널 공통
+──────────────────────────────────────────────────────────*/
+.template-container {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  background: #f5f7fa;
+  box-sizing: border-box;
+}
+
+.template-panel {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.template-panel[style*="flex: 1.2"] { flex: 1.2; }
+.template-panel[style*="flex: 1.5"] { flex: 1.5; }
+
+/* ──────────────────────────────────────────────────────────
+   패널 헤더
+──────────────────────────────────────────────────────────*/
+.panel-header {
+  background: #07223D;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 12px 16px;
+  border-radius: 8px 8px 0 0;
+  margin: -20px -20px 16px;
+  box-sizing: border-box;
+}
+
+/* ──────────────────────────────────────────────────────────
+   섹션 제목(h3) 통일
+──────────────────────────────────────────────────────────*/
+.template-panel h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #333;
+}
+
+/* ──────────────────────────────────────────────────────────
+   필터박스 (왼쪽 패널 상단)
+──────────────────────────────────────────────────────────*/
+.filter-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+.filter-box select,
+.filter-box input[type="text"] {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+}
+.filter-box input[type="text"] {
+  flex: 1;
+}
+.filter-box .btn-save {
+  padding: 6px 14px;
+  background: #07223D;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: auto;  /* 조회 버튼만 오른쪽 끝으로 밀기 */
+}
+.filter-box .btn-save:hover {
+  background: #07223D;
+}
+
+/* ──────────────────────────────────────────────────────────
+   리스트 테이블
+──────────────────────────────────────────────────────────*/
+.template-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 14px;
+}
+.template-panel th,
+.template-panel td {
+  padding: 10px;
+  text-align: left;
+}
+.template-panel thead th {
+  background: #fafafa;
+  font-weight: 600;
+  border-bottom: 2px solid #e0e0e0;
+}
+.template-panel tbody tr {
+  transition: background 0.2s;
+}
+.template-panel tbody tr:nth-child(odd) {
+  background: #fff;
+}
+.template-panel tbody tr:nth-child(even) {
+  background: #fcfcfc;
+}
+.template-panel tbody tr:hover {
+  background: #f0f8ff;
+}
+
+/* ──────────────────────────────────────────────────────────
+   기본정보 테이블 (오른쪽 패널)
+──────────────────────────────────────────────────────────*/
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+.info-table th,
+.info-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+}
+.info-table thead {
+  background: #fafafa;
+}
+.info-table thead th {
+  font-weight: 600;
+  color: #333;
+}
+
+/* ──────────────────────────────────────────────────────────
+   상세/작성 폼
+──────────────────────────────────────────────────────────*/
+.template-panel form > div {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+.template-panel form label {
+  width: 100px;
+  font-size: 14px;
+  color: #333;
+}
+.template-panel form input[type="text"],
+.template-panel form textarea {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+.template-panel form textarea {
+  height: 180px;
+}
+
+/* ──────────────────────────────────────────────────────────
+   CKEditor 넓게 적용
+──────────────────────────────────────────────────────────*/
+.cke_top,
+.cke_bottom,
+.cke_contents {
+  border-radius: 6px !important;
+}
+.cke_contents {
+  min-height: 200px !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   버튼 그룹 (삭제/초기화/저장)
+──────────────────────────────────────────────────────────*/
+.template-panel .btn-delete,
+.template-panel .btn-reset,
+.template-panel .btn-save {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.template-panel .btn-delete {
+  background: #C00003;
+  color: #fff;
+  margin-right: 8px;
+}
+.template-panel .btn-delete:hover {
+  background: #A00002;
+}
+.template-panel .btn-reset {
+  background: #C00003;
+  color: #fff;
+  margin-right: 8px;
+}
+.template-panel .btn-reset:hover {
+  background: #A00002;
+}
+.template-panel .btn-save {
+  background: #07223D;
+  color: #fff;
+  margin-left: auto;  /* 저장 버튼만 오른쪽 끝으로 밀기 */
+}
+.template-panel .btn-save:hover {
+  background: #07223D;
+}
+
+/* ──────────────────────────────────────────────────────────
+   하단 페이지네이션(리스트 패널)
+──────────────────────────────────────────────────────────*/
+.template-panel > div[style*="text-align: center"] {
+  font-size: 14px;
+  color: #555;
+  margin-top: 12px;
+}
