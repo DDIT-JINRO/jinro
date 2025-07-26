@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'NotoSansKR';
+  src: url('/fonts/NotoSansKR-Regular.otf') format('opentype');
+}
+
+body, input, textarea {
+  font-family: 'NotoSansKR', 'Malgun Gothic', 'Arial', sans-serif;
+}
+
+
 /* 전체 레이아웃 */
 .public-wrapper-main {
   max-width: 800px;
