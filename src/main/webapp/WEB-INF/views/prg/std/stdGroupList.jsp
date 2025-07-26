@@ -8,7 +8,7 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">프로그램</div> 
+		<div class="channel-title-text">프로그램</div>
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
@@ -20,8 +20,8 @@
 <div>
 	<div class="public-wrapper">
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-		
-		
+
+
   		<div class="public-wrapper-main">
   			스터디그룹목록
   			${myRoomSet }
@@ -59,14 +59,14 @@
 								<option value="G23017">제주</option>
 							</select>
 						</label>
-						
-						<label for="gender">성별 : 
+
+						<label for="gender">성별 :
 							<input type="radio" name="gender" id="gender-all" value="all" checked/><label for="gender-all">전체</label>
 							<input type="radio" name="gender" id="gender-men" value="men"/><label for="gender-men">남자만</label>
 							<input type="radio" name="gender" id="gender-women" value="women"/><label for="gender-women">여자만</label>
 						</label>
-						
-						<label for="interest">관심사 : 
+
+						<label for="interest">관심사 :
 							<select id="interest" name="interest">
 						    <option value="">전체</option>
 						    <optgroup label="학업">
@@ -92,7 +92,7 @@
 						    </optgroup>
 							</select>
 						</label>
-						<label for="maxPeople">채팅인원제한 : 
+						<label for="maxPeople">채팅인원제한 :
 							<select id="maxPeople" name="maxPeople">
 								<option value="">전체</option>
 								<option value="2">2명</option>
@@ -144,7 +144,7 @@
 				<ul class="pagination">
 					<!-- Previous -->
 					<li>
-						<a 
+						<a
 						href="${articlePage.url }&currentPage=${articlePage.startPage - 5}"
 						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
 							← Previous </a>
@@ -184,5 +184,6 @@ document.addEventListener('DOMContentLoaded', function(){
 		})
 	})
 })
+const memId = '<sec:authentication property="name" />'
 </script>
 <script src="/js/prg/std/stdGroupList.js"></script>
