@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -33,6 +36,8 @@ public class IamportApiClient {
 
 	// JSON 데이터를 자바 객체로, 자바 객체를 JSON 데이터로 변환할 때 사용됩니다.
 	private final ObjectMapper objectMapper = new ObjectMapper();
+	
+	
 
 	/**
 	 * 아임포트 Access Token을 발급받는 메서드입니다. 아임포트 API 호출 시 인증을 위해 필요한 토큰입니다.
@@ -43,10 +48,14 @@ public class IamportApiClient {
 		// 아임포트 토큰 발급 API의 URL
 		String url = "https://api.iamport.kr/users/getToken";
 
+	    System.out.println("apiKey: " + apiKey);
+	    System.out.println("apiSecret: " + apiSecret);
+
 		// HTTP 요청 헤더 설정: JSON 형태로 데이터를 보낼 것임을 명시
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
+		/*
 		// HTTP 요청 본문(body)에 포함될 데이터 (API 키와 시크릿)
 		Map<String, String> body = new HashMap<>();
 		body.put("imp_key", apiKey);
@@ -54,7 +63,13 @@ public class IamportApiClient {
 
 		// 요청 헤더와 본문을 포함하는 HTTP 엔티티 생성
 		HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
+		*/
+		// DTO 객체 사용
+	    IamportTokenRequest tokenRequest = new IamportTokenRequest(apiKey, apiSecret);
 
+	    HttpEntity<IamportTokenRequest> request = new HttpEntity<>(tokenRequest, headers);
+
+		
 		try {
 			// POST 요청을 보내고 응답을 Map 형태로 받습니다.
 			ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
@@ -72,7 +87,7 @@ public class IamportApiClient {
 			 * 			"expired_at": 1678890000 } 
 			 * }
 			 */
-			if (response.getBody() != null & response.getBody().containsKey("response")) {
+			if (response.getBody() != null && response.getBody().containsKey("response")) {
 				// 응답 본문에서 'response' 필드에 해당하는 Map을 추출합니다.
 				Map<String, Object> responseBody = (Map<String, Object>) response.getBody().get("response");
 				// 추출된 Map에서 'access_token' 값을 반환합니다.
@@ -84,7 +99,13 @@ public class IamportApiClient {
 			System.err.println("Failed to get Iamport Access Token: " + e.getMessage());
 			return null;
 		}
+	}
+	public String getApiKey() {
+	    return apiKey;
+	}
 
+	public String getApiSecret() {
+	    return apiSecret;
 	}
 
 	/**

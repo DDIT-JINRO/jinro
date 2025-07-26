@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 		IMP.request_pay(
 			{
 				customer_uid: customerUid,
-				channelKey: "channel-key-50e02de4-5742-4068-bf6e-70cd0053d27e",
-				//pg: "danal_tpay",
+				channelKey: "channel-key-c07f6500-7039-49dd-8ea4-359da1f6ea77",
+				//pg: "kcp_billing",
 				pay_method: "card",
 				merchant_uid: merchantUid,
 				name: "BASIC",
@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 				buyer_tel: "010-1234-5678",
 				buyer_addr: "서울특별시",
 				buyer_postcode: "01181",
+				digital: true,
 			},
 			
 			function(rsp){
@@ -59,8 +60,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	            } else { // 실패시
 	                var msg = '결제에 실패하였습니다.';
 	                msg += '에러내용 : ' + rsp.error_msg;
+	             	alert(msg);
 	            }
-	             alert(msg);
 			},
 		);
 		
