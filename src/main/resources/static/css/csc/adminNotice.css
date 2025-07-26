@@ -20,6 +20,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  min-width: 0; /* Fixed: Flex item no longer expands beyond parent */
 }
 
 .template-panel[style*="flex: 1.2"] { flex: 1.2; }
@@ -78,7 +79,7 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  margin-left: auto;  /* 조회 버튼만 오른쪽 끝으로 밀기 */
+  margin-left: auto;
 }
 .filter-box .btn-save:hover {
   background: #07223D;
@@ -165,18 +166,6 @@
 }
 
 /* ──────────────────────────────────────────────────────────
-   CKEditor 넓게 적용
-──────────────────────────────────────────────────────────*/
-.cke_top,
-.cke_bottom,
-.cke_contents {
-  border-radius: 6px !important;
-}
-.cke_contents {
-  min-height: 200px !important;
-}
-
-/* ──────────────────────────────────────────────────────────
    버튼 그룹 (삭제/초기화/저장)
 ──────────────────────────────────────────────────────────*/
 .template-panel .btn-delete,
@@ -207,7 +196,7 @@
 .template-panel .btn-save {
   background: #07223D;
   color: #fff;
-  margin-left: auto;  /* 저장 버튼만 오른쪽 끝으로 밀기 */
+  margin-left: auto;
 }
 .template-panel .btn-save:hover {
   background: #07223D;
@@ -220,4 +209,58 @@
   font-size: 14px;
   color: #555;
   margin-top: 12px;
+}
+
+/* ──────────────────────────────────────────────────────────
+   CKeditor
+──────────────────────────────────────────────────────────*/
+/* 에디터 전체 컨테이너 */
+.template-panel form .ck-editor {
+  box-sizing: border-box;
+  margin-top: 6px;        /* label 아래 적당한 여백 */
+  border: 1px solid #ccc; /* textarea와 같은 테두리 */
+  border-radius: 6px;     /* textarea와 동일한 모서리 */
+  background: #fff;
+  min-width: 0;           /* 에디터가 부모보다 넓어져도 패널이 늘어나지 않음 */
+}
+
+/* 툴바 영역 */
+.template-panel form .ck-editor .ck-toolbar {
+  background: #fafafa;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 6px 6px 0 0;
+  width: 100%;
+}
+
+/* 에디터 본문(Editable) 영역 */
+.template-panel form .ck-editor .ck-editor__editable_inline {
+  /* 고정 높이 */
+  height: 180px;         /* 원래 textarea 높이 */
+  max-height: 400px;     /* 필요시 이보다 크게는 커지지 않음 */
+  width: 100%;           /* 가로폭은 부모에 딱 맞게 */
+
+  /* 오버플로우 제어 */
+  overflow-y: auto;      /* 세로 스크롤 허용 */
+  overflow-x: auto;      /* 가로 스크롤 허용 */
+  max-width: 100%;       /* 부모 너비 이상으로 커지지 않음 */
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 0 0 6px 6px;
+  box-sizing: border-box;
+}
+
+/* 에디터 내용(.ck-content) 영역에 줄바꿈과 가로 스크롤 허용 */
+.template-panel form .ck-editor .ck-content {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* 코드 블록(<pre>) 같은 요소는 항상 가로 스크롤 */
+.template-panel form .ck-editor .ck-content pre {
+  overflow-x: auto;
+  white-space: pre;
 }

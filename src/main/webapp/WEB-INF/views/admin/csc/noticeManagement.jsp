@@ -3,9 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" href="/css/admin/test.css">
 <link rel="stylesheet" href="/css/csc/adminNotice.css">
-<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/46.0.0/ckeditor5.css">
-<script type="text/javascript" src="/js/csc/adminNoticeList.js"></script>
-<h3>고객센터 > 공지사항</h3><br>
+<script type="text/javascript" src="/js/csc/adminNoticeList.js" defer></script>
+
+<h3>고객센터 > 공지사항</h3>
+<br>
 <div class="template-container">
 	<!-- 리스트 패널 -->
 	<div class="template-panel" style="flex: 1.2">
@@ -76,13 +77,13 @@
 
 		<form method="post" action="/faq/save">
 			<div>
-				<label>제목</label> <input type="text" name="noticeTitle"
-					placeholder="제목을 입력하세요" />
+				<label>제목</label> 
+				<input type="text" name="noticeTitle" placeholder="제목을 입력하세요" />
 			</div>
 
 			<div>
 				<label>공지 내용 내용</label>
-				  <textarea name="noticeContent" id="noticeContent"></textarea>
+				<textarea id="noticeContent"></textarea>
 			</div>
 
 			<div style="margin-top: 10px;">
@@ -93,7 +94,6 @@
 		</form>
 	</div>
 </div>
-<!--ckeditor -->
 <script type="text/javascript">
-
+console.log(ClassicEditor)
 </script>
