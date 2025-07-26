@@ -1,6 +1,7 @@
 package kr.or.ddit.util.setle.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpEntity;
@@ -55,16 +56,15 @@ public class IamportApiClient {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		/*
-		// HTTP 요청 본문(body)에 포함될 데이터 (API 키와 시크릿)
-		Map<String, String> body = new HashMap<>();
-		body.put("imp_key", apiKey);
-		body.put("imp_secret", apiSecret);
-
-		// 요청 헤더와 본문을 포함하는 HTTP 엔티티 생성
-		HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
-		*/
+		
 		// DTO 객체 사용
+		/*
+		 * {
+			  "imp_key": "your_api_key",
+			  "imp_secret": "your_api_secret"
+			}
+		 * 아임포트 api가 위의 형식의 json구조를 원하기에 IamportTokenRequest을 사용
+		 */
 	    IamportTokenRequest tokenRequest = new IamportTokenRequest(apiKey, apiSecret);
 
 	    HttpEntity<IamportTokenRequest> request = new HttpEntity<>(tokenRequest, headers);
@@ -232,4 +232,47 @@ public class IamportApiClient {
 			return null;
 		}
 	}
+	
+	
+	/**
+     * customer_uid(고객 고유 식별자)를 사용하여 예약된 결제가 실행되기전에 해당 예약의 취소를 수행하는 메서드입니다.
+     * 주로 정기 결제 스케줄러에서 매달 자동 결제를 시도할 때 사용됩니다.
+     * 아임포트 API: POST /subscribe/payments/schedule/{merchant_uid}
+     *
+     * @param customerUid 고객 고유 식별자
+     * @param merchantUid 상점에서 생성하는 이번 결제 건의 고유 주문번호
+     */
+	public Map<String, Object> unscheduleSubscriptionPayment(String customerUid, String merchantUid) {
+		String accessToken = getAccessToken();
+		if(accessToken == null) {
+			return null; // 토큰 발급 실패 시 즉시 종료
+		}
+		
+		String url ="https://api.iamport.kr/subscribe/payments/schedule";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setBearerAuth(accessToken);
+
+        // API 요청 본문 구성: 고객, 주문
+		Map<String, Object> body = new HashMap<>();
+		body.put("customer_uid", customerUid);
+		body.put("merchant_uid", List.of(merchantUid));
+		
+		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String,Object>>(body, headers);
+		
+		try {
+            // POST 요청을 보내고 응답을 Map 형태로 받습니다.
+			ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+			if(response.getBody() != null && response.getBody().containsKey("response")) {
+				return (Map<String, Object>) response.getBody().get("response");
+			}
+			return null;
+		} catch (Exception e) {
+			System.err.println("Failed to perform payAgain for customer_uid " + customerUid + ": " + e.getMessage());
+			return null;
+		}
+		
+	}
+	
+	
 }
