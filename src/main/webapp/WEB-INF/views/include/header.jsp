@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="/css/pagenation.css">
 <link rel="stylesheet" href="/css/chatModal.css">
 <script src="/js/axios.min.js"></script>
+<script src="/js/com/sockjs.min.js"></script>
+<script src="/js/com/stomp.min.js"></script>
 <meta charset="UTF-8">
 <title>CareerPath</title>
 <script src="/js/include/header.js"></script>

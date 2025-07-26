@@ -22,8 +22,6 @@
 	</div>
 </div>
 <!-- 채팅 모달 끝 -->
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script>
 const sender = '<sec:authentication property="name" />';
 let stompClient = null;	// 소켓 연결 객체
@@ -33,4 +31,4 @@ let chatRoomSubscription = null; // 채팅방 구독 관리. (현재 보고 있�
 let unreadDetailSubscription = null; // 전체 채팅방별 안 읽은 갯수 구독 관리
 
 </script>
-<script type="text/javascript" src="/js/chatModal.js" ></script>
+<script type="text/javascript" src="/js/include/chatModal.js" ></script>
