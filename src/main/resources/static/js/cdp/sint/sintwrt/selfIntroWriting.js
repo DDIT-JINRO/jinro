@@ -20,6 +20,20 @@ document.addEventListener('DOMContentLoaded', function () {
 	    const originalForm = document.querySelector("form");
 	    const clonedForm = originalForm.cloneNode(true); // 깊은 복사
 
+		 const originalInputs = originalForm.querySelectorAll("input, textarea");
+		 const clonedInputs = clonedForm.querySelectorAll("input, textarea");
+
+		 clonedInputs.forEach((clonedEl, i) => {
+		   const originalEl = originalInputs[i];
+		   if (clonedEl.tagName === "TEXTAREA") {
+		     clonedEl.innerHTML = originalEl.value; // textarea는 innerHTML에 입력된 내용 반영
+		   } else if (clonedEl.type === "checkbox" || clonedEl.type === "radio") {
+		     clonedEl.checked = originalEl.checked;
+		   } else {
+		     clonedEl.setAttribute("value", originalEl.value);
+		   }
+		 });
+		
 	    // 2. 버튼 그룹 제거
 	    const btnGroup = clonedForm.querySelector(".btn-group");
 	    if (btnGroup) {
@@ -28,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		
 		//글자수 제거
 		clonedForm.querySelectorAll(".char-count")?.forEach(e => e.remove());
+		
+
 
 
 		const xhtmlContent = sanitizeHtmlToXHTML(clonedForm.outerHTML);
