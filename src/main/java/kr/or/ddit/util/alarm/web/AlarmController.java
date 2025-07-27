@@ -16,12 +16,16 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import kr.or.ddit.util.alarm.service.AlarmService;
 import kr.or.ddit.util.alarm.service.AlarmVO;
+import kr.or.ddit.util.alarm.service.impl.AlarmEmitterManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/alarm")
 public class AlarmController {
+
+	@Autowired
+	AlarmEmitterManager emitterManager;
 
 	@Autowired
 	AlarmService alarmService;
@@ -37,20 +41,14 @@ public class AlarmController {
 		}
 	}
 
+	// 클라이언트가
 	@GetMapping(value = "/sub",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public String getMethodName(@RequestParam int memId) {
-		SseEmitter emitter = new SseEmitter();
-		System.out.println("##### emitter 타임아웃 : "+emitter.getTimeout());
-		try {
-			emitter.send(SseEmitter.event()
-							.name("alarm")
-							.data(new AlarmVO())
-							.build());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public SseEmitter getMethodName(@RequestParam int memId) {
 
-		return new String();
+		SseEmitter emitter = null;
+		emitter = emitterManager.createOrReplaceEmitter(memId);
+
+		return emitter;
 	}
 
 
