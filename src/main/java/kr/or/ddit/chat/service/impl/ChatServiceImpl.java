@@ -50,9 +50,8 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public void exitChatRoom(int crId, String memId) {
-		// TODO Auto-generated method stub
-
+	public void exitChatRoom(ChatMemberVO chatMemberVO) {
+		this.chatMapper.chatMemberExitChatRoomUpdate(chatMemberVO);
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public interface ChatService {
 	 * @param crId
 	 * @param memId
 	 */
-	void exitChatRoom(int crId, String memId);
+	void exitChatRoom(ChatMemberVO chatMemberVO);
 
 	/**
 	 * 특정 유저번호 와 채팅방 번호로 입장시간 이후의 메시지 불러오기.
