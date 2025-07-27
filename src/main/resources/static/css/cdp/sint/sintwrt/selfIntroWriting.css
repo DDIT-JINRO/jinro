@@ -155,6 +155,22 @@ body, input, textarea {
   text-align: right;
 }
 
+/* 문항-답변 블록 전체 (질문+답변을 묶어서 페이지 중간에 잘리지 않게) */
+.qa-block {
+  page-break-inside: avoid;  /* 페이지 중간에서 끊기지 않도록 */
+  break-inside: avoid;
+  margin-bottom: 32px;        /* 문항 간 간격 */
+}
+
+/* 답변이 너무 길 경우 내부에서 줄 바꿈 되도록 */
+.answer-block {
+  page-break-inside: auto;
+  break-inside: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+
 /* 반응형 */
 @media (max-width: 600px) {
   .btn-group {
