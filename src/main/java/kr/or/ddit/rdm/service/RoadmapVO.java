@@ -14,4 +14,6 @@ public class RoadmapVO {
 	private Date completeAt;
 	private Date createdAt;
 	private Date dueDate;
+	
+	private boolean isComplete;
 }

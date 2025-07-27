@@ -41,6 +41,25 @@ public class RoadmapServiceImpl implements RoadmapService {
 		// 현재 받은 미션들
 		List<RoadmapVO> progressMissions = this.roadmapMapper.selectProgressMissionList(memId);
 
+		// 각 진행 중인 미션에 대해 완료 가능 여부를 조회 및 설정
+		for(RoadmapVO mission : progressMissions) {
+			int rsId = mission.getRsId();
+			
+			String tableName = this.roadmapMapper.selectTableName(rsId);
+			if (tableName != null && ALLOWED_TABLE_NAMES.contains(tableName)) {
+				Map<String, Object> parameter = new HashMap<String, Object>();
+				parameter.put("tableName", tableName);
+				parameter.put("memId", memId);
+				parameter.put("rsId", rsId);
+				
+				int result = this.roadmapMapper.isCompleteExists(parameter);
+				
+				if(result > 0) mission.setComplete(true);
+			} else {
+				mission.setComplete(false);
+			}
+		}
+		
 		// 완료한 미션들
 		List<RoadmapVO> completedMissions = this.roadmapMapper.selectCompletedMissionList(memId);
 
@@ -62,10 +81,10 @@ public class RoadmapServiceImpl implements RoadmapService {
 			this.roadmapMapper.insertCompleteRoadmap(memId);
 			return "complete";
 		}
-		
-	    if (!ALLOWED_TABLE_NAMES.contains(tableName)) {
-	        throw new IllegalArgumentException("허용되지 않은 테이블 이름입니다: " + tableName);
-	    }
+
+		if (!ALLOWED_TABLE_NAMES.contains(tableName)) {
+			throw new IllegalArgumentException("허용되지 않은 테이블 이름입니다: " + tableName);
+		}
 
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put("tableName", tableName);
@@ -91,21 +110,23 @@ public class RoadmapServiceImpl implements RoadmapService {
 		request.setMemId(Integer.parseInt(memId));
 
 		int result = this.roadmapMapper.insertMission(request);
-		
-		if (result > 0) return "success";
-		
+
+		if (result > 0)
+			return "success";
+
 		return "fail";
 	}
-	
+
 	// 특정 사용자의 미션 완료 날짜 업데이트
 	@Override
 	public String updateDueDate(String memId, RoadmapVO request) {
 		request.setMemId(Integer.parseInt(memId));
-		
+
 		int result = this.roadmapMapper.updateDueDate(request);
-		
-		if (result > 0) return "success";
-		
+
+		if (result > 0)
+			return "success";
+
 		return "fail";
 	}
 
@@ -113,7 +134,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 	@Override
 	public String selectResultData(String memId) {
 		String memName = this.roadmapMapper.selectMember(memId).getMemName();
-		
+
 		return memName;
 	}
 
