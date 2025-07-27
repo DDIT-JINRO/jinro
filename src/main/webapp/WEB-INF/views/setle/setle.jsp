@@ -12,11 +12,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	const IMP = window.IMP;
 	IMP.init('imp55613015') //가맹점 식별코드
 	
+	const nextPayId = "<%= request.getAttribute("nextPayId") %>";
+	const loginUser = {
+		email: "<%= loginUser.getMemEmail() %>",
+		name: "<%= loginUser.getMemName() %>",
+		tel: "<%= loginUser.getMemPhoneNumber() %>"
+	};
 	
 	function requestPay(){
 		
 		const customerUid = "test_customer_" + new Date().getTime(); 
-		const merchantUid = "order_" + new Date().getTime();
+		const merchantUid = "" + nextPayId;
 		
 		IMP.request_pay(
 			{
@@ -27,14 +33,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 				merchant_uid: merchantUid,
 				name: "BASIC",
 				amount: 100,
-				buyer_email:"gildong@gmail.com",
-				buyer_name: "홍길동",
-				buyer_tel: "010-1234-5678",
-				buyer_addr: "서울특별시",
-				buyer_postcode: "01181",
+				buyer_email:loginUser.email,
+				buyer_name: loginUser.name,
+				buyer_tel: loginUser.tel,
 				digital: true,
 			},
-			
 			function(rsp){
 				//callback
 				if(rsp.success ) {
@@ -64,10 +67,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	            }
 			},
 		);
-		
 	}
-	
-	
 	
 	//"결제하기" 버튼 클릭시 함수 호출
 	const payButton = document.getElementById("payButton");
@@ -76,8 +76,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	}
 	
 });
-		
-
 </script>
 </head>
 <body>

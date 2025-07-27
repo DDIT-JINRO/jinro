@@ -5,6 +5,7 @@
 
 	<resultMap id="paymentMap" type="kr.or.ddit.util.setle.service.PaymentVO">
 		<id property="payId" column="PAY_ID" />
+		<result property="msId" column="MS_ID"/>
 		<result property="payDate" column="PAY_DATE" />
 		<result property="payAmount" column="PAY_AMOUNT" />
 		<result property="impUid" column="IMP_UID" />
@@ -14,7 +15,14 @@
 		<result property="payMockCnt" column="PAY_MOCK_CNT" />
 	</resultMap>
 
-
+	<!-- 
+	merchant_uid를 생성하기 위해 pay_id의 다음 시퀀스 값을 조회
+	public int selectNextPayId()
+	 -->
+	<select id="selectNextPayId">
+		SELECT NVL(MAX(PAY_ID), 0) + 1 FROM PAYMENT
+	</select> 
+	 
 	<!--  새로운 결제 정보를 데이터베이스에 삽입.
 	public int insertPayment(PaymentVO paymentVO); -->
 	<insert id="insertPayment" parameterType="kr.or.ddit.util.setle.service.PaymentVO">
@@ -23,6 +31,7 @@
         </selectKey>
         INSERT INTO PAYMENT (
              PAY_ID
+            ,MS_ID
             ,PAY_DATE
             ,PAY_AMOUNT
             ,IMP_UID
@@ -34,6 +43,7 @@
         VALUES (
 			
             #{payId}
+           ,#{msId}
            ,SYSDATE
            ,#{payAmount}
            ,#{impUid}
@@ -58,7 +68,6 @@
         FROM	PAYMENT
         WHERE	IMP_UID = #{impUid} 
 	</select>
-
     
 	<!-- merchantUid를 기반으로 결제 정보를 조회
 	public PaymentVO selectPaymentByMerchantUid(String merchantUid); -->
@@ -72,8 +81,6 @@
 	           ,PAY_CONSULT_CNT
 	           ,PAY_MOCK_CNT
         FROM	PAYMENT
-        WHERE	PAY_ID = #{payId} 
+        WHERE	PAY_ID = #{merchantUid} 
 	</select>
-    
-	
 </mapper>

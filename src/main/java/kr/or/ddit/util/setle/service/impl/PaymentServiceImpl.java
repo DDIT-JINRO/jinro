@@ -4,20 +4,46 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.setle.service.IamportApiClient;
+import kr.or.ddit.util.setle.service.MemberSubscriptionVO;
 import kr.or.ddit.util.setle.service.PaymentRequestDto;
 import kr.or.ddit.util.setle.service.PaymentResponseDto;
 import kr.or.ddit.util.setle.service.PaymentService;
+import kr.or.ddit.util.setle.service.PaymentVO;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
 	
 	@Autowired
 	private IamportApiClient iamportApiClient;
+	
+	@Autowired
+	private PaymentMapper paymentMapper;
+	
+	@Autowired
+	private MemberSubscriptionMapper memberSubscriptionMapper;
+	
+	@Autowired
+	private PayMemberMapper payMemberMapper;
+
+	//merchant_uid를 생성하기 위해 pay_id의 다음 시퀀스 값을 조회
+	@Override
+	public int selectNextPayId() {
+		return paymentMapper.selectNextPayId();
+	}
+
+	// 이메일을 기반으로 회원정보 조회
+	@Override
+	public MemberVO selectMemberByEmail(String email) {
+		return payMemberMapper.selectMemberByEmail(email);
+	}
 
 	@Override
-	public PaymentResponseDto verifyAndProcessPayment(PaymentRequestDto requestDto) {
+	@Transactional
+	public PaymentResponseDto verifyAndProcessPayment(PaymentRequestDto requestDto, String loginId) {
 
 		try {
             // 1. 아임포트 서버로부터 실제 결제 정보 조회
@@ -26,6 +52,7 @@ public class PaymentServiceImpl implements PaymentService {
 			if(paymentData ==null) {
 				return new PaymentResponseDto("failure", "결제 정보 조회에 실패했습니다.", requestDto.getMerchantUid());
 			}
+			
 
             // 2. 실제 결제 금액과 우리 시스템이 알아야 할 금액이 일치하는지 검증
             // 지금은 테스트로 100원으로 가정합니다.
@@ -54,7 +81,24 @@ public class PaymentServiceImpl implements PaymentService {
 			System.out.println("결제 상태: " + paymentData.get("status"));
 			System.out.println("결제 금액: " + paymentData.get("amount"));
 			
-			return new PaymentResponseDto("success", "서버 검증에 성공했습니다.", requestDto.getMerchantUid());
+			// 💡 1. 구독 정보 먼저 생성 (회원 ID, 상품 ID는 예시로 1)
+			MemberVO loginUser = payMemberMapper.selectMemberByEmail(loginId);
+			
+			MemberSubscriptionVO sub = new MemberSubscriptionVO();
+	        sub.setMemId(loginUser.getMemId()); // TODO: 실제 로그인 사용자로 대체
+	        sub.setSubId(1); // TODO: BASIC 상품 ID
+	        sub.setIamportCustomerUid(requestDto.getCustomerUid());
+	        memberSubscriptionMapper.insertMemberSubscription(sub);
+
+	        // 💡 2. 결제 정보 생성
+	        PaymentVO payment = new PaymentVO();
+	        payment.setImpUid(requestDto.getImpUid());
+	        payment.setPayAmount(requestDto.getAmount());
+	        payment.setMsId(sub.getMsId());
+	        paymentMapper.insertPayment(payment);
+			
+			
+			return new PaymentResponseDto("success", successMessage, requestDto.getMerchantUid());
 			
 		} catch (Exception e) {
 			// API 호출 중 예외 발생 시
@@ -67,4 +111,5 @@ public class PaymentServiceImpl implements PaymentService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

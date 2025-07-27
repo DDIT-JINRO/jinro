@@ -9,7 +9,11 @@ import kr.or.ddit.util.setle.service.PaymentVO;
  */
 @Mapper // 스프링 부트에서 MyBatis 매퍼를 스캔하고 빈으로 등록할 수 있도록 돕습니다.
 public interface PaymentMapper {
-    /**
+
+	//merchant_uid를 생성하기 위해 pay_id의 다음 시퀀스 값을 조회
+	public int selectNextPayId();
+
+	/**
      * 새로운 결제 정보를 데이터베이스에 삽입합니다.
      * @param payment 삽입할 Payment VO/엔티티 객체
      * @return 삽입된 행의 수
@@ -29,10 +33,5 @@ public interface PaymentMapper {
      * @return 조회된 Payment VO/엔티티 객체 또는 null
      */
 	public PaymentVO selectPaymentByMerchantUid(String merchantUid);
-
-   
-
-    // 필요하다면 다른 조회, 업데이트, 삭제 메서드 추가
-	
 
 }

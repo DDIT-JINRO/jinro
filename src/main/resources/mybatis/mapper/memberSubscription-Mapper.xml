@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.util.setle.service.impl.MemberSubscriptionMapper">
+
+	<!-- 
+	// 구독 등록
+	int insertMemberSubscription(MemberSubscriptionVO memberSubscriptionVO);
+	-->
+	<insert id="insertMemberSubscription" parameterType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+		<selectKey keyProperty="msId" resultType="int" order="BEFORE">
+			SELECT MEMBER_SUBSCRIPTION_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO member_subscription (
+		    MS_ID
+		    , MEM_ID
+		    , SUB_ID
+		    , CUSTOMER_UID
+		    , SUB_STATUS
+		    , SUB_START_DT
+		    , SUB_END_DT
+		    , LAST_PAY_DT
+		    , RECUR_PAY_CNT
+		    , CREATED_DT
+		    , UPDATED_DT
+		) VALUES (
+		      #{msId}
+		    , #{memId}
+		    , #{subId}
+		    , #{customerUid}
+		    , 'Y'
+		    , SYSDATE
+		    , SYSDATE
+		    , SYSDATE
+		    , 1
+		    , SYSDATE
+		    , SYSDATE
+		);       
+	</insert>
+	
+	<!--
+	// 회원 ID로 구독 정보 조회
+	MemberSubscriptionVO selectByMemberId(int memId);
+	-->
+	<select id="selectByMemberId" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+		SELECT  MS_ID
+			  , MEM_ID
+			  , SUB_ID
+			  , CUSTOMER_UID
+			  , SUB_STATUS
+			  , SUB_START_DT
+			  , SUB_END_DT
+			  , LAST_PAY_DT
+			  , RECUR_PAY_CNT
+			  , CREATED_DT
+			  , UPDATED_DT
+		FROM	MEMBER_SUBSCRIPTION 
+		WHERE	MEM_ID = #{memId}
+	</select>
+	
+	<!--
+	// 구독번호로 구독 정보 조회
+	MemberSubscriptionVO selectByMsId(int msId);
+	-->
+	<select id="selectByMsId" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+		SELECT  MS_ID
+			  , MEM_ID
+			  , SUB_ID
+			  , CUSTOMER_UID
+			  , SUB_STATUS
+			  , SUB_START_DT
+			  , SUB_END_DT
+			  , LAST_PAY_DT
+			  , RECUR_PAY_CNT
+			  , CREATED_DT
+			  , UPDATED_DT
+		FROM	MEMBER_SUBSCRIPTION 
+		WHERE	MS_ID = #{msId}
+	</select>
+
+</mapper>
