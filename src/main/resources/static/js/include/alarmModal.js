@@ -5,6 +5,7 @@
 document.addEventListener('DOMContentLoaded', function(){
 	const alarmBtn    = document.getElementById('alarmBtn');
 	const alarmModal  = document.getElementById('alarm-modal');
+	const alarmClose	= document.getElementById('alarm-close');
 
 	document.addEventListener('click', function(e){
 		if(alarmModal.classList.contains('hidden')) return;
