@@ -151,7 +151,7 @@
 		<img src="/images/chaticon.png" alt="채팅">
 		<span id="chatFloatingBadge" class="chat-unread-badge" style="position: absolute; top: -5px; right: -10px; display: none;">0</span>
 	</button>
-	<button class="right-fixed-btn">
+	<button class="right-fixed-btn" id="roadmap">
 		<img src="/images/roadmapicon.png" alt="진로탐색">
 	</button>
 </div>

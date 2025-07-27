@@ -10,7 +10,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.rdm.service.RoadmapService;
 import kr.or.ddit.rdm.service.RoadmapStepVO;
 import kr.or.ddit.rdm.service.RoadmapVO;
@@ -30,8 +29,11 @@ public class RoadmapServiceImpl implements RoadmapService {
 	// 특정 사용자의 로드맵 정보 조회
 	@Override
 	public Map<String, Object> selectMemberRoadmap(int memId) {
+		boolean isFirst = false;
+
 		if (this.roadmapMapper.selectMemberRoadmap(memId).isEmpty()) {
 			this.roadmapMapper.insertMemberRoadmap(memId);
+			isFirst = true;
 		}
 		// 현재 캐릭터 위치
 		int currentCharPosition = this.roadmapMapper.selectCurrentCharPosition(memId);
@@ -43,7 +45,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 		List<RoadmapVO> completedMissions = this.roadmapMapper.selectCompletedMissionList(memId);
 
 		return Map.of("currentCharPosition", currentCharPosition, "progressMissions", progressMissions,
-				"completedMissions", completedMissions);
+				"completedMissions", completedMissions, "isFirst", isFirst);
 	}
 
 	// 로드맵 노드별 미션 리스트
