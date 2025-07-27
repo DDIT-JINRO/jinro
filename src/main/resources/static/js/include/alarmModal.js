@@ -7,6 +7,16 @@ document.addEventListener('DOMContentLoaded', function(){
 	const alarmModal  = document.getElementById('alarm-modal');
 	const alarmClose	= document.getElementById('alarm-close');
 
+	const eventSource = new EventSource('/api/alarm/sub?memId='+memId);
+	eventSource.addEventListener('alarm',function(e){
+		const alarmVO = JSON.parse(e.data);
+		console.log(alarmVO);
+	})
+	eventSource.onopen = () =>{
+		console.log("sse연결됨");
+	}
+
+
 	document.addEventListener('click', function(e){
 		if(alarmModal.classList.contains('hidden')) return;
 
