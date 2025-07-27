@@ -9,46 +9,99 @@ import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.rdm.service.RoadmapStepVO;
 import kr.or.ddit.rdm.service.RoadmapVO;
 
+/**
+ * 로드맵 관련 데이터베이스 작업을 위한 매퍼 인터페이스.
+ */
 @Mapper
 public interface RoadmapMapper {
 
-	// 특정 사용자의 로드맵있는지에 대한 여부 조회
+	/**
+	 * 특정 회원의 로드맵 미션 목록을 조회
+	 * @param memId 회원 식별 번호
+	 * @return 해당 회원의 모든 로드맵 미션 목록 (List<RoadmapVO>)
+	 */
 	List<RoadmapVO> selectMemberRoadmap(int memId);
 
-	// 로드맵이 없는 사용자의 첫 로드맵 생성
+	/**
+	 * 로드맵이 없는 신규 회원을 위해 초기 로드맵 데이터를 생성
+	 * @param memId 회원 식별 번호
+	 * @return 생성된 행의 수 (보통 1)
+	 */
 	int insertMemberRoadmap(int memId);
 	
-	// 특정 사용자의 로드맵의 현재 캐릭터의 위치 조회
+	/**
+	 * 특정 회원의 로드맵에서 현재 캐릭터의 위치를 조회
+	 * @param memId 회원 식별 번호
+	 * @return 현재 캐릭터의 위치를 나타내는 정수 값
+	 */
 	int selectCurrentCharPosition(int memId);
 
-	// 특정 사용자의 진행 중인 미션 리스트 조회
+	/**
+	 * 특정 회원의 진행 중인 미션 리스트를 조회
+	 * @param memId 회원 식별 번호
+	 * @return 진행 중인 미션 목록 (List<RoadmapVO>)
+	 */
 	List<RoadmapVO> selectProgressMissionList(int memId);
 
-	// 특정 사용자의 완료된 미션 리스트 조회
+	/**
+	 * 특정 회원의 완료된 미션 리스트를 조회
+	 * @param memId 회원 식별 번호
+	 * @return 완료된 미션 목록 (List<RoadmapVO>)
+	 */
 	List<RoadmapVO> selectCompletedMissionList(int memId);
 
-	// 로드맵 노드별 미션 리스트
+	/**
+	 * 로드맵 노드별 미션 리스트를 조회
+	 * @return {@link RoadmapStepVO} 객체를 담은 리스트
+	 */
 	List<RoadmapStepVO> selectMissionList();
 	
-	// 파라미터 단계에 해당하는 테이블명 조회
+	/**
+	 * 주어진 로드맵 단계 식별 번호(rsId)에 해당하는 테이블 이름을 조회
+	 * @param rsId 로드맵 단계 식별 번호
+	 * @return 해당 단계와 연관된 테이블 이름
+	 */
 	String selectTableName(int rsId);
 	
-	// 미션 완료 확인 여부 조회
+	/**
+	 * 미션 완료 여부를 확인
+	 * @param parameter 테이블 이름, 회원 ID, 로드맵 단계 ID를 포함하는 Map
+	 * @return 완료 여부 (0보다 크면 완료된 것으로 간주)
+	 */
 	int isCompleteExists(Map<String, Object> parameter);
 	
-	// 미션 완료 시 완료 여부 업데이트
+	/**
+	 * 미션 완료 시 해당 미션의 완료 여부를 업데이트
+	 * @param parameter 테이블 이름, 회원 ID, 로드맵 단계 ID를 포함하는 Map
+	 * @return 업데이트된 행의 수
+	 */
 	int updateCompleteMission(Map<String, Object> parameter);
 
-	// 특정 사용자의 미션 등록 메서드
+	/**
+	 * 특정 회원의 미션을 데이터베이스에 등록
+	 * @param roadmapVO 등록할 미션 정보가 담긴 {@link RoadmapVO} 객체
+	 * @return 삽입된 행의 수
+	 */
 	int insertMission(RoadmapVO roadmapVO);
 
-	// 특정 사용자의 미션 완료 날짜 업데이트
+	/**
+	 * 특정 회원의 미션 완료 예정일을 업데이트
+	 * @param request 업데이트할 미션 정보가 담긴 {@link RoadmapVO} 객체
+	 * @return 업데이트된 행의 수
+	 */
 	int updateDueDate(RoadmapVO request);
 
-	// 로드맵 전체 완성 여부 반환
+	/**
+	 * 특정 회원의 로드맵 전체 완성 여부를 기록
+	 * @param memId 회원 식별 번호
+	 */
 	void insertCompleteRoadmap(String memId);
 
-	// 사용자 정보 조회
+	/**
+	 * 특정 회원의 정보를 조회합니다.
+	 * @param memId 회원 식별 번호
+	 * @return 조회된 회원 정보가 담긴 {@link MemberVO} 객체
+	 */
 	MemberVO selectMember(String memId);
 
 
