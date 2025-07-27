@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.util.alarm.service.impl.AlarmMapper">
+
+  <!-- Insert new Alarm, using sequence for ALARM_ID -->
+  <insert id="insertAlarm" parameterType="kr.or.ddit.util.alarm.service.AlarmVO">
+    <selectKey keyProperty="alarmId" resultType="int" order="BEFORE">
+      SELECT NVL(MAX(alarmId),0)+1 AS alarmId FROM ALARM
+    </selectKey>
+    INSERT INTO ALARM (
+        ALARM_ID
+      , MEM_ID
+      , ALARM_TARGET_TYPE
+      , ALARM_CONTENT
+      , ALARM_IS_READ
+      , ALARM_CREATED_AT
+      , BOARD_ID
+      , REPLY_ID
+    ) VALUES (
+        #{alarmId}
+      , #{memId}
+      , #{alarmTargetType}
+      , #{alarmContent}
+      , #{alarmIsRead}
+      , SYSDATE
+      , #{boardId}
+      , #{replyId}
+    )
+  </insert>
+
+  <!-- 멤버 번호로 안읽은 알림들 조회 -->
+  <select id="selectAllByMember" parameterType="int" resultType="kr.or.ddit.util.alarm.service.AlarmVO">
+    SELECT *
+      FROM ALARM
+     WHERE MEM_ID = #{memId}
+     ORDER BY ALARM_CREATED_AT DESC
+  </select>
+
+  <!-- 단일 알림건 읽음 처리 (알림ID) -->
+  <update id="updateMarkRead" parameterType="int">
+    UPDATE ALARM
+       SET ALARM_IS_READ = 'Y'
+     WHERE ALARM_ID = #{alarmId}
+  </update>
+
+  <!-- 단일 알림건 삭제 처리 (알림ID) -->
+  <delete id="deleteById" parameterType="int">
+    DELETE FROM ALARM
+     WHERE ALARM_ID = #{alarmId}
+  </delete>
+
+  <!-- 전체 알림건 삭제 처리 (멤버ID) -->
+  <delete id="deleteAllByMember" parameterType="int">
+    DELETE FROM ALARM
+     WHERE MEM_ID = #{memId}
+  </delete>
+
+</mapper>
