@@ -13,7 +13,7 @@ public class MemberSubscriptionVO {
 	private int msId; // PK, MEMBER_SUBSCRIPTION의 고유 ID
     private int memId; // FK, 회원 ID
     private int subId; // FK, 구독 상품 ID
-    private String iamportCustomerUid; // 아임포트 고객 식별자
+    private String customerUid; // 아임포트 고객 식별자
     private String subStatus; // 구독 상태 (Y/N)
     private Date nextPayDt; // 다음 결제 예정일
     private Date subStrtDt; // 구독 시작일

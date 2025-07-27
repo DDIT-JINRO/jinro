@@ -34,11 +34,11 @@ public class PaymentServiceImpl implements PaymentService {
 	public int selectNextPayId() {
 		return paymentMapper.selectNextPayId();
 	}
-
-	// 이메일을 기반으로 회원정보 조회
+	
+	// 회원id을 기반으로 회원정보 조회
 	@Override
-	public MemberVO selectMemberByEmail(String email) {
-		return payMemberMapper.selectMemberByEmail(email);
+	public MemberVO selectMemberById(int memId) {
+		return payMemberMapper.selectMemberById(memId);
 	}
 
 	@Override
@@ -46,16 +46,22 @@ public class PaymentServiceImpl implements PaymentService {
 	public PaymentResponseDto verifyAndProcessPayment(PaymentRequestDto requestDto, String loginId) {
 
 		try {
-            // 1. 아임포트 서버로부터 실제 결제 정보 조회
+			// 1. 아임포트 서버로부터 실제 결제 정보 조회
 			Map<String, Object> paymentData = iamportApiClient.getPaymentInfo(requestDto.getImpUid());
 			
+			//로그
+			System.out.println("검증 요청: " + requestDto);
+			System.out.println("paymentData: " + paymentData); 
+			
 			if(paymentData ==null) {
+			    System.err.println("❌ paymentData is null - impUid: " + requestDto.getImpUid());
 				return new PaymentResponseDto("failure", "결제 정보 조회에 실패했습니다.", requestDto.getMerchantUid());
 			}
 			
+			System.out.println("결제 상태: " + paymentData.get("status")); 
 
-            // 2. 실제 결제 금액과 우리 시스템이 알아야 할 금액이 일치하는지 검증
-            // 지금은 테스트로 100원으로 가정합니다.
+			// 2. 실제 결제 금액과 우리 시스템이 알아야 할 금액이 일치하는지 검증
+			// 지금은 테스트로 100원으로 가정합니다.
 //			double amountToBePaid = 100.0;
 //			double paidAmount = ((Number) paymentData.get("amount")).doubleValue();
 //			
@@ -64,9 +70,9 @@ public class PaymentServiceImpl implements PaymentService {
 //                return new PaymentResponseDto("failure", "결제 금액이 일치하지 않습니다.", requestDto.getMerchantUid());
 //			}
 
-            // 3. 결제 상태가 '결제완료(paid)' 상태인지 검증
+			// 3. 결제 상태가 '결제완료(paid)' 상태인지 검증
 			if(!"paid".equals(paymentData.get("status"))) {
-                // 금액이 일치하지 않으면 실패 응답 반환
+				// 금액이 일치하지 않으면 실패 응답 반환
 				return new PaymentResponseDto("failure", "결제가 완료되지 않았습니다. 현재 상태: " + paymentData.get("status"), requestDto.getMerchantUid());
 			}
 			
@@ -81,28 +87,36 @@ public class PaymentServiceImpl implements PaymentService {
 			System.out.println("결제 상태: " + paymentData.get("status"));
 			System.out.println("결제 금액: " + paymentData.get("amount"));
 			
-			// 💡 1. 구독 정보 먼저 생성 (회원 ID, 상품 ID는 예시로 1)
-			MemberVO loginUser = payMemberMapper.selectMemberByEmail(loginId);
-			
-			MemberSubscriptionVO sub = new MemberSubscriptionVO();
-	        sub.setMemId(loginUser.getMemId()); // TODO: 실제 로그인 사용자로 대체
-	        sub.setSubId(1); // TODO: BASIC 상품 ID
-	        sub.setIamportCustomerUid(requestDto.getCustomerUid());
-	        memberSubscriptionMapper.insertMemberSubscription(sub);
+			// 1. loginId(문자열 "1")를 숫자로 변환합니다.
+			int memId = Integer.parseInt(loginId);
 
-	        // 💡 2. 결제 정보 생성
-	        PaymentVO payment = new PaymentVO();
-	        payment.setImpUid(requestDto.getImpUid());
-	        payment.setPayAmount(requestDto.getAmount());
-	        payment.setMsId(sub.getMsId());
-	        paymentMapper.insertPayment(payment);
-			
+			// 2. ID로 회원을 조회합니다. (selectMemberByEmail -> selectMemberById)
+			MemberVO loginUser = payMemberMapper.selectMemberById(memId);
+	        
+			// 혹시 모를 경우를 대비해 Null 체크를 추가하면 더 좋습니다.
+			if (loginUser == null) {
+				return new PaymentResponseDto("failure", "회원 정보를 찾을 수 없습니다. ID: " + memId, requestDto.getMerchantUid());
+			}
+	        
+			// 3. 구독 정보 먼저 생성 (회원 ID, 상품 ID는 예시로 1)
+			MemberSubscriptionVO sub = new MemberSubscriptionVO();
+			sub.setMemId(loginUser.getMemId()); // TODO: 실제 로그인 사용자로 대체
+			sub.setSubId(1); // TODO: BASIC 상품 ID
+			sub.setCustomerUid(requestDto.getCustomerUid());
+			memberSubscriptionMapper.insertMemberSubscription(sub);
+
+			// 4. 결제 정보 생성
+			PaymentVO payment = new PaymentVO();
+			payment.setImpUid(requestDto.getImpUid());
+			payment.setPayAmount(requestDto.getAmount());
+			payment.setMsId(sub.getMsId());
+			paymentMapper.insertPayment(payment);
 			
 			return new PaymentResponseDto("success", successMessage, requestDto.getMerchantUid());
 			
 		} catch (Exception e) {
 			// API 호출 중 예외 발생 시
-            return new PaymentResponseDto("failure", "서버 처리 중 오류가 발생했습니다: " + e.getMessage(), requestDto.getMerchantUid());
+			return new PaymentResponseDto("failure", "서버 처리 중 오류가 발생했습니다: " + e.getMessage(), requestDto.getMerchantUid());
 		}
 	}
 
@@ -111,5 +125,4 @@ public class PaymentServiceImpl implements PaymentService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

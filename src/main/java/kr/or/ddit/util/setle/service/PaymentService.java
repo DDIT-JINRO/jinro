@@ -10,11 +10,11 @@ public interface PaymentService {
 	 * merchant_uid를 생성하기 위해 pay_id의 다음 시퀀스 값을 조회
 	 */
 	public int selectNextPayId();
-
+	
 	/**
-	 * 이메일로 회원조회
+	 * 회원id로 회원조회
 	 */
-	public MemberVO selectMemberByEmail(String email);
+	public MemberVO selectMemberById(int memId);
 
 	/**
 	 * 클라이언트로부터 전달받은 결제 정보를 검증하고 DB에 저장하는 등 후처리합니다.

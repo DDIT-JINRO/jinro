@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,17 +13,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	const IMP = window.IMP;
 	IMP.init('imp55613015') //가맹점 식별코드
 	
-	const nextPayId = "<%= request.getAttribute("nextPayId") %>";
+	const nextPayId = "<c:out value='${nextPayId}' />";
 	const loginUser = {
-		email: "<%= loginUser.getMemEmail() %>",
-		name: "<%= loginUser.getMemName() %>",
-		tel: "<%= loginUser.getMemPhoneNumber() %>"
+			email: "<c:out value='${loginUser.memEmail}' />",
+		    name: "<c:out value='${loginUser.memName}' />",
+		    tel: "<c:out value='${loginUser.memPhoneNumber}' />"
 	};
 	
 	function requestPay(){
 		
 		const customerUid = "test_customer_" + new Date().getTime(); 
-		const merchantUid = "" + nextPayId;
+		const merchantUid = "order_" + new Date().getTime(); 
+		//const merchantUid = "" + nextPayId;
 		
 		IMP.request_pay(
 			{

@@ -7,7 +7,6 @@ import kr.or.ddit.main.service.MemberVO;
 @Mapper
 public interface PayMemberMapper {
 
-	// 이메일을 기반으로 회원정보 조회
-	public MemberVO selectMemberByEmail(String email);
-
+	// 회원id을 기반으로 회원정보 조회
+	public MemberVO selectMemberById(int memId);
 }

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.PostConstruct;
@@ -44,13 +45,19 @@ public class IamportApiClient {
 	 * 아임포트 Access Token을 발급받는 메서드입니다. 아임포트 API 호출 시 인증을 위해 필요한 토큰입니다.
 	 *
 	 * @return 발급된 Access Token 문자열 또는 토큰 발급 실패 시 null
+	 * @throws JsonProcessingException 
 	 */
-	public String getAccessToken() {
+	public String getAccessToken() throws JsonProcessingException {
 		// 아임포트 토큰 발급 API의 URL
 		String url = "https://api.iamport.kr/users/getToken";
 
-	    System.out.println("apiKey: " + apiKey);
-	    System.out.println("apiSecret: " + apiSecret);
+		System.out.println("apiKey: " + apiKey);
+		System.out.println("apiSecret: " + apiSecret);
+		
+		System.out.println("restTemplate message converters:");
+		restTemplate.getMessageConverters().forEach(converter -> {
+		    System.out.println(converter.getClass());
+		});
 
 		// HTTP 요청 헤더 설정: JSON 형태로 데이터를 보낼 것임을 명시
 		HttpHeaders headers = new HttpHeaders();
@@ -65,9 +72,15 @@ public class IamportApiClient {
 			}
 		 * 아임포트 api가 위의 형식의 json구조를 원하기에 IamportTokenRequest을 사용
 		 */
-	    IamportTokenRequest tokenRequest = new IamportTokenRequest(apiKey, apiSecret);
-
-	    HttpEntity<IamportTokenRequest> request = new HttpEntity<>(tokenRequest, headers);
+		IamportTokenRequest tokenRequest = new IamportTokenRequest(apiKey, apiSecret);
+		String jsonBody = objectMapper.writeValueAsString(tokenRequest);
+		try {
+			System.out.println("보내는 JSON: " + objectMapper.writeValueAsString(tokenRequest));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace(); // 혹은 log.error(...) 사용
+		}
+	    
+		HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
 
 		
 		try {
@@ -101,11 +114,11 @@ public class IamportApiClient {
 		}
 	}
 	public String getApiKey() {
-	    return apiKey;
+		return apiKey;
 	}
 
 	public String getApiSecret() {
-	    return apiSecret;
+		return apiSecret;
 	}
 
 	/**
@@ -114,8 +127,9 @@ public class IamportApiClient {
 	 *
 	 * @param impUid 아임포트가 부여한 결제 고유 식별자
 	 * @return 조회된 결제 정보가 담긴 Map (성공 시), 또는 null (실패 시)
+	 * @throws JsonProcessingException 
 	 */
-	public Map<String, Object> getPaymentInfo(String impUid){
+	public Map<String, Object> getPaymentInfo(String impUid) throws JsonProcessingException{
         // 먼저 Access Token을 발급받습니다. 토큰 없이는 API 호출 불가.
 		String accessToken = getAccessToken();
 		if(accessToken == null) {
@@ -156,8 +170,9 @@ public class IamportApiClient {
      * @param customerUid 아임포트에 등록된 고객의 고유 식별자
      * @param scheduleData 예약할 결제 정보가 담긴 Map (merchant_uid, amount, schedule_at(Unix timestamp) 등이 포함된 'schedules' 리스트 포함)
      * @return API 응답 Map (성공 시), 또는 null (실패 시)
+     * @throws JsonProcessingException 
      */
-	public Map<String, Object> scheduleSubscriptionPayment(String customerUid, Map<String, Object> scheduleData){
+	public Map<String, Object> scheduleSubscriptionPayment(String customerUid, Map<String, Object> scheduleData) throws JsonProcessingException{
 		String accessToken = getAccessToken();
 		if(accessToken == null) {
 			return null; // 토큰 발급 실패 시 즉시 종료
@@ -198,8 +213,9 @@ public class IamportApiClient {
      * @param amount 결제 금액
      * @param name 상품명
      * @return API 응답 Map (성공 시), 또는 null (실패 시)
+     * @throws JsonProcessingException 
      */
-	public Map<String, Object> payAgain(String customerUid, String merchantUid, double amount, String name){
+	public Map<String, Object> payAgain(String customerUid, String merchantUid, double amount, String name) throws JsonProcessingException{
 		String accessToken = getAccessToken();
 		if(accessToken == null) {
 			return null; // 토큰 발급 실패 시 즉시 종료
@@ -241,8 +257,9 @@ public class IamportApiClient {
      *
      * @param customerUid 고객 고유 식별자
      * @param merchantUid 상점에서 생성하는 이번 결제 건의 고유 주문번호
+	 * @throws JsonProcessingException 
      */
-	public Map<String, Object> unscheduleSubscriptionPayment(String customerUid, String merchantUid) {
+	public Map<String, Object> unscheduleSubscriptionPayment(String customerUid, String merchantUid) throws JsonProcessingException {
 		String accessToken = getAccessToken();
 		if(accessToken == null) {
 			return null; // 토큰 발급 실패 시 즉시 종료

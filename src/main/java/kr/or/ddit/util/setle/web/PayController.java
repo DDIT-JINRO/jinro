@@ -27,12 +27,17 @@ public class PayController {
 	@GetMapping("/checkout")
 	public String showCheckoutPage(Model model, @AuthenticationPrincipal String loginId) {
 		
+		
+	    System.out.println("### PayController가 받은 loginId: " + loginId);
+	    
+	    //받은 loginId를 실제 숫자(int)로 변환
+	    int memId = Integer.parseInt(loginId);
+		
 		int nextPayId = paymentService.selectNextPayId();
 		model.addAttribute("nextPayId", nextPayId);
 		
 
-		MemberVO loginUser = paymentService.selectMemberByEmail(loginId);
-		int memId = loginUser.getMemId();
+		MemberVO loginUser = paymentService.selectMemberById(memId);
 		model.addAttribute("loginUser", loginUser);
 		model.addAttribute("memId", memId);
 		
