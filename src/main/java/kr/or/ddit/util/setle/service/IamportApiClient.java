@@ -20,6 +20,11 @@ import jakarta.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 
+//Gson 라이브러리 관련 import 추가
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 /**
  * 아임포트 REST API와 통신하는 클라이언트 클래스입니다. 아임포트 API 키를 통해 토큰을 발급받고, 결제 정보를 조회하며, 정기 결제
  * 등을 수행합니다.
@@ -218,25 +223,6 @@ public class IamportApiClient {
         }
         System.out.println("❌ 응답 body가 null입니다");
         return null;
-        
-        /* 원 try
-                 try {
-            // POST 요청을 보내고 응답을 Map 형태로 받습니다.
-        	ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
-        	if(response.getBody() != null && response.getBody().containsKey("response")) {
-        		return (List<Map<String, Object>>) response.getBody().get("response");
-        	}
-        	System.out.println("일단 성공");
-        	return null;
-		} catch (HttpClientErrorException e) {
-			System.err.println("결제 예약 API 호출 실패! Status: " + e.getStatusCode());
-			System.err.println("Response Body: " + e.getResponseBodyAsString());
-			return null;
-		} catch (Exception e) {
-			System.err.println("Failed to schedule subscription payment for customer_uid " + customerUid + ": " + e.getMessage());
-			return null;
-		} 
-         */
 	}
 
     /**
@@ -262,15 +248,18 @@ public class IamportApiClient {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setBearerAuth(accessToken);
 
-        // API 요청 본문 구성: 고객, 주문, 금액 정보
-		Map<String, Object> body = new HashMap<>();
-		body.put("customer_uid", customerUid);
-		body.put("merchant_uid", merchantUid);
-		body.put("amount", amount);
-		body.put("name", name);
-        // 필요에 따라 buyer_name, buyer_email, buyer_tel 등 추가 파라미터를 body에 포함할 수 있습니다.
+		// --- Gson을 사용한 수동 JSON 생성 ---
+        Gson gson = new Gson();
+        JsonObject requestBodyJson = new JsonObject();
+        requestBodyJson.addProperty("customer_uid", customerUid);
+        requestBodyJson.addProperty("merchant_uid", merchantUid);
+        requestBodyJson.addProperty("amount", amount);
+        requestBodyJson.addProperty("name", name);
+
+        String jsonBody = gson.toJson(requestBodyJson);
+        System.out.println("보내는 JSON (payAgain): " + jsonBody);
 		
-		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String,Object>>(body, headers);
+        HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
 		
 		try {
             // POST 요청을 보내고 응답을 Map 형태로 받습니다.
@@ -279,10 +268,14 @@ public class IamportApiClient {
 				return (Map<String, Object>) response.getBody().get("response");
 			}
 			return null;
-		} catch (Exception e) {
-			System.err.println("Failed to perform payAgain for customer_uid " + customerUid + ": " + e.getMessage());
-			return null;
-		}
+		} catch (HttpClientErrorException e) {
+	        System.err.println("❌ payAgain API 호출 실패! Status: " + e.getStatusCode());
+	        System.err.println("Response Body: " + e.getResponseBodyAsString());
+	        return null;
+	    } catch (Exception e) {
+	        System.err.println("❌ Failed to perform payAgain for customer_uid " + customerUid + ": " + e.getMessage());
+	        return null;
+	    }
 	}
 	
 	/**

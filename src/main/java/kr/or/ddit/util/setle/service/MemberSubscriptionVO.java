@@ -15,7 +15,6 @@ public class MemberSubscriptionVO {
     private int subId; // FK, 구독 상품 ID
     private String customerUid; // 아임포트 고객 식별자
     private String subStatus; // 구독 상태 (Y/N)
-    private Date nextPayDt; // 다음 결제 예정일
     private Date subStrtDt; // 구독 시작일
     private Date subEndDt; // 구독 종료일
     private Date lastPayDt; // 최종 결제 성공일

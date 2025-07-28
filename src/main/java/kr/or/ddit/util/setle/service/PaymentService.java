@@ -1,5 +1,6 @@
 package kr.or.ddit.util.setle.service;
 
+import java.util.List;
 import java.util.Map;
 
 import kr.or.ddit.main.service.MemberVO;
@@ -17,21 +18,23 @@ public interface PaymentService {
 	public MemberVO selectMemberById(int memId);
 
 	/**
-	 * 클라이언트로부터 전달받은 결제 정보를 검증하고 DB에 저장하는 등 후처리합니다.
 	 * 
+	 * 클라이언트로부터 전달받은 결제 정보를 검증하고 DB에 저장하는 등 후처리합니다.
 	 * @param requestDto 클라이언트로부터 받은 결제 요청 데이터
 	 * @return 결제 처리 결과 응답 DTO
 	 */
 	public PaymentResponseDto verifyAndProcessPayment(PaymentRequestDto requestDto, String loginId);
 
-	/**
-	 * 아임포트 웹훅 알림을 받아 결제 상태를 업데이트하는 등 처리합니다.
-	 * 
-	 * @param webhookData 아임포트 웹훅으로부터 받은 데이터
-	 * @return 웹훅 처리 결과 응답 DTO
-	 */
-	public PaymentResponseDto handleWebhook(Map<String, Object> webhookData);
+	// 결제해야 할 구독 목록을 DB에서 조회
+	public List<MemberSubscriptionVO> findSubscriptionsDueForToday();
 
-	// 필요하다면 결제 취소나 환불 관련 메서드를 추가할 수 있습니다.
-	// boolean cancelPayment(String impUid);
+	// 구독 정보 업데이트 (다음 결제일, 결제 횟수 등)
+	public int updateAfterRecurringPayment(int msId);
+
+	//스케줄러에서 사용할 결제 내역 저장 
+	public int insertPayment(PaymentVO payment);
+
+	//구독 취소
+	public boolean cancelSubscription(int memId);
+
 }

@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	function requestPay(){
 		
 		const customerUid = "test_customer_" + new Date().getTime(); 
-		const merchantUid = "order_" + new Date().getTime(); 
-		//const merchantUid = "" + nextPayId;
+		//const merchantUid = "order_" + new Date().getTime(); 
+		const merchantUid = "" + nextPayId;
 		
 		IMP.request_pay(
 			{
@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 				buyer_name: loginUser.name,
 				buyer_tel: loginUser.tel,
 				digital: true,
-				notice_url:"https://080950865f5e.ngrok-free.app/webhook/handleScheduledPayment",
 			},
 			function(rsp){
 				//callback
@@ -74,6 +73,24 @@ document.addEventListener('DOMContentLoaded', ()=>{
 		);
 	}
 	
+	// "구독 취소하기" 버튼 클릭시 함수 호출
+	const cancelButton = document.getElementById("cancelButton");
+	if(cancelButton){
+	    cancelButton.addEventListener('click', ()=>{
+	        if (!confirm("정말로 구독을 취소하시겠습니까?")) {
+	            return;
+	        }
+
+	        fetch('/pay/cancel-subscription', { method: 'POST' })
+	            .then(response => response.text())
+	            .then(message => {
+	                alert(message);
+	                // 필요하다면 페이지 새로고침
+	                // location.reload();
+	            });
+	    });
+	}
+	
 	//"결제하기" 버튼 클릭시 함수 호출
 	const payButton = document.getElementById("payButton");
 	if(payButton){
@@ -85,5 +102,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 </head>
 <body>
 	<button id="payButton">결제하기</button>
+<button id="cancelButton" style="margin-left: 20px;">구독 취소하기</button>
 </body>
 </html>

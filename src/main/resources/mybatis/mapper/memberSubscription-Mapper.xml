@@ -78,4 +78,68 @@
 		WHERE	MS_ID = #{msId}
 	</select>
 
+	<!-- 
+	// 오늘 결제해야 할 구독 목록 조회
+    public List<MemberSubscriptionVO> findSubscriptionsDueForToday();
+    -->
+    <select id="findSubscriptionsDueForToday" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+	    SELECT	MS_ID
+			  , MEM_ID
+			  , SUB_ID
+			  , CUSTOMER_UID
+			  , SUB_STATUS
+			  , SUB_START_DT
+			  , SUB_END_DT
+			  , LAST_PAY_DT
+			  , RECUR_PAY_CNT
+			  , CREATED_DT
+			  , UPDATED_DT
+	    FROM	MEMBER_SUBSCRIPTION
+	    WHERE	SUB_STATUS = 'Y'
+	    AND		TRUNC(SUB_END_DT) = TRUNC(SYSDATE)
+	</select>
+    
+     
+    <!-- 
+    // 정기결제 성공 후 구독 정보 업데이트
+	public int updateAfterRecurringPayment(int msId);
+    -->
+	<update id="updateAfterRecurringPayment">
+	    UPDATE	MEMBER_SUBSCRIPTION
+	    SET		RECUR_PAY_CNT = RECUR_PAY_CNT + 1,
+	        	LAST_PAY_DT = SYSDATE,
+	        	SUB_END_DT = ADD_MONTHS(SUB_END_DT, 1), -- 다음 결제일을 한 달 뒤로
+	        	UPDATED_DT = SYSDATE
+	    WHERE	MS_ID = #{msId}
+	</update>
+	
+	<!-- 
+	// 활성화된 구독 정보 조회
+	public MemberSubscriptionVO findActiveSubscriptionByMemberId(int memId);
+	-->
+	<select id="findActiveSubscriptionByMemberId" parameterType="int" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+	    SELECT	MS_ID
+			  , MEM_ID
+			  , SUB_ID
+			  , CUSTOMER_UID
+			  , SUB_STATUS
+			  , SUB_START_DT
+			  , SUB_END_DT
+			  , LAST_PAY_DT
+			  , RECUR_PAY_CNT
+	    FROM	MEMBER_SUBSCRIPTION
+	    WHERE	MEM_ID = #{memId} 
+	    AND		SUB_STATUS = 'Y'
+	</select>
+	
+	<!-- 
+	// 구독 상태를 '취소'로 변경
+	public int updateStatusToCancelled(int msId);
+	 -->
+	<update id="updateStatusToCancelled" parameterType="int">
+	    UPDATE	MEMBER_SUBSCRIPTION
+	    SET		SUB_STATUS = 'N',          -- 구독 비활성화
+	        	UPDATED_DT = SYSDATE
+	    WHERE	MS_ID = #{msId}
+	</update>
 </mapper>
