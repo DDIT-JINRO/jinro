@@ -47,7 +47,10 @@ public class AlarmController {
 
 		SseEmitter emitter = null;
 		emitter = emitterManager.createOrReplaceEmitter(memId);
-
+		
+		// EventSource 객체를 생성하면서 해당 주소(/api/alarm/sub)로 연결
+		// 서버가 응답 받아 emitter 객체를 return 하면 정상적으로 연결완료
+		// eventSource객체 emitter객체 1대1로 연결
 		return emitter;
 	}
 
