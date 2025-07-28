@@ -51,7 +51,11 @@
     VALUES (#{wdId}, #{wdResult}, SYSDATE, #{memId})
 </insert>
 
-
+<select id="selectComCodeNameByccId" parameterType="kr.or.ddit.worldcup.service.ComCodeVO" resultType="kr.or.ddit.worldcup.service.ComCodeVO">
+	select CC_ID, CL_CODE, CC_NAME, CC_ETC
+	from COM_CODE
+	where CC_ID = #{ccId}
+</select>
 
 
 </mapper>

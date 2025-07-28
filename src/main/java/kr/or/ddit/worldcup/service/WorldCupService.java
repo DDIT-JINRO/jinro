@@ -11,4 +11,6 @@ public interface WorldCupService {
 	public JobsVO selectJobById(JobsVO jobsVO);
 
 	public int insertWorldcupResult(JobsVO jobsVO,int id);
+
+	public ComCodeVO selectComCodeNameByccId(ComCodeVO comCodeVO);
 }

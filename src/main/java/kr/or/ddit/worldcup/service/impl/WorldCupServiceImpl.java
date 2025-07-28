@@ -46,4 +46,10 @@ public class WorldCupServiceImpl implements WorldCupService {
 		
 		return worldCupMapper.insertWorldcupResult(worldCupVO);
 	}
+
+	@Override
+	public ComCodeVO selectComCodeNameByccId(ComCodeVO comCodeVO) {
+		// TODO Auto-generated method stub
+		return worldCupMapper.selectComCodeNameByccId(comCodeVO);
+	}
 }
