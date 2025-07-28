@@ -2,52 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.prg.std.service.impl.StudyGroupMapper">
 
-	<resultMap id="stdBoardMap" type="kr.or.ddit.prg.std.service.StdBoardVO">
-	    <id property="boardId" column="BOARD_ID" />
-	    <result property="boardTitle" column="BOARD_TITLE" />
-	    <result property="boardContent" column="BOARD_CONTENT" />
-	    <result property="boardCnt" column="BOARD_CNT" />
-	    <result property="boardCreatedAt" column="BOARD_CREATED_AT" />
-		<result property="boardUpdatedAt" column="BOARD_UPDATED_AT"/>
-	    <result property="replyCnt" column="REPLY_COUNT" />
-	    <result property="curJoinCnt" column="CUR_CNT" />
-	    <result property="boardId" column="BOARD_ID"/>
-		<result property="memId" column="MEM_ID"/>
-		<result property="boardDelYn" column="BOARD_DEL_YN"/>
+	<resultMap id="stdBoardMap"
+		type="kr.or.ddit.prg.std.service.StdBoardVO">
+		<id property="boardId" column="BOARD_ID" />
+		<result property="boardTitle" column="BOARD_TITLE" />
+		<result property="boardContent" column="BOARD_CONTENT" />
+		<result property="boardCnt" column="BOARD_CNT" />
+		<result property="boardCreatedAt" column="BOARD_CREATED_AT" />
+		<result property="boardUpdatedAt" column="BOARD_UPDATED_AT" />
+		<result property="replyCnt" column="REPLY_COUNT" />
+		<result property="curJoinCnt" column="CUR_CNT" />
+		<result property="boardId" column="BOARD_ID" />
+		<result property="memId" column="MEM_ID" />
+		<result property="boardDelYn" column="BOARD_DEL_YN" />
 
-	    <association property="chatRoomVO" javaType="kr.or.ddit.chat.service.ChatRoomVO">
-	        <id     property="crId"        column="CR_ID" />
-	        <result property="ccId"        column="CR_CC_ID" />
-	        <result property="targetId"    column="CR_TARGET_ID" />
-	        <result property="crTitle"     column="CR_TITLE" />
-	        <result property="crMaxCnt"    column="CR_MAX_CNT" />
-	        <result property="createdAt"   column="CR_CREATED_AT" />
-	    </association>
-
-	</resultMap>
-
-	<resultMap type="kr.or.ddit.prg.std.service.StdBoardVO" id="oneStdBoardMap">
-		<id property="boardId" column="BOARD_ID"/>
-		<result property="memId" column="MEM_ID"/>
-		<result property="ccId" column="CC_ID"/>
-		<result property="boardTitle" column="BOARD_TITLE"/>
-		<result property="boardContent" column="BOARD_CONTENT"/>
-		<result property="boardCreatedAt" column="BOARD_CREATED_AT"/>
-		<result property="boardUpdatedAt" column="BOARD_UPDATED_AT"/>
-		<result property="boardCnt" column="BOARD_CNT"/>
-		<result property="boardDelYn" column="BOARD_DEL_YN"/>
-		<result property="filegroupId" column="FILEGROUP_ID"/>
-		
-		<result property="curJoinCnt" column="CUR_JOIN_CNT"/>
-
-		<result property="memGen" column="MEM_GEN"/>
-		<result property="memName" column="MEM_NAME"/>
-		<result property="memNickname" column="MEM_NICKNAME"/>
-		<result property="memEmail" column="MEM_EMAIL"/>
-		<result property="fileBadge" column="FILE_BADGE"/>
-		<result property="fileProfile" column="FILE_PROFILE"/>
-
-		<association property="chatRoomVO" javaType="kr.or.ddit.chat.service.ChatRoomVO">
+		<association property="chatRoomVO"
+			javaType="kr.or.ddit.chat.service.ChatRoomVO">
 			<id property="crId" column="CR_ID" />
 			<result property="ccId" column="CR_CC_ID" />
 			<result property="targetId" column="CR_TARGET_ID" />
@@ -56,26 +26,62 @@
 			<result property="createdAt" column="CR_CREATED_AT" />
 		</association>
 
-		<collection property="stdReplyVOList" resultMap="stdReplyMap"/>
 	</resultMap>
 
-	<resultMap type="kr.or.ddit.prg.std.service.StdReplyVO" id="stdReplyMap">
-			<id property="replyId" column="REPLY_ID"/>
-			<result property="boardId" column="BOARD_ID"/>
-			<result property="replyParentId" column="REPLY_PARENT_ID"/>
-			<result property="memId" column="MEM_ID"/>
-			<result property="replyContent" column="REPLY_CONTENT"/>
-			<result property="replyDelYn" column="REPLY_DEL_YN"/>
-			<result property="replyCreatedAt" column="REPLY_CREATED_AT"/>
-			<result property="replyUpdatedAt" column="REPLY_UPDATED_AT"/>
-			<result property="childCount" column="CHILD_COUNT"/>
+	<resultMap type="kr.or.ddit.prg.std.service.StdBoardVO"
+		id="oneStdBoardMap">
+		<id property="boardId" column="BOARD_ID" />
+		<result property="memId" column="MEM_ID" />
+		<result property="ccId" column="CC_ID" />
+		<result property="boardTitle" column="BOARD_TITLE" />
+		<result property="boardContent" column="BOARD_CONTENT" />
+		<result property="boardCreatedAt" column="BOARD_CREATED_AT" />
+		<result property="boardUpdatedAt" column="BOARD_UPDATED_AT" />
+		<result property="boardCnt" column="BOARD_CNT" />
+		<result property="boardDelYn" column="BOARD_DEL_YN" />
+		<result property="filegroupId" column="FILEGROUP_ID" />
 
-			<result property="memGen" column="R_MEM_GEN"/>
-			<result property="memName" column="R_MEM_NAME"/>
-			<result property="memNickname" column="R_MEM_NICKNAME"/>
-			<result property="memEmail" column="R_MEM_EMAIL"/>
-			<result property="fileBadge" column="R_FILE_BADGE"/>
-			<result property="fileProfile" column="R_FILE_PROFILE"/>
+		<result property="curJoinCnt" column="CUR_JOIN_CNT" />
+
+		<result property="memGen" column="MEM_GEN" />
+		<result property="memName" column="MEM_NAME" />
+		<result property="memNickname" column="MEM_NICKNAME" />
+		<result property="memEmail" column="MEM_EMAIL" />
+		<result property="fileBadge" column="FILE_BADGE" />
+		<result property="fileProfile" column="FILE_PROFILE" />
+
+		<association property="chatRoomVO"
+			javaType="kr.or.ddit.chat.service.ChatRoomVO">
+			<id property="crId" column="CR_ID" />
+			<result property="ccId" column="CR_CC_ID" />
+			<result property="targetId" column="CR_TARGET_ID" />
+			<result property="crTitle" column="CR_TITLE" />
+			<result property="crMaxCnt" column="CR_MAX_CNT" />
+			<result property="createdAt" column="CR_CREATED_AT" />
+		</association>
+
+		<collection property="stdReplyVOList"
+			resultMap="stdReplyMap" />
+	</resultMap>
+
+	<resultMap type="kr.or.ddit.prg.std.service.StdReplyVO"
+		id="stdReplyMap">
+		<id property="replyId" column="REPLY_ID" />
+		<result property="boardId" column="BOARD_ID" />
+		<result property="replyParentId" column="REPLY_PARENT_ID" />
+		<result property="memId" column="MEM_ID" />
+		<result property="replyContent" column="REPLY_CONTENT" />
+		<result property="replyDelYn" column="REPLY_DEL_YN" />
+		<result property="replyCreatedAt" column="REPLY_CREATED_AT" />
+		<result property="replyUpdatedAt" column="REPLY_UPDATED_AT" />
+		<result property="childCount" column="CHILD_COUNT" />
+
+		<result property="memGen" column="R_MEM_GEN" />
+		<result property="memName" column="R_MEM_NAME" />
+		<result property="memNickname" column="R_MEM_NICKNAME" />
+		<result property="memEmail" column="R_MEM_EMAIL" />
+		<result property="fileBadge" column="R_FILE_BADGE" />
+		<result property="fileProfile" column="R_FILE_PROFILE" />
 	</resultMap>
 
 	<!-- 목록조회. board테이블에서 스터디그룹게시글과 연계된 chat_room테이블&chat_member테이블 -->

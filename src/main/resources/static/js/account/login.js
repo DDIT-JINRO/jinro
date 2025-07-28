@@ -59,11 +59,11 @@ function loginBtn(){
 	  .then(response => response.json())  
 	  .then(data => {
 	    if(data.status=='success'){
-			const redirectUrl = sessionStorage.getItem("redirectUrl");	
-	    	if(redirectUrl){
+			const redirectUrl = sessionStorage.getItem("redirectUrl");
+			if (redirectUrl) {
 				sessionStorage.removeItem("redirectUrl");
 				location.href = redirectUrl;
-			}else{
+			} else {
 				location.href = "/";
 			}
 	    }

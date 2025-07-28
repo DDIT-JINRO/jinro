@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/prg/std/stdGroupList.css">
-<link rel="stylesheet" href="/css/prg/std/stdGroupList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -175,15 +174,4 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-	const cardList = document.querySelectorAll('.group-card');
-	cardList.forEach(card =>{
-		card.addEventListener('click', function(){
-			location.href = '/prg/std/stdGroupDetail.do?stdGroupId='+this.dataset.stdbId;
-		})
-	})
-})
-const memId = '<sec:authentication property="name" />'
-</script>
 <script src="/js/prg/std/stdGroupList.js"></script>

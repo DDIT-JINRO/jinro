@@ -29,12 +29,6 @@ public class SecurityConfig {
 		this.userDetailsService = userDetailsService;
 		
 	}
-	
-	public WebSecurityCustomizer configure() {
-		return (web)->web.ignoring()
-				.requestMatchers(new AntPathRequestMatcher("/static/**")
-								, new AntPathRequestMatcher("/ws-stomp/**"));
-	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

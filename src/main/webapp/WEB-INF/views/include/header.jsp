@@ -23,6 +23,7 @@
 	document.addEventListener("DOMContentLoaded",() => {
 		header();
 	});
+	const memId = '<sec:authentication property="name" />'
 </script>
 </head>
 

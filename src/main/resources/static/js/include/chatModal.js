@@ -3,33 +3,36 @@
  */
 
 document.addEventListener('DOMContentLoaded', function(){
-	// 소켓 연결
-	connectSocket();
-
-	// 플로팅 버튼 클릭시 모달 오픈
-	document.getElementById('chatRooms').addEventListener('click',openChatModal);
-
-	// 입력창, 전송버튼에 이벤트 등록
-	const inputEl = document.getElementById('chatMessageInput');
-	const sendBtn = document.getElementById('sendMsgBtn');
-	sendBtn.addEventListener('click', function () {
-	    sendCurrentInput();
-	});
-	inputEl.addEventListener('keyup', function (e) {
-	    if (e.code === 'Enter' && !e.shiftKey) {
-	        e.preventDefault();
-	        sendCurrentInput();
-	    }
-	});
-
-	function sendCurrentInput() {
-	    const content = inputEl.value.trim();
-	    if (!content) return;
-
-	    inputEl.value = '';
-	    sendMessage(currentChatRoomId, content);
+	// 로그인 여부 확인
+	if(memId && memId !='anonymousUser'){
+		console.log("로그인 성공");
+		// 소켓 연결
+		connectSocket();
+		// 플로팅 버튼 클릭시 모달 오픈
+	
+		// 입력창, 전송버튼에 이벤트 등록
+		const inputEl = document.getElementById('chatMessageInput');
+		const sendBtn = document.getElementById('sendMsgBtn');
+		sendBtn.addEventListener('click', function () {
+		    sendCurrentInput();
+		});
+		inputEl.addEventListener('keyup', function (e) {
+		    if (e.code === 'Enter' && !e.shiftKey) {
+		        e.preventDefault();
+		        sendCurrentInput();
+		    }
+		});
+	
+		function sendCurrentInput() {
+		    const content = inputEl.value.trim();
+		    if (!content) return;
+	
+		    inputEl.value = '';
+		    sendMessage(currentChatRoomId, content);
+		}
 	}
-
+	
+	document.getElementById('chatRooms').addEventListener('click',openChatModal);
 })
 
 document.addEventListener('click', function(e){
@@ -65,9 +68,14 @@ function closeChatModal(){
 
 // 모달 열기
 async function openChatModal(){
-	await printChatRoomList();
-	subscribeToUnreadDetail();
-	document.getElementById('chat-modal').style.display = 'flex';
+	if(!memId || memId=='anonymousUser') {
+		sessionStorage.setItem("redirectUrl", location.href);
+		location.href = "/login";
+	} else {
+		await printChatRoomList();
+		subscribeToUnreadDetail();
+		document.getElementById('chat-modal').style.display = 'flex';		
+	}
 }
 
 // 채팅방 목록 채우기 -> 모달 열때 호출

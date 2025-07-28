@@ -175,7 +175,6 @@
 </body>
 <script>
 const crId = "${stdBoardVO.chatRoomVO.crId}";
-const memId = "<sec:authentication property="name" />";
 </script>
 <script src="/js/prg/std/createStdGroup.js"></script>
 </html>
