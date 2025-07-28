@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		eventSource.addEventListener('alarm',function(e){
 			const alarmVO = JSON.parse(e.data);
 			console.log(alarmVO);
+			//addAlarmItem(alarmVO);
 		})
 
 		eventSource.addEventListener('connected', function(e){
@@ -87,6 +88,9 @@ document.addEventListener('DOMContentLoaded', function(){
 			item.innerHTML = `	<span class="alarm-content">${alarm.alarmContent}</span>
 			      				<button class="alarm-delete-btn">&times;</button>`;
 			alarmBody.prepend(item);
+			if(alarm.alarmIsRead == 'N'){
+				updateFloatingBadge(1);
+			}
 		}
 
 		alarmModal.addEventListener('mouseover', updateReadAlarm);
@@ -132,10 +136,26 @@ function updateReadAlarm(e){
 		// 뱃지제거
 		unreadAlarmItem.classList.remove('unread');
 		unreadAlarmItem.classList.add('read');
+		updateFloatingBadge(-1);
 	})
 	.catch(err =>{
 		console.log(err);
 	})
+}
+
+// 플로팅 뱃지 업데이트 시키는 함수
+// nums(증가 or 감소 될 갯수) : 초기 세팅 안읽은갯수 혹은 SseEvent발생시 1, 읽어서 업데이트 할 때 -1
+function updateFloatingBadge(nums=Number){
+	const floatingBadge = document.getElementById("alarm-badge");
+	let unreadCnt = floatingBadge.textContent.trim();
+	unreadCnt = parseInt(unreadCnt)+nums;
+	if(unreadCnt > 0){
+		floatingBadge.textContent = unreadCnt;
+		floatingBadge.style.display = "inline-block";
+	}else{
+		floatingBadge.textContent = 0;
+		floatingBadge.style.display = "none";
+	}
 }
 
 // 모달에서 삭제 버튼 누를 시 삭제처리 하는 함수
