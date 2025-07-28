@@ -96,6 +96,10 @@
   align-items: flex-start;
 }
 
+.alarm-item:hover {
+	cursor: pointer;
+}
+
 .alarm-item.unread {
   border-left: 4px solid #467fcf;
 }

@@ -7,7 +7,7 @@
     <h3>알림</h3>
     <button id="alarm-close">&times;</button>
   </div>
-  <div class="alarm-body">
+  <div class="alarm-body" id="alarm-body">
     <!-- 알림이 하나도 없을 때 보여줄 기본 메시지 -->
     <p class="empty-message">알림이 없습니다.</p>
   </div>
@@ -16,7 +16,4 @@
   </div>
 </div>
 <!-- 알림모달 끝 -->
-<script>
-  const memId = "<sec:authentication property='name'/>";
-</script>
 <script src="/js/include/alarmModal.js"></script>

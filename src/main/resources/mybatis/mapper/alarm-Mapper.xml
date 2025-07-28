@@ -30,18 +30,18 @@
 
   <!-- 멤버 번호로 안읽은 알림들 조회 -->
   <select id="selectAllByMember" parameterType="int" resultType="kr.or.ddit.util.alarm.service.AlarmVO">
-    SELECT 
-    	 , #{alarmIsRead}
-		 , #{alarmCreatedAt}
-		 , #{alarmTargetId}
-		 , #{alarmTargetUrl}
-		 , #{alarmId}
-		 , #{memId}
-		 , #{alarmTargetType}
-		 , #{alarmContent}
+    SELECT
+    	   ALARM_IS_READ
+		 , ALARM_CREATED_AT
+		 , ALARM_TARGET_ID
+		 , ALARM_TARGET_URL
+		 , ALARM_ID
+		 , MEM_ID
+		 , ALARM_TARGET_TYPE
+		 , ALARM_CONTENT
       FROM ALARM
      WHERE MEM_ID = #{memId}
-     ORDER BY ALARM_CREATED_AT DESC
+     ORDER BY ALARM_CREATED_AT
   </select>
 
   <!-- 단일 알림건 읽음 처리 (알림ID) -->

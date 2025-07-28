@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,12 +49,18 @@ public class AlarmController {
 
 		SseEmitter emitter = null;
 		emitter = emitterManager.createOrReplaceEmitter(memId);
-		
+
 		// EventSource 객체를 생성하면서 해당 주소(/api/alarm/sub)로 연결
 		// 서버가 응답 받아 emitter 객체를 return 하면 정상적으로 연결완료
 		// eventSource객체 emitter객체 1대1로 연결
 		return emitter;
 	}
 
-
+	// 클라이언트가 알림에 마우스 hover시 호출. 읽음으로 변경
+	@PostMapping("/updateRead")
+	public ResponseEntity<Void> updateRead(@RequestBody AlarmVO alarmVO){
+		log.info("fetch alarm 업데이트 요청 : " + alarmVO);
+		this.alarmService.updateMarkRead(alarmVO.getAlarmId());
+		return ResponseEntity.noContent().build();
+	}
 }
