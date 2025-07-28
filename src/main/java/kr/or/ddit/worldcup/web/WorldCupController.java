@@ -1,11 +1,14 @@
 package kr.or.ddit.worldcup.web;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.or.ddit.worldcup.service.ComCodeVO;
 import kr.or.ddit.worldcup.service.JobsVO;
 import kr.or.ddit.worldcup.service.WorldCupService;
-import kr.or.ddit.worldcup.service.WorldCupVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,12 +39,18 @@ public class WorldCupController {
 	}
 
 	@PostMapping("/selectJobsByCategory")
-	public ResponseEntity<List<JobsVO>> selectJobsByCategory(@RequestBody ComCodeVO comCodeVO) {
+	public ResponseEntity<Map<String, Object>> selectJobsByCategory(@RequestBody ComCodeVO comCodeVO) {
+		
+		comCodeVO = worldCupService.selectComCodeNameByccId(comCodeVO);
 		log.info("WorldCupController -> comCodeVO :" + comCodeVO);
+		
 		List<JobsVO> jobsVOList = worldCupService.selectJobsByCategory(comCodeVO);
 		log.info("WorldCupController -> jobsVOList :" + jobsVOList);
 
-		return ResponseEntity.ok(jobsVOList);
+	    Map<String, Object> response = new HashMap();
+	    response.put("comCodeVO", comCodeVO);
+	    response.put("jobsVOList", jobsVOList);
+		return ResponseEntity.ok(response);
 
 	}
 	
@@ -56,17 +64,21 @@ public class WorldCupController {
 	}
 	
 	@PostMapping("/insertWorldcupResult")
-	public ResponseEntity<Integer> insertWorldcupResult(@AuthenticationPrincipal String memId,@RequestBody JobsVO jobsVO) {
-
-		int id = Integer.valueOf(memId);
+	public ResponseEntity<Integer> insertWorldcupResult(Principal principal,@RequestBody JobsVO jobsVO) {
 		
-		int cnt = worldCupService.insertWorldcupResult(jobsVO,id);
+	      if(principal!=null && !principal.getName().equals("anonymousUser")) {
+	    	String  memId= principal.getName();
+	  		int id = Integer.valueOf(memId);
+			
+			int cnt = worldCupService.insertWorldcupResult(jobsVO,id);
+			
+			log.info("cnt : "+cnt);
+			return (ResponseEntity<Integer>) ResponseEntity.ok(cnt);
+	          
+	       }else {
+	    	   return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+	       }
 		
-		log.info("cnt : "+cnt);
-		return (ResponseEntity<Integer>) ResponseEntity.ok();
-
 	}
-	
-	
 	
 }
