@@ -97,9 +97,17 @@ public class RoadmapServiceImpl implements RoadmapService {
 	 */
 	@Override
 	public String updateCompleteMission(String memId, int rsId) {
+		int point;
 		String tableName = this.roadmapMapper.selectTableName(rsId);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put("memId", memId);
+		
+		
 		if (rsId == 11) {
+			point = 10;
+			parameter.put("point", point);
 			this.roadmapMapper.insertCompleteRoadmap(memId);
+			this.roadmapMapper.updateUserPoint(parameter);
 			return "complete";
 		}
 
@@ -107,9 +115,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			throw new IllegalArgumentException("허용되지 않은 테이블 이름입니다: " + tableName);
 		}
 
-		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put("tableName", tableName);
-		parameter.put("memId", memId);
 		parameter.put("rsId", rsId);
 
 		int searchResult = this.roadmapMapper.isCompleteExists(parameter);
@@ -120,6 +126,13 @@ public class RoadmapServiceImpl implements RoadmapService {
 		int updateResult = this.roadmapMapper.updateCompleteMission(parameter);
 
 		if (updateResult <= 0)
+			return "fail";
+		
+		point = 1;
+		parameter.put("point", point);
+		int result = this.roadmapMapper.updateUserPoint(parameter);
+		
+		if (result <= 0)
 			return "fail";
 
 		return "success";

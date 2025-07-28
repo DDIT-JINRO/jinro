@@ -142,6 +142,16 @@
 		   RS_ID = #{rsId}
 	</update>
 	
+	<!-- 로드맵 완료시 특정 회원의 포인트를 추가 -->
+	<update id="updateUserPoint" parameterType="map">
+		UPDATE
+		   MEMBER
+		SET
+		   MEM_POINT = MEM_POINT + #{point}
+		WHERE
+		   MEM_ID = #{memId}
+	</update>
+	
 	<!-- 특정 사용자의 미션 등록 메서드 -->
 	<insert id="insertMission" parameterType="kr.or.ddit.rdm.service.RoadmapVO">
 		INSERT
@@ -176,10 +186,14 @@
 	</insert>
 	
 	<update id="updateDueDate" parameterType="kr.or.ddit.rdm.service.RoadmapVO">
-		UPDATE ROADMAP
-		SET DUE_DATE = #{dueDate}
-		WHERE MEM_ID = #{memId}
-		AND RS_ID = #{rsId}	
+		UPDATE
+			ROADMAP
+		SET
+			DUE_DATE = #{dueDate}
+		WHERE
+			MEM_ID = #{memId}
+		AND
+			RS_ID = #{rsId}	
 	</update>
 	
 	<insert id="insertCompleteRoadmap" parameterType="String">
