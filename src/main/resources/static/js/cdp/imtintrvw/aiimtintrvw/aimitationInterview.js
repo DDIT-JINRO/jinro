@@ -47,6 +47,10 @@ function loadCustomQuestionList() {
  */
 function loadIndustryList() {
     const select = document.getElementById('questionSelect');
+	
+	if(!memId || memId =='anonymousUser') {
+		return;
+	}
     
     // 로딩 상태 표시
     select.classList.add('loading');
