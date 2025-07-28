@@ -14,8 +14,8 @@
       , ALARM_CONTENT
       , ALARM_IS_READ
       , ALARM_CREATED_AT
-      , BOARD_ID
-      , REPLY_ID
+      , ALARM_TARGET_ID
+      , ALARM_TARGET_URL
     ) VALUES (
         #{alarmId}
       , #{memId}
@@ -23,14 +23,22 @@
       , #{alarmContent}
       , #{alarmIsRead}
       , SYSDATE
-      , #{boardId}
-      , #{replyId}
+      , #{alarmTargetId}
+      , #{alarmTargetUrl}
     )
   </insert>
 
   <!-- 멤버 번호로 안읽은 알림들 조회 -->
   <select id="selectAllByMember" parameterType="int" resultType="kr.or.ddit.util.alarm.service.AlarmVO">
-    SELECT *
+    SELECT 
+    	 , #{alarmIsRead}
+		 , #{alarmCreatedAt}
+		 , #{alarmTargetId}
+		 , #{alarmTargetUrl}
+		 , #{alarmId}
+		 , #{memId}
+		 , #{alarmTargetType}
+		 , #{alarmContent}
       FROM ALARM
      WHERE MEM_ID = #{memId}
      ORDER BY ALARM_CREATED_AT DESC
