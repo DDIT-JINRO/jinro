@@ -77,8 +77,8 @@ public interface SelfIntroMapper {
 	public List<SelfIntroVO> selectSelfIntroBymemId(SelfIntroVO selfIntroVO);
 
 	// 자소서 삭제
-	public void deleteselfIntro(SelfIntroVO selfIntroVO);
+	public void deleteSelfIntro(SelfIntroVO selfIntroVO);
 
 	// 자소서 상세 삭제
-	public void deleteselfIntroContent(SelfIntroVO selfIntroVO);
+	public void deleteSelfIntroContent(SelfIntroVO selfIntroVO);
 }

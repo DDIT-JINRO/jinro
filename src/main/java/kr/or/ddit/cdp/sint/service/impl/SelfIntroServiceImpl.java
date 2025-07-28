@@ -186,8 +186,8 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 	@Override
 	@Transactional
 	public void deleteSelfIntro(SelfIntroVO selfIntroVO) {
-		selfIntroMapper.deleteselfIntro(selfIntroVO);
-		selfIntroMapper.deleteselfIntroContent(selfIntroVO);
+		selfIntroMapper.deleteSelfIntro(selfIntroVO);
+		selfIntroMapper.deleteSelfIntroContent(selfIntroVO);
 	}
 
 }
