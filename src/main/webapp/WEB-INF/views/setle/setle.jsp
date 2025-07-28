@@ -34,16 +34,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
 				pay_method: "card",
 				merchant_uid: merchantUid,
 				name: "BASIC",
-				amount: 100,
+				amount: 100.0,
 				buyer_email:loginUser.email,
 				buyer_name: loginUser.name,
 				buyer_tel: loginUser.tel,
 				digital: true,
+				notice_url:"https://080950865f5e.ngrok-free.app/webhook/handleScheduledPayment",
 			},
 			function(rsp){
 				//callback
 				if(rsp.success ) {
 					//결제 성공 시 , 서버로 검증요청
+					console.log(rsp)
+					alert(rsp)
 					fetch('/pay/verify',{
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
@@ -57,9 +60,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
 					.then(response => response.json())
 					.then(data => {
 						if(data.status === 'success'){
-							alert('구독 신청이 완료되었습니다!' + data.message);
+							alert('처리 신청이 완료되었습니다!' + data.message);
 						} else {
-							alert('구독 신청이 실패하였습니다!' + data.message);
+							alert('처리 신청이 실패하였습니다!' + data.message);
 						}
 					}) 
 	            } else { // 실패시

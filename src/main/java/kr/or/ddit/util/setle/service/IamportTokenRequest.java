@@ -32,7 +32,5 @@ public class IamportTokenRequest {
 	public void setImpSecret(String impSecret) {
 		this.impSecret = impSecret;
 	}
-
-	
 	
 }

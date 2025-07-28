@@ -25,13 +25,13 @@ public class WebhookController {
 	@PostMapping("/handleScheduledPayment")
 	@ResponseBody
 	public ResponseEntity<String> handleScheduledPayment(@RequestBody Map<String, Object> payload){
-		/*
+		
 		try {
 			String impUid = (String) payload.get("imp_uid");
 			String merchantUid = (String) payload.get("merchant_uid");
 			
 			/// billingKey는 Webhook에서 안 오기 때문에 null로 넘김 (검증에는 영향 없음)
-			PaymentResponseDto responseDto = paymentService.verifyAndProcessPayment(yourPaymentRequestDto, null);
+			PaymentResponseDto responseDto = paymentService.handleWebhook(payload);
 
 				if ("success".equals(responseDto.getStatus())) {
 					return ResponseEntity.ok("success: " + responseDto.getMessage());
@@ -41,6 +41,6 @@ public class WebhookController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("error: " + e.getMessage());
         }
-        */ return null;
+        
 	}
 }

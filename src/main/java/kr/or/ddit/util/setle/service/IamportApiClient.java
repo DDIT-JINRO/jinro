@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,7 +83,6 @@ public class IamportApiClient {
 	    
 		HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
 
-		
 		try {
 			// POST 요청을 보내고 응답을 Map 형태로 받습니다.
 			ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
@@ -172,10 +172,21 @@ public class IamportApiClient {
      * @return API 응답 Map (성공 시), 또는 null (실패 시)
      * @throws JsonProcessingException 
      */
-	public Map<String, Object> scheduleSubscriptionPayment(String customerUid, Map<String, Object> scheduleData) throws JsonProcessingException{
+	public List<Map<String, Object>> scheduleSubscriptionPayment(String customerUid, Map<String, Object> scheduleData) throws JsonProcessingException{
 		String accessToken = getAccessToken();
 		if(accessToken == null) {
 			return null; // 토큰 발급 실패 시 즉시 종료
+		}
+		
+		System.out.println("토큰발급 : 시작");
+		System.out.println(accessToken);
+		System.out.println("토큰발급 : 끝");
+		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		String url = "https://api.iamport.kr/subscribe/payments/schedule";
@@ -190,17 +201,42 @@ public class IamportApiClient {
 		
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
         
-        try {
+        // 수정본
+        ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+        System.out.println("전체 응답: " + response.getBody());
+
+        Map<String, Object> bodyMap = response.getBody();
+        if (bodyMap != null) {
+            Object code = bodyMap.get("code");
+            if (code instanceof Integer && ((Integer) code) == 0) {
+                // 성공
+                return (List<Map<String, Object>>) bodyMap.get("response");
+            } else {
+                System.out.println("❌ 실패 코드 또는 응답: " + bodyMap);
+                return null;
+            }
+        }
+        System.out.println("❌ 응답 body가 null입니다");
+        return null;
+        
+        /* 원 try
+                 try {
             // POST 요청을 보내고 응답을 Map 형태로 받습니다.
         	ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
         	if(response.getBody() != null && response.getBody().containsKey("response")) {
-        		return (Map<String, Object>) response.getBody().get("response");
+        		return (List<Map<String, Object>>) response.getBody().get("response");
         	}
+        	System.out.println("일단 성공");
         	return null;
+		} catch (HttpClientErrorException e) {
+			System.err.println("결제 예약 API 호출 실패! Status: " + e.getStatusCode());
+			System.err.println("Response Body: " + e.getResponseBodyAsString());
+			return null;
 		} catch (Exception e) {
-			 System.err.println("Failed to schedule subscription payment for customer_uid " + customerUid + ": " + e.getMessage());
-			 return null;
-		}
+			System.err.println("Failed to schedule subscription payment for customer_uid " + customerUid + ": " + e.getMessage());
+			return null;
+		} 
+         */
 	}
 
     /**
@@ -249,7 +285,6 @@ public class IamportApiClient {
 		}
 	}
 	
-	
 	/**
      * customer_uid(고객 고유 식별자)를 사용하여 예약된 결제가 실행되기전에 해당 예약의 취소를 수행하는 메서드입니다.
      * 주로 정기 결제 스케줄러에서 매달 자동 결제를 시도할 때 사용됩니다.
@@ -265,7 +300,7 @@ public class IamportApiClient {
 			return null; // 토큰 발급 실패 시 즉시 종료
 		}
 		
-		String url ="https://api.iamport.kr/subscribe/payments/schedule";
+		String url ="https://api.iamport.kr/subscribe/payments/unschedule";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setBearerAuth(accessToken);
@@ -290,6 +325,5 @@ public class IamportApiClient {
 		}
 		
 	}
-	
 	
 }
