@@ -84,7 +84,7 @@ public class QuestionListController {
 	public String saveCart(@RequestParam("questionIds") String questionIds, HttpSession session,
 			@AuthenticationPrincipal String memId, HttpServletRequest requset) {
 		int id = Integer.parseInt(memId);
-		List<Long> questionIdList = Arrays.stream(questionIds.split(",")).filter(s -> !s.isBlank()).map(Long::valueOf)
+		List<Integer> questionIdList = Arrays.stream(questionIds.split(",")).filter(s -> !s.isBlank()).map(Integer::valueOf)
 				.collect(Collectors.toList());
 
 		log.info("questionIdList" + questionIdList);

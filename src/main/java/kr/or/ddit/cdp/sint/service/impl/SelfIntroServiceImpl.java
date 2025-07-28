@@ -43,7 +43,7 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 
 	@Override
 	@Transactional
-	public int insertIntroToQList(SelfIntroVO selfIntroVO, List<Long> questionIds) {
+	public int insertIntroToQList(SelfIntroVO selfIntroVO, List<Integer> questionIds) {
 
 		int siId = selfIntroMapper.selectMaxIntroId();
 		int cnt = 1;
@@ -70,7 +70,7 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 			SelfIntroContentVO selfIntroContentVO = new SelfIntroContentVO();
 			selfIntroContentVO.setSicId(sicId);
 			selfIntroContentVO.setSiId(siId);
-			selfIntroContentVO.setSiqId(questionIds.get(i).intValue());
+			selfIntroContentVO.setSiqId(questionIds.get(i));
 			selfIntroContentVO.setSicLimit(1500);
 			selfIntroContentVO.setSicOrder(cnt);
 			selfIntroMapper.insertContent(selfIntroContentVO);
@@ -136,7 +136,7 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 
 	@Override
 	@Transactional
-	public void insertContent(int newSiId, List<Long> siqIdList, List<String> sicContentList) {
+	public void insertContent(int newSiId, List<Integer> siqIdList, List<String> sicContentList) {
 		for (int i = 0; i < siqIdList.size(); i++) {
 			int sicId = selfIntroMapper.selectMaxSICId();
 			SelfIntroContentVO selfIntroContentVO = new SelfIntroContentVO();
@@ -144,8 +144,8 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 			selfIntroContentVO.setSicId(sicId);
 			selfIntroContentVO.setSiId(newSiId);
 
-			Long questionId = siqIdList.get(i); // 질문 아이디
-			selfIntroContentVO.setSiqId(questionId.intValue());
+			Integer questionId = siqIdList.get(i); // 질문 아이디
+			selfIntroContentVO.setSiqId(questionId);
 
 			String answer = sicContentList.get(i); // 질문 답변
 			selfIntroContentVO.setSicContent(answer);
@@ -165,10 +165,10 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 
 	@Override
 	@Transactional
-	public void updateContent(List<Long> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList) {
+	public void updateContent(List<Integer> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList) {
 
 		for (int i = 0; i < siqIdList.size(); i++) {
-			int siqId = siqIdList.get(i).intValue();
+			int siqId = siqIdList.get(i);
 			String sicContent = sicContentList.get(i);
 			int sicId = qToSicId.get(siqId);
 			int sicOrder = i + 1;

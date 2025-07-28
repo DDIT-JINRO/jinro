@@ -84,10 +84,11 @@ public class SelfIntroWritingController {
 
 	@PostMapping("/save")
 	public String saveSelfIntro(@RequestParam("siTitle") String siTitle, @RequestParam("siId") Integer siId,
-			@RequestParam("siqIdList") List<Long> siqIdList,
+			@RequestParam("siqIdList") List<Integer> siqIdList,
 			@RequestParam("sicContentList") List<String> sicContentList, @RequestParam("memId") String memId,
 			@RequestParam("siStatus") String siStatus) {
 
+		
 		int memberId = Integer.parseInt(memId);
 
 		// 1) SelfIntroVO 셋팅

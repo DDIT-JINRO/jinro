@@ -14,7 +14,7 @@ public interface SelfIntroService {
 
 	public List<ComCodeVO> selectSelfIntroComCodeList();
 
-	public int insertIntroToQList(SelfIntroVO selfIntroVO, List<Long> questionIds);
+	public int insertIntroToQList(SelfIntroVO selfIntroVO, List<Integer> questionIds);
 
 	public List<SelfIntroContentVO> selectBySelfIntroContentIdList(SelfIntroVO selfIntroVO);
 
@@ -36,9 +36,9 @@ public interface SelfIntroService {
 	// 이미 있을 때 수정 제목과 상태
 	public void updateIntro(SelfIntroVO selfIntroVO);
 
-	public void insertContent(int newSiId, List<Long> siqIdList, List<String> sicContentList);
+	public void insertContent(int newSiId, List<Integer> siqIdList, List<String> sicContentList);
 
-	public void updateContent(List<Long> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList);
+	public void updateContent(List<Integer> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList);
 
 	public List<SelfIntroVO> selectSelfIntroBymemId(SelfIntroVO selfIntroVO);
 
