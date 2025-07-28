@@ -23,9 +23,13 @@ function loginBtn(){
 	  .then(response => response.json())  
 	  .then(data => {
 	    if(data.status=='success'){
-	    	
-	    	
-	    	location.href='/';
+			const redirectUrl = sessionStorage.getItem("redirectUrl");
+			if (redirectUrl) {
+				sessionStorage.removeItem("redirectUrl");
+				location.href = redirectUrl;
+			} else {
+				location.href = "/";
+			}
 	    }
 	  })
 	  .catch(error => {

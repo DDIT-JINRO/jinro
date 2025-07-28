@@ -1,0 +1,104 @@
+package kr.or.ddit.chat.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import kr.or.ddit.chat.service.ChatMemberVO;
+import kr.or.ddit.chat.service.ChatMessageVO;
+import kr.or.ddit.chat.service.ChatReceiverVO;
+import kr.or.ddit.chat.service.ChatRoomVO;
+
+
+@Mapper
+public interface ChatMapper {
+
+	/**
+	 * 회원아이디로 현재 참여중인 채팅방 정보 불러오기 
+	 * @param memId
+	 */
+	List<ChatRoomVO> findRoomsByMemId(String memId);
+	
+	/**
+	 * 존재 여부 확인 (참여자 테이블에서)
+	 * @param crId
+	 * @param memId
+	 * @return
+	 */
+	ChatMemberVO selectChatMember(ChatMemberVO chatMemberVO);
+
+	/**
+	 * 최초 참여 및 재입장 -> (IS_EXITED = 'N', JOINED_AT 갱신)
+	 * @param member
+	 * @return
+	 */
+	int insertAndUpdateChatMember(ChatMemberVO chatMemberVO);
+
+	/**
+	 * 완전 퇴장 (IS_EXITED = 'Y', EXITED_AT 갱신)
+	 * @param chatMemberVO
+	 * @return
+	 */
+	int chatMemberExitChatRoomUpdate(ChatMemberVO chatMemberVO);
+	
+	List<ChatMessageVO> selectChatMsgByChatRoomIdAndMemId(ChatMemberVO chatMemberVO);
+	
+	/**
+	 * 채팅메시지를 테이블에 삽입
+	 * @param chatMessageVO
+	 * @return
+	 */
+	int insertChatMessage(ChatMessageVO chatMessageVO);
+	
+	
+	/**
+	 * 채팅메시지에 대해서 수신자 테이블에 삽입
+	 * @param chatReceiverVO
+	 * @return
+	 */
+	int insertChatReceiver(ChatReceiverVO chatReceiverVO);
+	
+	
+	/**
+	 * 채팅방 번호로 해당 채팅방 멤버id 리스트로 뽑아오기 (수신자 테이블 삽입을 위함)
+	 * @param crId
+	 * @return
+	 */
+	List<Integer> findChatMemberIdsByCrId(int crId);
+	
+	/**
+	 * 수신자 테이블에서 멤버별로 전체 안읽은 갯수 받아오기
+	 * @return
+	 */
+	List<ChatReceiverVO> selectUnreadCountGroupByMemId();
+	
+	/**
+	 * 수신자테이블에서 특정회원의 채팅방별 안읽은 갯수 받아오기
+	 * @return
+	 */
+	List<ChatReceiverVO> selectUnreadCountOfRoomsByMemId(int memId);
+	
+	/**
+	 * 수신자테이블에서 특정회원의 전체 안읽은 갯수 받아오기
+	 * @param memId
+	 * @return
+	 */
+	ChatReceiverVO selectUnreadCountByMemId(int memId); 
+	
+	/**
+	 * 채팅방 입장 시 해당 채팅방 안읽었던 메시지 전체 읽음 처리 
+	 * @param chatMemberVO
+	 * @return
+	 */
+	int receiverReadAtUpdate(ChatMemberVO chatMemberVO);
+	
+	
+	/**
+	 * 채팅방 개설
+	 * @param chatRoomVO
+	 * @return
+	 */
+	int insertChatRoom(ChatRoomVO chatRoomVO);
+	
+}

@@ -88,12 +88,12 @@ public class NaverCallBackController {
 		Cookie refreshTokenCookie = new Cookie("refreshToken", (String) result.get("refreshToken"));
 
 		accessTokenCookie.setHttpOnly(true);
-		accessTokenCookie.setSecure(true);
+//		accessTokenCookie.setSecure(true);
 		accessTokenCookie.setPath("/");
 		accessTokenCookie.setMaxAge(60 * 31);
 
 		refreshTokenCookie.setHttpOnly(true);
-		refreshTokenCookie.setSecure(true);
+//		refreshTokenCookie.setSecure(true);
 		refreshTokenCookie.setPath("/");
 		refreshTokenCookie.setMaxAge(60 * 60 * 24 * 7);
 

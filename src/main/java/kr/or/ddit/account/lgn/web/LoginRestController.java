@@ -35,12 +35,12 @@ public class LoginRestController {
 		Cookie refreshTokenCookie = new Cookie("refreshToken", (String) resultMap.get("refreshToken"));
 
 		accessTokenCookie.setHttpOnly(true);
-		accessTokenCookie.setSecure(true);
+//		accessTokenCookie.setSecure(true);
 		accessTokenCookie.setPath("/");
 		accessTokenCookie.setMaxAge(60 * 31);
 
 		refreshTokenCookie.setHttpOnly(true);
-		refreshTokenCookie.setSecure(true);
+//		refreshTokenCookie.setSecure(true);
 		refreshTokenCookie.setPath("/");
 		refreshTokenCookie.setMaxAge(60 * 60 * 24 * 7);
 
@@ -81,7 +81,7 @@ public class LoginRestController {
 			String token =jwtUtil.createAccessToken(memId);
 			Cookie accessTokenCookie = new Cookie("accessToken", token);
 			accessTokenCookie.setHttpOnly(true);
-			accessTokenCookie.setSecure(true);
+//			accessTokenCookie.setSecure(true);
 			accessTokenCookie.setPath("/");
 			accessTokenCookie.setMaxAge(60 * 31);
 		}

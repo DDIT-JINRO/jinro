@@ -12,7 +12,10 @@
 <link rel="stylesheet" href="/css/footer.css">
 <link rel="stylesheet" href="/css/channel.css">
 <link rel="stylesheet" href="/css/pagenation.css">
+<link rel="stylesheet" href="/css/chatModal.css">
 <script src="/js/axios.min.js"></script>
+<script src="/js/com/sockjs.min.js"></script>
+<script src="/js/com/stomp.min.js"></script>
 <meta charset="UTF-8">
 <title>CareerPath</title>
 <script src="/js/include/header.js"></script>
@@ -20,6 +23,7 @@
 	document.addEventListener("DOMContentLoaded",() => {
 		header();
 	});
+	const memId = '<sec:authentication property="name" />'
 </script>
 </head>
 
@@ -78,11 +82,13 @@
 	<button class="right-fixed-btn">
 		<img src="/images/worldCup.png" alt="월드컵">
 	</button>
-	<button class="right-fixed-btn">
+	<button class="right-fixed-btn" id="chatRooms">
 		<img src="/images/chaticon.png" alt="채팅">
+		<span id="chatFloatingBadge" class="chat-unread-badge" style="position: absolute; top: -5px; right: -10px; display: none;">0</span>
 	</button>
 	<button class="right-fixed-btn">
 		<img src="/images/roadmapicon.png" alt="진로탐색">
 	</button>
 </div>
+<%@ include file="/WEB-INF/views/include/chatModal.jsp"%>
 <body>

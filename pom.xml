@@ -211,13 +211,24 @@
 			<artifactId>flying-saucer-pdf-itext5</artifactId>
 			<version>9.1.22</version>
 		</dependency>
-		<!-- 유튜브 시작-->
+				
+		<!-- 웹소켓 기본 기능 + STOMP 지원 -->
 		<dependency>
-			<groupId>com.google.apis</groupId>
-			<artifactId>google-api-services-youtube</artifactId>
-			<version>v3-rev20250714-2.0.0</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
-		<!-- 유튜브 끝-->
+		<!-- 클라이언트용 SockJS (JS 라이브러리, WebJars 사용 시) -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>sockjs-client</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+		<!-- 클라이언트용 STOMP (JS 라이브러리, WebJars 사용 시) -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>stomp-websocket</artifactId>
+			<version>2.3.4</version>
+		</dependency>
 		<dependency>
 			<groupId>com.google.genai</groupId>
 			<artifactId>google-genai</artifactId>
