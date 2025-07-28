@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function(){
 		formData.append("boardContent", JSON.stringify(boardContent));
 		formData.append("memId", memId);
 		formData.append("ccId", "G09005");
-		formData.append("boardTitle", postTitle);
 		formData.append("chatTitle", chatTitle);
 		
 		const formEl = document.createElement('form');
