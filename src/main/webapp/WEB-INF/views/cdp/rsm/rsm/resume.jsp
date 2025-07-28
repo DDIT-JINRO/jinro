@@ -57,12 +57,6 @@
                     <span class="error-message" id="gender-error">성별을 선택해주세요.</span>
                 </div>
 
-                <div class="form-group email-group">
-                    <label for="email">이메일 <span class="required-asterisk">*</span></label>
-                    <input type="email" id="email" name="email" placeholder="이메일" required>
-                    <span class="error-message" id="email-error">이메일을 입력해주세요.</span>
-                </div>
-
                 <div class="form-group photo-group">
                     <label for="photo-upload" class="photo-upload-area">
                         <i class="fa fa-plus" aria-hidden="true"></i>
@@ -70,6 +64,12 @@
                         <input type="file" id="photo-upload" name="photo" accept="image/*" class="sr-only">
                     </label>
                 </div>
+                <div class="form-group email-group">
+                    <label for="email">이메일 <span class="required-asterisk">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="이메일" required>
+                    <span class="error-message" id="email-error">이메일을 입력해주세요.</span>
+                </div>
+
 
                 <div class="form-group phone-group">
                     <label for="phone">전화번호</label>
@@ -89,6 +89,7 @@
                         <i class="fa fa-search icon-search" aria-label="주소 검색"></i>
                     </div>
                 </div>
+                
             </div>
         </form>
     </section>
