@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO;
+import kr.or.ddit.main.service.MemberVO;
 
 @Mapper
 public interface InterviewListMapper {
@@ -14,7 +15,7 @@ public interface InterviewListMapper {
 	/**
      * 사용자 정의 질문 리스트 조회
      */
-    List<InterviewDetailListVO> getCustomQuestionList();
+    List<InterviewDetailListVO> getCustomQuestionList(MemberVO memberVO);
 
     /**
      * 업종별 질문 리스트 조회 (IQ_GUBUN과 ComCodeVO 조인)

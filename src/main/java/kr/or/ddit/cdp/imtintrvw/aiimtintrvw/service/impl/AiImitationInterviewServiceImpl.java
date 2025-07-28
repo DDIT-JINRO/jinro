@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.AiImitationInterviewService;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO;
+import kr.or.ddit.main.service.MemberVO;
 
 @Service
 public class AiImitationInterviewServiceImpl implements AiImitationInterviewService {
@@ -16,8 +17,8 @@ public class AiImitationInterviewServiceImpl implements AiImitationInterviewServ
 	InterviewListMapper interviewListMapper; 
 	
 	@Override
-    public List<InterviewDetailListVO> getCustomQuestionList() {
-        return interviewListMapper.getCustomQuestionList();
+    public List<InterviewDetailListVO> getCustomQuestionList(MemberVO memberVO) {
+        return interviewListMapper.getCustomQuestionList(memberVO);
     }
 
     @Override
