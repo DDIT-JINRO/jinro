@@ -13,34 +13,35 @@ public interface SelfIntroService {
 	public int selectSelfIntroQCount(SelfIntroQVO selfIntroQVO);
 
 	public List<ComCodeVO> selectSelfIntroComCodeList();
-	
-	public int insertIntroToQList(SelfIntroVO selfIntroVO,List<Long> questionIds);
-	
+
+	public int insertIntroToQList(SelfIntroVO selfIntroVO, List<Long> questionIds);
+
 	public List<SelfIntroContentVO> selectBySelfIntroContentIdList(SelfIntroVO selfIntroVO);
-	
+
 	public SelfIntroQVO selectBySelfIntroQId(SelfIntroContentVO selfIntroContentVO);
-	
+
 	public SelfIntroVO selectBySelfIntroId(SelfIntroVO selfIntroVO);
-	
-	//자기소개서 번호로 선택한 자기소개서 질문 가져오기
+
+	// 자기소개서 번호로 선택한 자기소개서 질문 가져오기
 	public List<SelfIntroQVO> selectQuestionsBySiId(int siId);
-	
-	//공통질문 가져오기
+
+	// 공통질문 가져오기
 	public List<SelfIntroQVO> selectCommonQuestions();
 
 	public void cheakselfIntrobyMemId(SelfIntroVO selfIntroVO, String memId);
-	//신규 자소서 정보등롯	
+
+	// 신규 자소서 정보등롯
 	public int insertIntroId(SelfIntroVO intro);
 
 	// 이미 있을 때 수정 제목과 상태
-	 public void updateIntro(SelfIntroVO selfIntroVO);
+	public void updateIntro(SelfIntroVO selfIntroVO);
 
-	 public void insertContent(int newSiId, List<Long> siqIdList, List<String> sicContentList);
+	public void insertContent(int newSiId, List<Long> siqIdList, List<String> sicContentList);
 
-	 public void updateContent(List<Long> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList);
+	public void updateContent(List<Long> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList);
 
-	 public List<SelfIntroVO> selectSelfIntroBymemId(SelfIntroVO selfIntroVO);
+	public List<SelfIntroVO> selectSelfIntroBymemId(SelfIntroVO selfIntroVO);
 
-	 //자소서 전체 삭제
-	 public void deleteSelfIntro(SelfIntroVO selfIntroVO);
+	// 자소서 전체 삭제
+	public void deleteSelfIntro(SelfIntroVO selfIntroVO);
 }

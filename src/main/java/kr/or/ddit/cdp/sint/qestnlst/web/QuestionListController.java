@@ -36,18 +36,17 @@ public class QuestionListController {
 	@GetMapping()
 	public String questionList(@RequestParam(defaultValue = "1") int currentPage,
 			@RequestParam(required = false) String keyword,
-			@RequestParam(value = "siqJobFilter", required = false) List<String> siqJobFilter,
-			Model model,
+			@RequestParam(value = "siqJobFilter", required = false) List<String> siqJobFilter, Model model,
 			@AuthenticationPrincipal String memId) {
-		log.info("siqJobFilter : "+siqJobFilter);
-		
+		log.info("siqJobFilter : " + siqJobFilter);
+
 		int size = 5; // 한 페이지에 5개
 		int startRow = (currentPage - 1) * size + 1;
 		int endRow = currentPage * size;
-		
-	    if (siqJobFilter == null || (siqJobFilter.size() == 1 && siqJobFilter.get(0).isEmpty())) {
-	        siqJobFilter = new ArrayList<>(); // 빈 리스트로 초기화
-	    }
+
+		if (siqJobFilter == null || (siqJobFilter.size() == 1 && siqJobFilter.get(0).isEmpty())) {
+			siqJobFilter = new ArrayList<>(); // 빈 리스트로 초기화
+		}
 
 		SelfIntroQVO selfIntroQVO = new SelfIntroQVO();
 		selfIntroQVO.setKeyword(keyword);
@@ -57,60 +56,54 @@ public class QuestionListController {
 
 		// 서비스 호출
 		List<ComCodeVO> codeVOList = selfIntroService.selectSelfIntroComCodeList();
-		log.info("codeVOList",codeVOList);
-		
-		Map<String,String> codeMap = new HashMap();
+		log.info("codeVOList", codeVOList);
+
+		Map<String, String> codeMap = new HashMap();
 
 		// 2) 코드 리스트를 한 줄씩 순회하면서
 		for (ComCodeVO code : codeVOList) {
-		    // 2‑1) 키와 값을 꺼낸 뒤
-		    String key   = code.getCcId();    // 예: "001"
-		    String value = code.getCcName();  // 예: "프로그래밍"
-		    // 2‑2) Map에 저장
-		    codeMap.put(key, value);
+			// 2‑1) 키와 값을 꺼낸 뒤
+			String key = code.getCcId(); // 예: "001"
+			String value = code.getCcName(); // 예: "프로그래밍"
+			// 2‑2) Map에 저장
+			codeMap.put(key, value);
 		}
-		
+
 		int total = selfIntroService.selectSelfIntroQCount(selfIntroQVO);
-		
+
 		List<SelfIntroQVO> selfIntroQVOList = selfIntroService.selectSelfIntroQList(selfIntroQVO);
 
 		ArticlePage<SelfIntroQVO> page = new ArticlePage<>(total, currentPage, size, selfIntroQVOList, keyword);
 		page.setUrl("/sint/qestnlst");
 
-		model.addAttribute("memId",memId);
-		model.addAttribute("codeMap",codeMap);
-		model.addAttribute("codeVOList",codeVOList);
+		model.addAttribute("memId", memId);
+		model.addAttribute("codeMap", codeMap);
+		model.addAttribute("codeVOList", codeVOList);
 		model.addAttribute("articlePage", page);
 		model.addAttribute("siqJobFilter", siqJobFilter); // 직무 필터 유지용
 		return "cdp/sint/qestnlst/questionList"; // JSP
 	}
-	
-    @PostMapping("/cart")
-    public String saveCart(
-        @RequestParam("questionIds") String questionIds,
-        HttpSession session,
-        @AuthenticationPrincipal String memId,
-        HttpServletRequest  requset
-    ) {
-    	int id = Integer.parseInt(memId);
-        // "1,3,5" → List<Long>
-        List<Long> questionIdList = Arrays.stream(questionIds.split(","))
-                               .filter(s -> !s.isBlank())
-                               .map(Long::valueOf)
-                               .collect(Collectors.toList());
-        
-        log.info("questionIdList"+questionIdList);
-        
-        SelfIntroVO selfIntroVO = new SelfIntroVO();
-        selfIntroVO.setMemId(id);
-        
-        log.info("selfIntroVO"+selfIntroVO);
-        
-        int siId = selfIntroService.insertIntroToQList(selfIntroVO,questionIdList);
-        log.info("siId : "+siId);
-        
-        requset.setAttribute("siId", siId);
-        return "redirect:/sint/sintwrt?siId="+siId;
-    }
-    
+
+	@PostMapping("/cart")
+	public String saveCart(@RequestParam("questionIds") String questionIds, HttpSession session,
+			@AuthenticationPrincipal String memId, HttpServletRequest requset) {
+		int id = Integer.parseInt(memId);
+		// "1,3,5" → List<Long>
+		List<Long> questionIdList = Arrays.stream(questionIds.split(",")).filter(s -> !s.isBlank()).map(Long::valueOf)
+				.collect(Collectors.toList());
+
+		log.info("questionIdList" + questionIdList);
+
+		SelfIntroVO selfIntroVO = new SelfIntroVO();
+		selfIntroVO.setMemId(id);
+
+		log.info("selfIntroVO" + selfIntroVO);
+
+		int siId = selfIntroService.insertIntroToQList(selfIntroVO, questionIdList);
+		log.info("siId : " + siId);
+
+		requset.setAttribute("siId", siId);
+		return "redirect:/sint/sintwrt?siId=" + siId;
+	}
+
 }

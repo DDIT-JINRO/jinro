@@ -51,9 +51,9 @@
 					<div class="section-title">
 						<input type="text" name="siTitle" value="${selfIntroVO.siTitle}"
 							placeholder="제목을 입력하세요." class="title-input" required="required" />
-						<input type="hidden" name="siId" value="${selfIntroVO.siId}" /> 
-						<input type="hidden" name="memId" value="${selfIntroVO.memId}" /> 
-						<input type="hidden" name="siStatus" id="siStatus" value="완료"/>
+						<input type="hidden" name="siId" value="${selfIntroVO.siId}" /> <input
+							type="hidden" name="memId" value="${selfIntroVO.memId}" /> <input
+							type="hidden" name="siStatus" id="siStatus" value="완료" />
 					</div>
 
 
@@ -64,8 +64,8 @@
 							<div class="qa-block">
 								<div class="question-block">
 									<span class="question-number">${st.index + 1}.</span> <span
-										class="question-text">${q.siqContent}</span>
-										<input type="hidden" name="siqIdList" value="${q.siqId}" />
+										class="question-text">${q.siqContent}</span> <input
+										type="hidden" name="siqIdList" value="${q.siqId}" />
 								</div>
 								<div class="answer-block">
 									<textarea name="sicContentList" placeholder="답변을 작성해주세요."
@@ -86,8 +86,8 @@
 								<div class="qa-block">
 									<div class="question-block">
 										<span class="question-number">${globalIndex + 1}.</span> <span
-											class="question-text">${q.siqContent}</span> 
-											<input type="hidden" name="siqIdList" value="${q.siqId}" />
+											class="question-text">${q.siqContent}</span> <input
+											type="hidden" name="siqIdList" value="${q.siqId}" />
 									</div>
 									<div class="answer-block">
 										<textarea name="sicContentList" placeholder="답변을 작성해주세요."
@@ -130,5 +130,5 @@
 </body>
 </html>
 <script>
-
+	
 </script>

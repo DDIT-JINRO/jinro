@@ -63,8 +63,7 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 			selfIntroMapper.insertContent(selfIntroContentVO);
 			cnt++;
 		}
-		
-		
+
 		for (int i = 0; i < questionIds.size(); i++) {
 
 			int sicId = selfIntroMapper.selectMaxSICId();
@@ -122,12 +121,11 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 		int loginMemId = Integer.valueOf(memId);
 
 		// 2) 자소서가 없거나 작성자 정보가 없거나, 작성자가 아니면 모두 403
-		if (! (siId ==loginMemId)) {
+		if (!(siId == loginMemId)) {
 			throw new CustomException(ErrorCode.ACCESS_DENIED);
 		}
 	}
 
-	
 	@Override
 	public int insertIntroId(SelfIntroVO selfIntroVO) {
 		int siId = selfIntroMapper.selectMaxIntroId();
@@ -139,46 +137,44 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 	@Override
 	@Transactional
 	public void insertContent(int newSiId, List<Long> siqIdList, List<String> sicContentList) {
-		 for (int i = 0; i < siqIdList.size(); i++) {
-			 	int sicId = selfIntroMapper.selectMaxSICId();
-			 	SelfIntroContentVO selfIntroContentVO = new SelfIntroContentVO();
-			 	
-			 	selfIntroContentVO.setSicId(sicId);
-			 	selfIntroContentVO.setSiId(newSiId);
-			 	
-			 	Long questionId = siqIdList.get(i); // 질문 아이디 
-			 	selfIntroContentVO.setSiqId(questionId.intValue());
-			 	
-	            String answer    = sicContentList.get(i); // 질문 답변
-	            selfIntroContentVO.setSicContent(answer);
-	            
-	            selfIntroContentVO.setSicLimit(1500);
-	            selfIntroContentVO.setSicOrder(i+1);
-	            selfIntroMapper.insertContent(selfIntroContentVO);
-	        }
-		
-	}
+		for (int i = 0; i < siqIdList.size(); i++) {
+			int sicId = selfIntroMapper.selectMaxSICId();
+			SelfIntroContentVO selfIntroContentVO = new SelfIntroContentVO();
 
+			selfIntroContentVO.setSicId(sicId);
+			selfIntroContentVO.setSiId(newSiId);
+
+			Long questionId = siqIdList.get(i); // 질문 아이디
+			selfIntroContentVO.setSiqId(questionId.intValue());
+
+			String answer = sicContentList.get(i); // 질문 답변
+			selfIntroContentVO.setSicContent(answer);
+
+			selfIntroContentVO.setSicLimit(1500);
+			selfIntroContentVO.setSicOrder(i + 1);
+			selfIntroMapper.insertContent(selfIntroContentVO);
+		}
+
+	}
 
 	@Override
 	public void updateIntro(SelfIntroVO selfIntroVO) {
 		selfIntroMapper.updateIntro(selfIntroVO);
-		
-	}
 
+	}
 
 	@Override
 	@Transactional
 	public void updateContent(List<Long> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList) {
-		
-	        // 3) 전달받은 siqIdList, sicContentList 순회하며 업데이트
-			for(int i = 0; i < siqIdList.size(); i++) {
-			    int siqId    = siqIdList.get(i).intValue();
-			    String sicContent= sicContentList.get(i);
-			    int sicId = qToSicId.get(siqId);
-			    int sicOrder = i+1;
-			    selfIntroMapper.updateContent(sicId,siqId,sicContent,sicOrder);
-			}
+
+		// 3) 전달받은 siqIdList, sicContentList 순회하며 업데이트
+		for (int i = 0; i < siqIdList.size(); i++) {
+			int siqId = siqIdList.get(i).intValue();
+			String sicContent = sicContentList.get(i);
+			int sicId = qToSicId.get(siqId);
+			int sicOrder = i + 1;
+			selfIntroMapper.updateContent(sicId, siqId, sicContent, sicOrder);
+		}
 
 	}
 
