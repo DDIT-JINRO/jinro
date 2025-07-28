@@ -175,6 +175,7 @@ body, input, textarea {
 	page-break-inside: avoid; /* 페이지 중간에서 끊기지 않도록 */
 	break-inside: avoid;
 	margin-bottom: 32px; /* 문항 간 간격 */
+	page-break-after: auto; 
 }
 
 /* 답변이 너무 길 경우 내부에서 줄 바꿈 되도록 */
