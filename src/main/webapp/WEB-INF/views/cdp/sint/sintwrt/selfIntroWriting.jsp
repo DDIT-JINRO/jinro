@@ -3,10 +3,7 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/cdp/sint/sintwrt/selfIntroWriting.css">
 <!-- 스타일 여기 적어주시면 가능 -->
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/cdp/sint/sintwrt/selfIntroWriting.js">
-	
-</script>
+
 <c:if test="${not empty errorMessage}">
 	<script type="text/javascript">
 		alert('${fn:escapeXml(errorMessage)}');
@@ -129,6 +126,6 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script>
-	
+<script type="text/javascript"
+	src="/js/cdp/sint/sintwrt/selfIntroWriting.js">
 </script>
