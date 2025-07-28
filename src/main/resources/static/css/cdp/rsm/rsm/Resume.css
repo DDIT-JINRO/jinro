@@ -1,0 +1,554 @@
+@charset "UTF-8";
+
+@font-face {
+	font-family: 'MyFont';
+	src: url('../fonts/BMDOHYEON_ttf.woff2') format('woff2');
+	font-weight: normal;
+	font-style: normal;
+	font-weight: normal;
+}
+
+html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow-x: hidden;
+}
+
+.public-wrapper {
+	width: 1160px; /* 메인 컨텐츠 너비 */
+	margin: 70px auto; /* 위/아래 0, 좌우 자동으로 여백 생성 => 가운데 정렬 */
+}
+
+.public-wrapper-main {
+	margin-top: 20px;
+}
+
+.public-topbar {
+	display: flex;
+	justify-content: space-between;
+	min-width: 1500px;
+	align-items: center;
+	padding: 0 100px;
+	height: 90px;
+	background-color: white;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.public-topbar-left {
+	display: flex;
+	align-items: center;
+}
+
+.public-menu-icon {
+	width: 100%;
+	cursor: pointer;
+}
+
+.public-menu-icon:hover {
+	background-color: #f0f0f0;
+	border-radius: 8px;
+	transition: background-color 0.2s ease;
+}
+
+.logo {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.public-topbar-center.public-nav-menu {
+	list-style: none;
+	display: flex;
+	margin: 5px 0 0 0;
+	padding: 0;
+}
+
+.public-topbar-center.public-nav-menu :hover {
+	color: #848EFB;
+}
+
+.public-nav-menu {
+	gap: 85px;
+}
+
+.public-topbar-center.public-nav-menu li a {
+	text-decoration: none;
+	color: #626262;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.public-topbar-right {
+	display: flex;
+	gap: 26px;
+}
+
+.icon-btn {
+	width: 100%;
+	cursor: pointer;
+}
+
+/***********************  전체 메뉴   *********************************/
+.dropdown-menu {
+	position: absolute;
+	top: 90px;
+	width: 100%;
+	background: rgba(132, 142, 251, 0.3);
+	backdrop-filter: blur(10px);
+	z-index: 11;
+	height: 500px;
+	backdrop-filter: blur(10px);
+}
+
+.dropdown-menu ul {
+	list-style: none;
+}
+
+.hidden {
+	display: none;
+}
+
+/***********************  사이드 바  *********************************/
+
+.right-fixed-bar {
+  position: fixed;
+  top: 30%;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 999;
+  transition: top 0.3s ease;
+}
+
+@keyframes slideDownFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.right-fixed-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: white;
+  border: 1px solid #eee;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  padding: 12px;
+  animation: slideDownFadeIn 0.4s forwards;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+
+.right-fixed-btn:nth-child(1) {
+  animation-delay: 0s;
+}
+.right-fixed-btn:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.right-fixed-btn:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.right-fixed-btn:hover {
+    transform: scale(0.95);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  }
+
+.right-fixed-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/************************ 소메뉴 바  ***********************/
+.tab-container {
+	display: flex;
+	position: relative;
+	border-bottom: 2px solid transparent;
+	font-family: 'MyFont', sans-serif;
+	font-size: 18px;
+}
+
+.tab-container::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background-color: black;
+	z-index: 0;
+}
+
+.tab {
+	flex: 1;
+	text-align: center;
+	padding: 15px 0;
+	cursor: pointer;
+	position: relative;
+	color: black;
+	z-index: 1;
+	text-decoration: none;
+}
+
+.tab.active {
+	color: #6c75ff;
+}
+
+.tab.active::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background-color: #6c75ff;
+	z-index: 2;
+}
+
+/*********************** 인적사항 섹션 스타일 ***********************/
+.personal-info-section {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%; /* public-wrapper-main 내에서 전체 너비 사용 */
+    max-width: 900px; /* 원본 이미지와 유사하게 최대 너비 제한 */
+    margin: 0 auto; /* public-wrapper-main 내에서 중앙 정렬 */
+    box-sizing: border-box;
+}
+
+/* Section Header */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee; /* Subtle separator */
+}
+
+.section-header h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+    font-weight: 600;
+}
+
+.section-header.required-info { /*.section-header.required-info 대신.section-header.required-info로 변경 */
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+}
+
+.required-asterisk {
+    color: #e53935; /* Red color for required asterisk */
+    margin-left: 2px;
+}
+
+/* Form Grid Layout */
+.personal-info-form.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns for inputs */
+    gap: 20px; /* Gap between grid items */
+    align-items: start; /* Align items to the top of their cells */
+}
+
+/* Specific Grid Item Placement and Spanning */
+.form-group.name-group {
+    grid-column: span 1;
+}
+
+.form-group.dob-group {
+    grid-column: span 1;
+}
+
+.form-group.gender-group {
+    grid-column: span 1;
+}
+
+.form-group.email-group {
+    grid-column: span 1;
+}
+
+.form-group.photo-group {
+    /* Photo group spans across 2 columns and 2 rows visually */
+    grid-column: span 1; /* It looks like it's in its own column */
+    grid-row: 1 / span 2; /* Spans from row 1 to row 2 */
+    display: flex; /* Use flexbox to center content vertically */
+    flex-direction: column; /* 아이콘과 텍스트를 세로로 정렬 */
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Ensure it takes full height of its grid rows */
+}
+
+.form-group.phone-group {
+    grid-column: span 1;
+}
+
+.form-group.mobile-phone-group {
+    grid-column: span 1;
+}
+
+.form-group.address-group {
+    grid-column: span 2; /* Address field spans 2 columns */
+}
+
+/* Basic Form Group Styling */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+/* Input, Select General Styling */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #333;
+    outline: none;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    transition: border-color 0.2s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group input[type="date"]:focus,
+.form-group select:focus {
+    border-color: #007bff; /* Highlight on focus */
+}
+
+/* Placeholder Styling */
+.form-group input::placeholder {
+    color: #bbb;
+    font-size: 14px;
+}
+
+/* Error Message Styling */
+.error-message {
+    color: #e53935; /* Red for error messages */
+    font-size: 12px;
+    margin-top: 5px;
+    min-height: 18px; /* Reserve space to prevent layout shift */
+    display: none; /* Hidden by default, shown with JS */
+}
+
+/* Specific Select Styling (to remove default arrow) */
+.form-group select {
+    -webkit-appearance: none; /* Remove default arrow for Chrome/Safari */
+    -moz-appearance: none;    /* Remove default arrow for Firefox */
+    appearance: none;         /* Remove default arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-6.4H18.6c-5%200-9.3%201.8-13.2%206.4-3.9%204.5-6%2010-6%2016.3%200%206.2%202.1%2011.7%206%2016.3l118.2%20126.4c4.5%204.5%2010%206.4%2016.3%206.4s11.8-2%2016.3-6.4L287%20102c3.9-4.6%206-10.1%206-16.3s-2.1-11.7-6-16.3z%22%2F%3E%3C%2Fsvg%3E'); /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    padding-right: 30px; /* Make space for the custom arrow */
+}
+
+/* Photo Upload Area */
+.photo-upload-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px; /* Fixed width/height for square */
+    height: 100px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center;
+    margin: 0 auto; /* Center within its grid cell */
+}
+
+.photo-upload-area:hover {
+    background-color: #f0f0f0;
+}
+
+.photo-upload-area.fa-plus { /*.photo-upload-area.fa-plus 대신.photo-upload-area.fa-plus로 변경 */
+    font-size: 2em;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.photo-upload-area span {
+    font-size: 13px;
+    color: #666;
+}
+
+/* Visually hidden input for accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Input with Icon (Address field) */
+.input-with-icon {
+    position: relative;
+    width: 100%;
+}
+
+.input-with-icon input {
+    padding-right: 40px; /* Make space for the icon */
+}
+
+.input-with-icon.icon-search { /*.input-with-icon.icon-search 대신.input-with-icon.icon-search로 변경 */
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .personal-info-section {
+        padding: 20px;
+    }
+
+  .personal-info-form.form-grid {
+        grid-template-columns: 1fr; /* Stack all items on smaller screens */
+        gap: 15px;
+    }
+
+  .form-group.photo-group {
+        grid-column: span 1; /* Photo group takes full width */
+        grid-row: auto; /* Reset row spanning */
+        height: auto; /* Allow height to adjust */
+        width: 100px; /* Keep fixed width for square aspect */
+        margin: 15px auto; /* Center and add vertical margin */
+    }
+
+  .form-group.address-group {
+        grid-column: span 1; /* Address field takes full width */
+    }
+}
+
+/************************ 푸터 스타일 ***********************/
+footer {
+	background-color: #f5f7fa;
+	padding: 40px 20px 0;
+	font-family: 'Noto Sans KR', sans-serif;
+	color: #333;
+}
+
+.footer-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	max-width: 1200px;
+	margin: auto;
+	gap: 20px;
+}
+
+.footer-logo-area {
+	flex: 1 1 100%;
+	text-align: left;
+}
+
+.footer-logo-area img.footer-logoImg {
+	width: 140px;
+	margin-bottom: 15px;
+}
+
+.footer-logo-area p {
+	font-size: 14px;
+	line-height: 1.7;
+	color: #555;
+}
+
+.footer-columns {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 40px;
+	width: 100%;
+}
+
+.footer-column {
+	flex: 1 1 200px;
+}
+
+.footer-column h4 {
+	font-size: 16px;
+	font-weight: 600;
+	margin-bottom: 12px;
+}
+
+.footer-column ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.footer-column ul li {
+	margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+	text-decoration: none;
+	color: #555;
+	font-size: 14px;
+	transition: color 0.2s;
+}
+
+.footer-column ul li a:hover {
+	color: #007bff;
+}
+
+.footer-bottom {
+	text-align: center;
+	padding: 20px 0;
+	border-top: 1px solid #ddd;
+	margin-top: 30px;
+	font-size: 12px;
+}
+
+.social-icons a {
+	margin: 0 10px;
+	color: #555;
+	font-size: 18px;
+	transition: color 0.3s;
+}
+
+.social-icons a:hover {
+	color: #007bff;
+}
