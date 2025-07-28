@@ -59,7 +59,7 @@
 			<a href="/admin"><img src="/images/manager.png" alt="관리자" class="icon-btn"></a>
 		</sec:authorize>
 		<a href=""><img src="/images/profile.png" alt="프로필" class="icon-btn" /></a>
-		<a href=""><img src="/images/alarm.png" alt="알림" class="icon-btn" id="alarmBtn"/></a>
+		<a href=""><img src="/images/alarm.png" alt="알림" class="icon-btn" id="alarmBtn"/><span id="alarm-badge" class="badge">0</span></a>
 		<sec:authorize access="!isAuthenticated()">
 		<a href="/login"><img src="/images/login.png" alt="로그인" class="icon-btn" /></a>
 		</sec:authorize>
