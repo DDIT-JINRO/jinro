@@ -4,7 +4,7 @@
 <mapper namespace="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.impl.InterviewListMapper">
 
     <!-- 사용자 정의 질문 리스트 조회 -->
-    <select id="getCustomQuestionList" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO">
+    <select id="getCustomQuestionList" parameterType="kr.or.ddit.main.service.MemberVO" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO">
         SELECT 
             IDL.IDL_ID as idlId,
             IDL.MEM_ID as memId,
@@ -15,6 +15,7 @@
         FROM INTERVIEW_DETAIL_LIST IDL
         LEFT JOIN INTERVIEW_DETAIL ID ON IDL.IDL_ID = ID.IDL_ID
         WHERE IDL.IDL_DEL_YN = 'N'
+          AND IDL.MEM_ID = #{memId}
         GROUP BY IDL.IDL_ID, IDL.MEM_ID, IDL.IDL_TITLE, IDL.IDL_CREATED_AT, IDL.IDL_DEL_YN
         ORDER BY IDL.IDL_CREATED_AT DESC
     </select>

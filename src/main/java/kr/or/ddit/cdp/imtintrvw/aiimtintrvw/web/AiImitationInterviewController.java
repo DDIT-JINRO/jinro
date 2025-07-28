@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.AiImitationInterviewService;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO;
+import kr.or.ddit.main.service.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("/cdp/imtintrvw/aiimtintrvw")
@@ -41,11 +43,17 @@ public class AiImitationInterviewController {
      */
     @GetMapping("/getCustomQuestionList")
     @ResponseBody
-    public ResponseEntity<List<InterviewDetailListVO>> getCustomQuestionList() {
+    public ResponseEntity<List<InterviewDetailListVO>> getCustomQuestionList(@AuthenticationPrincipal String memId) {
         try {
             log.info("=== getCustomQuestionList 호출 시작 ===");
-            
-            List<InterviewDetailListVO> list = aiImitationInterviewService.getCustomQuestionList();
+            // 로그인 체크
+    	    if (memId == null || memId.equals("anonymousUser")) {
+    	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    	    }
+    	    MemberVO memberVO = new MemberVO();
+    	    memberVO.setMemId(Integer.parseInt(memId));
+    	  
+            List<InterviewDetailListVO> list = aiImitationInterviewService.getCustomQuestionList(memberVO);
             
             log.info("=== 조회 결과 ===");
             log.info("리스트 크기: {}", list != null ? list.size() : "null");
