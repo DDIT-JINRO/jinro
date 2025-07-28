@@ -41,7 +41,7 @@ public class AlarmController {
 		}
 	}
 
-	// 클라이언트가
+	// 클라이언트가 구독하면 emitterManager를 통해 관리하기 시작
 	@GetMapping(value = "/sub",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter getMethodName(@RequestParam int memId) {
 
