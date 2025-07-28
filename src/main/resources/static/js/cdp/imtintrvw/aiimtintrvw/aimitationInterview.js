@@ -7,6 +7,10 @@ let questionList = [];
 function loadCustomQuestionList() {
     const select = document.getElementById('questionSelect');
     
+	if(!memId || memId =='anonymousUser') {
+		return;
+	}
+	
     // 로딩 상태 표시
     select.classList.add('loading');
     select.innerHTML = '<option value="" disabled selected class="loading-text">질문 리스트를 불러오는 중...</option>';
