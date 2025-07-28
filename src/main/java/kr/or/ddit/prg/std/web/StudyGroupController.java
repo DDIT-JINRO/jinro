@@ -94,12 +94,6 @@ public class StudyGroupController {
 		// 단일 게시글 전체 내용에 댓글 리스트 + 채팅방정보 챙겨오기
 
 		StdBoardVO stdBoardVO = this.studyGroupService.selectStudyGroupDetail(stdGroupId);
-		if(stdBoardVO == null) {
-			// 게시글이 존재하지 않으면 badRequest 리턴 (파라미터값 임의로 변경시 스터디그룹이 아니면 막아야함)
-		}else {
-
-		}
-		
 		
 		// 채팅방 참여했는지 여부를 체크하는 값 가져오기
 		ChatRoomVO chatRoomVO = stdBoardVO.getChatRoomVO();

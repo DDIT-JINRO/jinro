@@ -51,14 +51,14 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		// content에 json형식의 문자열이 들어가있고 해당 값을 그대로 받아왔기때문에 처리단계.
 		ObjectMapper mapper = new ObjectMapper();
 		for (StdBoardVO board : list) {
-		    JsonNode json;
+			JsonNode json;
 			try {
 				json = mapper.readTree(board.getBoardContent());
-			    board.setRegion(regionMap.get(json.path("region").asText()));
-			    board.setGender(json.path("gender").asText());
-			    board.setInterest(json.path("interest").asText());
-			    board.setMaxPeople(json.path("maxPeople").asInt());
-			    board.setParsedContent(json.path("content").asText());
+				board.setRegion(regionMap.get(json.path("region").asText()));
+				board.setGender(json.path("gender").asText());
+				board.setInterest(json.path("interest").asText());
+				board.setMaxPeople(json.path("maxPeople").asInt());
+				board.setParsedContent(json.path("content").asText());
 			} catch (JsonMappingException e) {
 				e.printStackTrace();
 			} catch (JsonProcessingException e) {
@@ -168,14 +168,15 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		return stdBoardVO;
 	}
 
-	private List<StdReplyVO> getChildReplies(int replyId){
+	private List<StdReplyVO> getChildReplies(int replyId) {
 		List<StdReplyVO> replyList = this.studyGroupMapper.selectChildReplyList(replyId);
-		for(StdReplyVO replyVO : replyList) {
-			if(replyVO.getChildCount() == 0) continue;
-            int parentReplyId = replyVO.getReplyId();
-            List<StdReplyVO> childReplies = getChildReplies(parentReplyId);
-            // 자식댓글 리스트 세팅
-            replyVO.setChildReplyVOList(childReplies);
+		for (StdReplyVO replyVO : replyList) {
+			if (replyVO.getChildCount() == 0)
+				continue;
+			int parentReplyId = replyVO.getReplyId();
+			List<StdReplyVO> childReplies = getChildReplies(parentReplyId);
+			// 자식댓글 리스트 세팅
+			replyVO.setChildReplyVOList(childReplies);
 		}
 		return replyList;
 	}

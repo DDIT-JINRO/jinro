@@ -79,13 +79,13 @@ public class ChatRoomSessionManager {
         }
         
         // 모달 오픈된 유저 관리
-        if (destination != null && destination.startsWith("/sub/chat/unread/detail/")) {
-        	System.out.println("########[모달오픈유저] "+user.getName());
-            int memId = Integer.parseInt(destination.replace("/sub/chat/unread/detail/", ""));
-            modalOpenedUsers.add(memId);
-        }
-        printAll();
-    }
+		if (destination != null && destination.startsWith("/sub/chat/unread/detail/")) {
+			System.out.println("########[모달오픈유저] " + user.getName());
+			int memId = Integer.parseInt(destination.replace("/sub/chat/unread/detail/", ""));
+			modalOpenedUsers.add(memId);
+		}
+//		printAll();	// 상태관리 디버깅용
+	}
     
     @EventListener
     public void handleSessionUnsubscribeEvent(SessionUnsubscribeEvent event) {
@@ -117,7 +117,7 @@ public class ChatRoomSessionManager {
                 }
             }
         }
-        printAll();
+//        printAll();	// 상태관리 디버깅용 
     }
 
     /**
@@ -144,7 +144,7 @@ public class ChatRoomSessionManager {
             log.info("[roomSessionMap REMOVE] memId={}", memId);
             log.info("[modalOpenedUsers REMOVE] memId={}", memId);
         }
-        printAll();
+//        printAll();	// 상태관리 디버깅용
     }
     
     
