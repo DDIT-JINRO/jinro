@@ -13,7 +13,7 @@ import jakarta.annotation.PreDestroy;
 @Component
 public class AlarmEmitterManager {
 
-	Map<Integer, SseEmitter> connectedEmitterMap = new ConcurrentHashMap<>();
+	private final Map<Integer, SseEmitter> connectedEmitterMap = new ConcurrentHashMap<>();
 
 	public SseEmitter createOrReplaceEmitter(int memId) {
 		if(connectedEmitterMap.containsKey(memId)) {
@@ -61,4 +61,13 @@ public class AlarmEmitterManager {
 		});
 		connectedEmitterMap.clear();
 	}
+	
+	public SseEmitter getEmitter(int memId) {
+		return this.connectedEmitterMap.get(memId);
+	}
+	
+	public Map<Integer, SseEmitter> getConnectedEmitterMap(){
+		return this.connectedEmitterMap;
+	}
+	
 }
