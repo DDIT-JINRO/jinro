@@ -72,7 +72,6 @@ public class StudyGroupController {
 		articlePage.setUrl(baseUrl);
 		articlePage.setPagingArea("");
 
-		Map<String, String> interestMap = this.studyGroupService.getInterestsMap();
 
 		if(principal!=null && !principal.getName().equals("anonymousUser")) {
 			List<ChatRoomVO> roomList = chatService.findRoomsByMemId(principal.getName());
@@ -81,9 +80,15 @@ public class StudyGroupController {
 				    .collect(Collectors.toSet());
 			model.addAttribute("myRoomSet", myChatRoomIds);
 		}
-
+		// 지역목록맵<지역코드, 지역명> 을 받아와서 지역코드순으로 출력하기 위해 리스트로 변환하고 정렬
+		Map<String, String> regionMap = this.studyGroupService.getRegionMap();
+		ArrayList<Map.Entry<String, String>> regionList = new ArrayList<>(regionMap.entrySet());
+		regionList.sort(Map.Entry.comparingByKey());
+		
 		model.addAttribute("articlePage", articlePage);
-		model.addAttribute("interestMap", interestMap);
+		model.addAttribute("interestMap", this.studyGroupService.getInterestsMap());
+		model.addAttribute("regionList", regionList);
+		
 		model.addAttribute("genderMap", Map.of("all", "성별무관", "men", "남자만", "women", "여자만"));
 		return "prg/std/stdGroupList";
 	}
@@ -146,8 +151,12 @@ public class StudyGroupController {
 		Map<String, String> interestMap = this.studyGroupService.getInterestsMap();
 		Map<String, String> regionMap = this.studyGroupService.getRegionMap();
 		
+		// 보관되어있는 regionMap<지역코드 : 지역명> 을 순서대로 정렬해서 보내기 위해 리스트로 변환 후 key순 정렬
+		ArrayList<Map.Entry<String, String>> regionList = new ArrayList<>(regionMap.entrySet());
+		regionList.sort(Map.Entry.comparingByKey());
+		
 		model.addAttribute("interestMap", interestMap);
-		model.addAttribute("regionMap", regionMap);
+		model.addAttribute("regionList", regionList);
 		
 		return "prg/std/createStdGroup";
 	}

@@ -39,23 +39,9 @@
 						<label for="region">지역 :
 							<select id="region" name="region" class="select-box select-box--tall">
 								<option value="">전체</option>
-								<option value="G23001">서울</option>
-								<option value="G23002">부산</option>
-								<option value="G23003">대구</option>
-								<option value="G23004">인천</option>
-								<option value="G23005">광주</option>
-								<option value="G23006">대전</option>
-								<option value="G23007">울산</option>
-								<option value="G23008">세종</option>
-								<option value="G23009">경기</option>
-								<option value="G23010">강원</option>
-								<option value="G23011">충북</option>
-								<option value="G23012">충남</option>
-								<option value="G23013">전북</option>
-								<option value="G23014">전남</option>
-								<option value="G23015">경북</option>
-								<option value="G23016">경남</option>
-								<option value="G23017">제주</option>
+								<c:forEach var="region" items="${regionList }">
+									<option value="${region.key }">${region.value }</option>
+								</c:forEach>
 							</select>
 						</label>
 

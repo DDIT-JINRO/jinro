@@ -44,43 +44,15 @@
 							<label for="region">지역 선택</label>
 							<div class="custom-select__label">지역 선택</div>
 						  	<ul class="custom-select__options">
-						    	<li data-value="G23001">서울</li>
-						    	<li data-value="G23002">부산</li>
-						    	<li data-value="G23003">대구</li>
-						    	<li data-value="G23004">인천</li>
-						    	<li data-value="G23005">광주</li>
-						    	<li data-value="G23006">대전</li>
-						    	<li data-value="G23007">울산</li>
-						    	<li data-value="G23008">세종</li>
-						    	<li data-value="G23009">경기</li>
-						    	<li data-value="G23010">강원</li>
-						    	<li data-value="G23011">충북</li>
-						    	<li data-value="G23012">충남</li>
-						    	<li data-value="G23013">전북</li>
-						    	<li data-value="G23014">전남</li>
-						    	<li data-value="G23015">경북</li>
-						    	<li data-value="G23016">경남</li>
-						    	<li data-value="G23017">제주</li>
+							  	<c:forEach var="region" items="${regionList }">
+							  		<li data-value="${region.key }">${region.value }</li>
+							  	</c:forEach>
 						  	</ul>
 							<select name="region" class="visually-hidden" id="region">
 								<option value="">지역 선택</option>
-								<option value="G23001">서울</option>
-								<option value="G23002">부산</option>
-								<option value="G23003">대구</option>
-								<option value="G23004">인천</option>
-								<option value="G23005">광주</option>
-								<option value="G23006">대전</option>
-								<option value="G23007">울산</option>
-								<option value="G23008">세종</option>
-								<option value="G23009">경기</option>
-								<option value="G23010">강원</option>
-								<option value="G23011">충북</option>
-								<option value="G23012">충남</option>
-								<option value="G23013">전북</option>
-								<option value="G23014">전남</option>
-								<option value="G23015">경북</option>
-								<option value="G23016">경남</option>
-								<option value="G23017">제주</option>
+								<c:forEach var="region" items="${regionList }">
+									<option value="${region.key }">${region.value }</option>
+								</c:forEach>
 							</select>
 						</div> 
 						<div class="custom-select">
