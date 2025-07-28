@@ -33,6 +33,12 @@ document.addEventListener('DOMContentLoaded', function () {
 		     clonedEl.setAttribute("value", originalEl.value);
 		   }
 		 });
+		 
+		
+		  const title = clonedForm.querySelector(".section-title");
+		  if (title) {
+			  title.remove();
+		  }
 		
 	    // 2. 버튼 그룹 제거
 	    const btnGroup = clonedForm.querySelector(".btn-group");
@@ -43,8 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		//글자수 제거
 		clonedForm.querySelectorAll(".char-count")?.forEach(e => e.remove());
 		
-
-
 
 		const xhtmlContent = sanitizeHtmlToXHTML(clonedForm.outerHTML);
 	    // 3. 스타일 가져오기 (예: /css/cdp/sint/sintwrt/selfIntroWriting.css)

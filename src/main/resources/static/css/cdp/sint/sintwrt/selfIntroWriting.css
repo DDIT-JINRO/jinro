@@ -1,10 +1,10 @@
 @font-face {
-  font-family: 'NotoSansKR';
-  src: url('/fonts/NotoSansKR-Regular.otf') format('opentype');
+  font-family: 'NotoSansCJKkr';
+  src: url('/fonts/NotoSansCJKkr-Regular.otf') format('opentype');
 }
 
 body, input, textarea {
-  font-family: 'NotoSansKR', 'Malgun Gothic', 'Arial', sans-serif;
+  font-family: 'NotoSansCJKkr', 'Malgun Gothic', 'Arial', sans-serif;
 }
 
 
