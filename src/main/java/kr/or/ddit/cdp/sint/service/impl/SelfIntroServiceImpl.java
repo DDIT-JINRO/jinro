@@ -167,7 +167,6 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 	@Transactional
 	public void updateContent(List<Long> siqIdList, Map<Integer, Integer> qToSicId, List<String> sicContentList) {
 
-		// 3) 전달받은 siqIdList, sicContentList 순회하며 업데이트
 		for (int i = 0; i < siqIdList.size(); i++) {
 			int siqId = siqIdList.get(i).intValue();
 			String sicContent = sicContentList.get(i);

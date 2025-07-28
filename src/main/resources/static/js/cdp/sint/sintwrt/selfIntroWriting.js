@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 
-
+/*--미리보기*/
 	document.querySelector(".btn-preview").addEventListener("click", () => {
 		// 1. form 요소 클론
 		const originalForm = document.querySelector("form");

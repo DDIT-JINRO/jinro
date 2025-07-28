@@ -45,7 +45,7 @@ public class QuestionListController {
 		int endRow = currentPage * size;
 
 		if (siqJobFilter == null || (siqJobFilter.size() == 1 && siqJobFilter.get(0).isEmpty())) {
-			siqJobFilter = new ArrayList<>(); // 빈 리스트로 초기화
+			siqJobFilter = new ArrayList<>(); 
 		}
 
 		SelfIntroQVO selfIntroQVO = new SelfIntroQVO();
@@ -54,18 +54,14 @@ public class QuestionListController {
 		selfIntroQVO.setStartRow(startRow);
 		selfIntroQVO.setEndRow(endRow);
 
-		// 서비스 호출
 		List<ComCodeVO> codeVOList = selfIntroService.selectSelfIntroComCodeList();
 		log.info("codeVOList", codeVOList);
 
 		Map<String, String> codeMap = new HashMap();
 
-		// 2) 코드 리스트를 한 줄씩 순회하면서
 		for (ComCodeVO code : codeVOList) {
-			// 2‑1) 키와 값을 꺼낸 뒤
-			String key = code.getCcId(); // 예: "001"
-			String value = code.getCcName(); // 예: "프로그래밍"
-			// 2‑2) Map에 저장
+			String key = code.getCcId(); 
+			String value = code.getCcName();
 			codeMap.put(key, value);
 		}
 
@@ -80,15 +76,14 @@ public class QuestionListController {
 		model.addAttribute("codeMap", codeMap);
 		model.addAttribute("codeVOList", codeVOList);
 		model.addAttribute("articlePage", page);
-		model.addAttribute("siqJobFilter", siqJobFilter); // 직무 필터 유지용
-		return "cdp/sint/qestnlst/questionList"; // JSP
+		model.addAttribute("siqJobFilter", siqJobFilter); 
+		return "cdp/sint/qestnlst/questionList"; 
 	}
 
 	@PostMapping("/cart")
 	public String saveCart(@RequestParam("questionIds") String questionIds, HttpSession session,
 			@AuthenticationPrincipal String memId, HttpServletRequest requset) {
 		int id = Integer.parseInt(memId);
-		// "1,3,5" → List<Long>
 		List<Long> questionIdList = Arrays.stream(questionIds.split(",")).filter(s -> !s.isBlank()).map(Long::valueOf)
 				.collect(Collectors.toList());
 
