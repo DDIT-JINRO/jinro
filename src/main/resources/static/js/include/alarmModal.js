@@ -10,11 +10,6 @@ window.addEventListener('beforeunload', function(){
 	eventSource.close();
 })
 
-// 동적으로 생성되는 알림에 대해서 이벤트 위임
-document.addEventListener('click', function(){
-
-})
-
 document.addEventListener('DOMContentLoaded', function(){
 	const alarmBtn    = document.getElementById('alarmBtn');
 	const alarmModal  = document.getElementById('alarm-modal');
@@ -72,6 +67,18 @@ document.addEventListener('DOMContentLoaded', function(){
 		// 알림 전체삭제 요청 버튼 이벤트 추가
 		alarmDeleteAll.addEventListener('click', function(){
 			console.log('버튼 작동 테스트');
+			fetch('/api/alarm/deleteAllAlarm',{
+				method : "POST"
+			})
+			.then(resp =>{
+				if(!resp.ok) throw new Error("전체삭제 에러 발생");
+				// 정상적으로 삭제되고 나서 body비우기 및 뱃지 제거
+				updateFloatingBadge(Number.MIN_SAFE_INTEGER);
+				alarmBody.innerHTML = '<p class="empty-message">알림이 없습니다.</p>';
+			})
+			.catch(err =>{
+				console.log(err);
+			})
 		})
 
 		// 모달에 띄울 알림 내용 출력하는 함수
@@ -86,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			}
 			// 알림 내용, 취소버튼 추가
 			item.innerHTML = `	<span class="alarm-content">${alarm.alarmContent}</span>
-			      				<button class="alarm-delete-btn">&times;</button>`;
+			      				<button class="alarm-delete-btn" onclick="removeAlarmItem(this)">&times;</button>`;
 			alarmBody.prepend(item);
 			if(alarm.alarmIsRead == 'N'){
 				updateFloatingBadge(1);
@@ -158,6 +165,27 @@ function updateFloatingBadge(nums=Number){
 	}
 }
 
-// 모달에서 삭제 버튼 누를 시 삭제처리 하는 함수
+// 모달에서 삭제 버튼 누를 시 삭제처리 하는 함수 (단일삭제)
+function removeAlarmItem(alarmDeleteBtn){
+	const alarmItem = alarmDeleteBtn.closest(".alarm-item");
+	const alarmBody = alarmItem.closest("#alarm-body");
+	console.log(alarmItem);
+	let alarmId = alarmItem.dataset.id;
 
+	fetch(`/api/alarm/deleteAlarmItem?alarmId=${alarmId}`,{
+		method : "POST"
+	})
+	.then(resp =>{
+		if(!resp.ok) throw new Error("단일 삭제 에러 발생")
+
+		updateFloatingBadge(-1);
+		alarmItem.remove();
+		if(!alarmBody.firstChild){
+			alarmBody.innerHTML = '<p class="empty-message">알림이 없습니다.</p>';
+		}
+	})
+	.catch(err =>{
+		console.log(err);
+	})
+}
 

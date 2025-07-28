@@ -63,4 +63,23 @@ public class AlarmController {
 		this.alarmService.updateMarkRead(alarmVO.getAlarmId());
 		return ResponseEntity.noContent().build();
 	}
+
+	@PostMapping("/deleteAllAlarm")
+	public ResponseEntity<Void> deleteAllAlarm(Principal principal){
+		if(principal != null && !principal.getName().equals("anonymousUser")) {
+			String memIdStr =principal.getName();
+			this.alarmService.deleteAllByMember(Integer.parseInt(memIdStr));
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.internalServerError().build();
+	}
+
+	@PostMapping("/deleteAlarmItem")
+	public ResponseEntity<Void> deleteAlarmItem(@RequestParam int alarmId, Principal principal){
+		if(principal != null && !principal.getName().equals("anonymousUser")) {
+			this.alarmService.deleteById(alarmId);
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.internalServerError().build();
+	}
 }
