@@ -61,4 +61,12 @@ public interface AlarmService {
 	 */
 	void sendEvent(AlarmVO alarmVO);
 
+	/**
+	 * 알림 유형 (alarmTargetType)
+	 * 알림 타겟id (alarmTargetId)
+	 * 값으로 알림을 받아야할 대상 memId 가져오기
+	 * @param alarmVO
+	 * @return
+	 */
+	int getTargetMemId(AlarmVO alarmVO);
 }

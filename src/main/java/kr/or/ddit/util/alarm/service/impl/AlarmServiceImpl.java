@@ -115,7 +115,8 @@ public class AlarmServiceImpl implements AlarmService{
 		}
 	}
 
-	private int getTargetMemId(AlarmVO alarmVO) {
+	@Override
+	public int getTargetMemId(AlarmVO alarmVO) {
 		AlarmType type = alarmVO.getAlarmTargetType();
 
 		// 타입이 REPLY_TO_BOARD  REPLY테이블, BOARD테이블, 조인해서 BOARD테이블의 memId 챙겨오기
