@@ -10,6 +10,8 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.ddit.exception.CustomException;
+import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.rdm.service.RoadmapService;
 import kr.or.ddit.rdm.service.RoadmapStepVO;
 import kr.or.ddit.rdm.service.RoadmapVO;
@@ -40,7 +42,14 @@ public class RoadmapServiceImpl implements RoadmapService {
 	 * </p>
 	 */
 	@Override
-	public Map<String, Object> selectMemberRoadmap(int memId) {
+	public Map<String, Object> selectMemberRoadmap(String memIdStr) {
+		int memId;
+		try {
+		    memId = Integer.parseInt(memIdStr);
+		} catch (NumberFormatException e) {
+		    throw new CustomException(ErrorCode.INVALID_USER);
+		}
+		
 		boolean isFirst = false;
 
 		// 초기 로드맵 생성
@@ -96,7 +105,20 @@ public class RoadmapServiceImpl implements RoadmapService {
 	 * </p>
 	 */
 	@Override
-	public String updateCompleteMission(String memId, int rsId) {
+	public String updateCompleteMission(String memIdStr, RoadmapVO roadmapVO) {
+		int memId;
+		try {
+		    memId = Integer.parseInt(memIdStr);
+		} catch (NumberFormatException e) {
+		    throw new CustomException(ErrorCode.INVALID_USER);
+		}
+		
+		if (roadmapVO == null) {
+			throw new CustomException(ErrorCode.INVALID_INPUT);
+		}
+		
+		int rsId = roadmapVO.getRsId();
+		
 		int point;
 		String tableName = this.roadmapMapper.selectTableName(rsId);
 		Map<String, Object> parameter = new HashMap<String, Object>();
@@ -107,12 +129,16 @@ public class RoadmapServiceImpl implements RoadmapService {
 			point = 10;
 			parameter.put("point", point);
 			this.roadmapMapper.insertCompleteRoadmap(memId);
-			this.roadmapMapper.updateUserPoint(parameter);
+			int pointResult = this.roadmapMapper.updateUserPoint(parameter);
+			if (pointResult <= 0) {
+				throw new CustomException(ErrorCode.POINT_UPDATE_ERROR);
+			}
+			
 			return "complete";
 		}
 
-		if (!ALLOWED_TABLE_NAMES.contains(tableName)) {
-			throw new IllegalArgumentException("허용되지 않은 테이블 이름입니다: " + tableName);
+		if (tableName == null || !ALLOWED_TABLE_NAMES.contains(tableName)) {
+			throw new CustomException(ErrorCode.FORBIDDEN_OPERATION);
 		}
 
 		parameter.put("tableName", tableName);
@@ -120,20 +146,23 @@ public class RoadmapServiceImpl implements RoadmapService {
 
 		int searchResult = this.roadmapMapper.isCompleteExists(parameter);
 
-		if (searchResult <= 0)
-			return "fail";
+	    if (searchResult <= 0) {
+	        throw new CustomException(ErrorCode.MISSION_NOT_COMPLETABLE);
+	    }
 
 		int updateResult = this.roadmapMapper.updateCompleteMission(parameter);
 
-		if (updateResult <= 0)
-			return "fail";
+	   if (updateResult <= 0) {
+	        throw new CustomException(ErrorCode.MISSION_ERROR);
+	    }
 		
 		point = 1;
 		parameter.put("point", point);
-		int result = this.roadmapMapper.updateUserPoint(parameter);
+		int pointResult = this.roadmapMapper.updateUserPoint(parameter);
 		
-		if (result <= 0)
-			return "fail";
+	    if (pointResult <= 0) {
+	        throw new CustomException(ErrorCode.POINT_UPDATE_ERROR);
+	    }
 
 		return "success";
 	}
@@ -142,23 +171,38 @@ public class RoadmapServiceImpl implements RoadmapService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String insertMission(String memId, RoadmapVO request) {
-		request.setMemId(Integer.parseInt(memId));
+	public String insertMission(String memIdStr, RoadmapVO request) {
+		int memId;
+		try {
+		    memId = Integer.parseInt(memIdStr);
+		} catch (NumberFormatException e) {
+		    throw new CustomException(ErrorCode.INVALID_USER);
+		}
+		
+		request.setMemId(memId);
 
 		int result = this.roadmapMapper.insertMission(request);
 
-		if (result > 0)
-			return "success";
+	    if (result <= 0) {
+	        throw new CustomException(ErrorCode.MISSION_ERROR);
+	    }
 
-		return "fail";
+		return "success";
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String updateDueDate(String memId, RoadmapVO request) {
-		request.setMemId(Integer.parseInt(memId));
+	public String updateDueDate(String memIdStr, RoadmapVO request) {
+		int memId;
+		try {
+		    memId = Integer.parseInt(memIdStr);
+		} catch (NumberFormatException e) {
+		    throw new CustomException(ErrorCode.INVALID_USER);
+		}
+		
+		request.setMemId(memId);
 
 		int result = this.roadmapMapper.updateDueDate(request);
 
@@ -172,9 +216,19 @@ public class RoadmapServiceImpl implements RoadmapService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String selectResultData(String memId) {
-		String memName = this.roadmapMapper.selectMember(memId).getMemName();
-
+	public String selectResultData(String memIdStr) {
+		int memId;
+		try {
+		    memId = Integer.parseInt(memIdStr);
+		} catch (NumberFormatException e) {
+		    throw new CustomException(ErrorCode.INVALID_USER);
+		}
+		
+		String memName = this.roadmapMapper.selectMember(memId);
+		if (memName == null) {
+			throw new CustomException(ErrorCode.USER_NOT_FOUND);
+		}
+		
 		return memName;
 	}
 

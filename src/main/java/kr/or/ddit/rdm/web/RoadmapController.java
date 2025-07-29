@@ -45,7 +45,7 @@ public class RoadmapController {
 	 */
 	@GetMapping("/selectMemberRoadmap")
 	public ResponseEntity<Map<String, Object>> selectMemberRoadmap(@AuthenticationPrincipal String memId) {
-		Map<String, Object> roadmapInfo = this.roadmapService.selectMemberRoadmap(Integer.parseInt(memId));
+		Map<String, Object> roadmapInfo = this.roadmapService.selectMemberRoadmap(memId);
 		
 		return new ResponseEntity<Map<String, Object>>(roadmapInfo, HttpStatus.OK);
 	}
@@ -64,12 +64,12 @@ public class RoadmapController {
 	/**
 	 * 특정 사용자의 미션 완료 상태 업데이트 메서드
 	 * @param memId 사용자 식별번호 (AuthenticationPrincipal 통해 얻음)
-	 * @param rsId 로드맵 단계 식별 번호
+	 * @param roadmapVO 로드맵 정보
 	 * @return "success" (성공), "fail" (실패), 또는 "complete" (로드맵 전체 완료)
 	 */
 	@PostMapping("/updateCompleteMission")
 	public ResponseEntity<String> updateCompleteMission(@AuthenticationPrincipal String memId, @RequestBody RoadmapVO roadmapVO) {
-		String result = this.roadmapService.updateCompleteMission(memId, roadmapVO.getRsId());
+		String result = this.roadmapService.updateCompleteMission(memId, roadmapVO);
 		
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}

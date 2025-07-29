@@ -95,14 +95,14 @@ public interface RoadmapMapper {
 	 * 특정 회원의 로드맵 전체 완성 여부를 기록
 	 * @param memId 회원 식별 번호
 	 */
-	void insertCompleteRoadmap(String memId);
+	void insertCompleteRoadmap(int memId);
 
 	/**
 	 * 특정 회원의 정보를 조회
 	 * @param memId 회원 식별 번호
 	 * @return 조회된 회원 정보가 담긴 {@link MemberVO} 객체
 	 */
-	MemberVO selectMember(String memId);
+	String selectMember(int memId);
 
 	/**
 	 * 로드맵 완료시 특정 회원의 포인트 추가

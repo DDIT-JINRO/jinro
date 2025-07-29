@@ -19,7 +19,7 @@ public interface RoadmapService {
 	 * <li><b>isFirst</b>: 사용자의 로드맵 최초 진입 여부 (boolean)</li>
 	 * </ul>
 	 */
-	public Map<String, Object> selectMemberRoadmap(int memId);
+	public Map<String, Object> selectMemberRoadmap(String memId);
 
 	/**
 	 * 로드맵 노드별 미션 리스트
@@ -30,10 +30,10 @@ public interface RoadmapService {
 	/**
 	 * 특정 사용자의 미션 완료 상태 업데이트 메서드
 	 * @param memId 사용자 식별 번호
-	 * @param rsId 로드맵 단계 식별 번호
+	 * @param roadmapVO 완료 로드맵 정보
 	 * @return "success" (성공), "fail" (실패), 또는 "complete" (로드맵 전체 완료)
 	 */
-	public String updateCompleteMission(String memId, int rsId);
+	public String updateCompleteMission(String memId, RoadmapVO roadmapVO);
 
 	/**
 	 * 특정 사용자의 미션 등록 메서드
