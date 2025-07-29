@@ -38,7 +38,7 @@
 						<h2>인적사항</h2>
 						<p class="required-info">* 필수 입력 정보입니다.</p>
 					</div>
-					<div class="form-grid">
+					<div class="form-profile-grid">
 						<div class="form-group name-group">
 							<label for="name">이름 <span class="required-asterisk">*</span></label>
 							<input type="text" id="name" name="name"
@@ -97,10 +97,41 @@
 								<i class="fa fa-search icon-search" aria-label="주소 검색"></i>
 							</div>
 						</div>
-
 					</div>
+					<div class="form-JobWish">
+						<label for="desired-job">희망 직무</label>
+						<div class="job-input-group">
+							<input type="text" id="desired-job" name="desired-job"
+								placeholder="희망 직무를 입력하세요" required>
+						</div>
+						<button type="button" id="add-job">추가</button>
+						<div id="additional-jobs"></div>
+						<!-- 추가된 직무 입력 필드를 이곳에 넣습니다 -->
+					</div>
+
+					<div class="form-Skills">
+						<label for="skills">스킬</label>
+						<div class="skills-input-group">
+							<input type="text" id="skills" name="skills"
+								placeholder="스킬을 입력하세요" required>
+						</div>
+						<button type="button" id="add-skill">추가</button>
+						<div id="education-list"></div>
+						<!-- 추가된 스킬 항목을 이곳에 추가 -->
+					</div>
+
+
 				</form>
 			</section>
+			<div class="button-group">
+				<!-- 학력 불러오기 버튼 -->
+				<button type="button" id="load-education" name="rsId" data-id="1">학력
+					불러오기</button>
+
+				<!-- 자격증 불러오기 버튼 -->
+				<button type="button" id="load-certificate" name="rsId" data-id="2">자격증
+					불러오기</button>
+			</div>
 			<a href="/rsm/rsm/detail.do">이력서 디테일</a>
 		</div>
 	</div>
@@ -108,6 +139,7 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
+<script type="text/javascript" src="/js/cdp/rsm/rsm/Resume.js"></script>
 <script>
 	// 스크립트 작성 해주시면 됩니다.
 </script>
