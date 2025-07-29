@@ -202,8 +202,7 @@ public class PaymentServiceImpl implements PaymentService {
 	//전체 결제 내역 조회 (구독 결제 내역 표시)
 	@Override
 	public List<PaymentVO> selectPaymentHistory(int memId) {
-		// TODO Auto-generated method stub
-		return null;
+		return paymentMapper.selectPaymentHistory(memId);
 	}
 
 }

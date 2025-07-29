@@ -1,5 +1,7 @@
 package kr.or.ddit.util.setle.service.impl;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.util.setle.service.PaymentVO;
@@ -36,5 +38,8 @@ public interface PaymentMapper {
 	 * @return 조회된 Payment VO/엔티티 객체 또는 null
 	 */
 	public PaymentVO selectPaymentByMerchantUid(String merchantUid);
+
+	//전체 결제 내역 조회 (구독 결제 내역 표시)
+	public List<PaymentVO> selectPaymentHistory(int memId);
 
 }

@@ -8,10 +8,8 @@ import kr.or.ddit.util.setle.service.SubscriptionVO;
 
 @Mapper
 public interface SubscriptionMapper {
-
-	static List<SubscriptionVO> selectAllProducts() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	//구독상품조회
+	public List<SubscriptionVO> selectAllProducts();
 
 }

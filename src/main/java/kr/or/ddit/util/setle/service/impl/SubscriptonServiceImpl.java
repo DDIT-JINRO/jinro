@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.or.ddit.util.setle.service.SubscriptionService;
 import kr.or.ddit.util.setle.service.SubscriptionVO;
-
+@Service
 public class SubscriptonServiceImpl implements SubscriptionService {
 
 	@Autowired
@@ -17,7 +17,7 @@ public class SubscriptonServiceImpl implements SubscriptionService {
 	@Override
 	public List<SubscriptionVO> selectAllProducts() {
 		
-		return SubscriptionMapper.selectAllProducts();
+		return subscriptionMapper.selectAllProducts();
 	}
 
 }

@@ -14,6 +14,7 @@
 		<result property="payConsultCnt" column="PAY_CONSULT_CNT" />
 		<result property="payMockCnt" column="PAY_MOCK_CNT" />
 		<result property="merchantUid" column="MERCHANT_UID" />
+		<result property="subName" column="SUB_NAME" />
 	</resultMap>
 
 	<!-- 
@@ -69,7 +70,7 @@
 	           ,PAY_MOCK_CNT
 	           ,MERCHANT_UID
         FROM	PAYMENT
-        WHERE	IMP_UID = #{impUid} 
+        WHERE	IMP_UID  = #{impUid} 
 	</select>
     
 	<!-- merchantUid를 기반으로 결제 정보를 조회
@@ -86,5 +87,32 @@
 	           ,MERCHANT_UID
         FROM	PAYMENT
         WHERE	MERCHANT_UID = #{merchantUid} 
+	</select>
+	<!-- 
+	//전체 결제 내역 조회 (구독 결제 내역 표시)
+	public List<PaymentVO> selectPaymentHistory(int memId);
+	 -->
+	 <select id="selectPaymentHistory" parameterType="int" resultMap="paymentMap">
+	    SELECT	
+				p.PAY_ID
+	           ,p.PAY_DATE
+	           ,p.PAY_AMOUNT
+	           ,p.IMP_UID
+	           ,p.PAY_RESUME_CNT
+	           ,p.PAY_COVER_CNT
+	           ,p.PAY_CONSULT_CNT
+	           ,p.PAY_MOCK_CNT
+	           ,p.MERCHANT_UID
+	           ,s.SUB_NAME
+        FROM	
+        		PAYMENT p
+        JOIN	
+        		MEMBER_SUBSCRIPTION ms ON (p.MS_ID = ms.MS_ID)
+        JOIN	
+        		SUBSCRIBE s ON (ms.SUB_ID = s.SUB_ID)
+        WHERE	
+        		MEM_ID = #{memId}
+        ORDER BY
+        		p.PAY_DATE DESC
 	</select>
 </mapper>
