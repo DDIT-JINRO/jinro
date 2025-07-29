@@ -1,4 +1,4 @@
-package kr.or.ddit.highSchool.web;
+package kr.or.ddit.ertds.hgschl.web;
 
 import java.util.List;
 
@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.or.ddit.highSchool.service.HighSchoolService;
-import kr.or.ddit.highSchool.service.HighSchoolVO;
+import kr.or.ddit.ertds.hgschl.service.HighSchoolService;
+import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
+
+
 
 @Controller
 @RequestMapping("highSchool")
@@ -25,7 +27,7 @@ public class HighSchoolController {
 		this.highSchoolService = highSchoolService;
 	}
 
-	// 1. 모든 고등학교 목록 조회 API (리스트 화면용)F
+	// 1. 모든 고등학교 목록 조회 API (리스트 화면용)
 
 	@GetMapping("/list")
 	public String highSchoolListPage(Model model) {

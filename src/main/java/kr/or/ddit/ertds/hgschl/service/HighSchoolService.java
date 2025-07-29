@@ -1,4 +1,4 @@
-package kr.or.ddit.highSchool.service;
+package kr.or.ddit.ertds.hgschl.service;
 
 import java.util.List;
 

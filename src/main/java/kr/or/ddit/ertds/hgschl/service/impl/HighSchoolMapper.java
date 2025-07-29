@@ -1,11 +1,12 @@
-package kr.or.ddit.highSchool.service.impl;
+package kr.or.ddit.ertds.hgschl.service.impl;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import kr.or.ddit.highSchool.service.HighSchoolVO;
+import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
+
 
 @Mapper
 public interface HighSchoolMapper {

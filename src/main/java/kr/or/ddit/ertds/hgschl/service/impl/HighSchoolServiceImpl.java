@@ -1,12 +1,14 @@
-package kr.or.ddit.highSchool.service.impl;
+package kr.or.ddit.ertds.hgschl.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.or.ddit.highSchool.service.HighSchoolService;
-import kr.or.ddit.highSchool.service.HighSchoolVO;
+import kr.or.ddit.ertds.hgschl.service.HighSchoolService;
+import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
+
+
 
 @Service
 public class HighSchoolServiceImpl implements HighSchoolService {
