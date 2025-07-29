@@ -57,7 +57,7 @@
 				    <li><strong>모집 인원:</strong> ${stdBoardVO.maxPeople }명</li>
 				    <li><strong>참여 인원:</strong> ${stdBoardVO.curJoinCnt }명</li>
 				  </ul>
-				  
+
 				    <div class="enter-btn-wrapper">
 				    	<c:choose>
 					    	<c:when test="${isEntered }">
@@ -77,7 +77,7 @@
 					    	</c:otherwise>
 					    </c:choose>
 					</div>
-				
+
 				  <div class="group-description">
 				    <h3 class="desc-title">소개글</h3>
 				    <p>${stdBoardVO.parsedContent }</p>
@@ -124,7 +124,7 @@
 			</div>
 
 			<!-- 댓글 입력창 -->
-			<form action="/studyGroup/reply/write" method="post" class="comment-form">
+			<form action="/prg/std/createStdReply.do" method="post" class="comment-form">
 			  <input type="hidden" name="boardId" value="${stdBoardVO.boardId}" />
 			  <textarea id="replyContent" name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
 			  <div class="comment-footer">

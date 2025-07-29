@@ -12,8 +12,10 @@ public class AlarmVO {
 	private String alarmContent;	// 알림메시지,내용
 	private String alarmIsRead;		// 알림읽음 여부. 삭제처리는 delete
 	private Date alarmCreatedAt;	// 알림생성일시
-	private int alarmTargetId;		// 알림대상번호 (좋아요나 댓글이 달린 대상의 번호)
+	private int alarmTargetId;		// 알림대상번호
 	private String alarmTargetUrl;	// 알림대상url (알림클릭시 이동시킬 url)
-	
+
+	// 화면단으로 넘겨줄 때 출력할 시간정보를 가져가는 용도
+	private String displayTime;
 }
 

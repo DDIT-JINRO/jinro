@@ -12,7 +12,7 @@
     <p class="empty-message">알림이 없습니다.</p>
   </div>
   <div class="alarm-footer">
-    <button id="alarm-delete-all">전체 삭제</button>
+    <button id="alarm-delete-all" class="denied" disabled="disabled">전체 삭제</button>
   </div>
 </div>
 <!-- 알림모달 끝 -->
