@@ -17,7 +17,7 @@ public class FileUtil {
 
     private final String basePath = "C:/upload";
 
-    public FileDetailVO saveFile(MultipartFile file, String fileGroupId, int fileSeq) throws IOException {
+    public FileDetailVO saveFile(MultipartFile file, Long fileGroupId, int fileSeq) throws IOException {
         String datePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         Path saveDir = Paths.get(basePath, datePath);
         Files.createDirectories(saveDir);

@@ -34,13 +34,13 @@ public class FileServiceImpl implements FileService {
 	private final FileUtil fileUtil;
 	
 	@Override
-	public String createFileGroup() {
+	public Long createFileGroup() {
 	    String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 	    log.info("createFileGroup -> today :" +today);
-	    String maxId = fileMapper.getMaxFileGroupId(today);
+	    Long maxId = fileMapper.getMaxFileGroupId(today);
 
-	    int next = (maxId == null) ? 1 : Integer.parseInt(maxId.substring(8)) + 1;
-	    String fileGroupId = today + String.format("%03d", next);
+	    Long next = (maxId == null) ? 1 : Long.parseLong(maxId.toString().substring(8)) + 1;
+	    Long fileGroupId = Long.parseLong(today + String.format("%03d", next));
 
 	    FileGroupVO vo = new FileGroupVO();
 	    vo.setFileGroupId(fileGroupId);
@@ -52,7 +52,7 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	@Transactional
-	public List<FileDetailVO> uploadFiles(String fileGroupId, List<MultipartFile> files) throws IOException {
+	public List<FileDetailVO> uploadFiles(Long fileGroupId, List<MultipartFile> files) throws IOException {
 	    List<FileDetailVO> detailList = new ArrayList<>();
 
 	    // ✅ 기존 그룹이면 max seq 조회
@@ -68,12 +68,12 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public FileDetailVO getFileDetail(String fileGroupId, int fileSeq) {
+	public FileDetailVO getFileDetail(Long fileGroupId, int fileSeq) {
 	    return fileMapper.getFileDetailByGroupAndSeq(fileGroupId, fileSeq);
 	}
 
 	@Override
-	public Resource downloadFile(String fileGroupId, int fileSeq) throws IOException {
+	public Resource downloadFile(Long fileGroupId, int fileSeq) throws IOException {
 	    FileDetailVO detail = fileMapper.getFileDetailByGroupAndSeq(fileGroupId, fileSeq);
 	    if (detail == null) {
 	        throw new FileNotFoundException("파일 정보를 찾을 수 없습니다.");
@@ -92,7 +92,7 @@ public class FileServiceImpl implements FileService {
 
 	
 	@Override
-	public boolean deleteFile(String groupId, int seq) {
+	public boolean deleteFile(Long groupId, int seq) {
 	    FileDetailVO detail = fileMapper.selectFile(groupId, seq);
 	    if (detail == null) return false;
 
@@ -117,7 +117,7 @@ public class FileServiceImpl implements FileService {
 	}
 	
 	@Override
-	public boolean deleteFileGroup(String groupId) {
+	public boolean deleteFileGroup(Long groupId) {
 	    List<FileDetailVO> fileList = fileMapper.selectFileList(groupId);
 	    if (fileList == null || fileList.isEmpty()) return false;
 
@@ -146,7 +146,7 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public List<FileDetailVO> getFileList(String groupId) {
+	public List<FileDetailVO> getFileList(Long groupId) {
 		 return fileMapper.selectFileList(groupId);
 	}
 }

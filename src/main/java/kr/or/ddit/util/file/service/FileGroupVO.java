@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class FileGroupVO {
-    private String fileGroupId;         // 예: 20250716001
+    private Long fileGroupId;         // 예: 20250716001
     private LocalDateTime fileGroupDate;
     private List<FileDetailVO> fileList;
 }

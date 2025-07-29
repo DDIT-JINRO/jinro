@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class FileDetailVO {
     private Long fileId;             // UUID or 시퀀스
-    private String fileGroupId;        // FK
+    private Long fileGroupId;        // FK
     private String fileOrgName;        // 원본 파일명
     private String fileSaveName;       // 저장된 파일명 (uuid_원본)
     private Long fileSize;				//kb 기준

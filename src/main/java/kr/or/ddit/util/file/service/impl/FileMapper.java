@@ -13,24 +13,24 @@ public interface FileMapper {
 
 	public void insertFileGroup(FileGroupVO vo);
 
-	public String getMaxFileGroupId(String today);
+	public Long getMaxFileGroupId(String today);
 
 	public void insertFileDetail(FileDetailVO detail);
 
-	public FileDetailVO getFileDetailByGroupAndSeq(@Param("fileGroupId") String fileGroupId,@Param("fileSeq") int fileSeq);
+	public FileDetailVO getFileDetailByGroupAndSeq(@Param("fileGroupId") Long fileGroupId,@Param("fileSeq") int fileSeq);
 
-	public FileDetailVO getFileDetailById(String fileId);
+	public FileDetailVO getFileDetailById(Long fileId);
 
-	FileDetailVO selectFile(@Param("groupId") String groupId, @Param("seq") int seq);
+	FileDetailVO selectFile(@Param("groupId") Long groupId, @Param("seq") int seq);
 
-	int deleteFile(@Param("groupId") String groupId, @Param("seq") int seq);
+	int deleteFile(@Param("groupId") Long groupId, @Param("seq") int seq);
 
-	List<FileDetailVO> selectFileList(String groupId);
+	List<FileDetailVO> selectFileList(Long groupId);
 
-	int deleteFilesByGroupId(String groupId);
+	int deleteFilesByGroupId(Long groupId);
 
-	public void deleteFileGroup(String groupId);
+	public void deleteFileGroup(Long groupId);
 
-	int getMaxFileSeq(String fileGroupId);
+	int getMaxFileSeq(Long fileGroupId);
 
 }
