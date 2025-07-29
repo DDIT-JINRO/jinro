@@ -43,19 +43,17 @@
 	MemberSubscriptionVO selectByMemberId(int memId);
 	-->
 	<select id="selectByMemberId" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
-		SELECT  MS_ID
-			  , MEM_ID
-			  , SUB_ID
-			  , CUSTOMER_UID
-			  , SUB_STATUS
-			  , SUB_START_DT
-			  , SUB_END_DT
-			  , LAST_PAY_DT
-			  , RECUR_PAY_CNT
-			  , CREATED_DT
-			  , UPDATED_DT
-		FROM	MEMBER_SUBSCRIPTION 
-		WHERE	MEM_ID = #{memId}
+		SELECT  A.MS_ID
+			  , A.MEM_ID
+			  , A.SUB_ID
+			  , A.CUSTOMER_UID
+			  , A.SUB_STATUS
+			  , A.SUB_END_DT
+			  , B.SUB_PRICE 
+		FROM	MEMBER_SUBSCRIPTION A
+		JOIN	SUBSCRIBE B ON(A.SUB_ID=B.SUB_ID)
+		WHERE	A.SUB_STATUS ='Y'
+		AND		A.MEM_ID = #{memId}
 	</select>
 	
 	<!--

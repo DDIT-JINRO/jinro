@@ -192,4 +192,18 @@ public class PaymentServiceImpl implements PaymentService {
 		return false;
 	}
 
+
+	// 마이페이지에서 사용할 사용자의 구독정보 조회
+	@Override
+	public MemberSubscriptionVO selectByMemberId(int memid) {
+		return memberSubscriptionMapper.selectByMemberId(memid);
+	}
+
+	//전체 결제 내역 조회 (구독 결제 내역 표시)
+	@Override
+	public List<PaymentVO> selectPaymentHistory(int memId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

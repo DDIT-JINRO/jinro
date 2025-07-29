@@ -6,22 +6,22 @@ import java.util.Objects;
  * 서버(Controller)에서 클라이언트(JSP)로 결제 처리 결과를 응답할 때 사용되는 DTO입니다.
  */
 public class PaymentResponseDto {
-	private String status;  // "success" 또는 "failure"
-    private String message; // 사용자에게 보여줄 상세 메시지
-    private String orderId; // 처리된 주문의 고유 ID
-    
-    public PaymentResponseDto() {
-        // 기본 생성자
-    }
+	private String status; // "success" 또는 "failure"
+	private String message; // 사용자에게 보여줄 상세 메시지
+	private String orderId; // 처리된 주문의 고유 ID
 
-    // 모든 필드를 인자로 받는 생성자 (롬복의 @AllArgsConstructor 역할)
-    public PaymentResponseDto(String status, String message, String orderId) {
-    	this.status = status;
-    	this.message = message;
-    	this.orderId = orderId;
-    }
+	public PaymentResponseDto() {
+		// 기본 생성자
+	}
 
-    // Getter 메서드
+	// 모든 필드를 인자로 받는 생성자 (롬복의 @AllArgsConstructor 역할)
+	public PaymentResponseDto(String status, String message, String orderId) {
+		this.status = status;
+		this.message = message;
+		this.orderId = orderId;
+	}
+
+	// Getter 메서드
 	public String getStatus() {
 		return status;
 	}
@@ -33,13 +33,15 @@ public class PaymentResponseDto {
 	public String getOrderId() {
 		return orderId;
 	}
-	
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}

@@ -21,4 +21,6 @@ public class MemberSubscriptionVO {
 	private Integer recurPayCnt; // 정기 결제 횟수
 	private Date createdDt; // 생성 일시
 	private Date updatedDt; // 최종 수정 일시
+	
+	private Double payAmount; //구독가격
 }

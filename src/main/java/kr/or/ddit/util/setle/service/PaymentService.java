@@ -36,5 +36,11 @@ public interface PaymentService {
 
 	//구독 취소
 	public boolean cancelSubscription(int memId);
+	
+	// 마이페이지에서 사용할 사용자의 구독정보 조회
+	public MemberSubscriptionVO selectByMemberId(int memid);
+
+	//전체 결제 내역 조회 (구독 결제 내역 표시)
+	public List<PaymentVO> selectPaymentHistory(int memId);
 
 }
