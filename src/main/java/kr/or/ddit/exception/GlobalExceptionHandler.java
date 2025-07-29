@@ -1,6 +1,9 @@
 package kr.or.ddit.exception;
 
+import java.io.IOException;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
 	// 커스텀 예외 처리
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e, HttpServletRequest request) {
@@ -32,7 +36,7 @@ public class GlobalExceptionHandler {
 
 		);
 
-		return ResponseEntity.status(errorCode.getStatus()).body(response);
+		return ResponseEntity.status(errorCode.getStatus()).contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)

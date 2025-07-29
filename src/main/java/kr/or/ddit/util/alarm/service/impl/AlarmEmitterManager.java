@@ -31,6 +31,8 @@ public class AlarmEmitterManager {
 		} catch (IOException e) {
 			emitter.complete();
 			connectedEmitterMap.remove(memId);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		emitter.onCompletion(()->{
@@ -45,8 +47,9 @@ public class AlarmEmitterManager {
 		});
 		emitter.onError((e)->{
 			SseEmitter disconnectEmitter = connectedEmitterMap.remove(memId);
-			if(disconnectEmitter != null) disconnectEmitter.completeWithError(e);
-			System.out.println("@@@@@@ emitter 에러발생 memId : " + memId+" error" + e);
+			if(disconnectEmitter != null) disconnectEmitter.complete();
+			System.out.println("@@@@@@ emitter 에러발생 memId : " + memId+" error" + e+ "  @@ class : "+e.getClass());
+
 		});
 
 		return emitter;
@@ -61,13 +64,13 @@ public class AlarmEmitterManager {
 		});
 		connectedEmitterMap.clear();
 	}
-	
+
 	public SseEmitter getEmitter(int memId) {
 		return this.connectedEmitterMap.get(memId);
 	}
-	
+
 	public Map<Integer, SseEmitter> getConnectedEmitterMap(){
 		return this.connectedEmitterMap;
 	}
-	
+
 }
