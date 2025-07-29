@@ -208,12 +208,12 @@
 	WHERE RNUM<![CDATA[>]]>= #{startNo}
   </select>
 
-<delete id="deleteselfIntro" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
+<delete id="deleteSelfIntro" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
 	DELETE FROM SELF_INTRO
 	WHERE SI_ID = #{siId}
 </delete>
 
-<delete id="deleteselfIntroContent" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
+<delete id="deleteSelfIntroContent" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
 	DELETE FROM SELF_INTRO_CONTENT
 	WHERE SI_ID = #{siId}
 </delete>
