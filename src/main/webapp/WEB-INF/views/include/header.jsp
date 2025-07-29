@@ -21,8 +21,35 @@
 <script src="/js/include/header.js"></script>
 <script>
 	document.addEventListener("DOMContentLoaded",() => {
-		header();
-	});
+      const menuIcon = document.getElementById("menuToggle");
+      const dropdown = document.getElementById("dropdownMenu");
+      const worldcup = document.getElementById("worldcup");
+	  header();
+
+      menuIcon.addEventListener("click",() => {
+        dropdown.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click",(event) => {
+            if (!dropdown.contains(event.target) && !menuIcon.contains(event.target)) {
+               dropdown.classList.add("hidden");
+            }
+          });
+      
+      worldcup.addEventListener("click", () => {
+          const worldcupUrl = 'http://localhost:5173/worldcup';
+          
+          const width  = 1200;
+          const height = 800;
+          const screenWidth  = window.screen.width;
+          const screenHeight = window.screen.height;
+             const left = Math.floor((screenWidth - width) / 2);
+             const top  = Math.floor((screenHeight - height) / 2);
+          
+          window.open(worldcupUrl, 'worldcup', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+       });
+       
+   	});
 	const memId = '<sec:authentication property="name" />'
 </script>
 </head>
@@ -79,8 +106,8 @@
 </div>
 
 <div class="right-fixed-bar">
-	<button class="right-fixed-btn">
-		<img src="/images/worldCup.png" alt="월드컵">
+    <button class="right-fixed-btn">
+		<img src="/images/worldCup.png" id="worldcup" alt="월드컵">
 	</button>
 	<button class="right-fixed-btn" id="chatRooms">
 		<img src="/images/chaticon.png" alt="채팅">
