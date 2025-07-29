@@ -20,23 +20,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/files")
 public class FileController {
-	
+
 	private final FileService fileService;
-	  
-    @GetMapping("/download")
-    public ResponseEntity<Resource> download(
-            @RequestParam Long groupId,
-            @RequestParam int seq
-    ) throws IOException {
-        FileDetailVO detail = fileService.getFileDetail(groupId, seq);
-        Resource resource = fileService.downloadFile(groupId, seq);
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" + URLEncoder.encode(detail.getFileOrgName(), "UTF-8") + "\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(resource);
-    }
+	@GetMapping("/download")
+	public ResponseEntity<Resource> download(@RequestParam Long fileGroupId, @RequestParam int seq) throws IOException {
+		FileDetailVO detail = fileService.getFileDetail(fileGroupId, seq);
+		Resource resource = fileService.downloadFile(fileGroupId, seq);
 
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + URLEncoder.encode(detail.getFileOrgName(), "UTF-8") + "\"")
+				.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+	}
 
 }
