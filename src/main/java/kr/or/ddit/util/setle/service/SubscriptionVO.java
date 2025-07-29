@@ -20,5 +20,5 @@ public class SubscriptionVO {
 	private String subActiveYn; // SUB_ACTIVE_YN (구독 활성화 여부 Y/N)
 	private Double subPrice; // SUB_PRICE (구독 가격)
 	private int fileGroupId; // FILE_GROUP_ID (파일 그룹 ID)
-	
+
 }

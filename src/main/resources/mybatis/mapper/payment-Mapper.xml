@@ -13,6 +13,7 @@
 		<result property="payCoverCnt" column="PAY_COVER_CNT" />
 		<result property="payConsultCnt" column="PAY_CONSULT_CNT" />
 		<result property="payMockCnt" column="PAY_MOCK_CNT" />
+		<result property="merchantUid" column="MERCHANT_UID" />
 	</resultMap>
 
 	<!-- 
@@ -26,6 +27,9 @@
 	<!--  새로운 결제 정보를 데이터베이스에 삽입.
 	public int insertPayment(PaymentVO paymentVO); -->
 	<insert id="insertPayment" parameterType="kr.or.ddit.util.setle.service.PaymentVO">
+		<selectKey keyProperty="payId" resultType="int" order="BEFORE">
+			SELECT PAYMENT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
         INSERT INTO PAYMENT (
              PAY_ID
             ,MS_ID
@@ -36,6 +40,7 @@
             ,PAY_COVER_CNT
             ,PAY_CONSULT_CNT
             ,PAY_MOCK_CNT
+            ,MERCHANT_UID
         ) 
         VALUES (
             #{payId}
@@ -47,6 +52,7 @@
            ,NVL(#{payCoverCnt}, 0)
            ,NVL(#{payConsultCnt}, 0)
            ,NVL(#{payMockCnt}, 0)
+           ,#{merchantUid}
         )
 	</insert>
 	
@@ -61,6 +67,7 @@
 	           ,PAY_COVER_CNT
 	           ,PAY_CONSULT_CNT
 	           ,PAY_MOCK_CNT
+	           ,MERCHANT_UID
         FROM	PAYMENT
         WHERE	IMP_UID = #{impUid} 
 	</select>
@@ -76,7 +83,8 @@
 	           ,PAY_COVER_CNT
 	           ,PAY_CONSULT_CNT
 	           ,PAY_MOCK_CNT
+	           ,MERCHANT_UID
         FROM	PAYMENT
-        WHERE	PAY_ID = #{merchantUid} 
+        WHERE	MERCHANT_UID = #{merchantUid} 
 	</select>
 </mapper>

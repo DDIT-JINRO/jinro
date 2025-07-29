@@ -23,8 +23,8 @@ public class SubscriptionScheduler {
     private PaymentService paymentService;
 
     // 매일 새벽 4시에 실행 (서버 부하가 적은 시간)
-    @Scheduled(cron = "0 0 4 * * *") 
-    //@Scheduled(cron = "0 */1 * * * *") //테스트를 위해 '매 1분마다' 실행
+    //@Scheduled(cron = "0 0 4 * * *") 
+    @Scheduled(cron = "0 */1 * * * *") //테스트를 위해 '매 1분마다' 실행
     public void scheduleDailyPayments() {
         System.out.println("----------- 정기결제 스케줄러 시작 -----------");
         
@@ -35,7 +35,9 @@ public class SubscriptionScheduler {
             try {
                 // 2. 이번 결제를 위한 새로운 주문번호 생성
             	int nextPayId = paymentService.selectNextPayId();
-                String newMerchantUid = String.valueOf(nextPayId);
+//              String newMerchantUid = String.valueOf(nextPayId);
+                String newMerchantUid = "sub_due_" + memberSubscriptionVO.getMsId() + "_" + System.currentTimeMillis();
+                
                 double amount = 100.0; // TODO: sub 정보에 맞는 실제 상품 가격 조회
                 String productName = "월간 구독 자동결제";
 
@@ -53,9 +55,9 @@ public class SubscriptionScheduler {
                     
                     // 새 결제 내역 저장
                     PaymentVO payment = new PaymentVO();
-                    payment.setPayId(nextPayId); 
                     payment.setMsId(memberSubscriptionVO.getMsId());
                     payment.setImpUid((String) result.get("imp_uid"));
+                    payment.setMerchantUid(newMerchantUid);
                     payment.setPayAmount(amount);
                     int insertResult = paymentService.insertPayment(payment);
 
@@ -84,6 +86,6 @@ public class SubscriptionScheduler {
                 System.err.println("구독 ID " + memberSubscriptionVO.getMsId() + " 처리 중 예외 발생: " + e.getMessage());
             }
         }
-        System.out.println("----------- 정기결제 스케줄러 종료 -----------");
-    }
+		System.out.println("----------- 정기결제 스케줄러 종료 -----------");
+	}
 }

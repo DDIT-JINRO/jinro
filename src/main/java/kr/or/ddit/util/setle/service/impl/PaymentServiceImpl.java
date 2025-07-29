@@ -31,7 +31,6 @@ import kr.or.ddit.util.setle.service.PaymentService;
 import kr.or.ddit.util.setle.service.PaymentVO;
 import lombok.extern.slf4j.Slf4j;
 
-
 @Service
 @Slf4j
 public class PaymentServiceImpl implements PaymentService {
@@ -121,38 +120,38 @@ public class PaymentServiceImpl implements PaymentService {
 				return new PaymentResponseDto("failure", "회원 정보를 찾을 수 없습니다. ID: " + memId, requestDto.getMerchantUid());
 			}
 
-			 // 3. 구독 정보 생성 및 DB 저장
-	        MemberSubscriptionVO sub = new MemberSubscriptionVO();
-	        sub.setMemId(loginUser.getMemId());
-	        sub.setSubId(1); // BASIC 상품 ID
-	        sub.setCustomerUid(requestDto.getCustomerUid()); // 빌링키
-	        sub.setSubStatus("Y"); // 구독 상태 활성화
-	        sub.setSubStrtDt(new Date()); // 구독 시작일
-	        sub.setLastPayDt(new Date()); // 마지막 결제 성공일
-	        sub.setRecurPayCnt(1); // 첫 결제이므로 1회차
+			// 3. 구독 정보 생성 및 DB 저장
+			MemberSubscriptionVO sub = new MemberSubscriptionVO();
+			sub.setMemId(loginUser.getMemId());
+			sub.setSubId(1); // BASIC 상품 ID
+			sub.setCustomerUid(requestDto.getCustomerUid()); // 빌링키
+			sub.setSubStatus("Y"); // 구독 상태 활성화
+			sub.setSubStrtDt(new Date()); // 구독 시작일
+			sub.setLastPayDt(new Date()); // 마지막 결제 성공일
+			sub.setRecurPayCnt(1); // 첫 결제이므로 1회차
 
-	        // ✅ 다음 결제일(nextPayDt)을 한 달 뒤로 설정하여 저장합니다.
-	        Calendar cal = Calendar.getInstance();
-	        cal.add(Calendar.MONTH, 1);
-	        //cal.add(Calendar.MINUTE, 3); 테스트
-	        sub.setSubEndDt(cal.getTime());
-	        
-	        memberSubscriptionMapper.insertMemberSubscription(sub);
+			// ✅ 다음 결제일(nextPayDt)을 한 달 뒤로 설정하여 저장합니다.
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MONTH, 1);
+			// cal.add(Calendar.MINUTE, 3); 테스트
+			sub.setSubEndDt(cal.getTime());
 
-	        // 4. 결제 정보 생성
-	        PaymentVO payment = new PaymentVO();
-            payment.setPayId(Integer.parseInt(requestDto.getMerchantUid()));
-	        payment.setImpUid(requestDto.getImpUid());
-	        payment.setPayAmount(requestDto.getAmount());
-	        payment.setMsId(sub.getMsId());
-	        paymentMapper.insertPayment(payment);
+			memberSubscriptionMapper.insertMemberSubscription(sub);
 
-	        successMessage = "서버 검증 및 구독 정보 저장 성공! 발급된 빌링키: " + requestDto.getCustomerUid();
-	        return new PaymentResponseDto("success", successMessage, requestDto.getMerchantUid());
+			// 4. 결제 정보 생성
+			PaymentVO payment = new PaymentVO();
+			payment.setImpUid(requestDto.getImpUid());
+			payment.setMerchantUid(requestDto.getMerchantUid());
+			payment.setPayAmount(requestDto.getAmount());
+			payment.setMsId(sub.getMsId());
+			paymentMapper.insertPayment(payment);
 
-	    } catch (Exception e) {
-	        return new PaymentResponseDto("failure", "서버 처리 중 오류: " + e.getMessage(), null);
-	    }
+			successMessage = "서버 검증 및 구독 정보 저장 성공! 발급된 빌링키: " + requestDto.getCustomerUid();
+			return new PaymentResponseDto("success", successMessage, requestDto.getMerchantUid());
+
+		} catch (Exception e) {
+			return new PaymentResponseDto("failure", "서버 처리 중 오류: " + e.getMessage(), null);
+		}
 	}
 
 	// 결제해야 할 구독 목록을 DB에서 조회
@@ -165,33 +164,32 @@ public class PaymentServiceImpl implements PaymentService {
 	// 구독 정보 업데이트 (다음 결제일, 결제 횟수 등)
 	@Override
 	public int updateAfterRecurringPayment(int msId) {
-		
+
 		return memberSubscriptionMapper.updateAfterRecurringPayment(msId);
-		
+
 	}
 
 	@Override
 	public int insertPayment(PaymentVO paymentVO) {
 		return paymentMapper.insertPayment(paymentVO);
-		
+
 	}
 
-	//구독취소
+	// 구독취소
 	@Override
 	@Transactional
 	public boolean cancelSubscription(int memId) {
 		// 1. 현재 사용자의 활성화된 구독 정보를 DB에서 조회
-        MemberSubscriptionVO activeSub = memberSubscriptionMapper.findActiveSubscriptionByMemberId(memId);
+		MemberSubscriptionVO activeSub = memberSubscriptionMapper.findActiveSubscriptionByMemberId(memId);
 
-        if (activeSub != null) {
-            // 2. 구독 정보가 있다면, 상태를 '취소'로 변경
-            int updateResult = memberSubscriptionMapper.updateStatusToCancelled(activeSub.getMsId());
-            return updateResult > 0;
-        }
-        
-        // 취소할 구독이 없는 경우
-        return false;
+		if (activeSub != null) {
+			// 2. 구독 정보가 있다면, 상태를 '취소'로 변경
+			int updateResult = memberSubscriptionMapper.updateStatusToCancelled(activeSub.getMsId());
+			return updateResult > 0;
+		}
+
+		// 취소할 구독이 없는 경우
+		return false;
 	}
-	
-	
+
 }

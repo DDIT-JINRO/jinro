@@ -11,7 +11,7 @@ public class IamportTokenRequest {
 	private String impSecret;
 
 	public IamportTokenRequest() {}
-    
+
 	public IamportTokenRequest(String impKey, String impSecret) {
 		this.impKey = impKey;
 		this.impSecret = impSecret;
@@ -32,5 +32,5 @@ public class IamportTokenRequest {
 	public void setImpSecret(String impSecret) {
 		this.impSecret = impSecret;
 	}
-	
+
 }
