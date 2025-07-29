@@ -47,8 +47,7 @@
 		</div>
 	</div>
 
-	<script type="text/javascript"
-		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1881066df7ed9e16e4315953d2419995"></script>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1881066df7ed9e16e4315953d2419995"></script>
 	<script>
 	// 전역 변수 선언
     let map; // 카카오 지도 객체

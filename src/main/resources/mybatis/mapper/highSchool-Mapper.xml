@@ -32,7 +32,7 @@
     //특정 고등학교 ID로 상세 정보를 조회
 	public HighSchoolVO selectHighSchoolById(@Param("hsId") Long hsId); // hsId가 Long 타입으로 변경
      -->
-     <select id="selectHighSchoolById" parameterType="long" resultType="kr.or.ddit.highSchool.service.HighSchoolVO">
+     <select id="selectHighSchoolById" parameterType="int" resultType="kr.or.ddit.highSchool.service.HighSchoolVO">
         SELECT HS_ID
 		     , HS_CODE
 		     , HS_NAME

@@ -23,8 +23,9 @@ public class HighSchoolServiceImpl implements HighSchoolService {
 
 	// 고등학교 상세
 	@Override
-	public HighSchoolVO getHighSchoolById(Long hsId) {
-		
+	public HighSchoolVO getHighSchoolById(int hsId) {
+		HighSchoolVO highSchool = highSchoolMapper.selectHighSchoolById(hsId);
+
 		return highSchoolMapper.selectHighSchoolById(hsId);
 	}
 

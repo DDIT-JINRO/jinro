@@ -23,7 +23,6 @@ public class HighSchoolController {
 
 	public HighSchoolController(HighSchoolService highSchoolService) {
 		this.highSchoolService = highSchoolService;
-
 	}
 
 	// 1. 모든 고등학교 목록 조회 API (리스트 화면용)F
@@ -43,7 +42,7 @@ public class HighSchoolController {
 
 	// 고등학교 상세
 	@GetMapping("/detail")
-	public String highSchoolDetailPage(@RequestParam("hsId") Long hsId, Model model) {
+	public String highSchoolDetailPage(@RequestParam("hsId") int hsId, Model model) {
 		HighSchoolVO highSchool = highSchoolService.getHighSchoolById(hsId); // DB에서 상세 정보를 조회
 
 		model.addAttribute("highSchool", highSchool); // HighSchoolVO 객체 자체를 JSP로 전달
@@ -53,7 +52,7 @@ public class HighSchoolController {
 	// 특정 고등학교 ID로 상세 정보를 JSON 형태로 반환하는 API 엔드포인트
 	@GetMapping("/api/highschools/{hsId}") // 이 경로로 요청이 오면
 	@ResponseBody // HighSchoolVO 객체를 JSON으로 변환하여 HTTP 응답 본문에 씀
-	public ResponseEntity<HighSchoolVO> getHighSchoolByIdApi(@PathVariable("hsId") Long hsId) {
+	public ResponseEntity<HighSchoolVO> getHighSchoolByIdApi(@PathVariable("hsId") int hsId) {
 		HighSchoolVO highSchool = highSchoolService.getHighSchoolById(hsId);
 		
 		return new ResponseEntity<>(highSchool, HttpStatus.OK); // 200 OK와 데이터 반환
