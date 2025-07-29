@@ -3,7 +3,7 @@
 <mapper namespace="kr.or.ddit.util.file.service.impl.FileMapper">
 
 	<!-- 가장 큰 그룹 ID 조회 -->
-	<select id="getMaxFileGroupId" resultType="String">
+	<select id="getMaxFileGroupId" resultType="Long" parameterType="String">
 	    SELECT MAX(FILE_GROUP_ID)
 	    FROM FILE_GROUP
 	    WHERE FILE_GROUP_ID LIKE #{prefix} || '%'
