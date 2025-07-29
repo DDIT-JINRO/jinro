@@ -23,7 +23,7 @@
 	document.addEventListener("DOMContentLoaded",() => {
       const menuIcon = document.getElementById("menuToggle");
       const dropdown = document.getElementById("dropdownMenu");
-      const roadmap  = document.getElementById("roadmap");
+      const worldcup = document.getElementById("worldcup");
 	  header();
 
       menuIcon.addEventListener("click",() => {
@@ -35,19 +35,6 @@
                dropdown.classList.add("hidden");
             }
           });
-      
-      roadmap.addEventListener("click", () => {
-         const roadmapUrl = 'http://localhost:5173/roadmap';
-         
-         const width  = 1084;
-         const height = 736;
-         const screenWidth  = window.screen.width;
-         const screenHeight = window.screen.height;
-            const left = Math.floor((screenWidth - width) / 2);
-            const top  = Math.floor((screenHeight - height) / 2);
-         
-         window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
-      });
       
       worldcup.addEventListener("click", () => {
           const worldcupUrl = 'http://localhost:5173/worldcup';
