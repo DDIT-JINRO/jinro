@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const loadButtons = document.querySelector(".button-group");
+    const loadButtons = document.querySelector(".button-group button");
 
     // 버튼 클릭 시 항목 추가
     loadButtons.addEventListener("click", function(e) {
@@ -67,6 +67,13 @@ document.addEventListener("DOMContentLoaded", function() {
             containerCertificate.removeEventListener('click', handleCertificateClick);  // 기존 이벤트 리스너 제거
             containerCertificate.addEventListener('click', handleCertificateClick);  // 이벤트 리스너 추가
         }
+
+        // 대외 활동 항목 추가 이벤트
+        const containerActivities = document.querySelector('.form-activities');
+        if (containerActivities) {  // 요소가 존재할 때만 이벤트 리스너를 추가
+            containerActivities.removeEventListener('click', handleActivitiesClick);  // 기존 이벤트 리스너 제거
+            containerActivities.addEventListener('click', handleActivitiesClick); // 이벤트 리스너 추가
+        }
     }
 
     // 학력 항목 클릭 이벤트 처리
@@ -113,5 +120,20 @@ document.addEventListener("DOMContentLoaded", function() {
             newInput.classList.add('certificate-input');
             newInput.placeholder = '자격증을 입력하세요';
             certificateInputGroup.appendChild(newInput);
+        }
+    }
+
+        // 대외활동 항목 클릭 이벤트 처리
+    function handleActivitiesClick(event) {
+        if (event.target && event.target.closest('.activities-form button')) {
+            const activitiesInputGroup = event.target.closest('.activities-form').querySelector('.activities-input-container');
+
+            // 1개씩만 추가
+            const newInput = document.createElement('input');
+            newInput.type = 'text';
+            newInput.name = 'activities';
+            newInput.classList.add('activities-input');
+            newInput.placeholder = '활동 내용';
+            activitiesInputGroup.appendChild(newInput);
         }
     }

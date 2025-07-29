@@ -110,17 +110,16 @@
 					</div>
 
 					<div class="form-Skills">
-					<div class="Skills-header">
-						<label for="skills">스킬</label>
-						<button type="button" id="add-skill">추가</button>
-					</div>
+						<div class="Skills-header">
+							<label for="skills">스킬</label>
+							<button type="button" id="add-skill">추가</button>
+						</div>
 						<div class="skills-input-group">
 							<input type="text" id="skills" name="skills"
 								placeholder="스킬을 입력하세요" required>
 						</div>
 					</div>
-
-
+					
 				</form>
 			</section>
 			<div class="button-group">
@@ -131,6 +130,9 @@
 				<!-- 자격증 불러오기 버튼 -->
 				<button type="button" id="load-certificate" name="rsId" data-id="2">자격증
 					불러오기</button>
+					
+				<!-- 대외활동 불러오기 버튼 -->
+				<button type="button" id="load-activities" name="rsId" data-id="3">대외활동➕</button>
 			</div>
 			<a href="/rsm/rsm/detail.do">이력서 디테일</a>
 		</div>
