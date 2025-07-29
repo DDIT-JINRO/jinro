@@ -147,7 +147,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 		int searchResult = this.roadmapMapper.isCompleteExists(parameter);
 
 	    if (searchResult <= 0) {
-	        throw new CustomException(ErrorCode.MISSION_NOT_COMPLETABLE);
+	        return "fail";
 	    }
 
 		int updateResult = this.roadmapMapper.updateCompleteMission(parameter);

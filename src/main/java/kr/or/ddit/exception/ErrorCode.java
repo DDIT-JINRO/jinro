@@ -16,7 +16,6 @@ public enum ErrorCode {
 	INVALID_USER(HttpStatus.BAD_REQUEST, "INVALID_USER", "로그인을 해주세요."),
 	POINT_UPDATE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "POINT_UPDATE_ERROR", "포인트 업데이트에 실패했습니다."),
 	MISSION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "MISSION_UPDATE_ERROR", "미션 상태 업데이트에 실패했습니다."),
-	MISSION_NOT_COMPLETABLE(HttpStatus.BAD_REQUEST, "MISSION_NOT_COMPLETABLE", "아직 완료할 수 없는 미션입니다."),
 	FORBIDDEN_OPERATION(HttpStatus.FORBIDDEN, "FORBIDDEN_OPERATION", "허용되지 않는 작업입니다.");
 
 	private final HttpStatus status;
