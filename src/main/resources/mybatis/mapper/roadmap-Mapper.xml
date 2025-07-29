@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.rdm.service.impl.RoadmapMapper">
+
+	<!-- 특정 사용자의 로드맵있는지에 대한 여부 조회 -->
+	<select id="selectMemberRoadmap" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
+		SELECT
+			MEM_ID
+		FROM
+			ROADMAP
+		WHERE
+			MEM_ID = #{memId}
+	</select>
+
+	<!-- 로드맵이 없는 사용자의 첫 로드맵 생성 -->
+	<insert id="insertMemberRoadmap" parameterType="int">
+		INSERT
+			INTO
+			ROADMAP(
+				ROAD_ID
+				, MEM_ID
+				, RS_ID
+				, ROAD_COMPLETE
+				, CREATED_AT
+				, DUE_DATE
+			)
+		VALUES(ROADMAP_SEQ.NEXTVAL, #{memId}, 1, 'N', SYSDATE, SYSDATE)
+	</insert>
+	
+	<!-- 특정 사용자의 로드맵의 현재 캐릭터의 위치 조회 -->
+	<select id="selectCurrentCharPosition" resultType="int" parameterType="int">
+		SELECT
+		    RS_ID
+		FROM(
+	        SELECT
+	            A.RS_ID
+	        FROM
+	            ROADMAP A
+	        INNER JOIN
+	            ROADMAP_STEP B ON (A.RS_ID = B.RS_ID)
+	        WHERE
+	            A.MEM_ID = #{memId}
+	        ORDER BY
+	            A.ROAD_ID DESC,
+	            B.RS_STEP DESC
+		)
+		WHERE
+		    ROWNUM = 1
+	</select>
+	
+	<!-- 특정 사용자의 진행 중인 미션 리스트 조회 -->
+	<select id="selectProgressMissionList" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
+		SELECT
+			RS_ID
+			, DUE_DATE
+		FROM
+			ROADMAP
+		WHERE
+			ROAD_COMPLETE = 'N'
+			AND MEM_ID = #{memId}
+		ORDER BY
+			RS_ID DESC
+	</select>
+	
+	<!-- 특정 사용자의 완료된 미션 리스트 조회 -->
+	<select id="selectCompletedMissionList" resultType="kr.or.ddit.rdm.service.RoadmapVO" parameterType="int">
+		SELECT
+		   RS_ID
+		   , CREATED_AT
+		   , ROAD_COMPLETE
+		   , COMPLETE_AT
+		FROM
+		   ROADMAP
+		WHERE
+		   ROAD_COMPLETE = 'Y'
+		   AND MEM_ID = #{memId}
+		ORDER BY
+		   RS_ID DESC
+	</select>
+	
+	<!-- 로드맵 노드별 미션 리스트 -->
+	<resultMap type="kr.or.ddit.rdm.service.RoadmapStepVO" id="roadmapStepMap">
+		<result property="rsId" column="RS_ID"/>
+		<result property="stepName" column="STEP_NAME"/>
+	</resultMap>
+	
+	<select id="selectMissionList" resultMap="roadmapStepMap">
+		SELECT
+			A.RS_ID
+			, B.CC_ETC AS STEP_NAME
+		FROM
+			ROADMAP_STEP A
+		INNER JOIN COM_CODE B ON
+			(A.RS_TYPE = B.CC_ID)
+	</select>
+	
+	<!-- 파라미터 단계에 해당하는 테이블명 조회 -->
+	<select id="selectTableName" parameterType="int" resultType="String">
+		SELECT
+			CC_NAME
+		FROM
+			COM_CODE
+		WHERE
+			CC_ID = (
+				SELECT
+					RS_TYPE
+				FROM
+					ROADMAP_STEP
+				WHERE
+					RS_ID = #{rsId}
+			)
+	</select>
+	
+	<!-- 미션 완료 확인 여부 조회 -->
+	<select id="isCompleteExists" parameterType="map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			${tableName}
+		WHERE
+			MEM_ID = #{memId}
+		<if test="tableName == 'BOOKMARK'">
+		AND
+			BM_CATEGORY_ID = 'G03004'
+		</if>
+		<if test="tableName == 'SELF_INTRO'">
+		AND
+			SI_STATUS = '완료'
+		</if>
+	</select>
+	
+	<!-- 미션 완료 시 완료 여부 업데이트 -->
+	<update id="updateCompleteMission" parameterType="map">
+		UPDATE
+		   ROADMAP
+		SET 
+		   ROAD_COMPLETE = 'Y',
+		   COMPLETE_AT = SYSDATE
+		WHERE
+		   MEM_ID = #{memId}
+		AND
+		   RS_ID = #{rsId}
+	</update>
+	
+	<!-- 로드맵 완료시 특정 회원의 포인트를 추가 -->
+	<update id="updateUserPoint" parameterType="map">
+		UPDATE
+		   MEMBER
+		SET
+		   MEM_POINT = MEM_POINT + #{point}
+		WHERE
+		   MEM_ID = #{memId}
+	</update>
+	
+	<!-- 특정 사용자의 미션 등록 메서드 -->
+	<insert id="insertMission" parameterType="kr.or.ddit.rdm.service.RoadmapVO">
+		INSERT
+			INTO
+			ROADMAP (
+				ROAD_ID
+				, MEM_ID
+				, RS_ID
+				, ROAD_COMPLETE
+				, CREATED_AT
+				, DUE_DATE
+			)
+		SELECT
+			ROADMAP_SEQ.NEXTVAL
+			, #{memId}
+			, #{rsId}
+			, 'N'
+			, SYSDATE
+			, #{dueDate}
+		FROM
+			DUAL
+		WHERE
+			NOT EXISTS (
+				SELECT
+					1
+				FROM
+					ROADMAP
+				WHERE
+					MEM_ID = #{memId}
+					AND RS_ID = #{rsId}
+			)
+	</insert>
+	
+	<update id="updateDueDate" parameterType="kr.or.ddit.rdm.service.RoadmapVO">
+		UPDATE
+			ROADMAP
+		SET
+			DUE_DATE = #{dueDate}
+		WHERE
+			MEM_ID = #{memId}
+		AND
+			RS_ID = #{rsId}	
+	</update>
+	
+	<insert id="insertCompleteRoadmap" parameterType="int">
+		INSERT
+			INTO
+			ROADMAP(
+				ROAD_ID
+				, MEM_ID
+				, RS_ID
+				, ROAD_COMPLETE
+				, COMPLETE_AT
+				, CREATED_AT
+				, DUE_DATE
+			)
+		VALUES(ROADMAP_SEQ.NEXTVAL, #{memId}, 11, 'Y', SYSDATE, SYSDATE, SYSDATE)
+	</insert>
+	
+	<select id="selectMember" parameterType="int" resultType="String">
+		SELECT
+			MEM_NAME
+		FROM
+			MEMBER
+		WHERE
+			MEM_ID = #{memId}
+	</select>
+</mapper>

@@ -2,12 +2,6 @@
 	pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="/css/main.css" />
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function () {
-	  const banner = document.querySelector('.main-loadmap-banner');
-	  banner.classList.add('animate-in');
-});
-</script>
 <div class="mainContainer">
 	<section class="main-loadmap-banner">
 		<div class="banner-inner">
@@ -39,3 +33,4 @@ document.addEventListener('DOMContentLoaded', function () {
 	</section>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
+<script src="/js/content/main.js"></script>
