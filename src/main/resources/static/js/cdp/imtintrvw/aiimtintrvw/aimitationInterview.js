@@ -271,14 +271,12 @@ function validateInterviewSettings(selectedValue) {
             },
         })
         .then(response => {
-            console.log('📡 검증 응답:', response.status);
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('✅ 검증 성공:', data);
             if (data.success && data.questions && data.questions.length > 0) {
                 resolve({
                     type: selectedInterviewType,
@@ -381,7 +379,6 @@ function openMockInterviewPopup(interviewSettings) {
         }
         
         popupUrl += '?' + params.toString();
-        console.log('🚀 팝업 URL:', popupUrl);
         
         // 팝업 창 열기
         const popup = window.open(
@@ -430,9 +427,7 @@ function resetButton() {
 /**
  * 이벤트 리스너 초기화 함수
  */
-function initializeEventListeners() {
-    console.log('🎯 이벤트 리스너 초기화 시작');
-    
+function initializeEventListeners() {    
     // 체크박스 클릭 이벤트
     const checkboxes = document.querySelectorAll('.checkbox');
     checkboxes.forEach(function(checkbox) {
@@ -441,11 +436,9 @@ function initializeEventListeners() {
             if (this.classList.contains('checked')) {
                 // 체크 해제
                 this.classList.remove('checked');
-                console.log('☑️ 체크박스 해제');
             } else {
                 // 체크 설정
                 this.classList.add('checked');
-                console.log('✅ 체크박스 체크');
             }
             
             // 버튼 상태 업데이트
@@ -459,7 +452,6 @@ function initializeEventListeners() {
         tag.addEventListener('click', function() {
             // 이미 활성화된 태그를 다시 클릭한 경우 무시
             if (this.classList.contains('active')) {
-                console.log('🔄 이미 활성화된 태그 클릭 - 무시');
                 return;
             }
             
@@ -478,7 +470,6 @@ function initializeEventListeners() {
     const questionSelect = document.getElementById('questionSelect');
     if (questionSelect) {
         questionSelect.addEventListener('change', function() {
-            console.log(`📝 Select 값 변경: "${this.value}"`);
             updateStartButton();
         });
     }
@@ -487,9 +478,7 @@ function initializeEventListeners() {
 /**
  * 페이지 초기화 함수
  */
-function initializeAiInterviewPage() {
-    console.log('📄 AI 모의면접 페이지 초기화 시작');
-    
+function initializeAiInterviewPage() {    
     // 미디어 장치 지원 여부 확인
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         const button = document.getElementById('startButton');
@@ -510,8 +499,6 @@ function initializeAiInterviewPage() {
     
     // 이벤트 리스너 초기화
     initializeEventListeners();
-    
-    console.log('✅ AI 모의면접 페이지 초기화 완료');
 }
 
 // DOM 로드 완료 시 초기화 실행
