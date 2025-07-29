@@ -16,4 +16,10 @@ public interface NoticeMapper {
 	public int upNoticeCnt(int no);
 	
 	public int getAllNotice(Map<String, Object>map);
+
+	public int insertNotice(NoticeVO noticeVo);
+
+	public int updateNotice(NoticeVO noticeVo);
+
+	public int deleteNotice(int noticeId);
 }

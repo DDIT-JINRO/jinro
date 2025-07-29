@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- 사이드바 -->
 <link rel="stylesheet" href="/css/admin/admSideBar.css">
 <link rel="shortcut icon" href="/images/crppvc.png">
+<link rel="stylesheet" href="/pagenation.css">
 <script src="/js/include/admin/sidebar.js"></script>
 <script src="/js/axios.min.js"></script>
 <script src="/ckeditor5/ckeditor.js"></script>

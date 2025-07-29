@@ -12,4 +12,10 @@ public interface NoticeService {
 	public int upNoticeCnt(String no);
 	//전체 게시글 수
 	public int getAllNotice(Map<String, Object>map);
+	//공지사항 등록
+	public int insertNotice(NoticeVO noticeVo);
+	//공지사항 수정
+	public int updateNotice(NoticeVO noticeVo);
+	//공지사항 삭제
+	public int deleteNotice(int noticeId);
 }

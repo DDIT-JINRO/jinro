@@ -1,6 +1,9 @@
 package kr.or.ddit.csc.not.service;
 
 import java.util.Date;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 //관리자 공지사항 VO
 public class NoticeVO {
-	private int fileGroupNo;
+
 	private int noticeCnt;
 	private String noticeContent;
 	private Date noticeCreatedAt;
@@ -18,8 +21,20 @@ public class NoticeVO {
 	private String noticeTitle;
 	private Date noticeUpdatedAt;
 
+	// 파일
+	private Long fileGroupNo;
+	private String fileName;
+	private List<MultipartFile> files;
+	private int seq;
+	
+	// 파일 리스트
+	private List<kr.or.ddit.util.file.service.FileDetailVO> getFileList;
+	
 	// 검색 키워드
 	private String keyword;
+	
+	// 연도
+	private String status;
 	
 	// 페이징
 	private int currentPage;

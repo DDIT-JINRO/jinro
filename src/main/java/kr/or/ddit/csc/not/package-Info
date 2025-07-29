@@ -1,0 +1,7 @@
+/**
+ * Video  : Video  (화상상담)
+ * 화상상담 관련 패키지
+ * 
+ * kr\or\ddit\util\video\web\VideoController.java
+ * : 화상상담(구르미) API 클래스
+ */

@@ -43,4 +43,22 @@ public class NoticeServiceImpl implements NoticeService{
 		return this.noticeMapper.getAllNotice(map);
 	}
 
+	@Override
+	public int insertNotice(NoticeVO noticeVo) {
+		// TODO Auto-generated method stub
+		return this.noticeMapper.insertNotice(noticeVo);
+	}
+
+	@Override
+	public int updateNotice(NoticeVO noticeVo) {
+		// TODO Auto-generated method stub
+		return  this.noticeMapper.updateNotice(noticeVo);
+	}
+
+	@Override
+	public int deleteNotice(int noticeId) {
+		// TODO Auto-generated method stub
+		return this.noticeMapper.deleteNotice(noticeId);
+	}
+
 }
