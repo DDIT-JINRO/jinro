@@ -1,0 +1,204 @@
+@font-face {
+	font-family: 'NotoSansCJKkr';
+	src: url('/fonts/NotoSansCJKkr-Regular.otf') format('opentype');
+}
+
+body, input, textarea {
+	font-family: 'NotoSansCJKkr', 'Malgun Gothic', 'Arial', sans-serif;
+}
+
+/* 전체 레이아웃 */
+.public-wrapper-main {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 24px 60px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 제목 섹션 */
+.section-title {
+	margin-bottom: 32px;
+}
+
+.section-title h2 {
+	font-size: 1.75rem;
+	font-weight: 600;
+	color: #333;
+	margin-bottom: 8px;
+}
+
+.title-input {
+	width: 95.5%;
+	padding: 12px 16px;
+	font-size: 1rem;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	outline: none;
+}
+
+.title-input:focus {
+	border-color: #5a3fdb;
+	box-shadow: 0 0 0 2px rgba(90, 63, 219, 0.2);
+}
+
+/* 질문+답변 블록 */
+.qa-block {
+	margin-bottom: 24px;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	padding: 16px;
+	background: #fafafa;
+}
+
+.question-block {
+	display: flex;
+	align-items: center;
+	margin-bottom: 12px;
+}
+
+.question-number {
+	display: inline-block;
+	min-width: 32px;
+	font-size: 1rem;
+	font-weight: 700;
+	color: #5a3fdb;
+}
+
+.question-text {
+	flex: 1;
+	font-size: 1rem;
+	color: #333;
+	margin-left: 8px;
+}
+
+.answer-block textarea {
+  width: 96%; /* 가로폭을 꽉 채우도록 */
+  margin: 0; /* 여백 제거 */
+  padding: 12px;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical; /* 높이만 조정 가능하도록 */
+  outline: none;
+}
+
+.answer-block textarea:focus {
+	border-color: #5a3fdb;
+	box-shadow: 0 0 0 2px rgba(90, 63, 219, 0.2);
+}
+
+/* 버튼 그룹 */
+.btn-group {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 30px;
+}
+
+.btn-group button {
+	padding: 10px 24px;
+	font-size: 1rem;
+	font-weight: 500;
+	border-radius: 4px;
+	cursor: pointer;
+	border: none;
+	transition: background 0.2s, color 0.2s;
+}
+/* 오른쪽 버튼 그룹 묶음 */
+.btn-right-group {
+	display: flex;
+	gap: 10px;
+}
+
+.btn-left-group {
+	display: flex;
+}
+
+.btn-temp-save {
+	background: transparent;
+	color: #666;
+	border: 1px solid #ccc;
+}
+
+.btn-temp-save:hover {
+	background: #e2e2e2;
+}
+
+.btn-preview {
+	background: #fff;
+	color: #5a3fdb;
+	border: 1px solid #5a3fdb;
+}
+
+.btn-preview:hover {
+	background: #717bfb;
+	color: #fff;
+}
+
+.btn-submit {
+	background: #717bfb;
+	color: #fff;
+}
+
+.btn-submit:hover {
+	background: #4a2fb8;
+}
+
+/* 삭제 버튼 스타일 */
+.btn-delete {
+	background-color: #ff6262;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 14px;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.btn-delete:hover {
+	background-color: #d9363e;
+}
+
+.char-count {
+  margin-top: 5px; /* 적당한 위쪽 여백 */
+  font-size: 0.9rem;
+  color: #666;
+  text-align: right;
+  padding: 0;
+}
+
+/* 문항-답변 블록 전체 (질문+답변을 묶어서 페이지 중간에 잘리지 않게) */
+.qa-block {
+	page-break-inside: avoid;
+	break-inside: avoid;
+	margin-bottom: 20px; 
+	page-break-after: auto; 
+}
+
+/* 답변이 너무 길 경우 내부에서 줄 바꿈 되도록 */
+/* 문항-답변 블록 */
+.answer-block {
+  margin-bottom: 10px; /* 여백 최소화 */
+  padding: 0; /* 불필요한 패딩 제거 */
+  page-break-inside: avoid; /* 페이지 중간에서 끊기지 않도록 */
+  break-inside: avoid;
+}
+
+/* 반응형 */
+@media ( max-width : 600px) {
+	.btn-group {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.btn-left-group, .btn-right-group {
+		justify-content: center;
+		margin-top: 8px;
+	}
+	.btn-group button {
+		width: 100%;
+	}
+}
