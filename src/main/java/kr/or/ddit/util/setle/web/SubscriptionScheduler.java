@@ -23,8 +23,8 @@ public class SubscriptionScheduler {
     private PaymentService paymentService;
 
     // 매일 새벽 4시에 실행 (서버 부하가 적은 시간)
-    //@Scheduled(cron = "0 0 4 * * *") 
-    @Scheduled(cron = "0 */1 * * * *") //테스트를 위해 '매 1분마다' 실행
+    @Scheduled(cron = "0 0 4 * * *") 
+    //@Scheduled(cron = "0 */1 * * * *") //테스트를 위해 '매 1분마다' 실행
     public void scheduleDailyPayments() {
         System.out.println("----------- 정기결제 스케줄러 시작 -----------");
         

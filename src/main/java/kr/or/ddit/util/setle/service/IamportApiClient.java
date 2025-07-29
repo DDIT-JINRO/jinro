@@ -156,64 +156,6 @@ public class IamportApiClient {
 		}
 	}
 
-	/**
-	 * customer_uid(고객 고유 식별자)를 사용하여 정기 결제를 예약하는 메서드입니다. 일반적으로 최초 빌링키 발급 후 다음 자동 결제를
-	 * 미리 예약할 때 사용됩니다. 아임포트 API: POST /subscribe/payments/schedule
-	 *
-	 * @param customerUid  아임포트에 등록된 고객의 고유 식별자
-	 * @param scheduleData 예약할 결제 정보가 담긴 Map (merchant_uid, amount, schedule_at(Unix
-	 *                     timestamp) 등이 포함된 'schedules' 리스트 포함)
-	 * @return API 응답 Map (성공 시), 또는 null (실패 시)
-	 * @throws JsonProcessingException
-	 */
-	public List<Map<String, Object>> scheduleSubscriptionPayment(String customerUid, Map<String, Object> scheduleData)
-			throws JsonProcessingException {
-		String accessToken = getAccessToken();
-		if (accessToken == null) {
-			return null; // 토큰 발급 실패 시 즉시 종료
-		}
-
-		System.out.println("토큰발급 : 시작");
-		System.out.println(accessToken);
-		System.out.println("토큰발급 : 끝");
-
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		String url = "https://api.iamport.kr/subscribe/payments/schedule";
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setBearerAuth(accessToken);
-
-		// API 요청 본문 구성: customer_uid와 예약 스케줄 정보
-		Map<String, Object> body = new HashMap<>();
-		body.put("customer_uid", customerUid);
-		body.put("schedules", scheduleData.get("schedules")); // 'schedules' 키에 해당하는 리스트를 추출하여 전달
-
-		HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-
-		// 수정본
-		ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
-		System.out.println("전체 응답: " + response.getBody());
-
-		Map<String, Object> bodyMap = response.getBody();
-		if (bodyMap != null) {
-			Object code = bodyMap.get("code");
-			if (code instanceof Integer && ((Integer) code) == 0) {
-				// 성공
-				return (List<Map<String, Object>>) bodyMap.get("response");
-			} else {
-				System.out.println("❌ 실패 코드 또는 응답: " + bodyMap);
-				return null;
-			}
-		}
-		System.out.println("❌ 응답 body가 null입니다");
-		return null;
-	}
 
 	/**
 	 * customer_uid(고객 고유 식별자)를 사용하여 빌링키로 즉시 결제를 수행하는 메서드입니다. 주로 정기 결제 스케줄러에서 매달 자동
@@ -267,47 +209,4 @@ public class IamportApiClient {
 			return null;
 		}
 	}
-
-	/**
-	 * customer_uid(고객 고유 식별자)를 사용하여 예약된 결제가 실행되기전에 해당 예약의 취소를 수행하는 메서드입니다. 주로 정기 결제
-	 * 스케줄러에서 매달 자동 결제를 시도할 때 사용됩니다. 아임포트 API: POST
-	 * /subscribe/payments/schedule/{merchant_uid}
-	 *
-	 * @param customerUid 고객 고유 식별자
-	 * @param merchantUid 상점에서 생성하는 이번 결제 건의 고유 주문번호
-	 * @throws JsonProcessingException
-	 */
-	public Map<String, Object> unscheduleSubscriptionPayment(String customerUid, String merchantUid)
-			throws JsonProcessingException {
-		String accessToken = getAccessToken();
-		if (accessToken == null) {
-			return null; // 토큰 발급 실패 시 즉시 종료
-		}
-
-		String url = "https://api.iamport.kr/subscribe/payments/unschedule";
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setBearerAuth(accessToken);
-
-		// API 요청 본문 구성: 고객, 주문
-		Map<String, Object> body = new HashMap<>();
-		body.put("customer_uid", customerUid);
-		body.put("merchant_uid", List.of(merchantUid));
-
-		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(body, headers);
-
-		try {
-			// POST 요청을 보내고 응답을 Map 형태로 받습니다.
-			ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
-			if (response.getBody() != null && response.getBody().containsKey("response")) {
-				return (Map<String, Object>) response.getBody().get("response");
-			}
-			return null;
-		} catch (Exception e) {
-			System.err.println("Failed to perform payAgain for customer_uid " + customerUid + ": " + e.getMessage());
-			return null;
-		}
-
-	}
-
 }
