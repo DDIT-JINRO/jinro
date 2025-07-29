@@ -158,7 +158,8 @@
 }
 
 #alarm-delete-all:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  transform: scale(1.01);
 }
 
 .empty-message {

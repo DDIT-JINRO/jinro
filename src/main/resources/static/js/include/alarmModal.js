@@ -65,7 +65,8 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 
 		// 알림 전체삭제 요청 버튼 이벤트 추가
-		alarmDeleteAll.classList.remove('denined');
+		alarmDeleteAll.classList.remove('denied');
+		alarmDeleteAll.removeAttribute('disabled');
 		alarmDeleteAll.addEventListener('click', function(){
 			console.log('버튼 작동 테스트');
 			fetch('/api/alarm/deleteAllAlarm',{
