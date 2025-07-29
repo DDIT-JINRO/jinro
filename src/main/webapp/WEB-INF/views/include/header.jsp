@@ -20,6 +20,8 @@
 <title>CareerPath</title>
 <script src="/js/include/header.js"></script>
 <script>
+const memId = '<sec:authentication property="name" />'
+
 	document.addEventListener("DOMContentLoaded",() => {
 		const menuIcon = document.getElementById("menuToggle");
 		const dropdown = document.getElementById("dropdownMenu");
@@ -39,16 +41,21 @@
 		
 		if(roadmap) {
 			roadmap.addEventListener("click", () => {
-				const roadmapUrl = 'http://localhost:5173/roadmap';
-				
-				const width  = 1084;
-				const height = 736;
-				const screenWidth  = window.screen.width;
-				const screenHeight = window.screen.height;
-	            const left = Math.floor((screenWidth - width) / 2);
-	            const top  = Math.floor((screenHeight - height) / 2);
-				
-				window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+				if(!memId || memId=='anonymousUser') {
+					sessionStorage.setItem("redirectUrl", location.href);
+					location.href = "/login";
+				} else {
+					const roadmapUrl = 'http://localhost:5173/roadmap';
+					
+					const width  = 1084;
+					const height = 736;
+					const screenWidth  = window.screen.width;
+					const screenHeight = window.screen.height;
+		            const left = Math.floor((screenWidth - width) / 2);
+		            const top  = Math.floor((screenHeight - height) / 2);
+					
+					window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+				}
 			});
 		}
 		
@@ -73,21 +80,22 @@
 		});
 		
 		worldcup.addEventListener("click", () => {
-			const worldcupUrl = 'http://localhost:5173/worldcup';
-			
-			const width  = 1200;
-			const height = 800;
-			const screenWidth  = window.screen.width;
-			const screenHeight = window.screen.height;
+			if(!memId || memId=='anonymousUser') {
+				sessionStorage.setItem("redirectUrl", location.href);
+				location.href = "/login";
+			} else {
+				const worldcupUrl = 'http://localhost:5173/worldcup';
+				
+				const width  = 1200;
+				const height = 800;
+				const screenWidth  = window.screen.width;
+				const screenHeight = window.screen.height;
 				const left = Math.floor((screenWidth - width) / 2);
 				const top  = Math.floor((screenHeight - height) / 2);
-			
-			window.open(worldcupUrl, 'worldcup', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+				
+				window.open(worldcupUrl, 'worldcup', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+			}
 		});
-		
-		});
-		const memId = '<sec:authentication property="name" />'
-		
 	});
 </script>
 </head>

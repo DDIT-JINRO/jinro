@@ -28,7 +28,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 	 * 미션 완료 여부 확인 시 허용되는 테이블 이름 목록.
 	 * 이 목록에 없는 테이블 이름은 보안상 허용되지 않습니다.
 	 */
-	private static final Set<String> ALLOWED_TABLE_NAMES = new HashSet<>(
+	private final Set<String> ALLOWED_TABLE_NAMES = new HashSet<>(
 			Arrays.asList("INTEREST_CN", "APTITUDE_TEST", "WORLDCUP", "BOOKMARK", "CHAT_MEMBER", "COUNSELING", "BOARD",
 					"RESUME", "SELF_INTRO", "MOCK_INTERVIEW_HISTORY"));
 

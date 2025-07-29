@@ -35,7 +35,6 @@ public class SecurityConfig {
 		this.userDetailsService = userDetailsService;
 		
 	}
-
     
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -47,8 +46,10 @@ public class SecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/worldcup/**", config);
+        source.registerCorsConfiguration("/roadmap/**", config);
         return source;
     }
+    
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http

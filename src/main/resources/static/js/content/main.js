@@ -2,6 +2,13 @@
  * 
  */
 
+document.addEventListener('DOMContentLoaded', function() {
+	fn_init();
+    if(memId && memId !='anonymousUser') {
+    	roadmapPopup();
+	}
+});
+
 const fn_init = () => {
 	const banner = document.querySelector('.main-loadmap-banner');
 	banner.classList.add('animate-in');
