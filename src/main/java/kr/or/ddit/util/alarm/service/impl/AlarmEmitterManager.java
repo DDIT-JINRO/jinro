@@ -25,9 +25,7 @@ public class AlarmEmitterManager {
 
 		// 연결 테스트용
 		try {
-			emitter.send(SseEmitter.event()
-								.name("connected")
-								.data(memId));
+			emitter.send(SseEmitter.event().name("connected").data(memId));
 		} catch (IOException e) {
 			emitter.complete();
 			connectedEmitterMap.remove(memId);
@@ -38,18 +36,17 @@ public class AlarmEmitterManager {
 		emitter.onCompletion(()->{
 			SseEmitter disconnectEmitter = connectedEmitterMap.remove(memId);
 			if(disconnectEmitter != null) disconnectEmitter.complete();
-			System.out.println("@@@@@@ emitter 연결종료 memId : " + memId);
+//			System.out.println("@@@@@@ emitter 연결종료 memId : " + memId);
 		});
 		emitter.onTimeout(()->{
 			SseEmitter disconnectEmitter = connectedEmitterMap.remove(memId);
 			if(disconnectEmitter != null) disconnectEmitter.complete();
-			System.out.println("@@@@@@ emitter 만료됨 memId : " + memId);
+//			System.out.println("@@@@@@ emitter 만료됨 memId : " + memId);
 		});
 		emitter.onError((e)->{
 			SseEmitter disconnectEmitter = connectedEmitterMap.remove(memId);
 			if(disconnectEmitter != null) disconnectEmitter.complete();
-			System.out.println("@@@@@@ emitter 에러발생 memId : " + memId+" error" + e+ "  @@ class : "+e.getClass());
-
+//			System.out.println("@@@@@@ emitter 에러발생 memId : " + memId+" error" + e+ "  @@ class : "+e.getClass());
 		});
 
 		return emitter;
@@ -57,10 +54,11 @@ public class AlarmEmitterManager {
 
 	@PreDestroy
 	public void cleanupEmitters() {
-		connectedEmitterMap.forEach((memId, emitter)->{
+		connectedEmitterMap.forEach((memId, emitter) -> {
 			try {
 				emitter.complete();
-			} catch (Exception e) {	}
+			} catch (Exception e) {
+			}
 		});
 		connectedEmitterMap.clear();
 	}

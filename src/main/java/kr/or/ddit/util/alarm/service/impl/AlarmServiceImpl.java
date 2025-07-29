@@ -61,13 +61,13 @@ public class AlarmServiceImpl implements AlarmService{
 	public void sendEvent(AlarmVO alarmVO) {
 		// 알림 내용 설정
 		int targetMemId = alarmVO.getMemId();
-		if(targetMemId == 0) {
+		if (targetMemId == 0) {
 			targetMemId = getTargetMemId(alarmVO);
 		}
 		String content = createContent(alarmVO.getAlarmTargetType());
 		alarmVO.setMemId(targetMemId);
 		alarmVO.setAlarmContent(content);
-		if(alarmVO.getAlarmIsRead() == null) {
+		if (alarmVO.getAlarmIsRead() == null) {
 			alarmVO.setAlarmIsRead("N");
 		}
 		// DB에 저장.
@@ -78,19 +78,16 @@ public class AlarmServiceImpl implements AlarmService{
 		// alarm 대상 꺼내서 emitter에서 확인
 		SseEmitter sseEmitter = this.emitterManager.getEmitter(targetMemId);
 		// 있으면 전송
-		if(sseEmitter != null) {
+		if (sseEmitter != null) {
 			try {
-				sseEmitter.send(SseEmitter.event()
-										.name("alarm")
-										.data(alarmVO)
-										.build());
-			}catch(IOException e){
+				sseEmitter.send(SseEmitter.event().name("alarm").data(alarmVO).build());
+			} catch (IOException e) {
 				// 클라이언트의 EventSource 객체와 sseEmitter 연결이 끊겨서
 				// 가지고 있는 객체가 send 할 수 없을경우 에러 발생
 				// sseEmitter를 종료시킴.
-				  saveComplete(sseEmitter);
-				  emitterManager.getConnectedEmitterMap().remove(sseEmitter);
-			}catch (Exception e) {
+				saveComplete(sseEmitter);
+				emitterManager.getConnectedEmitterMap().remove(sseEmitter);
+			} catch (Exception e) {
 			}
 		}
 	}
