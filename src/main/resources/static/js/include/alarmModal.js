@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		eventSource.addEventListener('alarm',function(e){
 			const alarmVO = JSON.parse(e.data);
 			console.log(alarmVO);
-			//addAlarmItem(alarmVO);
+			addAlarmItem(alarmVO);
 		})
 
 		eventSource.addEventListener('connected', function(e){
@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 
 		// 알림 전체삭제 요청 버튼 이벤트 추가
+		alarmDeleteAll.classList.remove('denined');
 		alarmDeleteAll.addEventListener('click', function(){
 			console.log('버튼 작동 테스트');
 			fetch('/api/alarm/deleteAllAlarm',{
@@ -73,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			.then(resp =>{
 				if(!resp.ok) throw new Error("전체삭제 에러 발생");
 				// 정상적으로 삭제되고 나서 body비우기 및 뱃지 제거
-				updateFloatingBadge(Number.MIN_SAFE_INTEGER);
+				updateAlarmFloatingBadge(Number.MIN_SAFE_INTEGER);
 				alarmBody.innerHTML = '<p class="empty-message">알림이 없습니다.</p>';
 			})
 			.catch(err =>{
@@ -84,6 +85,9 @@ document.addEventListener('DOMContentLoaded', function(){
 		// 모달에 띄울 알림 내용 출력하는 함수
 		function addAlarmItem(alarm){
 			const item = document.createElement('div');
+			const emptyMessage = document.querySelector(".empty-message");
+			if(emptyMessage) emptyMessage.remove();
+
 			item.classList.add('alarm-item');
 			item.classList.add(alarm.alarmIsRead == 'Y' ? 'read' : 'unread');
 			item.dataset.id = alarm.alarmId;
@@ -91,12 +95,17 @@ document.addEventListener('DOMContentLoaded', function(){
 				if(e.target.closest('.alarm-delete-btn')) return;
 				location.href = alarm.alarmTargetUrl;
 			}
-			// 알림 내용, 취소버튼 추가
-			item.innerHTML = `	<span class="alarm-content">${alarm.alarmContent}</span>
-			      				<button class="alarm-delete-btn" onclick="removeAlarmItem(this)">&times;</button>`;
+			// 알림 내용, 시간, 삭제 버튼 추가
+			item.innerHTML = `
+					    <div class="alarm-item__main">
+					      <span class="alarm-time">${alarm.displayTime}</span>
+					      <span class="alarm-content">${alarm.alarmContent}</span>
+					    </div>
+					    <button class="alarm-delete-btn" onclick="removeAlarmItem(this)">&times;</button>
+						`;
 			alarmBody.prepend(item);
 			if(alarm.alarmIsRead == 'N'){
-				updateFloatingBadge(1);
+				updateAlarmFloatingBadge(1);
 			}
 		}
 
@@ -143,7 +152,7 @@ function updateReadAlarm(e){
 		// 뱃지제거
 		unreadAlarmItem.classList.remove('unread');
 		unreadAlarmItem.classList.add('read');
-		updateFloatingBadge(-1);
+		updateAlarmFloatingBadge(-1);
 	})
 	.catch(err =>{
 		console.log(err);
@@ -152,7 +161,7 @@ function updateReadAlarm(e){
 
 // 플로팅 뱃지 업데이트 시키는 함수
 // nums(증가 or 감소 될 갯수) : 초기 세팅 안읽은갯수 혹은 SseEvent발생시 1, 읽어서 업데이트 할 때 -1
-function updateFloatingBadge(nums=Number){
+function updateAlarmFloatingBadge(nums=Number){
 	const floatingBadge = document.getElementById("alarm-badge");
 	let unreadCnt = floatingBadge.textContent.trim();
 	unreadCnt = parseInt(unreadCnt)+nums;
@@ -169,7 +178,6 @@ function updateFloatingBadge(nums=Number){
 function removeAlarmItem(alarmDeleteBtn){
 	const alarmItem = alarmDeleteBtn.closest(".alarm-item");
 	const alarmBody = alarmItem.closest("#alarm-body");
-	console.log(alarmItem);
 	let alarmId = alarmItem.dataset.id;
 
 	fetch(`/api/alarm/deleteAlarmItem?alarmId=${alarmId}`,{
@@ -178,9 +186,11 @@ function removeAlarmItem(alarmDeleteBtn){
 	.then(resp =>{
 		if(!resp.ok) throw new Error("단일 삭제 에러 발생")
 
-		updateFloatingBadge(-1);
+		updateAlarmFloatingBadge(-1);
 		alarmItem.remove();
-		if(!alarmBody.firstChild){
+		const alarmItemList = document.querySelectorAll(".alarm-item");
+
+		if(alarmItemList.length == 0){
 			alarmBody.innerHTML = '<p class="empty-message">알림이 없습니다.</p>';
 		}
 	})

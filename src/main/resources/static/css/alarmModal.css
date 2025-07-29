@@ -72,7 +72,7 @@
 
 .alarm-body {
   padding: 8px;
-  max-height: calc(80vh - 128px);
+  max-height: 280px;
   overflow-y: auto;
 }
 
@@ -88,12 +88,19 @@
 .alarm-item {
   background: #ffffff;
   border-radius: 8px;
+  border-bottom: 1px solid #eee;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   margin-bottom: 12px;
-  padding: 12px 16px;
+  padding: 8px 12px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+}
+
+.alarm-item__main {
+  display: flex;
+  flex-direction: column;
+  /* 혹은 가로 정렬을 원하면 row, 아래 예시는 세로정렬 */
 }
 
 .alarm-item:hover {
@@ -109,23 +116,28 @@
 }
 
 .alarm-content {
-  flex: 1;
-  font-size: 0.875rem;
-  color: #444;
-  line-height: 1.4;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+/* 시간 표시 */
+.alarm-time {
+  font-size: 12px;
+  color: #888;
 }
 
 .alarm-delete-btn {
-  background: none;
+  background: transparent;
   border: none;
-  cursor: pointer;
-  font-size: 1rem;
+  font-size: 16px;
   color: #bbb;
+  cursor: pointer;
   margin-left: 8px;
 }
 
 .alarm-delete-btn:hover {
-  color: #e74c3c;
+  color: #888;
 }
 
 .alarm-footer {
@@ -147,4 +159,15 @@
 
 #alarm-delete-all:hover {
   text-decoration: underline;
+}
+
+.empty-message {
+  text-align: center;
+  padding: 16px;
+  color: #666;
+  font-size: 14px;
+}
+
+.denied {
+	cursor: not-allowed !important;
 }
