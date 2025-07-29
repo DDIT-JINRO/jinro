@@ -5,7 +5,7 @@
   <!-- Insert new Alarm, using sequence for ALARM_ID -->
   <insert id="insertAlarm" parameterType="kr.or.ddit.util.alarm.service.AlarmVO">
     <selectKey keyProperty="alarmId" resultType="int" order="BEFORE">
-      SELECT NVL(MAX(alarmId),0)+1 AS alarmId FROM ALARM
+      SELECT NVL(MAX(ALARM_ID),0)+1 AS ALARM_ID FROM ALARM
     </selectKey>
     INSERT INTO ALARM (
         ALARM_ID
@@ -62,5 +62,39 @@
     DELETE FROM ALARM
      WHERE MEM_ID = #{memId}
   </delete>
+
+  <!-- 게시글에 새 댓글 알림받을 대상 챙겨오기 -->
+  <select id="getReplyToBoardTargetMemId" parameterType="kr.or.ddit.util.alarm.service.AlarmVO" resultType="int">
+  	SELECT
+  		   B.MEM_ID
+	  FROM BOARD B
+	  JOIN REPLY R ON B.BOARD_ID = R.BOARD_ID
+	  WHERE R.REPLY_ID = #{alarmTargetId}
+  </select>
+
+  <!-- 댓글에 새 댓글 알림받을 대상 챙겨오기 -->
+  <select id="getReplyToReplyTargetMemId" parameterType="kr.or.ddit.util.alarm.service.AlarmVO" resultType="int">
+	SELECT
+		   R1.MEM_ID
+	  FROM REPLY R1
+	  JOIN REPLY R2 ON R1.REPLY_ID = R2.REPLY_PARENT_ID
+	 WHERE R2.REPLY_ID = #{alarmTargetId}
+  </select>
+
+  <!-- 게시글에 좋아요 알림받을 대상 챙겨오기 -->
+  <select id="getLikeToBoardTargetMemId" parameterType="kr.or.ddit.util.alarm.service.AlarmVO" resultType="int">
+  	SELECT
+  		   B.MEM_ID
+	  FROM BOARD B
+	 WHERE B.BOARD_ID = #{alarmTargetId}
+  </select>
+
+  <!-- 댓글에 좋아요 알림받을 대상 챙겨오기 -->
+  <select id="getLikeToReplyTargetMemId" parameterType="kr.or.ddit.util.alarm.service.AlarmVO" resultType="int">
+  	SELECT
+  		   R.MEM_ID
+  	  FROM REPLY R
+  	 WHERE R.REPLY_ID = #{alarmTargetId}
+  </select>
 
 </mapper>

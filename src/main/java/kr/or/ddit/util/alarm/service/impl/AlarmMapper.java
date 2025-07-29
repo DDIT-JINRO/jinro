@@ -44,4 +44,32 @@ public interface AlarmMapper {
 	 */
 	int deleteAllByMember(int memId);
 
+	/**
+	 * 게시글에 댓글 -> 알림대상회원번호 가져오기
+	 * @param alarmVO
+	 * @return
+	 */
+	int getReplyToBoardTargetMemId(AlarmVO alarmVO);
+
+	/**
+	 * 댓글에 댓글 -> 알림대상회원번호 가져오기
+	 * @param alarmVO
+	 * @return
+	 */
+	int getReplyToReplyTargetMemId(AlarmVO alarmVO);
+
+	/**
+	 * 게시글에 좋아요 -> 알림대상회원번호 가져오기
+	 * @param alarmVO
+	 * @return
+	 */
+	int getLikeToBoardTargetMemId(AlarmVO alarmVO);
+
+	/**
+	 * 댓글에 좋아요 -> 알림대상회원번호 가져오기
+	 * @param alarmVO
+	 * @return
+	 */
+	int getLikeToReplyTargetMemId(AlarmVO alarmVO);
+
 }
