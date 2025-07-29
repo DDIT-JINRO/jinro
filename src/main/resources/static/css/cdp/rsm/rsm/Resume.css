@@ -1,74 +1,83 @@
-.form-profile-grid {
-    display: grid;
-    /* Defines a grid with 4 equal columns */
-    grid-template-columns: repeat(4, 1fr);
-    /* Sets a gap between grid items */
-    gap: 5px;
-    width: 100%;
-    border: 1px solid black;
-    border-radius: 30px;
-   	box-sizing: border-box; 
-   	padding: 25px;
-   	
-    
+/* 스타일을 추가하기 전에 기존 스타일을 그대로 두고, 새로운 섹션과 요소들을 추가합니다. */
+
+/* 각 섹션에 여백을 주고, 버튼들을 구분 짓기 */
+.form-JobWish, .form-Skills, .certificate-form, .form-Education {
+    margin-bottom: 20px;  /* 섹션 간 간격 */
 }
 
-/* form-JobCategoryGroup을 flexbox로 설정하여 두 개의 드롭다운을 나란히 배치 */
+/* 각 버튼 스타일 (추가 버튼들) */
+button[type="button"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
 
+button[type="button"]:hover {
+    background-color: #0056b3; /* Hover 시 색상 변화 */
+}
 
-/* 제목 입력란 스타일 */
-.resume-title input[type="text"] {
+/* 동적으로 추가된 input 필드 스타일 */
+.job-input-group input,
+.skills-input-group input,
+.certificate-input-container input,
+.education-input-container input {
+    display: block;
     width: 100%;
     padding: 14px;
+    margin-top: 10px;  /* input 간 간격 */
+    margin-bottom: 15px;  /* input 아래의 여백 */
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 15px; /* Add spacing below the title input */
+    box-sizing: border-box;
+}
+
+/* 동적으로 추가된 버튼들 */
+.form-JobWish button,
+.form-Skills button,
+.certificate-form button,
+.form-Education button {
+    padding: 12px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.form-JobWish button:hover,
+.form-Skills button:hover,
+.certificate-form button:hover,
+.form-Education button:hover {
+    background-color: #0056b3;  /* 버튼 hover 시 색상 변화 */
+}
+
+/* 각 폼의 제목 스타일 */
+h2 {
+    font-size: 1.6em;
+    margin-bottom: 10px;
     color: #333;
 }
 
-/* 제목 입력란 포커스 스타일 */
-.resume-title input[type="text"]:focus {
-    border-color: #5a3fdb; /* Change border color on focus */
-    box-shadow: 0 0 5px rgba(90, 63, 219, 0.2); /* Add a subtle shadow effect */
+.required-info {
+    font-size: 0.9em;
+    color: red;
+    margin-left: 5px;
 }
 
-/* 제목 입력란의 placeholder 스타일 */
-.resume-title input[type="text"]::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
-
-
-/* Adjustments for specific elements to ensure proper alignment */
-.form-group.name-group,
-.form-group.dob-group,
-.form-group.gender-group,
-/* .form-group.email-group, */
-.form-group.phone-group,
-.form-group.mobile-phone-group,
-.form-group.address-group {
-    /* Each of these will take up one column in the grid */
-    grid-column: span 1;
-}
-
-.form-group.photo-group {
-    /* This will span two columns to make room for the larger photo upload area,
-       adjusting the flow for a cleaner layout with 4 items per row. */
-    grid-column: span 1;
-    /* Center the photo upload area within its grid cell */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Ensure the photo upload area itself takes full width within its flex container */
+/* 사진 업로드 영역 스타일 */
 .photo-upload-area {
     width: 100%;
-    max-width: 100px; /* Adjust as needed for desired photo size */
-    height: 100px; /* Adjust as needed */
+    max-width: 120px; /* 사진 영역 크기 조정 */
+    height: 120px; /* 사진 영역 높이 */
     border: 2px dashed #ccc;
     display: flex;
     flex-direction: column;
@@ -76,6 +85,7 @@
     align-items: center;
     cursor: pointer;
     text-align: center;
+    margin: 10px 0; /* 사진 업로드와 다른 필드 간 간격 */
 }
 
 .photo-upload-area .fa-plus {
@@ -89,27 +99,14 @@
     font-size: 0.9em;
 }
 
-/* Basic styling for input fields to ensure they fill their containers */
-.form-group input[type="text"],
-.form-group input[type="date"],
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group select {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-}
-
-/* Styling for the address input with an icon */
+/* 주소 입력과 검색 아이콘 스타일 */
 .input-with-icon {
     position: relative;
     width: 100%;
 }
 
 .input-with-icon input {
-    padding-right: 30px; /* Make space for the icon */
+    padding-right: 40px;  /* 아이콘 공간을 위한 여백 */
 }
 
 .input-with-icon .icon-search {
@@ -121,13 +118,48 @@
     cursor: pointer;
 }
 
-/* Error message styling */
-.error-message {
-    color: red;
-    font-size: 0.8em;
-    margin-top: 5px;
-    display: none; /* Hide by default, show with JavaScript */
+.input-with-icon .icon-search:hover {
+    color: #007bff;
 }
 
+/* 에러 메시지 스타일 (기본 숨기기) */
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: none;  /* 기본적으로 숨김 */
+}
 
+/* 드롭다운 선택 필드 스타일 */
+select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
 
+/* grid 레이아웃을 더 깨끗하게 할 수 있도록 일부 요소 수정 */
+.form-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4개 컬럼 설정 */
+    gap: 15px;  /* 그리드 아이템 간 간격을 늘려서 정렬을 더 깔끔하게 */
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Grid 내 각 폼 항목 스타일 (각 항목이 한 칸씩 차지) */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;  /* 레이블과 입력 필드 간 간격 */
+    width: 100%;
+}
+
+/* 에러 메시지가 활성화될 때 보이도록 하기 */
+.error-message.active {
+    display: block;
+}
