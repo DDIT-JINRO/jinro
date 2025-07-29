@@ -68,7 +68,7 @@
 .pse-cat-tab {
   background: white;
   border: 2px solid #C5C9F9;
-  color: #4254F4;
+  color: #7881f5;
   padding: 8px 20px;
   border-radius: 20px;
   margin: 0 10px;
@@ -78,7 +78,7 @@
 }
 
 .pse-cat-tab.active {
-  background: #4254F4;
+  background: #7881f5;
   color: white;
 }
 
@@ -137,7 +137,7 @@
 }
 
 .pse-cat-card button {
-  background-color: #4254F4;
+  background-color: #7881f5;
   color: white;
   padding: 10px 20px;
   border: none;

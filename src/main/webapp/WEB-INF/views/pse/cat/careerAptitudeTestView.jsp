@@ -3,6 +3,12 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/pse/cat/careerAptitudeTestView.css">
 <!-- 스타일 여기 적어주시면 가능 -->
+  <sec:authorize access="hasRole('ROLE_USER')">
+    <script>window.isLoggedIn = true;</script>
+  </sec:authorize>
+  <sec:authorize access="!isAuthenticated()">
+    <script>window.isLoggedIn = false;</script>
+  </sec:authorize>
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
@@ -63,121 +69,7 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script>
+<script src="/js/pse/cat/careerAptitudeTestView.js">
 	// 스크립트 작성 해주시면 됩니다.
-	const cardData = {
-		student : [ {
-			title : "직업 흥미 검사(K)",
-			desc : "다양한 직업에서 이루어지는 활동들에 대해 얼마나 흥미를 느끼고 있는가를 알아봄으로써, 장래에 자신에게 알맞은<br/>직업군을 탐색하는 데 도움을 주기 위한 것입니다.",
-			time : "15~20분",
-			img : "/images/main/readingGlasses.png",
-			type : "1"
-		}, {
-			title : "직업 흥미 검사(H)",
-			desc : "나의 흥미유형 및 세부 직업과 관련하여 어떤 흥미를<br/> 가지고 있는지 알아볼 수 있습니다.",
-			time : "15~20분",
-			img : "/images/main/readingGlasses.png",
-			type : "2"
-		}, {
-			title : "직업 가치관 검사",
-			desc : "직업과 관련된 다양한 가치 중, 어떤 가치를 중요하게<br/> 여기는지 알아볼 수 있습니다.",
-			time : "15~20분",
-			img : "/images/main/readingGlasses.png",
-			type : "3"
-		}, {
-			title : "직업적성검사",
-			desc : "직업과 관련된 다양한 능력을 어느정도로 갖추고 있는지<br/> 알아볼 수 있습니다.",
-			time : "중학생 20분, 고등학생 30분",
-			img : "/images/main/readingGlasses.png",
-			type : "4"
-		}],
-		adult : [ {
-			title : "성인용 직업흥미검사",
-			desc : "성인 대상의 진로 전환 및 직업 탐색을 위한 검사입니다.",
-			time : "20분",
-			img : "/images/main/readingGlasses.png",
-			type : "5"
-		}, {
-			title : "직무 적성 검사",
-			desc : "직무에 필요한 능력과 적성 요소를 평가합니다.",
-			time : "25분",
-			img : "/images/main/readingGlasses.png",
-			type : "6"
-		}, {
-			title : "진로 가치관 검사",
-			desc : "학생들의 진로 선택에 있어 중요하게 여기는 가치관을 파악합니다.",
-			time : "10분",
-			img : "/images/main/readingGlasses.png",
-			type : "7"
-		}, {
-			title : "진로 가치관 검사",
-			desc : "학생들의 진로 선택에 있어 중요하게 여기는 가치관을 파악합니다.",
-			time : "10분",
-			img : "/images/main/readingGlasses.png",
-			type : "8"
-		} ]
-	};
 	
-	  const tabs = document.querySelectorAll(".pse-cat-tab");
-	  const cardGrid = document.getElementById("cardGrid");
-
-	  function renderCards(type) {
-	    cardGrid.innerHTML = "";
-	    const cards = cardData[type];
-
-	    cards.forEach(card => {
-	      const cardHTML = `
-	        <div class="pse-cat-card">
-	          <div class="pse-cat-card-icon"><img alt="" src="\${card.img}"></div>
-	          <div class="pse-cat-card-title">\${card.title}</div>
-	          <div class="pse-cat-card-desc">\${card.desc}</div>
-	          <div class="pse-cat-card-time">평균 소요시간 : \${card.time}</div>
-	          <sec:authorize access="hasRole('ROLE_USER')">
-	          	<button onclick="startTest(\${card.type})">검사 시작</button>
-	          </sec:authorize>
-	          <sec:authorize access='isAnonymous()'>
-	          	<button onclick="logReq()">검사 시작</button>
-	          </sec:authorize>
-	          
-	        </div>
-	      `;
-	      cardGrid.insertAdjacentHTML("beforeend", cardHTML);
-	    });
-	  }
-
-	  tabs.forEach(tab => {
-	    tab.addEventListener("click", () => {
-	      
-	      tabs.forEach(t => t.classList.remove("active"));
-	      tab.classList.add("active");
-
-	      
-	      const type = tab.dataset.type;
-	      renderCards(type);
-	    });
-	  });
-
-	  renderCards("student");
-	  
-	  function startTest(type){
-		  
-		  axios.post("/pse/cat/test/start", {
-		        type: type
-		      })
-		      .then(response => {
-		        console.log("서버 응답:", response.data);
-		 
-// 		        window.location.href = `/test/progress?testId=${response.data.testId}`;
-		      })
-		      .catch(error => {
-		        console.error("요청 실패:", error);
-		        alert("검사 시작에 실패했습니다.");
-		      });
-		  
-	  }
-	  function logReq(){
-		  
-	  	location.href = "/error/logReq";
-		  
-	  }
 </script>

@@ -1,0 +1,19 @@
+package kr.or.ddit.pse.cat.service.impl;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import kr.or.ddit.pse.cat.service.TemporarySaveVO;
+
+@Mapper
+public interface CareerAptitudeTestMapper {
+
+	public int testSave(TemporarySaveVO temporarySaveVO);
+
+	public TemporarySaveVO getSavingTest(TemporarySaveVO temporarySaveVO);
+
+	public void delTempSaveTest(TemporarySaveVO temporarySaveVO);
+
+	
+	
+	
+}
