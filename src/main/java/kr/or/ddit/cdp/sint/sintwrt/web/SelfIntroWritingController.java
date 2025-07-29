@@ -130,7 +130,6 @@ public class SelfIntroWritingController {
 
 		SelfIntroVO selfIntroVO = new SelfIntroVO();
 		selfIntroVO.setSiId(Integer.parseInt(siId));
-		;
 
 		// 자소서 전체 삭제
 		selfIntroService.deleteSelfIntro(selfIntroVO);

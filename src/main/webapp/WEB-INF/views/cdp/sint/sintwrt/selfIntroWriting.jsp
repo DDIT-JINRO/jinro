@@ -35,9 +35,9 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-			<a class="tab" href="/sint/qestnlst">질문 리스트</a> <a class="tab"
-				href="/sint/sintlst">자기소개서 리스트</a> <a class="tab active"
-				href="/sint/sintwrt">자기소개서 작성</a>
+			<a class="tab" href="/sint/qestnlst">질문 리스트</a> 
+			<a class="tab" href="/sint/sintlst">자기소개서 리스트</a> 
+			<a class="tab active" href="/sint/sintwrt">자기소개서 작성</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">

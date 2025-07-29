@@ -117,11 +117,11 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 	// 본인 자소서인지 확인
 	@Override
 	public void cheakselfIntrobyMemId(SelfIntroVO selfIntroVO, String memId) {
-		int siId = selfIntroVO.getMemId();
+		int siMemId = selfIntroVO.getMemId();
 		int loginMemId = Integer.valueOf(memId);
 
 		// 2) 자소서가 없거나 작성자 정보가 없거나, 작성자가 아니면 모두 403
-		if (!(siId == loginMemId)) {
+		if (!(siMemId == loginMemId)) {
 			throw new CustomException(ErrorCode.ACCESS_DENIED);
 		}
 	}
@@ -186,8 +186,8 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 	@Override
 	@Transactional
 	public void deleteSelfIntro(SelfIntroVO selfIntroVO) {
-		selfIntroMapper.deleteSelfIntro(selfIntroVO);
 		selfIntroMapper.deleteSelfIntroContent(selfIntroVO);
+		selfIntroMapper.deleteSelfIntro(selfIntroVO);
 	}
 
 }
