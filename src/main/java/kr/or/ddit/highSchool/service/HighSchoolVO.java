@@ -4,22 +4,22 @@ import lombok.Data;
 
 @Data
 public class HighSchoolVO {
-	private Long hsId;
-    private String hsCode; // 학교코드
-    private String hsName; // 학교명
-    private String hsRegion; // 시도명
-    private String hsJurisCode; // 관할 교육청 코드
-    private String hsFoundType; // 설립유형
-    private String hsZipcode; // 우편번호
-    private String hsAddr; // 기본주소
-    private String hsAddrDetail; // 상세주소
-    private String hsTel; // 전화번호
-    private String hsHomepage; // 홈페이지 URL
-    private String hsCoeduType;  // 남녀공학 구분
-    private String hsTypeName; // 학교 종류
-    private String hsGeneralType; // 일반계/전문계
-    private String hsFoundDate; // 설립일자
-    private String hsAnnivAt; // 개교기념일
-    private Double hsLat; // 위도
-    private Double hsLot; // 경도
+	private int hsId;
+	private String hsCode; // 학교코드
+	private String hsName; // 학교명
+	private String hsRegion; // 시도명
+	private String hsJurisCode; // 관할 교육청 코드
+	private String hsFoundType; // 설립유형
+	private String hsZipcode; // 우편번호
+	private String hsAddr; // 기본주소
+	private String hsAddrDetail; // 상세주소
+	private String hsTel; // 전화번호
+	private String hsHomepage; // 홈페이지 URL
+	private String hsCoeduType; // 남녀공학 구분
+	private String hsTypeName; // 학교 종류
+	private String hsGeneralType; // 일반계/전문계
+	private String hsFoundDate; // 설립일자
+	private String hsAnnivAt; // 개교기념일
+	private Double hsLat; // 위도
+	private Double hsLot; // 경도
 }

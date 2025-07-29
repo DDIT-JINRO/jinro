@@ -33,25 +33,24 @@
 	public HighSchoolVO selectHighSchoolById(@Param("hsId") Long hsId); // hsId가 Long 타입으로 변경
      -->
      <select id="selectHighSchoolById" parameterType="long" resultType="kr.or.ddit.highSchool.service.HighSchoolVO">
-        SELECT
-            HS_ID,
-            HS_CODE,
-            HS_NAME,
-            HS_REGION_CODE AS hsRegion,
-            HS_JURIS_CODE AS hsJurisCode,
-            HS_FOUND_TYPE AS hsFoundType,
-            HS_ZIPCODE AS hsZipcode,
-            HS_ADDR AS hsAddr,
-            HS_ADDR_DETAIL AS hsAddrDetail,
-            HS_TEL AS hsTel,
-            HS_HOMEPAGE AS hsHomepage,
-            HS_COEDU_TYPE AS hsCoeduType,
-            HS_TYPE_NAME AS hsTypeName,
-            HS_GENERAL_TYPE AS hsGeneralType,
-            HS_FOUND_DATE AS hsFoundDate,
-            HS_ANNIV_AT AS hsAnnivAt,
-            HS_LAT AS hsLat,
-            HS_LOT AS hsLot
+        SELECT HS_ID
+		     , HS_CODE
+		     , HS_NAME
+		     , HS_REGION_CODE
+		     , HS_JURIS_CODE
+		     , HS_FOUND_TYPE
+		     , HS_ZIPCODE
+		     , HS_ADDR
+		     , HS_ADDR_DETAIL
+		     , HS_TEL
+		     , HS_HOMEPAGE
+		     , HS_COEDU_TYPE
+		     , HS_TYPE_NAME
+		     , HS_GENERAL_TYPE
+		     , HS_FOUND_DATE
+		     , HS_ANNIV_AT
+		     , HS_LAT
+		     , HS_LOT
         FROM HIGH_SCHOOL
         WHERE HS_ID = #{hsId}
     </select>
