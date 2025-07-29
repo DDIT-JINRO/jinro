@@ -99,25 +99,25 @@
 						</div>
 					</div>
 					<div class="form-JobWish">
+					<div class="JobWish-header">
 						<label for="desired-job">희망 직무</label>
+						<button type="button" id="add-job">추가</button>
+					</div>
 						<div class="job-input-group">
 							<input type="text" id="desired-job" name="desired-job"
 								placeholder="희망 직무를 입력하세요" required>
 						</div>
-						<button type="button" id="add-job">추가</button>
-						<div id="additional-jobs"></div>
-						<!-- 추가된 직무 입력 필드를 이곳에 넣습니다 -->
 					</div>
 
 					<div class="form-Skills">
+					<div class="Skills-header">
 						<label for="skills">스킬</label>
+						<button type="button" id="add-skill">추가</button>
+					</div>
 						<div class="skills-input-group">
 							<input type="text" id="skills" name="skills"
 								placeholder="스킬을 입력하세요" required>
 						</div>
-						<button type="button" id="add-skill">추가</button>
-						<div id="education-list"></div>
-						<!-- 추가된 스킬 항목을 이곳에 추가 -->
 					</div>
 
 

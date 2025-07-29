@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const loadButtons = document.querySelector(".button-group");
 
-    // 버튼 클릭 시 학력 항목 추가
+    // 버튼 클릭 시 항목 추가
     loadButtons.addEventListener("click", function(e) {
         let rsId = e.target.dataset.id;
         console.log("rsId : " + rsId);
@@ -18,6 +18,39 @@ document.addEventListener("DOMContentLoaded", function() {
                 addEventListeners();
             });
     });
+
+
+    document.getElementById("add-job").addEventListener("click", function() {
+        // 'job-input-group' div를 찾기
+        const jobInputGroup = document.querySelector(".job-input-group");
+        
+        // 새로운 input 요소 생성
+        const newInput = document.createElement('input');
+        newInput.type = 'text';
+        newInput.name = 'desired-job';
+        newInput.placeholder = '희망 직무를 입력하세요';
+        newInput.required = true;
+
+        // 새로 생성된 input을 기존 input 아래에 추가
+        jobInputGroup.appendChild(newInput);
+    });
+
+    document.getElementById("add-skill").addEventListener("click", function() {
+        const skillsInputGroup = document.querySelector(".skills-input-group");
+        
+        // 새로운 input 요소 생성
+        const newInput = document.createElement('input');
+        newInput.type = 'text';
+        newInput.name = 'skills';
+        newInput.placeholder = '스킬을 입력하세요';
+        newInput.required = true;
+
+        // 새로 생성된 input을 기존 input 아래에 추가
+        skillsInputGroup.appendChild(newInput);
+    });
+
+    
+});
 
     // 이벤트 리스너 추가하는 함수
     function addEventListeners() {
@@ -82,5 +115,3 @@ document.addEventListener("DOMContentLoaded", function() {
             certificateInputGroup.appendChild(newInput);
         }
     }
-
-});
