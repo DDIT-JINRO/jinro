@@ -18,7 +18,7 @@
 	<!-- 상세 insert (여러 개일 경우 batch) -->
 	<insert id="insertFileDetail">
 	
-	 	<selectKey keyProperty="fileId" resultType="long" order="BEFORE">
+	 	<selectKey keyProperty="fileId" resultType="int" order="BEFORE">
 	       	SELECT NVL(MAX(FILE_ID),0)+1 AS fileId FROM FILE_DETAIL
 		</selectKey>
 	
