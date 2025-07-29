@@ -13,6 +13,32 @@
     
 }
 
+/* 제목 입력란 스타일 */
+.resume-title input[type="text"] {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 15px; /* Add spacing below the title input */
+    color: #333;
+}
+
+/* 제목 입력란 포커스 스타일 */
+.resume-title input[type="text"]:focus {
+    border-color: #5a3fdb; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(90, 63, 219, 0.2); /* Add a subtle shadow effect */
+}
+
+/* 제목 입력란의 placeholder 스타일 */
+.resume-title input[type="text"]::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+
 /* Adjustments for specific elements to ensure proper alignment */
 .form-group.name-group,
 .form-group.dob-group,
