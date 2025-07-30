@@ -33,4 +33,6 @@ public interface FileMapper {
 
 	int getMaxFileSeq(Long fileGroupId);
 
+	public boolean updateFileGroup(Long fileGroupId);
+
 }

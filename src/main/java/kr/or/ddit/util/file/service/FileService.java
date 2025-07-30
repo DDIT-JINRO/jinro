@@ -20,4 +20,8 @@ public interface FileService {
 	boolean deleteFileGroup(Long groupId);
 
 	List<FileDetailVO> getFileList(Long groupId);
+	
+	int updateFile(Long fileGroupId);
+
+	boolean updateFile(Long fileGroupId, List<MultipartFile> files) throws IOException;
 }

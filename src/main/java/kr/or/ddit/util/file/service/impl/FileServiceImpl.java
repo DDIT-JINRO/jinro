@@ -79,9 +79,9 @@ public class FileServiceImpl implements FileService {
 	        throw new FileNotFoundException("파일 정보를 찾을 수 없습니다.");
 	    }
 
-	    // 경로: C:/upload/yyyy/MM/dd/UUID_원본파일명
+	    // 경로:192.168.145.21\\\\careerpath\\\\upload/yyyy/MM/dd/UUID_원본파일명
 	    String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-	    Path filePath = Paths.get("C:/upload", datePath, detail.getFileSaveName());
+	    Path filePath = Paths.get("\\\\\\\\192.168.145.21\\\\careerpath\\\\upload", datePath, detail.getFileSaveName());
 
 	    if (!Files.exists(filePath)) {
 	        throw new FileNotFoundException("파일이 존재하지 않습니다.");
@@ -92,13 +92,14 @@ public class FileServiceImpl implements FileService {
 
 	
 	@Override
+	//파일 단일 삭제
 	public boolean deleteFile(Long groupId, int seq) {
 	    FileDetailVO detail = fileMapper.selectFile(groupId, seq);
 	    if (detail == null) return false;
 
 	    // 📌 파일 저장 경로 계산 (yyyy/MM/dd)
 	    String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-	    Path fullPath = Paths.get("C:/upload", datePath, detail.getFileSaveName());
+	    Path fullPath = Paths.get("\\\\\\\\192.168.145.21\\\\careerpath\\\\upload", datePath, detail.getFileSaveName());
 
 	    log.info("삭제 시도 파일 경로: " + fullPath);
 
@@ -117,13 +118,14 @@ public class FileServiceImpl implements FileService {
 	}
 	
 	@Override
+	//파일그룹 전체 삭제
 	public boolean deleteFileGroup(Long groupId) {
 	    List<FileDetailVO> fileList = fileMapper.selectFileList(groupId);
 	    if (fileList == null || fileList.isEmpty()) return false;
 
 	    for (FileDetailVO detail : fileList) {
 	        String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-	        Path fullPath = Paths.get("C:/upload", datePath, detail.getFileSaveName());
+	        Path fullPath = Paths.get("\\\\\\\\192.168.145.21\\\\careerpath\\\\upload", datePath, detail.getFileSaveName());
 
 	        try {
 	            Files.deleteIfExists(fullPath);
@@ -148,5 +150,17 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public List<FileDetailVO> getFileList(Long groupId) {
 		 return fileMapper.selectFileList(groupId);
+	}
+
+	@Override
+	public boolean updateFile(Long fileGroupId, List<MultipartFile> files) throws IOException {
+		if(fileGroupId != null && fileGroupId != 0) {
+			
+			fileMapper.deleteFilesByGroupId(fileGroupId);
+			uploadFiles(fileGroupId,files);
+			return true;
+		}else {
+			return false;
+		}
 	}
 }
