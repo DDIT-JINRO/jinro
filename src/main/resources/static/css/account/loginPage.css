@@ -80,7 +80,7 @@
 }
 
 .login-btn:hover {
-	background-color: #5c68f2; /* 더 진한 파랑 */
+	background-color: #5c68d9; /* 더 진한 파랑 */
 	transform: scale(1.03);
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
