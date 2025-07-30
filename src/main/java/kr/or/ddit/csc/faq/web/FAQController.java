@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 //FAQ컨트롤러
-@RequestMapping("/csc")
+@RequestMapping("/csc/faq")
 public class FAQController {
 
 	// FAQ 리스트

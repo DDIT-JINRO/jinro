@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ include file="/WEB-INF/views/include/admin/sidebar.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +9,9 @@
 </script>
 <style>
 </style>
+
 </head>
+<%@ include file="/WEB-INF/views/include/admin/sidebar.jsp"%>
 <body>
 
 	<!-- 메인 콘텐츠 영역 -->

@@ -117,7 +117,7 @@ const memId = '<sec:authentication property="name" />'
 			<li><a href="/cnslt/off/offlineReservation.do">상담</a></li>
 			<li><a href="/prg/ctt/cttList.do">프로그램</a></li>
 			<li><a href="/comm/peer/teen/teenList.do">커뮤니티</a></li>
-			<li><a href="/csc/noticeList.do">고객센터</a></li>
+			<li><a href="/csc/not/noticeList.do">고객센터</a></li>
 		</ul>
 	</div>
 
