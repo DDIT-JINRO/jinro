@@ -8,19 +8,19 @@
 	<!-- 여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">진로 탐색</div>
+		<div class="channel-title-text">고객센터</div>
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
 		<div class="channel-sub-section-itemIn">
-			<a href="/csc/noticeList.do">공지사항</a>
+			<a href="/csc/not/noticeList.do">공지사항</a>
 		</div>
 		<!-- 중분류 -->
 		<div class="channel-sub-section-item">
-			<a href="/csc/faqList.do">FAQ</a>
+			<a href="/csc/faq/faqList.do">FAQ</a>
 		</div>
 		<div class="channel-sub-section-item">
-			<a href="/csc/inqryList.do">1:1문의</a>
+			<a href="/csc/inq/inqryList.do">1:1문의</a>
 		</div>
 	</div>
 </section>
@@ -51,7 +51,7 @@
 						<tr>
 							<td class="notice-no"> ${notice.noticeId}</td>
 							<td style="text-align: left;">
-								<a href="/csc/not/noticeDetail.do?no=${notice.noticeId}">${notice.noticeTitle}</a></td>
+								<a href="/csc/not/noticeDetail.do?noticeId=${notice.noticeId}">${notice.noticeTitle}</a></td>
 							<td>${notice.noticeCnt}</td>
 							<td><fmt:formatDate value="${notice.noticeCreatedAt}" pattern="MM.dd" /></td>
 						</tr>

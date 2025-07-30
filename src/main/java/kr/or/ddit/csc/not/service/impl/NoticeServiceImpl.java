@@ -39,7 +39,6 @@ public class NoticeServiceImpl implements NoticeService {
 	// 1. 사용자 목록 조회
 	@Override
 	public ArticlePage<NoticeVO> getUserNoticePage(int currentPage, int size, String keyword) {
-		log.info("getAdminNoticePage 파라미터: " + currentPage + ", " + size + ", " + keyword);
 		int startNo = (currentPage - 1) * size + 1;
 		int endNo = currentPage * size;
 
@@ -57,7 +56,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 		// 페이지 네이션
 		ArticlePage<NoticeVO> page = new ArticlePage<>(total, currentPage, size, list, keyword);
-		page.setUrl("/csc/noticeList.do");
+		page.setUrl("/csc/not/noticeList.do");
 
 		return page;
 	}
@@ -65,7 +64,6 @@ public class NoticeServiceImpl implements NoticeService {
 	// 2. 관리자 목록 조회
 	@Override
 	public ArticlePage<NoticeVO> getAdminNoticePage(int currentPage, int size, String keyword, String status) {
-		log.info("getAdminNoticePage 파라미터: " + currentPage + ", " + size + ", " + keyword + ", " + status);
 
 		// 파라미터
 		int startNo = (currentPage - 1) * size + 1;
@@ -77,7 +75,6 @@ public class NoticeServiceImpl implements NoticeService {
 		map.put("currentPage", currentPage);
 		map.put("startNo", startNo);
 		map.put("endNo", endNo);
-		log.info("map : " + map);
 
 		// 리스트 불러오기
 		List<NoticeVO> list = noticeMapper.getList(map);
@@ -93,24 +90,19 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public NoticeVO getUserNoticeDetail(String noticeIdStr) {
 
-		log.info("noticeIdStr : " + noticeIdStr);
 		int noticeId = Integer.parseInt(noticeIdStr);
 
 		// 조회수 증가
 		int cnt = noticeMapper.upNoticeCnt(noticeId);
-		log.info("조회수 증가 : " + cnt);
 
 		// 게시글 상세 조회
 		NoticeVO noticeDetail = noticeMapper.getNoticeDetail(noticeId);
-		log.info("게시글 상세 조회 : " + noticeDetail);
 
 		// 파일 불러오기
 		List<FileDetailVO> getFileList = fileService.getFileList(noticeDetail.getFileGroupNo());
 		if (getFileList != null && getFileList.size() > 0) {
 			noticeDetail.setGetFileList(getFileList);
-			log.info("getfileList : " + getFileList);
 		}
-		log.info("파일 불러오기 : " + getFileList);
 
 		return noticeDetail;
 	}
@@ -119,20 +111,16 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public NoticeVO getAdminNoticeDetail(String noticeIdStr) {
 
-		log.info("noticeIdStr : " + noticeIdStr);
 		int noticeId = Integer.parseInt(noticeIdStr);
 
 		// 게시글 상세 조회
 		NoticeVO noticeDetail = noticeMapper.getNoticeDetail(noticeId);
-		log.info("게시글 상세 조회 : " + noticeDetail);
 
 		// 파일 불러오기
 		List<FileDetailVO> getFileList = fileService.getFileList(noticeDetail.getFileGroupNo());
 		if (getFileList != null && getFileList.size() > 0) {
 			noticeDetail.setGetFileList(getFileList);
-			log.info("getfileList : " + getFileList);
 		}
-		log.info("파일 불러오기 : " + getFileList);
 
 		return noticeDetail;
 	}
@@ -141,12 +129,10 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public int insertNotice(NoticeVO noticeVo) {
 
-		log.info("insertNotice 파라미터 : " + noticeVo);
 
 		// 파일 그룹 생성.
 		Long createFileGroupId = fileService.createFileGroup();
 		noticeVo.setFileGroupNo(createFileGroupId);
-		log.info("createFileGroupId 생성 값 : " + createFileGroupId);
 
 		// 공지사항 등록
 		int insertNotice = this.noticeMapper.insertNotice(noticeVo);
@@ -162,18 +148,12 @@ public class NoticeServiceImpl implements NoticeService {
 
 				if (!validFiles.isEmpty()) {
 					List<FileDetailVO> detailList = fileService.uploadFiles(createFileGroupId, noticeVo.getFiles());
-					log.info("detailList : {}", detailList);
-				} else {
-					log.info("유효한 파일이 없어 업로드 생략");
 				}
-			} else {
-				log.info("첨부된 파일이 없습니다. 파일 저장 생략.");
 			}
 		} catch (IOException e) {
 			log.error("파일 업로드 중 오류 발생", e);
 			return 0;
 		}
-		log.info("insertNotice 성공 여부(파일 포함) : " + insertNotice);
 		return insertNotice;
 	}
 
@@ -181,8 +161,7 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public int updateNotice(NoticeVO noticeVo) {
 	    int result = noticeMapper.updateNotice(noticeVo);
-	    log.info("공지사항 수정 : " + result);
-
+	 
 	    try {
 	        List<MultipartFile> files = noticeVo.getFiles();
 
@@ -201,15 +180,9 @@ public class NoticeServiceImpl implements NoticeService {
 
 	                    // 공지사항 테이블에 FILE_GROUP_NO 업데이트
 	                    noticeMapper.updateNoticeFileGroup(noticeVo.getNoticeId(), newGroupId);
-	                    log.info("기존에 파일 그룹이 없어 새로 생성하고 공지사항에 반영함: {}", newGroupId);
 	                }
 	                List<FileDetailVO> detailList = fileService.uploadFiles(noticeVo.getFileGroupNo(), validFiles);
-	                log.info("detailList : {}", detailList);
-	            } else {
-	                log.info("유효한 파일이 없어 업로드 생략");
 	            }
-	        } else {
-	            log.info("첨부된 파일이 없습니다. 파일 저장 생략.");
 	        }
 	    } catch (IOException e) {
 	        log.error("파일 업로드 중 오류 발생", e);

@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 //1:1문의 컨트롤러
-@RequestMapping("/csc")
+@RequestMapping("/csc/inq")
 public class InqryController {
 	// 1:1문의 리스트
 	@GetMapping("/inqryList.do")

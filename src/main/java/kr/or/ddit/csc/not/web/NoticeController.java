@@ -1,9 +1,6 @@
 package kr.or.ddit.csc.not.web;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +17,6 @@ import org.springframework.http.MediaType;
 import kr.or.ddit.csc.not.service.NoticeService;
 import kr.or.ddit.csc.not.service.NoticeVO;
 import kr.or.ddit.util.ArticlePage;
-import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,9 +50,9 @@ public class NoticeController {
 	
 	// 공지사항 세부 화면
 	@GetMapping("/noticeDetail.do")
-	public String noticeDetail(@RequestParam String no, Model model) {
+	public String noticeDetail(@RequestParam String noticeId, Model model) {
 
-		NoticeVO noticeDetail = noticeService.getUserNoticeDetail(no);
+		NoticeVO noticeDetail = noticeService.getUserNoticeDetail(noticeId);
 		model.addAttribute("noticeDetail", noticeDetail);
 
 		return "csc/noticeDetail";
@@ -79,10 +75,10 @@ public class NoticeController {
 	// 관리자 공지사항 세부 화면
 	@ResponseBody
 	@GetMapping("/admin/noticeDetail.do")
-	public NoticeVO adminNoticeDetail(@RequestParam String no) {
+	public NoticeVO adminNoticeDetail(@RequestParam String noticeId) {
 
 		// 게시글 상세 조회
-		NoticeVO noticeDetail = noticeService.getAdminNoticeDetail(no);
+		NoticeVO noticeDetail = noticeService.getAdminNoticeDetail(noticeId);
 		
 		return noticeDetail ;
 	}
@@ -103,7 +99,7 @@ public class NoticeController {
 	@ResponseBody
 	@GetMapping("/admin/deleteFile")
 	public boolean deleteFile(@RequestParam Long groupId, @RequestParam int seq) {
-		log.info("seq : "+seq);
+
 		boolean resultDeleteFile =fileService.deleteFile(groupId, seq);
 
 		return resultDeleteFile;
@@ -115,7 +111,6 @@ public class NoticeController {
 	public int updateNotice(@ModelAttribute NoticeVO noticeVo) {
 
         int noticeCount = noticeService.updateNotice(noticeVo);
-        log.info("파일 수정 : "+noticeCount);
         
 		return noticeCount;
 	}
@@ -124,11 +119,8 @@ public class NoticeController {
 	@PostMapping("/admin/deleteNotice")
 	public int deleteNotice(@ModelAttribute NoticeVO noticeVO) {
 		
-		log.info("noticeVO : "+noticeVO.toString());
-		
 		int noticeId = noticeVO.getNoticeId();
 		int resultNotice = noticeService.deleteNotice(noticeId);
-		log.info("resultNotice : "+resultNotice);
 		
 		List<MultipartFile> files = noticeVO.getFiles();
 
@@ -140,12 +132,8 @@ public class NoticeController {
 
 		    if (!validFiles.isEmpty()) {
 		    	boolean result = fileService.deleteFileGroup(null);
-		    } else {
-		        log.info("유효한 파일이 없어 업로드 생략");
 		    }
-		} else {
-		    log.info("첨부된 파일이 없습니다. 파일 저장 생략.");
-		}
+		} 
 		
 		return resultNotice;
 	}
