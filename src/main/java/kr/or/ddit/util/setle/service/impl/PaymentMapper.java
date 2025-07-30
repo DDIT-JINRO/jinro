@@ -37,11 +37,12 @@ public interface PaymentMapper {
 	 * @param merchantUid 상점 주문 번호
 	 * @return 조회된 Payment VO/엔티티 객체 또는 null
 	 */
+	//
 	public PaymentVO selectPaymentByMerchantUid(String merchantUid);
 
-	//전체 결제 내역 조회 (구독 결제 내역 표시)
+	// 전체 결제 내역 조회 (구독 결제 내역 표시)
 	public List<PaymentVO> selectPaymentHistory(int memId);
-	
+
 	// 구독 월간 기능 횟수 초기화
 	public int resetUsageCounts();
 

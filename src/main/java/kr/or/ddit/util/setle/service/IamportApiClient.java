@@ -55,14 +55,6 @@ public class IamportApiClient {
 		// 아임포트 토큰 발급 API의 URL
 		String url = "https://api.iamport.kr/users/getToken";
 
-		System.out.println("apiKey: " + apiKey);
-		System.out.println("apiSecret: " + apiSecret);
-
-		System.out.println("restTemplate message converters:");
-		restTemplate.getMessageConverters().forEach(converter -> {
-			System.out.println(converter.getClass());
-		});
-
 		// HTTP 요청 헤더 설정: JSON 형태로 데이터를 보낼 것임을 명시
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -156,7 +148,6 @@ public class IamportApiClient {
 		}
 	}
 
-
 	/**
 	 * customer_uid(고객 고유 식별자)를 사용하여 빌링키로 즉시 결제를 수행하는 메서드입니다. 주로 정기 결제 스케줄러에서 매달 자동
 	 * 결제를 시도할 때 사용됩니다. 아임포트 API: POST /subscribe/payments/again
@@ -189,7 +180,6 @@ public class IamportApiClient {
 		requestBodyJson.addProperty("name", name);
 
 		String jsonBody = gson.toJson(requestBodyJson);
-		System.out.println("보내는 JSON (payAgain): " + jsonBody);
 
 		HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
 

@@ -13,7 +13,7 @@ public interface PaymentService {
 	public int selectNextPayId();
 	
 	/**
-	 * 회원id로 회원조회
+	 * 회원id로 회원 조회
 	 */
 	public MemberVO selectMemberById(int memId);
 
@@ -51,8 +51,11 @@ public interface PaymentService {
 	
 	//예약구독 취소
     boolean cancelSubscriptionChange(int memId);
-    
-    // 구독 월간 기능 횟수 초기화
+
+	// 구독 월간 기능 횟수 초기화
     public void resetMonthlyUsageCounts(); 
+    
+    // 스케줄러가 호출할 정기경제 메서드
+    public void processScheduledPayments();
 
 }

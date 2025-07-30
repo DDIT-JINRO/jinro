@@ -13,7 +13,7 @@ IMP.init('imp55613015') //가맹점 식별코드
  */
 
 function requestSubscription(subInfo, userInfo) {
-	const customerUid = "test_customer_" + new Date().getTime();
+	const customerUid = "userInfo.id" + new Date().getTime();
 	const merchantUid = "order_" + new Date().getTime();
 
 	IMP.request_pay(
@@ -27,18 +27,10 @@ function requestSubscription(subInfo, userInfo) {
 			buyer_email: userInfo.email,
 			buyer_name: userInfo.name,
 			buyer_tel: userInfo.tel,
-			/*digital: true,*/
 		},
 		function(rsp) {
 			//callback
 			if (rsp.success) {
-				console.log("서버로 보내는 최종 데이터:", {
-				        impUid: rsp.imp_uid,
-				        customerUid: rsp.customer_uid,
-				        merchantUid: rsp.merchant_uid,
-				        amount: rsp.paid_amount,
-				        subId: subInfo.id 
-				    });
 				//결제 성공 시 , 서버로 검증요청
 				fetch('/mpg/verify', {
 					method: 'POST',
@@ -83,7 +75,7 @@ function cancelSubscription() {
 			return Promise.reject('구독 취소에 실패했습니다. 잠시 후 다시 시도해주세요.');
 		})
 		.then(message => {
-			alert(message);
+			alert('구독 취소 신청이 완료되었습니다!' + message);
 			location.reload(); // 성공 시 페이지 새로고침
 		})
 		.catch(error => alert(error));

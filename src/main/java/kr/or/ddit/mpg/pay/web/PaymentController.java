@@ -94,17 +94,12 @@ public class PaymentController {
 		// 받은 loginId를 실제 숫자(int)로 변환
 		int memId = Integer.parseInt(loginId);
 
-		try {
 			boolean isCancelled = paymentService.cancelSubscription(memId);
 			if (isCancelled) {
 				return ResponseEntity.ok("구독이 정상적으로 취소되었습니다.");
 			} else {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("취소할 구독 정보가 없거나, 이미 취소된 상태입니다.");
 			}
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("구독 취소 처리 중 오류가 발생했습니다: " + e.getMessage());
-		}
 	}
 
 	// 구독 변경

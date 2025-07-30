@@ -30,18 +30,18 @@ public interface MemberSubscriptionMapper {
 	// 구독 상태를 '취소'로 변경
 	public int updateStatusToCancelled(int msId);
 
-	//새로운 구독정보를 db에 insert
+	// 새로운 구독정보를 db에 insert
 	public int insertNewSubscription(MemberSubscriptionVO newSub);
 
 	// 예약된 구독 정보 조회
 	public MemberSubscriptionVO findReservedSubscriptionByMemberId(int memId);
 
-	//이전에 취소했던 원래 구독 정보 조회(가장 최신 'n' 상태 구독)
+	// 이전에 취소했던 원래 구독 정보 조회(가장 최신 'n' 상태 구독)
 	public MemberSubscriptionVO findCancelledOriginalSubscription(int memId);
 
-	//예약된 구독은 DB에서 삭제
+	// 예약된 구독은 DB에서 삭제
 	public void deleteSubscriptionById(int msId);
 
-	//원래 구독의 상태를 다시 'Y'로 복원
+	// 원래 구독의 상태를 다시 'Y'로 복원
 	public void reactivateSubscriptionById(int msId);
 }

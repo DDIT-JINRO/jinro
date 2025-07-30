@@ -144,26 +144,26 @@ public class PaymentServiceImpl implements PaymentService {
 			payment.setMerchantUid(requestDto.getMerchantUid());
 			payment.setPayAmount(requestDto.getAmount());
 			payment.setMsId(sub.getMsId());
-			
+
 			// 5. 구독 상품에 따라 기능 횟수 설정
 			int subId = requestDto.getSubId();
 			if (subId == 1) { // BASIC 상품
-	            payment.setPayResumeCnt(3);
-	            payment.setPayCoverCnt(3);
-	            payment.setPayConsultCnt(3);
-	            payment.setPayMockCnt(3);
-	        } else if (subId == 2) { // PLUS 상품
-	            payment.setPayResumeCnt(5);
-	            payment.setPayCoverCnt(5);
-	            payment.setPayConsultCnt(5);
-	            payment.setPayMockCnt(5);
-	        } else if (subId == 3) { // PRO 상품
-	            payment.setPayResumeCnt(8);
-	            payment.setPayCoverCnt(8);
-	            payment.setPayConsultCnt(8);
-	            payment.setPayMockCnt(8);
-	        }
-			
+				payment.setPayResumeCnt(3);
+				payment.setPayCoverCnt(3);
+				payment.setPayConsultCnt(3);
+				payment.setPayMockCnt(3);
+			} else if (subId == 2) { // PLUS 상품
+				payment.setPayResumeCnt(5);
+				payment.setPayCoverCnt(5);
+				payment.setPayConsultCnt(5);
+				payment.setPayMockCnt(5);
+			} else if (subId == 3) { // PRO 상품
+				payment.setPayResumeCnt(8);
+				payment.setPayCoverCnt(8);
+				payment.setPayConsultCnt(8);
+				payment.setPayMockCnt(8);
+			}
+
 			paymentMapper.insertPayment(payment);
 
 			successMessage = "서버 검증 및 구독 정보 저장 성공! 발급된 빌링키: " + requestDto.getCustomerUid();
@@ -212,44 +212,43 @@ public class PaymentServiceImpl implements PaymentService {
 		return false;
 	}
 
-
 	// 마이페이지에서 사용할 사용자의 구독정보 조회
 	@Override
 	public MemberSubscriptionVO selectByMemberId(int memid) {
 		return memberSubscriptionMapper.selectByMemberId(memid);
 	}
 
-	//전체 결제 내역 조회 (구독 결제 내역 표시)
+	// 전체 결제 내역 조회 (구독 결제 내역 표시)
 	@Override
 	public List<PaymentVO> selectPaymentHistory(int memId) {
 		return paymentMapper.selectPaymentHistory(memId);
 	}
 
-	//구독 변경
+	// 구독 변경
 	@Override
 	@Transactional
 	public boolean changeSubscription(int memId, int newSubId) {
-		//1. 현재 사용자의 활성화된 구독 정보를 조회합니다
+		// 1. 현재 사용자의 활성화된 구독 정보를 조회합니다
 		MemberSubscriptionVO memberSubscriptionVO = memberSubscriptionMapper.selectByMemberId(memId);
-		
-		//2. 기존 구독의 자동 갱신 중단
+
+		// 2. 기존 구독의 자동 갱신 중단
 		memberSubscriptionMapper.updateStatusToCancelled(memberSubscriptionVO.getMsId());
-		
+
 		// 3. 새로 구독할 상품 정보를 담을 새 MemberSubscriptionVO 객체를 만듭니다.
-        MemberSubscriptionVO newSub = new MemberSubscriptionVO();
-        newSub.setMemId(memId);
-        newSub.setSubId(newSubId); // 사용자가 새로 선택한 상품 ID
-        newSub.setCustomerUid(memberSubscriptionVO.getCustomerUid()); // 빌링키는 그대로 사용
-        newSub.setSubStatus("Y"); // 새 구독은 활성 상태
-        newSub.setRecurPayCnt(0);
-        //새구독의 시작일/다음결제일/마지막결제일을 기존 구독의 종료일로 설정
-        newSub.setSubStartDt(memberSubscriptionVO.getSubStartDt());
-        newSub.setSubEndDt(memberSubscriptionVO.getSubEndDt());
-        newSub.setLastPayDt(memberSubscriptionVO.getLastPayDt());
-        
-        //새로운 구독정보를 db에 insert
-        int insertResult = memberSubscriptionMapper.insertNewSubscription(newSub);
-		
+		MemberSubscriptionVO newSub = new MemberSubscriptionVO();
+		newSub.setMemId(memId);
+		newSub.setSubId(newSubId); // 사용자가 새로 선택한 상품 ID
+		newSub.setCustomerUid(memberSubscriptionVO.getCustomerUid()); // 빌링키는 그대로 사용
+		newSub.setSubStatus("Y"); // 새 구독은 활성 상태
+		newSub.setRecurPayCnt(0);
+		// 새구독의 시작일/다음결제일/마지막결제일을 기존 구독의 종료일로 설정
+		newSub.setSubStartDt(memberSubscriptionVO.getSubStartDt());
+		newSub.setSubEndDt(memberSubscriptionVO.getSubEndDt());
+		newSub.setLastPayDt(memberSubscriptionVO.getLastPayDt());
+
+		// 새로운 구독정보를 db에 insert
+		int insertResult = memberSubscriptionMapper.insertNewSubscription(newSub);
+
 		return insertResult > 0;
 	}
 
@@ -257,35 +256,113 @@ public class PaymentServiceImpl implements PaymentService {
 	public MemberSubscriptionVO findReservedSubscription(int memId) {
 		return memberSubscriptionMapper.findReservedSubscriptionByMemberId(memId);
 	}
-	
-	//변경예약구독취소
+
+	// 변경예약구독취소
 	@Override
-    @Transactional
-    public boolean cancelSubscriptionChange(int memId) {
-        // 1. 예약된 구독 정보 조회 (RECUR_PAY_CNT = 0)
-        MemberSubscriptionVO reservedSub = memberSubscriptionMapper.findReservedSubscriptionByMemberId(memId);
-        
-        // 2. 이전에 취소했던 원래 구독 정보 조회 (가장 최신 'N' 상태 구독)
-        MemberSubscriptionVO originalSub = memberSubscriptionMapper.findCancelledOriginalSubscription(memId);
+	@Transactional
+	public boolean cancelSubscriptionChange(int memId) {
+		// 1. 예약된 구독 정보 조회 (RECUR_PAY_CNT = 0)
+		MemberSubscriptionVO reservedSub = memberSubscriptionMapper.findReservedSubscriptionByMemberId(memId);
 
-        if (reservedSub != null && originalSub != null) {
-            // 3. 예약된 구독은 DB에서 삭제
-            memberSubscriptionMapper.deleteSubscriptionById(reservedSub.getMsId());
-            
-            // 4. 원래 구독의 상태를 다시 'Y'로 복원
-            memberSubscriptionMapper.reactivateSubscriptionById(originalSub.getMsId());
-            
-            return true;
-        }
-        return false;
-    }
+		// 2. 이전에 취소했던 원래 구독 정보 조회 (가장 최신 'N' 상태 구독)
+		MemberSubscriptionVO originalSub = memberSubscriptionMapper.findCancelledOriginalSubscription(memId);
 
-    // 구독 월간 기능 횟수 초기화
+		if (reservedSub != null && originalSub != null) {
+			// 3. 예약된 구독은 DB에서 삭제
+			memberSubscriptionMapper.deleteSubscriptionById(reservedSub.getMsId());
+
+			// 4. 원래 구독의 상태를 다시 'Y'로 복원
+			memberSubscriptionMapper.reactivateSubscriptionById(originalSub.getMsId());
+
+			return true;
+		}
+		return false;
+	}
+
+	// 구독 월간 기능 횟수 초기화
 	@Override
 	public void resetMonthlyUsageCounts() {
 		int updatedRows = paymentMapper.resetUsageCounts();
-		if(updatedRows>0) {
+		if (updatedRows > 0) {
 			log.info("총 {}건의 결제 내역에 대한 기능 횟수가 초기화되었습니다.", updatedRows);
+		}
+	}
+
+	// 스케줄러가 호출할 정기경제 메서드
+	@Override
+	public void processScheduledPayments() {
+		// 1. 오늘 결제해야 할 구독 목록을 DB에서 조회
+		List<MemberSubscriptionVO> dueSubscriptions = this.findSubscriptionsDueForToday();
+
+		for (MemberSubscriptionVO memberSubscriptionVO : dueSubscriptions) {
+			try {
+				// 2. 이번 결제를 위한 새로운 주문번호 생성
+				int nextPayId = this.selectNextPayId();
+				String newMerchantUid = "sub_due_" + memberSubscriptionVO.getMsId() + "_" + System.currentTimeMillis();
+
+				double amount = memberSubscriptionVO.getSubPrice(); // TODO: sub 정보에 맞는 실제 상품 가격 조회
+				String productName = "월간 구독 자동결제";
+
+				// 3. IamportApiClient의 payAgain 메서드 호출
+				Map<String, Object> result = iamportApiClient.payAgain(memberSubscriptionVO.getCustomerUid(), // DB에 저장된
+																												// 빌링키
+						newMerchantUid, amount, productName);
+
+				if (result != null && "paid".equals(result.get("status"))) {
+					// 4. 결제 성공 시 DB 업데이트
+					System.out.println("구독 ID " + memberSubscriptionVO.getMsId() + " 정기결제 성공.");
+
+					// 새 결제 내역 저장
+					PaymentVO payment = new PaymentVO();
+					payment.setMsId(memberSubscriptionVO.getMsId());
+					payment.setImpUid((String) result.get("imp_uid"));
+					payment.setMerchantUid(newMerchantUid);
+					payment.setPayAmount(amount);
+					// 5. 구독 상품에 따라 기능 횟수 설정
+					int subId = memberSubscriptionVO.getSubId();
+					if (subId == 1) { // BASIC 상품
+						payment.setPayResumeCnt(3);
+						payment.setPayCoverCnt(3);
+						payment.setPayConsultCnt(3);
+						payment.setPayMockCnt(3);
+					} else if (subId == 2) { // PLUS 상품
+						payment.setPayResumeCnt(5);
+						payment.setPayCoverCnt(5);
+						payment.setPayConsultCnt(5);
+						payment.setPayMockCnt(5);
+					} else if (subId == 3) { // PRO 상품
+						payment.setPayResumeCnt(8);
+						payment.setPayCoverCnt(8);
+						payment.setPayConsultCnt(8);
+						payment.setPayMockCnt(8);
+					}
+
+					int insertResult = this.insertPayment(payment);
+
+					if (insertResult > 0) {
+						System.out.println("새 결제 내역 저장 성공");
+					} else {
+						System.err.println("새 결제 내역 저장 실패: 0 rows affected");
+					}
+
+					// 구독 정보 업데이트 (다음 결제일, 결제 횟수 등)
+					int updateResult = (int) this.updateAfterRecurringPayment(memberSubscriptionVO.getMsId());
+
+					if (updateResult > 0) {
+						System.out.println("구독 정보 갱신 완료: msId=" + memberSubscriptionVO.getMsId());
+					} else {
+						System.err.println("구독 정보 갱신 실패: msId=" + memberSubscriptionVO.getMsId());
+					}
+
+				} else {
+					// 5. 결제 실패 시
+					System.err.println("구독 ID " + memberSubscriptionVO.getMsId() + " 정기결제 실패.");
+					// 구독 상태를 '미납(UNPAID)' 등으로 변경하는 로직 추가
+				}
+
+			} catch (Exception e) {
+				System.err.println("구독 ID " + memberSubscriptionVO.getMsId() + " 처리 중 예외 발생: " + e.getMessage());
+			}
 		}
 	}
 

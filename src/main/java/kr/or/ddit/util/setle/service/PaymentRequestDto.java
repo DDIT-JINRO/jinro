@@ -10,8 +10,7 @@ public class PaymentRequestDto {
 	private String merchantUid; // 상점 주문 번호
 	private String customerUid; // 고객 고유 식별자 (빌링키 용)
 	private double amount; // 클라이언트가 요청한 결제 금액 (서버 검증용)
-    private int subId; //클라이언트가 선택한 상품번호
-	
+	private int subId; // 클라이언트가 선택한 상품번호
 
 	// 기본 생성자 (필수)
 	public PaymentRequestDto() {
@@ -58,11 +57,11 @@ public class PaymentRequestDto {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	
+
 	public int getSubId() {
 		return subId;
 	}
-	
+
 	public void setSubId(int subId) {
 		this.subId = subId;
 	}
@@ -100,7 +99,7 @@ public class PaymentRequestDto {
 				Objects.equals(impUid, that.impUid) && // impUid 필드 비교
 				Objects.equals(merchantUid, that.merchantUid) && // merchantUid 필드 비교
 				Objects.equals(customerUid, that.customerUid) && // customerUid 필드 비교
-				Objects.equals(subId, that.subId);	// subId 필드 비교
+				Objects.equals(subId, that.subId); // subId 필드 비교
 	}
 
 	// equals()를 오버라이드했다면,

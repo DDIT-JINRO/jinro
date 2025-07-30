@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface SubscriptionService {
 
-	//구독상품 조회
+	// 구독상품 조회
 	public List<SubscriptionVO> selectAllProducts();
 
 }

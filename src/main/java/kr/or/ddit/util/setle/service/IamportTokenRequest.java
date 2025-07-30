@@ -10,7 +10,8 @@ public class IamportTokenRequest {
 	@JsonProperty("imp_secret")
 	private String impSecret;
 
-	public IamportTokenRequest() {}
+	public IamportTokenRequest() {
+	}
 
 	public IamportTokenRequest(String impKey, String impSecret) {
 		this.impKey = impKey;
