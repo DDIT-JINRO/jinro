@@ -1,64 +1,4 @@
-/* 스타일을 추가하기 전에 기존 스타일을 그대로 두고, 새로운 섹션과 요소들을 추가합니다. */
 
-/* 각 섹션에 여백을 주고, 버튼들을 구분 짓기 */
-.form-JobWish, .form-Skills, .certificate-form, .form-Education {
-    margin-bottom: 20px;  /* 섹션 간 간격 */
-}
-
-/* 각 버튼 스타일 (추가 버튼들) */
-button[type="button"] {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    margin-top: 10px;
-    transition: background-color 0.3s;
-}
-
-button[type="button"]:hover {
-    background-color: #0056b3; /* Hover 시 색상 변화 */
-}
-
-/* 동적으로 추가된 input 필드 스타일 */
-.job-input-group input,
-.skills-input-group input,
-.certificate-input-container input,
-.education-input-container input {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    margin-top: 10px;  /* input 간 간격 */
-    margin-bottom: 15px;  /* input 아래의 여백 */
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box;
-}
-
-/* 동적으로 추가된 버튼들 */
-.form-JobWish button,
-.form-Skills button,
-.certificate-form button,
-.form-Education button {
-    padding: 12px 25px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-}
-
-.form-JobWish button:hover,
-.form-Skills button:hover,
-.certificate-form button:hover,
-.form-Education button:hover {
-    background-color: #0056b3;  /* 버튼 hover 시 색상 변화 */
-}
 
 /* 각 폼의 제목 스타일 */
 h2 {
@@ -130,14 +70,6 @@ h2 {
     display: none;  /* 기본적으로 숨김 */
 }
 
-/* 드롭다운 선택 필드 스타일 */
-select {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box;
-}
 
 /* grid 레이아웃을 더 깨끗하게 할 수 있도록 일부 요소 수정 */
 .form-profile-grid {
@@ -163,3 +95,143 @@ select {
 .error-message.active {
     display: block;
 }
+
+/*추가  */
+/* 추가 버튼 스타일 */
+button[type="button"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+button[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+/* 각 폼의 입력 필드 스타일 */
+.job-input-group input,
+.skills-input-group input,
+.education-input-container input,
+.certificate-input-container input,
+.activities-input-container input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px; /* 입력 필드 간 간격 */
+}
+
+/* 직무, 스킬, 학력, 자격증, 대외활동 섹션 스타일 */
+.form-JobWish,
+.form-Skills,
+.form-Education,
+.form-certificate,
+.form-activities {
+    margin-bottom: 30px;
+}
+
+/* 각 섹션 제목 스타일 */
+.form-JobWish .JobWish-header,
+.form-Skills .Skills-header,
+.form-Education .education-header,
+.form-certificate .certificate-header,
+.form-activities .Activities-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-JobWish .JobWish-header label,
+.form-Skills .Skills-header label,
+.form-Education .education-header label,
+.form-certificate .certificate-header label,
+.form-activities .Activities-header label {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.form-JobWish button,
+.form-Skills button,
+.form-Education button,
+.form-certificate button,
+.form-activities button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.form-JobWish button:hover,
+.form-Skills button:hover,
+.form-Education button:hover,
+.form-certificate button:hover,
+.form-activities button:hover {
+    background-color: #218838;
+}
+
+/* 각 섹션 입력 필드 스타일 */
+.job-input-group,
+.skills-input-group,
+.education-input-container,
+.certificate-input-container,
+.activities-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 동적으로 추가된 입력 필드와 삭제 버튼을 감싸는 div 스타일 */
+.input-container {
+    display: flex;
+    align-items: center;  /* 수평 중앙 정렬 */
+    gap: 10px;  /* input과 삭제 버튼 간의 간격 */
+    width: 100%;
+}
+
+/* 삭제 버튼 스타일 */
+.delete-button {
+    padding: 5px 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}
+
+/* input 필드 스타일 */
+.input-container input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+
+select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
