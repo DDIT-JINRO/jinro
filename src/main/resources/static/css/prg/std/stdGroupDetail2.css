@@ -128,6 +128,9 @@
   padding: 20px;
   border-radius: 10px;
   background: #f9f9f9;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
 }
 
 .comment-form textarea {
@@ -282,6 +285,125 @@
   white-space: pre-line;
 }
 
+:root {
+  --card-border: #e8ecef;
+  --card-radius: 10px;
+  --card-bg: #fff;
+  --text-dark: #333;
+  --text-mid: #555;
+  --text-light: #858e96;
+  --gap: 20px;
+}
+
+/* ─── 카드 래퍼 ─── */
+.detail-wrapper {
+  max-width: 1160px;
+  margin: 40px auto;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  padding: 30px;
+  padding-top: 15px;
+}
+
+/* ─── 1) 제목·프로필·메타 ─── */
+.post-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid var(--card-border);
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.post-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  flex: 1 1 auto;
+}
+
+.author-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* .user-profile { */
+/*   width: 50px; */
+/*   height: 50px; */
+/*   border-radius: 50%; */
+/*   overflow: hidden; */
+/*   flex-shrink: 0; */
+/* } */
+
+/* .user-profile .profile-image { */
+/*   width: 100%; */
+/*   height: 100%; */
+/*   object-fit: cover; */
+/* } */
+
+.author-nickname {
+  font-weight: 600;
+  color: var(--text-mid);
+}
+
+/* 메타 (작성일, 조회수) */
+.post-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+
+/* ─── 2) 핵심 정보 그리드 ─── */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--gap);
+  margin-bottom: 30px;
+}
+
+.info-item dt {
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.info-item dd {
+  margin: 0;
+  color: var(--text-mid);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* ─── 3) 본문 ─── */
+.group-description {
+  border-top: 2px solid var(--card-border);
+  padding-top: 30px;
+}
+
+.desc-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+}
+
+.group-description p {
+  font-size: 1rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.char-count{
+	padding-right : 30px;
+}
+
 .etcBtn{
-	float: right;
+	float:right;
 }

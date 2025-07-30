@@ -116,7 +116,7 @@ public class StudyGroupController {
 
 		model.addAttribute("stdBoardVO", stdBoardVO);
 		model.addAttribute("interestMap", this.studyGroupService.getInterestsMap());
-		return "prg/std/stdGroupDetail";
+		return "prg/std/stdGroupDetail2";
 	}
 
 	// page번호 버튼에 url 입력을 위한 base 쿼리스트링 구성

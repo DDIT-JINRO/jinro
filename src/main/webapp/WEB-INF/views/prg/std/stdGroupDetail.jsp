@@ -19,7 +19,6 @@
 <div>
 	<div class="public-wrapper">
   		<div class="public-wrapper-main">
-  			스터디그룹 상세
   			<br/>
   			<!-- 게시글 박스 -->
 			<div class="post-box">
