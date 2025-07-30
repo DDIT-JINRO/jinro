@@ -31,19 +31,20 @@ public class ResumeController {
 	private final ResumeService resumeService;
 
 	@GetMapping()
-	public String resumePage(@ModelAttribute ResumeVO resumeVO,Model model) {
+	public String resumePage() {
+		
+		
+		return "cdp/rsm/rsm/resume";
+	}
+	
+	@GetMapping("/resumeWriter")
+	public String resumedeatilPage(@ModelAttribute ResumeVO resumeVO,Model model) {
 		log.info("resumeVO",resumeVO);
 		
 		ResumeDetailVO resumeDetailVO =  resumeService.selectResumeDetailByResumeId(resumeVO);
 		
 		model.addAttribute("resumeDetailVO",resumeDetailVO);
-		
-		return "cdp/rsm/rsm/resume";
-	}
-	
-	@GetMapping("/detail.do")
-	public String resumedeatilPage() {
-		return "cdp/rsm/rsm/resumeDetail";
+		return "cdp/rsm/rsm/resumeWriter";
 	}
 	
 	@GetMapping("/getElement")
