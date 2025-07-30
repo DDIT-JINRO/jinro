@@ -122,6 +122,7 @@
 					
 				</form>
 			</section>
+			<button type="submit">제출</button>
 			<div class="button-group">
 				<!-- 학력 불러오기 버튼 -->
 				<button type="button" id="load-education" name="rsId" data-id="1">학력
@@ -132,7 +133,7 @@
 					불러오기</button>
 					
 				<!-- 대외활동 불러오기 버튼 -->
-				<button type="button" id="load-activities" name="rsId" data-id="3">대외활동➕</button>
+				<button type="button" id="load-activities" name="rsId" data-id="3">대외활동</button>
 			</div>
 			<a href="/rsm/rsm/detail.do">이력서 디테일</a>
 		</div>
