@@ -3,6 +3,7 @@ package kr.or.ddit.cdp.rsm.rsm.web;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -58,26 +59,37 @@ public class ResumeController {
 	}
 	
 	@PostMapping("/insertElement")
-	public ResponseEntity<String>insertElement(@RequestBody String html) throws UnsupportedEncodingException{
-		 try {
-	            // URL 디코딩
-	            String decodedHtml = URLDecoder.decode(html, StandardCharsets.UTF_8.name());
-	            
-	            // 디코딩된 HTML 처리 (예: DB에 저장)
-	            //System.out.println("디코딩된 HTML: " + decodedHtml);
-	            
-	            ResumeDetailVO resumeDetailVO = new ResumeDetailVO();
-	            resumeDetailVO.setFieldValue(decodedHtml);
-	            
-	            // DB 저장 로직 추가
-	            int cnt = resumeService.insertResumeDetail(resumeDetailVO);
-	            
-	            
-	            return ResponseEntity.ok("HTML 데이터가 성공적으로 처리되었습니다!");
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return ResponseEntity.ok("오류 발생: " + e.getMessage());
-	        }
+	public String insertElement(@RequestBody String html, Principal principal,
+				@ModelAttribute ResumeVO resumeVO,Model model) throws UnsupportedEncodingException{
+	      if(principal!=null && !principal.getName().equals("anonymousUser")) {
+	         
+	    	  if (resumeVO !=null || resumeVO.getResumeId() == 0) {
+				 //기존의 것 update
+	    	  }else {
+	    		  //새로운 것 insert
+	    		  try {
+	    			  // URL 디코딩
+	    			  String decodedHtml = URLDecoder.decode(html, StandardCharsets.UTF_8.name());
+	    			  
+	    			  // 디코딩된 HTML 처리 (예: DB에 저장)
+	    			  //System.out.println("디코딩된 HTML: " + decodedHtml);
+	    			  
+	    			  ResumeDetailVO resumeDetailVO = new ResumeDetailVO();
+	    			  resumeDetailVO.setFieldValue(decodedHtml);
+	    			  
+	    			  // DB 저장 로직 추가
+	    			  int cnt = resumeService.insertResumeDetail(resumeDetailVO);
+	    			  
+	    			  
+	    		  } catch (Exception e) {
+	    			  e.printStackTrace();
+	    		  }
+	    	  }
+	    	  
+	       }
+	      
+		  return "redirect:cdp/rsm/rsm/resumeWriter?resumeId=";//+resumeId;
+			
 	}
 	
 	

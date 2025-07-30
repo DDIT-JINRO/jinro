@@ -26,7 +26,8 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			이력서 디테일페이지
+  			이력서 페이지
+			<a href="/rsm/rsm/resumeWriter?resumeId=1">이력서 디테일</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>
