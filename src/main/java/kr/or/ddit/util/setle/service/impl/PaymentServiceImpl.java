@@ -102,12 +102,6 @@ public class PaymentServiceImpl implements PaymentService {
 			String billingKey = requestDto.getCustomerUid();
 			String successMessage = "서버 검증 성공! 발급된 빌링키 : " + billingKey;
 
-			System.out.println("imp_uid: " + requestDto.getImpUid());
-			System.out.println("customer_uid: " + requestDto.getCustomerUid());
-			System.out.println("merchant_uid: " + requestDto.getMerchantUid());
-			System.out.println("결제 상태: " + paymentData.get("status"));
-			System.out.println("결제 금액: " + paymentData.get("amount"));
-
 			// 디비저장
 			// 1. loginId(문자열 "1")를 숫자로 변환합니다.
 			int memId = Integer.parseInt(loginId);
