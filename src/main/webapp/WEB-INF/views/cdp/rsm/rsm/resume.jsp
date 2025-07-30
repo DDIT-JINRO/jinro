@@ -28,101 +28,109 @@
 		<div class="public-wrapper-main">
 			이력서 페이지
 			<section class="personal-info-section">
-
-				<form class="personal-info-form">
-					<div class="resume-title">
-						<input type="text" name="resumeTitle" placeholder="제목을 입력해주세요."
-							required>
-					</div>
-					<div class="section-header">
-						<h2>인적사항</h2>
-						<p class="required-info">* 필수 입력 정보입니다.</p>
-					</div>
-					<div class="form-profile-grid">
-						<div class="form-group name-group">
-							<label for="name">이름 <span class="required-asterisk">*</span></label>
-							<input type="text" id="name" name="name"
-								placeholder="이름을 입력해주세요." required> <span
-								class="error-message" id="name-error">이름을 입력해주세요.</span>
+				<c:if test="${empty resumeDetailVO}">
+					<div class="personal-info-form">
+						<div class="resume-title">
+							<input type="text" name="resumeTitle" placeholder="제목을 입력해주세요."
+								value="" required>
 						</div>
-
-						<div class="form-group dob-group">
-							<label for="dob">생년월일 <span class="required-asterisk">*</span></label>
-							<input type="date" id="dob" name="dob" required> <span
-								class="error-message" id="dob-error">생년월일을 입력해주세요.</span>
+						<div class="section-header">
+							<h2>인적사항</h2>
+							<p class="required-info">* 필수 입력 정보입니다.</p>
 						</div>
+						<div class="form-profile-grid">
+							<div class="form-group name-group">
+								<label for="name">이름 <span class="required-asterisk">*</span></label>
+								<input type="text" id="name" name="name"
+									placeholder="이름을 입력해주세요." required> <span
+									class="error-message" id="name-error">이름을
+									입력해주세요.</span>
+							</div>
 
-						<div class="form-group gender-group">
-							<label for="gender">성별 <span class="required-asterisk">*</span></label>
-							<select id="gender" name="gender" required>
-								<option value="">선택</option>
-								<option value="male">남자</option>
-								<option value="female">여자</option>
-							</select> <span class="error-message" id="gender-error">성별을 선택해주세요.</span>
-						</div>
+							<div class="form-group dob-group">
+								<label for="dob">생년월일 <span class="required-asterisk">*</span></label>
+								<input type="date" id="dob" name="dob" required> <span
+									class="error-message" id="dob-error">생년월일을
+									입력해주세요.</span>
+							</div>
 
-						<div class="form-group photo-group">
-							<label for="photo-upload" class="photo-upload-area"> <i
-								class="fa fa-plus" aria-hidden="true"></i> <span>사진추가</span> <input
-								type="file" id="photo-upload" name="photo" accept="image/*"
-								class="sr-only">
-							</label>
-						</div>
-						<div class="form-group email-group">
-							<label for="email">이메일 <span class="required-asterisk">*</span></label>
-							<input type="email" id="email" name="email" placeholder="이메일"
-								required> <span class="error-message" id="email-error">이메일을
-								입력해주세요.</span>
-						</div>
+							<div class="form-group gender-group">
+								<label for="gender">성별 <span class="required-asterisk">*</span></label>
+								<select id="gender" name="gender" required>
+									<option value="">선택</option>
+									<option value="male">남자</option>
+									<option value="female">여자</option>
+								</select> <span class="error-message" id="gender-error">성별을
+									선택해주세요.</span>
+							</div>
+
+							<div class="form-group photo-group">
+								<label for="photo-upload" class="photo-upload-area"> <i
+									class="fa fa-plus" aria-hidden="true"></i> <span>사진추가</span> <input
+									type="file" id="photo-upload" name="photo" accept="image/*"
+									class="sr-only">
+								</label>
+							</div>
+							<div class="form-group email-group">
+								<label for="email">이메일 <span class="required-asterisk">*</span></label>
+								<input type="email" id="email" name="email" placeholder="이메일"
+									value="" required> <span class="error-message"
+									id="email-error">이메일을 입력해주세요.</span>
+							</div>
 
 
-						<div class="form-group phone-group">
-							<label for="phone">전화번호</label> <input type="tel" id="phone"
-								name="phone" placeholder="전화번호">
-						</div>
+							<div class="form-group phone-group">
+								<label for="phone">전화번호</label> <input type="tel" id="phone"
+									name="phone" value="" placeholder="전화번호">
+							</div>
 
-						<div class="form-group mobile-phone-group">
-							<label for="mobile-phone">휴대폰번호 <span
-								class="required-asterisk">*</span></label> <input type="tel"
-								id="mobile-phone" name="mobile-phone"
-								placeholder="휴대폰번호를 입력해주세요." required> <span
-								class="error-message" id="mobile-phone-error">휴대폰번호를
-								입력해주세요.</span>
-						</div>
+							<div class="form-group mobile-phone-group">
+								<label for="mobile-phone">휴대폰번호 <span
+									class="required-asterisk">*</span></label> <input type="tel"
+									id="mobile-phone" name="mobile-phone"
+									placeholder="휴대폰번호를 입력해주세요." value="" required> <span
+									class="error-message" id="mobile-phone-error">휴대폰번호를
+									입력해주세요.</span>
+							</div>
 
-						<div class="form-group address-group">
-							<label for="address">주소</label>
-							<div class="input-with-icon">
-								<input type="text" id="address" name="address" placeholder="">
-								<i class="fa fa-search icon-search" aria-label="주소 검색"></i>
+							<div class="form-group address-group">
+								<label for="address">주소</label>
+								<div class="input-with-icon">
+									<input type="text" id="address" value="" name="address"
+										placeholder=""> <i class="fa fa-search icon-search"
+										aria-label="주소 검색"></i>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="form-JobWish">
-					<div class="JobWish-header">
-						<label for="desired-job">희망 직무</label>
-						<button type="button" id="add-job">추가</button>
-					</div>
-						<div class="job-input-group">
-							<input type="text" id="desired-job" name="desired-job"
-								placeholder="희망 직무를 입력하세요" required>
+						<div class="form-JobWish">
+							<div class="JobWish-header">
+								<label for="desired-job">희망 직무</label>
+								<button type="button" id="add-job">추가</button>
+							</div>
+							<div class="job-input-group">
+								<input class="desired-job" type="text" id="desired-job"
+									name="desired-job" placeholder="희망 직무를 입력하세요" value="" required>
+							</div>
 						</div>
-					</div>
 
-					<div class="form-Skills">
-						<div class="Skills-header">
-							<label for="skills">스킬</label>
-							<button type="button" id="add-skill">추가</button>
+						<div class="form-Skills">
+							<div class="Skills-header">
+								<label for="skills">스킬</label>
+								<button type="button" id="add-skill">추가</button>
+							</div>
+							<div class="skills-input-group">
+								<input type="text" id="skills" name="skills"
+									placeholder="스킬을 입력하세요" value="" required>
+							</div>
 						</div>
-						<div class="skills-input-group">
-							<input type="text" id="skills" name="skills"
-								placeholder="스킬을 입력하세요" required>
-						</div>
+
 					</div>
-					
-				</form>
+				</c:if>
+				<c:if test="${not empty resumeDetailVO}">
+					<c:out value="${resumeDetailVO.fieldValue}" escapeXml="false" />
+				</c:if>
 			</section>
-			<button type="submit">제출</button>
+			<button type="button" id="btn-submit">문자화</button>
 			<div class="button-group">
 				<!-- 학력 불러오기 버튼 -->
 				<button type="button" id="load-education" name="rsId" data-id="1">학력
@@ -131,7 +139,7 @@
 				<!-- 자격증 불러오기 버튼 -->
 				<button type="button" id="load-certificate" name="rsId" data-id="2">자격증
 					불러오기</button>
-					
+
 				<!-- 대외활동 불러오기 버튼 -->
 				<button type="button" id="load-activities" name="rsId" data-id="3">대외활동</button>
 			</div>

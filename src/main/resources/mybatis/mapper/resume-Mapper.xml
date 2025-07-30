@@ -7,4 +7,15 @@
 		WHERE RS_ID =#{rsId}
 	</select>
 
+
+	<insert id="insertResumeDetail" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeDetailVO">
+		INSERT INTO RESUME_DETAIL(SD_ID, RESUME_ID, RS_ID, FIELD_VALUE, FIELD_ORDER)
+		VALUES (1,1,1,#{fieldValue},1)
+	</insert>
+	
+	<select id="selectResumeDetailByResumeId" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO" resultType="kr.or.ddit.cdp.rsm.rsm.service.ResumeDetailVO">
+		SELECT SD_ID, RESUME_ID, RS_ID, FIELD_VALUE, FIELD_ORDER
+		FROM RESUME_DETAIL
+		WHERE RESUME_ID = #{resumeId}
+	</select>
 </mapper>

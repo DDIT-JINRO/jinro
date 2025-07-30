@@ -2,38 +2,39 @@ document.addEventListener("DOMContentLoaded", function() {
     const loadButtons = document.querySelectorAll(".button-group button");
 
     // 버튼 클릭 시 항목 추가
-loadButtons.forEach(button => {
-    button.addEventListener("click", function(e) {
-        // Your code to handle the click event
-        let rsId = e.target.dataset.id;
-        console.log("rsId : " + rsId);
+	loadButtons.forEach(button => {
+        button.addEventListener("click", function(e) {
+            // Your code to handle the click event
+            let rsId = e.target.dataset.id;
+            console.log("rsId : " + rsId);
 
-        // 콘텐츠가 이미 추가되어 있는지 확인
-        const form = document.querySelector(".personal-info-form");
-        const existingElement = form.querySelector(`[data-id="${rsId}"]`);
+            // 콘텐츠가 이미 추가되어 있는지 확인
+            const form = document.querySelector(".personal-info-form");
+            const existingElement = form.querySelector(`[data-id="${rsId}"]`);
 
-        if (existingElement) {
-            // 이미 추가된 콘텐츠가 있으면 해당 콘텐츠를 삭제
-            existingElement.remove();
-        } else {
-            // 추가된 콘텐츠가 없으면 서버에서 HTML 데이터를 받아옴
-            axios.get('/rsm/rsm/getElement?rsId=' + rsId)
-                .then(function(response) {
-                    const lastDiv = form.lastElementChild; // 폼의 마지막 div를 찾음
+            if (existingElement) {
+                // 이미 추가된 콘텐츠가 있으면 해당 콘텐츠를 삭제
+                existingElement.remove();
+            } else {
+                // 추가된 콘텐츠가 없으면 서버에서 HTML 데이터를 받아옴
+                axios.get('/rsm/rsm/getElement?rsId=' + rsId)
+                    .then(function(response) {
+                        const lastDiv = form.lastElementChild; // 폼의 마지막 div를 찾음
 
-                    // 새로 받은 HTML 데이터를 마지막 div 밑에 추가
-                    lastDiv.insertAdjacentHTML('afterend', response.data);
+                        // 새로 받은 HTML 데이터를 마지막 div 밑에 추가
+                        lastDiv.insertAdjacentHTML('afterend', response.data);
 
-                    // 추가된 콘텐츠에 data-id를 추가하여 나중에 확인할 수 있도록 설정
-                    const newElement = form.lastElementChild;
-                    newElement.setAttribute("data-id", rsId);
+                        // 추가된 콘텐츠에 data-id를 추가하여 나중에 확인할 수 있도록 설정
+                        const newElement = form.lastElementChild;
+                        newElement.setAttribute("data-id", rsId);
 
-                    // DOM이 추가된 후, 이벤트 리스너를 한 번만 등록하도록 처리
-                    addEventListeners();
-                });
-        }
-    });
-});
+                        // DOM이 추가된 후, 이벤트 리스너를 한 번만 등록하도록 처리
+                        addEventListeners();
+                    });
+            }
+        });
+	});
+
 
 
     document.getElementById("add-job").addEventListener("click", function() {
@@ -44,7 +45,9 @@ loadButtons.forEach(button => {
         const newInput = document.createElement('input');
         newInput.type = 'text';
         newInput.name = 'desired-job';
-        newInput.placeholder = '희망 직무를 입력하세요';
+        newInput.className = 'desired-job';
+        newInput.placeholder = '희망 직무를 입력하세요..';
+        newInput.value='';
         newInput.required = true;
 
         // 삭제 버튼 생성
@@ -68,6 +71,7 @@ loadButtons.forEach(button => {
         newInput.type = 'text';
         newInput.name = 'skills';
         newInput.placeholder = '스킬을 입력하세요';
+        newInput.value='';
         newInput.required = true;
 
         // 삭제 버튼 생성
@@ -83,6 +87,41 @@ loadButtons.forEach(button => {
         skillsInputGroup.appendChild(inputContainer);
     });
 
+    document.getElementById("btn-submit").addEventListener("click",function(){
+        const allElementDiv = document.querySelector(".personal-info-form");
+
+        const objs = allElementDiv.querySelectorAll('input, select, textarea');  // 모든 입력 요소를 선택
+
+        for (let i = 0; i < objs.length; i++) {
+            //console.log(objs[i].value);  // 사용자가 입력한 값
+            
+            // 'value'가 반영된 상태로 outerHTML을 가져오기
+            const updatedInput = objs[i];  // 해당 input 요소
+
+            // 동적으로 업데이트된 값을 반영
+            if (updatedInput.tagName === "INPUT" || updatedInput.tagName === "TEXTAREA"
+                || updatedInput.tagName === "SELECT") {
+                updatedInput.setAttribute("value", updatedInput.value);  // 동적으로 변경된 값을 반영
+            }
+
+        }
+        allElementHtml = allElementDiv.outerHTML;  // value가 반영된 상태의 outerHTML
+        axios.post('/rsm/rsm/insertElement',allElementHtml)
+                .then(res =>{
+                    console.log("응답"+res.data)
+                })
+
+    })
+
+    const delectBtn = document.getElementsByClassName("delete-button");
+
+    for (let i = 0; i < delectBtn.length; i++) {
+        delectBtn[i].addEventListener("click", function(e) {
+            e.target.parentElement.remove();
+        });
+    }
+    addEventListeners();
+});
     // 이벤트 리스너 추가하는 함수
     function addEventListeners() {
         // 학력 항목 추가 이벤트
@@ -109,7 +148,7 @@ loadButtons.forEach(button => {
 
     // 학력 항목 클릭 이벤트 처리
     function handleEducationClick(event) {
-        if (event.target && event.target.closest('.form-Education button')) {
+        if (event.target && event.target.closest('.form-Education #add-education')) {
             const educationInputGroupContainer = event.target.closest('.form-Education').querySelector('.education-input-container');
 
             // 1개씩만 추가
@@ -130,6 +169,7 @@ loadButtons.forEach(button => {
             newInput.type = 'text';
             newInput.name = 'education';
             newInput.placeholder = '학교명을 입력하세요';
+            newInput.value='';
             newInput.required = true;
 
             // 삭제 버튼 생성
@@ -148,7 +188,7 @@ loadButtons.forEach(button => {
 
     // 자격증 항목 클릭 이벤트 처리
     function handleCertificateClick(event) {
-        if (event.target && event.target.closest('.form-certificate button')) {
+        if (event.target && event.target.closest('.form-certificate #add-certificate')) {
             const certificateInputGroup = event.target.closest('.form-certificate').querySelector('.certificate-input-container');
 
             // 1개씩만 추가
@@ -157,6 +197,7 @@ loadButtons.forEach(button => {
             newInput.name = 'certificate';
             newInput.classList.add('certificate-input');
             newInput.placeholder = '자격증을 입력하세요';
+            newInput.value='';
 
             // 삭제 버튼 생성
             const deleteButton = createDeleteButton(newInput);
@@ -173,7 +214,7 @@ loadButtons.forEach(button => {
 
     // 대외활동 항목 클릭 이벤트 처리
     function handleActivitiesClick(event) {
-        if (event.target && event.target.closest('.form-activities button')) {
+        if (event.target && event.target.closest('.form-activities #add-activities')) {
             const activitiesInputGroup = event.target.closest('.form-activities').querySelector('.activities-input-container');
 
             // 1개씩만 추가
@@ -182,6 +223,7 @@ loadButtons.forEach(button => {
             newInput.name = 'activities';
             newInput.classList.add('activities-input');
             newInput.placeholder = '활동 내용';
+            newInput.value='';
 
             // 삭제 버튼 생성
             const deleteButton = createDeleteButton(newInput);
@@ -210,4 +252,4 @@ loadButtons.forEach(button => {
 
         return deleteButton;
     }
-});
+
