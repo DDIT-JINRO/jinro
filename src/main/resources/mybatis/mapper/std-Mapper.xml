@@ -86,11 +86,12 @@
 
 	<!-- 목록조회. board테이블에서 스터디그룹게시글과 연계된 chat_room테이블&chat_member테이블 -->
 	<select id="selectStudyGroupList" resultMap="stdBoardMap" parameterType="kr.or.ddit.prg.std.service.StdBoardVO">
-		SELECT A.*
+		SELECT X.*
+		FROM
+		(SELECT ROWNUM RN, A.*
 		FROM
 		  (
 		  SELECT
-		    ROWNUM RN,
 		    B.BOARD_ID,
 		    B.BOARD_TITLE,
 		    B.BOARD_CONTENT,
@@ -143,9 +144,22 @@
 		      AND LOWER(JSON_VALUE(B.BOARD_CONTENT, '$.content')) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 		    </if>
 		  </where>
-		  ) A
-		  WHERE A.RN > #{startNo}
-		    AND A.RN <![CDATA[<=]]> #{endNo}
+		  <if test="sortBy == null or sortBy == '' or sortBy == 'createDesc'">
+			  ORDER BY B.BOARD_CREATED_AT DESC
+		  </if>
+		  <if test="sortBy == 'createAsc'">
+			  ORDER BY B.BOARD_CREATED_AT ASC
+		  </if>
+		  <if test="sortBy == 'viewCntDesc'">
+			  ORDER BY B.BOARD_CNT DESC, B.BOARD_CREATED_AT DESC
+		  </if>
+		  <if test="sortBy == 'enteredMemDesc'">
+			  ORDER BY CUR_CNT DESC, B.BOARD_CREATED_AT DESC
+		  </if>
+		  	) A
+		   ) X
+		  WHERE X.RN > #{startNo}
+		    AND X.RN <![CDATA[<=]]> #{endNo}
 	</select>
 
 	<select id="selectStudyGroupTotalCount" resultType="int" parameterType="kr.or.ddit.prg.std.service.StdBoardVO">

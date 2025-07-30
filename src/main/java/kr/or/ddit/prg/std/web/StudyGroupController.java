@@ -54,6 +54,7 @@ public class StudyGroupController {
 		    						@RequestParam(required = false) String searchKeyword,
 		    						@RequestParam(required = false, defaultValue = "1") int currentPage,
 		    						@RequestParam(required = false, defaultValue = "5") int size,
+		    						@RequestParam(required = false, defaultValue = "createDesc") String sortBy,
 		    						StdBoardVO stdBoardVO,
 		    						Principal principal,
 		    						Model model) {
@@ -63,8 +64,10 @@ public class StudyGroupController {
 		int totalCount = this.studyGroupService.selectStudyGroupTotalCount(stdBoardVO);
 		List<StdBoardVO> list = this.studyGroupService.selectStudyGroupList(stdBoardVO);
 
+		System.out.println("##########################"+stdBoardVO);
+
 		ArticlePage<StdBoardVO> articlePage = new ArticlePage<>(totalCount, currentPage, size, list, searchKeyword);
-		String baseUrl = buildQueryString(region, gender, interest, maxPeople, searchType, searchKeyword, size);
+		String baseUrl = buildQueryString(region, gender, interest, maxPeople, searchType, searchKeyword, size, sortBy);
 		articlePage.setUrl(baseUrl);
 		articlePage.setPagingArea("");
 
@@ -85,7 +88,7 @@ public class StudyGroupController {
 		model.addAttribute("regionList", regionList);
 
 		model.addAttribute("genderMap", Map.of("all", "성별무관", "men", "남자만", "women", "여자만"));
-		return "prg/std/stdGroupList";
+		return "prg/std/stdGroupList2";
 	}
 
 	@GetMapping("/stdGroupDetail.do")
@@ -109,7 +112,7 @@ public class StudyGroupController {
 
 	// page번호 버튼에 url 입력을 위한 base 쿼리스트링 구성
 	private String buildQueryString(String region,String gender, String interest, Integer maxPeople
-								, String searchType, String searchKeyword, int size) {
+								, String searchType, String searchKeyword, int size, String sortBy) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("/prg/std/stdGroupList.do");
 		sb.append("?").append("region=").append(region == null ? "" : region);

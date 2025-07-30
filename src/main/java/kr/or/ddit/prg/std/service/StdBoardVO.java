@@ -39,12 +39,15 @@ public class StdBoardVO {
 	private String gender;
 	private String interest;
 	private Integer maxPeople;
-	
+
 	private String parsedContent;     // JSON에서 content만 분리
 
 	// 검색용 필드도 추가
 	private String searchType;
 	private String searchKeyword;
+
+	// 정렬용 필드 추가
+	private String sortBy;
 
 	// 목록 조회시 페이징 처리를 위한 필드 추가
 	private int currentPage;
