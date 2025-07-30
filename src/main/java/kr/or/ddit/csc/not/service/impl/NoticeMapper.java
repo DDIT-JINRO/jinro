@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import kr.or.ddit.csc.not.service.NoticeVO;
 
@@ -22,4 +23,7 @@ public interface NoticeMapper {
 	public int updateNotice(NoticeVO noticeVo);
 
 	public int deleteNotice(int noticeId);
+
+	// @Param 쓰면 DB에 삽입이 가능
+	void updateNoticeFileGroup(@Param("noticeId") int noticeId, @Param("newGroupId") Long newGroupId);
 }

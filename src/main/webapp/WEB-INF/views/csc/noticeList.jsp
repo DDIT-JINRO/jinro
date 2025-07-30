@@ -30,7 +30,7 @@
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
 			<!-- 검색 기능 -->
-			<form class="search-box" action="/csc/noticeList.do" method="get">
+			<form class="search-box" action="/csc/not/noticeList.do" method="get">
 
 				<input type="text" name="keyword" placeholder="검색어를 입력하세요..." value="${param.keyword}">
 				<button type="submit">검색</button>
@@ -51,7 +51,7 @@
 						<tr>
 							<td class="notice-no"> ${notice.noticeId}</td>
 							<td style="text-align: left;">
-								<a href="/csc/noticeDetail.do?no=${notice.noticeId}">${notice.noticeTitle}</a></td>
+								<a href="/csc/not/noticeDetail.do?no=${notice.noticeId}">${notice.noticeTitle}</a></td>
 							<td>${notice.noticeCnt}</td>
 							<td><fmt:formatDate value="${notice.noticeCreatedAt}" pattern="MM.dd" /></td>
 						</tr>

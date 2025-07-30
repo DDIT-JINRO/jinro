@@ -3,19 +3,30 @@ package kr.or.ddit.csc.not.service;
 import java.util.List;
 import java.util.Map;
 
+import kr.or.ddit.util.ArticlePage;
+
 public interface NoticeService {
-	//리스트 조회
-	public List<NoticeVO> getList(Map<String, Object>map);
-	//게시글 상세
-	public NoticeVO getNoticeDetail(String noticeIdStr);
-	//조회수
-	public int upNoticeCnt(String noticeIdStr);
-	//전체 게시글 수
-	public int getAllNotice(Map<String, Object>map);
-	//공지사항 등록
-	public int insertNotice(NoticeVO noticeVo);
-	//공지사항 수정
+
+	// 수정 후
+	
+	// 1. 사용자 목록 조회
+	public ArticlePage<NoticeVO> getUserNoticePage(int currentPage, int size, String keyword);
+	
+	// 2. 관리자 목록 조회
+	public ArticlePage<NoticeVO> getAdminNoticePage(int currentPage, int size, String keyword, String status);
+	
+	// 3. 사용자 공지사항 세부 조회
+	public NoticeVO getUserNoticeDetail(String noticeIdStr);
+	
+	// 4. 관리자 공지사항 세부 조회
+	public NoticeVO getAdminNoticeDetail(String noticeIdStr);
+	
+	// 5. 관리자 공지사항 등록
+	public int insertNotice(NoticeVO noticeVO);
+	
+	// 6. 공지사항 수정
 	public int updateNotice(NoticeVO noticeVo);
-	//공지사항 삭제
+	
+	// 7. 공지사항 삭제
 	public int deleteNotice(int noticeId);
 }

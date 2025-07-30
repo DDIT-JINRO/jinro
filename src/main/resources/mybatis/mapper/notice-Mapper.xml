@@ -83,4 +83,10 @@
 		SET NOTICE_DEL_YN = 'Y'
 		WHERE NOTICE_ID = #{noticeId}
 	</update>
+	
+	<update id="updateNoticeFileGroup">
+		UPDATE NOTICE
+		SET FILE_GROUP_NO =#{newGroupId}
+		WHERE NOTICE_ID = #{noticeId}
+	</update>
 </mapper>
