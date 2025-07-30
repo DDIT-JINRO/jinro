@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -36,17 +35,14 @@ public class AlarmEmitterManager {
 		emitter.onCompletion(()->{
 			SseEmitter disconnectEmitter = connectedEmitterMap.remove(memId);
 			if(disconnectEmitter != null) disconnectEmitter.complete();
-//			System.out.println("@@@@@@ emitter 연결종료 memId : " + memId);
 		});
 		emitter.onTimeout(()->{
 			SseEmitter disconnectEmitter = connectedEmitterMap.remove(memId);
 			if(disconnectEmitter != null) disconnectEmitter.complete();
-//			System.out.println("@@@@@@ emitter 만료됨 memId : " + memId);
 		});
 		emitter.onError((e)->{
 			SseEmitter disconnectEmitter = connectedEmitterMap.remove(memId);
 			if(disconnectEmitter != null) disconnectEmitter.complete();
-//			System.out.println("@@@@@@ emitter 에러발생 memId : " + memId+" error" + e+ "  @@ class : "+e.getClass());
 		});
 
 		return emitter;
@@ -58,6 +54,7 @@ public class AlarmEmitterManager {
 			try {
 				emitter.complete();
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 		connectedEmitterMap.clear();

@@ -2,17 +2,13 @@ package kr.or.ddit.prg.std.web;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,19 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
-import kr.or.ddit.mpg.mat.bmk.web.BookMarkController;
 import kr.or.ddit.prg.std.service.StdBoardVO;
 import kr.or.ddit.prg.std.service.StdReplyVO;
 import kr.or.ddit.prg.std.service.StudyGroupService;
-import kr.or.ddit.prg.std.service.impl.StudyGroupServiceImpl;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.alarm.service.AlarmService;
 import kr.or.ddit.util.alarm.service.AlarmType;
@@ -78,7 +67,6 @@ public class StudyGroupController {
 		String baseUrl = buildQueryString(region, gender, interest, maxPeople, searchType, searchKeyword, size);
 		articlePage.setUrl(baseUrl);
 		articlePage.setPagingArea("");
-
 
 		if(principal!=null && !principal.getName().equals("anonymousUser")) {
 			List<ChatRoomVO> roomList = chatService.findRoomsByMemId(principal.getName());
@@ -137,7 +125,6 @@ public class StudyGroupController {
 
 	@PostMapping("/api/enterStdGroup")
 	public ResponseEntity<String> enterStdGroup(@RequestBody ChatMemberVO chatMemberVO){
-		log.info("enterStdGroup -> chatMemberVO : "+chatMemberVO);
 		try {
 			this.chatService.participateChatRoom(chatMemberVO);
 			return ResponseEntity.ok().build();
@@ -150,7 +137,6 @@ public class StudyGroupController {
 	@GetMapping("/createStdGroup.do")
 	public String createStdGroup(@AuthenticationPrincipal String memId, Model model) {
 		// jsp 측에서 막아놨지만 혹시 몰라서 걸어둠.
-		System.out.println("@@@@@@@@@@@@@@memId : "+memId);
 		if(memId == null || memId.equals("anonymousUser")) {
 			return "/login";
 		}
@@ -170,7 +156,6 @@ public class StudyGroupController {
 
 	@PostMapping("/createStdGroup.do")
 	public String createStdGroupPost(StdBoardVO stdBoardVO) {
-		log.info("createStdGroupPost -> stdBoardVO : "+ stdBoardVO);
 		int resultBoardId = this.studyGroupService.insertStdBoard(stdBoardVO);
 		if(resultBoardId > 0) {
 			return "redirect:/prg/std/stdGroupDetail.do?stdGroupId="+resultBoardId;
@@ -182,7 +167,6 @@ public class StudyGroupController {
 
 	@PostMapping("/createStdReply.do")
 	public String createStdReply(StdReplyVO stdReplyVO) {
-		log.info("createStdReply -> stdReplyVO : " + stdReplyVO);
 		stdReplyVO.setReplyId(6);
 		// 댓글 테이블에 삽입 (먼저 삽입이 되어야함 -> join해서 memId 챙겨옴)
 		// 해당 댓글 번호를 targetId 로 넣어주기

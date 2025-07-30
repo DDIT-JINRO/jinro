@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function(){
 			return resp.json();
 		})
 		.then(data =>{
-			console.log(data);
 			if(data.length >= 1){
 				alarmBody.innerHTML = '';
 				data.forEach(alarm =>{
@@ -47,12 +46,10 @@ document.addEventListener('DOMContentLoaded', function(){
 		eventSource = new EventSource('/api/alarm/sub?memId='+memId);
 		eventSource.addEventListener('alarm',function(e){
 			const alarmVO = JSON.parse(e.data);
-			console.log(alarmVO);
 			addAlarmItem(alarmVO);
 		})
 
 		eventSource.addEventListener('connected', function(e){
-			console.log("connected 이벤트 확인");
 			console.log(e.data);
 		})
 
@@ -149,7 +146,6 @@ function updateReadAlarm(e){
 	})
 	.then(resp =>{
 		if(!resp.ok) throw new Error("에러 발생");
-		console.log("정상완료");
 		// 뱃지제거
 		unreadAlarmItem.classList.remove('unread');
 		unreadAlarmItem.classList.add('read');

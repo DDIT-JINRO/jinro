@@ -1,6 +1,5 @@
 package kr.or.ddit.util.alarm.web;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -59,7 +58,6 @@ public class AlarmController {
 	// 클라이언트가 알림에 마우스 hover시 호출. 읽음으로 변경
 	@PostMapping("/updateRead")
 	public ResponseEntity<Void> updateRead(@RequestBody AlarmVO alarmVO){
-		log.info("fetch alarm 업데이트 요청 : " + alarmVO);
 		this.alarmService.updateMarkRead(alarmVO.getAlarmId());
 		return ResponseEntity.noContent().build();
 	}

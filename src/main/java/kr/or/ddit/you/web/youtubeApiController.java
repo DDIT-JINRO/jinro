@@ -20,11 +20,6 @@ public class youtubeApiController {
 	@Value("${DEV.YOUTUBE.API_KEY}")
 	private String API_KEY;
 	
-	@Value("${DEV.YOUTUBE.ACCESS_TOKEN}")
-	private String ACCESS_TOKEN; // 실제 액세스 토큰으로 교체
-
-
-	
 	@GetMapping("/main/youtubeJsp")
 	public String youtube(@AuthenticationPrincipal String memId, Model model) {	
 		log.info(memId);	
