@@ -1,8 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/mpg/pay/payment.css">
-<!-- 스타일 여기 적어주시면 가능 -->
+<link rel="stylesheet" href="/css/mpg/pay/selectPaymentView.css">
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
@@ -20,81 +18,91 @@
 	<div class="public-wrapper">
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			이곳은 결제/구독 내역 페이지 입니다.
-  			<%-- ================= 구독 등급 목록 ================= --%>
-            <div class="subscription-section">
-                <div class="section-header">
-                    <h2>구독 등급 목록</h2>
-                    <%-- 현재 구독 중일 때만 취소 버튼 표시 --%>
-                    <c:if test="${currentSub != null && currentSub.subStatus == 'Y'}">
-                        <button id="cancel-sub-btn" class="btn-cancel">구독 취소</button>
-                    </c:if>
-                </div>
-
-                <div class="subscription-plans-container">
-                    <c:forEach var="product" items="${subProducts}">
-                        <div class="subscription-plan ${currentSub.subId == product.subId ? 'active' : ''}">
-                            <h3>${product.subName}</h3>
-                            <p class="price">₩ <fmt:formatNumber value="${product.subPrice}" pattern="#,###" />/month</p>
-                            <ul class="benefits">
-                                <%-- 구독 혜택을 '\n' 기준으로 나눠서 표시 (JSTL fn 사용 필요) --%>
-                                <li>${product.subBenefit}</li>
-                            </ul>
-                            
-                            <c:choose>
-                                <c:when test="${currentSub != null && currentSub.subId == product.subId && currentSub.subStatus == 'Y'}">
-                                    <button class="btn-main" disabled>구독중</button>
-                                </c:when>
-                                <c:when test="${currentSub != null && currentSub.subStatus == 'Y'}">
-                                    <button class="change-sub-btn btn-secondary" data-sub-id="${product.subId}">변경</button>
-                                </c:when>
-                                <c:otherwise>
-                                    <button class="subscribe-btn btn-main" 
-                                            data-sub-id="${product.subId}" 
-                                            data-name="${product.subName}" 
-                                            data-price="${product.subPrice}">가입</button>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
-            
-            <%-- ================= 구독 결제 내역 ================= --%>
-            <div class="payment-history-section">
-                <h2>구독 결제 내역</h2>
-                <table class="payment-history-table">
-                    <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>상품명</th>
-                            <th>결제일</th>
-                            <th>결제 금액</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="payment" items="${paymentHistory}" varStatus="status">
-                            <tr>
-                                <td>${payment.payId}</td>
-                                <td>${payment.subName}</td>
-                                <td><fmt:formatDate value="${payment.payDate}" pattern="yyyy-MM-dd"/></td>
-                                <td><fmt:formatNumber value="${payment.payAmount}" pattern="#,###" /> 원</td>
-                            </tr>
-                        </c:forEach>
-                        <c:if test="${empty paymentHistory}">
-                            <tr><td colspan="4">결제 내역이 없습니다.</td></tr>
-                        </c:if>
-                    </tbody>
-                </table>
-            </div>
-            
+			<div class="content-container">
+			    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+			        <h2 class="section-title">구독 등급 목록</h2>
+			        <c:choose>
+				        <%-- 1. 예약된 구독이 있을 경우 '예약 취소' 링크 표시 --%>
+				        <c:when test="${reservedSub != null}">
+				            <a href="#" id="cancel-reservation-link" class="cancel-link">구독 변경 예약을 취소하시겠습니까?</a>
+				        </c:when>
+				        <%-- 2. 현재 구독 중일 경우 '구독 취소' 링크 표시 --%>
+				        <c:when test="${currentSub != null && currentSub.subStatus == 'Y'}">
+				            <a href="#" id="cancel-link" class="cancel-link">구독을 취소하고 싶으신가요?</a>
+				        </c:when>
+				    </c:choose>
+			    </div>
+			    <div class="pricing-cards-container">
+			        <%-- 컨트롤러에서 받은 구독 상품 목록(subProducts)을 JSTL로 반복 표시 --%>
+			        <c:forEach var="product" items="${subProducts}">
+			            <%-- 현재 구독중인 상품에 highlighted 클래스를 추가하여 강조 --%>
+			            <div class="pricing-card ${currentSub.subId == product.subId ? 'highlighted' : ''}">
+			                <c:if test="${currentSub.subId == product.subId}">
+			                    <div class="popular-tag">현재 구독중인 상품</div>
+			                </c:if>
+			                <h3 class="card-title">${product.subName}</h3>
+			                <p class="card-price">₩ <fmt:formatNumber value="${product.subPrice}" pattern="#,###" /><span>/월</span></p>
+			                <ul class="card-features">
+			                	<c:forEach var="benefit" items="${fn:split(product.subBenefit, ',')}">
+				                    <li>${benefit}</li>
+			                	</c:forEach>
+			                </ul>
+			                
+			                <%-- 현재 구독 상태에 따라 버튼을 다르게 표시 --%>
+			                <c:choose>
+							    <%-- 1. 아무것도 구독하지 않은 경우 --%>
+							    <c:when test="${currentSub == null}">
+							        <button class="subscribe-btn card-button" data-sub-id="${product.subId}" 
+							        data-name="${product.subName}" data-price="${product.subPrice}">가입</button>
+							    </c:when>
+							    <%-- 2. 현재 바로 이 상품을 구독 중인 경우 --%>
+							    <c:when test="${currentSub.subId == product.subId}">
+							        <button class="card-button" disabled>구독중</button>
+							    </c:when>
+							    <%-- 3. 그 외의 경우 (다른 상품을 구독 중인 경우) --%>
+							    <c:otherwise>
+							        <%-- 예약된 구독이 있으면 버튼 비활성화, 없으면 '변경하기' 버튼 활성화 --%>
+							        <button class="change-sub-btn card-button" data-sub-id="${product.subId}" ${reservedSub != null ? 'disabled' : ''}>
+							            ${reservedSub != null ? '변경 예약됨' : '변경하기'}
+							        </button>
+							    </c:otherwise>
+							</c:choose>
+			            </div>
+			        </c:forEach>
+			    </div>
+			</div>
+			<div class="content-container">
+				<h2 class="section-title">구독 결제 내역</h2>
+				<div class="history-table">
+					<div class="history-row history-header">
+						<span>번호</span>
+						<span>상품명</span>
+						<span>결제일</span>
+						<span>결제 금액</span>
+					</div>
+					<c:forEach var="payment" items="${paymentHistory}" varStatus="status">
+                          <div class="history-row">
+                            <a href="#">${status.count}</a>
+		                    <span>${payment.subName}</span>
+		                    <span><fmt:formatDate value="${payment.payDate}" pattern="yyyy-MM-dd"/></span>
+		                    <span><fmt:formatNumber value="${payment.payAmount}" pattern="#,###" /> 원</span>
+		                  </div>
+                       </c:forEach>
+					<c:if test="${empty paymentHistory}">
+						<div class="history-row">
+							<span style="grid-column: 1/-1; text-align: center;">결제
+								내역이 없습니다.</span>
+						</div>
+					</c:if>
+				</div>
+				</div>
+			</div>
   		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-
 <%-- ================= 스크립트 영역 ================= --%>
 
 <%-- ✅ 1. 결제/취소 로직이 담긴 JS 파일 포함 --%>
@@ -123,11 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // '구독 취소' 버튼 이벤트
-    const cancelButton = document.getElementById('cancel-sub-btn');
-    if (cancelButton) {
-        cancelButton.addEventListener('click', () => {
-            cancelSubscription(); 
+    // '구독 취소' 링크 이벤트
+    const cancelLink = document.getElementById('cancel-link');
+    if (cancelLink) {
+        cancelLink.addEventListener('click', (event) => {
+            event.preventDefault(); // a 태그의 기본 동작(페이지 이동)을 막습니다.
+            cancelSubscription(); // payment.js의 구독 취소 함수 호출
         });
     }
     
@@ -135,9 +144,38 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.change-sub-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const nextSubId = btn.dataset.subId;
-            alert(`다음 결제부터 구독 상품을 ID ${nextSubId}로 변경하는 기능을 구현해야 합니다.`);
-            // TODO: '/pay/change-subscription' API 호출 로직 추가
+            if (confirm(`다음 결제부터 구독 상품을 변경하시겠습니까?`)) {
+                
+                const formData = new FormData();
+                formData.append('subId', nextSubId);
+
+                fetch('/mpg/change-subscription', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(message => {
+                    alert(message);
+                    location.reload();
+                }); 
+            }
         });
     });
+    
+    // '예약 취소' 링크에 이벤트 추가
+    const cancelReservationLink = document.getElementById('cancel-reservation-link');
+    if (cancelReservationLink) {
+        cancelReservationLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (confirm("구독 변경 예약을 취소하시겠습니까?")) {
+                fetch('/mpg/cancel-change', { method: 'POST' }) 
+                    .then(response => response.text())
+                    .then(message => {
+                        alert(message);
+                        location.reload();
+                    });
+            }
+        });
+    }
 });
 </script>

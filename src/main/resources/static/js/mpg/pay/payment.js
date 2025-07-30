@@ -2,8 +2,8 @@
  * 
  */
 
-// 전역변수로 IMP 초기화
-const IMP = window.IMP;
+/*전역변수로 IMP 초기화*/
+IMP = window.IMP;
 IMP.init('imp55613015') //가맹점 식별코드
 
 /**
@@ -32,8 +32,15 @@ function requestSubscription(subInfo, userInfo) {
 		function(rsp) {
 			//callback
 			if (rsp.success) {
+				console.log("서버로 보내는 최종 데이터:", {
+				        impUid: rsp.imp_uid,
+				        customerUid: rsp.customer_uid,
+				        merchantUid: rsp.merchant_uid,
+				        amount: rsp.paid_amount,
+				        subId: subInfo.id 
+				    });
 				//결제 성공 시 , 서버로 검증요청
-				fetch('/pay/verify', {
+				fetch('/mpg/verify', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
@@ -66,12 +73,18 @@ function cancelSubscription() {
 	if (!confirm("정말로 구독을 취소하시겠습니까?")) {
 		return;
 	}
-
-	fetch('/pay/cancel-subscription', { method: 'POST' }) // 취소는 기존 PayController 사용
-		.then(response => response.ok ? response.text() : Promise.reject('구독 취소 실패'))
+	// 백엔드의 /mpg/cancel-subscription 주소로 POST 요청을 보냄
+	fetch('/mpg/cancel-subscription', { method: 'POST' }) // 취소는 기존 PayController 사용
+		.then(response => {
+			if (response.ok) {
+				return response.text();
+			}
+			// 서버에서 4xx, 5xx 에러 응답 시
+			return Promise.reject('구독 취소에 실패했습니다. 잠시 후 다시 시도해주세요.');
+		})
 		.then(message => {
 			alert(message);
-			location.reload();
+			location.reload(); // 성공 시 페이지 새로고침
 		})
 		.catch(error => alert(error));
 

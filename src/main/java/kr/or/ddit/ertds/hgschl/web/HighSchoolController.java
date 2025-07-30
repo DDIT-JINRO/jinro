@@ -18,7 +18,7 @@ public class HighSchoolController {
 		return "ertds/hgschl/list"; // /WEB-INF/views/erds/hgschl/list.jsp
 	}
 
-	// 고등학교 리스트
+	// 고등학교 상세
 	@GetMapping("/selectHgschDetail.do")
 	public String highSchoolDetailPage() {
 

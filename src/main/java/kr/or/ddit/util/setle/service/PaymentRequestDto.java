@@ -10,17 +10,20 @@ public class PaymentRequestDto {
 	private String merchantUid; // 상점 주문 번호
 	private String customerUid; // 고객 고유 식별자 (빌링키 용)
 	private double amount; // 클라이언트가 요청한 결제 금액 (서버 검증용)
+    private int subId; //클라이언트가 선택한 상품번호
+	
 
 	// 기본 생성자 (필수)
 	public PaymentRequestDto() {
 	};
 
 	// 모든 필드를 포함하는 생성자 (선택, 편리성을 위해 추가)
-	public PaymentRequestDto(String impUid, String merchantUid, String customerUid, double amount) {
+	public PaymentRequestDto(String impUid, String merchantUid, String customerUid, double amount, int subId) {
 		this.impUid = impUid;
 		this.merchantUid = merchantUid;
 		this.customerUid = customerUid;
 		this.amount = amount;
+		this.subId = subId;
 	}
 
 	// Getter와 Setter 메서드
@@ -55,11 +58,19 @@ public class PaymentRequestDto {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
+	
+	public int getSubId() {
+		return subId;
+	}
+	
+	public void setSubId(int subId) {
+		this.subId = subId;
+	}
 
 	@Override
 	public String toString() {
 		return "PaymentRequestDto [impUid=" + impUid + ", merchantUid=" + merchantUid + ", customerUid=" + customerUid
-				+ ", amount=" + amount + "]";
+				+ ", amount=" + amount + ", subId=" + subId + "]";
 	}
 
 	@Override
@@ -88,7 +99,8 @@ public class PaymentRequestDto {
 		return Double.compare(amount, that.amount) == 0 && // amount 필드 비교
 				Objects.equals(impUid, that.impUid) && // impUid 필드 비교
 				Objects.equals(merchantUid, that.merchantUid) && // merchantUid 필드 비교
-				Objects.equals(customerUid, that.customerUid); // customerUid 필드 비교
+				Objects.equals(customerUid, that.customerUid) && // customerUid 필드 비교
+				Objects.equals(subId, that.subId);	// subId 필드 비교
 	}
 
 	// equals()를 오버라이드했다면,
@@ -99,7 +111,7 @@ public class PaymentRequestDto {
 	public int hashCode() {
 		// Objects.hash()를 사용하여 모든 핵심 필드의 해시 코드를 조합하여 하나의 int 값으로 반환합니다.
 		// 이는 각 필드의 해시 코드를 효율적으로 결합해줍니다.
-		return Objects.hash(impUid, merchantUid, customerUid, amount);
+		return Objects.hash(impUid, merchantUid, customerUid, amount, subId);
 	}
 
 }

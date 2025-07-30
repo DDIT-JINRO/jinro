@@ -115,4 +115,17 @@
         ORDER BY
         		p.PAY_DATE DESC
 	</select>
+	
+	<!-- 
+	// 구독 월간 기능 횟수 초기화
+	public int resetUsageCounts()
+	 -->
+	<update id="resetUsageCounts">
+		UPDATE	PAYMENT
+		SET		PAY_RESUME_CNT = 0
+			   ,PAY_COVER_CNT = 0
+			   ,PAY_CONSULT_CNT = 0
+			   ,PAY_MOCK_CNT = 0
+		WHERE	TRUNC(ADD_MONTHS(PAY_DATE, 1) + 1) = TRUNC(SYSDATE)
+	</update> 
 </mapper>
