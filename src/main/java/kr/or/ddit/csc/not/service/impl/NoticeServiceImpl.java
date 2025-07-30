@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.csc.not.service.NoticeService;
@@ -88,6 +89,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 	// 3. 사용자 공지사항 세부 조회
 	@Override
+	@Transactional
 	public NoticeVO getUserNoticeDetail(String noticeIdStr) {
 
 		int noticeId = Integer.parseInt(noticeIdStr);
@@ -109,6 +111,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 	// 4. 관리자 공지사항 세부 조회
 	@Override
+	@Transactional
 	public NoticeVO getAdminNoticeDetail(String noticeIdStr) {
 
 		int noticeId = Integer.parseInt(noticeIdStr);
@@ -127,6 +130,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 	// 5. 관리자 공지사항 등록
 	@Override
+	@Transactional
 	public int insertNotice(NoticeVO noticeVo) {
 
 
@@ -159,6 +163,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 	// 6. 공지사항 수정
 	@Override
+	@Transactional
 	public int updateNotice(NoticeVO noticeVo) {
 	    int result = noticeMapper.updateNotice(noticeVo);
 	 
@@ -195,9 +200,26 @@ public class NoticeServiceImpl implements NoticeService {
 
 	// 7. 공지사항 삭제
 	@Override
-	public int deleteNotice(int noticeId) {
-		// TODO Auto-generated method stub
-		return this.noticeMapper.deleteNotice(noticeId);
+	@Transactional
+	public int deleteNotice(NoticeVO noticeVO) {
+		
+		int noticeId = noticeVO.getNoticeId();
+		int resultNotice = noticeMapper.deleteNotice(noticeId);
+		
+		List<MultipartFile> files = noticeVO.getFiles();
+
+		if (files != null && !files.isEmpty()) {
+		    // 유효한 파일만 필터링 (빈 파일, 이름 없는 파일 제외)
+		    List<MultipartFile> validFiles = files.stream()
+		        .filter(file -> file != null && !file.isEmpty() && file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank())
+		        .toList();
+
+		    if (!validFiles.isEmpty()) {
+		    	boolean result = fileService.deleteFileGroup(noticeVO.getFileGroupNo());
+		    }
+		} 
+		
+		return resultNotice;
 	}
 
 }

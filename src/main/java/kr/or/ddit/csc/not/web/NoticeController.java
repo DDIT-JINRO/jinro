@@ -118,23 +118,7 @@ public class NoticeController {
 	@ResponseBody
 	@PostMapping("/admin/deleteNotice")
 	public int deleteNotice(@ModelAttribute NoticeVO noticeVO) {
-		
-		int noticeId = noticeVO.getNoticeId();
-		int resultNotice = noticeService.deleteNotice(noticeId);
-		
-		List<MultipartFile> files = noticeVO.getFiles();
-
-		if (files != null && !files.isEmpty()) {
-		    // 유효한 파일만 필터링 (빈 파일, 이름 없는 파일 제외)
-		    List<MultipartFile> validFiles = files.stream()
-		        .filter(file -> file != null && !file.isEmpty() && file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank())
-		        .toList();
-
-		    if (!validFiles.isEmpty()) {
-		    	boolean result = fileService.deleteFileGroup(null);
-		    }
-		} 
-		
-		return resultNotice;
+				
+		return noticeService.deleteNotice(noticeVO);
 	}
 }

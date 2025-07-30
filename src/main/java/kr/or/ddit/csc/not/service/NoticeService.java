@@ -28,5 +28,5 @@ public interface NoticeService {
 	public int updateNotice(NoticeVO noticeVo);
 	
 	// 7. 공지사항 삭제
-	public int deleteNotice(int noticeId);
+	public int deleteNotice(NoticeVO noticeVo);
 }

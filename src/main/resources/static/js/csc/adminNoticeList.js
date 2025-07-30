@@ -69,19 +69,6 @@ function bindNoticeEvents() {
 	if (noticeEventsBound) return;
 	noticeEventsBound = true;
 
-	const paginationEl = document.querySelector('.pagination');
-	if (paginationEl) {
-		paginationEl.addEventListener('click', e => {
-			e.preventDefault();
-			const a = e.target.closest('a[data-page]');
-			if (!a) return;
-			const page = parseInt(a.dataset.page, 10);
-			if (isNaN(page) || page < 1) return;
-			window.currentPage = page;
-			fetchNotices(page);
-		});
-	}
-
 	const searchBtn = document.querySelector('.btn-save');
 	if (searchBtn) {
 		searchBtn.addEventListener('click', () => fetchNotices(1));
@@ -97,6 +84,21 @@ function bindNoticeEvents() {
 			fetchNotices(1);
 		});
 	}
+}
+if (!window._paginationDelegated) {
+  window._paginationDelegated = true;
+
+  document.addEventListener('click', e => {
+    const a = e.target.closest('.pagination a[data-page]');
+    if (!a) return;
+
+    e.preventDefault();
+    const page = parseInt(a.dataset.page, 10);
+    if (isNaN(page) || page < 1) return;
+
+    window.currentPage = page;
+    fetchNotices(page);
+  });
 }
 
 function waitForInit() {
@@ -140,12 +142,12 @@ function showDetail(noticeId) {
 
 			const resp = response.data;
 			document.getElementById("info-table-tbody").innerHTML = `
-        <tr>
-          <td>${resp.noticeId}</td>
-          <td>${resp.noticeTitle}</td>
-          <td>${formatDateMMDD(resp.noticeUpdatedAt)}</td>
-          <td>${resp.noticeCnt}</td>
-        </tr>`;
+	        <tr>
+	          <td>${resp.noticeId}</td>
+	          <td>${resp.noticeTitle}</td>
+	          <td>${formatDateMMDD(resp.noticeUpdatedAt)}</td>
+	          <td>${resp.noticeCnt}</td>
+	        </tr>`;
 
 			document.querySelector('input[name="noticeTitle"]').value = resp.noticeTitle;
 			window.editor?.setData(resp.noticeContent);
@@ -157,10 +159,11 @@ function showDetail(noticeId) {
 				document.getElementById('fileGroupNo').value = resp.getFileList[0].fileGroupId;
 				document.getElementById("file").style.display = "block";
 				ul.innerHTML = resp.getFileList.map(f => `
-          <li>
-            <div onclick="filedownload('${f.fileGroupId}', ${f.fileSeq})" target="_blank">${f.fileOrgName}</div>&nbsp;&nbsp;
-            <button type="button" onclick="deleteExistingFile('${f.fileGroupId}', ${f.fileSeq}, ${noticeId})">삭제</button>
-          </li>`).join('');
+	          	<li>
+	            <div onclick="filedownload('${f.fileGroupId}', ${f.fileSeq})" target="_blank">${f.fileOrgName}</div>&nbsp;&nbsp;
+	            <button type="button" onclick="deleteExistingFile('${f.fileGroupId}', ${f.fileSeq}, ${noticeId})">삭제</button>
+	          	</li>`
+				).join('');
 			}
 		})
 		.catch(console.error);
@@ -195,10 +198,6 @@ function deleteExistingFile(fileGroupId, seq, noticeId) {
 		.catch(console.error);
 }
 
-ClassicEditor.create(document.getElementById("noticeContent"), {
-	ckfinder: { uploadUrl: "/image/upload" }
-}).then(editor => { window.editor = editor })
-	.catch(err => console.error(err.stack));
 
 function resetDetail() {
 	document.getElementById("btn-delete").style.display = "none";
@@ -215,6 +214,9 @@ function resetDetail() {
 function insertOrUpdate() {
 	const form = document.getElementById('form-data');
 	const fd = new FormData(form);
+	
+	
+	
 	fd.set('noticeContent', window.editor?.getData() || '');
 
 	if (document.querySelector('.info-table').style.display === 'none') {
@@ -247,3 +249,4 @@ function deleteNotice() {
 		})
 		.catch(err => console.error('삭제 실패:', err.response || err));
 }
+
