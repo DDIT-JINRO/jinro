@@ -1,33 +1,26 @@
 package kr.or.ddit.csc.not.web;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
-
-import kr.or.ddit.com.FileDetailVO;
 import kr.or.ddit.csc.not.service.NoticeService;
 import kr.or.ddit.csc.not.service.NoticeVO;
 import kr.or.ddit.util.ArticlePage;
+import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -99,7 +92,7 @@ public class NoticeController {
 		log.info("noticeDetail : " + noticeDetail);
 		
 		// 파일 가져오기
-		List<kr.or.ddit.util.file.service.FileDetailVO> getFileList = fileService.getFileList(Long.toString(noticeDetail.getFileGroupNo()));
+		List<FileDetailVO> getFileList = fileService.getFileList(noticeDetail.getFileGroupNo());
 		if(getFileList !=null && getFileList.size() >1) {
 			noticeDetail.setGetFileList(getFileList);
 			log.info("getfileList : "+getFileList);
@@ -162,7 +155,7 @@ public class NoticeController {
 		log.info("noticeDetail : " + noticeDetail);
 		
 		// 파일 가져오기
-		List<kr.or.ddit.util.file.service.FileDetailVO> getFileList = fileService.getFileList(Long.toString(noticeDetail.getFileGroupNo()));
+		List<FileDetailVO> getFileList = fileService.getFileList(noticeDetail.getFileGroupNo());
 		if(getFileList !=null && getFileList.size() >1) {
 			noticeDetail.setGetFileList(getFileList);
 			log.info("getfileList : "+getFileList);
@@ -182,13 +175,12 @@ public class NoticeController {
 
 		log.info("noticeVo : {}", noticeVo);
 		// 1. 파일 그룹 생성.
-		String createFileGroup = fileService.createFileGroup();
-		noticeVo.setFileGroupNo(Long.valueOf(createFileGroup));
-		log.info("createFileGroup : "+createFileGroup);
+		Long createFileGroupId = fileService.createFileGroup();
+		noticeVo.setFileGroupNo(createFileGroupId);
+		log.info("createFileGroupId : "+createFileGroupId);
 
 		
         // 2) 공지사항 저장 (제목·내용 등)
-		log.info("asd");
         int noticeCount = noticeService.insertNotice(noticeVo);
         log.info("notice insert 결과: {}", noticeCount);
 		
@@ -203,7 +195,7 @@ public class NoticeController {
                     .toList();
 
                 if (!validFiles.isEmpty()) {
-                	List<kr.or.ddit.util.file.service.FileDetailVO> detailList = fileService.uploadFiles(createFileGroup, noticeVo.getFiles());
+                	List<FileDetailVO> detailList = fileService.uploadFiles(createFileGroupId, noticeVo.getFiles());
                 	log.info("detailList : {}", detailList);
                 } else {
                     log.info("유효한 파일이 없어 업로드 생략");
@@ -219,26 +211,10 @@ public class NoticeController {
 		return 1;
 	}
 	
-	//공지사항 파일 다운로드
-	@ResponseBody
-	@GetMapping("/admin/downloadFile")
-    public ResponseEntity<Resource> download(@RequestParam String groupId, @RequestParam int seq) throws IOException {
-        kr.or.ddit.util.file.service.FileDetailVO detail = fileService.getFileDetail(groupId, seq);
-        log.info("detail : "+detail);
-        Resource resource = fileService.downloadFile(groupId, seq);
-        log.info("resource : "+resource);
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" + URLEncoder.encode(detail.getFileOrgName(), "UTF-8") + "\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(resource);
-    }
-	
 	//파일삭제
 	@ResponseBody
 	@GetMapping("/admin/deleteFile")
-	public boolean deleteFile(@RequestParam String groupId, @RequestParam int seq) {
+	public boolean deleteFile(@RequestParam Long groupId, @RequestParam int seq) {
 		
 		log.info("groupId : "+groupId);
 		log.info("seq : "+seq);
@@ -272,7 +248,7 @@ public class NoticeController {
                     .toList();
 
                 if (!validFiles.isEmpty()) {
-                	List<kr.or.ddit.util.file.service.FileDetailVO> detailList = fileService.uploadFiles(Long.toString(noticeVo.getFileGroupNo()), noticeVo.getFiles());
+                	List<FileDetailVO> detailList = fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
                 	log.info("detailList : {}", detailList);
                 } else {
                     log.info("유효한 파일이 없어 업로드 생략");

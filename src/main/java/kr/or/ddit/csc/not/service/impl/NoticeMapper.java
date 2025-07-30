@@ -11,9 +11,9 @@ import kr.or.ddit.csc.not.service.NoticeVO;
 public interface NoticeMapper {
 	public List<NoticeVO> getList(Map<String, Object>map);
 
-	public NoticeVO getNoticeDetail(int no);
+	public NoticeVO getNoticeDetail(int noticeId);
 
-	public int upNoticeCnt(int no);
+	public int upNoticeCnt(int noticeId);
 	
 	public int getAllNotice(Map<String, Object>map);
 

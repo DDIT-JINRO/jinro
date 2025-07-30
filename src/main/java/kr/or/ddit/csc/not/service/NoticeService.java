@@ -7,9 +7,9 @@ public interface NoticeService {
 	//리스트 조회
 	public List<NoticeVO> getList(Map<String, Object>map);
 	//게시글 상세
-	public NoticeVO getNoticeDetail(String no);
+	public NoticeVO getNoticeDetail(String noticeIdStr);
 	//조회수
-	public int upNoticeCnt(String no);
+	public int upNoticeCnt(String noticeIdStr);
 	//전체 게시글 수
 	public int getAllNotice(Map<String, Object>map);
 	//공지사항 등록

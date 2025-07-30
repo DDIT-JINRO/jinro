@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.or.ddit.util.file.service.FileDetailVO;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,12 +24,13 @@ public class NoticeVO {
 
 	// 파일
 	private Long fileGroupNo;
-	private String fileName;
 	private List<MultipartFile> files;
+	
+	private String fileName;
 	private int seq;
 	
 	// 파일 리스트
-	private List<kr.or.ddit.util.file.service.FileDetailVO> getFileList;
+	private List<FileDetailVO> getFileList;
 	
 	// 검색 키워드
 	private String keyword;

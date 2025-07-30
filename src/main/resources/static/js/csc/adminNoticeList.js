@@ -208,7 +208,7 @@ responseType: 'blob'
 function filedownload(fileGroupId, fileSeq) {
   axios({
     method: 'get',
-    url: `/csc/admin/downloadFile`,
+    url: `/files/download`,
     params: {
 		groupId: fileGroupId, 
 		seq: fileSeq            

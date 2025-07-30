@@ -1,7 +1,7 @@
 function filedownload(fileGroupId,fileSeq,fileOrgName){
 	axios({
 	  method: 'get',
-	  url: `/csc/admin/downloadFile`,
+	  url: `/files/download`,
 	  params: {
 		groupId: fileGroupId, 
 		seq: fileSeq            

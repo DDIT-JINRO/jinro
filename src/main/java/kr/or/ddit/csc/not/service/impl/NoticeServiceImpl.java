@@ -24,17 +24,17 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	@Override
-	public NoticeVO getNoticeDetail(String no) {
+	public NoticeVO getNoticeDetail(String noticeIdStr) {
 		// TODO Auto-generated method stub
-		int data = Integer.parseInt(no);
-		return this.noticeMapper.getNoticeDetail(data);
+		int noticeId = Integer.parseInt(noticeIdStr);
+		return this.noticeMapper.getNoticeDetail(noticeId);
 	}
 
 	@Override
-	public int upNoticeCnt(String no) {
+	public int upNoticeCnt(String noticeIdStr) {
 		// TODO Auto-generated method stub
-		int data = Integer.parseInt(no);
-		return this.noticeMapper.upNoticeCnt(data);
+		int noticeId = Integer.parseInt(noticeIdStr);
+		return this.noticeMapper.upNoticeCnt(noticeId);
 	}
 
 	@Override
