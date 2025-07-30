@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
         allElementHtml = allElementDiv.outerHTML;  // value가 반영된 상태의 outerHTML
         axios.post('/rsm/rsm/insertElement',allElementHtml)
                 .then(res =>{
-                    console.log("응답"+res.data)
+                    //get 이력서 상세페이지로 보내주어야할 것 같음
                 })
 
     })

@@ -211,7 +211,7 @@ button[type="button"]:hover {
     font-size: 0.9em;
 }
 
-.delete-button:hover {
+.personal-info-form .delete-button:hover {
     background-color: darkred;
 }
 

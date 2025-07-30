@@ -130,7 +130,7 @@
 					<c:out value="${resumeDetailVO.fieldValue}" escapeXml="false" />
 				</c:if>
 			</section>
-			<button type="button" id="btn-submit">문자화</button>
+			<button type="button" id="btn-submit">제출</button>
 			<div class="button-group">
 				<!-- 학력 불러오기 버튼 -->
 				<button type="button" id="load-education" name="rsId" data-id="1">학력
