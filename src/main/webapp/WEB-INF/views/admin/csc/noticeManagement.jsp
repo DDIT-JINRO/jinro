@@ -74,8 +74,8 @@
 				<input type="text" name="noticeTitle" placeholder="제목을 입력하세요" />
 			</div>
 			
-			<input type="hidden" name="fileGroupNo" id="fileGroupNo">
-			<input type="hidden" name="noticeId" id="noticeId">
+			<input type="hidden" name="fileGroupNo" id="fileGroupNo"/>
+			<input type="hidden" name="noticeId" id="noticeId" value="0"/>
 			<div class="ck-row">
 			  <label>공지 내용</label>
 			  <div class="ck-editor">
