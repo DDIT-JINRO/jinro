@@ -5,34 +5,36 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import kr.or.ddit.admin.las.service.VisitLogService;
 import kr.or.ddit.config.jwt.JwtAuthenticationFilter;
 import kr.or.ddit.config.jwt.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
+@Slf4j
 public class SecurityConfig {
 	
-    
 	private final JwtUtil jwtUtil;
 	private final UserDetailsService userDetailsService;
-
-	public SecurityConfig(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
+	private final VisitLogService visitLogService;
+	
+	public SecurityConfig(JwtUtil jwtUtil, UserDetailsService userDetailsService, VisitLogService visitLogService) {
 		this.jwtUtil = jwtUtil;
 		this.userDetailsService = userDetailsService;
+		this.visitLogService = visitLogService;
 		
 	}
     
@@ -63,11 +65,11 @@ public class SecurityConfig {
 			)
 				.formLogin(form -> form.disable()) 
 				.httpBasic(httpBasic -> httpBasic.disable()) // HTTP Basic 인증 비활성화
-				.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService, visitLogService),UsernamePasswordAuthenticationFilter.class)
 				.logout(logout -> logout
 					    .logoutUrl("/logout")
 					    .logoutSuccessHandler((request, response, authentication) -> {
-					        String referer = request.getHeader("Referer");
+					    	String referer = request.getHeader("Referer");
 					        if (referer != null) {
 					            response.sendRedirect(referer);
 					        } else {

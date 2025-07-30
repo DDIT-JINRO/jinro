@@ -24,6 +24,8 @@ public interface LoginService {
 
 	public int insertEncodePass(MemberVO memVO);
 
+	
+
 
 
 }

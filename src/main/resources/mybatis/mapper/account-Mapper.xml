@@ -182,4 +182,35 @@
 		WHERE
 		MEM_EMAIL = #{memEmail} AND LOGIN_TYPE = 'G33001'
 	</update>
+
+	<insert id="insertLoginLog" parameterType="int">
+		INSERT INTO LOGIN_LOG
+		(
+		LL_ID
+		, LL_CREATED_AT
+		, LL_STATUS
+		, MEM_ID
+		) VALUES (
+		(SELECT NVL(MAX(LL_ID),0)+1 FROM LOGIN_LOG)
+		, SYSDATE
+		, 'I'
+		, #{memId}
+		)
+	</insert>
+	<insert id="insertLogoutLog" parameterType="int">
+		INSERT INTO LOGIN_LOG
+		(
+		LL_ID
+		, LL_CREATED_AT
+		, LL_STATUS
+		, MEM_ID
+		) VALUES (
+		(SELECT NVL(MAX(LL_ID),0)+1 FROM LOGIN_LOG)
+		, SYSDATE
+		, 'O'
+		, #{memId}
+		)
+	</insert>
+	
+	
 </mapper>

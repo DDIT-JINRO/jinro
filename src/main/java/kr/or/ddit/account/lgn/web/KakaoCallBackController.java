@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import kr.or.ddit.account.lgn.service.LoginLogService;
 import kr.or.ddit.account.lgn.service.LoginService;
 import kr.or.ddit.account.lgn.service.impl.KakaoCallBackService;
 import kr.or.ddit.main.service.MemberVO;
@@ -31,6 +32,9 @@ public class KakaoCallBackController {
 	KakaoCallBackService kakaoCallBackService;
 	@Autowired
 	LoginService loginService;
+	@Autowired
+	LoginLogService loginLogService;
+	
 	
 	@PostMapping("kakaoRestApiKey.do")
 	@ResponseBody
@@ -111,13 +115,16 @@ public class KakaoCallBackController {
 //		refreshTokenCookie.setSecure(true);
 		refreshTokenCookie.setPath("/");
 		refreshTokenCookie.setMaxAge(60 * 60 * 24 * 7);
-
+		
+		String memId = (String) result.get("memId");
 		resp.addCookie(accessTokenCookie);
 		resp.addCookie(refreshTokenCookie);
 
 		result.remove("accessToken");
 		result.remove("refreshToken");
-
+		
+		loginLogService.insertLoginLog(memId);
+		
 		return "redirect:/";
 	}
 
