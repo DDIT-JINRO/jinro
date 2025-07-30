@@ -1,13 +1,8 @@
 package kr.or.ddit.csc.not.service;
 
-import java.util.List;
-import java.util.Map;
-
 import kr.or.ddit.util.ArticlePage;
 
 public interface NoticeService {
-
-	// 수정 후
 	
 	// 1. 사용자 목록 조회
 	public ArticlePage<NoticeVO> getUserNoticePage(int currentPage, int size, String keyword);

@@ -25,10 +25,7 @@ public class NoticeVO {
 	// 파일
 	private Long fileGroupNo;
 	private List<MultipartFile> files;
-	
-	private String fileName;
-	private int seq;
-	
+
 	// 파일 리스트
 	private List<FileDetailVO> getFileList;
 	

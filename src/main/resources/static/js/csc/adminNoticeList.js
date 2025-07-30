@@ -17,13 +17,13 @@ function fetchNotices(page = 1) {
 	const status = document.querySelector('select[name="status"]').value;
 
 	axios.get('/csc/not/admin/noticeList.do', {
-		params: {
-			currentPage: page,
-			size: pageSize,
-			keyword: keyword,
-			status: status
-		}
-	})
+			params: {
+				currentPage: page,
+				size: pageSize,
+				keyword: keyword,
+				status: status
+			}
+		})
 		.then(({ data }) => {
 			const countEl = document.getElementById('notice-count');
 			if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
@@ -171,11 +171,11 @@ function showDetail(noticeId) {
 
 function filedownload(fileGroupId, fileSeq) {
 	axios({
-		method: 'get',
-		url: `/files/download`,
-		params: { groupId: fileGroupId, seq: fileSeq },
-		responseType: 'blob'
-	})
+			method: 'get',
+			url: `/files/download`,
+			params: { groupId: fileGroupId, seq: fileSeq },
+			responseType: 'blob'
+		})
 		.then(response => {
 			const blob = new Blob([response.data]);
 			const url = window.URL.createObjectURL(blob);
@@ -192,8 +192,8 @@ function filedownload(fileGroupId, fileSeq) {
 
 function deleteExistingFile(fileGroupId, seq, noticeId) {
 	axios.get('/csc/not/admin/deleteFile', {
-		params: { groupId: fileGroupId, seq }
-	})
+			params: { groupId: fileGroupId, seq }
+		})
 		.then(() => showDetail(noticeId))
 		.catch(console.error);
 }

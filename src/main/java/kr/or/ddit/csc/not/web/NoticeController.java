@@ -1,7 +1,5 @@
 package kr.or.ddit.csc.not.web;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
 
 import kr.or.ddit.csc.not.service.NoticeService;
@@ -67,20 +64,15 @@ public class NoticeController {
 			//연도별 구분
 			@RequestParam(value="status",required = false)String status) {
 
-		ArticlePage<NoticeVO> articlePage = noticeService.getAdminNoticePage(currentPage, size, keyword, status);
-
-		return articlePage;
+		return noticeService.getAdminNoticePage(currentPage, size, keyword, status);
 	}
 	
 	// 관리자 공지사항 세부 화면
 	@ResponseBody
 	@GetMapping("/admin/noticeDetail.do")
 	public NoticeVO adminNoticeDetail(@RequestParam String noticeId) {
-
-		// 게시글 상세 조회
-		NoticeVO noticeDetail = noticeService.getAdminNoticeDetail(noticeId);
 		
-		return noticeDetail ;
+		return noticeService.getAdminNoticeDetail(noticeId);
 	}
 
 	// 관리자 공지사항 등록
@@ -89,10 +81,8 @@ public class NoticeController {
 	@ResponseBody
 	@PostMapping(value = "/admin/insertNotice", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public int insertNotice(@ModelAttribute NoticeVO noticeVo) {
-		
-		int noticeCount =noticeService.insertNotice(noticeVo); 
 	
-		return noticeCount;
+		return noticeService.insertNotice(noticeVo);
 	}
 	
 	//파일삭제
@@ -100,19 +90,15 @@ public class NoticeController {
 	@GetMapping("/admin/deleteFile")
 	public boolean deleteFile(@RequestParam Long groupId, @RequestParam int seq) {
 
-		boolean resultDeleteFile =fileService.deleteFile(groupId, seq);
-
-		return resultDeleteFile;
+		return fileService.deleteFile(groupId, seq);
 	}
 	
 	//파일 수정
 	@ResponseBody
 	@PostMapping(value = "/admin/updateNotice", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public int updateNotice(@ModelAttribute NoticeVO noticeVo) {
-
-        int noticeCount = noticeService.updateNotice(noticeVo);
         
-		return noticeCount;
+		return noticeService.updateNotice(noticeVo);
 	}
 	
 	@ResponseBody
