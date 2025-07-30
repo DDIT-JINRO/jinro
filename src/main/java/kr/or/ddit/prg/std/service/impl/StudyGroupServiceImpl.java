@@ -28,7 +28,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 
 	@Autowired
 	StudyGroupMapper studyGroupMapper;
-	
+
 	@Autowired
 	ChatService chatService;
 
@@ -74,12 +74,12 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		int result = 0;
 		int boardId = 0;
 		result += this.studyGroupMapper.insertStdBoard(stdBoardVO);
-		
+
 		ChatRoomVO chatRoomVO = new ChatRoomVO();
 		chatRoomVO.setTargetId(stdBoardVO.getBoardId());
 		chatRoomVO.setCrTitle(stdBoardVO.getChatTitle());
 		chatRoomVO.setCcId("G04001");
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			JsonNode json = objectMapper.readTree(stdBoardVO.getBoardContent());
@@ -87,9 +87,9 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
+
 		result += this.chatService.insertChatRoom(chatRoomVO);
-		
+
 		ChatMemberVO chatMemberVO = new ChatMemberVO();
 		chatMemberVO.setCrId(chatRoomVO.getCrId());
 		chatMemberVO.setMemId(stdBoardVO.getMemId());
@@ -97,7 +97,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 			boardId = stdBoardVO.getBoardId();
 		}
 		this.chatService.participateChatRoom(chatMemberVO);
-		
+
 		return boardId;
 	}
 
@@ -112,28 +112,25 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 			    Map.entry("study.general", "공부"),
 			    Map.entry("study.exam", "수능준비"),
 			    Map.entry("study.assignment", "과제"),
-			    Map.entry("study.etc", "기타"),
 
 			    Map.entry("career.path", "진로"),
 			    Map.entry("career.admission", "진학"),
-			    Map.entry("career.etc", "기타"),
 
 			    Map.entry("job.prepare", "취업준비"),
 			    Map.entry("job.concern", "취업고민"),
-			    Map.entry("job.etc", "기타"),
 
 			    Map.entry("social.neighbor", "동네친구"),
-			    Map.entry("social.talk", "잡담"),
-			    Map.entry("social.etc", "기타")
+			    Map.entry("social.talk", "잡담")
 			);
 		return interestMap;
 	}
+
 
 	@Override
 	public StdBoardVO selectStudyGroupDetail(int stdGroupId) {
 		StdBoardVO stdBoardVO =this.studyGroupMapper.selectStudyGroupDetail(stdGroupId);
 		if(stdBoardVO == null) return stdBoardVO;
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			JsonNode json = objectMapper.readTree(stdBoardVO.getBoardContent());
@@ -142,7 +139,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 			stdBoardVO.setInterest(json.path("interest").asText());
 			stdBoardVO.setMaxPeople(json.path("maxPeople").asInt());
 			stdBoardVO.setParsedContent(json.path("content").asText());
-			
+
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
@@ -184,5 +181,10 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	@Override
 	public Map<String, String> getRegionMap() {
 		return this.regionMap;
+	}
+
+	@Override
+	public void increaseViewCnt(int stdGroupId) {
+		this.studyGroupMapper.increaseViewCnt(stdGroupId);
 	}
 }

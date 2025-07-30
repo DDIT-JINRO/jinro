@@ -130,8 +130,11 @@
 		    <if test="gender != null and gender != ''">
 		      AND JSON_VALUE(B.BOARD_CONTENT, '$.gender') = #{gender}
 		    </if>
-		    <if test="interest != null and interest != ''">
-		      AND JSON_VALUE(B.BOARD_CONTENT, '$.interest') = #{interest}
+		    <if test="interestItems != null and interestItems.size() > 0">
+		      AND JSON_VALUE(B.BOARD_CONTENT, '$.interest') IN
+		      <foreach collection="interestItems" item="item" open="(" separator=", " close=")">
+		      	#{item}
+		      </foreach>
 		    </if>
 		    <if test="maxPeople != null and maxPeople != 0">
 		      AND JSON_VALUE(B.BOARD_CONTENT, '$.maxPeople') = #{maxPeople}
@@ -175,8 +178,11 @@
 	    <if test="gender != null and gender != ''">
 	      AND JSON_VALUE(B.BOARD_CONTENT, '$.gender') = #{gender}
 	    </if>
-	    <if test="interest != null and interest != ''">
-	      AND JSON_VALUE(B.BOARD_CONTENT, '$.interest') = #{interest}
+	    <if test="interestItems != null and interestItems.size() > 0">
+	      AND JSON_VALUE(B.BOARD_CONTENT, '$.interest') IN
+	      <foreach collection="interestItems" item="item" open="(" separator=", " close=")">
+	      	#{item}
+	      </foreach>
 	    </if>
 	    <if test="maxPeople != null and maxPeople != ''">
 	      AND JSON_VALUE(B.BOARD_CONTENT, '$.maxPeople') = #{maxPeople}
@@ -318,4 +324,12 @@
 
 	    ORDER BY R1.REPLY_CREATED_AT ASC
 	</select>
+
+	<update id="increaseViewCnt" parameterType="int">
+		UPDATE BOARD
+		   SET BOARD_CNT = BOARD_CNT+1
+		 WHERE BOARD_ID = #{boardId}
+		   AND BOARD_DEL_YN = 'N'
+		   AND CC_ID = 'G09005'
+	</update>
 </mapper>

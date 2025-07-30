@@ -46,10 +46,16 @@ public interface StudyGroupService {
 	 * @return
 	 */
 	StdBoardVO selectStudyGroupDetail(int stdGroupId);
-	
+
 	/**
 	 * 지역코드 맵 불러오기
 	 * @return
 	 */
 	Map<String, String> getRegionMap();
+
+	/**
+	 * 조회수 증가
+	 * @param stdBoardVO
+	 */
+	void increaseViewCnt(int stdGroupId);
 }

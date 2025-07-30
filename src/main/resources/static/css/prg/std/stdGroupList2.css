@@ -88,22 +88,22 @@
 }
 
 
-/* 참여 가능 (available) - 연녹색 */
+/* 참여 가능 (available) -  */
 .status-tag.available {
-  background-color: #a4d18c; /* 부드러운 연녹색 */
-  color: #2d572c;             /* 텍스트는 어두운 녹색 */
+  background-color: #28b383;      /* 참여 중: 짙은 녹색 */
+  color: rgb(247, 247, 247);      /* 흰색 텍스트 */
 }
 
 /* 참여 중 (entered) - 연한 파랑 */
 .status-tag.entered {
-  background-color: #9fc9eb; /* 부드러운 하늘색 */
-  color: #1d4f7b;             /* 텍스트는 중간 파랑 */
+  background-color: #7881f5;
+  color: rgb(247, 247, 247);
 }
 
 /* 참여 불가 (disabled) - 연회색 */
 .status-tag.disabled {
-  background-color: #d1d1d1; /* 연회색 */
-  color: #666;               /* 텍스트는 중회색 */
+  background-color: #d1d1d1;
+  color: #666;
   cursor: not-allowed;
 }
 

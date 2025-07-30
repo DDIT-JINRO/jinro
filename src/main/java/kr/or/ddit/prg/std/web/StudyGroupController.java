@@ -49,6 +49,7 @@ public class StudyGroupController {
 	public String selectStdGroupList(@RequestParam(required = false) String region,
 		    						@RequestParam(required = false) String gender,
 		    						@RequestParam(required = false) String interest,
+		    						@RequestParam(required = false) List<String> interestItems,
 		    						@RequestParam(required = false) Integer maxPeople,
 		    						@RequestParam(required = false) String searchType,
 		    						@RequestParam(required = false) String searchKeyword,
@@ -64,10 +65,8 @@ public class StudyGroupController {
 		int totalCount = this.studyGroupService.selectStudyGroupTotalCount(stdBoardVO);
 		List<StdBoardVO> list = this.studyGroupService.selectStudyGroupList(stdBoardVO);
 
-		System.out.println("##########################"+stdBoardVO);
-
 		ArticlePage<StdBoardVO> articlePage = new ArticlePage<>(totalCount, currentPage, size, list, searchKeyword);
-		String baseUrl = buildQueryString(region, gender, interest, maxPeople, searchType, searchKeyword, size, sortBy);
+		String baseUrl = buildQueryString(region, gender, interestItems, maxPeople, searchType, searchKeyword, size, sortBy);
 		articlePage.setUrl(baseUrl);
 		articlePage.setPagingArea("");
 
@@ -87,7 +86,16 @@ public class StudyGroupController {
 		model.addAttribute("interestMap", this.studyGroupService.getInterestsMap());
 		model.addAttribute("regionList", regionList);
 
-		model.addAttribute("genderMap", Map.of("all", "성별무관", "men", "남자만", "women", "여자만"));
+		model.addAttribute("region",region);
+		model.addAttribute("gender", gender);
+		model.addAttribute("interestItems", interestItems);
+		model.addAttribute("maxPeople", maxPeople);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("searchKeyword", searchKeyword);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("size", size);
+		model.addAttribute("sortBy", sortBy);
+		System.out.println("###################################"+interestItems);
 		return "prg/std/stdGroupList2";
 	}
 
@@ -96,6 +104,7 @@ public class StudyGroupController {
 		model.addAttribute("stdGroupId", stdGroupId);
 		// 단일 게시글 전체 내용에 댓글 리스트 + 채팅방정보 챙겨오기
 
+		this.studyGroupService.increaseViewCnt(stdGroupId);
 		StdBoardVO stdBoardVO = this.studyGroupService.selectStudyGroupDetail(stdGroupId);
 
 		// 채팅방 참여했는지 여부를 체크하는 값 가져오기
@@ -111,17 +120,21 @@ public class StudyGroupController {
 	}
 
 	// page번호 버튼에 url 입력을 위한 base 쿼리스트링 구성
-	private String buildQueryString(String region,String gender, String interest, Integer maxPeople
+	private String buildQueryString(String region,String gender, List<String> interestItems, Integer maxPeople
 								, String searchType, String searchKeyword, int size, String sortBy) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("/prg/std/stdGroupList.do");
 		sb.append("?").append("region=").append(region == null ? "" : region);
 		sb.append("&").append("gender=").append(gender == null ? "" : gender);
-		sb.append("&").append("interest=").append(interest == null ? "" : interest);
 		sb.append("&").append("maxPeople=").append(maxPeople == null ? "" : maxPeople);
 		sb.append("&").append("searchType=").append(searchType == null ? "" : searchType);
 		sb.append("&").append("searchKeyword=").append(searchKeyword == null ? "" : searchKeyword);
 		sb.append("&").append("size=").append(size);
+
+		if(interestItems == null || interestItems.size() == 0) return sb.toString();
+		for(String interest : interestItems) {
+			sb.append("&").append("interestItems=").append(interest == null ? "" : interest);
+		}
 
 		return sb.toString();
 	}

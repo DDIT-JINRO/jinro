@@ -45,6 +45,7 @@ public class StdBoardVO {
 	// 검색용 필드도 추가
 	private String searchType;
 	private String searchKeyword;
+	private List<String> interestItems;
 
 	// 정렬용 필드 추가
 	private String sortBy;

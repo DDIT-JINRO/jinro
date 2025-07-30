@@ -61,4 +61,10 @@ public interface StudyGroupMapper {
 	 * @return
 	 */
 	List<StdReplyVO> selectChildReplyList(int replyId);
+
+	/**
+	 * 조회수 증가
+	 * @param stdBoardVO
+	 */
+	void increaseViewCnt(int stdGroupId);
 }
