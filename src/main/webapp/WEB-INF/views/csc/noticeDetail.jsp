@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<script type="text/javascript" src="/js/csc/noticeDetail.js" defer></script>
 <link rel="stylesheet" href="/css/csc/noticeDetail.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 
@@ -63,5 +62,6 @@
 		</div>
 	</div>
 	<%@ include file="/WEB-INF/views/include/footer.jsp"%>
+	<script type="text/javascript" src="/js/csc/noticeDetail.js" defer></script>
 	</body>
 	</html>
