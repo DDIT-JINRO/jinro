@@ -15,7 +15,7 @@ public class SubscriptionScheduler {
 	// 정기결제를 위한 스케줄러
 	// 매일 새벽0시에 실행 (서버 부하가 적은 시간)
 	@Scheduled(cron = "0 0 0 * * *") // 매일0시
-	@Scheduled(cron = "0 0/1 * * * *") //1분마다
+	// @Scheduled(cron = "0 0/1 * * * *") //1분마다
 	public void scheduleDailyPayments() {
 		paymentService.processScheduledPayments();
 

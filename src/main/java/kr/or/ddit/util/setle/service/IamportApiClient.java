@@ -62,11 +62,6 @@ public class IamportApiClient {
 		 */
 		IamportTokenRequest tokenRequest = new IamportTokenRequest(apiKey, apiSecret);
 		String jsonBody = objectMapper.writeValueAsString(tokenRequest);
-		try {
-			System.out.println("보내는 JSON: " + objectMapper.writeValueAsString(tokenRequest));
-		} catch (JsonProcessingException e) {
-			e.printStackTrace(); // 혹은 log.error(...) 사용
-		}
 
 		HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
 

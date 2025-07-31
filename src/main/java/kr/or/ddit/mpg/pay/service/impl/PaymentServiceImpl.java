@@ -59,29 +59,11 @@ public class PaymentServiceImpl implements PaymentService {
 				return new PaymentResponseDto("failure", "결제 정보 조회에 실패했습니다.", requestDto.getMerchantUid());
 			}
 
-			System.out.println("결제 상태: " + paymentData.get("status"));
-
-			// 2. 실제 결제 금액과 우리 시스템이 알아야 할 금액이 일치하는지 검증
-			// 지금은 테스트로 100원으로 가정합니다.
-//			double amountToBePaid = 100.0;
-//			double paidAmount = ((Number) paymentData.get("amount")).doubleValue();
-//			
-//			if(paidAmount != amountToBePaid) {
-//                // 금액이 일치하지 않으면 실패 응답 반환
-//                return new PaymentResponseDto("failure", "결제 금액이 일치하지 않습니다.", requestDto.getMerchantUid());
-//			}
-
-			// 3. 결제 상태가 '결제완료(paid)' 상태인지 검증
+			// 2. 결제 상태가 '결제완료(paid)' 상태인지 검증
 			if (!"paid".equals(paymentData.get("status"))) {
 				// 금액이 일치하지 않으면 실패 응답 반환
-				return new PaymentResponseDto("failure", "결제가 완료되지 않았습니다.",
-						requestDto.getMerchantUid());
+				return new PaymentResponseDto("failure", "결제가 완료되지 않았습니다.", requestDto.getMerchantUid());
 			}
-
-			// 4. 모든 검증을 통과했으므로 성공 응답을 반환
-			// requestDto에서 빌링키(customer_uid)를 꺼내옵니다.
-			String billingKey = requestDto.getCustomerUid();
-			String successMessage = "서버 검증 성공! 발급된 빌링키 : " + billingKey;
 
 			// 디비저장
 			// 1. loginId(문자열 "1")를 숫자로 변환합니다.
@@ -108,7 +90,6 @@ public class PaymentServiceImpl implements PaymentService {
 			// 다음 결제일(==구독마지막날)을 한 달 뒤로 설정하여 저장합니다.
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MONTH, 1);
-			// cal.add(Calendar.MINUTE, 3); 테스트
 			sub.setSubEndDt(cal.getTime());
 
 			memberSubscriptionMapper.insertMemberSubscription(sub);
@@ -143,6 +124,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 			paymentMapper.insertPayment(payment);
 
+			String successMessage = "";
 			successMessage = "결제가 정상적으로 완료되었습니다. 이용해주셔서 감사합니다.";
 			return new PaymentResponseDto("success", successMessage, requestDto.getMerchantUid());
 
@@ -151,30 +133,8 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 	}
 
-	// 결제해야 할 구독 목록을 DB에서 조회
-	@Override
-	public List<MemberSubscriptionVO> findSubscriptionsDueForToday() {
-		// TODO Auto-generated method stub
-		return memberSubscriptionMapper.findSubscriptionsDueForToday();
-	}
-
-	// 구독 정보 업데이트 (다음 결제일, 결제 횟수 등)
-	@Override
-	public int updateAfterRecurringPayment(int msId) {
-
-		return memberSubscriptionMapper.updateAfterRecurringPayment(msId);
-
-	}
-
-	@Override
-	public int insertPayment(PaymentVO paymentVO) {
-		return paymentMapper.insertPayment(paymentVO);
-
-	}
-
 	// 구독취소
 	@Override
-	@Transactional
 	public boolean cancelSubscription(int memId) {
 		// 1. 현재 사용자의 활성화된 구독 정보를 DB에서 조회
 		MemberSubscriptionVO activeSub = memberSubscriptionMapper.selectByMemberId(memId);
@@ -251,9 +211,6 @@ public class PaymentServiceImpl implements PaymentService {
 		        // 4. 되살릴 원래 구독이 있다면, 상태를 'Y'로 복원
 		        if (originalSub != null) {
 		            memberSubscriptionMapper.reactivateSubscriptionById(originalSub.getMsId());
-		        } else {
-		            // 되살릴 구독이 없는 경우 (이미 기간이 만료됨)는 그냥 넘어감
-		            System.out.println("되살릴 원래 구독 정보가 없습니다. 예약된 구독만 삭제합니다.");
 		        }
 		        
 		        return true; // 예약 건 삭제에 성공했으므로 true 반환
@@ -265,17 +222,15 @@ public class PaymentServiceImpl implements PaymentService {
 	// 구독 월간 기능 횟수 초기화
 	@Override
 	public void resetMonthlyUsageCounts() {
-		int updatedRows = paymentMapper.resetUsageCounts();
-		if (updatedRows > 0) {
-			log.info("총 {}건의 결제 내역에 대한 기능 횟수가 초기화되었습니다.", updatedRows);
-		}
+		paymentMapper.resetUsageCounts();
 	}
 
-	// 스케줄러가 호출할 정기경제 메서드
+	// 스케줄러가 호출할 정기결제 메서드
 	@Override
+	@Transactional
 	public void processScheduledPayments() {
 		// 1. 오늘 결제해야 할 구독 목록을 DB에서 조회
-		List<MemberSubscriptionVO> dueSubscriptions = this.findSubscriptionsDueForToday();
+		List<MemberSubscriptionVO> dueSubscriptions = this.memberSubscriptionMapper.findSubscriptionsDueForToday();
 
 		for (MemberSubscriptionVO memberSubscriptionVO : dueSubscriptions) {
 			try {
@@ -286,8 +241,7 @@ public class PaymentServiceImpl implements PaymentService {
 				String productName = "월간 구독 자동결제";
 
 				// 3. IamportApiClient의 payAgain 메서드 호출
-				Map<String, Object> result = iamportApiClient.payAgain(memberSubscriptionVO.getCustomerUid(), // DB에 저장된
-																												// 빌링키
+				Map<String, Object> result = iamportApiClient.payAgain(memberSubscriptionVO.getCustomerUid(), // DB에 저장된 빌링키
 						newMerchantUid, amount, productName);
 
 				if (result != null && "paid".equals(result.get("status"))) {
@@ -298,6 +252,7 @@ public class PaymentServiceImpl implements PaymentService {
 					payment.setImpUid((String) result.get("imp_uid"));
 					payment.setMerchantUid(newMerchantUid);
 					payment.setPayAmount(amount);
+					
 					// 5. 구독 상품에 따라 기능 횟수 설정
 					int subId = memberSubscriptionVO.getSubId();
 					if (subId == 1) { // BASIC 상품
@@ -317,22 +272,10 @@ public class PaymentServiceImpl implements PaymentService {
 						payment.setPayMockCnt(8);
 					}
 
-					int insertResult = this.insertPayment(payment);
-
-					if (insertResult > 0) {
-						System.out.println("새 결제 내역 저장 성공");
-					} else {
-						System.err.println("새 결제 내역 저장 실패: 0 rows affected");
-					}
+					this.paymentMapper.insertPayment(payment);
 
 					// 구독 정보 업데이트 (다음 결제일, 결제 횟수 등)
-					int updateResult = (int) this.updateAfterRecurringPayment(memberSubscriptionVO.getMsId());
-
-					if (updateResult > 0) {
-						System.out.println("구독 정보 갱신 완료: msId=" + memberSubscriptionVO.getMsId());
-					} else {
-						System.err.println("구독 정보 갱신 실패: msId=" + memberSubscriptionVO.getMsId());
-					}
+					this.memberSubscriptionMapper.updateAfterRecurringPayment(memberSubscriptionVO.getMsId());
 
 				} else {
 					// 5. 결제 실패 시
@@ -345,5 +288,4 @@ public class PaymentServiceImpl implements PaymentService {
 			}
 		}
 	}
-
 }

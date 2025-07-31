@@ -19,15 +19,6 @@ public interface PaymentService {
 	 */
 	public PaymentResponseDto verifyAndProcessPayment(PaymentRequestDto requestDto, String loginId);
 
-	// 결제해야 할 구독 목록을 DB에서 조회
-	public List<MemberSubscriptionVO> findSubscriptionsDueForToday();
-
-	// 구독 정보 업데이트 (다음 결제일, 결제 횟수 등)
-	public int updateAfterRecurringPayment(int msId);
-
-	//스케줄러에서 사용할 결제 내역 저장 
-	public int insertPayment(PaymentVO payment);
-
 	//구독 취소
 	public boolean cancelSubscription(int memId);
 	
