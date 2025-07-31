@@ -20,8 +20,8 @@ public interface FileService {
 	boolean deleteFileGroup(Long groupId);
 
 	List<FileDetailVO> getFileList(Long groupId);
-	
+
 	List<FileDetailVO> updateFile(Long fileGroupId, List<MultipartFile> files) throws IOException;
-	
+
 	public String getSavePath(FileDetailVO fileDetailVO);
 }
