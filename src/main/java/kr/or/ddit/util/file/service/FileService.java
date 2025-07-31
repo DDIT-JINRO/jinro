@@ -23,5 +23,5 @@ public interface FileService {
 
 	List<FileDetailVO> updateFile(Long fileGroupId, List<MultipartFile> files) throws IOException;
 
-	public String getSavePath(FileDetailVO fileDetailVO);
+	String getSavePath(FileDetailVO fileDetailVO);
 }

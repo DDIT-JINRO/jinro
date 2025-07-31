@@ -31,6 +31,7 @@ public class FileServiceImpl implements FileService {
 
 	private final FileMapper fileMapper;
 	private final FileUtil fileUtil;
+	private final String shareFilePath = "\\\\192.168.145.21\\careerpath\\upload";
 
 	@Override
 	public Long createFileGroup() {
@@ -80,7 +81,7 @@ public class FileServiceImpl implements FileService {
 
 		// 경로:192.168.145.21\\\\careerpath\\\\upload/yyyy/MM/dd/UUID_원본파일명
 		String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-		Path filePath = Paths.get("\\\\192.168.145.21\\careerpath\\upload", datePath, detail.getFileSaveName());
+		Path filePath = Paths.get(shareFilePath, datePath, detail.getFileSaveName());
 
 		if (!Files.exists(filePath)) {
 			throw new FileNotFoundException("파일이 존재하지 않습니다.");
@@ -98,7 +99,7 @@ public class FileServiceImpl implements FileService {
 
 		// 📌 파일 저장 경로 계산 (yyyy/MM/dd)
 		String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-		Path fullPath = Paths.get("\\\\192.168.145.21\\careerpath\\upload", datePath, detail.getFileSaveName());
+		Path fullPath = Paths.get(shareFilePath, datePath, detail.getFileSaveName());
 
 		log.info("삭제 시도 파일 경로: " + fullPath);
 
@@ -125,7 +126,7 @@ public class FileServiceImpl implements FileService {
 
 		for (FileDetailVO detail : fileList) {
 			String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-			Path fullPath = Paths.get("\\\\192.168.145.21\\careerpath\\upload", datePath, detail.getFileSaveName());
+			Path fullPath = Paths.get(shareFilePath, datePath, detail.getFileSaveName());
 
 			try {
 				Files.deleteIfExists(fullPath);
@@ -167,7 +168,7 @@ public class FileServiceImpl implements FileService {
 
 				for (FileDetailVO detail : fileList) {
 					String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-					Path fullPath = Paths.get("\\\\192.168.145.21\\careerpath\\upload", datePath, detail.getFileSaveName());
+					Path fullPath = Paths.get(shareFilePath, datePath, detail.getFileSaveName());
 
 					try {
 						Files.deleteIfExists(fullPath);
