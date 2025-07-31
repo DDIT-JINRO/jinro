@@ -101,8 +101,6 @@ public class FileServiceImpl implements FileService {
 		String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 		Path fullPath = Paths.get(shareFilePath, datePath, detail.getFileSaveName());
 
-		log.info("삭제 시도 파일 경로: " + fullPath);
-
 		try {
 			// 1. 파일 삭제 (존재하면)
 			Files.deleteIfExists(fullPath);
@@ -118,6 +116,7 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
+	@Transactional
 	// 파일그룹 전체 삭제
 	public boolean deleteFileGroup(Long groupId) {
 		List<FileDetailVO> fileList = fileMapper.selectFileList(groupId);
@@ -141,9 +140,6 @@ public class FileServiceImpl implements FileService {
 
 		// 2. 그룹 정보 삭제
 		fileMapper.deleteFileGroup(groupId);
-
-		log.info("삭제 대상 파일 수: {}", fileList.size());
-		log.info("FILE_DETAIL, FILE_GROUP 삭제 완료");
 
 		return true;
 	}
