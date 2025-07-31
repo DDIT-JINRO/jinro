@@ -1,6 +1,9 @@
 package kr.or.ddit.cdp.rsm.rsm.service;
 
 import java.util.Date;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 @Data
@@ -11,6 +14,7 @@ public class ResumeVO {
 	private String resumeIsTemp;
 	private Date createdAt;
 	private Date updatedAt;
-	private int fileGroupNo;
+	private Long fileGroupId; 
+	List<MultipartFile> files;
 	private String resumeContent;
 }

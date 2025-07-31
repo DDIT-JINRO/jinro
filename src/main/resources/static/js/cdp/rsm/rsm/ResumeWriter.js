@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		    formData.append('resumeId', resumeId);
 		  }
 		  if (photoFile) {
-		    formData.append('photo', photoFile);
+		    formData.append('files', photoFile);
 		  }
 
 		  // FormData는 form.submit과 달리 비동기 전송

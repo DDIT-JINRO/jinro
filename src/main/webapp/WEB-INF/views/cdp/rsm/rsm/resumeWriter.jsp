@@ -76,7 +76,7 @@
 							<div class="form-group photo-group">
 								<label for="photo-upload" class="photo-upload-area"> <i
 									class="fa fa-plus" aria-hidden="true"></i> <span>사진추가</span> <input
-									type="file" id="photo-upload" name="photo" accept="image/*"
+									type="file" id="photo-upload" name="files" accept="image/*"
 									class="sr-only">
 								</label>
 							</div>

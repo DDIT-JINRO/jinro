@@ -62,6 +62,7 @@ public class ResumeController {
 								Principal principal,
 								@ModelAttribute ResumeVO resumeVO,
 								Model model) throws UnsupportedEncodingException{
+			log.info("resumeVO :" +resumeVO);
 			Map<String, Object> result = new HashMap<>();
 	      if(principal!=null && !principal.getName().equals("anonymousUser")) {
 	    	  resumeVO.setMemId(Integer.parseInt( principal.getName()));
