@@ -3,6 +3,7 @@ package kr.or.ddit.main.service;
 import java.util.Date;
 import java.util.List;
 
+import kr.or.ddit.com.ComCodeVO;
 import lombok.Data;
 
 @Data
@@ -28,7 +29,7 @@ public class MemberVO {
 	private Long fileProfile;
 	private Long fileEtc;
 	
-	private List<String> interests;
+	private List<ComCodeVO> interests;
 	private String subName;
 	private int remainingDays;
 	

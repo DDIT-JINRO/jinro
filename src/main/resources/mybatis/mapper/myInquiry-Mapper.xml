@@ -14,20 +14,20 @@
 		<result property="memPoint" column="MEM_POINT" />
 		<result property="subName" column="SUB_NAME" />
 		<result property="remainingDays" column="REMAINING_DAYS" />
-		<collection property="interests" javaType="list" ofType="string" select="selectInterestsByMemId" column="MEM_ID" />
+		<collection property="interests" javaType="list" ofType="kr.or.ddit.com.ComCodeVO" select="selectInterestsByMemId" column="MEM_ID" />
 	</resultMap>
 
-	<select id="selectInterestsByMemId" parameterType="int" resultType="string"> 
+	<select id="selectInterestsByMemId" parameterType="int" resultType="kr.or.ddit.com.ComCodeVO"> 
 		SELECT
-			C.CC_NAME
+			C.CC_ID
+			, C.CC_NAME
+			, C.CC_ETC
 		FROM
 			INTEREST_CN B
 		JOIN COM_CODE C ON
 			B.IC_CODE = C.CC_ID
 		WHERE
 		    B.MEM_ID = #{memId}
-		AND
-			C.CC_ID != 'K01001'
 		ORDER BY
 			B.IC_CODE
 	</select>

@@ -108,8 +108,8 @@
 							<button class="btn btn-primary" id="interests-update-btn">수정</button>
 						</div>
 						<div class="tags-container">
-							<c:if test="${member.interests == null || empty member.interests}">
-								<span>선택한 관심 분야가 없습니다.</span>
+							<c:if test="${empty member.interests}">
+							    <span>선택한 관심 분야가 없습니다.</span>
 							</c:if>
 							<c:forEach var="userKeyword" items="${member.interests}">
 								<span class="tag">${userKeyword.ccName}</span>
