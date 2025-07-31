@@ -45,7 +45,14 @@
 					<div class="form-row">
 						<label for="user-email">이메일 주소</label>
 						<div class="input-wrapper">
-							<input type="email" id="user-email" value="현재 로그인된 이메일 주소" disabled>
+							<input type="email" id="user-email" value="${member.memEmail}" disabled>
+						</div>
+					</div>
+					<div class="form-row">
+						<label for="old-password">현재 비밀번호</label>
+						<div class="input-wrapper">
+							<input type="password" id="old-password" placeholder="현재 커리어패스 비밀번호를 입력하세요.">
+							<p class="validation-message"></p>
 						</div>
 					</div>
 					<div class="form-row">
@@ -58,12 +65,12 @@
 					<div class="form-row">
 						<label for="confirm-password">비밀번호 확인</label>
 						<div class="input-wrapper">
-							<input type="password" id="confirm-password" placeholder="새 커리어패스 비밀번호를 입력하세요.">
+							<input type="password" id="confirm-password" placeholder="확인 비밀번호를 입력하세요.">
 							<p class="validation-message"></p>
 						</div>
 					</div>
 					<div class="button-wrapper">
-						<button class="btn btn-primary">비밀번호 변경</button>
+						<button type="button" class="btn btn-primary" id="submit-btn">비밀번호 변경</button>
 					</div>
 				</div>
 			</div>
@@ -72,4 +79,5 @@
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
+<script src="/js/mpg/mif/pswdchg/selectPasswordChangeView.js"></script>
 </html>
