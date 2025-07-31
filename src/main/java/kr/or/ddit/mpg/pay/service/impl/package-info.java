@@ -1,1 +1,0 @@
-package kr.or.ddit.mpg.pay.service.impl;
