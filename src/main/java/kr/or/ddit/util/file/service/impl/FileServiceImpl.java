@@ -159,6 +159,22 @@ public class FileServiceImpl implements FileService {
 		if (fileGroupId != null && fileGroupId != 0) {
 
 			try {
+				
+				List<FileDetailVO> fileList = fileMapper.selectFileList(fileGroupId);
+				
+				if (fileList == null || fileList.isEmpty())
+					return updateFileList;
+
+				for (FileDetailVO detail : fileList) {
+					String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+					Path fullPath = Paths.get("\\\\192.168.145.21\\careerpath\\upload", datePath, detail.getFileSaveName());
+
+					try {
+						Files.deleteIfExists(fullPath);
+					} catch (IOException e) {
+						e.printStackTrace(); // 삭제 실패해도 계속 진행
+					}
+				}
 				fileMapper.deleteFilesByGroupId(fileGroupId); // 파일그룹ID로 파일디테일 삭제
 				updateFileList = uploadFiles(fileGroupId, files);
 			} catch (IOException e) {
