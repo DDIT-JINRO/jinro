@@ -85,12 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	const passwordConfirmBtn = document.querySelector("#password-confirm-btn");
 
 	const openModal = () => {
-		document.html.classList.add('scroll-lock');
+		document.body.classList.add('scroll-lock');
 		modalOverlay.classList.add('show');
 	}
 
 	const closeModal = () => {
-		document.html.classList.remove('scroll-lock');
+		document.body.classList.remove('scroll-lock');
 		modalOverlay.classList.remove('show');
 		passwordInput.value = '';
 		errorMsg.textContent = '';
