@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
@@ -37,12 +38,17 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	@Override
 	public Map<String, Object> selectMyInquiryView(String memIdStr) {
 		int memId = parseMemId(memIdStr);
-
+		
 		MemberVO member = this.myInquiryMapper.selectMyInquiryView(memId);
 
 		FileDetailVO fileDetail = fileService.getFileDetail(member.getFileProfile(), 1);
+		
+		List<ComCodeVO> interetsKeywordList = this.myInquiryMapper.selectInteretsKeywordList();
+		if(interetsKeywordList == null || interetsKeywordList.isEmpty()) {
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+		}
 
-		return Map.of("member", member, "imgPath", this.fileService.getSavePath(fileDetail));
+		return Map.of("member", member, "imgPath", this.fileService.getSavePath(fileDetail), "interetsKeywordList", interetsKeywordList);
 	}
 
 	@Override

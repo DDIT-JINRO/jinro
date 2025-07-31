@@ -53,17 +53,16 @@ const handleImgFileSelect = (event) => {
 		method: "POST",
 		body: formData
 	}).then(response => {
-		console.log("response", response);
 		if (response.ok) {
 			return response.json();
 		}
 	}).then(({ result }) => {
-		console.log("result", result);
 		if (result === "success") {
+			alert("정상적으로 프로필 이미지가 변경되었습니다.")
 			location.reload();
 		}
 	}).catch(error => {
-		console.log("프로필 이미지 업로드 중 에러 발생 : ", error);
+		console.error("프로필 이미지 업로드 중 에러 발생 : ", error);
 		alert(error.message);
 	})
 
@@ -160,3 +159,82 @@ const passwordCheckAPI = (password, errorMsg, passwordInput, closeModal) => {
 		errorMsg.textContent = error.message || '인증 중 오류가 발생했습니다. 다시 시도해 주세요.';
 	});
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+	const interestsUpdateBtn = document.querySelector("#interests-update-btn");
+	const modalOverlay = document.querySelector('#interest-modal-overlay');
+	const closeModalBtn = modalOverlay.querySelector('.modal-close-btn');
+
+	const openModal = () => {
+		modalOverlay.classList.add('show');
+	}
+
+	const closeModal = () => {
+		modalOverlay.classList.remove('show');
+		passwordInput.value = '';
+		errorMsg.textContent = '';
+	};
+
+	interestsUpdateBtn.addEventListener('click', function (event) {
+		event.preventDefault();
+		openModal();
+	});
+
+	closeModalBtn.addEventListener('click', closeModal);
+
+	modalOverlay.addEventListener('click', function (event) {
+		if (event.target === modalOverlay) {
+			closeModal();
+		}
+	});
+
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+	// 필터 키워드
+	const filterCheckboxes = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
+
+	// 선택 필터 영역
+	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
+
+	// 초기화 버튼
+	const resetButton = document.querySelector('.com-filter-reset-btn');
+
+	// 필터 태그 추가
+	const createFilterTag = (text) => {
+		const filterTag = `<span class="com-selected-filter" data-filter="${text}">${text}</span>`;
+
+		selectedFiltersContainer.innerHTML += filterTag;
+	};
+
+	// 필터 태그 삭제
+	const removeFilterTag = (text) => {
+		const tagToRemove = selectedFiltersContainer.querySelector(`[data-filter="${text}"]`);
+		if (tagToRemove) {
+			selectedFiltersContainer.removeChild(tagToRemove);
+		}
+	};
+
+	// 체크박스 변경 시 이벤트 처리
+	filterCheckboxes.forEach(checkbox => {
+		checkbox.addEventListener('change', (e) => {
+			const labelText = e.target.nextElementSibling.textContent;
+			if (e.target.checked) {
+				createFilterTag(labelText);
+			} else {
+				removeFilterTag(labelText);
+			}
+		});
+	});
+
+	// 초기화 버튼 클릭 시 이벤트 처리
+	if (resetButton) {
+		resetButton.addEventListener('click', () => {
+			filterCheckboxes.forEach(checkbox => {
+				checkbox.checked = false;
+			});
+
+			selectedFiltersContainer.innerHTML = '';
+		});
+	}
+});

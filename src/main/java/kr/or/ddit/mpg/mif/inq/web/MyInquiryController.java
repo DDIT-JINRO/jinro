@@ -43,6 +43,7 @@ public class MyInquiryController {
 			map = this.myInquiryService.selectMyInquiryView(memId);
 			model.addAttribute("member", map.get("member"));
 			model.addAttribute("imgPath", map.get("imgPath"));
+			model.addAttribute("interetsKeywordList", map.get("interetsKeywordList"));
 		} catch(CustomException e) {
 			return "redirect:/login";
 		} catch(Exception e) {

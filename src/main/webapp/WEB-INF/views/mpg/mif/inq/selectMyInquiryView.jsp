@@ -38,7 +38,7 @@
 						<div class="profile-photo-area">
 							<img src="${imgPath}" alt="프로필 사진" class="profile-img">
 							<div class="profile-photo-buttons">
-								<input type="file" id="change-photo-input" style="display:none;" accept="image/jpeg, image/png"/>
+								<input type="file" id="change-photo-input" style="display: none;" accept="image/jpeg, image/png" />
 								<button type="button" class="btn btn-primary" id="change-photo-btn">사진 변경</button>
 								<button class="btn btn-primary">테두리 변경</button>
 							</div>
@@ -105,7 +105,7 @@
 					<div class="profile-card my-interest-card">
 						<div class="card-header">
 							<h3 class="card-title">나의 관심 분야</h3>
-							<button class="btn btn-primary">수정</button>
+							<button class="btn btn-primary" id="interests-update-btn">수정</button>
 						</div>
 						<div class="tags-container">
 							<c:forEach var="inter" items="${member.interests}">
@@ -238,6 +238,36 @@
 			<input type="password" id="password-check-input" placeholder="비밀번호를 입력하세요">
 			<span class="modal-error-msg" id="modal-error-msg"></span>
 			<button class="btn btn-primary" id="password-confirm-btn" type="button">인증</button>
+		</div>
+	</div>
+</div>
+
+<div class="modal-overlay" id="interest-modal-overlay">
+	<div class="modal-content interests-modal">
+		<button class="modal-close-btn" type="button">&times;</button>
+		<h3>관심사 수정</h3>
+		<p>수정 할 관심 분야를 선택하세요.</p>
+		<div class="modal-form">
+			<form method="post" action="/">
+				<div class="com-filter-section">
+					<div class="com-filter-options">
+						<c:forEach items="${interetsKeywordList}" var="keyword">
+							<label class="com-filter-item">
+								<input type="checkbox" name="filter-keyword" value="${keyword.ccId}">
+								<span>${keyword.ccName}</span>
+							</label>
+	                	</c:forEach>
+					</div>
+				</div>
+				<div class="com-filter-section">
+					<div class="com-button-container">
+						<label class="com-filter-title">선택된 필터</label>
+						<button type="button" class="com-filter-reset-btn">초기화</button>
+					</div>
+					<div class="com-selected-filters"></div>
+				</div>
+				<button type="submit" class="com-submit-search-btn">검색</button>
+			</form>
 		</div>
 	</div>
 </div>

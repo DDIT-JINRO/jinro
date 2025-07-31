@@ -111,4 +111,19 @@
 		WHERE
 			MEM_ID = #{memId}
 	</update>
+	
+	<select id="selectInteretsKeywordList" resultType="kr.or.ddit.com.ComCodeVO">
+		SELECT
+		    CC_ID
+		    , CC_NAME
+		    , CC_ETC
+		FROM
+		    COM_CODE
+		WHERE
+		    CL_CODE = 'K01'
+		AND
+		    USE_YN = 'Y'
+		ORDER BY
+		    CC_ETC
+	</select>
 </mapper>
