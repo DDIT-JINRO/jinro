@@ -81,7 +81,7 @@ public class FileServiceImpl implements FileService {
 
 	    // 경로:192.168.145.21\\\\careerpath\\\\upload/yyyy/MM/dd/UUID_원본파일명
 	    String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-	    Path filePath = Paths.get("\\\\\\\\192.168.145.21\\\\careerpath\\\\upload", datePath, detail.getFileSaveName());
+	    Path filePath = Paths.get("\\\\192.168.145.21\\careerpath\\upload", datePath, detail.getFileSaveName());
 
 	    if (!Files.exists(filePath)) {
 	        throw new FileNotFoundException("파일이 존재하지 않습니다.");
@@ -99,7 +99,7 @@ public class FileServiceImpl implements FileService {
 
 	    // 📌 파일 저장 경로 계산 (yyyy/MM/dd)
 	    String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-	    Path fullPath = Paths.get("\\\\\\\\192.168.145.21\\\\careerpath\\\\upload", datePath, detail.getFileSaveName());
+	    Path fullPath = Paths.get("\\\\192.168.145.21\\careerpath\\upload", datePath, detail.getFileSaveName());
 
 	    log.info("삭제 시도 파일 경로: " + fullPath);
 
@@ -125,7 +125,7 @@ public class FileServiceImpl implements FileService {
 
 	    for (FileDetailVO detail : fileList) {
 	        String datePath = detail.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-	        Path fullPath = Paths.get("\\\\\\\\192.168.145.21\\\\careerpath\\\\upload", datePath, detail.getFileSaveName());
+	        Path fullPath = Paths.get("\\\\192.168.145.21\\careerpath\\upload", datePath, detail.getFileSaveName());
 
 	        try {
 	            Files.deleteIfExists(fullPath);
@@ -153,14 +153,36 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public boolean updateFile(Long fileGroupId, List<MultipartFile> files) throws IOException {
+	@Transactional
+	public List<FileDetailVO> updateFile(Long fileGroupId, List<MultipartFile> files) {
+		List<FileDetailVO> updateFileList = new ArrayList<FileDetailVO>();
 		if(fileGroupId != null && fileGroupId != 0) {
 			
-			fileMapper.deleteFilesByGroupId(fileGroupId);
-			uploadFiles(fileGroupId,files);
-			return true;
+			try {
+				fileMapper.deleteFilesByGroupId(fileGroupId); // 파일그룹ID로 파일디테일 삭제
+				updateFileList = uploadFiles(fileGroupId,files);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return updateFileList;
 		}else {
-			return false;
+			return updateFileList;
 		}
 	}
+	
+	/**
+	 * @param fileDetailVO
+	 * @return savePath 예) /upload/2025/07/30/e5892482_temp_profile.png
+	 */
+	@Override
+	public String getSavePath(FileDetailVO fileDetailVO) {
+		String datePath = fileDetailVO.getFileSaveDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+		
+		Path fullPath = Paths.get("/upload", datePath, fileDetailVO.getFileSaveName());
+		String savePath = fullPath.toString();
+		
+		return savePath;
+	}
+
 }

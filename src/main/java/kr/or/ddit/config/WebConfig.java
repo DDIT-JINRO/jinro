@@ -25,6 +25,9 @@ public class WebConfig implements WebMvcConfigurer {
         
         registry.addResourceHandler("/ckeditor5/**")
 				.addResourceLocations("classpath:/static/ckeditor5/");
+        
+        registry.addResourceHandler("/upload/**")
+		.addResourceLocations("file:////192.168.145.21/careerpath/upload/");
     }
 }
 

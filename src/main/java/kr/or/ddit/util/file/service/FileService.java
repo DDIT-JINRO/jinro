@@ -21,7 +21,7 @@ public interface FileService {
 
 	List<FileDetailVO> getFileList(Long groupId);
 	
-	int updateFile(Long fileGroupId);
-
-	boolean updateFile(Long fileGroupId, List<MultipartFile> files) throws IOException;
+	List<FileDetailVO> updateFile(Long fileGroupId, List<MultipartFile> files) throws IOException;
+	
+	public String getSavePath(FileDetailVO fileDetailVO);
 }
