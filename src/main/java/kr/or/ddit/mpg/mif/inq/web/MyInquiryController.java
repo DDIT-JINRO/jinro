@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.exception.CustomException;
+import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +64,13 @@ public class MyInquiryController {
 	 */
 	@ResponseBody
 	@PostMapping("/mif/inq/checkPassword.do")
-	public ResponseEntity<Map<String, Object>> checkPassword(@AuthenticationPrincipal String memId, @RequestBody Map<String, String> map) {
-		Map<String, Object> result = this.myInquiryService.checkPassword(memId, map);
+	public ResponseEntity<String> checkPassword(@AuthenticationPrincipal String memId, @RequestBody Map<String, String> map) {
+		String result;
+		try {
+			result = this.myInquiryService.checkPassword(memId, map.get("password"));
+		} catch (CustomException e) {
+			throw new CustomException(ErrorCode.INVALID_INPUT);
+		}
 
 		return ResponseEntity.ok(result);
 	}

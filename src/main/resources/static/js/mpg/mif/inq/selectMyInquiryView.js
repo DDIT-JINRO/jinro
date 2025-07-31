@@ -144,11 +144,11 @@ const passwordCheckAPI = (password, errorMsg, passwordInput, closeModal) => {
 		})
 	}).then((response) => {
 		if (response.ok) {
-			return response.json();
+			return response.text();
 		} else {
 			throw new Error("인증 중 오류가 발생했습니다. 다시 시도해 주세요.");
 		}
-	}).then(({ result }) => {
+	}).then((result) => {
 		if (result === "success") {
 			closeModal();
 			mainForm.submit();

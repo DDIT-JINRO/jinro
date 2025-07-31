@@ -13,10 +13,11 @@ public interface MyInquiryService {
 
 	String updateMyInquiryView(String memId, MemberVO member);
 
-	Map<String, Object> checkPassword(String memId, Map<String, String> map);
+	String checkPassword(String memId, String password);
 
 	Map<String, Object> updateProfileImg(String memId, MultipartFile profileImg);
 
 	void insertInterestList(String memId, List<String> filterKeyword);
 
+	int parseMemId(String memIdStr);
 }

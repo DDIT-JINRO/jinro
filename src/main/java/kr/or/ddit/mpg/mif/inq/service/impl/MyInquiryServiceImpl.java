@@ -62,17 +62,16 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	 * @return Map 일치 여부
 	 */
 	@Override
-	public Map<String, Object> checkPassword(String memIdStr, Map<String, String> map) {
+	public String checkPassword(String memIdStr, String password) {
 		int memId = parseMemId(memIdStr);
 
-		String password = map.get("password");
 		MemberVO memberVO = this.myInquiryMapper.checkPassword(memId);
 
 		if (bCryptPasswordEncoder.matches(password, memberVO.getMemPassword())) {
-			return Map.of("result", "success");
+			return "success";
 		}
 
-		return Map.of("result", "fail");
+		return "fail";
 	}
 
 	/**
@@ -159,6 +158,7 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	 * 
 	 * @param memIdStr 멤버id
 	 */
+	@Override
 	public int parseMemId(String memIdStr) {
 		int memId;
 		try {
