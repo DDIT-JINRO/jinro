@@ -1,6 +1,7 @@
 package kr.or.ddit.main.service;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -26,7 +27,11 @@ public class MemberVO {
 	private String delYn;
 	private Long fileProfile;
 	private Long fileEtc;
-
+	
+	private List<String> interests;
+	private String subName;
+	private int remainingDays;
+	
 	public String getSMemId() {
 		return memId+"";
 	}

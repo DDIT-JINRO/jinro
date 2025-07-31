@@ -50,43 +50,53 @@
 								<h3 class="card-title">나의 정보</h3>
 							</div>
 							<div class="social-login">
-								<img src="/images/kakao-img.png" alt="카카오톡"> <img src="/images/naver-img.png" alt="네이버">
+								<img src="/images/kakao-img.png" alt="카카오톡">
+								<img src="/images/naver-img.png" alt="네이버">
 							</div>
 						</div>
-						<div class="info-grid">
-							<div class="info-item">
-								<label>이름</label>
-								<input value="가나다" />
+						<form action="updateMyInquiryDetail.do" method="POST">
+							<div class="info-grid">
+								<div class="info-item">
+									<label>이름</label>
+									<input value="${member.memName}" name="memName" data-init-value="${member.memName}" />
+								</div>
+								<div class="info-item">
+									<label>닉네임</label>
+									<input value="${member.memNickname}" name="memNickname" data-init-value="${member.memNickname}" />
+								</div>
+								<div class="info-item">
+									<label>이메일</label>
+									<span>${member.memEmail}</span>
+								</div>
+								<div class="info-item">
+									<label>성별</label>
+									<c:if test="${member.memGen eq 'G11001'}">
+										<span>남</span>
+									</c:if>
+									<c:if test="${member.memGen eq 'G11002'}">
+										<span>여</span>
+									</c:if>
+								</div>
+								<div class="info-item">
+									<label>연락처</label>
+									<span>${member.memPhoneNumber}</span>
+									<button class="btn btn-auth">번호 변경</button>
+								</div>
+								<div class="info-item">
+									<label>생년월일</label>
+									<span>
+										<fmt:formatDate pattern="yyyy년 MM월 dd일" value="${member.memBirth}" />
+									</span>
+								</div>
+								<div class="info-item">
+									<label>포인트</label>
+									<span>${member.memPoint} 포인트</span>
+								</div>
+								<div class="info-item profile-update">
+									<button type="button" id="info-update-btn" class="btn btn-primary disable" disabled="disabled">수정</button>
+								</div>
 							</div>
-							<div class="info-item">
-								<label>닉네임</label>
-								<input value="닉네임" />
-							</div>
-							<div class="info-item">
-								<label>이메일</label>
-								<input value="testuser@gmail.com" />
-							</div>
-							<div class="info-item">
-								<label>성별</label>
-								<span>여</span>
-							</div>
-							<div class="info-item">
-								<label>연락처</label>
-								<span>000-0000-0000</span>
-								<button class="btn btn-auth">번호 변경</button>
-							</div>
-							<div class="info-item">
-								<label>생년월일</label>
-								<span>0000년 00월 00일</span>
-							</div>
-							<div class="info-item">
-								<label>포인트</label>
-								<span>00,000포인트</span>
-							</div>
-							<div class="info-item profile-update">
-								<button class="btn btn-secondary disable">수정</button>
-							</div>
-						</div>
+						</form>
 					</div>
 				</div>
 
@@ -97,23 +107,34 @@
 							<button class="btn btn-primary">수정</button>
 						</div>
 						<div class="tags-container">
-							<span class="tag">관심 키워드</span>
-							<span class="tag">관심 키워드</span>
-							<span class="tag">관심 키워드</span>
+							<c:forEach var="inter" items="${member.interests}">
+								<span class="tag">${inter}</span>
+							</c:forEach>
 						</div>
 					</div>
 
 					<div class="profile-card my-subscription-card">
-						<div class="card-header">
-							<h3 class="card-title">나의 구독 상태</h3>
-							<div class="subscription-header-right">
-								<span class="days-remaining">구독 만료까지 15일 남았어요!</span>
+						<c:if test="${member.remainingDays == 0}">
+							<div class="card-header">
+								<h3 class="card-title">나의 구독 상태</h3>
+								<div class="subscription-header-right">
+									<button type="button" class="btn btn-primary" id="move-sub-btn">구독하러 가기</button>
+								</div>
 							</div>
-						</div>
-						<div class="subscription-status-box">
-							<p class="plan-name">BASIC</p>
-							<p class="plan-desc">베이직 등급일 수 있습니다.</p>
-						</div>
+							<p class="plan-desc">구독 중인 상품이 없습니다.</p>
+						</c:if>
+						<c:if test="${member.remainingDays != 0}">
+							<div class="card-header">
+								<h3 class="card-title">나의 구독 상태</h3>
+								<div class="subscription-header-right">
+									<span class="days-remaining">구독 만료까지 15일 남았어요!</span>
+								</div>
+							</div>
+							<div class="subscription-status-box">
+								<p class="plan-name">BASIC</p>
+								<p class="plan-desc">베이직 등급일 수 있습니다.</p>
+							</div>
+						</c:if>
 					</div>
 				</div>
 
@@ -206,6 +227,20 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal-overlay" id="password-modal-overlay">
+	<div class="modal-content">
+		<button class="modal-close-btn" type="button">&times;</button>
+		<h3>비밀번호 확인</h3>
+		<p>회원 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 입력해 주세요.</p>
+		<div class="modal-form">
+			<input type="password" id="password-check-input" placeholder="비밀번호를 입력하세요">
+			<span class="modal-error-msg" id="modal-error-msg"></span>
+			<button class="btn btn-primary" id="password-confirm-btn" type="button">인증</button>
+		</div>
+	</div>
+</div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
+<script src="/js/mpg/mif/inq/selectMyInquiryView.js"></script>
 </html>
