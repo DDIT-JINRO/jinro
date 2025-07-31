@@ -55,7 +55,6 @@ public class SecurityConfig {
 		http
 				.cors(Customizer.withDefaults())
 				.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/pay/**").authenticated() // 결제기능은 로그인 필요
 				.requestMatchers("/test").hasRole("USER") // 모든 사용자는 유저권한을 포함시켜놨습니다. 로그인이 필요한 서비스는 여기에 넣어주시면 됩니다.
 				.anyRequest().permitAll()).csrf(csrf -> csrf.disable())
 				.exceptionHandling(ex -> ex
