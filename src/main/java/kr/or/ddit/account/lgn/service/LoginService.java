@@ -3,7 +3,6 @@ package kr.or.ddit.account.lgn.service;
 import java.util.List;
 import java.util.Map;
 
-
 import kr.or.ddit.main.service.MemberVO;
 
 public interface LoginService {
@@ -23,9 +22,5 @@ public interface LoginService {
 	public MemberVO validateUser(MemberVO inputMem);
 
 	public int insertEncodePass(MemberVO memVO);
-
-	
-
-
 
 }

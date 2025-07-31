@@ -6,12 +6,12 @@ import lombok.Data;
 
 @Data
 public class PageLogVO {
-	
+
 	private Long plId;
 	private String memId;
 	private String plUrl;
 	private String plTitle;
 	private String plRefererUrl;
 	private Date plCreatedAt;
-	
+
 }
