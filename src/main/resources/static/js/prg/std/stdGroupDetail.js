@@ -2,6 +2,35 @@
  *
  */
 document.addEventListener('DOMContentLoaded', function(){
+
+	const boardModifyBtn = document.getElementById('boardModifyBtn');
+	if(boardModifyBtn){
+		boardModifyBtn.addEventListener('click', function(){
+			console.log("수정페이지로 이동시키기");
+		})
+	}
+
+	const boardDeleteBtn = document.getElementById('boardDeleteBtn');
+	if(boardDeleteBtn){
+		boardDeleteBtn.addEventListener('click', function(){
+			console.log("삭제 fetch 보내고 성공하면 목록페이지 이동");
+		})
+	}
+
+	const boardReportBtn = document.getElementById('boardReportBtn');
+	if(boardReportBtn){
+		boardReportBtn.addEventListener('click', function(){
+			console.log("신고 fetch -> 이미 신고한 게시물인지 확인먼저 해야함");
+		})
+	}
+
+	const boardEtcBtn = document.getElementById('boardEtcBtn');
+	if(boardEtcBtn){
+		boardEtcBtn.addEventListener('click', function(){
+			document.querySelector('.boardEtcContainer').classList.toggle('board-etc-open');
+		})
+	}
+
 	const enterChatBtn = document.getElementById('enterChatBtn');
 	if(enterChatBtn){
 		enterChatBtn.addEventListener('click', function(){
@@ -56,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.addEventListener('submit', submitCreateReply);
 	document.addEventListener('input', eventReplyInput);
 	document.addEventListener('click', closeEtcBtn);
+	document.addEventListener('click', closeBoardEtcContainer);
 	commentSection.addEventListener('click', closeReplyBtn);
 	commentSection.addEventListener('click', eventReplyToggle);
 	commentSection.addEventListener('click', toggleEtcBtn);
@@ -279,7 +309,16 @@ function eventEtcContainerClicked(e){
 	if(action == '신고'){
 		console.log("신고 fetch")
 	}
-
-
 }
 
+// 이벤트 함수 8 boardEtcContainer바깥 클릭시 닫기 ; click
+function closeBoardEtcContainer(e){
+	if(e.target.classList.contains('boardEtcContainer')) return;
+	if(e.target.id=='boardEtcBtn') return;
+	if(e.target.closest('.boardEtcActionBtn')) return;
+
+	const cont = document.querySelector('.boardEtcContainer');
+	if(cont.classList.contains('board-etc-open')){
+		cont.classList.remove('board-etc-open');
+	}
+}

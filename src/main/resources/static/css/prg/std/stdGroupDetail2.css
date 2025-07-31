@@ -334,7 +334,6 @@
 /* ─── 카드 래퍼 ─── */
 .detail-wrapper {
   max-width: 1160px;
-  margin: 40px auto;
   background: var(--card-bg);
   border: 2px solid var(--card-border);
   border-radius: var(--card-radius);
@@ -492,4 +491,55 @@
 .etc-container.etc-open:hover{
 	cursor: pointer;
 	font-weight: 500;
+}
+
+.boardEtcBtn{
+	float: right;
+	color: #969696;
+}
+
+.boardEtcBtn:hover{
+	cursor: pointer;
+	color: #414141;
+}
+
+.boardEtcContainer{
+	box-sizing: border-box;
+	display: none;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+
+	background: #FFFFFF;
+	border: 2px solid #E8ECEF;
+	border-radius: 10px;
+	position: absolute;
+	justify-self: right;
+
+	margin-top: 30px;
+	margin-right: -10px;
+}
+
+.boardEtcContainer.board-etc-open{
+	display: flex;
+}
+
+.boardEtcContainer hr{
+	width: 70%;
+	margin: 2px;
+	border-color: #E8ECEF;
+	border-style: solid;
+}
+
+.boardEtcActionBtn {
+	height: 40px;
+	width: 80px;
+	color: #969696;
+	text-align: center;
+	align-content: center;
+}
+
+.boardEtcActionBtn:hover {
+	cursor: pointer;
+	color: #555555;
 }

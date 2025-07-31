@@ -17,11 +17,33 @@
 	</div>
 </section>
 <div>
+	<sec:authorize access="isAuthenticated()">
+		<sec:authentication property="principal" var="memId" />
+	</sec:authorize>
 	<div class="public-wrapper">
   		<div class="public-wrapper-main">
   			<br/>
   			<!-- 게시글 박스 -->
 			<div class="detail-wrapper">
+			<div class="boardEtcBtn" id="boardEtcBtn">...</div>
+			<div class="boardEtcContainer">
+				<c:choose>
+					<c:when test="${memId==stdBoardVO.memId }">
+						<div class="boardEtcActionBtn" id="boardModifyBtn">
+							<span>수정</span>
+						</div>
+						<hr/>
+						<div class="boardEtcActionBtn" id="boardDeleteBtn">
+							<span>삭제</span>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="boardEtcActionBtn" id="boardReportBtn">
+							<span>신고</span>
+						</div>
+					</c:otherwise>
+				</c:choose>
+			</div>
 			  <!-- 1) 제목 + 프로필 + 메타 -->
 			  <div class="post-header">
 			    <h1 class="post-title">${stdBoardVO.boardTitle}</h1>
@@ -102,10 +124,6 @@
 			    <button type="submit" class="btn-submit">등록</button>
 			  </div>
 			</form>
-
-			<sec:authorize access="isAuthenticated()">
-				<sec:authentication property="principal" var="memId" />
-			</sec:authorize>
 
 			<!-- 댓글 리스트 -->
 			<div class="comment-section">
