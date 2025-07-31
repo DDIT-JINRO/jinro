@@ -108,8 +108,8 @@
 							<button class="btn btn-primary" id="interests-update-btn">수정</button>
 						</div>
 						<div class="tags-container">
-							<c:forEach var="inter" items="${member.interests}">
-								<span class="tag">${inter}</span>
+							<c:forEach var="userKeyword" items="${member.interests}">
+								<span class="tag">${userKeyword.ccName}</span>
 							</c:forEach>
 						</div>
 					</div>
@@ -251,12 +251,19 @@
 			<form method="post" action="/">
 				<div class="com-filter-section">
 					<div class="com-filter-options">
-						<c:forEach items="${interetsKeywordList}" var="keyword">
+						<c:forEach items="${interetsKeywordList}" var="allKeyword">
+							<c:set var="isChecked" value="false" />
+							<c:forEach var="userKeyword" items="${member.interests}">
+								<c:if test="${allKeyword.ccId == userKeyword.ccId }">
+									<c:set var="isChecked" value="true" />
+								</c:if>
+							</c:forEach>
+
 							<label class="com-filter-item">
-								<input type="checkbox" name="filter-keyword" value="${keyword.ccId}">
-								<span>${keyword.ccName}</span>
+								<input type="checkbox" name="filter-keyword" value="${allKeyword.ccId}" ${isChecked ? "checked" : ""}>
+								<span>${allKeyword.ccName}</span>
 							</label>
-	                	</c:forEach>
+						</c:forEach>
 					</div>
 				</div>
 				<div class="com-filter-section">
@@ -264,7 +271,11 @@
 						<label class="com-filter-title">선택된 필터</label>
 						<button type="button" class="com-filter-reset-btn">초기화</button>
 					</div>
-					<div class="com-selected-filters"></div>
+					<div class="com-selected-filters">
+						<c:forEach var="userKeyword" items="${member.interests}">
+							<span class="com-selected-filter" data-filter="${userKeyword.ccName}">${userKeyword.ccName}</span>
+						</c:forEach>
+					</div>
 				</div>
 				<button type="submit" class="com-submit-search-btn">검색</button>
 			</form>
