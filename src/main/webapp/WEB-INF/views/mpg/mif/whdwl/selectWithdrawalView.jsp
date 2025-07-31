@@ -40,8 +40,9 @@
 					</p>
 					<p>아울러 회원 탈퇴시의 아래 사항을 숙지하시기 바랍니다.</p>
 					<ol>
+						<li>탈퇴 처리는 1주일의 유예기간 이후에 삭제됩니다.</li>
+						<li>유예기간 중 회원 탈퇴를 취소 할 수 있습니다.</li>
 						<li>탈퇴 시 고객님께서 보유하던 포인트는 모두 삭제됩니다.</li>
-						<li>탈퇴 후 30일간 재가입이 불가능합니다.</li>
 					</ol>
 				</div>
 
@@ -49,23 +50,23 @@
 					<div class="form-row-split">
 						<div class="form-group">
 							<label for="password">비밀번호 입력</label>
-							<input type="password" id="password" placeholder="비밀번호를 입력하세요.">
+							<input type="password" id="password" placeholder="비밀번호를 입력하세요." required>
+							<p id="password-check-message"></p>
 						</div>
 						<div class="form-group">
 							<label for="reason-select">무엇이 불편하셨나요?</label>
-							<select id="reason-select">
-								<option value="">무엇이 불편하셨나요?</option>
-								<option value="no-content">원하는 콘텐츠 부족</option>
-								<option value="error">서비스 장애 및 오류</option>
-								<option value="expensive">이용 요금 불만</option>
-								<option value="other">기타</option>
+							<select id="reason-select" required>
+								<option value="" selected disabled>무엇이 불편하셨나요?</option>
+								<c:forEach var="category" items="${mdCategoryList}">
+								<option value="${category.ccId}">${category.ccName}</option>
+								</c:forEach>
 							</select>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label for="reason-text">회원 탈퇴 사유에 대하여 적어주세요.</label>
-						<textarea id="reason-text" rows="6" placeholder="회원 탈퇴 사유에 대하여 적어주시면, 더욱 안정적인 서비스 품질 향상을 위하여 노력하겠습니다."></textarea>
+						<textarea id="reason-text" rows="6" placeholder="회원 탈퇴 사유에 대하여 적어주시면, 더욱 안정적인 서비스 품질 향상을 위하여 노력하겠습니다." required></textarea>
 					</div>
 
 					<div class="button-wrapper">
@@ -79,4 +80,5 @@
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
+<script src="/js/mpg/mif/whdwl/selectWithdrawalView.js"></script>
 </html>
