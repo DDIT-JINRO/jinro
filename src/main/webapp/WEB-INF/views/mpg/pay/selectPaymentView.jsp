@@ -134,13 +134,5 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<%-- ================= 스크립트 영역 ================= --%>
-
-<%-- ✅ 1. 결제/취소 로직이 담긴 JS 파일 포함 --%>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script src="/js/mpg/pay/payment.js"></script>
-
-<%-- ✅ 2. 마이페이지의 버튼과 JS 함수를 연결하는 코드 --%>
-<script>
-
-</script>

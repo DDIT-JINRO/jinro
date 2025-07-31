@@ -68,8 +68,7 @@ public class PaymentController {
 	// 결제 검증
 	@PostMapping("/verify")
 	@ResponseBody
-	public ResponseEntity<PaymentResponseDto> verifyPayment(@RequestBody PaymentRequestDto requestDto,
-			@AuthenticationPrincipal String loginId) {
+	public ResponseEntity<PaymentResponseDto> verifyPayment(@RequestBody PaymentRequestDto requestDto, @AuthenticationPrincipal String loginId) {
 
 		PaymentResponseDto response = paymentService.verifyAndProcessPayment(requestDto, loginId);
 
@@ -89,19 +88,18 @@ public class PaymentController {
 		// 받은 loginId를 실제 숫자(int)로 변환
 		int memId = Integer.parseInt(loginId);
 
-			boolean isCancelled = paymentService.cancelSubscription(memId);
-			if (isCancelled) {
-				return ResponseEntity.ok("구독이 정상적으로 취소되었습니다.");
-			} else {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("취소할 구독 정보가 없거나, 이미 취소된 상태입니다.");
-			}
+		boolean isCancelled = paymentService.cancelSubscription(memId);
+		if (isCancelled) {
+			return ResponseEntity.ok("구독이 정상적으로 취소되었습니다.");
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("취소할 구독 정보가 없거나, 이미 취소된 상태입니다.");
+		}
 	}
 
 	// 구독 변경
 	@PostMapping("/change-subscription")
 	@ResponseBody
-	public ResponseEntity<String> changeSubscription(@RequestParam("subId") int subId,
-			@AuthenticationPrincipal String loginId) {
+	public ResponseEntity<String> changeSubscription(@RequestParam("subId") int subId, @AuthenticationPrincipal String loginId) {
 		boolean result = paymentService.changeSubscription(Integer.parseInt(loginId), subId);
 		if (result) {
 			return ResponseEntity.ok("다음 결제부터 구독 상품이 변경되도록 예약되었습니다.");
