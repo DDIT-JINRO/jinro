@@ -1,9 +1,9 @@
 package kr.or.ddit.cdp.rsm.rsm.web;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,11 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.or.ddit.cdp.rsm.rsm.service.ResumeDetailVO;
 import kr.or.ddit.cdp.rsm.rsm.service.ResumeSectionVO;
 import kr.or.ddit.cdp.rsm.rsm.service.ResumeService;
 import kr.or.ddit.cdp.rsm.rsm.service.ResumeVO;
@@ -59,20 +57,22 @@ public class ResumeController {
 	}
 	
 	@PostMapping("/insertResume")
-	public String insertResume(
+	@ResponseBody
+	public Map<String, Object> insertResume(
 								Principal principal,
 								@ModelAttribute ResumeVO resumeVO,
 								Model model) throws UnsupportedEncodingException{
-		// URL 디코딩;
+			Map<String, Object> result = new HashMap<>();
 	      if(principal!=null && !principal.getName().equals("anonymousUser")) {
 	    	  resumeVO.setMemId(Integer.parseInt( principal.getName()));
 	    	  resumeVO = resumeService.mergeIntoResume(resumeVO);
 	    	  
-	    	  return "redirect:/rsm/rsm/resumeWriter?resumeId="+resumeVO.getResumeId();//+resumeId;
+	    	  result.put("status", "success");
+	          result.put("resumeId", resumeVO.getResumeId());
 	       }else {
-	    	   
-	    	   return "redirect:/login";
+	    	   result.put("status", "unauthorized");
 	       }
+		  return result;
 	      
 	}
 	

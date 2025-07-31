@@ -140,9 +140,15 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 
         }
+		
+		// 실제 이미지 input에서 파일 추출
+		const photoInput = document.querySelector("#photo-upload");
+		const photoFile = photoInput.files[0];
+		
+		applySelectedToOptions();
         resumeContent = allElementDiv.outerHTML;  // value가 반영된 상태의 outerHTML
-		console.log(resumeContent);
-		submitResume(resumeTitleVal, resumeContent, resumeId);
+		//console.log(resumeContent);
+		submitResume(resumeTitleVal, resumeContent, resumeId,photoFile);
     })
 
     const delectBtn = document.getElementsByClassName("delete-button");
@@ -154,36 +160,54 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     addEventListeners();
 });
+	//select selected 해주는 함수
+	function applySelectedToOptions() {
+	  const selects = document.querySelectorAll("select");
+	
+	  selects.forEach(select => {
+	    const selectedValue = select.value;
+	
+	    Array.from(select.options).forEach(option => {
+	      option.removeAttribute("selected");
+	    });
+	
+	    const selectedOption = Array.from(select.options).find(
+	      option => option.value === selectedValue
+	    );
+	    if (selectedOption) {
+	      selectedOption.setAttribute("selected", "selected");
+	    }
+	  });
+	}
+
 
 	//form형태로 전송하는 함수
-	function submitResume(resumeTitle, resumeContent, resumeId) {
-	  const form = document.createElement('form');
-	  form.method = 'POST';
-	  form.action = '/rsm/rsm/insertResume'; // Controller @PostMapping 경로
+	function submitResume(resumeTitle, resumeContent, resumeId, photoFile) {
+		const formData = new FormData();
+		  formData.append('resumeTitle', resumeTitle);
+		  formData.append('resumeContent', resumeContent);
+		  if (resumeId !== undefined && resumeId !== null) {
+		    formData.append('resumeId', resumeId);
+		  }
+		  if (photoFile) {
+		    formData.append('photo', photoFile);
+		  }
 
-	  // title
-	  const titleInput = document.createElement('input');
-	  titleInput.name = 'resumeTitle';
-	  titleInput.value = resumeTitle;
-	  form.appendChild(titleInput);
-
-	  // content
-	  const contentInput = document.createElement('input');
-	  contentInput.name = 'resumeContent';
-	  contentInput.value = resumeContent;
-	  form.appendChild(contentInput);
-
-	  // resumeId (선택)
-	  if (resumeId !== undefined && resumeId !== null) {
-	    const idInput = document.createElement('input');
-	    idInput.name = 'resumeId';
-	    idInput.value = resumeId;
-	    form.appendChild(idInput);
-	  }
-
-	  // form 추가 및 submit
-	  document.body.appendChild(form);
-	  form.submit();
+		  // FormData는 form.submit과 달리 비동기 전송
+		  fetch('/rsm/rsm/insertResume', {
+		    method: 'POST',
+		    body: formData,
+		  })
+		    .then(response => response.json())
+		    .then(data => {
+				console.log(data);
+		      if (data.status === 'success') {
+		        location.href = `/rsm/rsm/resumeWriter?resumeId=${data.resumeId}`;
+		      } else {
+		        location.href = '/login';
+		      }
+		    })
+		    .catch(err => console.error('에러 발생:', err));
 	}
 
     // 이벤트 리스너 추가하는 함수
