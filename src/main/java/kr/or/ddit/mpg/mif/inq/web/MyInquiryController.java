@@ -113,7 +113,6 @@ public class MyInquiryController {
 			this.myInquiryService.insertInterestList(memId, interestKeyword);
 			return "redirect:/mpg/mif/inq/selectMyInquiryView.do";
 		} catch (Exception e) {
-			log.info("에러명@@@@@@@@@@@@@@@@@ : " + e.getMessage());
 			return "redirect:/";
 		}
 	}
