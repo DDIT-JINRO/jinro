@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.web.AiImitationInterviewController;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/aifdbck/rsm")
+@RequestMapping("/cdp/aifdbck/rsm")
 @Controller
 @Slf4j
 public class AiFeedbackResumeController {
-	@GetMapping()
+	@GetMapping("/aiFeedbackResumeList.do")
 	public String aiImitationInterviewPage() {
 		return "cdp/aifdbck/rsm/aiFeedbackResume";
 	}

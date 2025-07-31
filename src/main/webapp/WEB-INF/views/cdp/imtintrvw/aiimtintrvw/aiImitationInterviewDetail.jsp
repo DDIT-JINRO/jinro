@@ -14,7 +14,7 @@
 		<div class="channel-sub-section-item"><a href="/rsm/rsm">이력서</a></div>
 		<div class="channel-sub-section-item"><a href="/sint/qestnlst">자기소개서</a></div>
 		<div class="channel-sub-section-itemIn"><a href="/imtintrvw/bsintrvw">모의면접</a></div>
-		<div class="channel-sub-section-item"><a href="/aifdbck/rsm">AI 피드백</a></div>
+		<div class="channel-sub-section-item"><a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do/aifdbck/rsm">AI 피드백</a></div>
 	</div>
 </section>
 <div>

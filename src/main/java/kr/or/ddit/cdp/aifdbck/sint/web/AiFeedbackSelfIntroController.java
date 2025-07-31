@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.web.AiImitationInterviewController;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/aifdbck/sint")
+@RequestMapping("/cdp/aifdbck/sint")
 @Controller
 @Slf4j
 public class AiFeedbackSelfIntroController {
-	@GetMapping()
+	@GetMapping("/aiFeedbackSelfIntroList.do")
 	public String aiImitationInterviewPage() {
 		return "cdp/aifdbck/sint/aiFeedbackSelfIntro";
 	}
