@@ -10,4 +10,7 @@ public interface MyInquiryService {
 
 	Map<String, Object> selectMyInquiryView(String memId);
 
+	String updateMyInquiryView(String memId, MemberVO member);
+
+	Map<String, Object> checkPassword(String memId, Map<String, String> map);
 }

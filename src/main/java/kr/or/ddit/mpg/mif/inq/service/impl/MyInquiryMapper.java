@@ -9,4 +9,7 @@ public interface MyInquiryMapper {
 
 	MemberVO selectMyInquiryView(int memId);
 
+	MemberVO checkPassword(int memId);
+
+	int updateMyInquiryView(MemberVO member);
 }

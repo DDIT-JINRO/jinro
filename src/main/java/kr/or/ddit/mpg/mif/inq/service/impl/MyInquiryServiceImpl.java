@@ -45,4 +45,42 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		return Map.of("member", member, "imgPath", this.fileService.getSavePath(fileDetail));
 	}
 
+	@Override
+	public Map<String, Object> checkPassword(String memIdStr, Map<String, String> map) {
+		int memId = parseMemId(memIdStr);
+
+		String password = map.get("password");
+		MemberVO memberVO = this.myInquiryMapper.checkPassword(memId);
+
+		if (bCryptPasswordEncoder.matches(password, memberVO.getMemPassword())) {
+			return Map.of("result", "success");
+		};
+
+		return Map.of("result", "fail");
+	}
+
+	@Override
+	public String updateMyInquiryView(String memIdStr, MemberVO member) {
+		int memId = parseMemId(memIdStr);
+
+		member.setMemId(memId);
+
+		int result = this.myInquiryMapper.updateMyInquiryView(member);
+		if (result == 0) {
+			return "redirect:";
+		}
+
+		return "success";
+	}
+
+	public int parseMemId(String memIdStr) {
+		int memId;
+		try {
+			memId = Integer.parseInt(memIdStr);
+		} catch (NumberFormatException e) {
+			throw new CustomException(ErrorCode.INVALID_USER);
+		}
+
+		return memId;
+	}
 }

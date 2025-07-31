@@ -36,9 +36,10 @@
 					<div class="profile-card profile-photo-card">
 						<h3 class="card-title">프로필 사진</h3>
 						<div class="profile-photo-area">
-							<img src="/images/defaultProfileImg.png" alt="프로필 사진" class="profile-img">
+							<img src="${imgPath}" alt="프로필 사진" class="profile-img">
 							<div class="profile-photo-buttons">
-								<button class="btn btn-primary">사진 변경</button>
+								<input type="file" id="change-photo-input" style="display:none;" accept="image/jpeg, image/png"/>
+								<button type="button" class="btn btn-primary" id="change-photo-btn">사진 변경</button>
 								<button class="btn btn-primary">테두리 변경</button>
 							</div>
 						</div>
