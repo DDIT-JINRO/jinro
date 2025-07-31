@@ -48,6 +48,7 @@ public class StudyGroupController {
 	AlarmService alarmService;
 
 
+
 	@GetMapping("/stdGroupList.do")
 	public String selectStdGroupList(@RequestParam(required = false) String region,
 		    						@RequestParam(required = false) String gender,
@@ -219,9 +220,6 @@ public class StudyGroupController {
 
 	@PostMapping("/deleteStdReply.do")
 	public ResponseEntity<Boolean> deleteStdReply(@RequestBody StdReplyVO stdReplyVO, Principal principal){
-		System.out.println("=========================================");
-		System.out.println(stdReplyVO);
-		System.out.println("=========================================");
 		if(principal==null || principal.getName().equals("anonymousUser")) {
 			throw new CustomException(ErrorCode.INVALID_USER);
 		}
@@ -234,6 +232,24 @@ public class StudyGroupController {
 		}
 
 		return ResponseEntity.ok(result);
+	}
+
+	@PostMapping("/deleteStdBoard.do")
+	public ResponseEntity<Boolean> deleteStdBoard(@RequestBody Map<String, Object> map, Principal principal){
+		System.out.println("========================================");
+		System.out.println(map);
+		System.out.println("========================================");
+
+		if(principal == null || principal.getName().equals("anonymousUser")
+				|| !principal.getName().equals(map.get("memId"))) throw new CustomException(ErrorCode.INVALID_USER);
+
+		try {
+			boolean result = this.studyGroupService.deleteStdBoard(map);
+			return ResponseEntity.ok(true);
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

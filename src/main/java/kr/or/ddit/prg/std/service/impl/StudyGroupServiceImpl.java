@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -205,5 +206,31 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	@Override
 	public boolean deleteReply(StdReplyVO stdReplyVO) {
 		return this.studyGroupMapper.deleteReply(stdReplyVO) > 0 ? true : false;
+	}
+
+	@Override
+	@Transactional
+	public boolean deleteStdBoard(Map<String, Object> map) {
+		// 게시글 -> 채팅방 -> 채팅멤버
+		System.out.println("@@@@@@@@@@@@@@@@@@"+map.get("boardId"));
+		boolean result = true;
+		String boardIdStr = (String) map.get("boardId");
+		String memIdStr = (String) map.get("memId");
+		String crIdStr = (String) map.get("crId");
+		int boardId = Integer.parseInt(boardIdStr);
+		int memId = Integer.parseInt(memIdStr);
+		int crId = Integer.parseInt(crIdStr);
+
+		StdBoardVO stdBoardVO = new StdBoardVO();
+		stdBoardVO.setBoardId(boardId);
+		stdBoardVO.setMemId(memId);
+		int resOfDelBoard = this.studyGroupMapper.deleteStdBoard(stdBoardVO);
+
+		ChatRoomVO chatRoomVO = new ChatRoomVO();
+		chatRoomVO.setCrId(crId);
+		int resOfDelChatRoom = this.chatService.deleteChatRoom(chatRoomVO);
+
+		if(resOfDelBoard<1) result = false;
+		return result;
 	}
 }

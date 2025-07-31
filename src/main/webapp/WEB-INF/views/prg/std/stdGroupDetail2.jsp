@@ -26,7 +26,7 @@
   			<!-- 게시글 박스 -->
 			<div class="detail-wrapper">
 			<div class="boardEtcBtn" id="boardEtcBtn">...</div>
-			<div class="boardEtcContainer">
+			<div class="boardEtcContainer" data-board-id="${stdBoardVO.boardId }">
 				<c:choose>
 					<c:when test="${memId==stdBoardVO.memId }">
 						<div class="boardEtcActionBtn" id="boardModifyBtn">

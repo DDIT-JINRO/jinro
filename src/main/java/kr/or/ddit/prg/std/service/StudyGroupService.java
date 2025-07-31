@@ -81,4 +81,13 @@ public interface StudyGroupService {
 	 * @return
 	 */
 	boolean deleteReply(StdReplyVO stdReplyVO);
+
+	/**
+	 * 스터디그룹 게시글 삭제 -> 채팅방 삭제 -> 채팅멤버 전체 삭제
+	 * 3단계 모두 update 처리
+	 * map : crId, memId, boardId
+	 * @param stdBoardVO
+	 * @return
+	 */
+	boolean deleteStdBoard(Map<String, Object> map);
 }

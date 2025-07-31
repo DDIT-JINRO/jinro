@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.prg.std.service.impl.StudyGroupMapper">
-
 	<resultMap id="stdBoardMap"
 		type="kr.or.ddit.prg.std.service.StdBoardVO">
 		<id property="boardId" column="BOARD_ID" />
@@ -285,11 +284,8 @@
 	    LEFT JOIN FILE_DETAIL RDP ON RDP.FILE_GROUP_ID = RFG_P.FILE_GROUP_ID
 
 	    WHERE B.BOARD_ID = #{boardId}
+	      AND B.BOARD_DEL_YN = 'N'
 	    ORDER BY R.REPLY_CREATED_AT DESC
-	</select>
-
-	<select id="" parameterType="int" resultMap="stdReplyMap">
-
 	</select>
 
 	<select id="selectChildReplyList" parameterType="int" resultMap="stdReplyMap">
@@ -404,12 +400,19 @@
 		    , SYSDATE
 		)
 	</insert>
-
 	<update id="deleteReply" parameterType="kr.or.ddit.prg.std.service.StdReplyVO">
 		UPDATE REPLY
 		   SET REPLY_DEL_YN = 'Y'
 		 WHERE REPLY_ID = #{replyId}
 		   AND MEM_ID = #{memId}
 		   AND REPLY_DEL_YN = 'N'
+	</update>
+	<update id="deleteStdBoard" parameterType="kr.or.ddit.prg.std.service.StdBoardVO">
+		UPDATE BOARD
+		   SET BOARD_DEL_YN = 'Y'
+		 WHERE BOARD_ID = #{boardId}
+		   AND MEM_ID = #{memId}
+		   AND CC_ID = 'G09005'
+		   AND BOARD_DEL_YN = 'N'
 	</update>
 </mapper>

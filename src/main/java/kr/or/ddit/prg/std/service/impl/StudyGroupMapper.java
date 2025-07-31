@@ -89,4 +89,11 @@ public interface StudyGroupMapper {
 	 * @return
 	 */
 	int deleteReply(StdReplyVO stdReplyVO);
+
+	/**
+	 * 게시글 삭제 boardId, memId 필요
+	 * @param stdBoardVO
+	 * @return
+	 */
+	int deleteStdBoard(StdBoardVO stdBoardVO);
 }

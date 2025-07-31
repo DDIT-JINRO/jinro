@@ -13,7 +13,30 @@ document.addEventListener('DOMContentLoaded', function(){
 	const boardDeleteBtn = document.getElementById('boardDeleteBtn');
 	if(boardDeleteBtn){
 		boardDeleteBtn.addEventListener('click', function(){
-			console.log("삭제 fetch 보내고 성공하면 목록페이지 이동");
+			console.log('채팅방까지 같이 폐쇄해야함')
+			const boardId = boardDeleteBtn.closest('.boardEtcContainer').dataset.boardId;
+			const data = {crId,boardId,memId};
+			fetch('/prg/std/deleteStdBoard.do',{
+				method:"POST",
+				headers:{
+					"Content-Type":"application/json"
+				},
+				body:JSON.stringify(data)
+			})
+			.then(resp =>{
+				if(!resp.ok) throw new Error('에러');
+				return resp.json();
+			})
+			.then(result =>{
+				if(result){
+					alert('정상적으로 삭제되었습니다');
+					location.href = '/prg/std/stdGroupList.do';
+				}
+			})
+			.catch(err =>{
+				console.log(err);
+				alert('삭제도중 문제가 발생했습니다.\n관리자측 문의바랍니다.');
+			})
 		})
 	}
 
