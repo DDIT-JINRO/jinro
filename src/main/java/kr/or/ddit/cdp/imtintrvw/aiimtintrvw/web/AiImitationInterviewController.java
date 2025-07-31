@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/cdp/imtintrvw/aiimtintrvw")
 @Controller
 @Slf4j
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class AiImitationInterviewController {
 	
 	@Autowired
