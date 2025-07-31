@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.or.ddit.util.setle.service.impl.MemberSubscriptionMapper">
+<mapper namespace="kr.or.ddit.mpg.pay.service.impl.MemberSubscriptionMapper">
 
 	<!-- 
 	// 구독 등록
 	int insertMemberSubscription(MemberSubscriptionVO memberSubscriptionVO);
 	-->
-	<insert id="insertMemberSubscription" parameterType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+	<insert id="insertMemberSubscription" parameterType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO">
 		<selectKey keyProperty="msId" resultType="int" order="BEFORE">
 			SELECT MEMBER_SUBSCRIPTION_SEQ.NEXTVAL FROM DUAL
 		</selectKey>
@@ -42,7 +42,7 @@
 	// 회원 ID로 구독 정보 조회
 	MemberSubscriptionVO selectByMemberId(int memId);
 	-->
-	<select id="selectByMemberId" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+	<select id="selectByMemberId" resultType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO">
 		SELECT  A.MS_ID
 			  , A.MEM_ID
 			  , A.SUB_ID
@@ -57,36 +57,17 @@
 		JOIN	SUBSCRIBE B ON(A.SUB_ID=B.SUB_ID)
 		WHERE	A.RECUR_PAY_CNT <![CDATA[ > ]]> 0
 		AND		A.MEM_ID = #{memId}
+		AND		SUB_END_DT <![CDATA[ >= ]]> TRUNC(SYSDATE)
 		ORDER BY A.MS_ID DESC
 		FETCH FIRST 1 ROWS ONLY
 	</select>
 	
-	<!--
-	// 구독번호로 구독 정보 조회
-	MemberSubscriptionVO selectByMsId(int msId);
-	-->
-	<select id="selectByMsId" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
-		SELECT  MS.MS_ID
-			  , MS.MEM_ID
-			  , MS.SUB_ID
-			  , MS.CUSTOMER_UID
-			  , MS.SUB_STATUS
-			  , MS.SUB_START_DT
-			  , MS.SUB_END_DT
-			  , MS.LAST_PAY_DT
-			  , MS.RECUR_PAY_CNT
-			  , MS.CREATED_DT
-			  , MS.UPDATED_DT
-		FROM	MEMBER_SUBSCRIPTION MS
-		JOIN	PAYMENT P
-		WHERE	MS_ID = #{msId}
-	</select>
 
 	<!-- 
 	// 오늘 정기결제해야 할 예약된 구독 목록 조회
     public List<MemberSubscriptionVO> findSubscriptionsDueForToday();
     -->
-    <select id="findSubscriptionsDueForToday" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+    <select id="findSubscriptionsDueForToday" resultType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO">
 	    SELECT	a.MS_ID
 			  , a.MEM_ID
 			  , a.SUB_ID
@@ -134,7 +115,7 @@
 	//새로운 구독정보를 db에 insert
 	public int insertNewSubscription(MemberSubscriptionVO newSub);
 	 -->
-	<insert id="insertNewSubscription" parameterType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+	<insert id="insertNewSubscription" parameterType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO">
 		<selectKey keyProperty="msId" resultType="int" order="BEFORE">
 			SELECT MEMBER_SUBSCRIPTION_SEQ.NEXTVAL FROM DUAL
 		</selectKey>
@@ -170,7 +151,7 @@
 	// 예약된 구독 정보 조회
 	public MemberSubscriptionVO findReservedSubscriptionByMemberId(int memId);
 	 -->
-	<select id="findReservedSubscriptionByMemberId" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+	<select id="findReservedSubscriptionByMemberId" resultType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO">
 	    SELECT	MS_ID
 		      , MEM_ID
 		      , SUB_ID
@@ -191,7 +172,7 @@
 //이전에 취소했던 원래 구독 정보 조회(가장 최신 'n' 상태 구독)
 	public MemberSubscriptionVO findCancelledOriginalSubscription(int memId);
  -->
-<select id="findCancelledOriginalSubscription" resultType="kr.or.ddit.util.setle.service.MemberSubscriptionVO">
+<select id="findCancelledOriginalSubscription" resultType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO">
         SELECT	MS_ID
 		      , MEM_ID
 		      , SUB_ID
@@ -206,7 +187,7 @@
 	    FROM	MEMBER_SUBSCRIPTION
         WHERE	MEM_ID = #{memId}
           AND	SUB_STATUS = 'N'
-          AND	SUB_END_DT <![CDATA[ > ]]> SYSDATE
+          AND	SUB_END_DT <![CDATA[ > ]]> TRUNC(SYSDATE)
         ORDER	BY MS_ID DESC
 		FETCH FIRST 1 ROWS ONLY
 </select>

@@ -1,4 +1,4 @@
-package kr.or.ddit.util.setle.service;
+package kr.or.ddit.mpg.pay.service;
 
 import java.util.Date;
 

@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.main.service.MemberVO;
-import kr.or.ddit.util.setle.service.MemberSubscriptionVO;
-import kr.or.ddit.util.setle.service.PaymentRequestDto;
-import kr.or.ddit.util.setle.service.PaymentResponseDto;
-import kr.or.ddit.util.setle.service.PaymentService;
-import kr.or.ddit.util.setle.service.PaymentVO;
-import kr.or.ddit.util.setle.service.SubscriptionService;
-import kr.or.ddit.util.setle.service.SubscriptionVO;
-import kr.or.ddit.util.setle.web.SubscriptionScheduler;
+import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
+import kr.or.ddit.mpg.pay.service.PaymentRequestDto;
+import kr.or.ddit.mpg.pay.service.PaymentResponseDto;
+import kr.or.ddit.mpg.pay.service.PaymentService;
+import kr.or.ddit.mpg.pay.service.PaymentVO;
+import kr.or.ddit.mpg.pay.service.SubscriptionService;
+import kr.or.ddit.mpg.pay.service.SubscriptionVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -71,10 +70,6 @@ public class PaymentController {
 	@ResponseBody
 	public ResponseEntity<PaymentResponseDto> verifyPayment(@RequestBody PaymentRequestDto requestDto,
 			@AuthenticationPrincipal String loginId) {
-
-		System.out.println("requestDto : start");
-		System.out.println(requestDto);
-		System.out.println("requestDto : end");
 
 		PaymentResponseDto response = paymentService.verifyAndProcessPayment(requestDto, loginId);
 

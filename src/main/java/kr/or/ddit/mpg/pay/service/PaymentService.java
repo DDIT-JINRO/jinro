@@ -1,17 +1,11 @@
-package kr.or.ddit.util.setle.service;
+package kr.or.ddit.mpg.pay.service;
 
 import java.util.List;
-import java.util.Map;
 
 import kr.or.ddit.main.service.MemberVO;
 
 public interface PaymentService {
 
-	/**
-	 * merchant_uid를 생성하기 위해 pay_id의 다음 시퀀스 값을 조회
-	 */
-	public int selectNextPayId();
-	
 	/**
 	 * 회원id로 회원 조회
 	 */

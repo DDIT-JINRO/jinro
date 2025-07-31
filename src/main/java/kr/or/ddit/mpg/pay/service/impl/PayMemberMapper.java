@@ -1,4 +1,4 @@
-package kr.or.ddit.util.setle.service.impl;
+package kr.or.ddit.mpg.pay.service.impl;
 
 import org.apache.ibatis.annotations.Mapper;
 

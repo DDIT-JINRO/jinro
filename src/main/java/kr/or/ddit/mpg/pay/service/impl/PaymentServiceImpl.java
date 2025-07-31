@@ -1,34 +1,22 @@
-package kr.or.ddit.util.setle.service.impl;
+package kr.or.ddit.mpg.pay.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 
 import kr.or.ddit.main.service.MemberVO;
-import kr.or.ddit.mpg.mat.sih.web.SelfIntroHistoryController;
+import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
+import kr.or.ddit.mpg.pay.service.PaymentRequestDto;
+import kr.or.ddit.mpg.pay.service.PaymentResponseDto;
+import kr.or.ddit.mpg.pay.service.PaymentService;
+import kr.or.ddit.mpg.pay.service.PaymentVO;
+import kr.or.ddit.mpg.pay.service.SubscriptionVO;
 import kr.or.ddit.util.setle.service.IamportApiClient;
-import kr.or.ddit.util.setle.service.MemberSubscriptionVO;
-import kr.or.ddit.util.setle.service.PaymentRequestDto;
-import kr.or.ddit.util.setle.service.PaymentResponseDto;
-import kr.or.ddit.util.setle.service.PaymentService;
-import kr.or.ddit.util.setle.service.PaymentVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -48,12 +36,9 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Autowired
 	private PayMemberMapper payMemberMapper;
-
-	// merchant_uid를 생성하기 위해 pay_id의 다음 시퀀스 값을 조회
-	@Override
-	public int selectNextPayId() {
-		return paymentMapper.selectNextPayId();
-	}
+	
+	@Autowired
+	private SubscriptionMapper subscriptionMapper;
 
 	// 회원id을 기반으로 회원정보 조회
 	@Override
@@ -68,10 +53,6 @@ public class PaymentServiceImpl implements PaymentService {
 		try {
 			// 1. 아임포트 서버로부터 실제 결제 정보 조회
 			Map<String, Object> paymentData = iamportApiClient.getPaymentInfo(requestDto.getImpUid());
-
-			// 로그
-			System.out.println("검증 요청: " + requestDto);
-			System.out.println("paymentData: " + paymentData);
 
 			if (paymentData == null) {
 				System.err.println("paymentData is null - impUid: " + requestDto.getImpUid());
@@ -93,7 +74,7 @@ public class PaymentServiceImpl implements PaymentService {
 			// 3. 결제 상태가 '결제완료(paid)' 상태인지 검증
 			if (!"paid".equals(paymentData.get("status"))) {
 				// 금액이 일치하지 않으면 실패 응답 반환
-				return new PaymentResponseDto("failure", "결제가 완료되지 않았습니다. 현재 상태: " + paymentData.get("status"),
+				return new PaymentResponseDto("failure", "결제가 완료되지 않았습니다.",
 						requestDto.getMerchantUid());
 			}
 
@@ -111,7 +92,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 			// 혹시 모를 경우를 대비해 Null 체크를 추가하면 더 좋습니다.
 			if (loginUser == null) {
-				return new PaymentResponseDto("failure", "회원 정보를 찾을 수 없습니다. ID: " + memId, requestDto.getMerchantUid());
+				return new PaymentResponseDto("failure", "회원 정보를 찾을 수 없습니다.", requestDto.getMerchantUid());
 			}
 
 			// 3. 구독 정보 생성 및 DB 저장
@@ -124,7 +105,7 @@ public class PaymentServiceImpl implements PaymentService {
 			sub.setLastPayDt(new Date()); // 마지막 결제 성공일
 			sub.setRecurPayCnt(1); // 첫 결제이므로 1회차
 
-			// ✅ 다음 결제일(==구독마지막날)을 한 달 뒤로 설정하여 저장합니다.
+			// 다음 결제일(==구독마지막날)을 한 달 뒤로 설정하여 저장합니다.
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MONTH, 1);
 			// cal.add(Calendar.MINUTE, 3); 테스트
@@ -136,11 +117,13 @@ public class PaymentServiceImpl implements PaymentService {
 			PaymentVO payment = new PaymentVO();
 			payment.setImpUid(requestDto.getImpUid());
 			payment.setMerchantUid(requestDto.getMerchantUid());
-			payment.setPayAmount(requestDto.getAmount());
 			payment.setMsId(sub.getMsId());
 
 			// 5. 구독 상품에 따라 기능 횟수 설정
 			int subId = requestDto.getSubId();
+			SubscriptionVO product = subscriptionMapper.selectProductById(subId);
+			payment.setPayAmount(product.getSubPrice());
+			
 			if (subId == 1) { // BASIC 상품
 				payment.setPayResumeCnt(3);
 				payment.setPayCoverCnt(3);
@@ -160,11 +143,11 @@ public class PaymentServiceImpl implements PaymentService {
 
 			paymentMapper.insertPayment(payment);
 
-			successMessage = "서버 검증 및 구독 정보 저장 성공! 발급된 빌링키: " + requestDto.getCustomerUid();
+			successMessage = "결제가 정상적으로 완료되었습니다. 이용해주셔서 감사합니다.";
 			return new PaymentResponseDto("success", successMessage, requestDto.getMerchantUid());
 
 		} catch (Exception e) {
-			return new PaymentResponseDto("failure", "서버 처리 중 오류: " + e.getMessage(), null);
+			return new PaymentResponseDto("failure", "서버 오류가 발생했습니다.", null);
 		}
 	}
 
@@ -258,18 +241,24 @@ public class PaymentServiceImpl implements PaymentService {
 		// 1. 예약된 구독 정보 조회 (RECUR_PAY_CNT = 0)
 		MemberSubscriptionVO reservedSub = memberSubscriptionMapper.findReservedSubscriptionByMemberId(memId);
 
-		// 2. 이전에 취소했던 원래 구독 정보 조회 (가장 최신 'N' 상태 구독)
-		MemberSubscriptionVO originalSub = memberSubscriptionMapper.findCancelledOriginalSubscription(memId);
+		 if (reservedSub != null) {
+		        // 2. 예약된 구독은 DB에서 삭제
+		        memberSubscriptionMapper.deleteSubscriptionById(reservedSub.getMsId());
 
-		if (reservedSub != null && originalSub != null) {
-			// 3. 예약된 구독은 DB에서 삭제
-			memberSubscriptionMapper.deleteSubscriptionById(reservedSub.getMsId());
+		        // 3. 이전에 취소했던 원래 구독 정보 조회
+		        MemberSubscriptionVO originalSub = memberSubscriptionMapper.findCancelledOriginalSubscription(memId);
 
-			// 4. 원래 구독의 상태를 다시 'Y'로 복원
-			memberSubscriptionMapper.reactivateSubscriptionById(originalSub.getMsId());
-
-			return true;
-		}
+		        // 4. 되살릴 원래 구독이 있다면, 상태를 'Y'로 복원
+		        if (originalSub != null) {
+		            memberSubscriptionMapper.reactivateSubscriptionById(originalSub.getMsId());
+		        } else {
+		            // 되살릴 구독이 없는 경우 (이미 기간이 만료됨)는 그냥 넘어감
+		            System.out.println("되살릴 원래 구독 정보가 없습니다. 예약된 구독만 삭제합니다.");
+		        }
+		        
+		        return true; // 예약 건 삭제에 성공했으므로 true 반환
+		    }
+		 
 		return false;
 	}
 
@@ -291,7 +280,6 @@ public class PaymentServiceImpl implements PaymentService {
 		for (MemberSubscriptionVO memberSubscriptionVO : dueSubscriptions) {
 			try {
 				// 2. 이번 결제를 위한 새로운 주문번호 생성
-				int nextPayId = this.selectNextPayId();
 				String newMerchantUid = "sub_due_" + memberSubscriptionVO.getMsId() + "_" + System.currentTimeMillis();
 
 				double amount = memberSubscriptionVO.getSubPrice(); // TODO: sub 정보에 맞는 실제 상품 가격 조회
@@ -304,8 +292,6 @@ public class PaymentServiceImpl implements PaymentService {
 
 				if (result != null && "paid".equals(result.get("status"))) {
 					// 4. 결제 성공 시 DB 업데이트
-					System.out.println("구독 ID " + memberSubscriptionVO.getMsId() + " 정기결제 성공.");
-
 					// 새 결제 내역 저장
 					PaymentVO payment = new PaymentVO();
 					payment.setMsId(memberSubscriptionVO.getMsId());

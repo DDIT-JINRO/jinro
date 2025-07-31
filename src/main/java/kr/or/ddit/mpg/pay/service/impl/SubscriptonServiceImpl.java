@@ -1,12 +1,14 @@
-package kr.or.ddit.util.setle.service.impl;
+package kr.or.ddit.mpg.pay.service.impl;
+
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.or.ddit.util.setle.service.SubscriptionService;
-import kr.or.ddit.util.setle.service.SubscriptionVO;
+import kr.or.ddit.mpg.pay.service.SubscriptionService;
+import kr.or.ddit.mpg.pay.service.SubscriptionVO;
+
 
 @Service
 public class SubscriptonServiceImpl implements SubscriptionService {
@@ -19,6 +21,12 @@ public class SubscriptonServiceImpl implements SubscriptionService {
 	public List<SubscriptionVO> selectAllProducts() {
 
 		return subscriptionMapper.selectAllProducts();
+	}
+
+	@Override
+	public SubscriptionVO selectProductById(int subId) {
+		// TODO Auto-generated method stub
+		return subscriptionMapper.selectProductById(subId);
 	}
 
 }

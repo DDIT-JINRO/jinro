@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
-	namespace="kr.or.ddit.util.setle.service.impl.PaymentMapper">
+	namespace="kr.or.ddit.mpg.pay.service.impl.PaymentMapper">
 
-	<resultMap id="paymentMap" type="kr.or.ddit.util.setle.service.PaymentVO">
+	<resultMap id="paymentMap" type="kr.or.ddit.mpg.pay.service.PaymentVO">
 		<id property="payId" column="PAY_ID" />
 		<result property="msId" column="MS_ID"/>
 		<result property="payDate" column="PAY_DATE" />
@@ -16,18 +16,10 @@
 		<result property="merchantUid" column="MERCHANT_UID" />
 		<result property="subName" column="SUB_NAME" />
 	</resultMap>
-
-	<!-- 
-	merchant_uid를 생성하기 위해 pay_id의 다음 시퀀스 값을 조회
-	public int selectNextPayId()
-	 -->
-	<select id="selectNextPayId">
-		SELECT NVL(MAX(PAY_ID), 0) + 1 FROM PAYMENT
-	</select> 
 	 
 	<!--  새로운 결제 정보를 데이터베이스에 삽입.
 	public int insertPayment(PaymentVO paymentVO); -->
-	<insert id="insertPayment" parameterType="kr.or.ddit.util.setle.service.PaymentVO">
+	<insert id="insertPayment" parameterType="kr.or.ddit.mpg.pay.service.PaymentVO">
 		<selectKey keyProperty="payId" resultType="int" order="BEFORE">
 			SELECT PAYMENT_SEQ.NEXTVAL FROM DUAL
 		</selectKey>
@@ -57,37 +49,6 @@
         )
 	</insert>
 	
-	<!-- impUid를 기반으로 결제 정보를 조회
-	public PaymentVO selectPaymentByImpUid(String impUid); -->
-	<select id="selectPaymentByImpUid" parameterType="String" resultMap="paymentMap">
-		SELECT	PAY_ID
-	           ,PAY_DATE
-	           ,PAY_AMOUNT
-	           ,IMP_UID
-	           ,PAY_RESUME_CNT
-	           ,PAY_COVER_CNT
-	           ,PAY_CONSULT_CNT
-	           ,PAY_MOCK_CNT
-	           ,MERCHANT_UID
-        FROM	PAYMENT
-        WHERE	IMP_UID  = #{impUid} 
-	</select>
-    
-	<!-- merchantUid를 기반으로 결제 정보를 조회
-	public PaymentVO selectPaymentByMerchantUid(String merchantUid); -->
-	<select id="selectPaymentByMerchantUid" parameterType="String" resultMap="paymentMap">
-		SELECT	PAY_ID
-	           ,PAY_DATE
-	           ,PAY_AMOUNT
-	           ,IMP_UID
-	           ,PAY_RESUME_CNT
-	           ,PAY_COVER_CNT
-	           ,PAY_CONSULT_CNT
-	           ,PAY_MOCK_CNT
-	           ,MERCHANT_UID
-        FROM	PAYMENT
-        WHERE	MERCHANT_UID = #{merchantUid} 
-	</select>
 	<!-- 
 	//전체 결제 내역 조회 (구독 결제 내역 표시)
 	public List<PaymentVO> selectPaymentHistory(int memId);

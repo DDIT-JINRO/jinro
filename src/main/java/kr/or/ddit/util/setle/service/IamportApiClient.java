@@ -1,7 +1,5 @@
 package kr.or.ddit.util.setle.service;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpEntity;
@@ -16,13 +14,11 @@ import org.springframework.web.client.HttpClientErrorException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 
 //Gson 라이브러리 관련 import 추가
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
