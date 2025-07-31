@@ -93,7 +93,7 @@ public class NaverCallBackController {
 		accessTokenCookie.setHttpOnly(true);
 //		accessTokenCookie.setSecure(true);
 		accessTokenCookie.setPath("/");
-		accessTokenCookie.setMaxAge(60 * 31);
+		accessTokenCookie.setMaxAge(60 * 60);
 
 		refreshTokenCookie.setHttpOnly(true);
 //		refreshTokenCookie.setSecure(true);

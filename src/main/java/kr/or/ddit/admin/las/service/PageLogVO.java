@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class PageLogVO {
 	
-	private int plId;
+	private Long plId;
 	private String memId;
 	private String plUrl;
 	private String plTitle;

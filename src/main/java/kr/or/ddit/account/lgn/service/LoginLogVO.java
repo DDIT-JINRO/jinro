@@ -8,7 +8,7 @@ import lombok.Data;
 public class LoginLogVO {
 	
 	private int memId;
-	private int llId;
+	private Long llId;
 	private Date llCreatedAt;
 	private String llStatus;
 	

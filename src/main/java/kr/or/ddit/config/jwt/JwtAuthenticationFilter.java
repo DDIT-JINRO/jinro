@@ -31,8 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final UserDetailsService userDetailsService;
 	private final VisitLogService visitLogService;
 
-	@Autowired
-	VisitViewUriMap visitViewUriMap;
+	
 
 	public JwtAuthenticationFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService,
 			VisitLogService visitLogService) {
@@ -59,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				e.printStackTrace();
 			}
 		}
-
+		
 		// 정적 리소스 요청은 필터 제외 (css, js, image, favicon 등)
 		if (path.startsWith("/static/") || path.startsWith("/css/") || path.startsWith("/js/")
 				|| path.startsWith("/images/") || path.equals("/favicon.ico") || path.startsWith("/fonts/")) {
@@ -86,9 +85,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 						null, authorities);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 
-				if (visitViewUriMap.contains(path) && VisitViewUriMap.contains(pathOnly)) {
-					String pageName = visitViewUriMap.getPageName(path);
-					String refererName = visitViewUriMap.getPageName(pathOnly);
+				if (VisitViewUriMap.contains(path) && VisitViewUriMap.contains(pathOnly)) {
+					String pageName = VisitViewUriMap.getPageName(path);
+					String refererName = VisitViewUriMap.getPageName(pathOnly);
 
 					if (pageName != null && refererName != null) {
 						if (!pageName.trim().equals(refererName.trim())) {
@@ -109,7 +108,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 						Cookie newTokenCookie = new Cookie("accessToken", newAccessToken);
 						newTokenCookie.setPath("/");
 						newTokenCookie.setHttpOnly(true);
-						newTokenCookie.setMaxAge(60 * 31);
+						newTokenCookie.setMaxAge(60 * 60);
 						response.addCookie(newTokenCookie);
 
 						String username = jwtUtil.getUsernameFromToken(newAccessToken);
@@ -123,9 +122,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 								username, null, authorities);
 						SecurityContextHolder.getContext().setAuthentication(authentication);
 
-						if (visitViewUriMap.contains(path) && VisitViewUriMap.contains(pathOnly)) {
-							String pageName = visitViewUriMap.getPageName(path);
-							String refererName = visitViewUriMap.getPageName(pathOnly);
+						if (VisitViewUriMap.contains(path) && VisitViewUriMap.contains(pathOnly)) {
+							String pageName = VisitViewUriMap.getPageName(path);
+							String refererName = VisitViewUriMap.getPageName(pathOnly);
 
 							if (pageName != null && refererName != null) {
 								if (!pageName.trim().equals(refererName.trim())) {
@@ -138,9 +137,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 						return;
 					} else {
 						SecurityContextHolder.clearContext();
-						if (visitViewUriMap.contains(path) && VisitViewUriMap.contains(pathOnly)) {
-							String pageName = visitViewUriMap.getPageName(path);
-							String refererName = visitViewUriMap.getPageName(pathOnly);
+						if (VisitViewUriMap.contains(path) && VisitViewUriMap.contains(pathOnly)) {
+							String pageName = VisitViewUriMap.getPageName(path);
+							String refererName = VisitViewUriMap.getPageName(pathOnly);
 
 							if (pageName != null && refererName != null) {
 								if (!pageName.trim().equals(refererName.trim())) {
@@ -153,9 +152,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			} else {
 				// 토큰 없거나 유효하지 않을 때 인증 초기화 (null로 설정)
 				SecurityContextHolder.clearContext();
-				if (visitViewUriMap.contains(path) && VisitViewUriMap.contains(pathOnly)) {
-					String pageName = visitViewUriMap.getPageName(path);
-					String refererName = visitViewUriMap.getPageName(pathOnly);
+				if (VisitViewUriMap.contains(path) && VisitViewUriMap.contains(pathOnly)) {
+					String pageName = VisitViewUriMap.getPageName(path);
+					String refererName = VisitViewUriMap.getPageName(pathOnly);
 
 					if (pageName != null && refererName != null) {
 						if (!pageName.trim().equals(refererName.trim())) {

@@ -53,6 +53,8 @@ const memId = '<sec:authentication property="name" />'
 		            const left = Math.floor((screenWidth - width) / 2);
 		            const top  = Math.floor((screenHeight - height) / 2);
 					
+		            axios.post("/admin/las/roadMapVisitLog.do");
+		            
 					window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
 				}
 			});
@@ -83,6 +85,7 @@ const memId = '<sec:authentication property="name" />'
 				sessionStorage.setItem("redirectUrl", location.href);
 				location.href = "/login";
 			} else {
+				axios.post("/admin/las/worldCupVisitLog.do")
 				const worldcupUrl = 'http://localhost:5173/worldcup';
 				
 				const width  = 1200;
@@ -115,7 +118,7 @@ const memId = '<sec:authentication property="name" />'
 					<a href="/pse/cat/careerAptitudeTest.do">진로</a>
 				</li>
 				<li>
-					<a href="/univ/selectUnivList.do">진학</a>
+					<a href="/ertds/univ/uvsrch/selectUnivList.do">진학</a>
 				</li>
 				<li>
 					<a href="/empt/ema/employmentAdvertisement.do">취업</a>
@@ -124,7 +127,7 @@ const memId = '<sec:authentication property="name" />'
 					<a href="/rsm/rsm">경력관리</a>
 				</li>
 				<li>
-					<a href="/cnslt/off/offlineReservation.do">상담</a>
+					<a href="/cnslt/off/crsv/offlineReservation.do">상담</a>
 				</li>
 				<li>
 					<a href="/prg/ctt/cttList.do">프로그램</a>
