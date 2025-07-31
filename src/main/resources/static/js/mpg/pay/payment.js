@@ -6,6 +6,74 @@
 IMP = window.IMP;
 IMP.init('imp55613015') //가맹점 식별코드
 
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 컨트롤러가 전달한 사용자 정보를 JS 변수로 저장
+    const userInfo = {
+        email: "<c:out value='${loginUser.memEmail}' />",
+        name: "<c:out value='${loginUser.memName}' />",
+        tel: "<c:out value='${loginUser.memPhoneNumber}' />"
+    };
+
+    // '구독하기' 버튼 이벤트
+    document.querySelectorAll('.subscribe-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const subInfo = {
+                id: parseInt(btn.dataset.subId),
+                name: btn.dataset.name,
+                price: parseInt(btn.dataset.price)
+            };
+            requestSubscription(subInfo, userInfo); 
+        });
+    });
+
+    // '구독 취소' 링크 이벤트
+    const cancelLink = document.getElementById('cancel-link');
+    if (cancelLink) {
+        cancelLink.addEventListener('click', (event) => {
+            event.preventDefault(); // a 태그의 기본 동작(페이지 이동)을 막습니다.
+            cancelSubscription(); // payment.js의 구독 취소 함수 호출
+        });
+    }
+    
+    // '구독 변경' 버튼 이벤트
+    document.querySelectorAll('.change-sub-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const nextSubId = btn.dataset.subId;
+            if (confirm(`다음 결제부터 구독 상품을 변경하시겠습니까?`)) {
+                const formData = new FormData();
+                formData.append('subId', nextSubId);
+
+                fetch('/mpg/change-subscription', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(message => {
+                    alert(message);
+                    location.reload();
+                }); 
+            }
+        });
+    });
+    
+    // '예약 취소' 링크에 이벤트 추가
+    const cancelReservationLink = document.getElementById('cancel-reservation-link');
+    if (cancelReservationLink) {
+        cancelReservationLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (confirm("구독 변경 예약을 취소하시겠습니까?")) {
+                fetch('/mpg/cancel-change', { method: 'POST' }) 
+                    .then(response => response.text())
+                    .then(message => {
+                        alert(message);
+                        location.reload();
+                    });
+            }
+        });
+    }
+});
+
 /**
  * 구독 신청 결제창 열기
  * @param {object} subInfo - 구독 상품 정보 {id, name, price}
@@ -69,28 +137,27 @@ function requestSubscription(subInfo, userInfo) {
 					// "취소"로 볼 수 있는 모든 상황
 
 
-					if (!rsp.success) {
-						const rawMsg = rsp.error_msg || "";
+					const rawMsg = rsp.error_msg || "";
 
-						let userMsg = "결제를 처리하지 못했습니다. 잠시 후 다시 시도해주세요.";
+					let userMsg = "결제를 처리하지 못했습니다. 잠시 후 다시 시도해주세요.";
 
-						if (
-							errorCode === "F1001" ||
-							status === "PAY_PROCESS_CANCELED" ||
-							errorMsg.includes("사용자가 결제를 취소")
-						) {
-							userMsg = "결제를 취소하셨습니다.";
-						} else if (rawMsg.includes("INVALID_CARD_NUMBER")) {
-							userMsg = "입력하신 카드 번호가 유효하지 않습니다. 다시 확인해주세요.";
-						} else if (rawMsg.includes("카드사 응답이 지연")) {
-							userMsg = "카드사 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요.";
-						} else if (rawMsg.includes("빌링키 발급 요청에 실패")) {
-							userMsg = "카드 정보를 다시 확인해주세요. 오류가 반복되면 다른 카드를 사용해 주세요.";
-						}
-
-						alert(userMsg);
-						return;
+					if (
+						errorCode === "F1001" ||
+						status === "PAY_PROCESS_CANCELED" ||
+						errorMsg.includes("사용자가 결제를 취소")
+					) {
+						userMsg = "결제를 취소하셨습니다.";
+					} else if (errorMsg.includes("INVALID_CARD_NUMBER")) {
+						userMsg = "입력하신 카드 번호가 유효하지 않습니다. 다시 확인해주세요.";
+					} else if (errorMsg.includes("카드사 응답이 지연")) {
+						userMsg = "카드사 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요.";
+					} else if (errorMsg.includes("빌링키 발급 요청에 실패")) {
+						userMsg = "카드 정보를 다시 확인해주세요. 오류가 반복되면 다른 카드를 사용해 주세요.";
 					}
+
+					alert(userMsg);
+					return;
+
 				}
 			},
 		);
