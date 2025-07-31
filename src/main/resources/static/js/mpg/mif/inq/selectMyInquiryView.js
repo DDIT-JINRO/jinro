@@ -21,6 +21,55 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+	const changePhotoBtn = document.querySelector("#change-photo-btn");
+	const changePhotoInput = document.querySelector("#change-photo-input");
+
+	changePhotoBtn.addEventListener("click", () => {
+		changePhotoInput.click();
+	});
+
+	changePhotoInput.addEventListener("change", handleImgFileSelect)
+})
+
+const handleImgFileSelect = (event) => {
+	const files = event.target.files;
+
+	if (files.length === 0) {
+		alert("파일이 선택되지 않았습니다.");
+		return;
+	}
+
+	const selectedFile = files[0];
+
+	if (selectedFile.type !== "image/jpeg" && selectedFile.type !== "image/png") {
+		alert("파일은 png 또는 jpg 형식만 가능합니다.");
+		return;
+	}
+
+	let formData = new FormData();
+	formData.append("profileImg", selectedFile);
+
+	fetch("updateProfileImg.do", {
+		method: "POST",
+		body: formData
+	}).then(response => {
+		console.log("response", response);
+		if (response.ok) {
+			return response.json();
+		}
+	}).then(({ result }) => {
+		console.log("result", result);
+		if (result === "success") {
+			location.reload();
+		}
+	}).catch(error => {
+		console.log("프로필 이미지 업로드 중 에러 발생 : ", error);
+		alert(error.message);
+	})
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
 	const updateInputs = document.querySelectorAll(".info-grid input");
 	const submitBtn = document.querySelector("#info-update-btn");
 

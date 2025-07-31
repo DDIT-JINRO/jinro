@@ -12,4 +12,7 @@ public interface MyInquiryMapper {
 	MemberVO checkPassword(int memId);
 
 	int updateMyInquiryView(MemberVO member);
+
+	int updateFileGroup(MemberVO member);
+
 }

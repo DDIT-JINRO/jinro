@@ -73,6 +73,37 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		return "success";
 	}
 
+	@Override
+	public Map<String, Object> updateProfileImg(String memIdStr, MultipartFile profileImg) {
+		int memId = parseMemId(memIdStr);
+
+		if (profileImg == null || profileImg.isEmpty()) {
+			throw new CustomException(ErrorCode.INVALID_FILE);
+		}
+
+		MemberVO member = this.myInquiryMapper.selectMyInquiryView(memId);
+
+		Long fileGroupId = fileService.createFileGroup();
+		member.setFileProfile(fileGroupId);
+
+		List<MultipartFile> files = new ArrayList<MultipartFile>();
+		files.add(profileImg);
+
+		List<FileDetailVO> fileDetail = new ArrayList<FileDetailVO>();
+		try {
+			fileDetail = this.fileService.uploadFiles(fileGroupId, files);
+		} catch (IOException e) {
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+		}
+
+		int result = this.myInquiryMapper.updateFileGroup(member);
+		if (result > 0) {
+			return Map.of("result", "success");
+		}
+
+		return Map.of("result", "fail");
+	}
+
 	public int parseMemId(String memIdStr) {
 		int memId;
 		try {
@@ -83,4 +114,5 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 
 		return memId;
 	}
+
 }

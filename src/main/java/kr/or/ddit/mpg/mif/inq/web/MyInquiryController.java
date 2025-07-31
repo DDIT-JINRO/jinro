@@ -82,4 +82,12 @@ public class MyInquiryController {
             return "redirect:/";
 		}
 	}
+	
+	@PostMapping("/mif/inq/updateProfileImg.do")
+	public ResponseEntity<Map<String, Object>> updateProfileImg(@AuthenticationPrincipal String memId, @RequestParam MultipartFile profileImg) {
+		Map<String, Object> result = this.myInquiryService.updateProfileImg(memId, profileImg);
+		
+		return ResponseEntity.ok(result);
+	}
+
 }

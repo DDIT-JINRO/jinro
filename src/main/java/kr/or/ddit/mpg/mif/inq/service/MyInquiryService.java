@@ -13,4 +13,7 @@ public interface MyInquiryService {
 	String updateMyInquiryView(String memId, MemberVO member);
 
 	Map<String, Object> checkPassword(String memId, Map<String, String> map);
+
+	Map<String, Object> updateProfileImg(String memId, MultipartFile profileImg);
+
 }
