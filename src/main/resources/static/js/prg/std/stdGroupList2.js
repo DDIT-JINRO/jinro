@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
       location.href = '/prg/std/stdGroupDetail.do?stdGroupId=' + card.dataset.stdbId;
     });
   });
+
   const btnWrite = document.getElementById('btnWrite');
   if (btnWrite) {
     btnWrite.addEventListener('click', () => {

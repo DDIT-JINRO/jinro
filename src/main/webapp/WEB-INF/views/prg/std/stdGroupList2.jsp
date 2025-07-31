@@ -19,80 +19,6 @@
 <div>
 	<div class="public-wrapper">
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-
-
-<!--   		<div class="public-wrapper-main"> -->
-<!--   			스터디그룹목록 -->
-<%--   			${myRoomSet } --%>
-<!-- 			<div class="group-search"> -->
-<!-- 				<form class="group-search form" action="/prg/std/stdGroupList.do" method="get"> -->
-<!-- 					<div class="filter-box"> -->
-<!-- 						<label for="searchType"> -->
-<!-- 							<select id="searchType" name="searchType"> -->
-<!-- 								<option value="title">제목</option> -->
-<!-- 								<option value="content">내용</option> -->
-<!-- 							</select> -->
-<!-- 						</label> -->
-<!-- 						<label for="searchKeyword">검색 : -->
-<!-- 						<input id="searchKeyword" type="text" placeholder="검색어를 입력해주세요" name="searchKeyword"/> -->
-<!-- 						</label> -->
-<!-- 						<label for="region">지역 : -->
-<!-- 							<select id="region" name="region" class="select-box select-box--tall"> -->
-<!-- 								<option value="">전체</option> -->
-<%-- 								<c:forEach var="region" items="${regionList }"> --%>
-<%-- 									<option value="${region.key }">${region.value }</option> --%>
-<%-- 								</c:forEach> --%>
-<!-- 							</select> -->
-<!-- 						</label> -->
-
-<!-- 						<label for="gender">성별 : -->
-<!-- 							<input type="radio" name="gender" id="gender-all" value="all" checked/><label for="gender-all">전체</label> -->
-<!-- 							<input type="radio" name="gender" id="gender-men" value="men"/><label for="gender-men">남자만</label> -->
-<!-- 							<input type="radio" name="gender" id="gender-women" value="women"/><label for="gender-women">여자만</label> -->
-<!-- 						</label> -->
-
-<!-- 						<label for="interest">관심사 : -->
-<!-- 							<select id="interest" name="interest"> -->
-<!-- 						    <option value="">전체</option> -->
-<!-- 						    <optgroup label="학업"> -->
-<!-- 						      <option value="study.general">공부</option> -->
-<!-- 						      <option value="study.exam">수능준비</option> -->
-<!-- 						      <option value="study.assignment">과제</option> -->
-<!-- 						      <option value="study.etc">기타</option> -->
-<!-- 						    </optgroup> -->
-<!-- 						    <optgroup label="진로"> -->
-<!-- 						      <option value="career.path">진로</option> -->
-<!-- 						      <option value="career.admission">진학</option> -->
-<!-- 						      <option value="career.etc">기타</option> -->
-<!-- 						    </optgroup> -->
-<!-- 						    <optgroup label="취업"> -->
-<!-- 						      <option value="job.prepare">취업준비</option> -->
-<!-- 						      <option value="job.concern">취업고민</option> -->
-<!-- 						      <option value="job.etc">기타</option> -->
-<!-- 						    </optgroup> -->
-<!-- 						    <optgroup label="기타"> -->
-<!-- 						      <option value="social.neighbor">동네친구</option> -->
-<!-- 						      <option value="social.talk">잡담</option> -->
-<!-- 						      <option value="social.etc">기타</option> -->
-<!-- 						    </optgroup> -->
-<!-- 							</select> -->
-<!-- 						</label> -->
-<!-- 						<label for="maxPeople">채팅인원제한 : -->
-<!-- 							<select id="maxPeople" name="maxPeople"> -->
-<!-- 								<option value="">전체</option> -->
-<!-- 								<option value="2">2명</option> -->
-<!-- 								<option value="5">5명</option> -->
-<!-- 								<option value="10">10명</option> -->
-<!-- 								<option value="15">15명</option> -->
-<!-- 								<option value="20">20명</option> -->
-<!-- 							</select> -->
-<!-- 						</label> -->
-<!-- 					</div> -->
-<!-- 					<input type="submit" value="조회"/> -->
-<!-- 				</form> -->
-<!-- 			</div> -->
-
-<!-- ------------------------------------------------------------------------------------- -->
 			<form method="get" action="/prg/std/stdGroupList.do">
 			    <div class="com-default-search">
 			        <div class="com-select-wrapper">
@@ -105,7 +31,7 @@
 			            </svg>
 			        </div>
 			        <input type="search" name="searchKeyword" placeholder="스터디그룹 내에서 검색" value="${searchKeyword }">
-			        <button class="com-search-btn" type="button">
+			        <button class="com-search-btn" type="submit">
 			            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
 			                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
 			            </svg>
