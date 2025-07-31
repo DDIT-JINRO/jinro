@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.util.report.service.impl.ReportMapper">
+
+	<insert id="test" parameterType="kr.or.ddit.util.report.service.ReportVO" >
+		INSERT INTO report (
+		    REPORT_ID
+		    , TARGET_TYPE
+		    , TARGET_ID
+		    , REPORT_REASON
+		    , REPORT_STATUS
+		    , REPORT_CREATED_AT
+		    , REPORT_COMPLETE_AT
+		    , REPORT_COMPLETE_ID
+		    , MEM_ID
+		    , FILE_GROUP_NO
+		) VALUES (
+		    report_id
+		    , #{targetType}
+		    , #{targetId}
+		    , #{reportReason}
+		    , #{reportStatus}
+		    , SYSDATE
+		    , NULL
+		    , #{reportCompleteId}
+		    , #{memId}
+		    , #{fileGroupNo}
+		);
+	</insert>
+
+</mapper>
