@@ -1,5 +1,6 @@
 package kr.or.ddit.mpg.mif.inq.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -15,5 +16,7 @@ public interface MyInquiryService {
 	Map<String, Object> checkPassword(String memId, Map<String, String> map);
 
 	Map<String, Object> updateProfileImg(String memId, MultipartFile profileImg);
+
+	void insertInterestList(String memId, List<String> filterKeyword);
 
 }

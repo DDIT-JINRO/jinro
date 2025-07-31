@@ -25,7 +25,9 @@
 		JOIN COM_CODE C ON
 			B.IC_CODE = C.CC_ID
 		WHERE
-			B.MEM_ID = #{memId}
+		    B.MEM_ID = #{memId}
+		AND
+			C.CC_ID != 'K01001'
 		ORDER BY
 			B.IC_CODE
 	</select>
@@ -123,7 +125,56 @@
 		    CL_CODE = 'K01'
 		AND
 		    USE_YN = 'Y'
+		AND
+			CC_ID != 'K01001'
 		ORDER BY
 		    CC_ETC
 	</select>
+	
+	<delete id="deleteInterestList" parameterType="int">
+		DELETE FROM
+			INTEREST_CN
+		WHERE
+			MEM_ID = #{memId}
+	</delete>
+	
+	<insert id="insertEmptyInterest" parameterType="int">
+		INSERT
+			INTO
+			INTEREST_CN (
+				IC_ID
+				, MEM_ID
+				, IC_CODE
+			)
+		VALUES (
+			(
+				SELECT
+					NVL(MAX(IC_ID), 0) + 1
+				FROM
+					INTEREST_CN
+			)
+			, #{memId}
+			, 'K01001'
+		)
+	</insert>
+	
+	<insert id="insertInterestList" parameterType="map">
+		INSERT
+			INTO
+			INTEREST_CN (
+				IC_ID
+				, MEM_ID
+				, IC_CODE
+			)
+		VALUES (
+			(
+				SELECT
+					NVL(MAX(IC_ID), 0) + 1
+				FROM
+					INTEREST_CN
+			)
+			, #{memId}
+			, #{keyword}
+		)
+	</insert>
 </mapper>

@@ -85,10 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	const passwordConfirmBtn = document.querySelector("#password-confirm-btn");
 
 	const openModal = () => {
+		document.html.classList.add('scroll-lock');
 		modalOverlay.classList.add('show');
 	}
 
 	const closeModal = () => {
+		document.html.classList.remove('scroll-lock');
 		modalOverlay.classList.remove('show');
 		passwordInput.value = '';
 		errorMsg.textContent = '';
@@ -166,10 +168,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	const closeModalBtn = modalOverlay.querySelector('.modal-close-btn');
 
 	const openModal = () => {
+		document.body.classList.add('scroll-lock');
 		modalOverlay.classList.add('show');
 	}
 
 	const closeModal = () => {
+		document.body.classList.remove('scroll-lock');
 		modalOverlay.classList.remove('show');
 		passwordInput.value = '';
 		errorMsg.textContent = '';
@@ -191,11 +195,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-	// 필터 키워드
-	const filterCheckboxes = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
+	// 관심사 키워드 체크박스
+	const keywordCheckbox = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
 
-	// 선택 필터 영역
-	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
+	// 선택 키워드 영역
+	const selectedKeywordContainer = document.querySelector('.com-selected-filters');
 
 	// 초기화 버튼
 	const resetButton = document.querySelector('.com-filter-reset-btn');
@@ -204,19 +208,19 @@ document.addEventListener('DOMContentLoaded', function () {
 	const createFilterTag = (text) => {
 		const filterTag = `<span class="com-selected-filter" data-filter="${text}">${text}</span>`;
 
-		selectedFiltersContainer.innerHTML += filterTag;
+		selectedKeywordContainer.innerHTML += filterTag;
 	};
 
 	// 필터 태그 삭제
 	const removeFilterTag = (text) => {
-		const tagToRemove = selectedFiltersContainer.querySelector(`[data-filter="${text}"]`);
+		const tagToRemove = selectedKeywordContainer.querySelector(`[data-filter="${text}"]`);
 		if (tagToRemove) {
-			selectedFiltersContainer.removeChild(tagToRemove);
+			selectedKeywordContainer.removeChild(tagToRemove);
 		}
 	};
 
 	// 체크박스 변경 시 이벤트 처리
-	filterCheckboxes.forEach(checkbox => {
+	keywordCheckbox.forEach(checkbox => {
 		checkbox.addEventListener('change', (e) => {
 			const labelText = e.target.nextElementSibling.textContent;
 			if (e.target.checked) {
@@ -230,11 +234,23 @@ document.addEventListener('DOMContentLoaded', function () {
 	// 초기화 버튼 클릭 시 이벤트 처리
 	if (resetButton) {
 		resetButton.addEventListener('click', () => {
-			filterCheckboxes.forEach(checkbox => {
+			keywordCheckbox.forEach(checkbox => {
 				checkbox.checked = false;
 			});
 
-			selectedFiltersContainer.innerHTML = '';
+			selectedKeywordContainer.innerHTML = '';
 		});
 	}
+
+	const checkboxes = document.querySelectorAll('input[name="filter-keyword"]');
+	
+	checkboxes.forEach((checkbox) => {
+		checkbox.addEventListener("click", (event) => {
+			const selectCheckbox = document.querySelectorAll('input[name="filter-keyword"]:checked');
+			if(selectCheckbox.length > 5) {
+				alert("관심사 최대 5개 까지만 선택 가능합니다.");
+				event.target.checked = false;
+			}
+		});
+	});
 });

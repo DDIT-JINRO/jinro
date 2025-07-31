@@ -1,3 +1,7 @@
+body.scroll-lock {
+    overflow: hidden;
+}
+
 /* 카드 레이아웃 */
 .profile-layout {
 	display: flex;

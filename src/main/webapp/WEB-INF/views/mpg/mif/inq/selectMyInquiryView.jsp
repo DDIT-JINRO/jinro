@@ -108,6 +108,9 @@
 							<button class="btn btn-primary" id="interests-update-btn">수정</button>
 						</div>
 						<div class="tags-container">
+							<c:if test="${member.interests == null || empty member.interests}">
+								<span>선택한 관심 분야가 없습니다.</span>
+							</c:if>
 							<c:forEach var="userKeyword" items="${member.interests}">
 								<span class="tag">${userKeyword.ccName}</span>
 							</c:forEach>
@@ -247,8 +250,8 @@
 		<button class="modal-close-btn" type="button">&times;</button>
 		<h3>관심사 수정</h3>
 		<p>수정 할 관심 분야를 선택하세요.</p>
-		<div class="modal-form">
-			<form method="post" action="/">
+		<div class="modal-form keyword-modal">
+			<form method="post" action="insertInterestList.do">
 				<div class="com-filter-section">
 					<div class="com-filter-options">
 						<c:forEach items="${interetsKeywordList}" var="allKeyword">
@@ -277,7 +280,7 @@
 						</c:forEach>
 					</div>
 				</div>
-				<button type="submit" class="com-submit-search-btn">검색</button>
+				<button type="submit" class="com-submit-search-btn">수정</button>
 			</form>
 		</div>
 	</div>

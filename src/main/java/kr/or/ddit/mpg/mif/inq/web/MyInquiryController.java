@@ -1,6 +1,7 @@
 package kr.or.ddit.mpg.mif.inq.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,24 @@ public class MyInquiryController {
 		Map<String, Object> result = this.myInquiryService.updateProfileImg(memId, profileImg);
 		
 		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 멤버의 관심사 키워드를 입력 or 변경합니다.
+	 * 
+	 * @param memId      멤버id
+	 * @param interestKeyword 관심사키워드
+	 * @return 이동 url
+	 */
+	@PostMapping("/mif/inq/insertInterestList.do")
+	public String insertInterestList(@AuthenticationPrincipal String memId, @RequestParam(name = "filter-keyword", required = false) List<String> interestKeyword) {
+		try {
+			this.myInquiryService.insertInterestList(memId, interestKeyword);
+			return "redirect:/mpg/mif/inq/selectMyInquiryView.do";
+		} catch (Exception e) {
+			log.info("에러명@@@@@@@@@@@@@@@@@ : " + e.getMessage());
+			return "redirect:/";
+		}
 	}
 
 }

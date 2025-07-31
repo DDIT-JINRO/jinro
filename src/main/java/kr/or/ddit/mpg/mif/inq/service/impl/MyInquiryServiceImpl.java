@@ -110,6 +110,32 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		return Map.of("result", "fail");
 	}
 
+	/**
+	 * 멤버의 관심사 키워드를 입력 or 변경합니다.
+	 * 
+	 * @param memIdStr        멤버id
+	 * @param interestKeyword 관심사키워드
+	 */
+	@Override
+	public void insertInterestList(String memIdStr, List<String> interestKeyword) {
+		int memId = parseMemId(memIdStr);
+
+		this.myInquiryMapper.deleteInterestList(memId);
+
+		if (interestKeyword == null || interestKeyword.isEmpty()) {
+			this.myInquiryMapper.insertEmptyInterest(memId);
+		} else {
+			for (String keyword : interestKeyword) {
+				this.myInquiryMapper.insertInterestList(Map.of("memId", memId, "keyword", keyword));
+			}
+		}
+	}
+
+	/**
+	 * String타입의 멤버 Id를 int 타입으로 변환합니다.
+	 * 
+	 * @param memIdStr 멤버id
+	 */
 	public int parseMemId(String memIdStr) {
 		int memId;
 		try {
