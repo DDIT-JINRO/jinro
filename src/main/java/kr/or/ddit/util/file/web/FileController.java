@@ -29,48 +29,6 @@ public class FileController {
 
 	private final FileService fileService;
 	
-    /**
-     * 다중 파일 업로드
-     * @param files - MultipartFile 리스트
-     * @return 업로드된 파일들의 상세 정보 리스트
-     */
-    @PostMapping("/upload")
-    public ResponseEntity<List<FileDetailVO>> uploadFiles(
-            @RequestParam("files") List<MultipartFile> files,
-            @RequestParam(required = false) Long groupId // 수정 시 기존 그룹ID 전달
-    ) throws IOException {
-
-        Long fileGroupId = groupId;
-        if (fileGroupId == null || fileGroupId==0) {
-            fileGroupId = fileService.createFileGroup(); // 신규 작성 시에만 생성
-        }
-
-        List<FileDetailVO> uploadedFiles = fileService.uploadFiles(fileGroupId, files);
-        return ResponseEntity.ok(uploadedFiles);
-    }
-    
-    @PostMapping("/update")
-    public ResponseEntity<List<FileDetailVO>> updateFiles(
-            @RequestParam("files") List<MultipartFile> files,
-            @RequestParam(required = false) Long groupId // 수정 시 기존 그룹ID 전달
-    ) throws IOException {
-
-        Long fileGroupId = groupId;
-        
-        List<FileDetailVO> updateFiles = new ArrayList<>();
-        
-        if (fileGroupId != null || fileGroupId!=0) {
-        	updateFiles = fileService.updateFile(fileGroupId, files); // 업데이트
-        }
-        
-        for(FileDetailVO file : updateFiles) {
-        	String path = fileService.getSavePath(file);
-        	log.info("path : "+path);
-        }
-
-        return ResponseEntity.ok(updateFiles);
-    }
-
 	@GetMapping("/download")
 	public ResponseEntity<Resource> download(@RequestParam Long fileGroupId, @RequestParam int seq) throws IOException {
 		FileDetailVO detail = fileService.getFileDetail(fileGroupId, seq);
