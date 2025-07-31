@@ -74,13 +74,35 @@
   border: 2px solid #e8ecef;
   border-radius: 10px;
   padding: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   background: #fff;
+}
+
+.reply-child-container {
+  /* display: none; 대신 */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.3s ease-out,
+    opacity     0.2s ease-out;
 }
 
 .reply-box.reply-child {
   background: #f9f9f9;
   padding-left: 40px;
+  margin-bottom: 0px;
+}
+
+.reply-child-container.open {
+	  /* 충분히 큰 값 */
+  max-height: 1000px;
+  opacity: 1;
+}
+.reply-child-container .reply-box {
+  margin-bottom: 10px;
+  /* 애니메이션 간 자연스러운 여백 전환 */
+  transition: margin 0.3s ease-out;
 }
 
 /* 프로필 */
@@ -119,11 +141,13 @@
 .reply-children {
   margin-top: 10px;
   margin-left: 20px;
+  margin-bottom: 0px;
 }
 
 /* 댓글 입력 */
 .comment-form {
   margin-top: 40px;
+  margin-bottom: 40px;
   border: 2px solid #e8ecef;
   padding: 20px;
   border-radius: 10px;
@@ -131,6 +155,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: end;
+}
+
+.comment-form.child-form{
+	margin-top: 0px;
 }
 
 .comment-form textarea {
@@ -168,6 +196,16 @@
   text-align: center;
   text-decoration: none;
   font-weight: bold;
+}
+
+.closeReplyBtn{
+	min-inline-size: -webkit-fill-available;
+	text-align-last: center;
+	color: #858E96;
+}
+
+.closeReplyBtn span:hover{
+	cursor: pointer;
 }
 
 .user-profile {
@@ -214,10 +252,8 @@
 }
 
 .btn-enter-chat.entered {
-  background-color: #f0f0f0;
-  color: #888;
-  cursor: not-allowed;
-  box-shadow: none;
+  background-color: #ff8040;
+  color: #8c0000;
 }
 
 .btn-enter-chat.disabled {
@@ -362,7 +398,7 @@
 /* ─── 2) 핵심 정보 그리드 ─── */
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: var(--gap);
   margin-bottom: 30px;
 }
@@ -406,4 +442,54 @@
 
 .etcBtn{
 	float:right;
+}
+
+.etcBtn:hover {
+	cursor: pointer;
+	font-size: 1.05rem;
+}
+
+.reply-child-btn{
+	border: none;
+	background: none;
+	color: #858E96;
+}
+
+.reply-child-btn:hover {
+	cursor: pointer;
+}
+
+.child-count{
+	font-size: 13px
+}
+
+/* 신고창 영역 */
+.etc-container{
+	box-sizing: border-box;
+
+	display: none;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 2px 2px;
+
+	width: 80px;
+	height: 40px;
+
+	background: #FFFFFF;
+	border: 2px solid #E8ECEF;
+	border-radius: 10px;
+
+	float: right;
+	clear: right;
+	margin-top:-2px;
+}
+
+.etc-container.etc-open{
+	display: flex;
+}
+
+.etc-container.etc-open:hover{
+	cursor: pointer;
+	font-weight: 500;
 }

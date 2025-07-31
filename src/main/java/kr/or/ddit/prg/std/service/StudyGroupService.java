@@ -58,4 +58,27 @@ public interface StudyGroupService {
 	 * @param stdBoardVO
 	 */
 	void increaseViewCnt(int stdGroupId);
+
+	/**
+	 * 단일 댓글 선택
+	 * 댓글생성 비동기 요청 insert 후 회원정보 등을 포함해서 돌려주기 위함
+	 * @param replyId
+	 * @return
+	 */
+	StdReplyVO selectReplyDetail(int replyId);
+
+	/**
+	 * 댓글 삽입 후 삽입된 댓글 조회해서 반환
+	 * 삽입 실패하면 null 반환
+	 * @param stdReplyVO
+	 * @return
+	 */
+	StdReplyVO insertReply(StdReplyVO stdReplyVO);
+
+	/**
+	 * 댓글 삭제. 회원번호 까지 확인함
+	 * @param stdReplyVO
+	 * @return
+	 */
+	boolean deleteReply(StdReplyVO stdReplyVO);
 }

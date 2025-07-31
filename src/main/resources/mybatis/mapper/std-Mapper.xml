@@ -69,13 +69,13 @@
 		<id property="replyId" column="REPLY_ID" />
 		<result property="boardId" column="BOARD_ID" />
 		<result property="replyParentId" column="REPLY_PARENT_ID" />
-		<result property="memId" column="MEM_ID" />
 		<result property="replyContent" column="REPLY_CONTENT" />
 		<result property="replyDelYn" column="REPLY_DEL_YN" />
 		<result property="replyCreatedAt" column="REPLY_CREATED_AT" />
 		<result property="replyUpdatedAt" column="REPLY_UPDATED_AT" />
 		<result property="childCount" column="CHILD_COUNT" />
 
+		<result property="memId" column="R_MEM_ID" />
 		<result property="memGen" column="R_MEM_GEN" />
 		<result property="memName" column="R_MEM_NAME" />
 		<result property="memNickname" column="R_MEM_NICKNAME" />
@@ -277,7 +277,7 @@
 	       AND B.CC_ID = 'G09005'
 	       AND CR.CC_ID = 'G04001'
 
-	    LEFT OUTER JOIN REPLY R ON R.BOARD_ID = B.BOARD_ID AND R.REPLY_PARENT_ID IS NULL
+	    LEFT OUTER JOIN REPLY R ON R.BOARD_ID = B.BOARD_ID AND R.REPLY_PARENT_ID IS NULL AND R.REPLY_DEL_YN = 'N'
 	    LEFT JOIN MEMBER RM ON RM.MEM_ID = R.MEM_ID
 	    LEFT JOIN FILE_GROUP RFG_B ON RFG_B.FILE_GROUP_ID = RM.FILE_BADGE
 	    LEFT JOIN FILE_DETAIL RDB ON RDB.FILE_GROUP_ID = RFG_B.FILE_GROUP_ID
@@ -285,6 +285,11 @@
 	    LEFT JOIN FILE_DETAIL RDP ON RDP.FILE_GROUP_ID = RFG_P.FILE_GROUP_ID
 
 	    WHERE B.BOARD_ID = #{boardId}
+	    ORDER BY R.REPLY_CREATED_AT DESC
+	</select>
+
+	<select id="" parameterType="int" resultMap="stdReplyMap">
+
 	</select>
 
 	<select id="selectChildReplyList" parameterType="int" resultMap="stdReplyMap">
@@ -305,6 +310,7 @@
 	           ) AS CHILD_COUNT
 
 	         -- 대댓글 작성자 정보
+	         , M.MEM_ID			 AS R_MEM_ID
 	         , M.MEM_GEN         AS R_MEM_GEN
 	         , M.MEM_NAME        AS R_MEM_NAME
 	         , M.MEM_NICKNAME    AS R_MEM_NICKNAME
@@ -323,6 +329,42 @@
 	      AND R1.REPLY_DEL_YN = 'N'
 
 	    ORDER BY R1.REPLY_CREATED_AT ASC
+	</select >
+
+	<select id="selectReplyDetail" parameterType="int" resultMap="stdReplyMap">
+		SELECT
+	           R1.REPLY_ID
+	         , R1.BOARD_ID
+	         , R1.REPLY_PARENT_ID
+	         , R1.MEM_ID
+	         , R1.REPLY_CONTENT
+	         , R1.REPLY_DEL_YN
+	         , R1.REPLY_CREATED_AT
+	         , R1.REPLY_UPDATED_AT
+	         , (
+	             SELECT COUNT(*)
+	             FROM REPLY R2
+	             WHERE R2.REPLY_PARENT_ID = R1.REPLY_ID
+	               AND R2.REPLY_DEL_YN = 'N'
+	           ) AS CHILD_COUNT
+
+	         -- 대댓글 작성자 정보
+	         , M.MEM_ID			 AS R_MEM_ID
+	         , M.MEM_GEN         AS R_MEM_GEN
+	         , M.MEM_NAME        AS R_MEM_NAME
+	         , M.MEM_NICKNAME    AS R_MEM_NICKNAME
+	         , M.MEM_EMAIL       AS R_MEM_EMAIL
+	         , D1.FILE_SAVE_NAME        AS R_FILE_BADGE
+	         , D2.FILE_SAVE_NAME        AS R_FILE_PROFILE
+
+	    FROM REPLY R1
+	    LEFT JOIN MEMBER M ON M.MEM_ID = R1.MEM_ID
+	    LEFT JOIN FILE_GROUP FG1 ON FG1.FILE_GROUP_ID = M.FILE_BADGE
+	    LEFT JOIN FILE_DETAIL D1 ON D1.FILE_GROUP_ID = FG1.FILE_GROUP_ID
+	    LEFT JOIN FILE_GROUP FG2 ON FG2.FILE_GROUP_ID = M.FILE_PROFILE
+	    LEFT JOIN FILE_DETAIL D2 ON D2.FILE_GROUP_ID = FG2.FILE_GROUP_ID
+
+	    WHERE R1.REPLY_ID = #{replyId}
 	</select>
 
 	<update id="increaseViewCnt" parameterType="int">
@@ -331,5 +373,43 @@
 		 WHERE BOARD_ID = #{boardId}
 		   AND BOARD_DEL_YN = 'N'
 		   AND CC_ID = 'G09005'
+	</update>
+
+	<insert id="insertReply" parameterType="kr.or.ddit.prg.std.service.StdReplyVO">
+		<selectKey keyProperty="replyId" order="BEFORE" resultType="int">
+			SELECT NVL(MAX(REPLY_ID),0)+1 FROM REPLY
+		</selectKey>
+
+		INSERT INTO REPLY(
+		    REPLY_ID
+		    , BOARD_ID
+		    <if test="replyParentId != null and replyParentId != 0">
+		    , REPLY_PARENT_ID
+		    </if>
+		    , MEM_ID
+		    , REPLY_CONTENT
+		    , REPLY_DEL_YN
+		    , REPLY_CREATED_AT
+		    , REPLY_UPDATED_AT
+		) VALUES (
+		    #{replyId}
+		    , #{boardId}
+		    <if test="replyParentId != null and replyParentId != 0">
+		    , #{replyParentId}
+		    </if>
+		    , #{memId}
+		    , #{replyContent}
+		    , 'N'
+		    , SYSDATE
+		    , SYSDATE
+		)
+	</insert>
+
+	<update id="deleteReply" parameterType="kr.or.ddit.prg.std.service.StdReplyVO">
+		UPDATE REPLY
+		   SET REPLY_DEL_YN = 'Y'
+		 WHERE REPLY_ID = #{replyId}
+		   AND MEM_ID = #{memId}
+		   AND REPLY_DEL_YN = 'N'
 	</update>
 </mapper>

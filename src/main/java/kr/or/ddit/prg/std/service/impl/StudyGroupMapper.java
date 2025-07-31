@@ -67,4 +67,26 @@ public interface StudyGroupMapper {
 	 * @param stdBoardVO
 	 */
 	void increaseViewCnt(int stdGroupId);
+
+	/**
+	 * 단일 댓글 선택
+	 * 댓글생성 비동기 요청 insert 후 회원정보 등을 포함해서 돌려주기 위함
+	 * @param replyId
+	 * @return
+	 */
+	StdReplyVO selectReplyDetail(int replyId);
+
+	/**
+	 * 댓글 삽입
+	 * @param stdReplyVO
+	 * @return
+	 */
+	int insertReply(StdReplyVO stdReplyVO);
+
+	/**
+	 * 댓글 삭제. 회원번호 까지 확인함
+	 * @param stdReplyVO
+	 * @return
+	 */
+	int deleteReply(StdReplyVO stdReplyVO);
 }

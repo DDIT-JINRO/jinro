@@ -63,11 +63,32 @@
 			      <dt>현재 입장 인원수</dt>
 			      <dd>${stdBoardVO.curJoinCnt} 명</dd>
 			    </div>
+				<div></div>
+			    <div class="enter-btn-wrapper">
+			    	<c:choose>
+				    	<c:when test="${isEntered }">
+							<button id="exitChatBtn" class="btn-enter-chat entered">
+						      🛑 채팅방 퇴장
+						    </button>
+				    	</c:when>
+				    	<c:when test="${stdBoardVO.maxPeople <= stdBoardVO.curJoinCnt}">
+								<button id="enterChatBtn" class="btn-enter-chat disabled">
+						      ❌ 입장 불가
+						    </button>
+				    	</c:when>
+				    	<c:otherwise>
+						    <button id="enterChatBtn" class="btn-enter-chat">
+						      💬 채팅방 입장
+						    </button>
+				    	</c:otherwise>
+				    </c:choose>
+				</div>
+				<div></div>
 			  </dl>
 
 			  <!-- 3) 본문 -->
 			  <div class="group-description">
-			    <h2 class="desc-title">게시글 내용</h2>
+			    <h2 class="desc-title">소개글</h2>
 			    <p>${stdBoardVO.parsedContent}</p>
 			  </div>
 			</div>
@@ -82,14 +103,22 @@
 			  </div>
 			</form>
 
+			<sec:authorize access="isAuthenticated()">
+				<sec:authentication property="principal" var="memId" />
+			</sec:authorize>
 
 			<!-- 댓글 리스트 -->
 			<div class="comment-section">
 			  <c:forEach var="reply" items="${stdBoardVO.stdReplyVOList}">
-			  ${reply }
 			  	<!-- 댓글 프로필 영역 -->
-			  	<div class="reply-box">
+			  	<div class="reply-box" id="reply-${stdBoardVO.boardId}-${reply.replyId }" data-reply-mem="${reply.memId }" >
 				<span class="etcBtn">…</span>
+				<div class="etc-container">
+					<c:choose>
+						<c:when test="${reply.memId == memId }">삭제</c:when>
+						<c:otherwise>신고</c:otherwise>
+					</c:choose>
+				</div>
 				<div class="reply-profile">
 				  <div class="user-profile">
 				    <img class="badge-frame" src="<c:out value="${not empty reply.fileBadge ? reply.fileBadge : '/images/defaultBorderImg.png' }"/>" alt="badge"/>
@@ -98,28 +127,56 @@
 				  </div>
 				  <div class="writer-info">
 				    <div class="reply-nickname">${reply.memNickname}</div>
-				    <div class="reply-date"><fmt:formatDate value="${reply.replyCreatedAt}"/></div>
+				    <div class="reply-date"><fmt:formatDate pattern="yyyy. MM. dd.  HH:mm" value="${reply.replyCreatedAt}"/></div>
 				  </div>
 				</div>
 				  <div class="reply-content">${reply.replyContent }</div>
-				  <div><button>답글</button></div>
+				  <div>
+				  	<button class="reply-child-btn" id="reply-${reply.replyId }">답글</button>
+			  		<span class="child-count">
+					  	<c:if test="${reply.childCount > 0 }">
+				  			${reply.childCount }
+					  	</c:if>
+			  		</span>
+				  </div>
 				  </div>
 				  <!-- 대댓글 (childReplyVOList) -->
-				  <c:forEach var="child" items="${reply.childReplyVOList}">
-				    <div class="reply-box reply-child">
-				      <div class="reply-profile">
-				        <div class="user-profile">
-				          <img class="badge-frame" src="<c:out value="${not empty child.fileBadge ? child.fileBadge : '/images/defaultBorderImg.png' }"/>" />
-				          <img class="profile-image" src="<c:out value="${not empty child.fileProfile ? child.fileProfile : '/images/defaultProfileImg.png' }"/>" />
-				        </div>
-				        <div class="writer-info">
-				          <div class="reply-nickname">${child.memNickname}</div>
-				          <div class="reply-date"><fmt:formatDate value="${child.replyCreatedAt}" /></div>
-				        </div>
-				      </div>
-				      <div class="reply-content">${child.replyContent}</div>
-				    </div>
-				  </c:forEach>
+				  <div class="reply-child-container" data-parent-id="${reply.replyId }">
+					  <c:forEach var="child" items="${reply.childReplyVOList}">
+					    <div class="reply-box reply-child" data-reply-mem="${child.memId}" id="reply-${child.boardId}-${child.replyId }">
+					      <span class="etcBtn">…</span>
+					      <div class="etc-container">
+							<c:choose>
+								<c:when test="${child.memId == memId }">삭제</c:when>
+								<c:otherwise>신고</c:otherwise>
+							</c:choose>
+						 </div>
+					      <div class="reply-profile">
+					        <div class="user-profile">
+					          <img class="badge-frame" src="<c:out value="${not empty child.fileBadge ? child.fileBadge : '/images/defaultBorderImg.png' }"/>" />
+					          <img class="profile-image" src="<c:out value="${not empty child.fileProfile ? child.fileProfile : '/images/defaultProfileImg.png' }"/>" />
+					        </div>
+					        <div class="writer-info">
+					          <div class="reply-nickname">${child.memNickname}</div>
+					          <div class="reply-date"><fmt:formatDate value="${child.replyCreatedAt}" /></div>
+					        </div>
+					      </div>
+					      <div class="reply-content">${child.replyContent}</div>
+					    </div>
+					  </c:forEach>
+ 					<!-- 대댓글 입력창 -->
+					<form action="/prg/std/createStdReply.do" method="post" class="comment-form child-form">
+					  <input type="hidden" name="boardId" value="${stdBoardVO.boardId}" />
+					  <input type="hidden" name="replyParentId" value="${reply.replyId }" />
+					  <textarea name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
+					  <div class="comment-footer">
+					    <span class="char-count">0 / 300</span>
+					    <button type="submit" class="btn-submit">등록</button>
+					  </div>
+					  <br/>
+					<div class="closeReplyBtn"><span>답글접기 ▲</span></div>
+					</form>
+				  </div>
 			  </c:forEach>
 			</div>
 

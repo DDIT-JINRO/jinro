@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
+import kr.or.ddit.exception.CustomException;
+import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.prg.std.service.StdBoardVO;
 import kr.or.ddit.prg.std.service.StdReplyVO;
 import kr.or.ddit.prg.std.service.StudyGroupService;
@@ -177,26 +180,61 @@ public class StudyGroupController {
 			return "redirect:/prg/std/stdGroupDetail.do?stdGroupId="+resultBoardId;
 		}
 
-
 		return "redirect:/prg/std/createStdGroup.do";
 	}
 
 	@PostMapping("/createStdReply.do")
-	public String createStdReply(StdReplyVO stdReplyVO) {
-		stdReplyVO.setReplyId(6);
-		// 댓글 테이블에 삽입 (먼저 삽입이 되어야함 -> join해서 memId 챙겨옴)
-		// 해당 댓글 번호를 targetId 로 넣어주기
-		// 좋아요인 경우에는 좋아요가 달린 boardId나 replyId 넣어주기
-		AlarmVO alarmVO = new AlarmVO();
-		alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_BOARD);
-		alarmVO.setAlarmTargetId(stdReplyVO.getReplyId());
-		alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId="+stdReplyVO.getBoardId());
-		try {
-			this.alarmService.sendEvent(alarmVO);
-		} catch (Exception e) {
-			e.printStackTrace();
+	public ResponseEntity<StdReplyVO> createStdReply(StdReplyVO stdReplyVO, Principal principal) {
+		System.out.println("=======================================================");
+		System.out.println("stdReplyVO : "+stdReplyVO);
+		System.out.println("=======================================================");
+		if(principal==null||principal.getName().equals("anonymousUser")) {
+			throw new CustomException(ErrorCode.USER_NOT_FOUND);
+		}
+		String memIdStr = principal.getName();
+		int memId = Integer.parseInt(memIdStr);
+		stdReplyVO.setMemId(memId);
+		StdReplyVO newReplyVO = this.studyGroupService.insertReply(stdReplyVO);
+
+		if(newReplyVO == null) {
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 
-		return "redirect:/prg/std/stdGroupDetail.do?stdGroupId="+stdReplyVO.getBoardId();
+		AlarmVO alarmVO = new AlarmVO();
+		if(newReplyVO.getReplyParentId() == 0) {
+			alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_BOARD);
+			alarmVO.setAlarmTargetId(stdReplyVO.getReplyId());
+			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId=1"+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyId());
+		}else {
+			alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_REPLY);
+			alarmVO.setAlarmTargetId(stdReplyVO.getReplyId());
+			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId=1"+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyParentId());
+		}
+		int targetMemId = alarmService.getTargetMemId(alarmVO);
+		if(memId != targetMemId) {
+			this.alarmService.sendEvent(alarmVO);
+		}
+
+		return ResponseEntity.ok(newReplyVO);
 	}
+
+	@PostMapping("/deleteStdReply.do")
+	public ResponseEntity<Boolean> deleteStdReply(@RequestBody StdReplyVO stdReplyVO, Principal principal){
+		System.out.println("=========================================");
+		System.out.println(stdReplyVO);
+		System.out.println("=========================================");
+		if(principal==null || principal.getName().equals("anonymousUser")) {
+			throw new CustomException(ErrorCode.INVALID_USER);
+		}
+		int memId = Integer.parseInt(principal.getName());
+		stdReplyVO.setMemId(memId);
+
+		boolean result = this.studyGroupService.deleteReply(stdReplyVO);
+		if(!result) {
+			log.error("잘못된 댓글 삭제 요청. 회원번호 : {}, 댓글번호 : {}", stdReplyVO.getMemId(), stdReplyVO.getReplyId());
+		}
+
+		return ResponseEntity.ok(result);
+	}
+
 }

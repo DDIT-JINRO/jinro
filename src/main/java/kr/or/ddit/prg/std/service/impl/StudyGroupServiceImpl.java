@@ -187,4 +187,23 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	public void increaseViewCnt(int stdGroupId) {
 		this.studyGroupMapper.increaseViewCnt(stdGroupId);
 	}
+
+	@Override
+	public StdReplyVO selectReplyDetail(int replyId) {
+		return this.studyGroupMapper.selectReplyDetail(replyId);
+	}
+
+	@Override
+	public StdReplyVO insertReply(StdReplyVO stdReplyVO) {
+		int result = this.studyGroupMapper.insertReply(stdReplyVO);
+		if(result > 0) {
+			return this.studyGroupMapper.selectReplyDetail(stdReplyVO.getReplyId());
+		}
+		return null;
+	}
+
+	@Override
+	public boolean deleteReply(StdReplyVO stdReplyVO) {
+		return this.studyGroupMapper.deleteReply(stdReplyVO) > 0 ? true : false;
+	}
 }
