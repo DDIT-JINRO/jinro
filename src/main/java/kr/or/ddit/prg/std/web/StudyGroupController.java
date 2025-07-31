@@ -98,7 +98,6 @@ public class StudyGroupController {
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("size", size);
 		model.addAttribute("sortBy", sortBy);
-		System.out.println("###################################"+interestItems);
 		return "prg/std/stdGroupList2";
 	}
 

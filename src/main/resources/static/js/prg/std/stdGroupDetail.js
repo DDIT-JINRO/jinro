@@ -265,8 +265,10 @@ function eventEtcContainerClicked(e){
 		})
 		.then(result =>{
 			if(result){
+				if(!targetReply.classList.contains('reply-child')){
+					targetReplyChildBox.remove();
+				}
 				targetReply.remove();
-				targetReplyChildBox.remove();
 				setTimeout(()=>{alert('삭제되었습니다')})
 			}
 		})
