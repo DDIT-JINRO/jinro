@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.csc.not.service.NoticeService;
 import kr.or.ddit.csc.not.service.NoticeVO;
@@ -35,7 +36,6 @@ public class NoticeServiceImpl implements NoticeService {
 		return this.noticeMapper.getList(map);
 	}
 
-	// 수정 후
 	// 1. 사용자 목록 조회
 	@Override
 	public ArticlePage<NoticeVO> getUserNoticePage(int currentPage, int size, String keyword) {
@@ -118,7 +118,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 		// 파일 불러오기
 		List<FileDetailVO> getFileList = fileService.getFileList(noticeDetail.getFileGroupNo());
-		if (getFileList != null && getFileList.size() > 0) {
+		if (getFileList != null) {
 			noticeDetail.setGetFileList(getFileList);
 		}
 
@@ -128,18 +128,23 @@ public class NoticeServiceImpl implements NoticeService {
 	// 5. 관리자 공지사항 등록
 	@Override
 	@Transactional
-	public int insertNotice(NoticeVO noticeVo) {		
+	public int insertNotice(NoticeVO noticeVo) {
+		
+		// 실제로 첨부된 유효한 파일만 필터링
+		List<MultipartFile> validFiles = noticeVo.getFiles().stream()
+			.filter(file -> file != null && !file.isEmpty() && file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank())
+			.toList();
+		
 		// 첨부파일이 있는 경우
-		if(!noticeVo.getFiles().isEmpty()) {
+		if (!validFiles.isEmpty()) {
 			// 파일 그룹 생성
 			Long createFileGroupId = fileService.createFileGroup();
 			noticeVo.setFileGroupNo(createFileGroupId);
-			
-			// 첨부파일 추가
-	        try {
-				fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
+
+			// 유효 파일만 업로드
+			try {
+				fileService.uploadFiles(createFileGroupId, validFiles);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
