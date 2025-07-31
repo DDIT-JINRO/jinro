@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("classpath:/static/images/");
         
-     // classpath:/static/fonts/ → /fonts/**
+        // classpath:/static/fonts/ → /fonts/**
         registry.addResourceHandler("/fonts/**")
                 .addResourceLocations("classpath:/static/fonts/");
         
@@ -25,6 +25,9 @@ public class WebConfig implements WebMvcConfigurer {
         
         registry.addResourceHandler("/ckeditor5/**")
 				.addResourceLocations("classpath:/static/ckeditor5/");
+        
+        registry.addResourceHandler("/upload/**")
+				.addResourceLocations("file:////192.168.145.21/careerpath/upload/");
     }
 }
 

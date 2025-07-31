@@ -17,7 +17,8 @@ public interface FileMapper {
 
 	public void insertFileDetail(FileDetailVO detail);
 
-	public FileDetailVO getFileDetailByGroupAndSeq(@Param("fileGroupId") Long fileGroupId,@Param("fileSeq") int fileSeq);
+	public FileDetailVO getFileDetailByGroupAndSeq(@Param("fileGroupId") Long fileGroupId,
+			@Param("fileSeq") int fileSeq);
 
 	public FileDetailVO getFileDetailById(Long fileId);
 
