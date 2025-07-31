@@ -31,9 +31,9 @@ public class MyInquiryController {
 	MyInquiryService myInquiryService;
 
 	/**
-	 * 마이페이지 진입 전 유저의 정보를 확인합니다.
+	 * 마이페이지 진입 전 멤버의 정보를 확인합니다.
 	 * 
-	 * @param memId 유저id
+	 * @param memId 멤버id
 	 * @param model 모델
 	 * @return url 페이지 이동
 	 */
@@ -45,19 +45,20 @@ public class MyInquiryController {
 			model.addAttribute("member", map.get("member"));
 			model.addAttribute("imgPath", map.get("imgPath"));
 			model.addAttribute("interetsKeywordList", map.get("interetsKeywordList"));
-		} catch(CustomException e) {
+		} catch (CustomException e) {
 			return "redirect:/login";
-		} catch(Exception e) {
-            return "redirect:/";
+		} catch (Exception e) {
+			return "redirect:/";
 		}
 
 		return "mpg/mif/inq/selectMyInquiryView";
 	}
-	
+
 	/**
+	 * 멤버의 비밀번호를 확인합니다.
 	 * 
-	 * @param memId 유저id
-	 * @param map 확인용 비밀번호
+	 * @param memId 멤버id
+	 * @param map   확인용 비밀번호
 	 * @return 일치 여부
 	 */
 	@ResponseBody
@@ -71,7 +72,7 @@ public class MyInquiryController {
 	/**
 	 * form데이터로 받은 변경 내용을 업데이트합니다.
 	 * 
-	 * @param memId  유저id
+	 * @param memId  멤버id
 	 * @param member 변경 내용
 	 * @return result 결과값
 	 */
@@ -80,15 +81,22 @@ public class MyInquiryController {
 		try {
 			this.myInquiryService.updateMyInquiryView(memId, member);
 			return "redirect:/mpg/mif/inq/selectMyInquiryView.do";
-		} catch(Exception e) {
-            return "redirect:/";
+		} catch (Exception e) {
+			return "redirect:/";
 		}
 	}
-	
+
+	/**
+	 * 멤버의 프로필 이미지를 변경합니다.
+	 * 
+	 * @param memId      멤버id
+	 * @param profileImg 프로필이미지
+	 * @return result 결과값
+	 */
 	@PostMapping("/mif/inq/updateProfileImg.do")
 	public ResponseEntity<Map<String, Object>> updateProfileImg(@AuthenticationPrincipal String memId, @RequestParam MultipartFile profileImg) {
 		Map<String, Object> result = this.myInquiryService.updateProfileImg(memId, profileImg);
-		
+
 		return ResponseEntity.ok(result);
 	}
 

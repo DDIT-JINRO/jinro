@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,9 +16,7 @@ import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
 import kr.or.ddit.util.file.service.FileDetailVO;
-import kr.or.ddit.util.file.service.FileGroupVO;
 import kr.or.ddit.util.file.service.FileService;
-import kr.or.ddit.util.file.service.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,22 +32,35 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	@Autowired
 	FileService fileService;
 
+	/**
+	 * 마이페이지 진입 전 멤버의 정보를 확인합니다.
+	 * 
+	 * @param memIdStr 멤버id
+	 * @return Map 멤버 정보
+	 */
 	@Override
 	public Map<String, Object> selectMyInquiryView(String memIdStr) {
 		int memId = parseMemId(memIdStr);
-		
+
 		MemberVO member = this.myInquiryMapper.selectMyInquiryView(memId);
 
 		FileDetailVO fileDetail = fileService.getFileDetail(member.getFileProfile(), 1);
-		
+
 		List<ComCodeVO> interetsKeywordList = this.myInquiryMapper.selectInteretsKeywordList();
-		if(interetsKeywordList == null || interetsKeywordList.isEmpty()) {
+		if (interetsKeywordList == null || interetsKeywordList.isEmpty()) {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 
 		return Map.of("member", member, "imgPath", this.fileService.getSavePath(fileDetail), "interetsKeywordList", interetsKeywordList);
 	}
 
+	/**
+	 * 멤버의 비밀번호를 확인합니다.
+	 * 
+	 * @param memIdStr 멤버id
+	 * @param map   확인용 비밀번호
+	 * @return Map 일치 여부
+	 */
 	@Override
 	public Map<String, Object> checkPassword(String memIdStr, Map<String, String> map) {
 		int memId = parseMemId(memIdStr);
@@ -60,11 +70,18 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 
 		if (bCryptPasswordEncoder.matches(password, memberVO.getMemPassword())) {
 			return Map.of("result", "success");
-		};
+		}
 
 		return Map.of("result", "fail");
 	}
 
+	/**
+	 * form데이터로 받은 변경 내용을 업데이트합니다.
+	 * 
+	 * @param memIdStr  멤버id
+	 * @param member 변경 내용
+	 * @return result 결과값
+	 */
 	@Override
 	public String updateMyInquiryView(String memIdStr, MemberVO member) {
 		int memId = parseMemId(memIdStr);
@@ -79,6 +96,13 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		return "success";
 	}
 
+	/**
+	 * 멤버의 프로필 이미지를 변경합니다.
+	 * 
+	 * @param memIdStr   멤버id
+	 * @param profileImg 프로필이미지
+	 * @return map 결과값
+	 */
 	@Override
 	public Map<String, Object> updateProfileImg(String memIdStr, MultipartFile profileImg) {
 		int memId = parseMemId(memIdStr);
@@ -95,9 +119,8 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		List<MultipartFile> files = new ArrayList<MultipartFile>();
 		files.add(profileImg);
 
-		List<FileDetailVO> fileDetail = new ArrayList<FileDetailVO>();
 		try {
-			fileDetail = this.fileService.uploadFiles(fileGroupId, files);
+			this.fileService.uploadFiles(fileGroupId, files);
 		} catch (IOException e) {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
@@ -146,5 +169,4 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 
 		return memId;
 	}
-
 }
