@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function() {
         button.addEventListener("click", function(e) {
             // Your code to handle the click event
             let rsId = e.target.dataset.id;
-            console.log("rsId : " + rsId);
 
             // 콘텐츠가 이미 추가되어 있는지 확인
             const form = document.querySelector(".personal-info-form");
@@ -89,26 +88,61 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById("btn-submit").addEventListener("click",function(){
         const allElementDiv = document.querySelector(".personal-info-form");
-
+		const resumeTitle = document.querySelector("#resumeTitle");
+		const resumeTitleVal = document.querySelector("#resumeTitle").value;
+		const resumeId = document.querySelector("#resumeId").value;
         const objs = allElementDiv.querySelectorAll('input, select, textarea');  // 모든 입력 요소를 선택
 
-        for (let i = 0; i < objs.length; i++) {
-            //console.log(objs[i].value);  // 사용자가 입력한 값
+		//제목 검사
+		if(resumeTitle.hasAttribute("required") && !resumeTitleVal.trim()){
+			alert("필수 입력 항목을 입력해주세요.");
+	        resumeTitle.focus();
+	        return; 
+		}
+		
+    	for (let i = 0; i < objs.length; i++) {
             
             // 'value'가 반영된 상태로 outerHTML을 가져오기
             const updatedInput = objs[i];  // 해당 input 요소
-
+			const value = updatedInput.value.trim();
+			
             // 동적으로 업데이트된 값을 반영
             if (updatedInput.tagName === "INPUT" || updatedInput.tagName === "TEXTAREA"
                 || updatedInput.tagName === "SELECT") {
                 updatedInput.setAttribute("value", updatedInput.value);  // 동적으로 변경된 값을 반영
             }
+			
+			// 'required'가 있고 값이 비어 있다면
+		    if (updatedInput.hasAttribute("required") && !value) {
+		        alert("필수 입력 항목을 입력해주세요.");
+		        updatedInput.focus();
+		        return; // 함수 종료하여 submit 중단
+		    }
+
+			
+			// 포맷 검사
+			if (updatedInput.name === "email") {
+			    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			    if (!emailRegex.test(value)) {
+			        alert("이메일 형식이 올바르지 않습니다.");
+			        updatedInput.focus();
+			        return;
+			    }
+			}
+
+			if (updatedInput.name === "phone" || updatedInput.name === "mobile-phone") {
+			    const phoneRegex = /^010\d{4}\d{4}$/; // 예: 010-1234-5678
+			    if (value && !phoneRegex.test(value)) {
+			        alert("전화번호 형식이 올바르지 않습니다. 예: 01012345678");
+			        updatedInput.focus();
+			        return;
+			    }
+			}
 
         }
-        allElementHtml = allElementDiv.outerHTML;  // value가 반영된 상태의 outerHTML
-        axios.post('/rsm/rsm/insertElement',allElementHtml)
-
-
+        resumeContent = allElementDiv.outerHTML;  // value가 반영된 상태의 outerHTML
+		console.log(resumeContent);
+		submitResume(resumeTitleVal, resumeContent, resumeId);
     })
 
     const delectBtn = document.getElementsByClassName("delete-button");
@@ -120,6 +154,38 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     addEventListeners();
 });
+
+	//form형태로 전송하는 함수
+	function submitResume(resumeTitle, resumeContent, resumeId) {
+	  const form = document.createElement('form');
+	  form.method = 'POST';
+	  form.action = '/rsm/rsm/insertResume'; // Controller @PostMapping 경로
+
+	  // title
+	  const titleInput = document.createElement('input');
+	  titleInput.name = 'resumeTitle';
+	  titleInput.value = resumeTitle;
+	  form.appendChild(titleInput);
+
+	  // content
+	  const contentInput = document.createElement('input');
+	  contentInput.name = 'resumeContent';
+	  contentInput.value = resumeContent;
+	  form.appendChild(contentInput);
+
+	  // resumeId (선택)
+	  if (resumeId !== undefined && resumeId !== null) {
+	    const idInput = document.createElement('input');
+	    idInput.name = 'resumeId';
+	    idInput.value = resumeId;
+	    form.appendChild(idInput);
+	  }
+
+	  // form 추가 및 submit
+	  document.body.appendChild(form);
+	  form.submit();
+	}
+
     // 이벤트 리스너 추가하는 함수
     function addEventListeners() {
         // 학력 항목 추가 이벤트

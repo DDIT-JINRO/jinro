@@ -11,8 +11,12 @@ public interface ResumeMapper {
 
 	String getElement(ResumeSectionVO resumeSectionVO);
 
-	int insertResumeDetail(ResumeDetailVO resumeDetailVO);
+	int mergeIntoResume(ResumeVO resumeVO);
 
-	ResumeDetailVO selectResumeDetailByResumeId(ResumeVO resumeVO);
+	int selectNextResumeId();
+
+	ResumeVO selectResumeByResumeId(ResumeVO resumeVO);
+
+	int mergeIntoResumeDetail(ResumeDetailVO resumeDetailVO);
 
 }

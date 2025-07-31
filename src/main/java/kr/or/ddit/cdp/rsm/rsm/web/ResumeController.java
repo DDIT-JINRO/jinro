@@ -40,11 +40,11 @@ public class ResumeController {
 	
 	@GetMapping("/resumeWriter")
 	public String resumedeatilPage(@ModelAttribute ResumeVO resumeVO,Model model) {
-		log.info("resumeVO",resumeVO);
+		log.info("resumeVO"+resumeVO);
 		
-		ResumeDetailVO resumeDetailVO =  resumeService.selectResumeDetailByResumeId(resumeVO);
+		resumeVO =  resumeService.selectResumeByResumeId(resumeVO);
 		
-		model.addAttribute("resumeDetailVO",resumeDetailVO);
+		model.addAttribute("resumeVO",resumeVO);
 		return "cdp/rsm/rsm/resumeWriter";
 	}
 	
@@ -58,38 +58,22 @@ public class ResumeController {
 		
 	}
 	
-	@PostMapping("/insertElement")
-	public String insertElement(@RequestBody String html, Principal principal,
-				@ModelAttribute ResumeVO resumeVO,Model model) throws UnsupportedEncodingException{
+	@PostMapping("/insertResume")
+	public String insertResume(
+								Principal principal,
+								@ModelAttribute ResumeVO resumeVO,
+								Model model) throws UnsupportedEncodingException{
+		// URL 디코딩;
 	      if(principal!=null && !principal.getName().equals("anonymousUser")) {
-	         
-	    	  if (resumeVO !=null || resumeVO.getResumeId() == 0) {
-				 //기존의 것 update
-	    	  }else {
-	    		  //새로운 것 insert
-	    		  try {
-	    			  // URL 디코딩
-	    			  String decodedHtml = URLDecoder.decode(html, StandardCharsets.UTF_8.name());
-	    			  
-	    			  // 디코딩된 HTML 처리 (예: DB에 저장)
-	    			  //System.out.println("디코딩된 HTML: " + decodedHtml);
-	    			  
-	    			  ResumeDetailVO resumeDetailVO = new ResumeDetailVO();
-	    			  resumeDetailVO.setFieldValue(decodedHtml);
-	    			  
-	    			  // DB 저장 로직 추가
-	    			  int cnt = resumeService.insertResumeDetail(resumeDetailVO);
-	    			  
-	    			  
-	    		  } catch (Exception e) {
-	    			  e.printStackTrace();
-	    		  }
-	    	  }
+	    	  resumeVO.setMemId(Integer.parseInt( principal.getName()));
+	    	  resumeVO = resumeService.mergeIntoResume(resumeVO);
 	    	  
+	    	  return "redirect:/rsm/rsm/resumeWriter?resumeId="+resumeVO.getResumeId();//+resumeId;
+	       }else {
+	    	   
+	    	   return "redirect:/login";
 	       }
 	      
-		  return "redirect:cdp/rsm/rsm/resumeWriter?resumeId=";//+resumeId;
-			
 	}
 	
 	

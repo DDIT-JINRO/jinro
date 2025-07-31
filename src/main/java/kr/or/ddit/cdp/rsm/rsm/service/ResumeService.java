@@ -4,8 +4,8 @@ public interface ResumeService {
 
 	String getElement(ResumeSectionVO resumeSectionVO);
 
-	int insertResumeDetail(ResumeDetailVO resumeDetailVO);
-
-	ResumeDetailVO selectResumeDetailByResumeId(ResumeVO resumeVO);
+	ResumeVO mergeIntoResume(ResumeVO resumeVO);
+	
+	ResumeVO selectResumeByResumeId(ResumeVO resumeVO);
 
 }

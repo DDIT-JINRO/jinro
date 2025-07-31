@@ -12,4 +12,5 @@ public class ResumeVO {
 	private Date createdAt;
 	private Date updatedAt;
 	private int fileGroupNo;
+	private String resumeContent;
 }

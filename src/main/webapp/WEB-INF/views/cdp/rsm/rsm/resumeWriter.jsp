@@ -36,12 +36,13 @@
 		<div class="public-wrapper-main">
 			이력서 페이지
 			<section class="personal-info-section">
-				<c:if test="${empty resumeDetailVO}">
-					<div class="personal-info-form">
 						<div class="resume-title">
-							<input type="text" name="resumeTitle" placeholder="제목을 입력해주세요."
-								value="" required>
+							<input type="text" name="resumeTitle" id="resumeTitle" placeholder="제목을 입력해주세요."
+								value="${resumeVO.resumeTitle}" required>
 						</div>
+				<c:if test="${empty resumeVO}">
+					<input type="hidden" value="0" name="resumeId" id="resumeId">
+					<div class="personal-info-form">
 						<div class="section-header">
 							<h2>인적사항</h2>
 							<p class="required-info">* 필수 입력 정보입니다.</p>
@@ -134,8 +135,9 @@
 
 					</div>
 				</c:if>
-				<c:if test="${not empty resumeDetailVO}">
-					<c:out value="${resumeDetailVO.fieldValue}" escapeXml="false" />
+				<c:if test="${not empty resumeVO}">
+					<input type="hidden" value="${resumeVO.resumeId}" name="resumeId" id="resumeId">
+					<c:out value="${resumeVO.resumeContent}" escapeXml="false" />
 				</c:if>
 			</section>
 			<button type="button" id="btn-submit">제출</button>

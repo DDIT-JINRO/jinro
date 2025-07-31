@@ -7,15 +7,40 @@
 		WHERE RS_ID =#{rsId}
 	</select>
 
-
-	<insert id="insertResumeDetail" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeDetailVO">
-		INSERT INTO RESUME_DETAIL(SD_ID, RESUME_ID, RS_ID, FIELD_VALUE, FIELD_ORDER)
-		VALUES (1,1,1,#{fieldValue},1)
-	</insert>
+	<select id="selectNextResumeId" resultType="int">
+    	SELECT NVL(MAX(RESUME_ID), 0) + 1 FROM RESUME
+	</select>
 	
-	<select id="selectResumeDetailByResumeId" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO" resultType="kr.or.ddit.cdp.rsm.rsm.service.ResumeDetailVO">
-		SELECT SD_ID, RESUME_ID, RS_ID, FIELD_VALUE, FIELD_ORDER
-		FROM RESUME_DETAIL
+	<update id="mergeIntoResume" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO">
+	    MERGE INTO RESUME r
+	    USING DUAL
+	    ON (r.RESUME_ID = #{resumeId})
+	    WHEN MATCHED THEN
+	        UPDATE
+	        <set>
+	            <if test="resumeTitle != null">
+	                r.RESUME_TITLE = #{resumeTitle},
+	            </if>
+	            <if test="resumeIsTemp != null">
+	                r.RESUME_IS_TEMP = #{resumeIsTemp},
+	            </if>
+	            <if test="fileGroupNo != null">
+	                r.FILE_GROUP_NO = #{fileGroupNo},
+	            </if>
+   	            <if test="resumeContent != null">
+	                r.RESUME_CONTENT = #{resumeContent},
+	            </if>
+	            r.UPDATED_AT = SYSDATE
+       		</set>
+				
+	    WHEN NOT MATCHED THEN
+	        INSERT (RESUME_ID,MEM_ID,RESUME_TITLE,RESUME_CONTENT,RESUME_IS_TEMP,CREATED_AT,UPDATED_AT,FILE_GROUP_NO)
+	        VALUES (#{resumeId},#{memId},#{resumeTitle},#{resumeContent},#{resumeIsTemp},sysdate,sysdate,#{fileGroupNo} )
+	</update>
+	
+	<select id="selectResumeByResumeId" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO" resultType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO">
+		SELECT RESUME_ID,MEM_ID,RESUME_TITLE,RESUME_CONTENT,RESUME_IS_TEMP,CREATED_AT,UPDATED_AT,FILE_GROUP_NO
+		FROM RESUME
 		WHERE RESUME_ID = #{resumeId}
 	</select>
 </mapper>
