@@ -31,12 +31,12 @@
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
 			<a class="tab" href="/cdp/sint/qestnlst/questionList.do">질문 리스트</a> 
-			<a class="tab active" href="/sint/sintlst">자기소개서 리스트</a> 
+			<a class="tab active" href="/cdp/sint/sintlst/selfIntroList.do">자기소개서 리스트</a> 
 			<a class="tab" href="/sint/sintwrt">자기소개서 작성</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			<form method="get" action="/sint/sintlst" class="intro-search-filter">
+			<form method="get" action="/cdp/sint/sintlst/selfIntroList.do" class="intro-search-filter">
 				<!-- 검색어 입력 -->
 				<input type="text" name="keyword" value="${keyword.param}"
 					placeholder="자기소개서 제목 검색" class="intro-search-input" />

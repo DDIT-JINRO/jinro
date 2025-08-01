@@ -121,7 +121,7 @@ public class SelfIntroWritingController {
 			selfIntroService.updateContent(siqIdList, qToSicId, sicContentList);
 		}
 
-		return "redirect:/sint/sintlst";
+		return "redirect:/cdp/sint/sintlst/selfIntroList.do";
 	}
 
 	@PostMapping("/delete.do")
@@ -134,7 +134,7 @@ public class SelfIntroWritingController {
 		// 자소서 전체 삭제
 		selfIntroService.deleteSelfIntro(selfIntroVO);
 
-		return "redirect:/sint/sintlst";
+		return "redirect:/cdp/sint/sintlst/selfIntroList.do";
 	}
 
 }
