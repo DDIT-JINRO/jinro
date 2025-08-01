@@ -256,91 +256,106 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 	/*--미리보기*/
 	document.querySelector("#btn-preview").addEventListener("click", () => {
-	  const originalForm = document.querySelector(".personal-info-section");
-	  const clonedForm = originalForm.cloneNode(true);
+	    const originalForm = document.querySelector(".personal-info-section"); // 이력서의 주요 내용이 담긴 섹션
+	    const clonedForm = originalForm.cloneNode(true); // 깊은 복사
 
-	  const originalInputs = originalForm.querySelectorAll("input, textarea, select");
-	  const clonedInputs = clonedForm.querySelectorAll("input, textarea, select");
+	    const originalInputs = originalForm.querySelectorAll("input, textarea, select");
+	    const clonedInputs = clonedForm.querySelectorAll("input, textarea, select");
 
-	  clonedInputs.forEach((clonedEl, i) => {
-	    const originalEl = originalInputs[i];
-	    if (clonedEl.tagName === "TEXTAREA") {
-	      clonedEl.innerHTML = originalEl.value;
-	    } else if (clonedEl.type === "checkbox" || clonedEl.type === "radio") {
-	      clonedEl.checked = originalEl.checked;
-	    } else {
-	      clonedEl.setAttribute("value", originalEl.value);
-	    }
-	  });
-
-	  // ⭐ 이미지 src가 없으면 base64 미리보기 반영
-	  const previewImg = clonedForm.querySelector("#photo-preview");
-	  const realImg = document.querySelector("#photo-preview");
-	  if (realImg && realImg.src && realImg.src.startsWith("data:image")) {
-	    previewImg.src = realImg.src;
-	    previewImg.style.display = "block";
-	  } else {
-	    // ⭐ 일반 이미지의 경우 절대 경로 또는 웹 URL로 변경 시도
-	    if (previewImg && previewImg.src && previewImg.src.startsWith("/upload/")) {
-	        previewImg.src = window.location.origin + previewImg.src; // 현재 웹사이트의 도메인을 붙여 완전한 URL로 만듬
-	    }
-	  }
-
-	  // 기존 버튼 그룹 제거
-	  const btnGroup = clonedForm.querySelector(".btn-group");
-	  if (btnGroup) btnGroup.remove();
-
-
-	  // --- ⭐ 여기에 CSS 파일들을 모두 불러오는 로직을 추가합니다. ⭐ ---
-	  Promise.all([
-	          fetch("/css/cdp/rsm/rsm/resumeWriter.css").then(res => {
-	              if (!res.ok) throw new Error(`Failed to load resumeWriter.css: ${res.status} ${res.statusText}`);
-	              return res.text();
-	          }),
-	          fetch("/css/header.css").then(res => { // ⭐ header.css 경로를 지정해주세요 ⭐
-	              if (!res.ok) throw new Error(`Failed to load header.css: ${res.status} ${res.statusText}`);
-	              return res.text();
-	          })
-	      ])
-	      .then(([resumeWriterCss, headerCss]) => {
-	          // 두 CSS 내용을 합칩니다. 순서는 중요하지 않지만, 일반적으로 더 특정적인 스타일이 나중에 오는 게 좋습니다.
-	          const combinedCss = `${resumeWriterCss}\n${headerCss}`;
-	          console.log(combinedCss); // 합쳐진 CSS 내용 확인용
-
-	          const htmlContentForPdf = `
-	              <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	              <html xmlns="http://www.w3.org/1999/xhtml">
-	                <head>
-	                  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	                  <title>PDF Document</title>
-	                  <style type="text/css">
-	                    ${combinedCss} </style>
-	                </head>
-	                <body>
-	                  ${clonedForm.outerHTML}
-	                </body>
-	              </html>
-	            `;
-
-	      const xhtml = sanitizeHtmlToXHTML(htmlContentForPdf); // 이 HTML 문자열을 XHTML로 변환
-
-	      const formData = new FormData();
-	      formData.append("htmlContent", xhtml);
-
-	      return fetch("/pdf/preview", {
-	        method: "POST",
-	        body: formData
-	      });
-	    })
-	    .then(response => response.blob())
-	    .then(blob => {
-	      const url = URL.createObjectURL(blob);
-	      window.open(url + "#zoom=75", "_blank");
-	    })
-	    .catch(err => {
-	      console.error("PDF 미리보기 오류:", err);
-	      alert(`PDF 미리보기 중 오류가 발생했습니다: ${err.message || err}`);
+	    clonedInputs.forEach((clonedEl, i) => {
+	        const originalEl = originalInputs[i];
+	        if (clonedEl.tagName === "TEXTAREA") {
+	            clonedEl.innerHTML = originalEl.value;
+	        } else if (clonedEl.type === "checkbox" || clonedEl.type === "radio") {
+	            clonedEl.checked = originalEl.checked;
+	        } else if (clonedEl.tagName === "SELECT") { // select 요소의 value도 반영
+	            clonedEl.value = originalEl.value;
+	        }
+			else {
+			       // ⭐ 이 부분을 수정합니다. input 태그의 value 프로퍼티에 직접 값을 할당합니다.
+			       clonedEl.value = originalEl.value; // input의 현재 값을 반영
+			   }
 	    });
+
+	    // ⭐ 이미지 src가 없으면 base64 미리보기 반영
+	    // photo-preview는 clonedForm 내부에 있는 요소를 선택해야 합니다.
+	    const previewImg = clonedForm.querySelector("#photo-preview");
+	    const realImg = document.querySelector("#photo-preview"); // 실제 폼의 이미지 요소
+
+	    if (realImg && realImg.src && realImg.src.startsWith("data:image")) {
+	        previewImg.src = realImg.src;
+	        previewImg.style.display = "block";
+	    } else {
+	        // ⭐ 일반 이미지의 경우 절대 경로 또는 웹 URL로 변경 시도
+	        if (previewImg && previewImg.src && previewImg.src.startsWith("/upload/")) {
+	            previewImg.src = window.location.origin + previewImg.src; // 현재 웹사이트의 도메인을 붙여 완전한 URL로 만듬
+	        }
+	    }
+
+	    // 기존 버튼 그룹 제거 (클론된 폼에서 제거)
+	    const btnGroup = clonedForm.querySelector(".btn-group");
+	    if (btnGroup) {
+	        btnGroup.remove();
+	    }
+	    
+	    // 이력서 제목 제거 (만약 `.resume-title`이 버튼 그룹 안에 있다면)
+	    const resumeTitleInput = clonedForm.querySelector(".resume-title");
+	    if(resumeTitleInput) {
+	        // resume-title 안에 있는 input만 제거할 수도 있고, section-title 처럼 전체 div를 제거할 수도 있습니다.
+	        // 현재 코드에서는 `.resume-title` div 통째로 제거하는게 자연스러워 보입니다.
+	        resumeTitleInput.remove(); 
+	    }
+
+	    // 폼 내용만 XHTML로 정제합니다. (전체 HTML 문서 구조는 포함하지 않음)
+	    const xhtmlContent = sanitizeHtmlToXHTML(clonedForm.outerHTML);
+
+	    // 2. 필요한 모든 CSS 파일들을 비동기로 불러옵니다.
+	    Promise.all([
+	            fetch("/css/cdp/rsm/rsm/resumeWriter.css").then(res => {
+	                if (!res.ok) throw new Error(`Failed to load resumeWriter.css: ${res.status} ${res.statusText}`);
+	                return res.text();
+	            }),
+	            fetch("/css/header.css").then(res => { // ⭐ header.css의 실제 경로로 수정하세요! ⭐
+	                if (!res.ok) throw new Error(`Failed to load header.css: ${res.status} ${res.statusText}`);
+	                return res.text();
+	            })
+	        ])
+	        .then(([resumeWriterCss, headerCss]) => {
+	            // 불러온 모든 CSS 내용을 합칩니다.
+	            const combinedCss = `${resumeWriterCss}\n${headerCss}`;
+
+	            // 3. FormData 구성
+	            const formData = new FormData();
+	            formData.append("htmlContent", xhtmlContent); // 정제된 HTML 내용만
+	            formData.append("cssContent", combinedCss);   // 합쳐진 CSS 내용
+
+	            // 4. 미리보기 요청
+	            return fetch("/pdf/preview", {
+	                method: "POST",
+	                body: formData
+	            });
+	        })
+	        .then(response => {
+	            if (!response.ok) throw new Error("미리보기 요청 실패");
+	            return response.blob();
+	        })
+	        .then(blob => {
+	            const url = URL.createObjectURL(blob);
+	            const pdfUrlWithZoom = url + "#zoom=75";
+
+	            const windowWidth = 900;
+	            const windowHeight = 700;
+	            const left = (screen.width - windowWidth) / 2;
+	            const top = (screen.height - windowHeight) / 2;
+	            const windowFeatures = `width=${windowWidth},height=${windowHeight},left=${left},top=${top},scrollbars=yes,resizable=yes,toolbar=no,location=no,status=no`;
+
+	            const previewWindow = window.open(pdfUrlWithZoom, "pdfPreview", windowFeatures);
+	            if (!previewWindow) window.open(pdfUrlWithZoom, "_blank"); // 팝업 차단 시 대비
+	        })
+	        .catch(err => {
+	            console.error("PDF 미리보기 오류:", err);
+	            alert("PDF 미리보기 중 오류가 발생했습니다: " + err.message);
+	        });
 	});
 	
 });
