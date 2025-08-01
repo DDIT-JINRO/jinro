@@ -499,7 +499,21 @@ function eventEtcContainerClicked(e){
 		})
 	}
 	if(action == '신고'){
-		console.log("신고 fetch")
+		(async function(){
+			const formData = new FormData();
+			formData.append('memId',memId);
+			formData.append('targetId', targetReplyId);
+			formData.append('targetType','G10002');
+			const resp = await fetch('/api/report/selectReport',{method:'POST',body:formData});
+			if(resp.status==200){
+				alert('이미 신고한 게시글입니다');
+				return;
+			}else{
+				setReportModal(targetReplyId, 'G10002');
+				document.body.classList.add('scroll-lock');
+				document.querySelector('#report-modal-overlay').classList.add('show');
+			}
+		}).apply();
 	}
 
 	if(action == '수정'){
