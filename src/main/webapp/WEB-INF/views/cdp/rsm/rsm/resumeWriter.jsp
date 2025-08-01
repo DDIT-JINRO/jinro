@@ -165,10 +165,8 @@
 					<button type="button" id="btn-submit">저장</button>
 				</div>
 			</div>
-			<div class="submit-buttons">
-
-			</div>
 			
+		</div>
 			<div class="load-button-group">
 				<!-- 학력 불러오기 버튼 -->
 				<button type="button" id="load-education" name="rsId" data-id="1">학력
@@ -181,7 +179,6 @@
 				<!-- 대외활동 불러오기 버튼 -->
 				<button type="button" id="load-activities" name="rsId" data-id="3">대외활동</button>
 			</div>
-		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
