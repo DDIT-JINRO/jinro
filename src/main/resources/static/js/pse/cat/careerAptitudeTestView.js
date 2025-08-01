@@ -93,9 +93,7 @@ function renderCards(type) {
 renderCards("student");
 
 function startTest(type, title) {
-	
-	console.log(title);
-	
+		
 	axios.post("/pse/cat/test/start", {
 		type: type
 	})
@@ -106,7 +104,6 @@ function startTest(type, title) {
 			const left = window.screenX + (window.outerWidth - width) / 2;
 			const top = window.screenY + (window.outerHeight - height) / 2;
 
-			console.log("서버 응답:", type);
 			window.open(`http://localhost:5173/aptiTest/${type}`, title, `width=${width},height=${height},left=${left},top=${top},resizable=no`);
 		})
 		.catch(error => {
