@@ -139,7 +139,9 @@ document.addEventListener("DOMContentLoaded", function() {
         skillsInputGroup.appendChild(inputContainer);
     });
 	
-	document.querySelector("#btn-resume-delete").addEventListener("click",function(){
+	const deleteButton = document.querySelector("#btn-resume-delete");
+	if (deleteButton) {
+		deleteButton.addEventListener("click",function(){
 		const resumeId = document.querySelector("#resumeId").value;
 		console.log(resumeId)
 		
@@ -163,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		     console.error("삭제 중 오류 발생:", err);
 		   });
 	})
-
+}
     document.querySelectorAll("#btn-submit-Temp, #btn-submit")
 		.forEach(button => {button.addEventListener("click",function (event){
 			const target = event.target;
@@ -289,33 +291,36 @@ document.addEventListener("DOMContentLoaded", function() {
 	  if (btnGroup) btnGroup.remove();
 
 
-	  fetch("/css/cdp/rsm/rsm/resumeWriter.css") // ⭐ 변경된 경로 적용 ⭐
-	    .then(res => {
-	        if (!res.ok) {
-	            // CSS 로드 실패 시 에러 처리
-	            throw new Error(`Failed to load resumeWriter.css: ${res.status} ${res.statusText}`);
-	        }
-	        return res.text();
-	    })
-	    .then(css => {
-	      console.log(css); // CSS 내용 확인용
+	  // --- ⭐ 여기에 CSS 파일들을 모두 불러오는 로직을 추가합니다. ⭐ ---
+	  Promise.all([
+	          fetch("/css/cdp/rsm/rsm/resumeWriter.css").then(res => {
+	              if (!res.ok) throw new Error(`Failed to load resumeWriter.css: ${res.status} ${res.statusText}`);
+	              return res.text();
+	          }),
+	          fetch("/css/header.css").then(res => { // ⭐ header.css 경로를 지정해주세요 ⭐
+	              if (!res.ok) throw new Error(`Failed to load header.css: ${res.status} ${res.statusText}`);
+	              return res.text();
+	          })
+	      ])
+	      .then(([resumeWriterCss, headerCss]) => {
+	          // 두 CSS 내용을 합칩니다. 순서는 중요하지 않지만, 일반적으로 더 특정적인 스타일이 나중에 오는 게 좋습니다.
+	          const combinedCss = `${resumeWriterCss}\n${headerCss}`;
+	          console.log(combinedCss); // 합쳐진 CSS 내용 확인용
 
-
-	      const htmlContentForPdf = `
-	        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	        <html xmlns="http://www.w3.org/1999/xhtml">
-	          <head>
-	            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	            <title>PDF Document</title>
-	            <style type="text/css">
-	              ${css}
-	            </style>
-	            </head>
-	          <body>
-	            ${clonedForm.outerHTML}
-	          </body>
-	        </html>
-	      `;
+	          const htmlContentForPdf = `
+	              <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	              <html xmlns="http://www.w3.org/1999/xhtml">
+	                <head>
+	                  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	                  <title>PDF Document</title>
+	                  <style type="text/css">
+	                    ${combinedCss} </style>
+	                </head>
+	                <body>
+	                  ${clonedForm.outerHTML}
+	                </body>
+	              </html>
+	            `;
 
 	      const xhtml = sanitizeHtmlToXHTML(htmlContentForPdf); // 이 HTML 문자열을 XHTML로 변환
 

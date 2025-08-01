@@ -77,9 +77,9 @@
 								<label for="photo-upload" class="photo-upload-area"> 
 								<div class="upload-placeholder">
 									<i class="fa fa-plus" aria-hidden="true"></i>
-									 <span>사진추가</span> <!-- 이미지 미리보기 -->
+									 <span>사진추가</span> 
 								</div>
-									<img id="photo-preview" src="" alt="사진 미리보기"/>
+									<img id="photo-preview" src="" alt=""/>
 
 									<!-- 파일 업로드 --> <input type="file" id="photo-upload"
 									name="files" accept="image/*" class="sr-only">
