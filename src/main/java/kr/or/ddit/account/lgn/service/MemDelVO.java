@@ -11,6 +11,7 @@ public class MemDelVO {
 	private int memId;
 	private String memEmail;
 	private String mdReason;
+	private String mdCategory;
 	private Date mdReqAt;
 	private String mdStatus;
 	private Date mdDeletedAt;
