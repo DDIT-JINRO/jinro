@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	
-    const loadButtons = document.querySelectorAll(".button-group button");
+    const loadButtons = document.querySelectorAll(".load-button-group button");
 
     // 버튼 클릭 시 항목 추가
 	loadButtons.forEach(button => {
@@ -138,91 +138,202 @@ document.addEventListener("DOMContentLoaded", function() {
         // 새로 생성된 input과 버튼을 기존 input 아래에 추가
         skillsInputGroup.appendChild(inputContainer);
     });
-
-    document.querySelector(".submit-buttons").addEventListener("click",function(event){
-		const target = event.target;
-        const allElementDiv = document.querySelector(".personal-info-form");
-		const resumeTitle = document.querySelector("#resumeTitle");
-		const resumeTitleVal = document.querySelector("#resumeTitle").value;
+	
+	document.querySelector("#btn-resume-delete").addEventListener("click",function(){
 		const resumeId = document.querySelector("#resumeId").value;
-		const fileGroupId = document.querySelector("#fileGroupId").value;
-        const objs = allElementDiv.querySelectorAll('input, select, textarea');  // 모든 입력 요소를 선택
-
-		//제목 검사
-		if(resumeTitle.hasAttribute("required") && !resumeTitleVal.trim()){
-			alert("제목을 입력해주세요.");
-	        resumeTitle.focus();
-	        return; 
-		}
+		console.log(resumeId)
 		
-    	for (let i = 0; i < objs.length; i++) {
-            
-            // 'value'가 반영된 상태로 outerHTML을 가져오기
-            const updatedInput = objs[i];  // 해당 input 요소
-			const value = updatedInput.value.trim();
-			
-            // 동적으로 업데이트된 값을 반영
-            if (updatedInput.tagName === "INPUT" || updatedInput.tagName === "TEXTAREA"
-                || updatedInput.tagName === "SELECT") {
-                updatedInput.setAttribute("value", updatedInput.value);  // 동적으로 변경된 값을 반영
-            }
-			
-			// 'required'가 있고 값이 비어 있다면
-		    if (updatedInput.hasAttribute("required") && !value) {
-		        alert("필수 입력 항목을 입력해주세요.");
-		        updatedInput.focus();
-		        return; // 함수 종료하여 submit 중단
-		    }
+		if (!resumeId || resumeId === "0") {
+		   alert("삭제할 이력서가 없습니다.");
+		   return;
+		 }
 
-			
-			// 포맷 검사
-			if (updatedInput.name === "email") {
-			    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			    if (!emailRegex.test(value)) {
-			        alert("이메일 형식이 올바르지 않습니다.");
-			        updatedInput.focus();
-			        return;
-			    }
+		 if (!confirm("정말 삭제하시겠습니까?")) return;
+
+		 axios.post("/rsm/rsm/deleteResume.do",resumeId)
+		   .then(response => {
+		     if (response.data.status === 'success') {
+		       alert("이력서가 삭제되었습니다.");
+		       location.href = "/rsm/rsm"; // 삭제 후 목록 페이지 등으로 이동
+		     } else {
+		       alert("삭제에 실패했습니다.");
+		     }
+		   })
+		   .catch(err => {
+		     console.error("삭제 중 오류 발생:", err);
+		   });
+	})
+
+    document.querySelectorAll("#btn-submit-Temp, #btn-submit")
+		.forEach(button => {button.addEventListener("click",function (event){
+			const target = event.target;
+	        const allElementDiv = document.querySelector(".personal-info-form");
+			const resumeTitle = document.querySelector("#resumeTitle");
+			const resumeTitleVal = document.querySelector("#resumeTitle").value;
+			const resumeId = document.querySelector("#resumeId").value;
+			const fileGroupId = document.querySelector("#fileGroupId").value;
+	        const objs = allElementDiv.querySelectorAll('input, select, textarea');  // 모든 입력 요소를 선택
+	
+			//제목 검사
+			if(resumeTitle.hasAttribute("required") && !resumeTitleVal.trim()){
+				alert("제목을 입력해주세요.");
+		        resumeTitle.focus();
+		        return; 
 			}
-
-			if (updatedInput.name === "phone" || updatedInput.name === "mobile-phone") {
-			    const phoneRegex = /^010\d{4}\d{4}$/; // 예: 010-1234-5678
-			    if (value && !phoneRegex.test(value)) {
-			        alert("전화번호 형식이 올바르지 않습니다. 예: 01012345678");
+			
+	    	for (let i = 0; i < objs.length; i++) {
+	            
+	            // 'value'가 반영된 상태로 outerHTML을 가져오기
+	            const updatedInput = objs[i];  // 해당 input 요소
+				const value = updatedInput.value.trim();
+				
+	            // 동적으로 업데이트된 값을 반영
+	            if (updatedInput.tagName === "INPUT" || updatedInput.tagName === "TEXTAREA"
+	                || updatedInput.tagName === "SELECT") {
+	                updatedInput.setAttribute("value", updatedInput.value);  // 동적으로 변경된 값을 반영
+	            }
+				
+				// 'required'가 있고 값이 비어 있다면
+			    if (updatedInput.hasAttribute("required") && !value) {
+			        alert("필수 입력 항목을 입력해주세요.");
 			        updatedInput.focus();
-			        return;
+			        return; // 함수 종료하여 submit 중단
 			    }
+	
+				
+				// 포맷 검사
+				if (updatedInput.name === "email") {
+				    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				    if (!emailRegex.test(value)) {
+				        alert("이메일 형식이 올바르지 않습니다.");
+				        updatedInput.focus();
+				        return;
+				    }
+				}
+	
+				if (updatedInput.name === "phone" || updatedInput.name === "mobile-phone") {
+				    const phoneRegex = /^010\d{4}\d{4}$/; // 예: 010-1234-5678
+				    if (value && !phoneRegex.test(value)) {
+				        alert("전화번호 형식이 올바르지 않습니다. 예: 01012345678");
+				        updatedInput.focus();
+				        return;
+				    }
+				}
+	
+	        }
+			let resumeIsTemp = null
+			
+			if (target.id === "btn-submit-Temp") {
+			  resumeIsTemp = 'Y'
+			  // 임시 저장 로직 실행
+			} else if (target.id === "btn-submit") {
+			  resumeIsTemp = 'N'
+			  // 정식 저장 로직 실행
 			}
+			
+			// 실제 이미지 input에서 파일 추출
+			const photoInput = document.querySelector("#photo-upload");
+			const photoFile = photoInput.files[0];
+			
+			applySelectedToOptions();
+	        resumeContent = allElementDiv.outerHTML;  // value가 반영된 상태의 outerHTML
 
-        }
-		let resumeIsTemp = null
-		
-		if (target.id === "btn-submit-Temp") {
-		  resumeIsTemp = 'Y'
-		  // 임시 저장 로직 실행
-		} else if (target.id === "btn-submit") {
-		  resumeIsTemp = 'N'
-		  // 정식 저장 로직 실행
-		}
-		
-		// 실제 이미지 input에서 파일 추출
-		const photoInput = document.querySelector("#photo-upload");
-		const photoFile = photoInput.files[0];
-		
-		applySelectedToOptions();
-        resumeContent = allElementDiv.outerHTML;  // value가 반영된 상태의 outerHTML
-		submitResume(resumeTitleVal, resumeContent, resumeId,photoFile,fileGroupId,resumeIsTemp);
-    })
+			submitResume(resumeTitleVal, resumeContent, resumeId,photoFile,fileGroupId,resumeIsTemp);
 
-    const delectBtn = document.getElementsByClassName("delete-button");
+	    })
+	
+	    const delectBtn = document.getElementsByClassName("delete-button");
+	
+	    for (let i = 0; i < delectBtn.length; i++) {
+	        delectBtn[i].addEventListener("click", function(e) {
+	            e.target.parentElement.remove();
+	        });
+	    }
+	    addEventListeners();
+	});
+	
+	/*--미리보기*/
+	document.querySelector("#btn-preview").addEventListener("click", () => {
+	  const originalForm = document.querySelector(".personal-info-section");
+	  const clonedForm = originalForm.cloneNode(true);
 
-    for (let i = 0; i < delectBtn.length; i++) {
-        delectBtn[i].addEventListener("click", function(e) {
-            e.target.parentElement.remove();
-        });
-    }
-    addEventListeners();
+	  const originalInputs = originalForm.querySelectorAll("input, textarea, select");
+	  const clonedInputs = clonedForm.querySelectorAll("input, textarea, select");
+
+	  clonedInputs.forEach((clonedEl, i) => {
+	    const originalEl = originalInputs[i];
+	    if (clonedEl.tagName === "TEXTAREA") {
+	      clonedEl.innerHTML = originalEl.value;
+	    } else if (clonedEl.type === "checkbox" || clonedEl.type === "radio") {
+	      clonedEl.checked = originalEl.checked;
+	    } else {
+	      clonedEl.setAttribute("value", originalEl.value);
+	    }
+	  });
+
+	  // ⭐ 이미지 src가 없으면 base64 미리보기 반영
+	  const previewImg = clonedForm.querySelector("#photo-preview");
+	  const realImg = document.querySelector("#photo-preview");
+	  if (realImg && realImg.src && realImg.src.startsWith("data:image")) {
+	    previewImg.src = realImg.src;
+	    previewImg.style.display = "block";
+	  }
+
+	  // 기존 버튼 그룹 제거
+	  const btnGroup = clonedForm.querySelector(".btn-group");
+	  if (btnGroup) btnGroup.remove();
+
+	  // CSS 불러오기
+	  fetch("/css/rsm/rsm/ResumeWriter.css")
+	    .then(res => res.text())
+	    .then(css => {
+	      const htmlWithCss = `
+	        <html>
+	          <head>
+	            <meta charset="UTF-8">
+	            <style>${css}</style>
+	          </head>
+	          <body>
+	            ${clonedForm.outerHTML}
+	          </body>
+	        </html>
+	      `;
+
+	      const xhtml = sanitizeHtmlToXHTML(htmlWithCss);
+
+	      const formData = new FormData();
+	      formData.append("htmlContent", xhtml);
+
+	      return fetch("/pdf/preview", {
+	        method: "POST",
+	        body: formData
+	      });
+	    })
+	    .then(response => response.blob())
+	    .then(blob => {
+	      const url = URL.createObjectURL(blob);
+	      window.open(url + "#zoom=75", "_blank");
+	    })
+	    .catch(err => {
+	      console.error("PDF 미리보기 오류:", err);
+	      alert("PDF 미리보기 중 오류가 발생했습니다.");
+	    });
+	});
+	
 });
+
+
+	function sanitizeHtmlToXHTML(html) {
+	  return html
+	    .replace(/<meta([^>]*?)(?<!\/)>/gi, '<meta$1 />')
+	    .replace(/<link([^>]*?)(?<!\/)>/gi, '<link$1 />')
+	    .replace(/<input([^>]*?)(?<!\/)>/gi, '<input$1 />')
+	    .replace(/<br([^>]*?)(?<!\/)>/gi, '<br$1 />')
+	    .replace(/<hr([^>]*?)(?<!\/)>/gi, '<hr$1 />')
+	    .replace(/<img([^>]*?)(?<!\/)>/gi, '<img$1 />');
+	}
+
+	
 	//select selected 해주는 함수
 	function applySelectedToOptions() {
 	  const selects = document.querySelectorAll("select");

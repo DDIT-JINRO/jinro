@@ -13,4 +13,6 @@ public interface ResumeService {
 	//리스트 불러오기
 	List<ResumeVO> selectResumeBymemId(ResumeVO resumeVO);
 
+	int deleteResumeById(int resumeId);
+
 }

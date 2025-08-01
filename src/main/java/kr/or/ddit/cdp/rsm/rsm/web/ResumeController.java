@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -103,6 +104,21 @@ public class ResumeController {
 	      log.info("result : "+result);
 		  return result;
 	      
+	}
+	
+	@PostMapping("/deleteResume.do")
+	@ResponseBody
+	public Map<String, Object> deleteResume(@ModelAttribute ResumeVO resumeVO) {
+		log.info("resumeVO"+resumeVO);
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        int cnt = resumeService.deleteResumeById(resumeVO.getResumeId()); // 삭제 처리
+	        result.put("status", "success");
+	    } catch (Exception e) {
+	        result.put("status", "fail");
+	        result.put("message", e.getMessage());
+	    }
+	    return result;
 	}
 	
 	

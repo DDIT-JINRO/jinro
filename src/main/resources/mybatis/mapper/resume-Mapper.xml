@@ -69,4 +69,9 @@
 		)
 		WHERE RNUM<![CDATA[>]]>= #{startNo}
 	</select>
+	
+	<delete id="deleteResumeById" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO">
+		DELETE RESUME
+		WHERE RESUME_ID = #{resumeId}
+	</delete>
 </mapper>

@@ -23,4 +23,6 @@ public interface ResumeMapper {
 
 	List<ResumeVO> selectResumeBymemId(ResumeVO resumeVO);
 
+	int deleteResumeById(int resumeId);
+
 }

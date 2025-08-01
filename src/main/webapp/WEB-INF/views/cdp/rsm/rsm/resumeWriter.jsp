@@ -149,12 +149,27 @@
 					<c:out value="${resumeVO.resumeContent}" escapeXml="false" />
 				</c:if>
 			</section>
+
+			<div class="btn-group">
+				<!-- 왼쪽: 삭제 버튼 -->
+				<div class="btn-left-group">
+					<c:if test="${resumeVO.resumeId != 0 && not empty resumeVO.resumeId}">
+						<button type="button" class="btn-resume-delete" id="btn-resume-delete">삭제하기</button>
+					</c:if>
+				</div>
+
+				<!-- 오른쪽: 임시저장/미리보기/작성완료 -->
+				<div class="btn-right-group">
+					<button type="button" id="btn-submit-Temp">임시저장</button>
+					<button type="button" class="btn-preview" id="btn-preview">미리보기</button>
+					<button type="button" id="btn-submit">저장</button>
+				</div>
+			</div>
 			<div class="submit-buttons">
-			<button type="button" id="btn-submit-Temp">임시저장</button>
-			<button type="button" id="btn-submit">저장</button>
+
 			</div>
 			
-			<div class="button-group">
+			<div class="load-button-group">
 				<!-- 학력 불러오기 버튼 -->
 				<button type="button" id="load-education" name="rsId" data-id="1">학력
 					불러오기</button>

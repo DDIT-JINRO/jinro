@@ -11,9 +11,7 @@ import kr.or.ddit.cdp.rsm.rsm.service.ResumeSectionVO;
 import kr.or.ddit.cdp.rsm.rsm.service.ResumeService;
 import kr.or.ddit.cdp.rsm.rsm.service.ResumeVO;
 import kr.or.ddit.util.file.service.FileDetailVO;
-import kr.or.ddit.util.file.service.FileGroupVO;
 import kr.or.ddit.util.file.service.FileService;
-import kr.or.ddit.util.file.service.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -69,12 +67,8 @@ public class ResumeServiceImpl implements ResumeService {
 		    } catch (IOException e) {
 		        e.printStackTrace();
 		    }
-		} //else {
-			//String content = changeImg(resumeVO.getResumeContent(), "");
-			//resumeVO.setResumeContent(content);
-		//}
+		}
 		
-
 		int result = resumeMapper.mergeIntoResume(resumeVO);
 		
 		resumeVO = resumeMapper.selectResumeByResumeId(resumeVO); //방금 isnert 또는 update한 ResumId로 가져옴
@@ -101,6 +95,12 @@ public class ResumeServiceImpl implements ResumeService {
 	public List<ResumeVO> selectResumeBymemId(ResumeVO resumeVO) {
 		// TODO Auto-generated method stub
 		return resumeMapper.selectResumeBymemId(resumeVO);
+	}
+
+	@Override
+	public int deleteResumeById(int resumeId) {
+		// TODO Auto-generated method stub
+		return resumeMapper.deleteResumeById(resumeId);
 	}
 
 }
