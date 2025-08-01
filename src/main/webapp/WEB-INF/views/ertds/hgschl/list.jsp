@@ -11,9 +11,9 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/univ/selectUnivList.do">대학교 정보</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/hgschl/selectHgschList.do">고등학교 정보</a></div>
-		<div class="channel-sub-section-item"><a href="/qlfexm/selectQlfexmList.do">검정고시</a></div>
+		<div class="channel-sub-section-item"><a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-itemIn"><a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a></div>
+		<div class="channel-sub-section-item"><a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a></div>
 	</div>
 </section>
 <div>
@@ -29,7 +29,7 @@
   		<div class="public-wrapper-main">
   			여기가 작성해야할 공간입니다. 고등학교 리스트
   			</br></br></br></br>
-  			<a href="/hgschl/selectHgschDetail.do">고등학교 상세</a>
+  			<a href="/ertds/hgschl/selectHgschDetail.do">고등학교 상세</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>

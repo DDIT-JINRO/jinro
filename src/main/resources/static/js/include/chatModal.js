@@ -72,6 +72,7 @@ async function openChatModal(){
 		sessionStorage.setItem("redirectUrl", location.href);
 		location.href = "/login";
 	} else {
+		axios.post("/admin/las/chatVisitLog.do");
 		await printChatRoomList();
 		subscribeToUnreadDetail();
 		document.getElementById('chat-modal').style.display = 'flex';		

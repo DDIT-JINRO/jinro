@@ -6,20 +6,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/hgschl")
+@RequestMapping("/ertds")
 @Controller
 @Slf4j
 public class HighSchoolController {
 
 	// 고등학교 리스트
-	@GetMapping("/selectHgschList.do")
+	@GetMapping("/hgschl/selectHgschList.do")
 	public String highSchoolListPage() {
 
 		return "ertds/hgschl/list"; // /WEB-INF/views/erds/hgschl/list.jsp
 	}
 
-	// 고등학교 상세
-	@GetMapping("/selectHgschDetail.do")
+	// 고등학교 리스트
+	@GetMapping("/hgschl/selectHgschDetail.do")
 	public String highSchoolDetailPage() {
 
 		return "ertds/hgschl/detail"; // /WEB-INF/views/erds/hgschl/detail.jsp
