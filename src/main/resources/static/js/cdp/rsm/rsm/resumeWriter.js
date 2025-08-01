@@ -277,29 +277,47 @@ document.addEventListener("DOMContentLoaded", function() {
 	  if (realImg && realImg.src && realImg.src.startsWith("data:image")) {
 	    previewImg.src = realImg.src;
 	    previewImg.style.display = "block";
+	  } else {
+	    // ⭐ 일반 이미지의 경우 절대 경로 또는 웹 URL로 변경 시도
+	    if (previewImg && previewImg.src && previewImg.src.startsWith("/upload/")) {
+	        previewImg.src = window.location.origin + previewImg.src; // 현재 웹사이트의 도메인을 붙여 완전한 URL로 만듬
+	    }
 	  }
 
 	  // 기존 버튼 그룹 제거
 	  const btnGroup = clonedForm.querySelector(".btn-group");
 	  if (btnGroup) btnGroup.remove();
 
-	  // CSS 불러오기
-	  fetch("/css/rsm/rsm/ResumeWriter.css")
-	    .then(res => res.text())
+
+	  fetch("/css/cdp/rsm/rsm/resumeWriter.css") // ⭐ 변경된 경로 적용 ⭐
+	    .then(res => {
+	        if (!res.ok) {
+	            // CSS 로드 실패 시 에러 처리
+	            throw new Error(`Failed to load resumeWriter.css: ${res.status} ${res.statusText}`);
+	        }
+	        return res.text();
+	    })
 	    .then(css => {
-	      const htmlWithCss = `
-	        <html>
+	      console.log(css); // CSS 내용 확인용
+
+
+	      const htmlContentForPdf = `
+	        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	        <html xmlns="http://www.w3.org/1999/xhtml">
 	          <head>
-	            <meta charset="UTF-8">
-	            <style>${css}</style>
-	          </head>
+	            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	            <title>PDF Document</title>
+	            <style type="text/css">
+	              ${css}
+	            </style>
+	            </head>
 	          <body>
 	            ${clonedForm.outerHTML}
 	          </body>
 	        </html>
 	      `;
 
-	      const xhtml = sanitizeHtmlToXHTML(htmlWithCss);
+	      const xhtml = sanitizeHtmlToXHTML(htmlContentForPdf); // 이 HTML 문자열을 XHTML로 변환
 
 	      const formData = new FormData();
 	      formData.append("htmlContent", xhtml);
@@ -316,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	    })
 	    .catch(err => {
 	      console.error("PDF 미리보기 오류:", err);
-	      alert("PDF 미리보기 중 오류가 발생했습니다.");
+	      alert(`PDF 미리보기 중 오류가 발생했습니다: ${err.message || err}`);
 	    });
 	});
 	

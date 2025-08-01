@@ -87,7 +87,6 @@ select {
     font-size: 1em;
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
     transition: border-color 0.3s ease;
-    margin-bottom: 15px;
 }
 
 input[type="text"]:focus,
@@ -105,6 +104,15 @@ select:focus {
     font-size: 0.85em;
     margin-top: 5px;
     display: none; /* Hidden by default, show with JavaScript */
+}
+
+.address-group,
+.form-JobWish,
+.form-Skills,
+.form-Education,
+.form-certificate,
+.certificate-input-container {
+	margin-bottom: 15px; 
 }
 
 /* Specific Group Adjustments */
@@ -215,7 +223,6 @@ select:focus {
 .education-input-container > .education-input-group > input,
 .certificate-input-container > input,
 .activities-input-container > input {
-    margin-bottom: 15px; /* Adjust for the gap */
 }
 
 .input-container {
