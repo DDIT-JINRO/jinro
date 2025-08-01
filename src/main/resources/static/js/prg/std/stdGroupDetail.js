@@ -506,7 +506,7 @@ function eventEtcContainerClicked(e){
 			formData.append('targetType','G10002');
 			const resp = await fetch('/api/report/selectReport',{method:'POST',body:formData});
 			if(resp.status==200){
-				alert('이미 신고한 게시글입니다');
+				alert('이미 신고한 댓글입니다');
 				return;
 			}else{
 				setReportModal(targetReplyId, 'G10002');
