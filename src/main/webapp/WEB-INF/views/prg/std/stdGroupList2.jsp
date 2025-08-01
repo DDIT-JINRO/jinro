@@ -104,6 +104,10 @@
 					          <span>2명</span>
 					        </label>
 					        <label class="filter-item">
+					          <input type="radio" name="maxPeople" value="3" ${maxPeople=='3' ? 'checked' : '' }>
+					          <span>3명</span>
+					        </label>
+					        <label class="filter-item">
 					          <input type="radio" name="maxPeople" value="5" ${maxPeople=='5' ? 'checked' : '' }>
 					          <span>5명</span>
 					        </label>

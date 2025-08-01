@@ -27,6 +27,12 @@ public class ReportController {
 	@Autowired
 	FileService fileService;
 
+	/**
+	 * 신고하기 전에 이미 신고한 내역이 있는지 찾기 위한 조회
+	 * 필요파라미터 memId, targetType, targetId
+	 * @param reportVO
+	 * @return
+	 */
 	@PostMapping("/api/report/selectReport")
 	public ResponseEntity<ReportVO> selectReport(ReportVO reportVO){
 		log.info("selectReport -> reportVO : "+reportVO);
@@ -39,6 +45,12 @@ public class ReportController {
 		}
 	}
 
+	/**
+	 * 파일첨부 가능한 신고
+	 *
+	 * @param reportVO
+	 * @return
+	 */
 	@PostMapping("/api/report/insertReport")
 	@ResponseBody
 	public ResponseEntity<Boolean> insertReport(@ModelAttribute ReportVO reportVO){
@@ -47,13 +59,12 @@ public class ReportController {
 		if(list != null && list.size() >= 1 && list.get(0).getOriginalFilename()!=null) {
 			Long fileGroupId = fileService.createFileGroup();
 			try {
-			  fileService.uploadFiles(fileGroupId, null);
+			  fileService.uploadFiles(fileGroupId, list);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			reportVO.setFileGroupNo(fileGroupId);
 		}
-
 
 		boolean result = this.reportService.insertReport(reportVO);
 		return ResponseEntity.ok(result);
