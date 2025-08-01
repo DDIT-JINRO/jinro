@@ -25,7 +25,7 @@ import kr.or.ddit.util.ArticlePage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/sint/qestnlst")
+@RequestMapping("/cdp/sint/qestnlst")
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class QuestionListController {
 
 	private final SelfIntroService selfIntroService;
 
-	@GetMapping()
+	@GetMapping("/questionList.do")
 	public String questionList(@RequestParam(defaultValue = "1") int currentPage,
 			@RequestParam(required = false) String keyword,
 			@RequestParam(value = "siqJobFilter", required = false) List<String> siqJobFilter, Model model,
@@ -70,7 +70,7 @@ public class QuestionListController {
 		List<SelfIntroQVO> selfIntroQVOList = selfIntroService.selectSelfIntroQList(selfIntroQVO);
 
 		ArticlePage<SelfIntroQVO> page = new ArticlePage<>(total, currentPage, size, selfIntroQVOList, keyword);
-		page.setUrl("/sint/qestnlst");
+		page.setUrl("/cdp/sint/qestnlst/questionList.do");
 
 		model.addAttribute("memId", memId);
 		model.addAttribute("codeMap", codeMap);
