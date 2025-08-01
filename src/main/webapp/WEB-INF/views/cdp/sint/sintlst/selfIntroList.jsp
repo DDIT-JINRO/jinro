@@ -19,7 +19,7 @@
 			<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
 		</div>
 		<div class="channel-sub-section-item">
-			<a href="/imtintrvw/bsintrvw">모의면접</a>
+			<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a>
 		</div>
 		<div class="channel-sub-section-item">
 			<a href="/aifdbck/rsm">AI 피드백</a>
