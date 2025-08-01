@@ -423,4 +423,14 @@
 		 WHERE REPLY_ID = #{replyId}
 		   AND MEM_ID = #{memId}
 	</update>
+
+	<update id="updateStdBoard" parameterType="kr.or.ddit.prg.std.service.StdBoardVO">
+		UPDATE BOARD
+		   SET BOARD_TITLE = #{boardTitle}
+			 , BOARD_CONTENT = #{boardContent}
+			 , BOARD_UPDATED_AT = SYSDATE
+		 WHERE BOARD_ID = #{boardId}
+		   AND MEM_ID = #{memId}
+		   AND CC_ID = #{ccId}
+	</update>
 </mapper>

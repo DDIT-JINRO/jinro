@@ -242,4 +242,35 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 
 		return true;
 	}
+
+	@Override
+	@Transactional
+	public int updateStdBoard(StdBoardVO stdBoardVO) {
+		int result = 0;
+		int boardId = 0;
+		result += this.studyGroupMapper.updateStdBoard(stdBoardVO);
+
+		ChatRoomVO chatRoomVO = new ChatRoomVO();
+		chatRoomVO.setTargetId(stdBoardVO.getBoardId());
+		chatRoomVO.setCrTitle(stdBoardVO.getChatTitle());
+		chatRoomVO.setCcId("G04001");
+		// 화면단에서 기존 채팅방 번호를 cnt에 담아서 넘겨줌
+		chatRoomVO.setCrId(stdBoardVO.getBoardCnt());
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			JsonNode json = objectMapper.readTree(stdBoardVO.getBoardContent());
+			chatRoomVO.setCrMaxCnt(json.path("maxPeople").asInt());
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		result += this.chatService.updateChatRoom(chatRoomVO);
+
+		if(result >= 2) {
+			boardId = stdBoardVO.getBoardId();
+		}
+
+		return boardId;
+	}
 }

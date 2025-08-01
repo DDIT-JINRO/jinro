@@ -109,4 +109,22 @@ public interface ChatMapper {
 	 */
 	int deleteChatRoom(ChatRoomVO chatRoomVO);
 
+	/**
+	 * 채팅방 정보만 조회
+	 * @param crId
+	 * @return
+	 */
+	ChatRoomVO selectChatRoom(int crId);
+
+	/**
+	 * 채팅방 정보 수정
+	 * chatTitle<br/>
+	 * crMaxCnt<br/>
+	 * crId<br/>
+	 * ccId<br/>
+	 * @param chatRoomVO
+	 * @return
+	 */
+	int updateChatRoom(ChatRoomVO chatRoomVO);
+
 }

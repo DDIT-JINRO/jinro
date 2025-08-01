@@ -103,4 +103,17 @@ public interface StudyGroupMapper {
 	 * @return
 	 */
 	int updateStdReply(StdReplyVO stdReplyVO);
+
+	/**
+	 * 스터디그룹 게시글 수정
+	 * 필요파라미터5<br/>
+	 * boardTitle<br/>
+	 * boardContent<br/>
+	 * boardId<br/>
+	 * memId<br/>
+	 * ccId<br/>
+	 * @param stdBoardVO
+	 * @return
+	 */
+	int updateStdBoard(StdBoardVO stdBoardVO);
 }

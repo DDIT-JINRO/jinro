@@ -2,6 +2,7 @@ package kr.or.ddit.prg.std.web;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -260,6 +261,67 @@ public class StudyGroupController {
 		}
 		boolean result = this.studyGroupService.updateStdReply(stdReplyVO);
 		return ResponseEntity.ok(result);
+	}
+
+	@PostMapping("/updateStdBoard.do")
+	public String updateStdBoard(StdBoardVO stdBoardVO, Model model) {
+		// boardCnt 에다가 연계된 채팅방번호 (crId) 값 넣어둠.
+		// boardId, memId, crId값 넘어옴
+		StdBoardVO currentStdBoardVO = this.studyGroupService.selectStudyGroupDetail(stdBoardVO.getBoardId());
+		model.addAttribute("csbVO", currentStdBoardVO);
+
+		Map<String, String> interestMap = this.studyGroupService.getInterestsMap();
+		Map<String, String> regionMap 	= this.studyGroupService.getRegionMap();
+		// 보관되어있는 regionMap<지역코드 : 지역명> 을 순서대로 정렬해서 보내기 위해 리스트로 변환 후 key순 정렬
+		ArrayList<Map.Entry<String, String>> regionList = new ArrayList<>(regionMap.entrySet());
+		regionList.sort(Map.Entry.comparingByKey());
+		Map<String, String> genderMap 	= new HashMap<>();
+		genderMap.put("all", "성별제한 없음");
+		genderMap.put("men", "남자만");
+		genderMap.put("women", "여자만");
+
+		model.addAttribute("interestMap", interestMap);
+		model.addAttribute("regionList", regionList);
+		model.addAttribute("genderMap", genderMap);
+		model.addAttribute("regionMap", regionMap);
+
+		return "prg/std/updateStdBoard";
+	}
+
+	@PostMapping("/updateStdBoardAct.do")
+	public String updateStdBoardAct(@AuthenticationPrincipal String memId, StdBoardVO stdBoardVO, Model model) {
+		// jsp 측에서 막아놨지만 혹시 몰라서 걸어둠.
+		if(memId == null || memId.equals("anonymousUser")) {
+			return "/login";
+		}
+		System.out.println("===========================================================");
+		System.out.println(stdBoardVO);
+		System.out.println("===========================================================");
+
+		int resultBoardId = this.studyGroupService.updateStdBoard(stdBoardVO);
+		if(resultBoardId > 0) {
+			// 성공시 상세페이지로 이동시킴
+			return "redirect:/prg/std/stdGroupDetail.do?stdGroupId="+resultBoardId;
+		}
+
+		// 실패 시 다시 forward
+		StdBoardVO currentStdBoardVO = this.studyGroupService.selectStudyGroupDetail(stdBoardVO.getBoardId());
+		model.addAttribute("csbVO", currentStdBoardVO);
+		Map<String, String> interestMap = this.studyGroupService.getInterestsMap();
+		Map<String, String> regionMap 	= this.studyGroupService.getRegionMap();
+		ArrayList<Map.Entry<String, String>> regionList = new ArrayList<>(regionMap.entrySet());
+		regionList.sort(Map.Entry.comparingByKey());
+		Map<String, String> genderMap 	= new HashMap<>();
+		genderMap.put("all", "성별제한 없음");
+		genderMap.put("men", "남자만");
+		genderMap.put("women", "여자만");
+
+		model.addAttribute("interestMap", interestMap);
+		model.addAttribute("regionList", regionList);
+		model.addAttribute("genderMap", genderMap);
+		model.addAttribute("regionMap", regionMap);
+
+		return "prg/std/updateStdBoard";
 	}
 
 }

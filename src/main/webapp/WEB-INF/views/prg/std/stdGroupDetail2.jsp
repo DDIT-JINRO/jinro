@@ -214,9 +214,33 @@
 			<div class="bottom-button">
 			  <a href="/prg/std/stdGroupList.do" class="btn-back">목록</a>
 			</div>
+
+			<!-- 신고모달 -->
+			<div class="modal-overlay" id="report-modal-overlay">
+				<div class="modal-content">
+					<button class="modal-close-btn" type="button">&times;</button>
+					<h3>신고 사유 입력</h3>
+					<p>
+					신고하실 내용을 구체적으로 입력해주세요.<br/>
+					예: 욕설·비방, 개인정보 노출, 허위 사실 유포, 부적절한 홍보 등<br/>
+					 위반 항목과 상황을 간략히 작성해 주시면 처리에 도움이 됩니다.
+					 </p>
+					<div class="modal-form">
+						<input type="hidden" id="report-target-id"/>
+						<input type="hidden" id="report-target-type"/>
+						<textarea id="report-content-input" placeholder="사유를 작성해주세요"></textarea>
+						<input type="file" id="report-file"/>
+						<span class="modal-error-msg" id="modal-error-msg"></span>
+						<button class="btn btn-primary" id="report-confirm-btn" type="button">확인</button>
+					</div>
+				</div>
+			</div>
+			<!-- 신고모달끝 -->
   		</div>
 	</div>
 </div>
+
+
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 <script>

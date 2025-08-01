@@ -1,0 +1,62 @@
+package kr.or.ddit.com.report.web;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.or.ddit.com.report.service.ReportService;
+import kr.or.ddit.com.report.service.ReportVO;
+import kr.or.ddit.util.file.service.FileDetailVO;
+import kr.or.ddit.util.file.service.FileService;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+public class ReportController {
+
+	@Autowired
+	ReportService reportService;
+
+	@Autowired
+	FileService fileService;
+
+	@PostMapping("/api/report/selectReport")
+	public ResponseEntity<ReportVO> selectReport(ReportVO reportVO){
+		log.info("selectReport -> reportVO : "+reportVO);
+
+		ReportVO selectedReportVO = this.reportService.selectReport(reportVO);
+		if(selectedReportVO!=null) {
+			return ResponseEntity.ok(selectedReportVO);
+		}else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+
+	@PostMapping("/api/report/insertReport")
+	@ResponseBody
+	public ResponseEntity<Boolean> insertReport(@ModelAttribute ReportVO reportVO){
+		log.info("insertReport -> reportVO : "+reportVO);
+		List<MultipartFile> list = reportVO.getReportFile();
+		if(list != null && list.size() >= 1 && list.get(0).getOriginalFilename()!=null) {
+			Long fileGroupId = fileService.createFileGroup();
+			try {
+			  fileService.uploadFiles(fileGroupId, null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			reportVO.setFileGroupNo(fileGroupId);
+		}
+
+
+		boolean result = this.reportService.insertReport(reportVO);
+		return ResponseEntity.ok(result);
+	}
+
+}

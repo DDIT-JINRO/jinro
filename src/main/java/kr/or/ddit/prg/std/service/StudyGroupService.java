@@ -92,9 +92,22 @@ public interface StudyGroupService {
 	boolean deleteStdBoard(Map<String, Object> map);
 
 	/**
-	 * 댓글 수정 replyId, memId 필요
+	 * 댓글 수정 replyId, memId, replyContent 필요
 	 * @param stdReplyVO
 	 * @return
 	 */
 	boolean updateStdReply(StdReplyVO stdReplyVO);
+
+	/**
+	 * 스터디그룹 게시글 수정, 내부에서 채팅방 같이 수정
+	 * 필요파라미터5<br/>
+	 * boardTitle<br/>
+	 * boardContent<br/>
+	 * boardId<br/>
+	 * memId<br/>
+	 * ccId<br/>
+	 * @param stdBoardVO
+	 * @return boardId. 수정된 게시글 번호를 반환합니다
+	 */
+	int updateStdBoard(StdBoardVO stdBoardVO);
 }

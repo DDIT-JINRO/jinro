@@ -150,4 +150,14 @@ public class ChatServiceImpl implements ChatService {
 		return result;
 	}
 
+	@Override
+	public ChatRoomVO selectChatRoom(int crId) {
+		return this.chatMapper.selectChatRoom(crId);
+	}
+
+	@Override
+	public int updateChatRoom(ChatRoomVO chatRoomVO) {
+		return this.chatMapper.updateChatRoom(chatRoomVO);
+	}
+
 }

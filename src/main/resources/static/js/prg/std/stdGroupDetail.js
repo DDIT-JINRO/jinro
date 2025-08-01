@@ -6,7 +6,31 @@ document.addEventListener('DOMContentLoaded', function(){
 	const boardModifyBtn = document.getElementById('boardModifyBtn');
 	if(boardModifyBtn){
 		boardModifyBtn.addEventListener('click', function(){
-			console.log("수정페이지로 이동시키기");
+			const modifyForwardForm = document.createElement('form');
+			modifyForwardForm.action = '/prg/std/updateStdBoard.do';
+			modifyForwardForm.method = 'post';
+
+			const boardId = document.querySelector('.boardEtcContainer').dataset.boardId;
+			const inputBoardId 	= document.createElement('input')
+			inputBoardId.type	= 'hidden';
+			inputBoardId.name	= 'boardId';
+			inputBoardId.value	= boardId;
+			const inputMemId 	= document.createElement('input');
+			inputMemId.type		= 'hidden';
+			inputMemId.name		= 'memId';
+			inputMemId.value	= memId;
+			const inputCrId 	= document.createElement('input');
+			inputCrId.type		= 'hidden';
+			inputCrId.name		= 'boardCnt';
+			inputCrId.value		= crId;
+
+			modifyForwardForm.appendChild(inputBoardId);
+			modifyForwardForm.appendChild(inputMemId);
+			modifyForwardForm.appendChild(inputCrId);
+
+			document.body.appendChild(modifyForwardForm);
+			modifyForwardForm.submit();
+			document.body.removeChild(modifyForwardForm);
 		})
 	}
 
@@ -37,13 +61,6 @@ document.addEventListener('DOMContentLoaded', function(){
 				console.log(err);
 				alert('삭제도중 문제가 발생했습니다.\n관리자측 문의바랍니다.');
 			})
-		})
-	}
-
-	const boardReportBtn = document.getElementById('boardReportBtn');
-	if(boardReportBtn){
-		boardReportBtn.addEventListener('click', function(){
-			console.log("신고 fetch -> 이미 신고한 게시물인지 확인먼저 해야함");
 		})
 	}
 
@@ -102,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	}
 
 
-	// 동적요소 바인딩
+	//========================================== 동적요소 바인딩================================= //
 	const commentSection = document.querySelector('.comment-section');
 
 	document.addEventListener('submit', submitCreateReply);
@@ -115,7 +132,122 @@ document.addEventListener('DOMContentLoaded', function(){
 	commentSection.addEventListener('click', eventEtcContainerClicked);
 	commentSection.addEventListener('click', modifyReplyAct);
 	commentSection.addEventListener('click', modifyReplyCancel);
+	//========================================== 동적요소 바인딩끝================================= //
+
+	//=====================신고모달 작동 시키는 스크립트=====================//
+	const modalOverlay = document.querySelector('#report-modal-overlay');
+	const closeModalBtn = modalOverlay.querySelector('.modal-close-btn');
+	const reportContentInput = document.querySelector('#report-content-input');
+	const errorMsg = document.querySelector('#modal-error-msg');
+	const reportConfirmBtn = document.querySelector("#report-confirm-btn");
+
+	const openModal = () => {
+		document.body.classList.add('scroll-lock');
+		modalOverlay.classList.add('show');
+	}
+	const closeModal = () => {
+		document.body.classList.remove('scroll-lock');
+		modalOverlay.classList.remove('show');
+		clearReportModal();
+	};
+	closeModalBtn.addEventListener('click', closeModal);
+	modalOverlay.addEventListener('click', function (event) {
+		if (event.target === modalOverlay) {
+			closeModal();
+		}
+	});
+	reportConfirmBtn.addEventListener("click", () => {
+		const reportContent = reportContentInput.value;
+		if (!reportContent) {
+			errorMsg.textContent = '사유를 입력해주세요';
+			return;
+		}
+		//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@전송 로직 여기에 작성됨
+		confirmReport();
+	});
+
+	const boardReportBtn = document.getElementById('boardReportBtn');
+	if(boardReportBtn){
+		boardReportBtn.addEventListener('click', async() => {
+			if(!memId || memId == 'anonymousUser'){
+				alert('로그인이 필요합니다');
+				return;
+			}
+			const targetId = boardReportBtn.closest('.boardEtcContainer').dataset.boardId;
+			const formData = new FormData();
+			formData.append('targetId', targetId);
+			formData.append('memId', memId);
+			formData.append('targetType', 'G10001');
+			// @@@@@@@@@ fetch()로 해당 게시글 신고한적 있는지 체크하고 신고한적 있으면 alert 이미 신고한 게시물
+			const resp = await fetch('/api/report/selectReport',{method:'POST',body:formData});
+			if(resp.status==200){
+				alert('이미 신고한 게시글입니다');
+				return;
+			}else{
+				setReportModal(targetId, 'G10001');
+				openModal();
+			}
+		})
+	}
 })
+
+function confirmReport(){
+	const targetId 	 = document.getElementById('report-target-id').value;
+	const targetType = document.getElementById('report-target-type').value;
+	const reportReason 	 = document.getElementById('report-content-input').value;
+	const reportFileEl = document.getElementById('report-file');
+	const FILE_MAX_M = 1;
+	const FILE_MAX_SIZE = FILE_MAX_M*1024;
+
+	const formData = new FormData();
+	if(reportFileEl.files.length>0){
+		console.log(reportFileEl.files[0].size);
+		if(reportFileEl.files[0].size > FILE_MAX_SIZE){
+			alert(`파일이 너무 큽니다 제한:${FILE_MAX_M}KB`);
+			reportFileEl.value = '';
+		}
+		formData.append('reportFile', reportFileEl.files[0]);
+	}
+
+	formData.append('targetId', targetId);
+	formData.append('targetType', targetType);
+	formData.append('reportReason', reportReason);
+	formData.append('memId', memId);
+
+
+	fetch('/api/report/insertReport',{
+		method:'POST',
+		body:formData
+	})
+	.then(resp =>{
+		if(!resp.ok) throw new Error('신고 전송도중 에러 발생');
+		return resp.json();
+	})
+	.then(result =>{
+		if(result){
+			alert('신고 완료');
+			location.reload();
+		}
+	})
+}
+
+function setReportModal(targetId, targetType){
+	const inputId = document.getElementById('report-target-id');
+	const inputType = document.getElementById('report-target-type');
+
+	inputId.value=targetId;
+	inputType.value=targetType;
+}
+function clearReportModal(){
+	document.getElementById('report-target-id').value = '';
+	document.getElementById('report-target-type').value = '';
+	document.getElementById('report-content-input').value = '';
+	document.getElementById('report-file').value = '';
+	document.getElementById('modal-error-msg').value= '';
+}
+
+//=====================신고모달 작동 시키는 스크립트 끝=====================//
+
 
 function createParentReply(replyVO, e){
 
@@ -233,7 +365,7 @@ function eventReplyInput(e){
 		charCountArr[0] = curLength;
 
 		charCountEl.textContent = charCountArr.join(' / ');
-	}else{
+	}else if(commentFooter.nodeName=='SPAN'){
 		const charCountArr = commentFooter.textContent.split(' / ');
 		charCountArr[0] = curLength;
 		commentFooter.textContent = charCountArr.join(' / ');
@@ -417,6 +549,9 @@ function modifyReplyAct(e){
 			contentArea.innerHTML = modifiedContent;
 		}
 	})
+	.catch(err=>{
+		console.log(err);
+	})
 }
 
 // 이벤트 함수 10 댓글 수정하다가 취소 클릭 시 ; click
@@ -429,3 +564,4 @@ function modifyReplyCancel(e){
 
 	contentArea.innerHTML = previousContent;
 }
+

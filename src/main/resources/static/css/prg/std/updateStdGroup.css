@@ -306,3 +306,23 @@
   font-size: 12px;
   color: #E53E3E;
 }
+
+/* — 커스텀 셀렉트 비활성화 스타일 — */
+.custom-select--disabled .custom-select__label {
+  background-color: #f3f4f6;
+  color: #858e96;
+  cursor: not-allowed;
+}
+.custom-select--disabled .custom-select__options {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* — 옵션비활성화(li[data-disabled]) 스타일 — */
+.custom-select__options li[data-disabled] {
+  color: #ccc;
+  cursor: not-allowed;
+}
+.custom-select__options li[data-disabled]:hover {
+  background: none;
+}

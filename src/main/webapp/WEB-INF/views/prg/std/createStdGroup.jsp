@@ -19,8 +19,8 @@
 <div>
 	<div class="public-wrapper">
 		<div class="public-wrapper-main">
-			스터디그룹 게시글 작성 <br />
-			<div class="study-post-wrapper">
+		<h3>스터디그룹 소개 및 채팅방 개설</h3>
+			<div class="create-wrapper">
 				<div class="form-group">
 					<label for="post-title">게시글 제목</label>
 					<input type="text" placeholder="제목을 입력하세요" class="title-input" id="post-title"/>
@@ -54,7 +54,7 @@
 									<option value="${region.key }">${region.value }</option>
 								</c:forEach>
 							</select>
-						</div> 
+						</div>
 						<div class="custom-select">
 							<label for="capacity">인원 제한</label>
 							<div class="custom-select__label">인원 선택</div>
@@ -75,7 +75,7 @@
 								<option value="15">15명</option>
 								<option value="20">20명</option>
 								<!-- ... -->
-							</select> 
+							</select>
 						</div>
 						<div class="custom-select">
 							<label for="interest">관심 분야</label>
@@ -83,27 +83,27 @@
 						  	<ul class="custom-select__options">
 							    <!-- optgroup 루프 -->
 							    <li class="optgroup-label">학업</li>
-							    <li data-value="study.general">공부</li>   
-							    <li data-value="study.exam">수능준비</li>    
+							    <li data-value="study.general">공부</li>
+							    <li data-value="study.exam">수능준비</li>
 							    <li data-value="study.assignment">과제</li>
-							    <li data-value="study.etc">기타</li>       
-							
+							    <li data-value="study.etc">기타</li>
+
 							    <li class="optgroup-label">진로</li>
-							    <li data-value="career.path">진로</li>     
+							    <li data-value="career.path">진로</li>
 							    <li data-value="career.admission">진학</li>
-							    <li data-value="career.etc">기타</li>      
-							    
+							    <li data-value="career.etc">기타</li>
+
 							    <li class="optgroup-label">취업</li>
-							    <li data-value="job.prepare">취업준비</li> 
-							    <li data-value="job.concern">취업고민</li> 
-							    <li data-value="job.etc">기타</li>       
-							    
+							    <li data-value="job.prepare">취업준비</li>
+							    <li data-value="job.concern">취업고민</li>
+							    <li data-value="job.etc">기타</li>
+
 							    <li class="optgroup-label">기타</li>
-							    <li data-value="social.neighbor">동네친구</li> 
-							    <li data-value="social.talk">잡담</li>       
-							    <li data-value="social.etc">기타</li>        
+							    <li data-value="social.neighbor">동네친구</li>
+							    <li data-value="social.talk">잡담</li>
+							    <li data-value="social.etc">기타</li>
 						  	</ul>
-						
+
 						  	<!-- 실제 폼 전송용 select -->
 						  	<select name="tool" class="visually-hidden" id="interest">
 							    <optgroup label="학업">
@@ -113,19 +113,19 @@
 							      	<option value="study.etc">기타</option>
 							    </optgroup>
 						    	<optgroup label="진로">
-							      	<option value="career.path">진로</option>       
-							      	<option value="career.admission">진학</option>  
-							      	<option value="career.etc">기타</option>        
+							      	<option value="career.path">진로</option>
+							      	<option value="career.admission">진학</option>
+							      	<option value="career.etc">기타</option>
 							    </optgroup>
 						    	<optgroup label="취업">
-							      	<option value="job.prepare">취업준비</option>  
-							      	<option value="job.concern">취업고민</option>  
-							      	<option value="job.etc">기타</option>        
+							      	<option value="job.prepare">취업준비</option>
+							      	<option value="job.concern">취업고민</option>
+							      	<option value="job.etc">기타</option>
 							    </optgroup>
 						    	<optgroup label="기타">
-							      	<option value="social.neighbor">동네친구</option>   
-							      	<option value="social.talk">잡담</option>         
-							      	<option value="social.etc">기타</option>          
+							      	<option value="social.neighbor">동네친구</option>
+							      	<option value="social.talk">잡담</option>
+							      	<option value="social.etc">기타</option>
 							    </optgroup>
 						  	</select>
 						</div>
@@ -145,8 +145,5 @@
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
-<script>
-const crId = "${stdBoardVO.chatRoomVO.crId}";
-</script>
 <script src="/js/prg/std/createStdGroup.js"></script>
 </html>

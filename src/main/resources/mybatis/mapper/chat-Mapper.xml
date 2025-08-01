@@ -199,4 +199,26 @@
 		   SET CR_DEL_YN = 'Y'
 		 WHERE CR_ID = #{crId}
 	</delete>
+
+	<select id="selectChatRoom" parameterType="int">
+		SELECT
+		       CR_ID
+		     , CC_ID
+		     , TARGET_ID
+		     , CR_TITLE
+		     , CR_MAX_CNT
+		     , CREATED_AT
+		     , CR_DEL_YN
+		  FROM CHAT_ROOM
+		 WHERE CR_ID = #{crId}
+		   AND CR_DEL_YN = 'N'
+	</select>
+
+	<update id="updateChatRoom" parameterType="kr.or.ddit.chat.service.ChatRoomVO">
+		UPDATE CHAT_ROOM
+		   SET CR_TITLE = #{crTitle}
+		     , CR_MAX_CNT = #{crMaxCnt}
+		 WHERE CR_ID = #{crId}
+		   AND CC_ID = #{ccId}
+	</update>
 </mapper>
