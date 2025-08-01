@@ -34,7 +34,7 @@ section:last-of-type {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 2px solid #007bff; /* Primary color for section headers */
 }
@@ -87,6 +87,7 @@ select {
     font-size: 1em;
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
     transition: border-color 0.3s ease;
+    margin-bottom: 15px;
 }
 
 input[type="text"]:focus,
@@ -214,7 +215,7 @@ select:focus {
 .education-input-container > .education-input-group > input,
 .certificate-input-container > input,
 .activities-input-container > input {
-    margin-bottom: 0; /* Adjust for the gap */
+    margin-bottom: 15px; /* Adjust for the gap */
 }
 
 .input-container {
@@ -222,6 +223,7 @@ select:focus {
     align-items: center;
     gap: 10px;
     width: 100%;
+    margin-bottom: 15px;
 }
 
 .input-container input[type="text"],
@@ -276,11 +278,11 @@ select:focus {
 }
 
 button {
-    padding: 12px 25px;
+    padding: 10px 15px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 1.1em;
+    font-size: 0.9em;
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease;
     white-space: nowrap; /* Prevent text wrapping on buttons */
