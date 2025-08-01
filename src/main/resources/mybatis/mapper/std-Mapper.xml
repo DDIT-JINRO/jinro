@@ -415,4 +415,12 @@
 		   AND CC_ID = 'G09005'
 		   AND BOARD_DEL_YN = 'N'
 	</update>
+
+	<update id="updateStdReply" parameterType="kr.or.ddit.prg.std.service.StdReplyVO">
+		UPDATE REPLY
+		   SET REPLY_CONTENT = #{replyContent}
+		     , REPLY_UPDATED_AT = SYSDATE
+		 WHERE REPLY_ID = #{replyId}
+		   AND MEM_ID = #{memId}
+	</update>
 </mapper>

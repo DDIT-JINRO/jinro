@@ -252,4 +252,14 @@ public class StudyGroupController {
 		}
 	}
 
+	@PostMapping("/updateStdReply.do")
+	public ResponseEntity<Boolean> updateStdReply(@RequestBody StdReplyVO stdReplyVO, Principal principal) {
+		if(principal == null || principal.getName().equals("anonymousUser")
+				|| !principal.getName().equals(stdReplyVO.getMemId()+"")) {
+			throw new CustomException(ErrorCode.INVALID_USER);
+		}
+		boolean result = this.studyGroupService.updateStdReply(stdReplyVO);
+		return ResponseEntity.ok(result);
+	}
+
 }

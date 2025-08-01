@@ -233,4 +233,13 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		if(resOfDelBoard<1) result = false;
 		return result;
 	}
+
+	@Override
+	public boolean updateStdReply(StdReplyVO stdReplyVO) {
+		int result = this.studyGroupMapper.updateStdReply(stdReplyVO);
+
+		if(result<1) return false;
+
+		return true;
+	}
 }

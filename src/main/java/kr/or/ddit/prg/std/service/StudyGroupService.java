@@ -90,4 +90,11 @@ public interface StudyGroupService {
 	 * @return
 	 */
 	boolean deleteStdBoard(Map<String, Object> map);
+
+	/**
+	 * 댓글 수정 replyId, memId 필요
+	 * @param stdReplyVO
+	 * @return
+	 */
+	boolean updateStdReply(StdReplyVO stdReplyVO);
 }

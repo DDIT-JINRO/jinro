@@ -133,8 +133,14 @@
 				<span class="etcBtn">…</span>
 				<div class="etc-container">
 					<c:choose>
-						<c:when test="${reply.memId == memId }">삭제</c:when>
-						<c:otherwise>신고</c:otherwise>
+						<c:when test="${reply.memId == memId }">
+							<div class="etc-act-btn">수정</div>
+							<hr/>
+							<div class="etc-act-btn">삭제</div>
+						</c:when>
+						<c:otherwise>
+							<div class="etc-act-btn">신고</div>
+						</c:otherwise>
 					</c:choose>
 				</div>
 				<div class="reply-profile">
@@ -165,8 +171,14 @@
 					      <span class="etcBtn">…</span>
 					      <div class="etc-container">
 							<c:choose>
-								<c:when test="${child.memId == memId }">삭제</c:when>
-								<c:otherwise>신고</c:otherwise>
+								<c:when test="${reply.memId == memId }">
+									<div class="etc-act-btn">수정</div>
+									<hr/>
+									<div class="etc-act-btn">삭제</div>
+								</c:when>
+								<c:otherwise>
+									<div class="etc-act-btn">신고</div>
+								</c:otherwise>
 							</c:choose>
 						 </div>
 					      <div class="reply-profile">

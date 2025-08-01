@@ -96,4 +96,11 @@ public interface StudyGroupMapper {
 	 * @return
 	 */
 	int deleteStdBoard(StdBoardVO stdBoardVO);
+
+	/**
+	 * 댓글 수정 replyId, memId 필요
+	 * @param stdReplyVO
+	 * @return
+	 */
+	int updateStdReply(StdReplyVO stdReplyVO);
 }

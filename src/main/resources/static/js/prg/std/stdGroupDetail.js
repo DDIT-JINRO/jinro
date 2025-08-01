@@ -113,7 +113,8 @@ document.addEventListener('DOMContentLoaded', function(){
 	commentSection.addEventListener('click', eventReplyToggle);
 	commentSection.addEventListener('click', toggleEtcBtn);
 	commentSection.addEventListener('click', eventEtcContainerClicked);
-
+	commentSection.addEventListener('click', modifyReplyAct);
+	commentSection.addEventListener('click', modifyReplyCancel);
 })
 
 function createParentReply(replyVO, e){
@@ -125,7 +126,11 @@ function createParentReply(replyVO, e){
 	div.id = `reply-${replyVO.boardId}-${replyVO.replyId }`;
 	div.innerHTML = `
 	<span class="etcBtn">…</span>
-	<div class="etc-container">삭제</div>
+	<div class="etc-container">
+		<div class="etc-act-btn">수정</div>
+		<hr/>
+		<div class="etc-act-btn">삭제</div>
+	</div>
 	<div class="reply-profile">
 	  <div class="user-profile">
 	    <img class="badge-frame" src="${replyVO.fileBadge ? replyVO.fileBadge : '/images/defaultBorderImg.png'}" alt="badge"/>
@@ -178,7 +183,11 @@ function createChildReply(replyVO, e){
 	const createdTimeFormat = `${createdTime.getFullYear()}. ${("0"+(createdTime.getMonth()+1)).slice(-2)}. ${createdTime.getDate()}. ${createdTime.getHours()}:${createdTime.getMinutes()}`;
 	childReply.innerHTML = `
 		<span class="etcBtn">…</span>
-		<div class="etc-container">삭제</div>
+		<div class="etc-container">
+			<div class="etc-act-btn">수정</div>
+			<hr/>
+			<div class="etc-act-btn">삭제</div>
+		</div>
 		<div class="reply-profile">
 		  <div class="user-profile">
 		    <img class="badge-frame" src="${replyVO.fileBadge ? replyVO.fileBadge : '/images/defaultBorderImg.png' }" />
@@ -219,11 +228,17 @@ function eventReplyInput(e){
 	const curLength = e.target.value.length;
 	const commentFooter = e.target.nextElementSibling;
 	const charCountEl = commentFooter.querySelector('.char-count');
+	if(charCountEl){
+		const charCountArr = charCountEl.textContent.split(' / ');
+		charCountArr[0] = curLength;
 
-	const charCountArr = charCountEl.textContent.split(' / ');
-	charCountArr[0] = curLength;
+		charCountEl.textContent = charCountArr.join(' / ');
+	}else{
+		const charCountArr = commentFooter.textContent.split(' / ');
+		charCountArr[0] = curLength;
+		commentFooter.textContent = charCountArr.join(' / ');
+	}
 
-	charCountEl.textContent = charCountArr.join(' / ');
 }
 
 // 이벤트 함수 3 답글닫기 버튼 이벤트 ; click
@@ -274,6 +289,9 @@ function toggleEtcBtn(e){
 
 	const etcContainer = e.target.nextElementSibling;
 	if(etcContainer) etcContainer.classList.toggle('etc-open');
+
+	const replyModifyCancelBtn = document.getElementById('cancelBtn');
+	if(replyModifyCancelBtn) replyModifyCancelBtn.click();
 }
 
 // 이벤트 함수 6 ...버튼 바깥 클릭시 박스 제거
@@ -289,8 +307,13 @@ function closeEtcBtn(e){
 
 // 이벤트 함수 7 container 버튼 클릭시
 function eventEtcContainerClicked(e){
-	if(!e.target.classList.contains('etc-container')) return;
+	if(!e.target.closest('.etc-container')) return;
 	const el = e.target;
+	if(!el.textContent.trim()) return;
+	console.log(el.textContent.trim());
+	if(el.classList.contains('reply-child-container')) return;
+	if(!e.target.classList.contains('etc-act-btn')) return;
+
 	const action = el.textContent.trim();
 	if(!confirm(`이 댓글을 정말로 ${action} 하시겠습니까?`)) return;
 	if(!memId || memId == 'anonymousUser'){
@@ -299,7 +322,6 @@ function eventEtcContainerClicked(e){
 	}
 	const targetReply = el.closest('.reply-box');
 	const targetReplyChildBox = targetReply.nextElementSibling;
-	console.log(targetReplyChildBox);
 	const targetReplyId = targetReply.id.split('-')[2];
 	const data = {"replyId":targetReplyId};
 	console.log(data);
@@ -332,6 +354,23 @@ function eventEtcContainerClicked(e){
 	if(action == '신고'){
 		console.log("신고 fetch")
 	}
+
+	if(action == '수정'){
+		// 열려있는 수정 창들 찾아서 취소버튼 클릭해주기.
+
+		const targetReplyContent = targetReply.querySelector('.reply-content').textContent;
+		const modifyForm = `
+		<div class="reply-content">
+		    <textarea class="reply-modify-input" placeholder="${targetReplyContent.trim()}">${targetReplyContent.trim()}</textarea>
+			<span class="char-count" id="char-count">${targetReplyContent.length} / 300</span>
+		    <div class="button-group">
+		        <button class="modify-btn" id="modifyBtn">등록</button>
+		        <button class="cancel-btn" id="cancelBtn">취소</button>
+		    </div>
+		</div>
+		`;
+		targetReply.querySelector('.reply-content').innerHTML = modifyForm;
+	}
 }
 
 // 이벤트 함수 8 boardEtcContainer바깥 클릭시 닫기 ; click
@@ -344,4 +383,49 @@ function closeBoardEtcContainer(e){
 	if(cont.classList.contains('board-etc-open')){
 		cont.classList.remove('board-etc-open');
 	}
+}
+
+// 이벤트 함수 9 댓글 수정 완료버튼 클릭 시 fetch ; click
+function modifyReplyAct(e){
+	const modifyActEl = e.target;
+	if(!modifyActEl || !modifyActEl.classList.contains('modify-btn')) return;
+	console.log('수정동작확인');
+	const targetReply = modifyActEl.closest('.reply-box');
+	const targetReplyId = targetReply.id.split('-')[2];
+	const modifiedContent = targetReply.querySelector('.reply-modify-input').value;
+	const data = {
+		"replyId":targetReplyId,
+		"replyContent":modifiedContent,
+		"memId":memId
+	};
+
+	fetch('/prg/std/updateStdReply.do',{
+		method:'POST',
+		headers:{"Content-Type":"application/json"},
+		body: JSON.stringify(data)
+	})
+	.then(resp =>{
+		if(!resp.ok) throw new Error('에러 발생');
+		return resp.json();
+	})
+	.then(result =>{
+		if(result){
+			console.log("댓글 수정 성공");
+			const contentArea = modifyActEl.closest('.reply-content');
+			const modifiedContent = contentArea.querySelector('textarea').value.trim();
+
+			contentArea.innerHTML = modifiedContent;
+		}
+	})
+}
+
+// 이벤트 함수 10 댓글 수정하다가 취소 클릭 시 ; click
+function modifyReplyCancel(e){
+	const modifyCancelEl = e.target;
+	if(!modifyCancelEl || !modifyCancelEl.classList.contains('cancel-btn')) return;
+
+	const contentArea = modifyCancelEl.closest('.reply-content')
+	const previousContent = contentArea.querySelector('textarea').placeholder.trim();
+
+	contentArea.innerHTML = previousContent;
 }
