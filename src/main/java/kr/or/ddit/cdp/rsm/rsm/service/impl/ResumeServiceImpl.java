@@ -35,7 +35,6 @@ public class ResumeServiceImpl implements ResumeService {
 	@Transactional
 	public ResumeVO mergeIntoResume(ResumeVO resumeVO) {
 		//만약 resumeVO에 아이디가 있으면 update, 없으면 insert
-		resumeVO.setResumeIsTemp("Y");
 		if (resumeVO.getResumeId() == 0) { //id가 없을때 
 		    int newResumeId = resumeMapper.selectNextResumeId();
 		    resumeVO.setResumeId(newResumeId);
@@ -96,6 +95,12 @@ public class ResumeServiceImpl implements ResumeService {
 		
 		return modified;
 
+	}
+
+	@Override
+	public List<ResumeVO> selectResumeBymemId(ResumeVO resumeVO) {
+		// TODO Auto-generated method stub
+		return resumeMapper.selectResumeBymemId(resumeVO);
 	}
 
 }

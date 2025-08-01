@@ -43,4 +43,30 @@
 		FROM RESUME
 		WHERE RESUME_ID = #{resumeId}
 	</select>
+	
+	<select id="selectResumeBymemId" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO" resultType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO">
+		SELECT * FROM (
+			SELECT ROWNUM AS RNUM, B.*
+			FROM (
+				SELECT
+					RESUME_ID,
+					RESUME_TITLE,
+					RESUME_IS_TEMP,
+					UPDATED_AT
+				FROM
+					RESUME
+				WHERE
+					MEM_ID = #{memId}
+					<if test="keyword != null and keyword != ''">
+						AND RESUME_TITLE LIKE '%' || #{keyword} || '%'
+					</if>
+					<if test="status != null and status != ''">
+						AND RESUME_IS_TEMP = #{status}
+					</if>
+				ORDER BY UPDATED_AT DESC
+				) B
+			WHERE ROWNUM <![CDATA[<]]>= #{endNo}
+		)
+		WHERE RNUM<![CDATA[>]]>= #{startNo}
+	</select>
 </mapper>
