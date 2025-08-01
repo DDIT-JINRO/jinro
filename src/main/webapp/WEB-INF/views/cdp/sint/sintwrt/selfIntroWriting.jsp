@@ -37,13 +37,13 @@
 		<div class="tab-container" id="tabs">
 			<a class="tab" href="/cdp/sint/qestnlst/questionList.do">질문 리스트</a> 
 			<a class="tab" href="/cdp/sint/sintlst/selfIntroList.do">자기소개서 리스트</a> 
-			<a class="tab active" href="/sint/sintwrt">자기소개서 작성</a>
+			<a class="tab active" href="/cdp/sint/sintwrt/selfIntroWriting.do">자기소개서 작성</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
 
 			<section class="selfintro-write-form">
-				<form action="/sint/sintwrt/save" method="post">
+				<form action="/cdp/sint/sintwrt/save" method="post">
 					<!-- 제목 -->
 					<div class="section-title">
 						<input type="text" name="siTitle" value="${selfIntroVO.siTitle}"

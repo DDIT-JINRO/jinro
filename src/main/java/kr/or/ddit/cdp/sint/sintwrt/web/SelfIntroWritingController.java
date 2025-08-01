@@ -20,7 +20,7 @@ import kr.or.ddit.cdp.sint.service.SelfIntroVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/sint/sintwrt")
+@RequestMapping("/cdp/sint/sintwrt")
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class SelfIntroWritingController {
 
 	private final SelfIntroService selfIntroService;
 
-	@GetMapping()
+	@GetMapping("/selfIntroWriting.do")
 	public String showSelfIntroWrite(@RequestParam(value = "siId", required = false) String siId, Model model,
 			Principal principal) {
 

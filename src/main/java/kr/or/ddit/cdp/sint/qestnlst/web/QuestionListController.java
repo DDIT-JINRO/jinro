@@ -98,7 +98,7 @@ public class QuestionListController {
 		log.info("siId : " + siId);
 
 		requset.setAttribute("siId", siId);
-		return "redirect:/sint/sintwrt?siId=" + siId;
+		return "redirect:/cdp/sint/sintwrt/selfIntroWriting.do?siId=" + siId;
 	}
 
 }
