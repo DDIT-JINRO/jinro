@@ -38,7 +38,7 @@
 		<div class="public-wrapper-main">
 			<form method="get" action="/cdp/sint/sintlst/selfIntroList.do" class="intro-search-filter">
 				<!-- 검색어 입력 -->
-				<input type="text" name="keyword" value="${keyword.param}"
+				<input type="text" name="keyword" value="${param.keyword}"
 					placeholder="자기소개서 제목 검색" class="intro-search-input" />
 
 				<!-- 상태 선택 -->
