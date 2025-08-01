@@ -54,7 +54,7 @@
 				<tbody>
 					<c:forEach var="notice" items="${getList}">
 						<tr>
-							<td class="notice-no"> ${notice.noticeId}</td>
+							<td><div class="notice-no"> ${notice.noticeId}</div></td>
 							<td style="text-align: left;">
 								<a href="/csc/not/noticeDetail.do?noticeId=${notice.noticeId}">${notice.noticeTitle}</a></td>
 							<td>${notice.noticeCnt}</td>
