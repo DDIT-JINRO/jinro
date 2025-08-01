@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	    const file = event.target.files[0];  // 선택된 파일
 	    const preview = document.querySelector("#photo-preview");
 	    const placeholder = document.querySelector(".upload-placeholder");
-		console.log("file :",file);
 	    // 파일이 선택된 경우에만 처리
 		
 	        // 이전에 선택된 파일과 비교
@@ -24,19 +23,22 @@ document.addEventListener("DOMContentLoaded", function() {
 	            };
 	            reader.readAsDataURL(file);
 
-				console.log("lastFile 변경 전",lastFile);
 	            lastFile = file;  // 마지막 파일 업데이트
-				console.log("lastFile 변경 후",lastFile);
-	        }else {
-	        // 취소한 경우 기존 이미지 그대로 유지
-	       /* preview.src = "";
-	        preview.style.display = "none";  // 미리보기 숨기기
-	        if (placeholder) {
-	            placeholder.classList.remove("hidden");  // 아이콘/텍스트 다시 보이기
-	        }*/
-	    }
+	        }
 	});
 
+	document.querySelector("#photo-delete-btn").addEventListener("click",function(event){
+		let file = document.querySelector("#photo-upload");
+		const preview = document.querySelector("#photo-preview");
+		const placeholder = document.querySelector(".upload-placeholder");
+        preview.src = "";
+        preview.style.display = "none";  // 미리보기 숨기기
+        if (placeholder) {
+            placeholder.classList.remove("hidden");  // 아이콘/텍스트 다시 보이기
+        }
+		file = null;
+	})
+	
 	// 파일 입력 취소 시 기존 파일 값 유지
 	document.querySelector("#photo-upload").addEventListener("click", function () {
 	    // 클릭 시 파일 값이 null로 초기화되는 문제 해결
@@ -137,7 +139,8 @@ document.addEventListener("DOMContentLoaded", function() {
         skillsInputGroup.appendChild(inputContainer);
     });
 
-    document.getElementById("btn-submit").addEventListener("click",function(){
+    document.querySelector(".submit-buttons").addEventListener("click",function(event){
+		const target = event.target;
         const allElementDiv = document.querySelector(".personal-info-form");
 		const resumeTitle = document.querySelector("#resumeTitle");
 		const resumeTitleVal = document.querySelector("#resumeTitle").value;
@@ -192,7 +195,15 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 
         }
+		let resumeIsTemp = null
 		
+		if (target.id === "btn-submit-Temp") {
+		  resumeIsTemp = 'Y'
+		  // 임시 저장 로직 실행
+		} else if (target.id === "btn-submit") {
+		  resumeIsTemp = 'N'
+		  // 정식 저장 로직 실행
+		}
 		
 		// 실제 이미지 input에서 파일 추출
 		const photoInput = document.querySelector("#photo-upload");
@@ -200,8 +211,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		
 		applySelectedToOptions();
         resumeContent = allElementDiv.outerHTML;  // value가 반영된 상태의 outerHTML
-		//console.log(resumeContent);
-		submitResume(resumeTitleVal, resumeContent, resumeId,photoFile,fileGroupId);
+		submitResume(resumeTitleVal, resumeContent, resumeId,photoFile,fileGroupId,resumeIsTemp);
     })
 
     const delectBtn = document.getElementsByClassName("delete-button");
@@ -235,11 +245,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 	//form형태로 전송하는 함수
-	function submitResume(resumeTitle, resumeContent, resumeId, photoFile, fileGroupId) {
+	function submitResume(resumeTitle, resumeContent, resumeId, photoFile, fileGroupId,resumeIsTemp) {
 		const formData = new FormData();
 		  formData.append('resumeTitle', resumeTitle);
 		  formData.append('resumeContent', resumeContent);
 		  formData.append('fileGroupId',fileGroupId);
+		  formData.append('resumeIsTemp',resumeIsTemp);
 		  if (resumeId !== undefined && resumeId !== null) {
 		    formData.append('resumeId', resumeId);
 		  }
@@ -254,9 +265,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		  })
 		    .then(response => response.json())
 		    .then(data => {
-				console.log(data);
 		      if (data.status === 'success') {
-		        location.href = `/rsm/rsm/resumeWriter?resumeId=${data.resumeId}`;
+		        location.href = `/rsm/rsm`;//resumeWriter?resumeId=${data.resumeId}`;
 		      } else {
 		        location.href = '/login';
 		      }

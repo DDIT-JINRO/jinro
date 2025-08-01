@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/cdp/rsm/rsm/ResumeWriter.css">
@@ -84,6 +84,7 @@
 									<!-- 파일 업로드 --> <input type="file" id="photo-upload"
 									name="files" accept="image/*" class="sr-only">
 								</label>
+								<button id="photo-delete-btn" type="button">삭제</button>
 							</div>
 							<div class="form-group email-group">
 								<label for="email">이메일 <span class="required-asterisk">*</span></label>
@@ -148,7 +149,11 @@
 					<c:out value="${resumeVO.resumeContent}" escapeXml="false" />
 				</c:if>
 			</section>
-			<button type="button" id="btn-submit">제출</button>
+			<div class="submit-buttons">
+			<button type="button" id="btn-submit-Temp">임시저장</button>
+			<button type="button" id="btn-submit">저장</button>
+			</div>
+			
 			<div class="button-group">
 				<!-- 학력 불러오기 버튼 -->
 				<button type="button" id="load-education" name="rsId" data-id="1">학력
