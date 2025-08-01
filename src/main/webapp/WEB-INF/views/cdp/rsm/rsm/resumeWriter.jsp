@@ -36,10 +36,10 @@
 		<div class="public-wrapper-main">
 			이력서 페이지
 			<section class="personal-info-section">
-						<div class="resume-title">
-							<input type="text" name="resumeTitle" id="resumeTitle" placeholder="제목을 입력해주세요."
-								value="${resumeVO.resumeTitle}" required>
-						</div>
+				<div class="resume-title">
+					<input type="text" name="resumeTitle" id="resumeTitle"
+						placeholder="제목을 입력해주세요." value="${resumeVO.resumeTitle}" required>
+				</div>
 				<c:if test="${empty resumeVO}">
 					<input type="hidden" value="0" name="resumeId" id="resumeId">
 					<div class="personal-info-form">
@@ -52,15 +52,13 @@
 								<label for="name">이름 <span class="required-asterisk">*</span></label>
 								<input type="text" id="name" name="name"
 									placeholder="이름을 입력해주세요." required> <span
-									class="error-message" id="name-error">이름을
-									입력해주세요.</span>
+									class="error-message" id="name-error">이름을 입력해주세요.</span>
 							</div>
 
 							<div class="form-group dob-group">
 								<label for="dob">생년월일 <span class="required-asterisk">*</span></label>
 								<input type="date" id="dob" name="dob" required> <span
-									class="error-message" id="dob-error">생년월일을
-									입력해주세요.</span>
+									class="error-message" id="dob-error">생년월일을 입력해주세요.</span>
 							</div>
 
 							<div class="form-group gender-group">
@@ -74,10 +72,15 @@
 							</div>
 
 							<div class="form-group photo-group">
-								<label for="photo-upload" class="photo-upload-area"> <i
-									class="fa fa-plus" aria-hidden="true"></i> <span>사진추가</span> <input
-									type="file" id="photo-upload" name="files" accept="image/*"
-									class="sr-only">
+								<label for="photo-upload" class="photo-upload-area"> 
+								<div class="upload-placeholder">
+									<i class="fa fa-plus" aria-hidden="true"></i>
+									 <span>사진추가</span> <!-- 이미지 미리보기 -->
+								</div>
+									<img id="photo-preview" src="" alt="사진 미리보기"/>
+
+									<!-- 파일 업로드 --> <input type="file" id="photo-upload"
+									name="files" accept="image/*" class="sr-only">
 								</label>
 							</div>
 							<div class="form-group email-group">
@@ -136,7 +139,8 @@
 					</div>
 				</c:if>
 				<c:if test="${not empty resumeVO}">
-					<input type="hidden" value="${resumeVO.resumeId}" name="resumeId" id="resumeId">
+					<input type="hidden" value="${resumeVO.resumeId}" name="resumeId"
+						id="resumeId">
 					<c:out value="${resumeVO.resumeContent}" escapeXml="false" />
 				</c:if>
 			</section>

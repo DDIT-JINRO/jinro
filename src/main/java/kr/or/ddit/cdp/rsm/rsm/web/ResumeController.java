@@ -73,6 +73,7 @@ public class ResumeController {
 	       }else {
 	    	   result.put("status", "unauthorized");
 	       }
+	      log.info("result : "+result);
 		  return result;
 	      
 	}

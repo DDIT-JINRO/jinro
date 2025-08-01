@@ -16,8 +16,8 @@ h2 {
 /* 사진 업로드 영역 스타일 */
 .photo-upload-area {
     width: 100%;
-    max-width: 120px; /* 사진 영역 크기 조정 */
-    height: 120px; /* 사진 영역 높이 */
+    max-width: 150px; /* 사진 영역 크기 조정 */
+    height: 150px; /* 사진 영역 높이 */
     border: 2px dashed #ccc;
     display: flex;
     flex-direction: column;
@@ -37,6 +37,27 @@ h2 {
 .photo-upload-area span {
     color: #666;
     font-size: 0.9em;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+}
+
+#photo-preview {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  display: none; /* 초기에는 안 보임 */
+  border-radius: 8px;
+}
+
+/* 숨김 처리 */
+.hidden {
+  display: none !important;
 }
 
 /* 주소 입력과 검색 아이콘 스타일 */

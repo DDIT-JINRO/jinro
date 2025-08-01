@@ -1,4 +1,25 @@
 document.addEventListener("DOMContentLoaded", function() {
+	//이미지 미리보기
+	document.querySelector("#photo-upload").addEventListener("input", function (event) {
+	  const file = event.target.files[0];
+	  const preview = document.querySelector("#photo-preview");
+	  const placeholder = document.querySelector(".upload-placeholder");
+		console.log("file"+file);	
+	  if (file) {
+	    const reader = new FileReader();
+	    reader.onload = function (e) {
+	      preview.src = e.target.result;
+	      preview.style.display = "block";
+		  placeholder.classList.add("hidden"); // 아이콘/텍스트 숨기기
+	    };
+	    reader.readAsDataURL(file);
+	  } else {
+	    preview.src = "";
+	    preview.style.display = "none";
+		placeholder.classList.remove("hidden"); // 다시 보이게
+	  }
+	});
+	
     const loadButtons = document.querySelectorAll(".button-group button");
 
     // 버튼 클릭 시 항목 추가
@@ -140,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 
         }
+		
 		
 		// 실제 이미지 input에서 파일 추출
 		const photoInput = document.querySelector("#photo-upload");
