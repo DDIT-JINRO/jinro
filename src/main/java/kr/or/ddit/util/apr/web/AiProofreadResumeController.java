@@ -1,4 +1,4 @@
-package kr.or.ddit.util.ai.web;
+package kr.or.ddit.util.apr.web;
 
 public class AiProofreadResumeController {
 

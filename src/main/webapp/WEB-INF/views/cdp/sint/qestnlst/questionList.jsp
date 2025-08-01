@@ -25,7 +25,7 @@
 			<a href="/imtintrvw/bsintrvw">모의면접</a>
 		</div>
 		<div class="channel-sub-section-item">
-			<a href="/aifdbck/rsm">AI 피드백</a>
+			<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>
 		</div>
 	</div>
 </section>
