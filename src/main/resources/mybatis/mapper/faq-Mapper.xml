@@ -58,7 +58,7 @@
 	
 	<insert id="insertFaq" parameterType="kr.or.ddit.csc.faq.service.FaqVO">
 		INSERT INTO FAQ(FAQ_ID, FAQ_TITLE, FAQ_CONTENT, FAQ_CREATED_AT, FILE_GROUP_NO, FAQ_DEL_YN) 
-		VALUES((SELECT MAX(FAQ_ID)+1 FROM FAQ), #{faqTitle}, #{faqContent}, SYSDATE, #{fileGroupNo},'N')
+		VALUES( (SELECT NVL(MAX(FAQ_ID), 0) + 1 FROM FAQ),, #{faqTitle}, #{faqContent}, SYSDATE, #{fileGroupNo},'N')
 	</insert>
 	
 	<update id="updateFaq" parameterType="kr.or.ddit.csc.faq.service.FaqVO">
