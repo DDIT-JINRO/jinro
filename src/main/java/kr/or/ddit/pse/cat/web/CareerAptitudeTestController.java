@@ -38,22 +38,16 @@ public class CareerAptitudeTestController {
 	
 	@PostMapping("/cat/aptiTestSubmit.do")
 	@ResponseBody
-	public String testSubmit(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String memId) {
+	public Map<String, Object> testSubmit(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String memId) {
 		
 		String testNo = data.get("testNo")+"";
 		
-		log.info(data+"");
-		
 		if( !("33".equals(testNo)) && !("34".equals(testNo))) {			
-			String resultURL =  careerAptitudeTestService.testSubmit(data, memId);
-			log.info(resultURL);
+			return Map.of("result", careerAptitudeTestService.testSubmit(data, memId));
 		}else {
-			String resultURL = careerAptitudeTestService.testV2Submit(data, memId);
-			log.info(resultURL);
+			return Map.of("result", careerAptitudeTestService.testV2Submit(data, memId));
 		}
 		
-		
-		return "";
 	}
 	
 	@PostMapping("/cat/aptiTestSave.do")
@@ -80,6 +74,7 @@ public class CareerAptitudeTestController {
 	}
 	
 	@PostMapping("/cat/delTempSaveTest.do")
+	@ResponseBody
 	public void delTempSaveTest(@RequestBody String qno, @AuthenticationPrincipal String memId) {
 		
 		String no = qno.split("=")[0];

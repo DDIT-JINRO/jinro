@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface CareerAptitudeTestService {
 
-	public String testSubmit(Map<String, Object> data, String memId);
+	public Map<String, Object> testSubmit(Map<String, Object> data, String memId);
 
 	public String testV2Submit(Map<String, Object> data, String memId);
 

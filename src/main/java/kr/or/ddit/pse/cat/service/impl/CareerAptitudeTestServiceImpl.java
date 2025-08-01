@@ -40,17 +40,17 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 	CareerAptitudeTestMapper careerAptitudeMapper;
 
 	@Override
-	public String testSubmit(Map<String, Object> data, String memId) {
+	public Map<String, Object> testSubmit(Map<String, Object> data, String memId) {
 		int testSeq = (int) data.get("testNo");
 		if (testSeq == 30 || testSeq == 31 || testSeq == 24 || testSeq == 25 || testSeq == 20 || testSeq == 21) {
-			String resURL = reqTestNor(data, memId);
+			Map<String, Object> resURL = reqTestNor(data, memId);
 			return resURL;
 		} else {
-			return "failed";
+			return Map.of("msg", "failed");
 		}
 	}
 
-	public String reqTestNor(Map<String, Object> data, String memId) {
+	public Map<String, Object> reqTestNor(Map<String, Object> data, String memId) {
 
 		Map<String, Object> answers = (Map<String, Object>) data.get("answers");
 
@@ -111,10 +111,11 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 //		    log.info("ERROR_REASON: {}", errorReason);
 //		    log.info("inspctSeq: {}", inspctSeq);
 //		    log.info("Report URL: {}", reportUrl);
-
-			return reportUrl;
+			
+						
+			return Map.of("msg", "success", "reportUrl", reportUrl);
 		} catch (Exception e) {
-			return "응답 JSON 파싱 실패";
+			return Map.of("msg", "failed");
 		}
 
 	}

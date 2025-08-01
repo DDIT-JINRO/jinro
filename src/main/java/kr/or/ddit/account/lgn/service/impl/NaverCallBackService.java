@@ -16,7 +16,7 @@ public class NaverCallBackService {
     private String CLIENT_ID;
 	@Value("${DEV.NAVER.CLIENT_SECRET}")
     private String CLIENT_SECRET;
-    private final String REDIRECT_URI = "http://localhost:8080/lgn/naverCallback.do";
+    private final String REDIRECT_URI = "http://localhost/lgn/naverCallback.do";
 
     public Map<String, Object> loginWithNaver(String code) {
         String accessToken = getAccessToken(code);
