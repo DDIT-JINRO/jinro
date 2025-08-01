@@ -60,7 +60,7 @@
 		)
 		VALUES (
 		(SELECT NVL(MAX(NOTICE_ID), 0) + 1 FROM NOTICE),
-		#{noticeTitle},
+		#{noticeTitle},	
 		#{noticeContent},
 		'N',
 		0,

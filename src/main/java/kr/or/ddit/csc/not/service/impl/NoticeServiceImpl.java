@@ -164,26 +164,38 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	@Transactional
 	public int updateNotice(NoticeVO noticeVo) {
-		// 공지사항 수정
-	    int result = noticeMapper.updateNotice(noticeVo);
+		// 실제 첨부된 유효한 파일만 필터링
+		List<MultipartFile> validFiles = noticeVo.getFiles().stream().filter(file -> file != null && !file.isEmpty()
+				&& file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank()).toList();
 	    
-        // 첨부파일이 없던 공지사항의 경우 파일그룹 생성
-	    if(noticeVo.getFileGroupNo() == null) {
-        	Long newGroupId = fileService.createFileGroup();
-        	noticeVo.setFileGroupNo(newGroupId); 	
-        } 
-    	
-	    // 첨부파일 추가
-        try {
-			fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
-		 	// 공지사항 테이블에 FILE_GROUP_NO 업데이트
-        	noticeMapper.updateNoticeFileGroup(noticeVo.getNoticeId(), noticeVo.getFileGroupNo());
-       
-        } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// 파일이 있을 경우
+		if (!validFiles.isEmpty()) {
+
+			// 기존 파일이 있을 경우
+			if (noticeVo.getFileGroupNo() != null) {
+				// 파일 업로드
+				try {
+					fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				// 기존파일이 없을 경우
+				// 파일 그룹 ID 생성
+				noticeVo.setFileGroupNo(fileService.createFileGroup());
+
+				// 파일 업로드
+				try {
+					fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
+					noticeMapper.updateNoticeFileGroup(noticeVo.getNoticeId(), noticeVo.getFileGroupNo());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-	    return result;
+    	
+
+		return noticeMapper.updateNotice(noticeVo);
 	}
 
 

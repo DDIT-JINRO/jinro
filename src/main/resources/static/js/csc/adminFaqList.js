@@ -154,6 +154,7 @@ function showDetail(faqId) {
 
 			const ul = document.getElementById("existing-files");
 			if (!resp.getFileList || resp.getFileList.length === 0) {
+				document.getElementById("file").style.display = "block";
 				ul.innerHTML = '<li>첨부된 파일이 없습니다.</li>';
 			} else {
 				document.getElementById('fileGroupNo').value = resp.getFileList[0].fileGroupId;

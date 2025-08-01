@@ -150,7 +150,6 @@ public class FaqServiceImpl implements FaqService{
 				}
 			}
 		}
-		log.info(""+faqVO);
 		return faqMapper.updateFaq(faqVO);
 	}
 
