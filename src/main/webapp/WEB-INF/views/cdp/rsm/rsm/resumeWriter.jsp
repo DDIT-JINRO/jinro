@@ -42,6 +42,8 @@
 				</div>
 				<c:if test="${empty resumeVO}">
 					<input type="hidden" value="0" name="resumeId" id="resumeId">
+					<input type="hidden" value="0" name="fileGroupId"
+					id="fileGroupId">
 					<div class="personal-info-form">
 						<div class="section-header">
 							<h2>인적사항</h2>
@@ -141,6 +143,8 @@
 				<c:if test="${not empty resumeVO}">
 					<input type="hidden" value="${resumeVO.resumeId}" name="resumeId"
 						id="resumeId">
+					<input type="hidden" value="${resumeVO.fileGroupId}" name="fileGroupId"
+					id="fileGroupId">
 					<c:out value="${resumeVO.resumeContent}" escapeXml="false" />
 				</c:if>
 			</section>

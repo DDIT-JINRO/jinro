@@ -1,10 +1,18 @@
 package kr.or.ddit.cdp.rsm.rsm.service.impl;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.regex.Matcher;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.cdp.rsm.rsm.service.ResumeSectionVO;
 import kr.or.ddit.cdp.rsm.rsm.service.ResumeService;
 import kr.or.ddit.cdp.rsm.rsm.service.ResumeVO;
+import kr.or.ddit.util.file.service.FileDetailVO;
+import kr.or.ddit.util.file.service.FileGroupVO;
+import kr.or.ddit.util.file.service.FileService;
 import kr.or.ddit.util.file.service.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ResumeServiceImpl implements ResumeService {
 
 	private final ResumeMapper resumeMapper;
-	private final FileUtil fileUtil;
-
+	private final FileService fileService;
 	
 	@Override
 	public String getElement(ResumeSectionVO resumeSectionVO) {
@@ -25,6 +32,7 @@ public class ResumeServiceImpl implements ResumeService {
 	}
 
 	@Override
+	@Transactional
 	public ResumeVO mergeIntoResume(ResumeVO resumeVO) {
 		//만약 resumeVO에 아이디가 있으면 update, 없으면 insert
 		resumeVO.setResumeIsTemp("Y");
@@ -33,19 +41,41 @@ public class ResumeServiceImpl implements ResumeService {
 		    resumeVO.setResumeId(newResumeId);
 		}
 		
-		//파일은 있고 파일 그룹아이디는 없을 경우
-		if((resumeVO.getFiles()!=null || !resumeVO.getFiles().isEmpty()) && 
-			(resumeVO.getFileGroupId() == null || resumeVO.getFileGroupId() ==0)) {
+		// 파일 그룹 ID가 있고, 새 파일도 있는 경우
+		if (resumeVO.getFiles() != null && !resumeVO.getFiles().isEmpty() &&
+				resumeVO.getFileGroupId() != null && resumeVO.getFileGroupId() != 0) {
 			
-			//파일 upload 먼저
+			Long fileGroupId = resumeVO.getFileGroupId();
 			
-			//파일 getSavePath 얻어오고 보내주기
-			
-			//changeImg(resumeVO.getResumeContent(), 파일path);
-		}
+			try {
+				List<FileDetailVO> fileDetailVOList = fileService.updateFile(fileGroupId, resumeVO.getFiles());
+				String filePath = fileService.getSavePath(fileDetailVOList.get(0));
+				String content = changeImg(resumeVO.getResumeContent(), filePath);
+				resumeVO.setResumeContent(content);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (resumeVO.getFiles() != null && !resumeVO.getFiles().isEmpty() &&
+		    (resumeVO.getFileGroupId() == null || resumeVO.getFileGroupId() == 0)) {
+			// 파일은 있고, 파일그룹 아이디는 없을 경우
+
+		    Long fileGroupId = fileService.createFileGroup();
+		    resumeVO.setFileGroupId(fileGroupId); // 이 라인도 있어야 이후 로직이 안전합니다
+
+		    try {
+		        List<FileDetailVO> fileDetailVOList = fileService.uploadFiles(fileGroupId, resumeVO.getFiles());
+		        String filePath = fileService.getSavePath(fileDetailVOList.get(0));
+		        String content = changeImg(resumeVO.getResumeContent(), filePath);
+		        resumeVO.setResumeContent(content);
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+		} //else {
+			//String content = changeImg(resumeVO.getResumeContent(), "");
+			//resumeVO.setResumeContent(content);
+		//}
 		
-		if(resumeVO.getFiles()!=null || !resumeVO.getFiles().isEmpty()) {
-		}
+
 		int result = resumeMapper.mergeIntoResume(resumeVO);
 		
 		resumeVO = resumeMapper.selectResumeByResumeId(resumeVO); //방금 isnert 또는 update한 ResumId로 가져옴
@@ -60,7 +90,11 @@ public class ResumeServiceImpl implements ResumeService {
 	}
 
 	private String changeImg(String html, String filePath) {
-		return filePath;
+		String modified = html.replaceAll(
+	            "(<img[^>]*id=[\"']photo-preview[\"'][^>]*src=\")[^\"]*(\"[^>]*>)",
+	            "$1" + Matcher.quoteReplacement(filePath) + "$2");
+		
+		return modified;
 
 	}
 

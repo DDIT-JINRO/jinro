@@ -15,6 +15,6 @@ public class ResumeVO {
 	private Date createdAt;
 	private Date updatedAt;
 	private Long fileGroupId; 
-	MultipartFile files;
+	List<MultipartFile> files;
 	private String resumeContent;
 }

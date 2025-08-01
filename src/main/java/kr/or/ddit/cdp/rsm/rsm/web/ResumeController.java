@@ -38,8 +38,6 @@ public class ResumeController {
 	
 	@GetMapping("/resumeWriter")
 	public String resumedeatilPage(@ModelAttribute ResumeVO resumeVO,Model model) {
-		log.info("resumeVO"+resumeVO);
-		
 		resumeVO =  resumeService.selectResumeByResumeId(resumeVO);
 		
 		model.addAttribute("resumeVO",resumeVO);
@@ -48,7 +46,6 @@ public class ResumeController {
 	
 	@GetMapping("/getElement")
 	public ResponseEntity<String>getElement(@ModelAttribute  ResumeSectionVO resumeSectionVO){
-		log.info("resumeSectionVO "+resumeSectionVO);
 		
 		String element = resumeService.getElement(resumeSectionVO);
 		
@@ -62,7 +59,7 @@ public class ResumeController {
 								Principal principal,
 								@ModelAttribute ResumeVO resumeVO,
 								Model model) throws UnsupportedEncodingException{
-			log.info("resumeVO :" +resumeVO);
+		log.info("resumeVO -> "+resumeVO);
 			Map<String, Object> result = new HashMap<>();
 	      if(principal!=null && !principal.getName().equals("anonymousUser")) {
 	    	  resumeVO.setMemId(Integer.parseInt( principal.getName()));

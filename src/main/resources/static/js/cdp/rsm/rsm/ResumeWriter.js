@@ -1,24 +1,54 @@
 document.addEventListener("DOMContentLoaded", function() {
 	//이미지 미리보기
+	let lastFile = null;  // 마지막 파일을 저장할 변수
+
+	// 파일 선택 시
 	document.querySelector("#photo-upload").addEventListener("input", function (event) {
-	  const file = event.target.files[0];
-	  const preview = document.querySelector("#photo-preview");
-	  const placeholder = document.querySelector(".upload-placeholder");
-		console.log("file"+file);	
-	  if (file) {
-	    const reader = new FileReader();
-	    reader.onload = function (e) {
-	      preview.src = e.target.result;
-	      preview.style.display = "block";
-		  placeholder.classList.add("hidden"); // 아이콘/텍스트 숨기기
-	    };
-	    reader.readAsDataURL(file);
-	  } else {
-	    preview.src = "";
-	    preview.style.display = "none";
-		placeholder.classList.remove("hidden"); // 다시 보이게
-	  }
+	    const file = event.target.files[0];  // 선택된 파일
+	    const preview = document.querySelector("#photo-preview");
+	    const placeholder = document.querySelector(".upload-placeholder");
+		console.log("file :",file);
+	    // 파일이 선택된 경우에만 처리
+		
+	        // 이전에 선택된 파일과 비교
+	        if (file != null && file !== lastFile) {
+	            const reader = new FileReader();
+	            reader.onload = function (e) {
+	                preview.src = e.target.result;  // 미리보기 이미지
+	                preview.style.display = "block";  // 이미지 표시
+
+	                // 아이콘/텍스트 숨기기
+	                if (placeholder) {
+	                    placeholder.classList.add("hidden");
+	                }
+	            };
+	            reader.readAsDataURL(file);
+
+				console.log("lastFile 변경 전",lastFile);
+	            lastFile = file;  // 마지막 파일 업데이트
+				console.log("lastFile 변경 후",lastFile);
+	        }else {
+	        // 취소한 경우 기존 이미지 그대로 유지
+	       /* preview.src = "";
+	        preview.style.display = "none";  // 미리보기 숨기기
+	        if (placeholder) {
+	            placeholder.classList.remove("hidden");  // 아이콘/텍스트 다시 보이기
+	        }*/
+	    }
 	});
+
+	// 파일 입력 취소 시 기존 파일 값 유지
+	document.querySelector("#photo-upload").addEventListener("click", function () {
+	    // 클릭 시 파일 값이 null로 초기화되는 문제 해결
+	    const photoInput = document.querySelector("#photo-upload");
+	    if (!photoInput.files[0] && lastFile) {
+	        // 취소 후 기존 파일 유지
+	        const dataTransfer = new DataTransfer();
+	        dataTransfer.items.add(lastFile);
+	        photoInput.files = dataTransfer.files;
+	    }
+	});
+
 	
     const loadButtons = document.querySelectorAll(".button-group button");
 
@@ -112,11 +142,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		const resumeTitle = document.querySelector("#resumeTitle");
 		const resumeTitleVal = document.querySelector("#resumeTitle").value;
 		const resumeId = document.querySelector("#resumeId").value;
+		const fileGroupId = document.querySelector("#fileGroupId").value;
         const objs = allElementDiv.querySelectorAll('input, select, textarea');  // 모든 입력 요소를 선택
 
 		//제목 검사
 		if(resumeTitle.hasAttribute("required") && !resumeTitleVal.trim()){
-			alert("필수 입력 항목을 입력해주세요.");
+			alert("제목을 입력해주세요.");
 	        resumeTitle.focus();
 	        return; 
 		}
@@ -170,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		applySelectedToOptions();
         resumeContent = allElementDiv.outerHTML;  // value가 반영된 상태의 outerHTML
 		//console.log(resumeContent);
-		submitResume(resumeTitleVal, resumeContent, resumeId,photoFile);
+		submitResume(resumeTitleVal, resumeContent, resumeId,photoFile,fileGroupId);
     })
 
     const delectBtn = document.getElementsByClassName("delete-button");
@@ -204,10 +235,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 	//form형태로 전송하는 함수
-	function submitResume(resumeTitle, resumeContent, resumeId, photoFile) {
+	function submitResume(resumeTitle, resumeContent, resumeId, photoFile, fileGroupId) {
 		const formData = new FormData();
 		  formData.append('resumeTitle', resumeTitle);
 		  formData.append('resumeContent', resumeContent);
+		  formData.append('fileGroupId',fileGroupId);
 		  if (resumeId !== undefined && resumeId !== null) {
 		    formData.append('resumeId', resumeId);
 		  }
