@@ -20,66 +20,64 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class CareerAptitudeTestController {
-	
+
 	@Autowired
 	CareerAptitudeTestService careerAptitudeTestService;
-	
+
 	@GetMapping("/cat/careerAptitudeTest.do")
-	public String careerAptitudeTestView () {
+	public String careerAptitudeTestView() {
 		return "pse/cat/careerAptitudeTestView";
 	}
-	
+
 	@PostMapping("/cat/test/start")
 	@ResponseBody
 	public String testStart() {
-		
+
 		return "success";
 	}
-	
+
 	@PostMapping("/cat/aptiTestSubmit.do")
 	@ResponseBody
-	public Map<String, Object> testSubmit(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String memId) {
-		
-		String testNo = data.get("testNo")+"";
-		
-		if( !("33".equals(testNo)) && !("34".equals(testNo))) {			
+	public Map<String, Object> testSubmit(@RequestBody Map<String, Object> data,
+			@AuthenticationPrincipal String memId) {
+
+		String testNo = data.get("testNo") + "";
+
+		if (!("33".equals(testNo)) && !("34".equals(testNo))) {
 			return Map.of("result", careerAptitudeTestService.testSubmit(data, memId));
-		}else {
+		} else {
 			return Map.of("result", careerAptitudeTestService.testV2Submit(data, memId));
 		}
-		
+
 	}
-	
+
 	@PostMapping("/cat/aptiTestSave.do")
 	@ResponseBody
 	public String testSave(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String memId) {
-		
-		log.info(data+"");
-		
+
 		String saveRes = careerAptitudeTestService.testSave(data, memId);
-		
-		
+
 		return saveRes;
 	}
-	
+
 	@PostMapping("/cat/getSavingTest.do")
 	@ResponseBody
-	public Map<String, Object> getSavingTest(@RequestBody String qno, @AuthenticationPrincipal String memId){
-		
+	public Map<String, Object> getSavingTest(@RequestBody String qno, @AuthenticationPrincipal String memId) {
+
 		String no = qno.split("=")[0];
 		Map<String, Object> savingTest = careerAptitudeTestService.getSavingTest(no, memId);
-		
+
 		return savingTest;
-		
+
 	}
-	
+
 	@PostMapping("/cat/delTempSaveTest.do")
 	@ResponseBody
 	public void delTempSaveTest(@RequestBody String qno, @AuthenticationPrincipal String memId) {
-		
+
 		String no = qno.split("=")[0];
 		careerAptitudeTestService.delTempSaveTest(no, memId);
-		
+
 	}
-	
+
 }

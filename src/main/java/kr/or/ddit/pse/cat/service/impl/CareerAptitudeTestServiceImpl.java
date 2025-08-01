@@ -111,8 +111,7 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 //		    log.info("ERROR_REASON: {}", errorReason);
 //		    log.info("inspctSeq: {}", inspctSeq);
 //		    log.info("Report URL: {}", reportUrl);
-			
-						
+
 			return Map.of("msg", "success", "reportUrl", reportUrl);
 		} catch (Exception e) {
 			return Map.of("msg", "failed");
@@ -126,7 +125,7 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 //		List<Map<>> data.get("answers");
 
 		Map<Integer, Integer> answers = (Map<Integer, Integer>) data.get("answers");
-		log.info(answers + "");
+
 //		String answer = String.join(" ",
 //				answers.entrySet().stream().map((e) -> e.getKey() + "=" + e.getValue()).toArray(String[]::new));
 //
@@ -196,8 +195,8 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 	public String testSave(Map<String, Object> data, String memId) {
 
 		String testType = "";
-		String type = data.get("testNo")+""; 
-	
+		String type = data.get("testNo") + "";
+
 		if ("30".equals(type) || "31".equals(type))
 			testType = "G37001";
 		if ("33".equals(type) || "34".equals(type))
@@ -220,8 +219,7 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 
 		String json = "";
 		int intMemId = Integer.parseInt(memId);
-		
-		log.info("testType : " + testType);
+
 		try {
 
 			json = objectMapper.writeValueAsString(data);
@@ -243,42 +241,42 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 
 	@Override
 	public Map<String, Object> getSavingTest(String qno, String memId) {
-		
-		String testType = "G3700"+qno;
-		
+
+		String testType = "G3700" + qno;
+
 		int intMemId = Integer.parseInt(memId);
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+
 		TemporarySaveVO temporarySaveVO = new TemporarySaveVO();
-		
+
 		temporarySaveVO.setTsType(testType);
 		temporarySaveVO.setMemId(intMemId);
-		
+
 		TemporarySaveVO savingTest = careerAptitudeMapper.getSavingTest(temporarySaveVO);
-		if(savingTest == null) {
+		if (savingTest == null) {
 			map.put("msg", "failed");
-			return  map;
+			return map;
 		}
-		
+
 		String testContent = savingTest.getTsContent();
 		ObjectMapper objectMapper = new ObjectMapper();
-        try {
+		try {
 			Map<String, Object> savingContent = objectMapper.readValue(testContent, Map.class);
 			savingContent.put("msg", "success");
 			return savingContent;
 		} catch (JsonMappingException e) {
 			map.put("msg", "failed");
-			return  map;
+			return map;
 		} catch (JsonProcessingException e) {
 			map.put("msg", "failed");
-			return  map;
+			return map;
 		}
-        
+
 	}
 
 	@Override
 	public void delTempSaveTest(String no, String memId) {
-		String testType = "G3700"+no;
+		String testType = "G3700" + no;
 		int intMemId = Integer.parseInt(memId);
 		TemporarySaveVO temporarySaveVO = new TemporarySaveVO();
 		temporarySaveVO.setTsType(testType);
