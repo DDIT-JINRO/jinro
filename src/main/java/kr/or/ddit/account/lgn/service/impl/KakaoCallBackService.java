@@ -18,7 +18,7 @@ public class KakaoCallBackService {
 	
 	@Value("${DEV.KAKAO.REST_API_KEY}")
 	private String REST_API_KEY;
-	private final String REDIRECT_URI = "http://localhost:8080/lgn/kakaoCallback.do";
+	private final String REDIRECT_URI = "http://localhost/lgn/kakaoCallback.do";
 	
 	
 	public Map<String, Object> loginWithKakao(String code) {

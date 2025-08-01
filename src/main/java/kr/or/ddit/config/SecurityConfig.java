@@ -2,6 +2,7 @@ package kr.or.ddit.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +32,9 @@ public class SecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final VisitLogService visitLogService;
 	
+	@Value("${DEV.SERVER.BASE_URL}")
+	private String SERVER_URL;
+	
 	public SecurityConfig(JwtUtil jwtUtil, UserDetailsService userDetailsService, VisitLogService visitLogService) {
 		this.jwtUtil = jwtUtil;
 		this.userDetailsService = userDetailsService;
@@ -41,14 +45,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));  // React dev 서버
+        config.setAllowedOrigins(List.of(SERVER_URL+":5173"));  // React dev 서버
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/worldcup/**", config);
-        source.registerCorsConfiguration("/roadmap/**", config);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
     
