@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import kr.or.ddit.cdp.sint.service.SelfIntroService;
 import kr.or.ddit.cdp.sint.service.SelfIntroVO;
+import kr.or.ddit.exception.CustomException;
+import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.mpg.mat.sih.service.SelfIntroHistoryService;
 import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
 import kr.or.ddit.util.ArticlePage;
@@ -34,10 +36,11 @@ public class SelfIntroHistoryServiceImpl implements SelfIntroHistoryService {
 
 		selfIntroVO.setMemId(memId);
 		
-		log.info("selfIntroVO : " + selfIntroVO);
-
 		List<SelfIntroVO> selfIntroVOList = this.selfIntroService.selectSelfIntroBymemId(selfIntroVO);
-		
+
+		if(selfIntroVOList.isEmpty()) {
+			return null;
+		}
 		
 		ArticlePage<SelfIntroVO> articlePage = new ArticlePage<SelfIntroVO>(
 				selfIntroVOList.size()

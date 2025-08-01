@@ -30,8 +30,10 @@ public class SelfIntroHistoryController {
 			, Model model) {
 		
 		ArticlePage<SelfIntroVO> articlePage = this.selfIntroHistoryService.selectSelfIntroHistoryList(memId, keyword, status, currentPage, size);
-		
-		model.addAttribute("articlePage", articlePage);
+
+		if(articlePage != null) {
+			model.addAttribute("articlePage", articlePage);
+		}
 		
 		return "mpg/mat/sih/selectSelfIntroHistoryList";
 	}
