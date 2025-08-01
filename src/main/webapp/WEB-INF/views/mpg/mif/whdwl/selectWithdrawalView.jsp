@@ -70,7 +70,6 @@
 					</div>
 
 					<div class="button-wrapper">
-						<button type="button" class="btn btn-secondary">뒤로가기</button>
 						<button type="submit" class="btn btn-danger">탈퇴하기</button>
 					</div>
 				</form>

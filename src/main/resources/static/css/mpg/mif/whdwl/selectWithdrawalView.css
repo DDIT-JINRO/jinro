@@ -91,7 +91,7 @@
 /* 버튼 스타일 */
 .button-wrapper {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
 	align-items: center;
 	margin-top: 16px;
 }
@@ -104,16 +104,6 @@
 	font-weight: 500;
 	font-size: 1rem;
 	transition: all 0.3s ease;
-}
-
-.btn-secondary {
-	background-color: #7881f5;
-	color: white;
-}
-
-.btn-secondary:hover {
-	transform: scale(1.03);
-	background-color: #5c68d9;
 }
 
 .btn-danger {
