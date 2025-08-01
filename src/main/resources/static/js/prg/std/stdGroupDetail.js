@@ -339,6 +339,13 @@ function createChildReply(replyVO, e){
 	const childContainer = document.querySelector(`.reply-child-container[data-parent-id="${replyVO.replyParentId}"]`);
 	containerEl.style.maxHeight = childContainer.scrollHeight + 'px';
 	e.target.querySelector('textarea').value='';
+	const replyChildCntSpan = childContainer.previousElementSibling.querySelector('.child-count');
+	let replyChildCnt =  replyChildCntSpan.textContent.trim();
+	if(replyChildCnt && replyChildCnt != ''){
+		replyChildCntSpan.textContent = parseInt(replyChildCnt)+1;
+	}else{
+		replyChildCntSpan.textContent = 1;
+	}
 }
 
 // 이벤트 함수 1. 답글버튼 토글 ; click

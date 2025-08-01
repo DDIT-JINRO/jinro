@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
+import kr.or.ddit.com.report.web.ReportController;
 import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.prg.std.service.StdBoardVO;
@@ -39,6 +40,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/prg/std")
 public class StudyGroupController {
 
+    private final ReportController reportController;
+
 	@Autowired
 	StudyGroupService studyGroupService;
 
@@ -47,6 +50,11 @@ public class StudyGroupController {
 
 	@Autowired
 	AlarmService alarmService;
+
+
+    StudyGroupController(ReportController reportController) {
+        this.reportController = reportController;
+    }
 
 
 
@@ -205,11 +213,11 @@ public class StudyGroupController {
 		if(newReplyVO.getReplyParentId() == 0) {
 			alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_BOARD);
 			alarmVO.setAlarmTargetId(stdReplyVO.getReplyId());
-			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId=1"+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyId());
+			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId="+newReplyVO.getBoardId()+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyId());
 		}else {
 			alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_REPLY);
 			alarmVO.setAlarmTargetId(stdReplyVO.getReplyId());
-			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId=1"+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyParentId());
+			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId="+newReplyVO.getBoardId()+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyParentId());
 		}
 		int targetMemId = alarmService.getTargetMemId(alarmVO);
 		if(memId != targetMemId) {
