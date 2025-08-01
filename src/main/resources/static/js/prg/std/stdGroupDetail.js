@@ -481,7 +481,15 @@ function eventEtcContainerClicked(e){
 			if(result){
 				if(!targetReply.classList.contains('reply-child')){
 					targetReplyChildBox.remove();
+				}else{
+					const parentId = targetReply.closest('.reply-child-container').dataset.parentId
+					const boardId = document.querySelector('.boardEtcContainer').dataset.boardId;
+					const parentReplyEl = document.querySelector(`#reply-${boardId}-${parentId}`);
+					const childCntEl = parentReplyEl.querySelector('.child-count');
+					let childCnt = childCntEl.textContent.trim();
+					childCntEl.textContent = parseInt(childCnt)-1 > 0 ? parseInt(childCnt)-1 : '';
 				}
+
 				targetReply.remove();
 				setTimeout(()=>{alert('삭제되었습니다')})
 			}
