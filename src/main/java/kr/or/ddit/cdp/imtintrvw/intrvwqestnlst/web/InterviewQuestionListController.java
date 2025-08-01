@@ -13,7 +13,7 @@ public class InterviewQuestionListController {
 	
 	@GetMapping("/intrvwQuestionList.do")
 	public String interviewQuestionListPage() {
-		return "cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList";
+		return "cdp/imtintrvw/intrvwqestnlst/interviewQuestionList";
 	}
 	
 	

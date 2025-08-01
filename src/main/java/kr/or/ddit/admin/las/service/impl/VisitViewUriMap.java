@@ -29,8 +29,8 @@ public class VisitViewUriMap {
 		uriNameMap.put("/cdp/sint/sintlst/selfIntroList.do", "자기소개서 - 자기소개서리스트");
 		uriNameMap.put("/cdp/sint/sintwrt/selfIntroWriting.do", "자기소개서 - 자기소개서 작성");
 		uriNameMap.put("/cdp/imtintrvw/intrvwitr/interviewIntro.do", "모의면접 - 면접의 기본");
-		uriNameMap.put("/cdp/imtintrvw/intrvwqestnlst/intrvwquestionList.do", "모의면접 - 면접 질문 리스트");
-		uriNameMap.put("/cdp/imtintrvw/intrvwqestnmn/interviewquestionmangementList.do", "모의면접 - 면접 질문 관리");
+		uriNameMap.put("/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do", "모의면접 - 면접 질문 리스트");
+		uriNameMap.put("/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do", "모의면접 - 면접 질문 관리");
 		uriNameMap.put("/cdp/imtintrvw/aiimtintrvw/aiImitationInterview.do", "모의면접 - AI 모의 면접");
 		uriNameMap.put("/cdp/aifdbck/rsm/aiFeedbackResumeList.do", "AI 피드백 - 이력서");
 		uriNameMap.put("/cdp/aifdbck/sint/aiFeedbackSelfIntroList.do", "AI 피드백 - 자기소개서");

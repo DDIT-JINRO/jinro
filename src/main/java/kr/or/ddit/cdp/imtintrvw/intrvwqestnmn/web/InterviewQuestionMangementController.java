@@ -4,20 +4,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import kr.or.ddit.cdp.imtintrvw.intrvwqestnlst.web.InterviewQuestionListController;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/imtintrvw/intrvwqestnmn")
+@RequestMapping("/cdp/imtintrvw/intrvwqestnmn")
 @Controller
 @Slf4j
 public class InterviewQuestionMangementController {
-	@GetMapping()
+	
+	@GetMapping("/interviewQuestionMangementList.do")
 	public String interviewQuestionMangement() {
-		return "cdp/imtintrvw/intrvwqestnmn/interviewquestionmangement";
+		return "cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangement";
 	}
 	
 	@GetMapping("detail.do")
 	public String interviewQuestionMangementDetail() {
-		return "cdp/imtintrvw/intrvwqestnmn/interviewquestionmangementDetail";
+		return "cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementDetail";
 	}
 }
