@@ -171,7 +171,7 @@
 					      <span class="etcBtn">…</span>
 					      <div class="etc-container">
 							<c:choose>
-								<c:when test="${reply.memId == memId }">
+								<c:when test="${child.memId == memId }">
 									<div class="etc-act-btn">수정</div>
 									<hr/>
 									<div class="etc-act-btn">삭제</div>
