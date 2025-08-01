@@ -67,11 +67,17 @@
 				) B
 			WHERE ROWNUM <![CDATA[<]]>= #{endNo}
 		)
-		WHERE RNUM<![CDATA[>]]>= #{startNo}
+		WHERE RNUM<![CDATA[>]]> #{startNo}
 	</select>
 	
 	<delete id="deleteResumeById" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO">
 		DELETE RESUME
 		WHERE RESUME_ID = #{resumeId}
 	</delete>
+	
+	<select id="selectResumeTotalBymemId" parameterType="kr.or.ddit.cdp.rsm.rsm.service.ResumeVO" resultType="int">
+		SELECT COUNT(*)
+		FROM RESUME
+		WHERE MEM_ID = #{memId}
+	</select>
 </mapper>

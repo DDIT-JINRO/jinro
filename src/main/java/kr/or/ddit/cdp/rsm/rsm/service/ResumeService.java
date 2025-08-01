@@ -15,4 +15,6 @@ public interface ResumeService {
 
 	int deleteResumeById(int resumeId);
 
+	int selectResumeTotalBymemId(ResumeVO resumeVO);
+
 }

@@ -39,10 +39,11 @@ public class SelfIntroListController {
 			selfIntroVO.setKeyword(keyword);
 			selfIntroVO.setStatus(status);
 
+			int total = selfIntroService.selectSelfIntroTotalBymemId(selfIntroVO);
 			// 사용자 자소서 리스트 불러옴
 			List<SelfIntroVO> SelfIntroVOList = selfIntroService.selectSelfIntroBymemId(selfIntroVO);
 
-			ArticlePage<SelfIntroVO> articlePage = new ArticlePage<SelfIntroVO>(SelfIntroVOList.size(), currentPage, 5,
+			ArticlePage<SelfIntroVO> articlePage = new ArticlePage<SelfIntroVO>(total, currentPage, 5,
 					SelfIntroVOList, keyword);
 			log.info("list->articlePage : " + articlePage);
 			articlePage.setUrl("/cdp/sint/sintlst/selfIntroList.do");

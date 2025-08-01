@@ -103,4 +103,10 @@ public class ResumeServiceImpl implements ResumeService {
 		return resumeMapper.deleteResumeById(resumeId);
 	}
 
+	@Override
+	public int selectResumeTotalBymemId(ResumeVO resumeVO) {
+		// TODO Auto-generated method stub
+		return resumeMapper.selectResumeTotalBymemId(resumeVO);
+	}
+
 }

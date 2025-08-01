@@ -190,4 +190,10 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 		selfIntroMapper.deleteSelfIntro(selfIntroVO);
 	}
 
+	@Override
+	public int selectSelfIntroTotalBymemId(SelfIntroVO selfIntroVO) {
+		// TODO Auto-generated method stub
+		return selfIntroMapper.selectSelfIntroTotalBymemId(selfIntroVO);
+	}
+
 }

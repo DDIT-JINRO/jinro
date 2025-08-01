@@ -50,10 +50,11 @@ public class ResumeController {
 			resumeVO.setKeyword(keyword);
 			resumeVO.setStatus(status);
 
+			int total = resumeService.selectResumeTotalBymemId(resumeVO);
 			// 사용자 자소서 리스트 불러옴
 			List<ResumeVO> ResumeVOList = resumeService.selectResumeBymemId(resumeVO);
 
-			ArticlePage<ResumeVO> articlePage = new ArticlePage<ResumeVO>(ResumeVOList.size(), currentPage, 5,
+			ArticlePage<ResumeVO> articlePage = new ArticlePage<ResumeVO>(total, currentPage, 5,
 					ResumeVOList, keyword);
 			log.info("list->articlePage : " + articlePage);
 			articlePage.setUrl("/rsm/rsm");

@@ -41,7 +41,7 @@ public class QuestionListController {
 		log.info("siqJobFilter : " + siqJobFilter);
 
 		int size = 5; // 한 페이지에 5개
-		int startRow = (currentPage - 1) * size + 1;
+		int startRow = (currentPage - 1) * size;
 		int endRow = currentPage * size;
 
 		if (siqJobFilter == null || (siqJobFilter.size() == 1 && siqJobFilter.get(0).isEmpty())) {

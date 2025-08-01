@@ -81,4 +81,6 @@ public interface SelfIntroMapper {
 
 	// 자소서 상세 삭제
 	public void deleteSelfIntroContent(SelfIntroVO selfIntroVO);
+
+	public int selectSelfIntroTotalBymemId(SelfIntroVO selfIntroVO);
 }
