@@ -170,16 +170,16 @@ public class NoticeServiceImpl implements NoticeService {
         // 첨부파일이 없던 공지사항의 경우 파일그룹 생성
 	    if(noticeVo.getFileGroupNo() == null) {
         	Long newGroupId = fileService.createFileGroup();
-        	noticeVo.setFileGroupNo(newGroupId);
-        	
-        	// 공지사항 테이블에 FILE_GROUP_NO 업데이트
-        	noticeMapper.updateNoticeFileGroup(noticeVo.getNoticeId(), newGroupId);
+        	noticeVo.setFileGroupNo(newGroupId); 	
         } 
     	
 	    // 첨부파일 추가
         try {
 			fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
-		} catch (IOException e) {
+		 	// 공지사항 테이블에 FILE_GROUP_NO 업데이트
+        	noticeMapper.updateNoticeFileGroup(noticeVo.getNoticeId(), noticeVo.getFileGroupNo());
+       
+        } catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
