@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import kr.or.ddit.csc.faq.service.FaqVO;
 
@@ -25,5 +26,7 @@ public interface FaqMapper {
 	public int deleteFaq(int faqId);
 
 	public List<FaqVO> getUserFaqList(String keyword);
+
+	public void updateFaqFileGroupID(@Param("faqId") int faqId, @Param("newGroupId") Long newGroupId);
 
 }

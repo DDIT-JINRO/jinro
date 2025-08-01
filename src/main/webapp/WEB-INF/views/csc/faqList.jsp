@@ -20,11 +20,15 @@
 	<div class="public-wrapper">
   		<div class="public-wrapper-main">
 			<div class="faq-wrapper">
-				<form class="faq-search-box" action="/csc/faq/faqList.do" method="get">
-					<div class="faq-search-input-wrapper">
-						<input type="text" class="faq-search-input" name="keyword" placeholder="검색어를 입력하세요..." value="${param.keyword}">
-					</div>
-					<button type="submit" class="faq-search-btn">검색</button>
+				<form method="get" action="/csc/faq/faqList.do">
+				    <div class="com-default-search">
+				        <input type="search" name="keyword" placeholder="FAQ 내에서 검색">
+				        <button class="com-search-btn" type="button">
+				            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+				                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+				            </svg>
+				        </button>
+				    </div>
 				</form>
 				<div class="faq-list">
 					<c:forEach var="item" items="${faqList}">

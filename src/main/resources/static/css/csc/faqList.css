@@ -91,61 +91,78 @@
 	font-weight: bold;
 	color: #222;
 }
-/* 검색창 전체 wrapper */
-.faq-search-box {
-	display: flex;
-	gap: 8px;
-	width: 100%;
-	max-width: 1160px;
-	margin: 0 auto 30px;
+/* 검색창 */
+.com-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    /* 우측 구분선 */
+    border-right: 2px solid #e5e7eb;
 }
 
-/* 인풋 감싸는 wrapper */
-.faq-search-input-wrapper {
-	position: relative;
-	flex: 1;
+/* 검색창 select 박스 스타일 */
+.com-status-filter {
+    /* 기본 select 스타일 초기화 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0 36px 0 16px; /* 오른쪽 패딩으로 화살표 공간 확보 */
+    font-size: 1rem;
+    color: #4b5563;
+    cursor: pointer;
+    height: 100%;
+}
+.com-status-filter:focus {
+    outline: none;
+}
+/* IE 브라우저용 화살표 숨기기 */
+.com-status-filter::-ms-expand {
+    display: none;
 }
 
-/* 검색 input 필드 */
-.faq-search-input {
-	width: 100%;
-	padding: 12px 40px 12px 16px;
-	font-size: 15px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	height: 48px;
-	outline: none;
-	box-sizing: border-box;
+/* 커스텀 화살표 아이콘 */
+.com-select-arrow {
+    position: absolute;
+    right: 12px;
+    width: 20px;
+    height: 20px;
+    color: #6b7280;
+    pointer-events: none; /* 화살표가 select 클릭을 방해하지 않도록 */
 }
 
-/* 돋보기 아이콘 */
-.faq-search-icon {
-	position: absolute;
-	right: 12px;
-	top: 50%;
-	transform: translateY(-50%);
-	font-size: 15px;
-	color: #999;
-	pointer-events: none;
+/* 1. 기본 검색창 스타일 */
+.com-default-search {
+    display: flex;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background-color: #fff;
 }
 
-/* 검색 버튼 */
-.faq-search-btn {
-	padding: 0 20px;
-	background-color: #4E575E;
-	color: #fff;
-	font-size: 14px;
-	border: none;
-	border-radius: 8px;
-	min-width: 150px;
-	height: 48px;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
+.com-default-search input {
+    width: 100%;
+    border: none;
+    padding: 12px 16px;
+    font-size: 1rem;
 }
 
-.faq-search-btn:hover {
-	background-color: #33485a;
+.com-default-search input:focus {
+    outline: none;
 }
+
+.com-default-search .com-search-btn {
+    background: none;
+    border: none;
+    padding: 0 16px;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+
 /* FAQ 파일 다운로드 영역 */
 .faq-file {
 	width: 96%;

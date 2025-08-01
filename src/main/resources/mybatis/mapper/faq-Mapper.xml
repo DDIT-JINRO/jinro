@@ -75,4 +75,11 @@
 		SET FAQ_DEL_YN = 'Y'
 		WHERE FAQ_ID = #{faqId}
 	</update>
+	
+		
+	<update id="updateFaqFileGroupID">
+		UPDATE FAQ
+		SET FILE_GROUP_NO =#{newGroupId}
+		WHERE FAQ_ID = #{faqId}
+	</update>
 </mapper>

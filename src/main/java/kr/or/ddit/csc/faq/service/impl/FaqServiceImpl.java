@@ -108,6 +108,9 @@ public class FaqServiceImpl implements FaqService{
 		    } catch (IOException e) {
 		        e.printStackTrace();
 		    }
+		} else {
+			// 파일 그룹 오류 해결
+			faqVO.setFileGroupNo(0L);
 		}
 		
 		return faqMapper.insertFaq(faqVO);
@@ -117,8 +120,13 @@ public class FaqServiceImpl implements FaqService{
 	@Override
 	public int updateFaq(FaqVO faqVO) {
 
+		// 실제 첨부된 유효한 파일만 필터링
+		List<MultipartFile> validFiles = faqVO.getFiles().stream()
+		    .filter(file -> file != null && !file.isEmpty() && file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank())
+		    .toList();
+		
 		// 파일이 있을 경우
-		if (!faqVO.getFiles().isEmpty() && faqVO.getFiles().size() > 1) {
+		if (!validFiles.isEmpty()) {
 			
 			// 기존 파일이 있을 경우
 			if(faqVO.getFileGroupNo() != null) {
@@ -136,12 +144,13 @@ public class FaqServiceImpl implements FaqService{
 				// 파일 업로드
 				try {
 					fileService.uploadFiles(faqVO.getFileGroupNo(), faqVO.getFiles());
+					faqMapper.updateFaqFileGroupID(faqVO.getFaqId(),faqVO.getFileGroupNo());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		
+		log.info(""+faqVO);
 		return faqMapper.updateFaq(faqVO);
 	}
 

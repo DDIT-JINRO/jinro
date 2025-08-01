@@ -112,9 +112,9 @@ public class NoticeServiceImpl implements NoticeService {
 	public NoticeVO getAdminNoticeDetail(String noticeIdStr) {
 
 		int noticeId = Integer.parseInt(noticeIdStr);
-
 		// 게시글 상세 조회
 		NoticeVO noticeDetail = noticeMapper.getNoticeDetail(noticeId);
+		log.info(""+noticeDetail);
 
 		// 파일 불러오기
 		List<FileDetailVO> getFileList = fileService.getFileList(noticeDetail.getFileGroupNo());
@@ -138,6 +138,7 @@ public class NoticeServiceImpl implements NoticeService {
 		// 첨부파일이 있는 경우
 		if (!validFiles.isEmpty()) {
 			// 파일 그룹 생성
+			log.info("파일 그룹 넘버 생성");
 			Long createFileGroupId = fileService.createFileGroup();
 			noticeVo.setFileGroupNo(createFileGroupId);
 
@@ -147,6 +148,10 @@ public class NoticeServiceImpl implements NoticeService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else {
+			// 타 공지사항의 FILE_GROUP_ID가 INSERT되는 것을 방지
+			
+			noticeVo.setFileGroupNo(0L);
 		}
 		
 		// 공지사항 등록
