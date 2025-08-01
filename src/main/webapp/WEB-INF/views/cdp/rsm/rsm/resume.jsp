@@ -22,7 +22,7 @@
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
 		    <a class="tab active" href="/rsm/rsm">이력서</a>
-		    <a class="tab" href="/rsm/rsmb">이력서 템플릿 게시판</a>
+		    <a class="tab" href="/cdp/rsm/rsmb/resumeBoardList.do">이력서 템플릿 게시판</a>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
