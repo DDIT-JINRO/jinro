@@ -194,9 +194,6 @@ public class StudyGroupController {
 
 	@PostMapping("/createStdReply.do")
 	public ResponseEntity<StdReplyVO> createStdReply(StdReplyVO stdReplyVO, Principal principal) {
-		System.out.println("=======================================================");
-		System.out.println("stdReplyVO : "+stdReplyVO);
-		System.out.println("=======================================================");
 		if(principal==null||principal.getName().equals("anonymousUser")) {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
@@ -302,9 +299,6 @@ public class StudyGroupController {
 		if(memId == null || memId.equals("anonymousUser")) {
 			return "/login";
 		}
-		System.out.println("===========================================================");
-		System.out.println(stdBoardVO);
-		System.out.println("===========================================================");
 
 		int resultBoardId = this.studyGroupService.updateStdBoard(stdBoardVO);
 		if(resultBoardId > 0) {
