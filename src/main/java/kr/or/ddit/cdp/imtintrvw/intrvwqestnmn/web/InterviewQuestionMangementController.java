@@ -16,7 +16,7 @@ public class InterviewQuestionMangementController {
 		return "cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangement";
 	}
 	
-	@GetMapping("detail.do")
+	@GetMapping("/detail.do")
 	public String interviewQuestionMangementDetail() {
 		return "cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementDetail";
 	}
