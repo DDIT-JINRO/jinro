@@ -98,7 +98,7 @@ public class ResumeServiceImpl implements ResumeService {
 
 	@Override
 	public int deleteResumeById(int resumeId) {
-		// TODO Auto-generated method stub
+		
 		return resumeMapper.deleteResumeById(resumeId);
 	}
 

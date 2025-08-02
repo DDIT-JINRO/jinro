@@ -66,19 +66,6 @@
 									선택해주세요.</span>
 							</div>
 
-							<div class="form-group photo-group">
-								<label for="photo-upload" class="photo-upload-area"> 
-								<div class="upload-placeholder">
-									<i class="fa fa-plus" aria-hidden="true"></i>
-									 <span>사진추가</span> 
-								</div>
-									<img id="photo-preview" src="" alt=""/>
-
-									<!-- 파일 업로드 --> <input type="file" id="photo-upload"
-									name="files" accept="image/*" class="sr-only">
-								</label>
-								<button id="photo-delete-btn" type="button">삭제</button>
-							</div>
 							<div class="form-group email-group">
 								<label for="email">이메일 <span class="required-asterisk">*</span></label>
 								<input type="email" id="email" name="email" placeholder="이메일"
@@ -94,6 +81,19 @@
 									placeholder="휴대폰번호를 입력해주세요." value="" required> <span
 									class="error-message" id="mobile-phone-error">휴대폰번호를
 									입력해주세요.</span>
+							</div>
+							<div class="form-group photo-group">
+								<label for="photo-upload" class="photo-upload-area"> 
+								<div class="upload-placeholder">
+									<i class="fa fa-plus" aria-hidden="true"></i>
+									 <span>사진추가</span> 
+								</div>
+									<img id="photo-preview" src="" alt=""/>
+
+									<!-- 파일 업로드 --> <input type="file" id="photo-upload"
+									name="files" accept="image/*" class="sr-only">
+								</label>
+								<button id="photo-delete-btn" type="button">삭제</button>
 							</div>
 
 							<div class="form-group address-group">

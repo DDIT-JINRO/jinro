@@ -106,7 +106,12 @@ public class ResumeController {
 		Map<String, Object> result = new HashMap<>();
 		try {
 			int cnt = resumeService.deleteResumeById(resumeVO.getResumeId()); // 삭제 처리
-			result.put("status", "success");
+			if(cnt>0) {
+				
+				result.put("status", "success");
+			}else {
+				result.put("status", "fail");
+			}
 		} catch (Exception e) {
 			result.put("status", "fail");
 			result.put("message", e.getMessage());
