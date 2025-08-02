@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="/css/channel.css">
 <link rel="stylesheet" href="/css/pagenation.css">
 <link rel="stylesheet" href="/css/chatModal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="/js/axios.min.js"></script>
 <script src="/js/com/sockjs.min.js"></script>
 <script src="/js/com/stomp.min.js"></script>
@@ -29,7 +32,7 @@ const memId = '<sec:authentication property="name" />'
 		header();
 
 		menuIcon.addEventListener("click",() => {
-			dropdown.classList.toggle("hidden");
+			dropdown.classList.toggle(" hidden");
 		});
 
 		document.addEventListener("click",(event) => {
@@ -186,18 +189,18 @@ const memId = '<sec:authentication property="name" />'
 		</ul>
 	</div>
 
-<div class="right-fixed-bar">
-    <button class="right-fixed-btn">
-		<img src="/images/worldCup.png" id="worldcup" alt="월드컵">
-	</button>
-	<button class="right-fixed-btn" id="chatRooms">
-		<img src="/images/chaticon.png" alt="채팅">
-		<span id="chatFloatingBadge" class="chat-unread-badge" style="position: absolute; top: -5px; right: -10px; display: none;">0</span>
-	</button>
-	<button id="roadmap" class="right-fixed-btn">
-		<img src="/images/roadmapicon.png" alt="진로탐색">
-	</button>
-</div>
-<%@ include file="/WEB-INF/views/include/chatModal.jsp"%>
-<%@ include file="/WEB-INF/views/include/alarmModal.jsp"%>
+	<div class="right-fixed-bar">
+		<button class="right-fixed-btn">
+			<img src="/images/worldCup.png" id="worldcup" alt="월드컵">
+		</button>
+		<button class="right-fixed-btn" id="chatRooms">
+			<img src="/images/chaticon.png" alt="채팅">
+			<span id="chatFloatingBadge" class="chat-unread-badge" style="position: absolute; top: -5px; right: -10px; display: none;">0</span>
+		</button>
+		<button id="roadmap" class="right-fixed-btn">
+			<img src="/images/roadmapicon.png" alt="진로탐색">
+		</button>
+	</div>
+	<%@ include file="/WEB-INF/views/include/chatModal.jsp"%>
+	<%@ include file="/WEB-INF/views/include/alarmModal.jsp"%>
 <body>

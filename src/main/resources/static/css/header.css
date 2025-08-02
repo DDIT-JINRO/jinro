@@ -180,7 +180,6 @@ body {
 	display: flex;
 	position: relative;
 	border-bottom: 2px solid transparent;
-	font-family: 'MyFont', sans-serif;
 	font-size: 18px;
 }
 
@@ -206,10 +205,12 @@ body {
 	color: black;
 	z-index: 1;
 	text-decoration: none;
+	font-weight: 500;
 }
 
 .tab.active {
 	color: #6c75ff;
+	font-weight: 600;
 }
 
 .tab.active::after {

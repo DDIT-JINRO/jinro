@@ -2,23 +2,25 @@
 
 .channel {
 	background-image: url("/images/backImg.png");
+/* 	background-color: rgb(204, 220, 254); */
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
 	width: 100%;
 	height: 220px;
-	font-family: 'MyFont', sans-serif;
 }
 
 .channel-title {
 	display: flex;
 	justify-content: center;
+	font-weight: 700;
 }
 
 .channel-title-text {
 
-	margin: 50px 0 80px 0;
+	margin: 50px 0;
 	font-size: 25px;
+	
 
 }
 
@@ -30,11 +32,17 @@
 
 .channel-sub-section-item {
 	font-size : 18px;
+	font-weight: 600;
 	color: #848484;
+	width: 150px;
+    text-align: center;
 }
 
 .channel-sub-section-itemIn {
 	font-size : 18px;
+	font-weight: 600;
+	width: 150px;
+    text-align: center;
 }
 
 .channel-sub-section-itemIn a,
