@@ -33,6 +33,7 @@ public class StdBoardVO {
 	private String memEmail;
 	private String fileBadge;
 	private String fileProfile;
+	private String fileSub;
 
 	// JSON 파싱 후 저장할 필드들
 	private String region;
