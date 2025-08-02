@@ -11,22 +11,22 @@
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-itemIn"><a href="/rsm/rsm">이력서</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/cdp/rsm/rsm/resumeList.do">이력서</a></div>
 		<div class="channel-sub-section-item"><a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a></div>
 		<div class="channel-sub-section-item"><a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a></div>
-		<div class="channel-sub-section-item"><a href="/aifdbck/rsm">AI 피드백</a></div>
+		<div class="channel-sub-section-item"><a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a></div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <a class="tab active" href="/rsm/rsm">이력서</a>
+		    <a class="tab active" href="/cdp/rsm/rsm/resumeList.do">이력서</a>
 		    <a class="tab" href="/cdp/rsm/rsmb/resumeBoardList.do">이력서 템플릿 게시판</a>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-			<form method="get" action="/rsm/rsm" class="resume-search-filter">
+			<form method="get" action="/cdp/rsm/rsm/resumeList.do" class="resume-search-filter">
 				<!-- 검색어 입력 -->
 				<input type="text" name="keyword" value="${param.keyword}"
 					placeholder="이력서 제목 검색" class="resume-search-input" />
@@ -64,11 +64,11 @@
 							</div>
 						</div>
 						<a class="resume-edit-button"
-							href="/rsm/rsm/resumeWriter?resumeId=${resume.resumeId}"> 이력서 수정하러 가기 </a>
+							href="/cdp/rsm/rsm/resumeWriter.do?resumeId=${resume.resumeId}"> 이력서 수정하러 가기 </a>
 					</div>
 				</c:forEach>
 			</div>
-			<a href="/rsm/rsm/resumeWriter" class="resume-writer">이력서 작성하러가기</a>
+			<a href="/cdp/rsm/rsm/resumeWriter.do" class="resume-writer">이력서 작성하러가기</a>
   		</div>
 	</div>
 </div>

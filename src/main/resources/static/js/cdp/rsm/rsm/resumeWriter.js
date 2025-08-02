@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				existingElement.remove();
 			} else {
 				// 추가된 콘텐츠가 없으면 서버에서 HTML 데이터를 받아옴
-				axios.get('/rsm/rsm/getElement?rsId=' + rsId)
+				axios.get('/cdp/rsm/rsm/getElement?rsId=' + rsId)
 					.then(function(response) {
 						const lastDiv = form.lastElementChild; // 폼의 마지막 div를 찾음
 
@@ -187,7 +187,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	if (deleteButton) {
 		deleteButton.addEventListener("click", function() {
 			const resumeId = document.querySelector("#resumeId").value;
-
+			
+			console.log("asd");
+			console.log(resumeId);
+			
 			if (!resumeId || resumeId === "0") {
 				alert("삭제할 이력서가 없습니다.");
 				return;
@@ -195,11 +198,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 			if (!confirm("정말 삭제하시겠습니까?")) return;
 
-			axios.post("/rsm/rsm/deleteResume.do", resumeId)
+			axios.post("/cdp/rsm/rsm/deleteResume.do",{resumeId : resumeId})
 				.then(response => {
 					if (response.data.status === 'success') {
 						alert("이력서가 삭제되었습니다.");
-						location.href = "/rsm/rsm"; // 삭제 후 목록 페이지 등으로 이동
+						location.href = "/cdp/rsm/rsm/resumeList.do"; // 삭제 후 목록 페이지 등으로 이동
 					} else {
 						alert("삭제에 실패했습니다.");
 					}
@@ -528,14 +531,14 @@ function submitResume(resumeTitle, resumeContent, resumeId, photoFile, fileGroup
 	}
 
 	// FormData는 form.submit과 달리 비동기 전송
-	fetch('/rsm/rsm/insertResume', {
+	fetch('/cdp/rsm/rsm/insertResume.do', {
 		method: 'POST',
 		body: formData,
 	})
 		.then(response => response.json())
 		.then(data => {
 			if (data.status === 'success') {
-				location.href = `/rsm/rsm`;//resumeWriter?resumeId=${data.resumeId}`;
+				location.href = `/cdp/rsm/rsm/resumeList.do`;//resumeWriter?resumeId=${data.resumeId}`;
 			} else {
 				location.href = '/login';
 			}

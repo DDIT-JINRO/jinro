@@ -24,14 +24,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
-@RequestMapping("/rsm/rsm")
+@RequestMapping("/cdp/rsm/rsm")
 @Controller
 @Slf4j
 public class ResumeController {
 
 	private final ResumeService resumeService;
 
-	@GetMapping() // resumeList.do
+	@GetMapping("/resumeList.do") // resumeList.do
 	public String resumePage(Principal principal, Model model, @RequestParam(required = false) String keyword,
 			@RequestParam(required = false) String status,
 			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
@@ -52,7 +52,7 @@ public class ResumeController {
 			List<ResumeVO> ResumeVOList = resumeService.selectResumeBymemId(resumeVO);
 
 			ArticlePage<ResumeVO> articlePage = new ArticlePage<ResumeVO>(total, currentPage, 5, ResumeVOList, keyword);
-			articlePage.setUrl("/rsm/rsm");
+			articlePage.setUrl("/cdp/rsm/rsm/resumeList.do");
 
 			model.addAttribute("articlePage", articlePage);
 
@@ -60,10 +60,10 @@ public class ResumeController {
 			return "redirect:/login";
 		}
 
-		return "cdp/rsm/rsm/resume";
+		return "cdp/rsm/rsm/resumeList";
 	}
 
-	@GetMapping("/resumeWriter")
+	@GetMapping("/resumeWriter.do")
 	public String resumedeatilPage(@ModelAttribute ResumeVO resumeVO, Model model) {
 		resumeVO = resumeService.selectResumeByResumeId(resumeVO);
 
@@ -80,7 +80,7 @@ public class ResumeController {
 
 	}
 
-	@PostMapping("/insertResume")
+	@PostMapping("/insertResume.do")
 	@ResponseBody
 	public Map<String, Object> insertResume(Principal principal, @ModelAttribute ResumeVO resumeVO, Model model)
 			throws UnsupportedEncodingException {
@@ -101,6 +101,7 @@ public class ResumeController {
 	@PostMapping("/deleteResume.do")
 	@ResponseBody
 	public Map<String, Object> deleteResume(@ModelAttribute ResumeVO resumeVO) {
+		log.info("resumeVO"+resumeVO);
 		Map<String, Object> result = new HashMap<>();
 		try {
 			int cnt = resumeService.deleteResumeById(resumeVO.getResumeId()); // 삭제 처리
