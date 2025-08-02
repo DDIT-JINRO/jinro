@@ -16,7 +16,7 @@ function loadCustomQuestionList() {
     select.innerHTML = '<option value="" disabled selected class="loading-text">질문 리스트를 불러오는 중...</option>';
     
     // AJAX 요청
-    fetch('/imtintrvw/aiimtintrvw/getCustomQuestionList', {
+    fetch('/cdp/imtintrvw/aiimtintrvw/getCustomQuestionList', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ function loadIndustryList() {
     select.innerHTML = '<option value="" disabled selected class="loading-text">업종 리스트를 불러오는 중...</option>';
     
     // AJAX 요청
-    fetch('/imtintrvw/aiimtintrvw/getIndustryList', {
+    fetch('/cdp/imtintrvw/aiimtintrvw/getIndustryList', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -260,7 +260,7 @@ function validateInterviewSettings(selectedValue) {
             params.append('questionCount', '10');
         }
         
-        let url = "/imtintrvw/aiimtintrvw/getInterviewQuestions?" + params.toString();
+        let url = "/cdp/imtintrvw/aiimtintrvw/getInterviewQuestions?" + params.toString();
         console.log("🔍 검증 URL:", url);
         
         // 간단한 검증만 수행 (실제 데이터는 React에서 로드)
