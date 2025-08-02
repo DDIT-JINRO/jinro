@@ -52,28 +52,34 @@
 						</button>
 					</div>
 				</form>
-
+				
 				<div class="self-intro-history-list">
-					<c:forEach var="selfIntro" items="${articlePage.content}">
-						<c:set var="writing" value="${selfIntro.siStatus eq '작성중' ? 'writing' : 'complete'}"/>
-						<div class="self-intro-history-item">
-							<div class="item-content">
-								<div class="item-header">
-									<span class="category-tag ${writing}">${selfIntro.siStatus}</span>
-									<h3 class="item-title">
-										<a href="/sint/sintwrt?siId=${selfIntro.siId}">${selfIntro.siTitle}</a>
-									</h3>
+					<c:choose>
+						<c:when test="${empty articlePage.content || articlePage.content == null }">
+							<p class="no-content-message">현재 자기소개서가 없습니다.</p>
+						</c:when>
+						<c:otherwise>
+							<c:forEach var="selfIntro" items="${articlePage.content}">
+								<c:set var="writing" value="${selfIntro.siStatus eq '작성중' ? 'writing' : 'complete'}"/>
+								<div class="self-intro-history-item">
+									<div class="item-content">
+										<div class="item-header">
+											<span class="category-tag ${writing}">${selfIntro.siStatus}</span>
+											<h3 class="item-title">
+												<a href="/sint/sintwrt?siId=${selfIntro.siId}">${selfIntro.siTitle}</a>
+											</h3>
+										</div>
+										<div class="item-meta">
+											<span>
+												마지막 작성일 : <fmt:formatDate value="${selfIntro.siUpdatedAt}" pattern="yyyy년 MM월 dd일" />
+											</span>
+										</div>
+									</div>
 								</div>
-								<div class="item-meta">
-									<span>
-										마지막 작성일 : <fmt:formatDate value="${selfIntro.siUpdatedAt}" pattern="yyyy년 MM월 dd일" />
-									</span>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 				</div>
-
 				<ul class="pagination">
 					<li>
 						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="
@@ -85,7 +91,7 @@
 
 					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 						<li>
-							<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&gubun=${param.gubun}" class="page-num 
+							<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="page-num 
 								<c:if test='${pNo == articlePage.currentPage}'>
 									active
 								</c:if>"> ${pNo}

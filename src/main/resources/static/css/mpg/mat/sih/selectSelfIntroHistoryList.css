@@ -150,35 +150,35 @@
     color: #6b7280;
 }
 
-.pagination {
-    list-style: none;
-    padding: 0;
-    margin: 40px 0 0 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-	height: 40px;
-}
 .pagination a {
-    color: #4b5563;
-    padding: 8px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: background-color 0.2s;
-    font-weight: 500;
+	padding: 0.4rem;
 }
-.pagination a:not(.disabled):hover {
-    background-color: #f3f4f6;
+
+.pagination li:last-child
+, .pagination li:first-child {
+	width: 100px;
 }
-.pagination a.page-num.active {
-    background-color: #7881f5; /* 포인트 색상 */
-    color: #fff;
-    font-weight: 700;
+
+.page-num {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 25px;
+	height: 25px;
+	border-radius: 6px;
+	text-decoration: none;
+	color: #374151;
+	font-weight: 500;
 }
-.pagination a.disabled {
-    color: #d1d5db;
-    pointer-events: none;
+
+.page-num:hover {
+	background-color: #f3f4f6;
+}
+
+.page-num.active {
+	background-color: #7881f5;
+	color: #fff;
+	font-weight: 700;
 }
 
 /* 5. (선택) 콘텐츠가 없을 경우를 위한 스타일 */

@@ -271,7 +271,7 @@
 				</div>
 				<div class="com-filter-section">
 					<div class="com-button-container">
-						<label class="com-filter-title">선택된 필터</label>
+						<label class="com-filter-title">선택된 관심 분야</label>
 						<button type="button" class="com-filter-reset-btn">초기화</button>
 					</div>
 					<div class="com-selected-filters">
