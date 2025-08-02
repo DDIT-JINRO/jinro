@@ -107,9 +107,11 @@
 								<label for="address">주소</label>
 								<div class="input-with-icon">
 									<input type="text" id="address" value="" name="address"
-										placeholder=""> <i class="fa fa-search icon-search"
+										placeholder="돋보기로 검색해주세요." readonly > <i class="fa fa-search icon-search"
 										aria-label="주소 검색"></i>
 								</div>
+									<input type="text" id="address-detail" value="" name="address-detail"
+									placeholder="상세주소 입력"  >
 							</div>
 						</div>
 						<div class="form-JobWish">
@@ -179,7 +181,8 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="/js/cdp/rsm/rsm/resumeWriter.js"></script>
 <script>
-	// 스크립트 작성 해주시면 됩니다.
+
 </script>
