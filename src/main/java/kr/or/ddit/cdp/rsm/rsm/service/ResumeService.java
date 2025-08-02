@@ -7,10 +7,10 @@ public interface ResumeService {
 	String getElement(ResumeSectionVO resumeSectionVO);
 
 	ResumeVO mergeIntoResume(ResumeVO resumeVO);
-	
+
 	ResumeVO selectResumeByResumeId(ResumeVO resumeVO);
 
-	//리스트 불러오기
+	// 리스트 불러오기
 	List<ResumeVO> selectResumeBymemId(ResumeVO resumeVO);
 
 	int deleteResumeById(int resumeId);

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
+
 @Data
 public class ResumeVO {
 	private int resumeId;
@@ -14,14 +15,14 @@ public class ResumeVO {
 	private String resumeIsTemp;
 	private Date createdAt;
 	private Date updatedAt;
-	private Long fileGroupId; 
+	private Long fileGroupId;
 	List<MultipartFile> files;
 	private String resumeContent;
-	
+
 	// 필터조건
 	private String keyword;
 	private String status;
-	
+
 	// 페이징
 	private int currentPage;
 	private int size;

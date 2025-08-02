@@ -1,239 +1,271 @@
 body {
-    font-family: 'Malgun Gothic', 'Apple Gothic', 'NanumGothic', sans-serif;
-    margin: 20px;
-    line-height: 1.6;
-    color: #333;
-    font-size: 12px;
-    /* 배경색은 PDF에 일반적으로 필요하지 않으므로 제거 */
-    /* background-color: #f4f7f6; */
+	font-family: 'Malgun Gothic', 'Apple Gothic', 'NanumGothic', sans-serif;
+	margin: 20px;
+	line-height: 1.6;
+	color: #333;
+	font-size: 12px;
+	/* 배경색은 PDF에 일반적으로 필요하지 않으므로 제거 */
+	/* background-color: #f4f7f6; */
 }
 
 /* 폰트 정의 (만약 TTF/OTF 파일로 폰트를 서버에 등록했다면 사용) */
 @font-face {
-    font-family: 'MyFont';
-    src: url('../fonts/BMDOHYEON_ttf.ttf') format('truetype'); /* WOFF2 대신 TTF/OTF 사용 권장 */
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'MyFont';
+	src: url('../fonts/BMDOHYEON_ttf.ttf') format('truetype');
+	/* WOFF2 대신 TTF/OTF 사용 권장 */
+	font-weight: normal;
+	font-style: normal;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #2c3e50;
-    margin-top: 0;
-    margin-bottom: 10px;
+	color: #2c3e50;
+	margin-top: 0;
+	margin-bottom: 10px;
 }
-h1 { font-size: 24px; }
-h2 { font-size: 20px; }
-h3 { font-size: 16px; }
+
+h1 {
+	font-size: 24px;
+}
+
+h2 {
+	font-size: 20px;
+}
+
+h3 {
+	font-size: 16px;
+}
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 11px;
+	width: 100%;
+	border-collapse: collapse;
+	margin: 20px 0;
+	font-size: 11px;
 }
+
 th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
 }
+
 th {
-    background-color: #f8f9fa;
-    font-weight: bold;
+	background-color: #f8f9fa;
+	font-weight: bold;
 }
+
 .header {
-    text-align: center;
-    margin-bottom: 30px;
+	text-align: center;
+	margin-bottom: 30px;
 }
+
 .footer {
-    text-align: center;
-    margin-top: 30px;
-    font-size: 10px;
-    color: #666;
+	text-align: center;
+	margin-top: 30px;
+	font-size: 10px;
+	color: #666;
 }
+
 p {
-    margin: 0 0 10px 0;
+	margin: 0 0 10px 0;
 }
+
 .highlight {
-    background-color: #fff3cd;
-    padding: 5px;
+	background-color: #fff3cd;
+	padding: 5px;
 }
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-.bold { font-weight: bold; }
+
+.text-center {
+	text-align: center;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.bold {
+	font-weight: bold;
+}
 
 /* font family class - Flying Saucer에 폰트가 등록되어 있어야 합니다. */
-.malgun { font-family: 'Malgun Gothic'; }
-.nanum { font-family: 'NanumGothic'; }
-.jeju { font-family: 'JejuGothic'; }
-.myfont { font-family: 'MyFont'; } /* 정의된 @font-face 폰트 클래스 추가 */
+.malgun {
+	font-family: 'Malgun Gothic';
+}
 
+.nanum {
+	font-family: 'NanumGothic';
+}
+
+.jeju {
+	font-family: 'JejuGothic';
+}
+
+.myfont {
+	font-family: 'MyFont';
+} /* 정의된 @font-face 폰트 클래스 추가 */
 
 /* General Body and Container Styles (중복 제거 및 PDF에 불필요한 속성 제거) */
 .public-wrapper-main {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 8px; /* PDF에서 렌더링되지 않거나 다르게 보일 수 있음 */
-    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* PDF에서는 지원되지 않음 */
-    /* position: relative; /* PDF에서는 일반적으로 불필요 */
+	max-width: 900px;
+	margin: 20px auto;
+	padding: 30px;
+	background-color: #fff;
+	border-radius: 8px; /* PDF에서 렌더링되지 않거나 다르게 보일 수 있음 */
+	/* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* PDF에서는 지원되지 않음 */
+	/* position: relative; /* PDF에서는 일반적으로 불필요 */
 }
 
 /* Section Styling */
 section {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
+	margin-bottom: 30px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #eee;
 }
 
 section:last-of-type {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
+	border-bottom: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
 }
 
 /* Section Headers - Flexbox 대신 block 또는 table-cell 기반으로 조정 고려 */
-.section-header, .JobWish-header, .Skills-header, .education-header, .certificate-header, .Activities-header {
-    display: block; /* Flexbox 대신 block으로 변경 */
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #007bff;
+.section-header, .JobWish-header, .Skills-header, .education-header,
+	.certificate-header, .Activities-header {
+	display: block; /* Flexbox 대신 block으로 변경 */
+	margin-bottom: 15px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #007bff;
 }
 
 h2 {
-    color: #007bff;
-    font-size: 1.8em;
-    margin: 0;
-    float: left; /* 제목과 필수 정보를 옆으로 배치할 경우 */
-    margin-right: 15px;
+	color: #007bff;
+	font-size: 1.8em;
+	margin: 0;
+	float: left; /* 제목과 필수 정보를 옆으로 배치할 경우 */
+	margin-right: 15px;
 }
 
 .required-info {
-    color: #888;
-    font-size: 0.9em;
-    display: block; /* 필수 정보도 블록으로 */
-    text-align: right; /* 오른쪽 정렬 (float 사용 시) */
-    overflow: hidden; /* float 해제 */
-}
-.section-header::after, .JobWish-header::after, .Skills-header::after, .education-header::after, .certificate-header::after, .Activities-header::after {
-    content: "";
-    display: table;
-    clear: both; /* float 해제 */
+	color: #888;
+	font-size: 0.9em;
+	display: block; /* 필수 정보도 블록으로 */
+	text-align: right; /* 오른쪽 정렬 (float 사용 시) */
+	overflow: hidden; /* float 해제 */
 }
 
+.section-header::after, .JobWish-header::after, .Skills-header::after,
+	.education-header::after, .certificate-header::after,
+	.Activities-header::after {
+	content: "";
+	display: table;
+	clear: both; /* float 해제 */
+}
 
 .required-asterisk {
-    color: red;
-    margin-left: 2px;
+	color: red;
+	margin-left: 2px;
 }
 
 /* Form Group Layouts - Grid 대신 Float 기반 또는 단순 블록 */
 .form-profile-grid {
-    /* display: grid; /* Flying Saucer에서 지원 안 될 수 있음 */
-    /* grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); */
-    /* gap: 20px; */
-    overflow: hidden; /* float 해제 */
-    margin-bottom: 20px; /* 섹션 하단 여백 */
+	/* display: grid; /* Flying Saucer에서 지원 안 될 수 있음 */
+	/* grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); */
+	/* gap: 20px; */
+	overflow: hidden; /* float 해제 */
+	margin-bottom: 20px; /* 섹션 하단 여백 */
 }
 
 .form-group {
-    display: block; /* Flexbox 대신 block */
-    margin-bottom: 15px; /* 각 폼 그룹 아래 여백 */
-    float: left; /* 옆으로 배치할 경우 */
-    width: 32%; /* 3개 컬럼 예시, 필요에 따라 조절 */
-    margin-right: 1%; /* 간격 */
-    box-sizing: border-box; /* 패딩, 보더 포함 너비 계산 */
+	display: block; /* Flexbox 대신 block */
+	margin-bottom: 15px; /* 각 폼 그룹 아래 여백 */
+	float: left; /* 옆으로 배치할 경우 */
+	width: 32%; /* 3개 컬럼 예시, 필요에 따라 조절 */
+	margin-right: 1%; /* 간격 */
+	box-sizing: border-box; /* 패딩, 보더 포함 너비 계산 */
 }
+
 .form-group:nth-child(3n) { /* 3번째마다 오른쪽 마진 제거 */
-    margin-right: 0;
+	margin-right: 0;
 }
 /* Address group은 전체 너비 */
 .address-group {
-    float: none; /* float 해제 */
-    clear: both; /* 이전 float 요소의 영향을 받지 않도록 */
-    width: 100%;
-    margin-right: 0;
+	float: none; /* float 해제 */
+	clear: both; /* 이전 float 요소의 영향을 받지 않도록 */
+	width: 100%;
+	margin-right: 0;
 }
 /* Photo group은 오른쪽에 배치하거나 별도로 처리 */
 .photo-group {
-    float: right; /* 오른쪽으로 배치 */
-    width: 190px; /* 고정 너비 */
-    text-align: center;
-    margin-left: 20px; /* 왼쪽 여백 */
+	float: right; /* 오른쪽으로 배치 */
+	width: 190px; /* 고정 너비 */
+	text-align: center;
+	margin-left: 20px; /* 왼쪽 여백 */
 }
-
 
 /* Label and Input/Select Styles */
 label {
-    font-weight: bold; /* bold 대신 600으로 되어 있었음 */
-    margin-bottom: 8px;
-    color: #555;
-    display: block;
+	font-weight: bold; /* bold 대신 600으로 되어 있었음 */
+	margin-bottom: 8px;
+	color: #555;
+	display: block;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="date"],
-select {
-    width: 96%;
-    padding: 10px; /* 패딩 축소하여 PDF 렌더링 안정성 높임 */
-    border: 1px solid #ccc;
-    border-radius: 4px; /* PDF에서 렌더링되지 않거나 다르게 보일 수 있음 */
-    font-size: 1em;
-    box-sizing: border-box;
-    /* transition: none; /* PDF에서 지원 안 됨 */
-    /* focus 스타일은 PDF에서 의미 없음 */
+input[type="text"], input[type="email"], input[type="tel"], input[type="date"],
+	select {
+	width: 96%;
+	padding: 10px; /* 패딩 축소하여 PDF 렌더링 안정성 높임 */
+	border: 1px solid #ccc;
+	border-radius: 4px; /* PDF에서 렌더링되지 않거나 다르게 보일 수 있음 */
+	font-size: 1em;
+	box-sizing: border-box;
+	/* transition: none; /* PDF에서 지원 안 됨 */
+	/* focus 스타일은 PDF에서 의미 없음 */
 }
 
 .error-message {
-    color: #e74c3c;
-    font-size: 0.85em;
-    margin-top: 5px;
-    /* display: none; /* 실제 미리보기에서는 보여야 할 수도 있음 */
+	color: #e74c3c;
+	font-size: 0.85em;
+	margin-top: 5px;
+	/* display: none; /* 실제 미리보기에서는 보여야 할 수도 있음 */
 }
 
-.address-group,
-.form-JobWish,
-.form-Skills,
-.form-Education,
-.form-certificate,
-.certificate-input-container,
-.form-activities { /* activities 추가 */
+.address-group, .form-JobWish, .form-Skills, .form-Education,
+	.form-certificate, .certificate-input-container, .form-activities {
+	/* activities 추가 */
 	margin-bottom: 15px;
 }
 
 /* Specific Group Adjustments - float 기반으로 조정 */
 .name-group, .email-group, .mobile-phone-group {
-    /* float: left; width: 32%; margin-right: 1%; 와 중복되므로 제거 */
+	/* float: left; width: 32%; margin-right: 1%; 와 중복되므로 제거 */
+	
 }
 
 /* Photo Upload */
 .photo-upload-area {
-    width: 120px; /* 크기 조정 */
-    height: 120px;
-    border: 1px solid #ccc; /* 점선 대신 실선 */
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative; /* img#photo-preview가 absolute일 경우 필요 */
-    background-color: #f9f9f9;
-    margin: 0 auto 10px auto; /* 중앙 정렬 */
-    /* flexbox 관련 속성 제거 */
-    display: block; /* 블록 요소로 */
+	width: 120px; /* 크기 조정 */
+	height: 120px;
+	border: 1px solid #ccc; /* 점선 대신 실선 */
+	border-radius: 50%;
+	overflow: hidden;
+	position: relative; /* img#photo-preview가 absolute일 경우 필요 */
+	background-color: #f9f9f9;
+	margin: 0 auto 10px auto; /* 중앙 정렬 */
+	/* flexbox 관련 속성 제거 */
+	display: block; /* 블록 요소로 */
 }
 
 .photo-upload-area img#photo-preview {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    display: block; /* 이미지 자체가 블록이 되도록 */
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 50%;
+	display: block; /* 이미지 자체가 블록이 되도록 */
 }
 
 .upload-placeholder {
-    text-align: center;
-    color: #888;
-    display: none; /* 미리보기에서는 placeholder 숨김 */
+	text-align: center;
+	color: #888;
+	display: none; /* 미리보기에서는 placeholder 숨김 */
 }
 
 /* .photo-delete-btn { /* 미리보기에서는 버튼 필요 없음 */
@@ -242,47 +274,43 @@ select {
 
 /* Input with Icon (Address Search) */
 .input-with-icon {
-    position: relative;
-    width: 100%;
+	position: relative;
+	width: 100%;
 }
 
 .input-with-icon input {
-    padding-right: 30px; /* Space for the icon */
+	padding-right: 30px; /* Space for the icon */
 }
 
 .input-with-icon .icon-search {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%); /* PDF에서 transform 지원이 제한적일 수 있음 */
-    color: #888;
-    /* cursor: pointer; /* PDF에서는 의미 없음 */
-    font-size: 1.1em;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%); /* PDF에서 transform 지원이 제한적일 수 있음 */
+	color: #888;
+	/* cursor: pointer; /* PDF에서는 의미 없음 */
+	font-size: 1.1em;
 }
 
 /* Dynamic Input Groups */
-.job-input-group,
-.skills-input-group,
-.education-input-container,
-.certificate-input-container,
-.activities-input-container {
-    display: block; /* Flexbox 대신 block */
-    /* gap: 15px; /* PDF에서 지원 안 됨, margin-bottom으로 대체 */
-    margin-top: 15px;
+.job-input-group, .skills-input-group, .education-input-container,
+	.certificate-input-container, .activities-input-container {
+	display: block; /* Flexbox 대신 block */
+	/* gap: 15px; /* PDF에서 지원 안 됨, margin-bottom으로 대체 */
+	margin-top: 15px;
 }
 
 .input-container {
-    display: block; /* Flexbox 대신 block */
-    /* gap: 10px; /* PDF에서 지원 안 됨 */
-    width: 100%;
-    margin-bottom: 10px; /* 간격 조절 */
-    overflow: hidden; /* float 해제 */
+	display: block; /* Flexbox 대신 block */
+	/* gap: 10px; /* PDF에서 지원 안 됨 */
+	width: 100%;
+	margin-bottom: 10px; /* 간격 조절 */
+	overflow: hidden; /* float 해제 */
 }
 
-.input-container input[type="text"],
-.input-container select {
-    width: 90%; /* 인풋 너비 조정 (삭제 버튼 공간 고려) */
-    float: left; /* 삭제 버튼과 옆으로 배치 */
+.input-container input[type="text"], .input-container select {
+	width: 90%; /* 인풋 너비 조정 (삭제 버튼 공간 고려) */
+	float: left; /* 삭제 버튼과 옆으로 배치 */
 }
 
 /* .delete-button { /* 미리보기에서는 버튼 필요 없음 */
@@ -290,29 +318,28 @@ select {
 /* } */
 
 /* Education specific adjustments */
-.input-container.education{
+.input-container.education {
 	display: flex;
 }
 
 .education-input-group {
-    display: block; /* Flexbox 대신 block */
-    /* gap: 10px; /* margin-bottom으로 대체 */
-    margin-bottom: 10px;
-    overflow: hidden; /* float 해제 */
+	display: block; /* Flexbox 대신 block */
+	/* gap: 10px; /* margin-bottom으로 대체 */
+	margin-bottom: 10px;
+	overflow: hidden; /* float 해제 */
 }
 
-.education-input-group select,
-.input-container.education select{
-    width: 34%; /* 고정 너비 */
-    float: left;
-    margin-right: 1%;
-    box-sizing: border-box;
+.education-input-group select, .input-container.education select {
+	width: 34%; /* 고정 너비 */
+	float: left;
+	margin-right: 1%;
+	box-sizing: border-box;
 }
-.education-input-group input,
-.input-container.education input {
-    width: 60%; /* 나머지 공간 */
-    float: left;
-    box-sizing: border-box;
+
+.education-input-group input, .input-container.education input {
+	width: 60%; /* 나머지 공간 */
+	float: left;
+	box-sizing: border-box;
 }
 
 /* Button Groups - 미리보기 HTML에서 JS로 제거되므로 CSS 불필요 */
@@ -329,5 +356,5 @@ select {
 
 /* Utility Classes */
 .hidden {
-    display: none !important;
+	display: none !important;
 }
