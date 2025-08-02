@@ -18,7 +18,7 @@
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-item">
-			<a href="/rsm/rsm">이력서</a>
+			<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
 		</div>
 		<div class="channel-sub-section-itemIn">
 			<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
