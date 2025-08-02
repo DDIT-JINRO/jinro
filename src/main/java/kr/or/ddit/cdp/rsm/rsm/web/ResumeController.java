@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -100,7 +101,7 @@ public class ResumeController {
 
 	@PostMapping("/deleteResume.do")
 	@ResponseBody
-	public Map<String, Object> deleteResume(@ModelAttribute ResumeVO resumeVO) {
+	public Map<String, Object> deleteResume(@RequestBody ResumeVO resumeVO) {
 		log.info("resumeVO"+resumeVO);
 		Map<String, Object> result = new HashMap<>();
 		try {
@@ -110,6 +111,7 @@ public class ResumeController {
 			result.put("status", "fail");
 			result.put("message", e.getMessage());
 		}
+		log.info("result"+result);
 		return result;
 	}
 

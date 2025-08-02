@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 			if (!confirm("정말 삭제하시겠습니까?")) return;
 
-			axios.post("/cdp/rsm/rsm/deleteResume.do",{resumeId : resumeId})
+			axios.post("/cdp/rsm/rsm/deleteResume.do",{resumeId:resumeId})
 				.then(response => {
 					if (response.data.status === 'success') {
 						alert("이력서가 삭제되었습니다.");
