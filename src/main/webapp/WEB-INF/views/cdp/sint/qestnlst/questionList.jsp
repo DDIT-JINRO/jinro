@@ -93,18 +93,8 @@
 					<!-- 오른쪽 패널 -->
 					<div class="cart-panel">
 						<div id="cartSidebar"></div>
-						<!-- 로그인된 사용자에게는 실제 장바구니 제출 버튼 -->
-						<sec:authorize access="isAuthenticated()">
-							<button type="button" onclick="submitCartForm()">자기소개서
+							<button type="button" class="submitCartForm" >자기소개서
 								작성</button>
-						</sec:authorize>
-
-						<!-- 익명(비로그인) 사용자에게는 로그인 페이지로 -->
-						<sec:authorize access="!isAuthenticated()">
-							<button type="button"
-								onclick="location.href='${pageContext.request.contextPath}/login?'">
-								로그인 후 작성</button>
-						</sec:authorize>
 					</div>
 				</form>
 

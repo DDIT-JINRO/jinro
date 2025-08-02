@@ -100,6 +100,30 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}
 	}
+	
+	
+	const submitCart = document.querySelector(".submitCartForm");
+	
+	if(!memId || memId =='anonymousUser'){
+		if (submitCart) { // 버튼이 존재하는지 확인 (에러 방지)
+		    submitCart.textContent = '로그인 하러 가기';
+			submitCart.addEventListener('click', function(){
+				window.location.href = '/login';
+			});
+		  }
+	}else
+	
+	// 6) 폼 제출
+	submitCart.addEventListener("click",function(){
+		
+		if (selectedQuestions.length === 0) {
+			alert('자기소개서 작성을 위해 질문을 선택해주세요.');
+			return;
+		}
+		// 필요하다면 여기서 sessionStorage.removeItem('selectedQuestions');
+		document.getElementById('cartForm').submit();
+		sessionStorage.clear();
+	}) 
 });
 
 // 2) 선택 토글 함수
@@ -171,13 +195,5 @@ function updateQuestionIdsInput() {
 		selectedQuestions.map(q => q.id).join(',');
 }
 
-// 6) 폼 제출
-function submitCartForm() {
-	if (selectedQuestions.length === 0) {
-		alert('자기소개서 작성을 위해 질문을 선택해주세요.');
-		return;
-	}
-	// 필요하다면 여기서 sessionStorage.removeItem('selectedQuestions');
-	document.getElementById('cartForm').submit();
-	sessionStorage.clear();
-}
+
+
