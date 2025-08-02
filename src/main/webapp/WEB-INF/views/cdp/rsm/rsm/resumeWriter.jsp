@@ -94,11 +94,6 @@
 							</div>
 
 
-							<div class="form-group phone-group">
-								<label for="phone">전화번호</label> <input type="tel" id="phone"
-									name="phone" value="" placeholder="전화번호">
-							</div>
-
 							<div class="form-group mobile-phone-group">
 								<label for="mobile-phone">휴대폰번호 <span
 									class="required-asterisk">*</span></label> <input type="tel"
