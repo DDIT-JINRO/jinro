@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,11 +51,9 @@ public class AiFeedbackSelfIntroController {
 		// 예: selfIntroService.getAllSelfIntrosByMemId(memId);
 		List<SelfIntroVO> selfIntroList = selfIntroService.selectSelfIntroBymemId(selfIntroVO);
 
-		System.out.println("이거 확인해봑라" + selfIntroList);
 		// JSP로 넘겨줄 모델에 담기. JSTL <c:forEach>의 items 속성과 일치하도록 "selfIntroList"로 명명.
 		model.addAttribute("selfIntroList", selfIntroList);
 
-		log.info("AI 피드백 페이지에 전달되는 자기소개서 목록: {}", selfIntroList);
 
 		return "cdp/aifdbck/sint/aiFeedbackSelfIntro";
 	}
