@@ -62,7 +62,7 @@
 								<label class="com-filter-title">북마크 필터</label>
 								<div class="com-filter-options">
 									<label class="com-filter-item">
-										<input id="all" type="radio" name="bmCategoryId" value="" ${param.bmCategoryId == '' ? 'checked' : ''}/>
+										<input id="all" type="radio" name="bmCategoryId" value="" ${empty param.bmCategoryId ? 'checked' : ''}/>
 										<span>전체</span>
 									</label>
 									<c:forEach var="bmCategory" items="${bmCategoryList}">
