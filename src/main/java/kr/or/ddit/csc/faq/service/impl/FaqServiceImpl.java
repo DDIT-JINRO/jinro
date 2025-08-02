@@ -129,7 +129,7 @@ public class FaqServiceImpl implements FaqService{
 		if (!validFiles.isEmpty()) {
 			
 			// 기존 파일이 있을 경우
-			if(faqVO.getFileGroupNo() != null) {
+			if(faqVO.getFileGroupNo() != null && faqVO.getFileGroupNo() != 0L) {
 				// 파일 업로드
 				try {
 					fileService.uploadFiles(faqVO.getFileGroupNo(), faqVO.getFiles());

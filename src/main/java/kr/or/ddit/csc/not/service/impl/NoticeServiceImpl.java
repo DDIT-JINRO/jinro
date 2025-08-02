@@ -114,7 +114,6 @@ public class NoticeServiceImpl implements NoticeService {
 		int noticeId = Integer.parseInt(noticeIdStr);
 		// 게시글 상세 조회
 		NoticeVO noticeDetail = noticeMapper.getNoticeDetail(noticeId);
-		log.info(""+noticeDetail);
 
 		// 파일 불러오기
 		List<FileDetailVO> getFileList = fileService.getFileList(noticeDetail.getFileGroupNo());
@@ -135,44 +134,43 @@ public class NoticeServiceImpl implements NoticeService {
 			.filter(file -> file != null && !file.isEmpty() && file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank())
 			.toList();
 		
-		// 첨부파일이 있는 경우
+		// 파일이 있을 경우에만 업로드 처리
 		if (!validFiles.isEmpty()) {
-			// 파일 그룹 생성
-			log.info("파일 그룹 넘버 생성");
-			Long createFileGroupId = fileService.createFileGroup();
-			noticeVo.setFileGroupNo(createFileGroupId);
-
-			// 유효 파일만 업로드
-			try {
-				fileService.uploadFiles(createFileGroupId, validFiles);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			// 타 공지사항의 FILE_GROUP_ID가 INSERT되는 것을 방지
 			
+			log.info("파일 업롣");
+			
+		    // 파일 그룹 ID 생성
+			noticeVo.setFileGroupNo(fileService.createFileGroup());
+
+		    // 파일 업로드
+		    try {
+		        fileService.uploadFiles(noticeVo.getFileGroupNo(), validFiles);
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+		} else {
+			// 파일 그룹 오류 해결
 			noticeVo.setFileGroupNo(0L);
 		}
 		
-		// 공지사항 등록
-		int result = this.noticeMapper.insertNotice(noticeVo);
-
-		return result;
+		return noticeMapper.insertNotice(noticeVo);
 	}
 
 	// 6. 공지사항 수정
 	@Override
 	@Transactional
 	public int updateNotice(NoticeVO noticeVo) {
+		
 		// 실제 첨부된 유효한 파일만 필터링
 		List<MultipartFile> validFiles = noticeVo.getFiles().stream().filter(file -> file != null && !file.isEmpty()
 				&& file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank()).toList();
-	    
+		
 		// 파일이 있을 경우
 		if (!validFiles.isEmpty()) {
+			log.info("파일이 있을 경우");
 
 			// 기존 파일이 있을 경우
-			if (noticeVo.getFileGroupNo() != null) {
+			if (noticeVo.getFileGroupNo() != null && noticeVo.getFileGroupNo() != 0L) {
 				// 파일 업로드
 				try {
 					fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());

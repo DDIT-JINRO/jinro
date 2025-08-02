@@ -130,7 +130,7 @@ waitForInit();
 // FAQ 세부조회
 function showDetail(faqId) {
 	if (!faqId) return;
-
+	resetDetail();
 	axios.get('csc/faq/admin/faqDetail.do', { params: { faqId } })
 		.then(response => {
 			window.currentFaqId=faqId;
@@ -202,6 +202,8 @@ function deleteExistingFile(fileGroupId, seq, faqId) {
 
 // 기존 상세 조회 초기화
 function resetDetail() {
+
+	document.getElementById('fileGroupNo').value = '';
 	document.getElementById("btn-delete").style.display = "none";
 	document.getElementById("file").style.display = "none";
 	document.getElementById("existing-files").innerHTML = "";
