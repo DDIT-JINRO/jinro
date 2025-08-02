@@ -146,6 +146,14 @@
 	white-space: nowrap;
 }
 
+.com-filter-row {
+	display: flex;
+}
+
+.com-filter-row .com-filter-section {
+	width: 50%;
+}
+
 .com-filter-title {
 	display: block;
 	font-size: 0.9rem;
@@ -232,6 +240,27 @@
 	margin-top: 12px;
 }
 
+.btn {
+	border: 1px solid transparent;
+	padding: 6px 18px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 0.9rem;
+	transition: all 0.3s ease;
+}
+
+.btn-primary {
+	background-color: #7881f5;
+	color: white;
+}
+
+.btn-primary:hover {
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	background-color: #5c68d9; /* 더 진한 파랑 */
+}
+
 /* 북마크 리스트 */
 .counsel-list {
 	display: flex;
@@ -241,9 +270,13 @@
 .counsel-item {
 	display: flex;
 	justify-content: space-between;
-	align-items: flex-start;
+	align-items: center;
 	padding: 24px 8px;
 	border-bottom: 1px solid #e5e7eb;
+}
+
+.item-content:first-child {
+	width: 85%;
 }
 
 .counsel-item:last-child {
@@ -295,7 +328,7 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
-	-webkit-line-clamp: 2;
+	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
 }
 
@@ -309,6 +342,15 @@
 
 .item-meta .divider {
 	color: #d1d5db;
+}
+
+.no-content-message {
+    padding: 80px 20px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 1.1rem;
+    border: 1px dashed #e5e7eb;
+    border-radius: 8px;
 }
 
 /* 페이지네이션 */
