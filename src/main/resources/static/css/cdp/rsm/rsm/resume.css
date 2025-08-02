@@ -1,3 +1,37 @@
+.resume-writer {
+    width: 230px;
+    height: 49px;
+    border: 2px solid #848EFB;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    color: #848EFB;
+    text-align: center; 
+    text-decoration: none; 
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    float: right;
+    margin-right: 30px;
+}
+
+.resume-writer:hover {
+    background-color: #848EFB;
+    color: white;
+    cursor: pointer; /* 마우스 오버 시 커서 변경 */
+}
+
+.public-wrapper-main::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
 .resume-list-section {
 	width: 1160px;
 	margin: 60px auto;

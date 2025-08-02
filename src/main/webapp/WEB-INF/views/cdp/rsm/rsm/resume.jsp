@@ -68,7 +68,7 @@
 					</div>
 				</c:forEach>
 			</div>
-			<a href="/rsm/rsm/resumeWriter">이력서 작성하러가기</a>
+			<a href="/rsm/rsm/resumeWriter" class="resume-writer">이력서 작성하러가기</a>
   		</div>
 	</div>
 </div>

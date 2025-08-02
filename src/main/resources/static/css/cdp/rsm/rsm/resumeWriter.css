@@ -125,7 +125,6 @@ select:focus {
 }
 
 /* Photo Upload */
-/* Photo Upload */
 .photo-group {
     grid-column: span 1;
     display: flex;
@@ -224,12 +223,6 @@ select:focus {
     margin-top: 15px;
 }
 
-.job-input-group > input,
-.skills-input-group > input,
-.education-input-container > .education-input-group > input,
-.certificate-input-container > input,
-.activities-input-container > input {
-}
 
 .input-container {
     display: flex;
@@ -244,21 +237,6 @@ select:focus {
     flex-grow: 1; /* Allows the input/select to take available space */
 }
 
-.delete-button {
-    background-color: #f39c12;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-    flex-shrink: 0; /* Prevent button from shrinking */
-}
-
-.delete-button:hover {
-    background-color: #e67e22;
-}
 
 /* Education specific adjustments */
 .education-input-group {
@@ -301,6 +279,20 @@ button {
     white-space: nowrap; /* Prevent text wrapping on buttons */
 }
 
+.delete-button {
+	background-color: #ff6262;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 0.9rem;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+.delete-button:hover {
+	background-color: #d9363e;
+}
+
 .btn-resume-delete {
     background-color: #e74c3c;
     color: white;
@@ -312,33 +304,33 @@ button {
 }
 
 #btn-submit-Temp {
-    background-color: #f1c40f;
-    color: #333;
+	background: transparent;
+	color: #666;
+	border: 1px solid #ccc;
 }
 
 #btn-submit-Temp:hover {
-    background-color: #f39c12;
-    transform: translateY(-2px);
+	background: #e2e2e2;
 }
 
 .btn-preview {
-    background-color: #3498db;
-    color: white;
+	background: #fff;
+	color: #5a3fdb;
+	border: 1px solid #5a3fdb;
 }
 
 .btn-preview:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
+	background: #717bfb;
+	color: #fff;
 }
 
 #btn-submit {
-    background-color: #2ecc71;
-    color: white;
+	background: #717bfb;
+	color: #fff;
 }
 
 #btn-submit:hover {
-    background-color: #27ae60;
-    transform: translateY(-2px);
+	background: #4a2fb8;
 }
 
 /* General Body and Container Styles (from previous CSS - keep as is) */
@@ -361,15 +353,6 @@ body {
     position: relative; /* 중요: 내부 absolute 요소의 기준점이 됩니다 */
 }
 
-/* --- 기존 CSS에서 load-button-group 관련 스타일은 삭제하거나 주석 처리하세요 --- */
-/* 예:
-.load-button-group {
-    // margin-top, text-align, display, flex-wrap, justify-content, gap, padding-top, border-top 등의 속성을 제거
-}
-.load-button-group button {
-    // 배경색, 색상, 패딩, 폰트 크기 등의 속성을 이 섹션에서 재정의할 것임
-}
-*/
 
 /* --- 새로 추가되거나 수정될 load-button-group 관련 CSS --- */
 .load-button-group {
@@ -393,7 +376,7 @@ body {
     content: "\f02d"; /* Font Awesome 책 아이콘 (자료를 불러오는 느낌) */
     font-family: 'Font Awesome 6 Free'; /* Font Awesome 폰트 지정 */
     font-weight: 900; /* Solid 아이콘을 위해 */
-    color: #6c757d; /* 아이콘 색상 */
+    color: #6c75ff; /* 아이콘 색상 */
     font-size: 1.5em; /* 아이콘 크기 */
     margin-bottom: 10px; /* 아이콘과 버튼 사이 간격 */
     text-align: center; /* 아이콘 중앙 정렬 */
@@ -402,7 +385,7 @@ body {
 
 
 .load-button-group button {
-    background-color: #6c757d; /* 버튼 배경색 (회색 계열) */
+    background-color: #6c75ff; /* 버튼 배경색 (회색 계열) */
     color: white;
     padding: 8px 15px; /* 버튼 패딩 */
     border: none;
@@ -416,7 +399,7 @@ body {
 }
 
 .load-button-group button:hover {
-    background-color: #495057; /* 호버 시 색상 변경 */
+    background-color: #5159ff; /* 호버 시 색상 변경 */
     transform: translateY(-1px); /* 살짝 위로 이동 효과 */
 }
 
@@ -426,7 +409,7 @@ body {
 @media (max-width: 768px) {
     .load-button-group {
         position: static; /* 작은 화면에서는 정적 위치로 변경하여 흐름에 맞춤 */
-        margin-top: 20px; /* 다른 요소와 간격 */
+        margin-top: 20px; /*다른 요소와 간격 */
         right: auto;
         top: auto;
         width: 90%; /* 화면 너비에 맞게 조정 */
