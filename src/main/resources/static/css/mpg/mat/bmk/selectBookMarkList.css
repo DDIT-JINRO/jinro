@@ -324,13 +324,21 @@
 	/* yellow */
 }
 
-/* 페이지네이션 */
-.pagination {
-	gap: 15px;
+.no-content {
+	color: #6b7280;
+    font-size: 1rem;
+    margin: 0;
+	text-align: center;
 }
 
+/* 페이지네이션 */
 .pagination a {
 	padding: 0.4rem;
+}
+
+.pagination li:last-child
+, .pagination li:first-child {
+	width: 100px;
 }
 
 .page-num {
@@ -353,4 +361,13 @@
 	background-color: #7881f5;
 	color: #fff;
 	font-weight: 700;
+}
+
+.no-content-message {
+    padding: 80px 20px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 1.1rem;
+    border: 1px dashed #e5e7eb;
+    border-radius: 8px;
 }
