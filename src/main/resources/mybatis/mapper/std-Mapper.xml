@@ -48,6 +48,7 @@
 		<result property="memEmail" column="MEM_EMAIL" />
 		<result property="fileBadge" column="FILE_BADGE" />
 		<result property="fileProfile" column="FILE_PROFILE" />
+		<result property="fileSub" column="FILE_SUB" />
 
 		<association property="chatRoomVO"
 			javaType="kr.or.ddit.chat.service.ChatRoomVO">
@@ -81,6 +82,7 @@
 		<result property="memEmail" column="R_MEM_EMAIL" />
 		<result property="fileBadge" column="R_FILE_BADGE" />
 		<result property="fileProfile" column="R_FILE_PROFILE" />
+		<result property="fileSub" column="R_FILE_SUB" />
 	</resultMap>
 
 	<!-- 목록조회. board테이블에서 스터디그룹게시글과 연계된 chat_room테이블&chat_member테이블 -->
@@ -240,6 +242,7 @@
 	        MB.MEM_EMAIL AS MEM_EMAIL,
 	        FDB.FILE_SAVE_NAME AS FILE_BADGE,
 	        FDP.FILE_SAVE_NAME AS FILE_PROFILE,
+	        FDS.FILE_SAVE_NAME AS FILE_SUB,
 
 	        -- 채팅방 정보
 	        CR.CR_ID, CR.TARGET_ID, CR.CR_TITLE, CR.CR_MAX_CNT, CR.CREATED_AT,
@@ -262,7 +265,8 @@
 	        RM.MEM_NICKNAME AS R_MEM_NICKNAME,
 	        RM.MEM_EMAIL AS R_MEM_EMAIL,
 	        RDB.FILE_SAVE_NAME AS R_FILE_BADGE,
-	        RDP.FILE_SAVE_NAME AS R_FILE_PROFILE
+	        RDP.FILE_SAVE_NAME AS R_FILE_PROFILE,
+	        RDS.FILE_SAVE_NAME AS R_FILE_SUB
 
 	    FROM BOARD B
 	    LEFT JOIN MEMBER MB ON MB.MEM_ID = B.MEM_ID
@@ -270,6 +274,8 @@
 	    LEFT JOIN FILE_DETAIL FDB ON FDB.FILE_GROUP_ID = FGB.FILE_GROUP_ID
 	    LEFT JOIN FILE_GROUP FGP ON FGP.FILE_GROUP_ID = MB.FILE_PROFILE
 	    LEFT JOIN FILE_DETAIL FDP ON FDP.FILE_GROUP_ID = FGP.FILE_GROUP_ID
+	    LEFT JOIN FILE_GROUP FGS ON FGS.FILE_GROUP_ID = MB.FILE_SUB
+	    LEFT JOIN FILE_DETAIL FDS ON FDS.FILE_GROUP_ID = FGS.FILE_GROUP_ID
 
 	    LEFT JOIN CHAT_ROOM CR
 	        ON CR.TARGET_ID = B.BOARD_ID
@@ -282,6 +288,8 @@
 	    LEFT JOIN FILE_DETAIL RDB ON RDB.FILE_GROUP_ID = RFG_B.FILE_GROUP_ID
 	    LEFT JOIN FILE_GROUP RFG_P ON RFG_P.FILE_GROUP_ID = RM.FILE_PROFILE
 	    LEFT JOIN FILE_DETAIL RDP ON RDP.FILE_GROUP_ID = RFG_P.FILE_GROUP_ID
+	    LEFT JOIN FILE_GROUP RFG_S ON RFG_S.FILE_GROUP_ID = RM.FILE_SUB
+	    LEFT JOIN FILE_DETAIL RDS ON RDS.FILE_GROUP_ID = RFG_S.FILE_GROUP_ID
 
 	    WHERE B.BOARD_ID = #{boardId}
 	      AND B.BOARD_DEL_YN = 'N'
@@ -313,6 +321,7 @@
 	         , M.MEM_EMAIL       AS R_MEM_EMAIL
 	         , D1.FILE_SAVE_NAME        AS R_FILE_BADGE
 	         , D2.FILE_SAVE_NAME        AS R_FILE_PROFILE
+	         , D3.FILE_SAVE_NAME        AS R_FILE_SUB
 
 	    FROM REPLY R1
 	    LEFT JOIN MEMBER M ON M.MEM_ID = R1.MEM_ID
@@ -320,6 +329,8 @@
 	    LEFT JOIN FILE_DETAIL D1 ON D1.FILE_GROUP_ID = FG1.FILE_GROUP_ID
 	    LEFT JOIN FILE_GROUP FG2 ON FG2.FILE_GROUP_ID = M.FILE_PROFILE
 	    LEFT JOIN FILE_DETAIL D2 ON D2.FILE_GROUP_ID = FG2.FILE_GROUP_ID
+	    LEFT JOIN FILE_GROUP FG3 ON FG3.FILE_GROUP_ID = M.FILE_SUB
+	    LEFT JOIN FILE_DETAIL D3 ON D2.FILE_GROUP_ID = FG3.FILE_GROUP_ID
 
 	    WHERE R1.REPLY_PARENT_ID = #{replyId}
 	      AND R1.REPLY_DEL_YN = 'N'

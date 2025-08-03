@@ -25,6 +25,8 @@ public class StdReplyVO {
 	private String memName;
 	private String memNickname;
 	private String memEmail;
+
 	private String fileBadge;
 	private String fileProfile;
+	private String fileSub;
 }

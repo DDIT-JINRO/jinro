@@ -3,6 +3,7 @@
  */
 document.addEventListener('DOMContentLoaded', function(){
 
+	// 게시글 수정버튼 클릭 시 게시글 수정 페이지로 이동 이벤트
 	const boardModifyBtn = document.getElementById('boardModifyBtn');
 	if(boardModifyBtn){
 		boardModifyBtn.addEventListener('click', function(){
@@ -34,10 +35,10 @@ document.addEventListener('DOMContentLoaded', function(){
 		})
 	}
 
+	// 게시글 삭제 버튼 클릭 시 삭제 요청 이벤트. 성공 시 목록으로
 	const boardDeleteBtn = document.getElementById('boardDeleteBtn');
 	if(boardDeleteBtn){
 		boardDeleteBtn.addEventListener('click', function(){
-			console.log('채팅방까지 같이 폐쇄해야함')
 			const boardId = boardDeleteBtn.closest('.boardEtcContainer').dataset.boardId;
 			const data = {crId,boardId,memId};
 			fetch('/prg/std/deleteStdBoard.do',{
@@ -64,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		})
 	}
 
+	// 게시글에 달린 더보기 버튼 클릭 이벤트. 더보기 박스의 내용물은 jsp 단에서 채워져있음
 	const boardEtcBtn = document.getElementById('boardEtcBtn');
 	if(boardEtcBtn){
 		boardEtcBtn.addEventListener('click', function(){
@@ -71,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		})
 	}
 
+	// 스터디그룹 채팅방 입장버튼 클릭 이벤트
 	const enterChatBtn = document.getElementById('enterChatBtn');
 	if(enterChatBtn){
 		enterChatBtn.addEventListener('click', function(){
@@ -78,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function(){
 			if(!confirm("입장하시겠습니까?")) return;
 
 			if(!memId || memId =='anonymousUser'){
-				console.log("로그인필요");
 				sessionStorage.setItem('redirectUrl', location.href);
 				location.href="/login";
 			}
@@ -95,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			})
 		})
 	}
+	// 스터디그룹 채팅방 퇴장버튼 클릭 이벤트
 	const exitChatBtn = document.getElementById('exitChatBtn');
 	if(exitChatBtn){
 		exitChatBtn.addEventListener('click',function(){
@@ -162,10 +165,11 @@ document.addEventListener('DOMContentLoaded', function(){
 			errorMsg.textContent = '사유를 입력해주세요';
 			return;
 		}
-		//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@전송 로직 여기에 작성됨
+		//신고 전송 함수 호출
 		confirmReport();
 	});
 
+	// 게시글 더보기버튼 -> 신고 버튼 클릭 시 모달 열기전에 이미 신고한 게시글인지 체크하도록 만들어둠
 	const boardReportBtn = document.getElementById('boardReportBtn');
 	if(boardReportBtn){
 		boardReportBtn.addEventListener('click', async() => {
@@ -191,6 +195,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	}
 })
 
+// 신고하기 완료 클릭 시. 신고종류(게시글,댓글), 해당기본키값, 신고사유, 첨부파일 모달에서 챙겨옴.
 function confirmReport(){
 	const targetId 	 = document.getElementById('report-target-id').value;
 	const targetType = document.getElementById('report-target-type').value;
@@ -202,10 +207,10 @@ function confirmReport(){
 	const formData = new FormData();
 	if(reportFileEl.files.length>0){
 		console.log(reportFileEl.files[0].size);
-		if(reportFileEl.files[0].size > FILE_MAX_SIZE){
+	/*	if(reportFileEl.files[0].size > FILE_MAX_SIZE){
 			alert(`파일이 너무 큽니다 제한:${FILE_MAX_M}KB`);
 			reportFileEl.value = '';
-		}
+		}*/
 		formData.append('reportFile', reportFileEl.files[0]);
 	}
 
@@ -226,6 +231,7 @@ function confirmReport(){
 	.then(result =>{
 		if(result){
 			alert('신고 완료');
+			// 신고 완료 시 새로고침
 			location.reload();
 		}
 	})
@@ -249,6 +255,7 @@ function clearReportModal(){
 //=====================신고모달 작동 시키는 스크립트 끝=====================//
 
 
+//=====================댓글(상위댓글) 만들어서 더해주는 함수===============//
 function createParentReply(replyVO, e){
 
 	const div = document.createElement('div');
@@ -264,10 +271,10 @@ function createParentReply(replyVO, e){
 		<div class="etc-act-btn">삭제</div>
 	</div>
 	<div class="reply-profile">
-	  <div class="user-profile">
-	    <img class="badge-frame" src="${replyVO.fileBadge ? replyVO.fileBadge : '/images/defaultBorderImg.png'}" alt="badge"/>
-
-	    <img class="profile-image" src="${replyVO.fileProfile ? replyVO.fileProfile : '/images/defaultProfileImg.png' }" alt="profile"/>
+	  <div class="profile-wrapper user-profile">
+	    <img class="profile-img" src="${replyVO.fileProfile ? replyVO.fileProfile : '/images/defaultProfileImg.png' }" alt="profile"/>
+	    <img class="badge-img" src="${replyVO.fileBadge ? replyVO.fileBadge : '/images/defaultBorderImg.png'}" alt="badge"/>
+		<img class="effect-img sparkle" src="${replyVO.fileSub}" style='${replyVO.fileSub ? "" :"display:none;"}'/>
 	  </div>
 	  <div class="writer-info">
 	    <div class="reply-nickname">${replyVO.memNickname}</div>
@@ -302,8 +309,9 @@ function createParentReply(replyVO, e){
 	document.querySelector('.comment-section').prepend(div);
 	e.target.querySelector('textarea').value='';
 }
-/* Frame 278 */
+//=====================댓글(상위댓글) 만들어서 더해주는 함수 끝=================//
 
+//=====================답글(대댓글) 만들어서 더해주는 함수 ===================//
 function createChildReply(replyVO, e){
 	const childReply = document.createElement('div');
 	childReply.classList.add('reply-box');
@@ -321,9 +329,10 @@ function createChildReply(replyVO, e){
 			<div class="etc-act-btn">삭제</div>
 		</div>
 		<div class="reply-profile">
-		  <div class="user-profile">
-		    <img class="badge-frame" src="${replyVO.fileBadge ? replyVO.fileBadge : '/images/defaultBorderImg.png' }" />
-		    <img class="profile-image" src="${replyVO.fileProfile ? replyVO.fileProfile : '/images/defaultProfileImg.png' }"/>" />
+		  <div class="profile-wrapper user-profile">
+		    <img class="profile-img" src="${replyVO.fileProfile ? replyVO.fileProfile : '/images/defaultProfileImg.png' }"/>
+		    <img class="badge-img" src="${replyVO.fileBadge ? replyVO.fileBadge : '/images/defaultBorderImg.png' }" />
+			<img class="effect-img sparkle" src="${replyVO.fileSub}" style='${replyVO.fileSub ? "" :"display:none;"}'/>
 		  </div>
 		  <div class="writer-info">
 		    <div class="reply-nickname">${replyVO.memNickname}</div>
@@ -347,6 +356,7 @@ function createChildReply(replyVO, e){
 		replyChildCntSpan.textContent = 1;
 	}
 }
+//=====================답글(대댓글) 만들어서 더해주는 함수 끝===================//
 
 // 이벤트 함수 1. 답글버튼 토글 ; click
 function eventReplyToggle(e){

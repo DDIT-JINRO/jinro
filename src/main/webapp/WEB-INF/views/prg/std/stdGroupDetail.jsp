@@ -119,7 +119,9 @@
 			  </div>
 			</div>
 
-						<!-- 댓글 입력창 -->
+			<!-- 여기까지 게시글 끝 -->
+
+			<!-- 댓글 입력창 -->
 			<form action="/prg/std/createStdReply.do" method="post" class="comment-form">
 			  <input type="hidden" name="boardId" value="${stdBoardVO.boardId}" />
 			  <textarea id="replyContent" name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
@@ -132,7 +134,6 @@
 			<!-- 댓글 리스트 -->
 			<div class="comment-section">
 			  <c:forEach var="reply" items="${stdBoardVO.stdReplyVOList}">
-			  	<!-- 댓글 프로필 영역 -->
 			  	<div class="reply-box" id="reply-${stdBoardVO.boardId}-${reply.replyId }" data-reply-mem="${reply.memId }" >
 				<span class="etcBtn">…</span>
 				<div class="etc-container">
@@ -149,9 +150,11 @@
 				</div>
 				<div class="reply-profile">
 				  <div class="profile-wrapper user-profile">
-				    <img class="badge-img" src="<c:out value="${not empty reply.fileBadge ? reply.fileBadge : '/images/defaultBorderImg.png' }"/>" alt="badge"/>
-
 				    <img class="profile-img" src="<c:out value="${not empty reply.fileProfile ? reply.fileProfile : '/upload/2025/07/30/4b137b23_product_6.jpg' }"/>" alt="profile"/>
+				    <img class="badge-img" src="<c:out value="${not empty reply.fileBadge ? reply.fileBadge : '/images/defaultBorderImg.png' }"/>" alt="badge"/>
+					<c:if test="${reply.fileSub != null }">
+				      	<img class="effect-img" src="${reply.fileSub }" alt="테두리" />
+			      	</c:if>
 				  </div>
 				  <div class="writer-info">
 				    <div class="reply-nickname">${reply.memNickname}</div>
@@ -160,7 +163,7 @@
 				</div>
 				  <div class="reply-content">${reply.replyContent }</div>
 				  <div>
-				  	<button class="reply-child-btn" id="reply-${reply.replyId }">답글</button>
+				  	<button class="reply-child-btn" id="reply-${reply.replyId }">답글</button><!-- 토글시킬 답글버튼 id:reply-댓글번호 -->
 			  		<span class="child-count">
 					  	<c:if test="${reply.childCount > 0 }">
 				  			${reply.childCount }
@@ -189,6 +192,9 @@
 					        <div class="profile-wrapper user-profile">
 					          <img class="profile-img" src="<c:out value="${not empty child.fileProfile ? child.fileProfile : '/images/defaultProfileImg.png' }"/>" />
 					          <img class="badge-img" src="<c:out value="${not empty child.fileBadge ? child.fileBadge : '/images/defaultBorderImg.png' }"/>" />
+					          <c:if test="${reply.fileSub != null }">
+						      	<img class="effect-img" src="${reply.fileSub }" alt="테두리" />
+					      	  </c:if>
 					        </div>
 					        <div class="writer-info">
 					          <div class="reply-nickname">${child.memNickname}</div>
