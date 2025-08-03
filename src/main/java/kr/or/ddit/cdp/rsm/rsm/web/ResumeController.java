@@ -65,8 +65,16 @@ public class ResumeController {
 	}
 
 	@GetMapping("/resumeWriter.do")
-	public String resumedeatilPage(@ModelAttribute ResumeVO resumeVO, Model model) {
-		resumeVO = resumeService.selectResumeByResumeId(resumeVO);
+	public String resumedeatilPage(@ModelAttribute ResumeVO resumeVO, Model model, Principal principal) {
+		
+		if (principal != null && !principal.getName().equals("anonymousUser")) {
+			
+			resumeVO = resumeService.selectResumeByResumeId(resumeVO,principal.getName());
+			
+		}else {
+			return"redirect:/login";
+		}
+		
 
 		model.addAttribute("resumeVO", resumeVO);
 		return "cdp/rsm/rsm/resumeWriter";

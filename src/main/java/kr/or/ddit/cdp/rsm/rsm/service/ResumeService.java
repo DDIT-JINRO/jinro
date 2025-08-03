@@ -8,7 +8,7 @@ public interface ResumeService {
 
 	ResumeVO mergeIntoResume(ResumeVO resumeVO);
 
-	ResumeVO selectResumeByResumeId(ResumeVO resumeVO);
+	ResumeVO selectResumeByResumeId(ResumeVO resumeVO, String memId);
 
 	// 리스트 불러오기
 	List<ResumeVO> selectResumeBymemId(ResumeVO resumeVO);

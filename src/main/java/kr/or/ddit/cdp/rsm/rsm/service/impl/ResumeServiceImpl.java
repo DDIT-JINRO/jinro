@@ -77,9 +77,13 @@ public class ResumeServiceImpl implements ResumeService {
 	}
 
 	@Override
-	public ResumeVO selectResumeByResumeId(ResumeVO resumeVO) {
-		// TODO Auto-generated method stub
-		return resumeVO = resumeMapper.selectResumeByResumeId(resumeVO);
+	public ResumeVO selectResumeByResumeId(ResumeVO resumeVO,String memId) {
+		
+		resumeVO = resumeMapper.selectResumeByResumeId(resumeVO);
+		if(resumeVO == null || (resumeVO.getMemId()!= Integer.parseInt(memId))){
+			resumeVO = null;
+		}
+		return resumeVO;
 	}
 
 	private String changeImg(String html, String filePath) {
