@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 body {
-	overflow-x: none;
+/* 	overflow-x: none; */
 }
 
 .main-contents-flex {
@@ -278,7 +278,7 @@ body {
 .charactor-img1 {
 	position: absolute;
 	bottom: 30px;
-	left: -108px;
+	left: -121px;
 	width: 150px;
 	z-index: 2;
 	pointer-events: none;
@@ -434,4 +434,11 @@ body {
 /***********************   community section     ******************************/
 .main-community-section {
 	height: 500px;
+}
+
+.main-communituy-section-header {
+	padding: 50px;
+	display: flex;
+	justify-content: center;
+	text-align: center;
 }

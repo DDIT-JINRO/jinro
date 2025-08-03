@@ -1,8 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,9 +14,11 @@
 <link rel="stylesheet" href="/css/channel.css">
 <link rel="stylesheet" href="/css/pagenation.css">
 <link rel="stylesheet" href="/css/chatModal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="/js/axios.min.js"></script>
 <script src="/js/com/sockjs.min.js"></script>
 <script src="/js/com/stomp.min.js"></script>
@@ -23,84 +27,8 @@
 <script src="/js/include/header.js"></script>
 <script>
 const memId = '<sec:authentication property="name" />'
-
 	document.addEventListener("DOMContentLoaded",() => {
-		const menuIcon = document.getElementById("menuToggle");
-		const dropdown = document.getElementById("dropdownMenu");
-		const worldcup = document.getElementById("worldcup");
-		const roadmap  = document.getElementById("roadmap");
 		header();
-
-		menuIcon.addEventListener("click",() => {
-			dropdown.classList.toggle(" hidden");
-		});
-
-		document.addEventListener("click",(event) => {
-			if (!dropdown.contains(event.target) && !menuIcon.contains(event.target)) {
-			dropdown.classList.add("hidden");
-			}
-		});
-		
-		if(roadmap) {
-			roadmap.addEventListener("click", () => {
-				if(!memId || memId=='anonymousUser') {
-					sessionStorage.setItem("redirectUrl", location.href);
-					location.href = "/login";
-				} else {
-					const roadmapUrl = 'http://localhost:5173/roadmap';
-					
-					const width  = 1084;
-					const height = 736;
-					const screenWidth  = window.screen.width;
-					const screenHeight = window.screen.height;
-		            const left = Math.floor((screenWidth - width) / 2);
-		            const top  = Math.floor((screenHeight - height) / 2);
-					
-		            axios.post("/admin/las/roadMapVisitLog.do");
-		            
-					window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
-				}
-			});
-		}
-		
-		window.addEventListener("message", (event) => {
-		    
-		    if (event.origin !== 'http://localhost:5173') {
-		        console.warn(`신뢰할 수 없는 출처(${event.origin})로부터의 메시지를 무시합니다.`);
-		        return;
-		    }
-
-		    const messageData = event.data;
-
-		    if (messageData && messageData.type === 'navigateParent') {
-		        
-		        const targetUrl = messageData.url;
-		        if (targetUrl) {
-		            window.location.href = targetUrl;
-		        } else {
-		            console.error('메시지에 이동할 URL이 없습니다.');
-		        }
-		    }
-		});
-		
-		worldcup.addEventListener("click", () => {
-			if(!memId || memId=='anonymousUser') {
-				sessionStorage.setItem("redirectUrl", location.href);
-				location.href = "/login";
-			} else {
-				axios.post("/admin/las/worldCupVisitLog.do")
-				const worldcupUrl = 'http://localhost:5173/worldcup';
-				
-				const width  = 1200;
-				const height = 800;
-				const screenWidth  = window.screen.width;
-				const screenHeight = window.screen.height;
-				const left = Math.floor((screenWidth - width) / 2);
-				const top  = Math.floor((screenHeight - height) / 2);
-				
-				window.open(worldcupUrl, 'worldcup', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
-			}
-		});
 	});
 </script>
 </head>
@@ -180,13 +108,124 @@ const memId = '<sec:authentication property="name" />'
 		</div>
 	</div>
 
-	<div id="dropdownMenu" class="dropdown-menu hidden">
-		<ul>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
+	<div id="dropdownMenu-tg" class="hidden dropdown-menu">
+		<div class="menu-header">
+			<div class="menu-dots">
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+			<div class="menu-title">MENU</div>
+		</div>
+
+		<!-- 전체 메뉴 -->
+		<div class="menu-container">
+			<div class="menu-con-flex">
+				<div class="menu-box">
+					<div class="menu-box-title">진로 탐색</div>
+					<div class="menu-subitems">
+						<a href="/pse/cat/careerAptitudeTest.do">
+							<span>진로 심리 검사</span>
+						</a>
+						<a href="/pse/cr/crl/selectCareerList.do">
+							<span>직업목록</span>
+						</a>
+						<a href="/pse/cr/crr/selectCareerRcmList.do">
+							<span>추천직업</span>
+						</a>
+					</div>
+				</div>
+				<div class="menu-box">
+					<div class="menu-box-title">진학 정보</div>
+					<div class="menu-subitems">
+						<a href="/ertds/univ/uvsrch/selectUnivList.do">
+							<span>대학 검색</span>
+						</a>
+						<a href="/ertds/univ/mjsrch/selectMajorList.do">
+							<span>학과 정보</span>
+						</a>
+						<a href="/ertds/hgschl/selectHgschList.do">
+							<span>고등학교 정보</span>
+						</a>
+						<a href="/ertds/qlfexm/selectQlfexmList.do">
+							<span>검정고시</span>
+						</a>
+					</div>
+				</div>
+
+				<div class="menu-box">
+					<div class="menu-box-title">취업 정보</div>
+					<div class="menu-subitems">
+						<a href="/empt/ema/employmentAdvertisement.do">
+							<span>채용공고</span>
+						</a>
+						<a href="/empt/enp/enterprisePosting.do">
+							<span>기업정보</span>
+						</a>
+						<a href="/empt/ivfb/interViewFeedback.do">
+							<span>면접후기</span>
+						</a>
+						<a href="/empt/cte/careerTechnicalEducation.do">
+							<span>직업교육</span>
+						</a>
+					</div>
+				</div>
+
+				<div class="menu-box">
+					<div class="menu-box-title">경력관리</div>
+					<div class="menu-subitems">
+						<a href="cdp/rsm/rsm/resumeList.do">
+							<span>이력서</span>
+						</a>
+						<a href="/cdp/sint/qestnlst/questionList.do">
+							<span>자기소개서</span>
+						</a>
+						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">
+							<span>모의 면접</span>
+						</a>
+						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">
+							<span>AI 피드백</span>
+						</a>
+					</div>
+				</div>
+				<div class="menu-box">
+					<div class="menu-box-title">상담</div>
+					<div class="menu-subitems">
+						<a href="cdp/rsm/rsm/resumeList.do">
+							<span>오프라인 상담</span>
+						</a>
+						<a href="/cdp/sint/qestnlst/questionList.do">
+							<span>화상 상담</span>
+						</a>
+						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">
+							<span>채팅 상담</span>
+						</a>
+						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">
+							<span>상담 후기</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="menu-con-flex">
+				<div class="menu-box">
+					<div class="menu-box-title">프로그램</div>
+					<div class="menu-subitems"></div>
+				</div>
+
+				<div class="menu-box">
+					<div class="menu-box-title">커뮤니티</div>
+					<div class="menu-subitems"></div>
+				</div>
+				<div class="menu-box">
+					<div class="menu-box-title">고객센터</div>
+					<div class="menu-subitems"></div>
+				</div>
+				<div class="menu-box">
+					<div class="menu-box-title">마이페이지</div>
+					<div class="menu-subitems"></div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<div class="right-fixed-bar">
@@ -195,7 +234,8 @@ const memId = '<sec:authentication property="name" />'
 		</button>
 		<button class="right-fixed-btn" id="chatRooms">
 			<img src="/images/chaticon.png" alt="채팅">
-			<span id="chatFloatingBadge" class="chat-unread-badge" style="position: absolute; top: -5px; right: -10px; display: none;">0</span>
+			<span id="chatFloatingBadge" class="chat-unread-badge"
+				style="position: absolute; top: -5px; right: -10px; display: none;">0</span>
 		</button>
 		<button id="roadmap" class="right-fixed-btn">
 			<img src="/images/roadmapicon.png" alt="진로탐색">

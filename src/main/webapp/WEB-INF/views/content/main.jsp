@@ -70,14 +70,11 @@
 	</section>
 	<section class="main-contents-section">
 		<div class="main-contents-flex">
-			<h2>
-				<strong>커리어 패스로</strong>
-			</h2>
 			<div class="main-contents-card">
 				<p class="main-contents-title">직업 이상형 월드컵</p>
 				<div class="content-box">
 					<div class="fixed-image">
-						<img src="/images/main/charactorChalsak.png" alt="캐릭터" class="charactor-img1" /> <img alt="" src="/images/main/charactor4.png" class="charactor-img3">
+						<img src="/images/main/charactor1.png" alt="캐릭터" class="charactor-img1" /> <img alt="" src="/images/main/charactor4.png" class="charactor-img3">
 					</div>
 					<div class="text-content">
 						<p>
@@ -126,7 +123,7 @@
 		</div>
 	</section>
 	<section class="main-community-section">
-		<div class="section-header">
+		<div class="main-communituy-section-header">
 			<p>다른 사용자들과 진로 정보와 고민을 나눠보세요.</p>
 		</div>
 	</section>
