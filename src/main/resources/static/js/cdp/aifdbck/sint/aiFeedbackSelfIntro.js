@@ -1,86 +1,92 @@
 /**
- * 
+ * 자바스크립트 파일로 분리된 AI 피드백 로직입니다.
  */
-	const selfIntroList = document.getElementById('selfIntroList');
-	selfIntroList.addEventListener('change', loadSelfIntroDetail);
 
+// 전역 변수로 AI 피드백 데이터를 저장할 공간
+let aiFeedbackData = null;
 let originalQuestions = [];
 
+const selfIntroList = document.getElementById('selfIntroList');
+selfIntroList.addEventListener('change', loadSelfIntroDetail);
+
+function cleanAiResponse(text) {
+	let cleanedText = text.trim();
+	if (cleanedText.startsWith('```json')) {
+		cleanedText = cleanedText.substring('```json'.length);
+	}
+	if (cleanedText.endsWith('```')) {
+		cleanedText = cleanedText.substring(0, cleanedText.length - '```'.length);
+	}
+	return cleanedText.trim();
+}
+
 function loadSelfIntroDetail() {
-
 	const selectedSiId = document.getElementById('selfIntroList').value;
-	//loadSelfIntroDetail 호출됨, selectedSiId: 1
-
 	if (!selectedSiId) {
-		//선택된 항목이 없으면 내용 초기화
-		document.querySelector('.aifb-title').innerHTML = '자기소개서 제목';
+		document.querySelector('.aifb-title').textContent = '자기소개서 제목';
 		document.getElementById('questionsWrapper').innerHTML = '자기소개서 내용이 출력될 공간입니다';
 		document.getElementById('feedbackArea').innerHTML = 'AI의 피드백 내용이 출력될 공간입니다';
-
 		return;
 	}
 
-	// AI 피드백 영역을 로딩 상태로 변경
 	const feedbackArea = document.getElementById('feedbackArea');
 	feedbackArea.innerHTML = `
-		  <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
-		    <div class="spinner-border text-primary" role="status">
-		      <span class="visually-hidden">AI가 피드백을 생성 중입니다...</span>
-		    </div>
-		  </div>
-		`;
-
+	  <div class="spinner-wrapper">
+	    <div class="spinner-border text-primary" role="status">
+	      <span class="visually-hidden">Loading...</span>
+	    </div>
+	    <div class="text-center mt-2">AI가 피드백을 생성 중입니다...<br>잠시만 기다려주세요.</div>
+	  </div>
+	`;
+	
+	let originalData = null;
+	
 	fetch(`/cdp/aifdbck/sint/getSelfIntroDetail.do?siId=${selectedSiId}`)
 		.then(response => {
-			return response.json()
+			if (!response.ok) throw new Error('자기소개서 상세 정보 요청 실패');
+			return response.json();
 		})
 		.then(data => {
 			if (data) {
-				//1. 자기소개서 제목 업데이트
+				originalData = data;
+				
 				document.querySelector('.aifb-title').textContent = data.title;
-
-				//2. 질문/답변 영역 업데이트
+			
+				// 질문-답변 영역을 렌더링합니다.
 				let questionsHtml = '';
 				data.questions.forEach((qvo, index) => {
 					const cvo = data.contents[index];
-
-					originalQuestions = data.questions.map(qvo => qvo.siqContent);
-
 					questionsHtml += `
-						<div class="qa-block">
-							<div class="question-block">
-								<span class="question-number">${index +1}.</span>
-								<span class="question-text">${qvo.siqContent}</span>
-							</div>
-							<div class="answer-block">
-								<p>${cvo.sicContent}</p>
-								<div class="char-count">
-					                글자 수: <span>${cvo.sicContent.length}</span> / 2000
-					            </div>
-							</div>
-						</div>
-					`
-				})
+                    <div class="qa-block" data-index="${index}" onclick="displayFeedback(${index}, this)">
+                        <div class="question-block">
+                            <span class="question-number">${index + 1}.</span>
+                            <span class="question-text">${qvo.siqContent}</span>
+                        </div>
+                        <div class="answer-block">
+                            <p>${cvo.sicContent}</p>
+                            <div class="char-count">
+                                글자 수: <span>${cvo.sicContent.length}</span> / 2000
+                            </div>
+                        </div>
+                    </div>
+                `;
+				});
 				document.getElementById('questionsWrapper').innerHTML = questionsHtml;
 
-				//3. ai 첨삭 요청 및 결과 출력
+				// AI 첨삭을 위한 페이로드를 준비
 				const sections = data.questions.map((qvo, index) => {
 					const cvo = data.contents[index];
 					return {
 						"question_title": qvo.siqContent,
-						"original_content": cvo.sicContent
+						"original_content": cvo.sicContent,
 					};
+				});
 
-				})
-
+				// AI 첨삭 요청 (단일 요청으로 변경)
 				return fetch('/ai/proofread/coverletter', {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						"sections": sections
-					})
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ "sections": sections })
 				});
 			}
 		})
@@ -89,64 +95,68 @@ function loadSelfIntroDetail() {
 			return response.text();
 		})
 		.then(aiResponseText => {
-			const feedbackArea = document.getElementById('feedbackArea');
-			const sections = aiResponseText.trim().split('---').filter(script => script.trim() != '');
-			// 안내문 형식의 첫 섹션을 제거하는 코드 추가
-			if (sections.length > originalQuestions.length) {
-				sections.shift();  // 첫 번째 안내 문장 제거
-			}
-			// 첫 문장이 의미 없는 경우 제거
-			const filteredSections = sections.filter(section =>
-				!section.includes('자기소개서 첨삭을 시작하겠습니다.') &&
-				section.trim().length > 20
-			);
+			// AI 응답 텍스트를 정리하고 파싱
+			const cleanedText = cleanAiResponse(aiResponseText);
 
-			const trimmedSections = filteredSections.slice(0, originalQuestions.length);
+			// ---로 구분된 피드백을 파싱
+			const sections = cleanedText.split('---').map(section => section.trim()).filter(section => section.length > 0);
 
-			let html = '';
-			trimmedSections.forEach((section, index) => {
-				const questionTitle = originalQuestions[index] || `질문 ${index + 1}`;
-				const cleandText = section.replace(new RegExp(`^\\s*${questionTitle}\\s*`, 'g'), '').trim();
+			// aiFeedbackData에 저장
+			aiFeedbackData = {
+				sections_feedback: sections,
+				questions: originalData.questions.map(qvo => qvo.siqContent)
+			};
 
-				if (!cleandText || cleandText === '[]') return; // 빈 내용은 렌더링 제외
-
-				html += `
-			    <div class="feedback-block">
-			      <div class="feedback-title question-block"><h4>${index + 1}. ${questionTitle}</h4></div>
-			      <div class="feedback-content">${cleandText.trim().replace(/\n/g, '<br>')}</div>
-			    </div>
-			  `;
-			});
-
-			feedbackArea.innerHTML = html;
-
-			// 높이 맞춤 (질문 영역과 피드백 블록 동일하게)
-			/* 	setTimeout(() => {
-					const questions = document.querySelectorAll('.qa-block');
-					const feedbacks = document.querySelectorAll('.feedback-block');
-					
-					for (let i = 0; i < Math.max(questions.length, feedbacks.length); i++) {
-						const q = questions[i];
-						const f = feedbacks[i];
-						if (!q || !f) continue;
-						
-						const qHeight = q.offsetHeight;
-						const fHeight = f.offsetHeight;
-						const maxHeight = Math.max(qHeight, fHeight);
-						
-						q.style.minHeight = maxHeight + 'px';
-						f.style.minHeight = maxHeight + 'px';
-					}
-				}, 100); */
-
-
+			displayAllFeedback();
 		})
 		.catch(error => {
 			console.error('Error fetching self-intro details:', error);
+			const feedbackArea = document.getElementById('feedbackArea');
+			feedbackArea.textContent = '데이터를 불러오는 데 실패했습니다.';
 			alert('데이터를 불러오는 데 실패했습니다.');
 		});
 }
 
+function displayAllFeedback() {
+	if (!aiFeedbackData) return;
+	const feedbackArea = document.getElementById('feedbackArea');
+
+	let feedbackHtml = '';
+
+	// 섹션별 피드백 출력 (핵심 내용만 간결하게)
+	if (aiFeedbackData.sections_feedback && aiFeedbackData.sections_feedback.length > 0) {
+		aiFeedbackData.sections_feedback.forEach((feedbackText, index) => {
+			feedbackHtml += `<div class="feedback-section" id="feedback-section-${index}">`;
+
+			// 질문을 제목으로 출력
+			const questionTitle = aiFeedbackData.questions?.[index] || `문항 ${index + 1}`;
+			feedbackHtml += `<h4>${index + 1}. ${questionTitle}</h4>`;
+
+			// "[문항 N번 - AI 피드백]" 제거 후 줄바꿈 처리
+			const cleanedText = feedbackText.replace(/\[문항 \d+번 - AI 피드백\]/, '').trim();
+			feedbackHtml += `<p>${cleanedText.replace(/\n/g, '<br>')}</p>`;
+
+			feedbackHtml += `</div>`;
+		});
+	} else {
+		feedbackHtml += '<p>제공된 피드백이 없습니다.</p>';
+	}
+
+	feedbackArea.innerHTML = feedbackHtml;
+	feedbackArea.scrollTop = 0;
+}
+
+function displayFeedback(index, clickedElement) {
+	document.querySelectorAll('.qa-block').forEach(el => el.classList.remove('active'));
+	clickedElement.classList.add('active');
+
+	const feedbackSection = document.getElementById(`feedback-section-${index}`);
+	if (feedbackSection) {
+		const feedbackArea = document.getElementById('feedbackArea');
+		const offset = feedbackSection.offsetTop - feedbackArea.offsetTop;
+		feedbackArea.scrollTop = offset;
+	}
+}
 function requestProofread() {
 	const selectedSiId = document.getElementById('selfIntroList').value;
 	if (selectedSiId) {
