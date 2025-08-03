@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.util.apr.service.AiProofreadSelfIntroService;
@@ -15,12 +16,13 @@ import java.util.Map;
 
 @Slf4j
 @Controller
+@RequestMapping("/ai/proofread")
 public class AiProofreadSelfIntroController {
 
 	@Autowired
 	public AiProofreadSelfIntroService aiProofreadSelfIntroService;
 
-	@PostMapping("/ai/proofread/coverletter")
+	@PostMapping("/coverletter")
 	@ResponseBody
 	public ResponseEntity<String> proofreadCoverLetter(@RequestBody Map<String, List<Map<String, String>>> requestPayload) {
 		log.info("📩 AI 첨삭 요청 수신 - URI: /ai/proofread/coverletter");
