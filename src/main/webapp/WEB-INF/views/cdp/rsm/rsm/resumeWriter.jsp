@@ -99,11 +99,11 @@
 								<label for="address">주소</label>
 								<div class="input-with-icon">
 									<input type="text" id="address" value="" name="address"
-										placeholder="돋보기로 검색해주세요." readonly > <i class="fa fa-search icon-search"
+										placeholder="돋보기로 검색해주세요." readonly required > <i class="fa fa-search icon-search"
 										aria-label="주소 검색"></i>
 								</div>
 									<input type="text" id="address-detail" value="" name="address-detail"
-									placeholder="상세주소 입력"  >
+									placeholder="상세주소 입력" required >
 							</div>
 						</div>
 						<div class="form-JobWish">
