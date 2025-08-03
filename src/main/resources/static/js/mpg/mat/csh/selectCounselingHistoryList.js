@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+	// 필터 정렬 순서
+	const filterOrder = ['counselStatus', 'counselCategory', 'counselMethod'];
+	
 	// 토글 버튼
 	const toggleButton = document.getElementById('com-accordion-toggle');
 
@@ -17,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// 초기화 버튼
 	const resetButton = document.querySelector('.com-filter-reset-btn');
+	
 
 	// 아코디언 코드
 	if (toggleButton && panel) {
@@ -31,41 +35,42 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		});
 	}
+	
+	// 선택된 필터 업데이트
+	const updateSelectedFiltersDisplay = () => {
+	    // 일단 기존 태그를 모두 비웁니다.
+	    selectedFiltersContainer.innerHTML = '';
 
-	// 필터 생성
-	const createFilterTag = (text, groupName) => {
-		if (groupName === "counselStatus") {
-			text = "상담 신청 상태 > " + text;
-		} else if (groupName === "counselCategory") {
-			text = "상담 분류 > " + text;
-		} else if (groupName === "counselMethod") {
-			text = "상담 방법 > " + text;
-		}
+	    // 정의된 순서(filterOrder)대로 각 필터 그룹을 확인합니다.
+	    filterOrder.forEach(groupName => {
+	        const radioList = allRadioGroups[groupName];
+	        const selectedRadio = Array.from(radioList).find(radio => radio.checked);
 
-        const filterTagHTML = `<span class="com-selected-filter" data-filter="${text}" data-group="${groupName}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
-        selectedFiltersContainer.innerHTML += filterTagHTML;
-    };
+	        // 해당 그룹에서 선택된 라디오 버튼이 있다면 태그를 생성합니다.
+	        if (selectedRadio) {
+	            let text = selectedRadio.nextElementSibling.textContent;
 
-	// 필터 태그 삭제
-	const removeFilterTag = (groupName) => {
-        const tagToRemove = selectedFiltersContainer.querySelector(`[data-group="${groupName}"]`);
-        if (tagToRemove) {
-            tagToRemove.remove();
-        }
-    };
+	            // 그룹 이름에 따라 텍스트를 포맷합니다.
+	            if (groupName === "counselStatus") {
+	                text = "상담 신청 상태 > " + text;
+	            } else if (groupName === "counselCategory") {
+	                text = "상담 분류 > " + text;
+	            } else if (groupName === "counselMethod") {
+	                text = "상담 방법 > " + text;
+	            }
 
-	const handleRadioChange = (e) => {
-		const inputRadio = e.target;
-		const groupName = inputRadio.name;
-		const labelText = inputRadio.nextElementSibling.textContent;
+	            const filterTagHTML = `<span class="com-selected-filter" data-group="${groupName}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
+	            selectedFiltersContainer.innerHTML += filterTagHTML;
+	        }
+	    });
+	};
 
-		removeFilterTag(groupName);
-
-		if (inputRadio.checked) {
-			createFilterTag(labelText, groupName);
-		}
+	// 라디오 선택 시 이벤트
+	const handleRadioChange = () => {
+		updateSelectedFiltersDisplay();
 	}
 
+	// 이벤트 등록
     Object.values(allRadioGroups).forEach(radioList => {
         radioList.forEach(radio => {
             radio.addEventListener('change', handleRadioChange);
@@ -76,21 +81,16 @@ document.addEventListener('DOMContentLoaded', function() {
 	selectedFiltersContainer.addEventListener('click', (e) => {
 		if (e.target.classList.contains('com-remove-filter')) {
 			const tag = e.target.closest('.com-selected-filter');
-			const filterText = tag.dataset.filter;
 			const groupName = tag.dataset.group;
 
-			const radioBoxes = allRadioGroups[groupName];
-			if(radioBoxes) {
-				const radioToUncheck = Array.from(radioBoxes).find(
-					radiobox => radiobox.nextElementSibling.textContent === filterText
-				);
-				if(radioToUncheck) {
-					radioToUncheck.checked = false;
-				}
-			}
-			
-			// 태그 삭제
-			tag.remove();
+	        // 해당하는 라디오 버튼을 찾아서 체크 해제합니다.
+			const radioToUncheck = Array.from(allRadioGroups[groupName]).find(radio => radio.checked);
+	        if (radioToUncheck) {
+	            radioToUncheck.checked = false;
+	        }
+
+			// 화면을 다시 그립니다.
+			updateSelectedFiltersDisplay();
 		}
 	});
 

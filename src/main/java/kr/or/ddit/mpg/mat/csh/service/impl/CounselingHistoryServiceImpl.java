@@ -28,7 +28,6 @@ public class CounselingHistoryServiceImpl implements CounselingHistoryService{
 	public Map<String, String> selectCounselStatusList() {
 		
 		List<Map<String, String>> counselStatusList = this.counselingHistoryMapper.selectCounselStatusList();
-		log.info("쿼리 결과다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ : " + counselStatusList);
 		
 		Map<String, String> counselStatus = parseMap(counselStatusList);
 		
@@ -67,8 +66,6 @@ public class CounselingHistoryServiceImpl implements CounselingHistoryService{
 			int total = this.counselingHistoryMapper.selectCounselingTotal(counselingVO);
 			
 			ArticlePage<CounselingVO> articlePage = new ArticlePage<>(total, counselingVO.getCurrentPage(), counselingVO.getSize(), counselingVOList, counselingVO.getKeyword());
-			
-			articlePage.setUrl("/mpg/mat/csh/selectCounselingHistoryList.do");
 			
 			return articlePage;
 		}

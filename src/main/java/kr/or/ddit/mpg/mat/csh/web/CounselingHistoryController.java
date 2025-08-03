@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.mpg.mat.csh.service.CounselingHistoryService;
 import kr.or.ddit.mpg.mat.csh.service.CounselingVO;
@@ -30,6 +31,7 @@ public class CounselingHistoryController {
 		Map<String, String> counselCategory = this.counselingHistoryService.selectCounselCategoryList();
 		Map<String, String> counselMethod = this.counselingHistoryService.selectCounselMethodList();
 		ArticlePage<CounselingVO> articlePage = this.counselingHistoryService.selectCounselingList(memId, counselingVO);
+		articlePage.setUrl("/mpg/mat/csh/selectCounselingHistoryList.do");
 		
 		model.addAttribute("counselStatus", counselStatus);
 		model.addAttribute("counselCategory", counselCategory);
@@ -37,6 +39,26 @@ public class CounselingHistoryController {
 		model.addAttribute("articlePage", articlePage);
 		
 		return "mpg/mat/csh/selectCounselingHistoryList";
+	}
+	
+	@GetMapping("/mat/csh/counselHistory.do")
+	public String selectCounselHistoryDetail (@ModelAttribute CounselingVO counselingVO) {
+		int counselId = counselingVO.getCounselId(); 
+		String counselMethod = counselingVO.getCounselMethod();
+		
+		switch (counselMethod) {
+		case "G08001": {
+			return "redirect:/cnslt/off/offlineReservationHistory.do";
+		}
+		case "G08002": {
+			return "redirect:/cnslt/cht/chattingReservationHistory.do";
+		}
+		case "G08003": {
+			return "redirect:/cnslt/vid/videoReservationHistory.do";
+		}
+		default:
+			return "redirect:mpg/mat/csh/selectCounselingHistoryList.do";
+		}
 	}
 	
 }

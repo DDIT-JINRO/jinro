@@ -44,7 +44,7 @@
                                 <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                             </svg>
 						</div>
-						<input type="search" name="keyword" placeholder="북마크 내에서 검색">
+						<input type="search" name="keyword" placeholder="내 상담내역에서 검색">
 						<button class="com-search-btn" type="submit">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                 <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
@@ -126,7 +126,7 @@
 				</form>
 				<c:choose>
 					<c:when test="${empty articlePage.content || articlePage.content == null }">
-						<p class="no-content-message">현재 북마크가 없습니다.</p>
+						<p class="no-content-message">현재 상담 내역이 없습니다.</p>
 					</c:when>
 					<c:otherwise>
 					<div class="counsel-list">
@@ -134,13 +134,13 @@
 							<div class="counsel-item">
 								<div class="item-content">
 									<div class="item-header">
-										<span class="category-tag counsel-category">${content.counselCategory}</span>
-										<span class="category-tag counsel-status">${content.counselStatus}</span>
-										<span class="category-tag counsel-method">${content.counselMethod}</span>
-										<h3 class="item-title">
-											<a href="#">${content.counselTitle}</a>
-										</h3>
+										<span class="category-tag">${counselCategory[content.counselCategory]}</span>
+										<span class="category-tag">${counselStatus[content.counselStatus]}</span>
+										<span class="category-tag">${counselMethod[content.counselMethod]}</span>
 									</div>
+									<h3 class="item-title">
+										${content.counselTitle}
+									</h3>
 									<p class="item-snippet">${content.counselDescription}</p>
 									<div class="item-meta">
 										<span>상담사</span>
@@ -154,35 +154,48 @@
 									</div>
 								</div>
 								<div class="item-content">
-									<a href="#" class="btn btn-primary">후기 작성하러 가기</a>
+									<c:choose>
+										<c:when test="${content.counselMethod == 'G08004'}">
+										</c:when>
+										<c:when test="${content.counselReviewd == 'N'}">
+											<a href="#" class="btn btn-primary">후기 작성하러 가기</a>
+										</c:when>
+										<c:otherwise>
+											<a href="/mpg/mat/csh/counselHistory.do?counselId=${content.counselId}&counselMethod=${content.counselMethod}" class="btn btn-primary">상세보기</a>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 						</c:forEach>
 					</div>
 					</c:otherwise>
 				</c:choose>
-
+				
 				<ul class="pagination">
 					<li>
-						<a href="/sint/qestnlst?currentPage=-4&amp;keyword=" class="disabled">← Previous</a>
+						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="
+							<c:if test='${articlePage.startPage < 6}'>
+								disabled
+							</c:if>"> ← Previous
+						</a>
 					</li>
+					
+					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
+						<li>
+							<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="page-num 
+								<c:if test='${pNo == articlePage.currentPage}'>
+									active
+								</c:if>"> ${pNo}
+							</a>
+						</li>
+					</c:forEach>
+
 					<li>
-						<a href="/sint/qestnlst?currentPage=1&amp;keyword=" class="page-num active">1</a>
-					</li>
-					<li>
-						<a href="/sint/qestnlst?currentPage=2&amp;keyword=" class="page-num">2</a>
-					</li>
-					<li>
-						<a href="/sint/qestnlst?currentPage=3&amp;keyword=" class="page-num">3</a>
-					</li>
-					<li>
-						<a href="/sint/qestnlst?currentPage=4&amp;keyword=" class="page-num">4</a>
-					</li>
-					<li>
-						<a href="/sint/qestnlst?currentPage=5&amp;keyword=" class="page-num">5</a>
-					</li>
-					<li>
-						<a href="/sint/qestnlst?currentPage=6&amp;keyword=" class="">Next →</a>
+						<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="
+							<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
+								disabled
+							</c:if>"> Next →
+						</a>
 					</li>
 				</ul>
 			</div>

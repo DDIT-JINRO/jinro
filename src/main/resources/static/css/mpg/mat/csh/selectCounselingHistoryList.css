@@ -1,6 +1,9 @@
 .activity-container {
-	margin: 0 auto;
-	padding: 20px 0;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .com-select-wrapper {
@@ -248,6 +251,7 @@
 	font-weight: 600;
 	font-size: 0.9rem;
 	transition: all 0.3s ease;
+	text-decoration: none;
 }
 
 .btn-primary {
@@ -353,13 +357,12 @@
     border-radius: 8px;
 }
 
-/* 페이지네이션 */
-.pagination {
-	gap: 15px;
-}
-
 .pagination a {
 	padding: 0.4rem;
+}
+
+.pagination li:last-child, .pagination li:first-child {
+    width: 100px;
 }
 
 .page-num {
