@@ -322,3 +322,20 @@ body {
 	{
 	padding-top: 0 !important;
 }
+.spinner-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  flex-direction: column;
+  color: #555;
+  font-size: 14px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
