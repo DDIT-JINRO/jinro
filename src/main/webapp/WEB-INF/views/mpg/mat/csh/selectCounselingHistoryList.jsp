@@ -150,11 +150,13 @@
 										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy년 MM월 dd일"/> </span>
 										<span class="divider">·</span>
 										<span>예약일</span>
-										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy년 MM월 dd일"/><fmt:formatDate value="${content.counselReqDate}" pattern="HH시"/></span>
+										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy년 MM월 dd일"/><fmt:formatDate value="${content.counselReqDate}" pattern=" (HH시)"/></span>
 									</div>
 								</div>
 								<div class="item-content">
 									<c:choose>
+										<c:when test="${content.counselMethod == 'G08004'}">
+										</c:when>
 										<c:when test="${content.counselMethod == 'G08004'}">
 										</c:when>
 										<c:when test="${content.counselReviewd == 'N'}">

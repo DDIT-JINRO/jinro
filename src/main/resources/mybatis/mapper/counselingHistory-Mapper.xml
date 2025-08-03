@@ -41,6 +41,7 @@
 	<select id="selectCounselingList" resultType="kr.or.ddit.mpg.mat.csh.service.CounselingVO" parameterType="kr.or.ddit.mpg.mat.csh.service.CounselingVO">
 		SELECT
 			MEM_NAME
+			, COUNSEL_ID
 			, COUNSEL_NAME
 			, COUNSEL_CATEGORY
 			, COUNSEL_METHOD
