@@ -1,8 +1,8 @@
 package kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.impl;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
-	
-	private final WebClient webClient;
+    
+    private final WebClient webClient;
     private final ObjectMapper objectMapper;
     
     @Value("${gemini.api.key}")
@@ -46,9 +46,20 @@ public class AnalysisServiceImpl implements AnalysisService {
      */
     @Override
     public AnalysisResponse analyzeInterview(AnalysisRequest request) {
+        String sessionId = request.getSessionId();
+        
         try {
+            log.info("🚀 Gemini 분석 시작 - 세션 ID: {}", sessionId);
+            
+            // 🎯 API 키 검증
+            if (geminiApiKey == null || geminiApiKey.trim().isEmpty()) {
+                log.error("❌ Gemini API 키가 설정되지 않았습니다");
+                return AnalysisResponse.createDefaultResponse(sessionId, "API 키가 설정되지 않았습니다");
+            }
+            
             // 1. 프롬프트 생성
             String prompt = buildAnalysisPrompt(request);
+            log.debug("📝 프롬프트 생성 완료 - 길이: {} 문자", prompt.length());
             
             // 2. Gemini API 요청 본문 생성
             Map<String, Object> requestBody = Map.of(
@@ -62,8 +73,16 @@ public class AnalysisServiceImpl implements AnalysisService {
                     "topK", 40,
                     "topP", 0.95,
                     "maxOutputTokens", 2048
+                ),
+                "safetySettings", List.of(
+                    Map.of("category", "HARM_CATEGORY_HARASSMENT", "threshold", "BLOCK_NONE"),
+                    Map.of("category", "HARM_CATEGORY_HATE_SPEECH", "threshold", "BLOCK_NONE"),
+                    Map.of("category", "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold", "BLOCK_NONE"),
+                    Map.of("category", "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold", "BLOCK_NONE")
                 )
             );
+            
+            log.info("🌐 Gemini API 호출 중...");
             
             // 3. API 호출
             String response = webClient.post()
@@ -72,17 +91,23 @@ public class AnalysisServiceImpl implements AnalysisService {
                     .bodyValue(requestBody)
                     .retrieve()
                     .bodyToMono(String.class)
-                    .timeout(Duration.ofSeconds(30))
+                    .timeout(Duration.ofSeconds(60)) // 🎯 타임아웃 증가
                     .block();
             
+            log.info("✅ Gemini API 응답 받음 - 세션 ID: {}", sessionId);
+            log.debug("📄 응답 내용: {}", response.substring(0, Math.min(500, response.length())) + "...");
+            
             // 4. 응답 파싱 및 반환
-            log.info("response : " + response);
             return parseGeminiResponse(response, request);
             
         } catch (WebClientResponseException e) {
-            throw new RuntimeException("Gemini API 호출 실패: " + e.getMessage(), e);
+            log.error("❌ Gemini API 호출 실패 - 세션 ID: {}, 상태: {}, 메시지: {}", 
+                     sessionId, e.getStatusCode(), e.getMessage());
+            return AnalysisResponse.createDefaultResponse(sessionId, "API 호출 실패: " + e.getMessage());
+            
         } catch (Exception e) {
-            throw new RuntimeException("면접 분석 처리 중 오류 발생: " + e.getMessage(), e);
+            log.error("❌ 면접 분석 처리 중 오류 - 세션 ID: {}", sessionId, e);
+            return AnalysisResponse.createDefaultResponse(sessionId, "분석 처리 오류: " + e.getMessage());
         }
     }
     
@@ -93,14 +118,24 @@ public class AnalysisServiceImpl implements AnalysisService {
         StringBuilder prompt = new StringBuilder();
         
         prompt.append("당신은 15년 경력의 전문 면접관이자 진로 상담사입니다. ")
-              .append("청소년과 청년들의 면접을 분석하여 건설적인 피드백을 제공해주세요.\n\n");
+              .append("청소년과 청년들의 면접을 분석하여 건설적이고 격려적인 피드백을 제공해주세요.\n\n");
+        
+        // 🎯 세션 정보 추가
+        prompt.append("=== 분석 세션 정보 ===\n");
+        prompt.append("- 세션 ID: ").append(request.getSessionId()).append("\n");
+        prompt.append("- 분석 시간: ").append(LocalDateTime.now()).append("\n\n");
         
         // 면접 데이터 정보
         prompt.append("=== 면접 기본 정보 ===\n");
         if (request.getInterviewData() != null) {
-            prompt.append("- 총 질문 수: ").append(request.getInterviewData().getQuestions().size()).append("개\n");
-            prompt.append("- 답변 완료: ").append(request.getInterviewData().getAnswers().size()).append("개\n");
-            prompt.append("- 면접 시간: ").append(request.getInterviewData().getDuration()).append("초\n\n");
+            var interviewData = request.getInterviewData();
+            prompt.append("- 총 질문 수: ").append(interviewData.getQuestions().size()).append("개\n");
+            prompt.append("- 답변 완료: ").append(interviewData.getAnswers().size()).append("개\n");
+            prompt.append("- 면접 시간: ").append(interviewData.getDuration()).append("초\n");
+            if (interviewData.getTimestamp() != null) {
+                prompt.append("- 면접 일시: ").append(interviewData.getTimestamp()).append("\n");
+            }
+            prompt.append("\n");
         }
         
         // 실시간 분석 데이터
@@ -113,16 +148,21 @@ public class AnalysisServiceImpl implements AnalysisService {
                 prompt.append("- 평균 볼륨: ").append(audio.getAverageVolume()).append("\n");
                 prompt.append("- 말하기 시간: ").append(audio.getSpeakingTime()).append("초\n");
                 prompt.append("- 말하기 속도: ").append(audio.getWordsPerMinute()).append(" WPM\n");
-                prompt.append("- 습관어 횟수: ").append(audio.getFillerWordsCount()).append("회\n\n");
+                prompt.append("- 습관어 횟수: ").append(audio.getFillerWordsCount()).append("회\n");
+                if (audio.getSpeechClarity() != null) {
+                    prompt.append("- 발음 명확도: ").append(audio.getSpeechClarity()).append("\n");
+                }
+                prompt.append("\n");
             }
             
             if (request.getRealtimeAnalysis().getVideo() != null) {
                 var video = request.getRealtimeAnalysis().getVideo();
                 prompt.append("👁️ 영상 분석:\n");
-                prompt.append("- 얼굴 감지: ").append(video.getFaceDetected() ? "양호" : "불안정").append("\n");
+                prompt.append("- 얼굴 감지: ").append(video.getFaceDetected() ? "안정적" : "불안정").append("\n");
                 prompt.append("- 아이컨택: ").append(video.getEyeContactPercentage()).append("%\n");
                 prompt.append("- 미소 빈도: ").append(video.getSmileDetection()).append("%\n");
-                prompt.append("- 자세 점수: ").append(video.getPostureScore()).append("점\n\n");
+                prompt.append("- 자세 점수: ").append(video.getPostureScore()).append("점\n");
+                prompt.append("- 얼굴 감지율: ").append(video.getFaceDetectionRate()).append("%\n\n");
             }
         }
         
@@ -137,14 +177,17 @@ public class AnalysisServiceImpl implements AnalysisService {
                 if (i < answers.size() && answers.get(i) != null && !answers.get(i).trim().isEmpty()) {
                     prompt.append("A").append(i + 1).append(": ").append(answers.get(i)).append("\n\n");
                 } else {
-                    prompt.append("A").append(i + 1).append(": [답변 없음]\n\n");
+                    prompt.append("A").append(i + 1).append(": [답변 없음 또는 음성 인식 실패]\n\n");
                 }
             }
         }
         
         // 분석 요청 사항
         prompt.append("=== 분석 요청 사항 ===\n");
-        prompt.append("위 데이터를 바탕으로 다음과 같은 형태의 JSON 형식으로 상세한 분석을 제공해주세요:\n\n");
+        prompt.append("위 데이터를 종합적으로 분석하여 다음과 같은 JSON 형식으로 상세한 분석을 제공해주세요.\n");
+        prompt.append("청소년/청년 대상이므로 격려와 성장 중심의 건설적 피드백을 부탁드립니다:\n\n");
+        
+        prompt.append("```json\n");
         prompt.append("{\n");
         prompt.append("  \"overall_score\": 85,\n");
         prompt.append("  \"grade\": \"B+\",\n");
@@ -152,30 +195,33 @@ public class AnalysisServiceImpl implements AnalysisService {
         prompt.append("    \"speech_clarity\": 80,\n");
         prompt.append("    \"pace_appropriate\": 75,\n");
         prompt.append("    \"volume_consistency\": 85,\n");
-        prompt.append("    \"feedback\": \"구체적인 음성 피드백\"\n");
+        prompt.append("    \"feedback\": \"음성 관련 구체적이고 격려적인 피드백\"\n");
         prompt.append("  },\n");
         prompt.append("  \"video_analysis\": {\n");
         prompt.append("    \"eye_contact\": 70,\n");
         prompt.append("    \"facial_expression\": 80,\n");
         prompt.append("    \"posture\": 75,\n");
-        prompt.append("    \"feedback\": \"구체적인 비언어적 소통 피드백\"\n");
+        prompt.append("    \"feedback\": \"비언어적 소통 관련 구체적이고 격려적인 피드백\"\n");
         prompt.append("  },\n");
         prompt.append("  \"text_analysis\": {\n");
         prompt.append("    \"content_quality\": 80,\n");
         prompt.append("    \"structure_logic\": 75,\n");
         prompt.append("    \"relevance\": 85,\n");
-        prompt.append("    \"feedback\": \"답변 내용에 대한 구체적 피드백\"\n");
+        prompt.append("    \"feedback\": \"답변 내용 관련 구체적이고 발전적인 피드백\"\n");
         prompt.append("  },\n");
-        prompt.append("  \"strengths\": [\"구체적인 강점 1\", \"구체적인 강점 2\"],\n");
-        prompt.append("  \"improvements\": [\"구체적인 개선점 1\", \"구체적인 개선점 2\"],\n");
-        prompt.append("  \"recommendation\": \"종합적인 추천사항과 격려\"\n");
-        prompt.append("}\n\n");
+        prompt.append("  \"strengths\": [\"구체적인 강점 1\", \"구체적인 강점 2\", \"구체적인 강점 3\"],\n");
+        prompt.append("  \"improvements\": [\"실행 가능한 개선점 1\", \"실행 가능한 개선점 2\"],\n");
+        prompt.append("  \"recommendation\": \"종합적인 추천사항과 격려 메시지 (100자 이상)\"\n");
+        prompt.append("}\n");
+        prompt.append("```\n\n");
         
-        prompt.append("⚠️ 중요사항:\n");
-        prompt.append("- 점수는 1-100 범위로 제공\n");
-        prompt.append("- 청소년/청년 대상이므로 격려와 건설적 피드백 중심\n");
-        prompt.append("- 구체적이고 실행 가능한 조언 제공\n");
-        prompt.append("- JSON 형식을 정확히 지켜주세요\n");
+        prompt.append("⚠️ 중요 지침:\n");
+        prompt.append("- 모든 점수는 1-100 범위로 제공\n");
+        prompt.append("- 청소년/청년 대상이므로 격려와 희망적 관점 중심\n");
+        prompt.append("- 구체적이고 실행 가능한 개선 방안 제시\n");
+        prompt.append("- JSON 형식을 정확히 준수 (문법 오류 금지)\n");
+        prompt.append("- 피드백은 각각 50자 이상으로 상세하게 작성\n");
+        prompt.append("- 실시간 데이터를 적극 활용하여 정확한 분석 제공\n");
         
         return prompt.toString();
     }
@@ -184,12 +230,27 @@ public class AnalysisServiceImpl implements AnalysisService {
      * Gemini API 응답을 파싱하여 분석 결과로 변환합니다.
      */
     private AnalysisResponse parseGeminiResponse(String response, AnalysisRequest request) {
+        String sessionId = request.getSessionId();
+        
         try {
             JsonNode responseNode = objectMapper.readTree(response);
             
+            // 🎯 API 응답 오류 체크
+            if (responseNode.has("error")) {
+                JsonNode errorNode = responseNode.get("error");
+                String errorMessage = errorNode.path("message").asText("Unknown API error");
+                log.error("❌ Gemini API 오류 응답 - 세션 ID: {}, 오류: {}", sessionId, errorMessage);
+                return AnalysisResponse.createDefaultResponse(sessionId, "API 오류: " + errorMessage);
+            }
+            
             // Gemini API 응답 구조에서 텍스트 추출
-            String generatedText = responseNode
-                    .path("candidates")
+            JsonNode candidatesNode = responseNode.path("candidates");
+            if (candidatesNode.isEmpty()) {
+                log.error("❌ Gemini API 응답에 candidates가 없음 - 세션 ID: {}", sessionId);
+                return AnalysisResponse.createDefaultResponse(sessionId, "API 응답 형식 오류");
+            }
+            
+            String generatedText = candidatesNode
                     .get(0)
                     .path("content")
                     .path("parts")
@@ -197,16 +258,21 @@ public class AnalysisServiceImpl implements AnalysisService {
                     .path("text")
                     .asText();
             
-            System.out.println("🔍 Gemini 원본 응답 텍스트: " + generatedText);
+            if (generatedText.isEmpty()) {
+                log.error("❌ Gemini API 응답 텍스트가 비어있음 - 세션 ID: {}", sessionId);
+                return AnalysisResponse.createDefaultResponse(sessionId, "빈 응답 텍스트");
+            }
             
-            // JSON 부분만 추출 (```json과 ``` 사이의 내용)
+            log.debug("🔍 Gemini 원본 응답 텍스트 길이: {} - 세션 ID: {}", generatedText.length(), sessionId);
+            
+            // JSON 부분만 추출
             String jsonContent = extractJsonFromText(generatedText);
-            System.out.println("📊 추출된 JSON: " + jsonContent);
+            log.debug("📊 추출된 JSON 길이: {} - 세션 ID: {}", jsonContent.length(), sessionId);
             
             JsonNode analysisNode = objectMapper.readTree(jsonContent);
             
-            // 응답 객체 생성
-            AnalysisResponse analysisResponse = new AnalysisResponse();
+            // 🎯 응답 객체 생성 (세션 ID 포함)
+            AnalysisResponse analysisResponse = new AnalysisResponse(sessionId);
             
             // 기본 점수 및 등급
             analysisResponse.setOverallScore(analysisNode.path("overall_score").asInt(75));
@@ -215,121 +281,117 @@ public class AnalysisServiceImpl implements AnalysisService {
             // 상세 분석 설정
             AnalysisResponse.DetailedAnalysis detailed = new AnalysisResponse.DetailedAnalysis();
             
-            // 오디오 분석 - 🎯 필드명 정확히 매칭
+            // 오디오 분석
             JsonNode audioNode = analysisNode.path("audio_analysis");
             if (!audioNode.isMissingNode()) {
-                AnalysisResponse.DetailedAnalysis.AudioAnalysis audio = 
-                    new AnalysisResponse.DetailedAnalysis.AudioAnalysis();
-                audio.setSpeechClarity(audioNode.path("speech_clarity").asInt(75));
-                audio.setPaceAppropriate(audioNode.path("pace_appropriate").asInt(75));
-                audio.setVolumeConsistency(audioNode.path("volume_consistency").asInt(75));
-                audio.setFeedback(audioNode.path("feedback").asText("음성 분석 결과입니다."));
-                detailed.setAudio(audio);
-                
-                System.out.println("🎤 음성 분석 파싱 완료: " + audio.getFeedback().substring(0, Math.min(50, audio.getFeedback().length())) + "...");
+                detailed.setAudio(new AnalysisResponse.DetailedAnalysis.AudioAnalysis(
+                    audioNode.path("speech_clarity").asInt(75),
+                    audioNode.path("pace_appropriate").asInt(75),
+                    audioNode.path("volume_consistency").asInt(75),
+                    audioNode.path("feedback").asText("음성 분석이 완료되었습니다.")
+                ));
+                log.debug("🎤 음성 분석 파싱 완료 - 세션 ID: {}", sessionId);
             }
             
-            // 비디오 분석 - 🎯 필드명 정확히 매칭
+            // 비디오 분석
             JsonNode videoNode = analysisNode.path("video_analysis");
             if (!videoNode.isMissingNode()) {
-                AnalysisResponse.DetailedAnalysis.VideoAnalysis video = 
-                    new AnalysisResponse.DetailedAnalysis.VideoAnalysis();
-                video.setEyeContact(videoNode.path("eye_contact").asInt(75));
-                video.setFacialExpression(videoNode.path("facial_expression").asInt(75));
-                video.setPosture(videoNode.path("posture").asInt(75));
-                video.setFeedback(videoNode.path("feedback").asText("비언어적 소통 분석 결과입니다."));
-                detailed.setVideo(video);
-                
-                System.out.println("👁️ 영상 분석 파싱 완료: " + video.getFeedback().substring(0, Math.min(50, video.getFeedback().length())) + "...");
+                detailed.setVideo(new AnalysisResponse.DetailedAnalysis.VideoAnalysis(
+                    videoNode.path("eye_contact").asInt(75),
+                    videoNode.path("facial_expression").asInt(75),
+                    videoNode.path("posture").asInt(75),
+                    videoNode.path("feedback").asText("비언어적 소통 분석이 완료되었습니다.")
+                ));
+                log.debug("👁️ 영상 분석 파싱 완료 - 세션 ID: {}", sessionId);
             }
             
-            // 텍스트 분석 - 🎯 필드명 정확히 매칭
+            // 텍스트 분석
             JsonNode textNode = analysisNode.path("text_analysis");
             if (!textNode.isMissingNode()) {
-                AnalysisResponse.DetailedAnalysis.TextAnalysis text = 
-                    new AnalysisResponse.DetailedAnalysis.TextAnalysis();
-                text.setContentQuality(textNode.path("content_quality").asInt(75));
-                text.setStructureLogic(textNode.path("structure_logic").asInt(75));
-                text.setRelevance(textNode.path("relevance").asInt(75));
-                text.setFeedback(textNode.path("feedback").asText("답변 내용 분석 결과입니다."));
-                detailed.setText(text);
-                
-                System.out.println("📝 텍스트 분석 파싱 완료: " + text.getFeedback().substring(0, Math.min(50, text.getFeedback().length())) + "...");
+                detailed.setText(new AnalysisResponse.DetailedAnalysis.TextAnalysis(
+                    textNode.path("content_quality").asInt(75),
+                    textNode.path("structure_logic").asInt(75),
+                    textNode.path("relevance").asInt(75),
+                    textNode.path("feedback").asText("답변 내용 분석이 완료되었습니다.")
+                ));
+                log.debug("📝 텍스트 분석 파싱 완료 - 세션 ID: {}", sessionId);
             }
             
             analysisResponse.setDetailed(detailed);
             
-            // 요약 정보 - 🎯 배열 파싱 개선
-            AnalysisResponse.AnalysisSummary summary = new AnalysisResponse.AnalysisSummary();
-            summary.setStrengths(parseStringArray(analysisNode.path("strengths")));
-            summary.setImprovements(parseStringArray(analysisNode.path("improvements")));
-            summary.setRecommendation(analysisNode.path("recommendation").asText("계속해서 연습하며 발전해나가세요!"));
-            analysisResponse.setSummary(summary);
+            // 요약 정보
+            List<String> strengths = parseStringArray(analysisNode.path("strengths"));
+            List<String> improvements = parseStringArray(analysisNode.path("improvements"));
+            String recommendation = analysisNode.path("recommendation").asText("계속해서 연습하며 발전해나가세요!");
             
-            System.out.println("📋 요약 정보 파싱 완료");
-            System.out.println("  - 강점: " + summary.getStrengths().size() + "개");
-            System.out.println("  - 개선점: " + summary.getImprovements().size() + "개"); 
-            System.out.println("  - 추천사항: " + summary.getRecommendation().substring(0, Math.min(30, summary.getRecommendation().length())) + "...");
+            analysisResponse.setSummary(new AnalysisResponse.AnalysisSummary(strengths, improvements, recommendation));
             
             // 점수 분석
-            AnalysisResponse.ScoreBreakdown scores = new AnalysisResponse.ScoreBreakdown();
-            scores.setCommunication(detailed.getAudio() != null ? detailed.getAudio().getSpeechClarity() : 75);
-            scores.setAppearance(detailed.getVideo() != null ? detailed.getVideo().getEyeContact() : 75);
-            scores.setContent(detailed.getText() != null ? detailed.getText().getContentQuality() : 75);
-            scores.setOverall(analysisResponse.getOverallScore());
-            analysisResponse.setScores(scores);
+            int audioScore = detailed.getAudio() != null ? 
+                (detailed.getAudio().getSpeechClarity() + detailed.getAudio().getPaceAppropriate() + detailed.getAudio().getVolumeConsistency()) / 3 : 75;
+            int videoScore = detailed.getVideo() != null ? 
+                (detailed.getVideo().getEyeContact() + detailed.getVideo().getFacialExpression() + detailed.getVideo().getPosture()) / 3 : 75;
+            int textScore = detailed.getText() != null ? 
+                (detailed.getText().getContentQuality() + detailed.getText().getStructureLogic() + detailed.getText().getRelevance()) / 3 : 75;
             
-            System.out.println("✅ Gemini 응답 파싱 완료!");
-            System.out.println("  - 총점: " + analysisResponse.getOverallScore() + " (" + analysisResponse.getGrade() + ")");
+            analysisResponse.setScores(new AnalysisResponse.ScoreBreakdown(audioScore, videoScore, textScore, analysisResponse.getOverallScore()));
+            
+            log.info("✅ Gemini 응답 파싱 완료 - 세션 ID: {}, 총점: {} ({})", 
+                     sessionId, analysisResponse.getOverallScore(), analysisResponse.getGrade());
             
             return analysisResponse;
             
         } catch (Exception e) {
-            System.err.println("❌ Gemini 응답 파싱 오류: " + e.getMessage());
-            e.printStackTrace();
+            log.error("❌ Gemini 응답 파싱 오류 - 세션 ID: {}", sessionId, e);
+            return AnalysisResponse.createDefaultResponse(sessionId, "응답 파싱 오류: " + e.getMessage());
         }
-        
-        return null;
     }
     
     /**
      * 텍스트에서 JSON 부분을 추출합니다.
      */
     private String extractJsonFromText(String text) {
-        System.out.println("🔍 JSON 추출 시작...");
+        log.debug("🔍 JSON 추출 시작...");
         
         // 1차: ```json과 ``` 사이의 내용 추출
         int jsonStart = text.indexOf("```json");
         if (jsonStart != -1) {
-            jsonStart = text.indexOf('\n', jsonStart) + 1; // ```json 다음 줄부터
+            jsonStart = text.indexOf('\n', jsonStart) + 1;
             int jsonEnd = text.indexOf("```", jsonStart);
             if (jsonEnd != -1) {
                 String extracted = text.substring(jsonStart, jsonEnd).trim();
-                System.out.println("✅ Markdown JSON 블록에서 추출 성공");
+                log.debug("✅ Markdown JSON 블록에서 추출 성공");
                 return extracted;
             }
         }
         
-        // 2차: { 와 } 사이의 내용 추출
+        // 2차: ``` 없이 { 와 } 사이의 내용 추출 (더 관대한 접근)
         int braceStart = text.indexOf("{");
         int braceEnd = text.lastIndexOf("}");
         
         if (braceStart != -1 && braceEnd != -1 && braceEnd > braceStart) {
             String extracted = text.substring(braceStart, braceEnd + 1);
-            System.out.println("✅ 중괄호 기반 추출 성공");
+            log.debug("✅ 중괄호 기반 추출 성공");
             return extracted;
         }
         
         // 3차: 전체 텍스트가 JSON인지 확인
         text = text.trim();
         if (text.startsWith("{") && text.endsWith("}")) {
-            System.out.println("✅ 전체 텍스트가 JSON으로 판단");
+            log.debug("✅ 전체 텍스트가 JSON으로 판단");
             return text;
         }
         
-        System.out.println("⚠️ JSON 추출 실패, 기본값 반환");
+        log.warn("⚠️ JSON 추출 실패, 기본값 반환");
         
-        // JSON을 찾을 수 없는 경우 기본값 반환
+        // 기본값 반환
+        return createDefaultJsonResponse();
+    }
+    
+    /**
+     * 기본 JSON 응답 생성
+     */
+    private String createDefaultJsonResponse() {
         return """
         {
           "overall_score": 75,
@@ -338,23 +400,23 @@ public class AnalysisServiceImpl implements AnalysisService {
             "speech_clarity": 75, 
             "pace_appropriate": 75, 
             "volume_consistency": 75, 
-            "feedback": "음성 분석이 완료되었습니다."
+            "feedback": "음성 분석이 완료되었습니다. 전반적으로 안정적인 말하기를 보여주셨습니다."
           },
           "video_analysis": {
             "eye_contact": 75, 
             "facial_expression": 75, 
             "posture": 75, 
-            "feedback": "비언어적 소통 분석이 완료되었습니다."
+            "feedback": "비언어적 소통 분석이 완료되었습니다. 자연스러운 표정과 자세를 유지하셨습니다."
           },
           "text_analysis": {
             "content_quality": 75, 
             "structure_logic": 75, 
             "relevance": 75, 
-            "feedback": "답변 내용 분석이 완료되었습니다."
+            "feedback": "답변 내용 분석이 완료되었습니다. 질문에 적절히 대답하려고 노력하셨습니다."
           },
-          "strengths": ["성실한 태도", "기본기 보유"],
-          "improvements": ["답변 구체화", "자신감 향상"],
-          "recommendation": "지속적인 연습을 통해 더욱 발전하실 수 있습니다!"
+          "strengths": ["성실한 면접 참여 태도", "기본적인 소통 능력", "적극적인 자세"],
+          "improvements": ["답변의 구체성 향상", "자신감 있는 표현", "논리적 구조화"],
+          "recommendation": "전반적으로 좋은 면접 태도를 보여주셨습니다. 답변을 더 구체적으로 준비하고 자신감을 가지고 말씀하시면 더욱 좋은 인상을 줄 수 있을 것입니다. 지속적인 연습을 통해 더욱 발전하시길 응원합니다!"
         }
         """;
     }
@@ -373,7 +435,6 @@ public class AnalysisServiceImpl implements AnalysisService {
                 }
             }
         } else if (arrayNode.isTextual()) {
-            // 문자열인 경우 쉼표로 분리 시도
             String text = arrayNode.asText();
             String[] parts = text.split(",");
             for (String part : parts) {
@@ -386,12 +447,9 @@ public class AnalysisServiceImpl implements AnalysisService {
         
         // 빈 배열인 경우 기본값 제공
         if (result.isEmpty()) {
-            if (arrayNode.isMissingNode()) {
-                result.add("분석 항목 없음");
-            }
+            result.add("분석 완료");
         }
         
         return result;
     }
-
 }
