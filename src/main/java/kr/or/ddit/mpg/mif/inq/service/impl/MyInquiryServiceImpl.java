@@ -43,13 +43,13 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		int memId = parseMemId(memIdStr);
 
 		MemberVO member = this.myInquiryMapper.selectMyInquiryView(memId);
+		if (member == null) {
+			throw new CustomException(ErrorCode.USER_NOT_FOUND);
+		}
 
 		FileDetailVO fileDetail = fileService.getFileDetail(member.getFileProfile(), 1);
 
 		List<ComCodeVO> interetsKeywordList = this.myInquiryMapper.selectInteretsKeywordList();
-		if (interetsKeywordList == null || interetsKeywordList.isEmpty()) {
-			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-		}
 
 		return Map.of("member", member, "imgPath", this.fileService.getSavePath(fileDetail), "interetsKeywordList", interetsKeywordList);
 	}
@@ -58,20 +58,17 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	 * 멤버의 비밀번호를 확인합니다.
 	 * 
 	 * @param memIdStr 멤버id
-	 * @param map   확인용 비밀번호
-	 * @return Map 일치 여부
+	 * @param password   확인용 비밀번호
 	 */
 	@Override
-	public String checkPassword(String memIdStr, String password) {
+	public void checkPassword(String memIdStr, String password) {
 		int memId = parseMemId(memIdStr);
 
 		MemberVO memberVO = this.myInquiryMapper.checkPassword(memId);
 
-		if (bCryptPasswordEncoder.matches(password, memberVO.getMemPassword())) {
-			return "success";
+		if (memberVO == null || !bCryptPasswordEncoder.matches(password, memberVO.getMemPassword())) {
+			throw new CustomException(ErrorCode.INVALID_PASSWORD);
 		}
-
-		return "fail";
 	}
 
 	/**
@@ -79,20 +76,17 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	 * 
 	 * @param memIdStr  멤버id
 	 * @param member 변경 내용
-	 * @return result 결과값
 	 */
 	@Override
-	public String updateMyInquiryView(String memIdStr, MemberVO member) {
+	public void updateMyInquiryView(String memIdStr, MemberVO member) {
 		int memId = parseMemId(memIdStr);
 
 		member.setMemId(memId);
 
 		int result = this.myInquiryMapper.updateMyInquiryView(member);
 		if (result == 0) {
-			return "redirect:";
+			throw new CustomException(ErrorCode.USER_UPDATE_FAILED);
 		}
-
-		return "success";
 	}
 
 	/**
@@ -100,10 +94,10 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	 * 
 	 * @param memIdStr   멤버id
 	 * @param profileImg 프로필이미지
-	 * @return map 결과값
+	 * @return FileDetailVO 결과
 	 */
 	@Override
-	public Map<String, Object> updateProfileImg(String memIdStr, MultipartFile profileImg) {
+	public FileDetailVO updateProfileImg(String memIdStr, MultipartFile profileImg) {
 		int memId = parseMemId(memIdStr);
 
 		if (profileImg == null || profileImg.isEmpty()) {
@@ -121,15 +115,15 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		try {
 			this.fileService.uploadFiles(fileGroupId, files);
 		} catch (IOException e) {
-			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+			throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
 		}
 
 		int result = this.myInquiryMapper.updateFileGroup(member);
-		if (result > 0) {
-			return Map.of("result", "success");
+		if (result == 0) {
+			throw new CustomException(ErrorCode.USER_UPDATE_FAILED);
 		}
-
-		return Map.of("result", "fail");
+		
+		return fileService.getFileDetail(fileGroupId, 1);
 	}
 
 	/**
@@ -160,11 +154,15 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	 */
 	@Override
 	public int parseMemId(String memIdStr) {
+		if (memIdStr == null || memIdStr.equals("anonymousUser")) {
+			throw new CustomException(ErrorCode.INVALID_AUTHORIZE);
+		}
+		
 		int memId;
 		try {
 			memId = Integer.parseInt(memIdStr);
 		} catch (NumberFormatException e) {
-			throw new CustomException(ErrorCode.INVALID_USER);
+			throw new CustomException(ErrorCode.INVALID_AUTHORIZE);
 		}
 
 		return memId;

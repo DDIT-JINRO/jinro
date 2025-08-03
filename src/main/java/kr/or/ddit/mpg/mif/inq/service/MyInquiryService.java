@@ -6,16 +6,17 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.main.service.MemberVO;
+import kr.or.ddit.util.file.service.FileDetailVO;
 
 public interface MyInquiryService {
 
 	Map<String, Object> selectMyInquiryView(String memId);
 
-	String updateMyInquiryView(String memId, MemberVO member);
+	void updateMyInquiryView(String memId, MemberVO member);
 
-	String checkPassword(String memId, String password);
+	void checkPassword(String memId, String password);
 
-	Map<String, Object> updateProfileImg(String memId, MultipartFile profileImg);
+	FileDetailVO updateProfileImg(String memId, MultipartFile profileImg);
 
 	void insertInterestList(String memId, List<String> filterKeyword);
 
