@@ -1,14 +1,17 @@
 package kr.or.ddit.mpg.mat.bmk.service;
 
-import java.util.List;
+import java.util.Map;
 
-import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.util.ArticlePage;
 
 public interface BookMarkService {
 
 	ArticlePage<BookMarkVO> selectBookmarkList(String memId, BookMarkVO bookmarkVO);
 
-	List<ComCodeVO> selectBmCategoryIdList();
+	Map<String, String> selectBmCategoryIdList();
+
+	void deleteBookmark(String memId, BookMarkVO bookmarkVO);
+
+	void insertBookmark(String memId, BookMarkVO bookmarkVO);
 
 }

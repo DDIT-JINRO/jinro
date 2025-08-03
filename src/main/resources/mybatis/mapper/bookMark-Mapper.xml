@@ -278,7 +278,7 @@
 	        </if>
 	</select>
 	
-	<select id="selectBmCategoryIdList" resultType="kr.or.ddit.com.ComCodeVO">
+	<select id="selectBmCategoryIdList" resultType="map">
 		SELECT
 		    CC_ID
 		    , CC_NAME
@@ -289,5 +289,31 @@
 		ORDER BY
 		    CC_ID
 	</select>
+	
+	<delete id="deleteBookmark" parameterType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO">
+		DELETE FROM BOOKMARK
+		WHERE
+			MEM_ID = #{memId}
+		AND
+			BM_CATEGORY_ID = #{bmCategoryId}
+		AND
+			BM_TARGET_ID = #{bmTargetId}
+	</delete>
+		
+	<insert id="insertBookmark" parameterType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO">
+		INSERT INTO BOOKMARK (
+			BM_ID
+			, MEM_ID
+			, BM_CATEGORY_ID
+			, BM_TARGET_ID
+			, BM_CREATED_AT
+		) VALUES (
+			  (SELECT NVL(MAX(BM_ID), 0) + 1 FROM BOOKMARK)
+			, #{memId}
+			, #{bmCategoryId}
+			, #{bmTargetId}
+			, SYSDATE
+		)
+	</insert>
 		
 </mapper>

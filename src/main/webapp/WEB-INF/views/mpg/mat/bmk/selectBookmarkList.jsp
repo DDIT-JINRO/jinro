@@ -44,7 +44,7 @@
                                 <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                             </svg>
 						</div>
-						<input type="search" name="keyword" placeholder="북마크 내에서 검색">
+						<input type="search" name="keyword" placeholder="내 북마크에서 검색">
 						<button class="com-search-btn" type="submit">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                 <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
@@ -65,10 +65,10 @@
 										<input id="all" type="radio" name="bmCategoryId" value="" ${empty param.bmCategoryId ? 'checked' : ''}/>
 										<span>전체</span>
 									</label>
-									<c:forEach var="bmCategory" items="${bmCategoryList}">
+									<c:forEach var="bmCategory" items="${bmCategoryId}">
 										<label class="com-filter-item">
-											<input id="${bmCategory.ccId}" type="radio" name="bmCategoryId" value="${bmCategory.ccId}" ${param.bmCategoryId == bmCategory.ccId ? 'checked' : ''}/>
-											<span>${bmCategory.ccName}</span>
+											<input id="${bmCategory.key}" type="radio" name="bmCategoryId" value="${bmCategory.key}" ${param.bmCategoryId == bmCategory.key ? 'checked' : ''}/>
+											<span>${bmCategory.value}</span>
 										</label>
 									</c:forEach>
 								</div>
@@ -89,22 +89,28 @@
 										<div class="item-header">
 											<span class="category-tag">${bookmark.categoryName}</span>
 											<h3 class="item-title">
-												<a href="#">${bookmark.title}</a>
+												<a href="/mpg/mat/bmk/selectBookMarkDetail.do?bmCategoryId=${bookmark.bmCategoryId}&bmTargetId=${bookmark.bmTargetId}">${bookmark.title}</a>
 											</h3>
 										</div>
-										<p class="item-snippet">${bookmark.content2}</p>
+										<c:if test="${bookmark.bmCategoryId != 'G03005'}">
+											<p class="item-snippet">${bookmark.content2}</p>
+										</c:if>
 										<div class="item-meta">
 											<span>${bookmark.content1}</span>
 											<span class="divider">·</span>
-											<span><fmt:formatDate value="${bookmark.bmCreatedAt}" pattern="yyyy년 MM월 dd일"/></span>
+											<span>북마크일 : <fmt:formatDate value="${bookmark.bmCreatedAt}" pattern="yyyy년 MM월 dd일"/></span>
 										</div>
 									</div>
 									<div class="item-action">
-										<button class="bookmark-btn active">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-		                                    	<path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
-		                                	</svg>
-										</button>
+									    <button class="bookmark-btn active" data-category-id="${bookmark.bmCategoryId}" data-target-id="${bookmark.bmTargetId}">
+									        <span class="icon-active">
+									            <img src="/images/bookmark-btn-active.png" alt="활성 북마크" width="24" height="24">
+									        </span>
+									        
+									        <span class="icon-inactive">
+									            <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크" width="24" height="24">
+									        </span>
+									    </button>
 									</div>
 								</div>
 							</div>
@@ -112,7 +118,6 @@
 					</c:otherwise>
 				</c:choose>
 				
-
 				<ul class="pagination">
 					<li>
 						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="
@@ -129,7 +134,7 @@
 								</c:if>"> ${pNo} </a>
 						</li>
 					</c:forEach>
-
+					
 					<li>
 						<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="
 							<c:if test='${articlePage.endPage >= articlePage.totalPages}'>

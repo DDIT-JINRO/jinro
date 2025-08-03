@@ -1,16 +1,21 @@
 package kr.or.ddit.mpg.mat.bmk.web;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkService;
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
 import kr.or.ddit.util.ArticlePage;
@@ -27,14 +32,81 @@ public class BookMarkController {
 	@GetMapping("/mat/bmk/selectBookMarkList.do")
 	public String selectBookMarkList (@AuthenticationPrincipal String memId, @ModelAttribute BookMarkVO bookmarkVO, Model model) {
 		
-		List<ComCodeVO> bmCategoryIdList = this.bookmarkService.selectBmCategoryIdList();
+		Map<String, String> bmCategoryId = this.bookmarkService.selectBmCategoryIdList();
 		
 		ArticlePage<BookMarkVO> articlePage = this.bookmarkService.selectBookmarkList(memId, bookmarkVO);
+		articlePage.setUrl("/mpg/mat/bmk/selectBookMarkList.do");
 		
 		model.addAttribute("articlePage", articlePage);
-		model.addAttribute("bmCategoryList", bmCategoryIdList);
+		model.addAttribute("bmCategoryId", bmCategoryId);
 		
 		return "mpg/mat/bmk/selectBookmarkList";
 	}
 	
+	@GetMapping("/mat/bmk/selectBookMarkDetail.do")
+	public String selectBookMarkDetail (@ModelAttribute BookMarkVO bookMarkVO) {
+		
+		int bmTargetId = bookMarkVO.getBmTargetId();
+		String bmCategoryId = bookMarkVO.getBmCategoryId();
+		
+		switch (bmCategoryId) {
+		case "G03001": {
+			return "redirect:/univ/selectDetail.do";
+		}
+		case "G03002": {
+			return "redirect:/empt/enp/enterprisePosting.do";
+		}
+		case "G03003": {
+			return "redirect:/empt/ema/employmentAdvertisement.do";
+		}
+		case "G03004": {
+			return "redirect:/pse/cr/crl/selectCareerDetail.do";
+		}
+		case "G03005": {
+			return "redirect:/rsm/rsmb/detail.do";
+		}
+		default:
+			return "mpg/mat/bmk/selectBookmarkList";
+		}
+	}
+	
+	@ResponseBody
+	@PostMapping("/mat/bmk/deleteBookmark.do")
+	public ResponseEntity<Map<String, Object>> deleteBookmark (@AuthenticationPrincipal String memId, @RequestBody BookMarkVO bookmarkVO) {
+
+        Map<String, Object> response = new HashMap<String, Object>();
+        
+        try {
+            bookmarkService.deleteBookmark(memId, bookmarkVO);
+            
+            response.put("success", true);
+            response.put("message", "북마크가 삭제되었습니다.");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "북마크 삭제에 실패했습니다.");
+            return ResponseEntity.status(500).body(response);
+        }
+        
+	}
+	
+	@ResponseBody
+	@PostMapping("/mat/bmk/insertBookmark.do")
+	public ResponseEntity<Map<String, Object>> insertBookmark (@AuthenticationPrincipal String memId, @RequestBody BookMarkVO bookmarkVO) {
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		try {
+			bookmarkService.insertBookmark(memId, bookmarkVO);
+			response.put("success", true);
+			response.put("message", "북마크가 등록되었습니다.");
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("message", "북마크 등록에 실패했습니다.");
+			return ResponseEntity.status(500).body(response);
+		}
+		
+	}
 }
