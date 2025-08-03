@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/mpg/mif/inq/selectMyInquiryView.css">
+
 <!-- 스타일 여기 적어주시면 가능 -->
-<section class="channel">
+<section class="channel" data-success-message="${successMessage}" data-error-message="${errorMessage}">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->

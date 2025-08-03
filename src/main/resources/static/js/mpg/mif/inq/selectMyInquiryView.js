@@ -3,6 +3,14 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
+    const channelSection = document.querySelector(".channel");
+    if (channelSection) {
+        const successMessage = channelSection.dataset.successMessage;
+        const errorMessage = channelSection.dataset.errorMessage;
+        if (successMessage) alert(successMessage);
+        if (errorMessage) alert(errorMessage);
+    }
+
 	try {
 		if (memId == "anonymousUser") {
 			alert("로그인 후 이용 가능한 페이지 입니다.")
@@ -33,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const handleImgFileSelect = (event) => {
 	const files = event.target.files;
+    const profileImg = document.querySelector(".profile-img");
 
 	if (files.length === 0) {
 		alert("파일이 선택되지 않았습니다.");
@@ -53,19 +62,19 @@ const handleImgFileSelect = (event) => {
 		method: "POST",
 		body: formData
 	}).then(response => {
-		if (response.ok) {
-			return response.json();
-		}
-	}).then(({ result }) => {
-		if (result === "success") {
-			alert("정상적으로 프로필 이미지가 변경되었습니다.")
-			location.reload();
-		}
-	}).catch(error => {
-		console.error("프로필 이미지 업로드 중 에러 발생 : ", error);
-		alert(error.message);
-	})
-
+		return response.json();
+	}).then(result => {
+        if (result.status === "success") {
+            alert(result.message);
+            if(profileImg) profileImg.src = result.imgPath; // 이미지 즉시 업데이트
+        } else {
+            alert(result.message || "프로필 사진 변경에 실패했습니다.");
+        }
+    })
+    .catch(error => {
+        console.error("프로필 이미지 업로드 중 에러 발생 : ", error);
+        alert("업로드 중 오류가 발생했습니다.");
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -142,24 +151,22 @@ const passwordCheckAPI = (password, errorMsg, passwordInput, closeModal) => {
 		body: JSON.stringify({
 			password: password
 		})
-	}).then((response) => {
-		if (response.ok) {
-			return response.text();
-		} else {
-			throw new Error("인증 중 오류가 발생했습니다. 다시 시도해 주세요.");
-		}
-	}).then((result) => {
-		if (result === "success") {
-			closeModal();
-			mainForm.submit();
-		} else {
-			errorMsg.textContent = result.message || '비밀번호가 일치하지 않습니다.';
-			passwordInput.value = ''; // 입력 필드 초기화
-			passwordInput.focus();
-		}
-	}).catch((error) => {
-		errorMsg.textContent = error.message || '인증 중 오류가 발생했습니다. 다시 시도해 주세요.';
-	});
+	}).then(response => {
+		return response.json()
+	}).then(result => {
+        if (result.status === "success") {
+            closeModal();
+            mainForm.submit();
+        } else {
+            errorMsg.textContent = result.message || '비밀번호가 일치하지 않습니다.';
+            passwordInput.value = ''; // 입력 필드 초기화
+            passwordInput.focus();
+        }
+    })
+    .catch(error => {
+        console.error("비밀번호 인증 에러 :", error);
+        errorMsg.textContent = '인증 중 오류가 발생했습니다. 다시 시도해 주세요.';
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
