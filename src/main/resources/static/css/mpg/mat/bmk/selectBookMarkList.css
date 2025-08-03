@@ -314,19 +314,6 @@
 	color: #d1d5db;
 }
 
-.item-action .bookmark-btn {
-	background: none;
-	border: none;
-	cursor: pointer;
-	color: #6b7280;
-	padding: 4px;
-}
-
-.item-action .bookmark-btn.active {
-	color: #f59e0b;
-	/* yellow */
-}
-
 .no-content {
 	color: #6b7280;
     font-size: 1rem;
