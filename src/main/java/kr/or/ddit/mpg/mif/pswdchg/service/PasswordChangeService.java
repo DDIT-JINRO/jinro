@@ -8,6 +8,6 @@ public interface PasswordChangeService {
 
 	MemberVO selectPasswordChangeView(String memId);
 
-	String updatePasswordChange(String memId, Map<String, Object> map);
+	void updatePasswordChange(String memId, Map<String, Object> map);
 
 }

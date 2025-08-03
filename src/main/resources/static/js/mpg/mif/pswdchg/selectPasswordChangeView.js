@@ -7,6 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let isConfirmValidate = false;
 
     const submitBtn = document.querySelector("#submit-btn");
+    // 페이지 로드 시 메시지 처리
+    const channelSection = document.querySelector(".channel");
+    if (channelSection) {
+        const successMessage = channelSection.dataset.successMessage;
+        const errorMessage = channelSection.dataset.errorMessage;
+        if (successMessage) alert(successMessage);
+        if (errorMessage) alert(errorMessage);
+    }
 
     const oldPasswordInput = document.querySelector("#old-password");
     const oldErrorMsg = oldPasswordInput.nextElementSibling;
@@ -16,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmErrorMsg = confirmPasswordInput.nextElementSibling;
 
     oldPasswordInput.addEventListener("input", () => {
-        oldErrorMsg.textContent = "";
+        if(oldErrorMsg) oldErrorMsg.textContent = "";
     })
 
     newPasswordInput.addEventListener("input", () => {
@@ -29,33 +37,47 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     submitBtn.addEventListener("click", () => {
-        if (isNewValidate && isConfirmValidate) {
-            fetch("updatePassword.do", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "password": oldPasswordInput.value,
-                    "newPassword": newPasswordInput.value
-                })
-            }).then(response => {
-                return response.text();
-            }).then(data => {
-                if ("success" === data ) {
-                    alert("비밀번호가 정상적으로 변경되었습니다.");
-                    location.href = "/";
-                } else {
-                    oldErrorMsg.textContent = data;
-                }
-            });
-        }
-    })
-
+		const isOldValid = oldPasswordInput.value.trim() !== "";
+		if (!isOldValid) {
+			alert("현재 비밀번호를 입력해주세요.");
+			oldPasswordInput.focus();
+			return;
+		}
+		
+		if (isNewValidate && isConfirmValidate) {
+	        fetch("/mpg/mif/pswdchg/updatePassword.do", {
+	            method: "POST",
+	            headers: {
+	                "Content-Type": "application/json"
+	            },
+	            body: JSON.stringify({
+	                "password": oldPasswordInput.value,
+	                "newPassword": newPasswordInput.value
+	            })
+	        }).then(response => {
+				return response.json();
+			}).then(result => {
+				alert(result.message);
+	
+				if(result.status === "success") {					
+	                location.href = "/mpg/mif/inq/selectMyInquiryView.do";
+				} else {
+	                oldPasswordInput.focus();
+				}
+			}).catch(error => {
+				console.error("비밀번호 변경 중 에러 발생 : ", error);
+				alert("비밀번호 변경 중 오류가 발생했습니다.");
+			});
+		} else {
+			alert("입력 내용을 다시 확인해주세요.");
+		}
+	});
 
     const validateNewPassword = () => {
         const newPassword = newPasswordInput.value;
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
+		
+		newErrorMsg.classList.remove("success");
 
         if (newPassword === "" && newPassword === null) {
             newErrorMsg.textContent = "비밀번호를 입력해주세요.";
@@ -75,6 +97,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const validateConfirmPassword = () => {
         const confirmPassword = confirmPasswordInput.value;
         const newPassword = newPasswordInput.value;
+		
+		confirmErrorMsg.classList.remove("success");
 
         if (confirmPassword === "" || confirmPassword === null || confirmPassword === undefined) {
             confirmErrorMsg.textContent = "";
@@ -90,6 +114,4 @@ document.addEventListener("DOMContentLoaded", () => {
             isConfirmValidate = true;
         }
     }
-
-
 })

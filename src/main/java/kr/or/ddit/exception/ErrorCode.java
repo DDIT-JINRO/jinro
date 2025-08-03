@@ -23,7 +23,11 @@ public enum ErrorCode {
 	POINT_UPDATE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "POINT_UPDATE_ERROR", "포인트 업데이트에 실패했습니다."),
 	MISSION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "MISSION_UPDATE_ERROR", "미션 상태 업데이트에 실패했습니다."),
 	FORBIDDEN_OPERATION(HttpStatus.FORBIDDEN, "FORBIDDEN_OPERATION", "허용되지 않는 작업입니다."),
-	INVALID_FILE(HttpStatus.BAD_REQUEST, "INVALID_FILE", "잘못된 파일입니다.");
+	INVALID_FILE(HttpStatus.BAD_REQUEST, "INVALID_FILE", "잘못된 파일입니다."),
+	
+	// PasswordChange
+	PASSWORD_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "PASSWORD_SAME_AS_OLD", "기존 비밀번호와 동일한 비밀번호로 변경할 수 없습니다."),
+	PASSWORD_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "PASSWORD_UPDATE_FAILED", "데이터베이스 오류로 비밀번호 변경에 실패했습니다.");
 
 	private final HttpStatus status;
 	private final String code;

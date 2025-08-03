@@ -35,13 +35,10 @@ public class PasswordChangeServiceImpl implements PasswordChangeService{
 	@Override
 	public MemberVO selectPasswordChangeView(String memIdStr) {
 		int memId = myInquiryService.parseMemId(memIdStr);
-		MemberVO member;
-		try {
-			member = this.passwordChangeMapper.selectPasswordChangeView(memId);
-		} catch (CustomException e) {
-			throw new CustomException(ErrorCode.INVALID_USER);
+		MemberVO member = this.passwordChangeMapper.selectPasswordChangeView(memId);
+		if (member == null) {
+			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
-		
 		return member;
 	}
 	
@@ -50,20 +47,18 @@ public class PasswordChangeServiceImpl implements PasswordChangeService{
 	 * 
 	 * @param memId 멤버id
 	 * @param map 기존비밀번호, 변경비밀번호
-	 * @return 성공여부 map
 	 */
 	@Override
-	public String updatePasswordChange(String memIdStr, Map<String, Object> map) {
+	public void updatePasswordChange(String memIdStr, Map<String, Object> map) {
 		String oldPassword = (String) map.get("password");
 		String newPassword = (String) map.get("newPassword");
 		
-		String checkResult = this.myInquiryService.checkPassword(memIdStr, oldPassword);
+		// 1. 현재 비밀번호가 맞는지 우선 확인 (틀리면 여기서 예외 발생)
+		myInquiryService.checkPassword(memIdStr, oldPassword);
 		
-		if(!"success".equals(checkResult)) {
-			return "현재 비밀번호가 일치하지 않습니다.";
-		}
-		if (newPassword.equals(oldPassword)) {
-			return "현재 비밀번호와 동일한 비밀번호는 이용 할 수 없습니다."; 
+		// 2. 기존 비밀번호와 새 비밀번호가 문자열로서 동일한지 확인
+		if (oldPassword.equals(newPassword)) {
+			throw new CustomException(ErrorCode.PASSWORD_SAME_AS_OLD);
 		}
 		
 		int memId = this.myInquiryService.parseMemId(memIdStr);
@@ -73,13 +68,10 @@ public class PasswordChangeServiceImpl implements PasswordChangeService{
 		map.put("memId", memId);
 		map.put("newPassword", newPassword);
 		
-		try {
-			this.passwordChangeMapper.updatePasswordChange(map);
-		} catch (CustomException e) {
-			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+		int result = this.passwordChangeMapper.updatePasswordChange(map);
+		if (result == 0) {
+			throw new CustomException(ErrorCode.PASSWORD_UPDATE_FAILED);
 		}
-		
-		return "success";
 	}
 
 }
