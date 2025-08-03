@@ -6,6 +6,6 @@ public interface WithdrawalService {
 
 	Map<String, Object> selectMdcategoryList(String memId);
 
-	String insertMemDelete(String memId, Map<String, Object> map);
+	void insertMemDelete(String memId, Map<String, Object> map);
 
 }

@@ -15,6 +15,8 @@
 	<select id="selectDelYN" parameterType="int" resultType="kr.or.ddit.main.service.MemberVO">
 		SELECT
 			DEL_YN
+			, MEM_ID
+			, MEM_EMAIL
 		FROM
 			MEMBER
 		WHERE
