@@ -57,13 +57,13 @@ public class ReportController {
 		log.info("insertReport -> reportVO : "+reportVO);
 		List<MultipartFile> list = reportVO.getReportFile();
 		if(list != null && list.size() >= 1 && list.get(0).getOriginalFilename()!=null) {
-			Long fileGroupId = fileService.createFileGroup();
 			try {
-			  fileService.uploadFiles(fileGroupId, list);
+				Long fileGroupId = fileService.createFileGroup();
+				fileService.uploadFiles(fileGroupId, list);
+				reportVO.setFileGroupNo(fileGroupId);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			reportVO.setFileGroupNo(fileGroupId);
 		}
 
 		boolean result = this.reportService.insertReport(reportVO);

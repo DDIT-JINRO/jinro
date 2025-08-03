@@ -17,7 +17,7 @@ public class StdBoardVO {
 	private Date boardUpdatedAt;
 	private int boardCnt;
 	private String boardDelYn;
-	private int filegroupId;
+	private Long filegroupId;
 
 	private ChatRoomVO chatRoomVO; // 연계된 채팅방
 	private List<StdReplyVO> stdReplyVOList; // 게시글에 연결된 댓글 리스트

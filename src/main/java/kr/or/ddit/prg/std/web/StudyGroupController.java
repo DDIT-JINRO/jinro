@@ -209,11 +209,11 @@ public class StudyGroupController {
 		AlarmVO alarmVO = new AlarmVO();
 		if(newReplyVO.getReplyParentId() == 0) {
 			alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_BOARD);
-			alarmVO.setAlarmTargetId(stdReplyVO.getReplyId());
+			alarmVO.setAlarmTargetId(newReplyVO.getReplyId());
 			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId="+newReplyVO.getBoardId()+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyId());
 		}else {
 			alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_REPLY);
-			alarmVO.setAlarmTargetId(stdReplyVO.getReplyId());
+			alarmVO.setAlarmTargetId(newReplyVO.getReplyId());
 			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId="+newReplyVO.getBoardId()+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyParentId());
 		}
 		int targetMemId = alarmService.getTargetMemId(alarmVO);
