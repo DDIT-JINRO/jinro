@@ -74,16 +74,38 @@
   border: 2px solid #e8ecef;
   border-radius: 10px;
   padding: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   background: #fff;
+}
+
+.reply-child-container {
+  /* display: none; 대신 */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.3s ease-out,
+    opacity     0.2s ease-out;
 }
 
 .reply-box.reply-child {
   background: #f9f9f9;
   padding-left: 40px;
+  margin-bottom: 0px;
 }
 
-/* 프로필 */
+.reply-child-container.open {
+	  /* 충분히 큰 값 */
+  max-height: 1000px;
+  opacity: 1;
+}
+.reply-child-container .reply-box {
+  margin-bottom: 10px;
+  /* 애니메이션 간 자연스러운 여백 전환 */
+  transition: margin 0.3s ease-out;
+}
+
+/* 댓글 프로필 */
 .reply-profile {
   display: flex;
   align-items: center;
@@ -119,15 +141,24 @@
 .reply-children {
   margin-top: 10px;
   margin-left: 20px;
+  margin-bottom: 0px;
 }
 
 /* 댓글 입력 */
 .comment-form {
   margin-top: 40px;
+  margin-bottom: 40px;
   border: 2px solid #e8ecef;
   padding: 20px;
   border-radius: 10px;
   background: #f9f9f9;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+}
+
+.comment-form.child-form{
+	margin-top: 0px;
 }
 
 .comment-form textarea {
@@ -167,28 +198,19 @@
   font-weight: bold;
 }
 
+.closeReplyBtn{
+	min-inline-size: -webkit-fill-available;
+	text-align-last: center;
+	color: #858E96;
+}
+
+.closeReplyBtn span:hover{
+	cursor: pointer;
+}
+
 .user-profile {
-  position: relative;
   width: 65px;
   height: 65px;
-}
-
-.user-profile .badge-frame {
-  position: absolute;
-  width: 65px;
-  height: 65px;
-  z-index: 1;
-}
-
-.user-profile .profile-image {
-  position: absolute;
-  top: 7.5px;
-  left: 7.5px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  z-index: 2;
 }
 
 .btn-enter-chat {
@@ -211,10 +233,8 @@
 }
 
 .btn-enter-chat.entered {
-  background-color: #f0f0f0;
-  color: #888;
-  cursor: not-allowed;
-  box-shadow: none;
+  background-color: #ff8040;
+  color: #8c0000;
 }
 
 .btn-enter-chat.disabled {
@@ -281,3 +301,409 @@
   color: #333;
   white-space: pre-line;
 }
+
+:root {
+  --card-border: #e8ecef;
+  --card-radius: 10px;
+  --card-bg: #fff;
+  --text-dark: #333;
+  --text-mid: #555;
+  --text-light: #858e96;
+  --gap: 20px;
+}
+
+/* ─── 카드 래퍼 ─── */
+.detail-wrapper {
+  max-width: 1160px;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  padding: 30px;
+  padding-top: 15px;
+}
+
+/* ─── 1) 제목·프로필·메타 ─── */
+.post-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid var(--card-border);
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.post-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  flex: 1 1 auto;
+}
+
+.author-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.author-nickname {
+  font-weight: 600;
+  color: var(--text-mid);
+}
+
+/* 메타 (작성일, 조회수) */
+.post-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+
+/* ─── 2) 핵심 정보 그리드 ─── */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--gap);
+  margin-bottom: 30px;
+}
+
+.info-item dt {
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.info-item dd {
+  margin: 0;
+  color: var(--text-mid);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* ─── 3) 본문 ─── */
+.group-description {
+  border-top: 2px solid var(--card-border);
+  padding-top: 30px;
+}
+
+.desc-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+}
+
+.group-description p {
+  font-size: 1rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.char-count{
+	padding-right : 30px;
+}
+
+.etcBtn{
+	float:right;
+}
+
+.etcBtn:hover {
+	cursor: pointer;
+	font-size: 1.05rem;
+}
+
+.reply-child-btn{
+	border: none;
+	background: none;
+	color: #858E96;
+}
+
+.reply-child-btn:hover {
+	cursor: pointer;
+}
+
+.child-count{
+	font-size: 13px
+}
+
+/* 신고창 영역 */
+.etc-container{
+	box-sizing: border-box;
+
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 2px 2px;
+
+	width: 70px;
+
+	background: #FFFFFF;
+	border: 2px solid #E8ECEF;
+	border-radius: 10px;
+
+	float: right;
+	clear: right;
+	margin-top:-2px;
+}
+
+.etc-container hr{
+    margin: 4px;
+    width: 70%;
+    border-style: groove;
+}
+
+.etc-container.etc-open{
+	display: flex;
+}
+
+.etc-container .etc-act-btn:hover{
+	cursor: pointer;
+	font-weight: 500;
+	color: #414141;
+}
+
+.etc-act-btn{
+	color: #969696;
+    width: 100%;
+    text-align: center;
+}
+
+.boardEtcBtn{
+	float: right;
+	color: #969696;
+}
+
+.boardEtcBtn:hover{
+	cursor: pointer;
+	color: #414141;
+}
+
+.boardEtcContainer{
+	box-sizing: border-box;
+	display: none;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+
+	background: #FFFFFF;
+	border: 2px solid #E8ECEF;
+	border-radius: 10px;
+	position: absolute;
+	justify-self: right;
+
+	margin-top: 30px;
+	margin-right: -10px;
+}
+
+
+
+.boardEtcContainer.board-etc-open{
+	display: flex;
+}
+
+.boardEtcContainer hr{
+	width: 70%;
+	margin: 2px;
+	border-color: #E8ECEF;
+	border-style: solid;
+}
+
+.boardEtcActionBtn {
+	height: 40px;
+	width: 80px;
+	color: #969696;
+	text-align: center;
+	align-content: center;
+}
+
+.boardEtcActionBtn:hover {
+	cursor: pointer;
+	color: #555555;
+}
+
+.reply-modify-input{
+    width: 80%;
+    height: 20px;
+    border-radius: 9px;
+    border: 2.5px solid rgba(127, 140, 141, 0.4);
+    color:#636363;
+    place-content: space-evenly;
+    padding-left: 10px;
+    resize: none;
+}
+
+.reply-modify-input::placeholder{
+	color:#969696;
+}
+
+.button-group{
+    display: inline-block;
+    float: right;
+    height : 27px;
+}
+
+.button-group button{
+	height : 100%;
+	border-radius: 8px;
+	border: 1px;
+	width: 45px;
+}
+
+.button-group button:hover{
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.button-group .modify-btn{
+	background: #d3f8ff;
+	color: #848efb;
+}
+
+.button-group .cancel-btn{
+	background: #d3f8ff;
+	color: #fe81a0;
+}
+
+/* ===================신고모달 css================= */
+
+/* 모달 오버레이 (배경) */
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: none; /* 기본적으로 숨김 */
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+}
+
+/* 모달이 보일 때의 스타일 */
+.modal-overlay.show {
+	display: flex;
+}
+
+/* 모달 콘텐츠 (흰색 박스) */
+.modal-content {
+	background-color: white;
+	padding: 30px 40px;
+	border-radius: 12px;
+	width: 100%;
+	max-width: 500px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	position: relative;
+	text-align: center;
+}
+
+.modal-content.interests-modal {
+	max-width: 700px;
+	max-height: 500px;
+}
+
+.modal-content h3 {
+	margin-top: 0;
+	font-size: 1.5rem;
+	color: #333;
+}
+
+.modal-content p {
+	color: #666;
+	margin-bottom: 24px;
+}
+
+.modal-close-btn {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	background: none;
+	border: none;
+	font-size: 2rem;
+	color: #999;
+	cursor: pointer;
+}
+
+.modal-form textarea{
+	width: 94.5%;
+	padding: 12px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 1rem;
+	margin-bottom: 8px;
+	resize: none;
+	height: 100px;
+}
+
+.modal-error-msg {
+	display: block;
+	color: #e53e3e;
+	font-size: 0.9rem;
+	height: 1.2em; /* 에러 메시지가 없을 때도 공간 유지 */
+	margin-bottom: 12px;
+}
+
+.modal-form .btn-primary {
+	width: 100%;
+	padding: 12px;
+}
+
+.btn {
+	border: 1px solid transparent;
+	padding: 6px 18px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 0.9rem;
+	transition: all 0.3s ease;
+}
+
+.btn-primary {
+	background-color: #7881f5;
+	color: white;
+}
+
+.btn-primary:hover {
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	background-color: #5c68d9; /* 더 진한 파랑 */
+}
+
+/* ─── 파일 입력창 스타일 ─── */
+.modal-form input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* ─── 파일 선택 버튼 커스텀 ─── */
+.modal-form input[type="file"]::file-selector-button {
+  padding: 8px 16px;
+  margin-right: 8px;
+  background-color: #7881f5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* ─── 버튼 호버 효과 ─── */
+.modal-form input[type="file"]::file-selector-button:hover {
+  background-color: #5c68d9;
+}
+
+/* ===================신고모달 css 끝================ */

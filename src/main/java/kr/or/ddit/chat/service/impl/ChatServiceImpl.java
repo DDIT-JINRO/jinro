@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatMessageVO;
@@ -21,7 +22,8 @@ import kr.or.ddit.chat.service.ChatMessageVO;
 import kr.or.ddit.chat.service.ChatReceiverVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
-import lombok.extern.slf4j.Slf4j;
+import kr.or.ddit.exception.CustomException;
+import kr.or.ddit.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -130,5 +132,32 @@ public class ChatServiceImpl implements ChatService {
 		return false;
 	}
 
+	@Override
+	@Transactional
+	public int deleteChatRoom(ChatRoomVO chatRoomVO) {
+		int crId = chatRoomVO.getCrId();
+		List<Integer> enterMemList = this.chatMapper.findChatMemberIdsByCrId(crId);
+
+		for(int memId : enterMemList) {
+			ChatMemberVO chatMemberVO = new ChatMemberVO();
+			chatMemberVO.setCrId(crId);
+			chatMemberVO.setMemId(memId);
+			this.exitChatRoom(chatMemberVO);
+		}
+
+		int result = this.chatMapper.deleteChatRoom(chatRoomVO);
+
+		return result;
+	}
+
+	@Override
+	public ChatRoomVO selectChatRoom(int crId) {
+		return this.chatMapper.selectChatRoom(crId);
+	}
+
+	@Override
+	public int updateChatRoom(ChatRoomVO chatRoomVO) {
+		return this.chatMapper.updateChatRoom(chatRoomVO);
+	}
 
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class MemberVO {
-	
+
 	private int memId;
 	private String memEmail;
 	private String memPassword;
@@ -24,11 +24,11 @@ public class MemberVO {
 	private String loginType;
 	private String memToken;
 	private String delYn;
-	private int fileProfile;
-	private int fileEtc;
-	
+	private Long fileProfile;
+	private Long fileEtc;
+
 	public String getSMemId() {
 		return memId+"";
 	}
-	
+
 }

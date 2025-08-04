@@ -50,15 +50,15 @@ document.addEventListener('DOMContentLoaded', function(){
 		})
 
 		eventSource.addEventListener('connected', function(e){
-			console.log(e.data);
+			//console.log(e.data);
 		})
 
 		eventSource.onopen = () =>{
-			console.log("sse연결됨");
+			//console.log("sse연결됨");
 		}
 
 		eventSource.onerror = (e) =>{
-			console.log("e :", e);
+			//console.log("e :", e);
 		}
 
 		// 알림 전체삭제 요청 버튼 이벤트 추가
@@ -120,16 +120,20 @@ document.addEventListener('DOMContentLoaded', function(){
 	})
 
 	// 모달 닫기버튼 이벤트 등록
-	alarmClose.addEventListener('click', (e) =>{
-		e.preventDefault();
-		alarmModal.classList.add('hidden');
-	})
+	if(alarmClose){
+		alarmClose.addEventListener('click', (e) =>{
+			e.preventDefault();
+			alarmModal.classList.add('hidden');
+		})
+	}
 
 	// 모달 토글
-	alarmBtn.addEventListener('click', (e) => {
-		e.preventDefault();
-		alarmModal.classList.toggle('hidden');
-	});
+	if(alarmBtn){
+		alarmBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			alarmModal.classList.toggle('hidden');
+		});
+	}
 })
 
 
