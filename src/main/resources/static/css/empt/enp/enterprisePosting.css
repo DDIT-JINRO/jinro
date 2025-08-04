@@ -113,7 +113,7 @@
     padding: 0 24px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 25px;
     border-top: 1px solid #e5e7eb;
 }
 
@@ -222,3 +222,217 @@
     margin-top: 12px;
 }
 
+/* 기존 CSS는 그대로 유지됩니다. */
+
+/* 기업 목록 전체 컨테이너 */
+.company-list {
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 기업 목록 헤더 (기업이미지, 기업명 등) */
+.company-list > .accordion-header { /* 직접 자식인 accordion-header에만 적용 */
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #f3f4f6; /* 회색 배경 */
+    font-weight: 600;
+    color: #4b5563;
+    border-bottom: 1px solid #e5e7eb;
+    gap: 10px; /* 항목 간 간격 */
+    margin-bottom: 10px;
+    border-radius: 10px; 
+}
+
+/* 개별 기업 항목 */
+.accordion-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background-color: #fff;
+    margin-bottom: 10px;
+}
+
+.accordion-item:last-child {
+    border-bottom: none; /* 마지막 항목의 하단 보더 제거 */
+}
+
+/* 각 기업 항목의 헤더 (펼치기/접기 버튼 포함) */
+.accordion-item .accordion-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.accordion-item .accordion-header:hover {
+    background-color: #f9fafb;
+}
+
+/* 기업 정보 각 항목 (이미지, 이름, 번호 등) */
+.company-info-item {
+    padding: 0 3px; /* 내부 패딩 */
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* 내용이 길어져도 줄바꿈 방지 */
+    overflow: hidden; /* 넘치는 내용 숨김 */
+    text-overflow: ellipsis; /* 넘치는 내용 ... 처리 */
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+/* 기업 이미지 */
+.company-image {
+    width: 60px; /* 이미지 크기 조정 */
+    height: 60px;
+    object-fit: contain; /* 비율 유지하며 컨테이너에 맞춤 */
+    border-radius: 4px; /* 살짝 둥근 모서리 */
+    border: 1px solid #e5e7eb;
+    background-color: #fff;
+    padding: 3px;
+}
+
+/* 홈페이지 링크 스타일 */
+.company-info-item a {
+    color: #4f46e5; /* 링크 색상 */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.company-info-item a:hover {
+    text-decoration: underline;
+}
+
+/* 북마크 아이콘 */
+/* 북마크 버튼 기본 스타일 */
+.bookmark-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* 비활성 아이콘은 기본적으로 숨깁니다. */
+.bookmark-btn .icon-inactive {
+    display: none;
+}
+
+/* 활성 아이콘은 기본적으로 보입니다. */
+.bookmark-btn .icon-active {
+    display: inline-block;
+}
+
+.bookmark-btn span img {
+    width: 30px;
+    height: 30px;
+}
+
+/* .active 클래스가 없는 경우 (비활성화 상태) */
+.bookmark-btn:not(.active) .icon-active {
+    display: none; /* 활성 아이콘을 숨깁니다. */
+}
+
+.bookmark-btn:not(.active) .icon-inactive {
+    display: inline-block; /* 비활성 아이콘을 보여줍니다. */
+}
+
+/* 펼치기/접기 아이콘 */
+.toggle-icon {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6b7280;
+    transition: transform 0.3s ease;
+}
+
+/* 아코디언 내용 부분 (기본적으로 숨김) */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    background-color: #fefefe;
+    border-top: 1px solid #f3f4f6; /* 내용과 헤더 사이 구분선 */
+    padding: 0 20px; /* 초기 패딩 0 */
+}
+
+/* 아코디언 내용이 열렸을 때 */
+.accordion-item.open .accordion-content {
+    max-height: 500px; /* 충분히 큰 값으로 설정하여 내용이 다 보이도록 */
+    padding: 20px; /* 열릴 때 패딩 적용 */
+    border-radius: 10px;
+}
+
+/* 아코디언 내용 내부 섹션 */
+.company-description-section,
+.company-review-section, /* 현재 JSP에서 주석 처리되어 있지만, 스타일은 남겨둠 */
+.company-address-section,
+.company-hiring-status-section {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #e0e0e0; /* 섹션 구분선 */
+}
+
+.company-hiring-status-section {
+    border-bottom: none; /* 마지막 섹션은 구분선 없음 */
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.accordion-content h4 {
+    font-size: 1rem;
+    color: #1f2937;
+    margin-bottom: 8px;
+    font-weight: 600;
+    border-left: 4px solid #7881f5; /* 강조를 위한 왼쪽 보더 */
+    padding-left: 8px;
+}
+
+.accordion-content p {
+    font-size: 0.9rem;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+/* 총 건수 표시 */
+p:first-of-type { /* 이 부분이 '총 10건'을 의미하는 것으로 가정 */
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 15px;
+    padding-right: 10px;
+}
+
+
+/* 홈페이지 링크 스타일 */
+.company-info-item .homepage-link {
+    display: inline-block; /* span과 같은 인라인 요소에 패딩과 보더를 적용하기 위함 */
+    padding: 8px 16px; /* 필터 태그와 유사한 패딩 */
+    border: 1px solid #d1d5db; /* 필터 태그와 유사한 보더 */
+    border-radius: 20px; /* 동그란 모양 */
+    background-color: #f3f4f6; /* 약간의 배경색 */
+    font-size: 0.9rem; /* 글자 크기 조정 */
+    color: #4b5563; /* 글자 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+    transition: all 0.2s ease; /* 호버 효과를 위한 전환 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+    text-decoration: none;
+}
+
+.company-info-item .homepage-link:hover {
+    background-color: #eef2ff; /* 호버 시 배경색 변경 */
+    border-color: #818cf8; /* 호버 시 보더 색상 변경 */
+    color: #4338ca; /* 호버 시 글자 색상 변경 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* 약간의 그림자 효과 */
+    text-decoration: none;
+}
+
+/* 추가적으로, 홈페이지 링크가 없는 경우를 대비한 스타일 */
+.company-info-item .no-homepage {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    color: #9ca3af; /* 비활성화된 느낌의 색상 */
+    background-color: #f9fafb;
+    border: 1px dashed #e0e0e0;
+    border-radius: 20px;
+    cursor: default;
+    white-space: nowrap;
+}

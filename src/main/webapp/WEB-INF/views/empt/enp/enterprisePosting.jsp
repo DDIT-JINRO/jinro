@@ -126,11 +126,28 @@
 							</div>
 							<div class="company-info-item" style="flex: 1;">${company.ccName}</div>
 							<div class="company-info-item" style="flex: 1;">
-								<a href="${company.cpWebsite}" target="_blank">홈페이지</a>
+								<c:choose>
+									<c:when test="${not empty company.cpWebsite}">
+										<a href="${company.cpWebsite}" target="_blank"
+											class="homepage-link">홈페이지</a>
+									</c:when>
+									<c:otherwise>
+										<span class="no-homepage">홈페이지 없음</span>
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="company-info-item" style="width: 80px;">
-								<img src="/resources/images/bookmark_icon.png" alt="북마크"
-									style="width: 20px; height: 20px;">
+								<div class="item-action">
+								    <button class="bookmark-btn active" data-category-id="${bookmark.bmCategoryId}" data-target-id="${bookmark.bmTargetId}">
+								        <span class="icon-active">
+								            <img src="/images/bookmark-btn-active.png" alt="활성 북마크">
+								        </span>
+								        
+								        <span class="icon-inactive">
+								            <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+								        </span>
+								    </button>
+								</div>
 							</div>
 							<div class="company-info-item" style="width: 20px;">
 								<span class="toggle-icon">+</span>
