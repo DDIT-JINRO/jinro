@@ -1,9 +1,19 @@
 package kr.or.ddit.pse.cat.service.impl;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -18,8 +28,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.json.JsonString;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import kr.or.ddit.account.lgn.service.LoginService;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.pse.cat.service.CareerAptitudeTestService;
@@ -54,8 +64,7 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 
 		Map<String, Object> answers = (Map<String, Object>) data.get("answers");
 
-		String answer = String.join(" ",
-				answers.entrySet().stream().map((e) -> e.getKey() + "=" + e.getValue()).toArray(String[]::new));
+		String answer = String.join(" ", answers.entrySet().stream().map((e) -> e.getKey() + "=" + e.getValue()).toArray(String[]::new));
 
 		MemberVO memVO = new MemberVO();
 		int numMemId = Integer.parseInt(memId);
@@ -107,10 +116,7 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 			long inspctSeq = resultNode.get("inspctSeq").asLong();
 			String reportUrl = resultNode.get("url").asText();
 
-//		    log.info("SUCC_YN: {}", succYn);
-//		    log.info("ERROR_REASON: {}", errorReason);
-//		    log.info("inspctSeq: {}", inspctSeq);
-//		    log.info("Report URL: {}", reportUrl);
+			insertResultKeyword(reportUrl, memId, testNo);
 
 			return Map.of("msg", "success", "reportUrl", reportUrl);
 		} catch (Exception e) {
@@ -283,4 +289,115 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 		temporarySaveVO.setMemId(intMemId);
 		careerAptitudeMapper.delTempSaveTest(temporarySaveVO);
 	}
+
+	@Override
+	public void insertResultKeyword(String url, String memId, String testNo) {
+		url = "https://www.career.go.kr/cloud/w/inspect/value2/report?seq=NzgyMDY4NDk=";
+
+		WebDriver driver = null;
+		try {
+			WebDriverManager.chromedriver().setup();
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--headless", "--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage");
+
+			// 3. WebDriver 인스턴스 생성
+			driver = new ChromeDriver(options);
+			// 4. 웹 페이지로 이동하여 원하는 작업 수행
+			driver.get(url);
+
+			// 5. 암시적 대기 설정 (페이지 로딩까지 최대 5초 대기)
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+			String result = "";
+			
+			switch (testNo) {
+			case "24": {
+				// 1. 상위 가치관
+	            List<WebElement> topResultElements = driver.findElements(By.cssSelector(".aptitude-tbl-list.value.import tbody tr td:nth-of-type(1)"));
+	            String topResultValues = topResultElements.stream().map(WebElement::getText).collect(Collectors.joining(" , "));
+
+	            // 2. 내가 중요하게 생각하는 가치관
+	            List<WebElement> myChoiceElements = driver.findElements(By.cssSelector(".aptitude-tbl-list.value.import tbody tr td:nth-of-type(2)"));
+	            String myChoiceValues = myChoiceElements.stream().map(WebElement::getText).collect(Collectors.joining(" , "));
+	            
+	            // 3. 나의 가치지향 텍스트 추출
+	            WebElement myTypeElement = driver.findElement(By.cssSelector("p.value-custom > span.fcolor-green"));
+	            String myValueType = myTypeElement.getText().replace("\"", "").trim(); // "성취지향" -> 성취지향
+
+	            // 3-2. 해당 유형에 맞는 직업 목록 찾기
+	            String recommendedJobs = findJobsByValueType(driver, myValueType);
+
+				result = "상위 가치관 : " + topResultValues + " / 내가 중요하게 생각하는 가치관 : " + myChoiceValues + " / 나의 가치지향 유형 : " + myValueType + " / 추천 직업 목록 : " + recommendedJobs;
+				
+				break;
+			}
+			
+			case "25": {
+				List<WebElement> elements = driver.findElements(By.cssSelector(".cont_result > p.txt_guide > span.emph_b"));
+
+				String keyword1 = "";
+				String keyword2 = "";
+
+				if (elements.size() >= 2) {
+					keyword1 = elements.get(1).getText().trim();
+					keyword2 = elements.get(2).getText().trim();
+				}
+
+				List<String> educationResults = parseTable(driver, ".cont_result > table.tbl_result:nth-of-type(1)", testNo);
+				List<String> majorResults = parseTable(driver, ".cont_result > table.tbl_result:nth-of-type(2)", testNo);
+				
+				result = "직업 가치관 상위 2개 단어 : " + keyword1 + ", " + keyword2 + "/ 학력별 추천 직업 : " + educationResults + " / 전공별 추천 직업 : " + majorResults;
+				
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + testNo);
+			}
+			
+			log.info("전체 겨로가다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ : " + result);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (driver != null) {
+				driver.quit();
+			}
+		}
+	}
+
+	private List<String> parseTable(WebDriver driver, String tableSelector, String testNo) {
+		List<String> results = new ArrayList<>();
+
+		List<WebElement> rows = driver.findElements(By.cssSelector(tableSelector + " > tbody > tr"));
+
+		for (WebElement row : rows) {
+			String title = row.findElement(By.cssSelector("td:nth-child(1)")).getText().trim();
+			List<WebElement> jobNames = row.findElements(By.cssSelector("td:nth-child(2) a"));
+
+			String content = jobNames.stream().map(WebElement::getText).collect(Collectors.joining(" , "));
+
+			results.add(title + ": " + content);
+		}
+
+		return results;
+	}
+	
+	// 가치지향 직업 추출
+    private String findJobsByValueType(WebDriver driver, String valueType) {
+        List<WebElement> jobSections = driver.findElements(By.cssSelector("ul.value4-job > li"));
+        
+        for (WebElement section : jobSections) {
+        	// 가치지향 제목
+            WebElement titleElement = section.findElement(By.tagName("dt"));
+            if (titleElement.getText().contains(valueType)) {
+            	
+                // 직업 텍스트를 추출하여 반환
+                List<WebElement> jobLinks = section.findElements(By.cssSelector("dd > a"));
+                log.info("리스트 길이 이거 실화임? : " + jobLinks.size());
+                return jobLinks.stream().map(WebElement::getText).collect(Collectors.joining(" , "));
+            }
+        }
+        // 일치하는 유형을 찾지 못한 경우 빈 리스트 반환
+        return "";
+    }
 }
