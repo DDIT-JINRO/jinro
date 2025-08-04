@@ -2,4 +2,112 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.empt.enp.service.impl.EnterprisePostingMapper">
 
+	<select id="selectCompanyListCount" parameterType="kr.or.ddit.empt.enp.service.CompanyVO" resultType="int">
+		SELECT COUNT(*)
+		FROM (
+			SELECT
+				a.cp_id
+			FROM company a
+			LEFT JOIN com_code b ON a.cp_scale = b.cc_id
+			LEFT JOIN (SELECT DISTINCT cp_id FROM hire) c ON a.cp_id = c.cp_id
+			WHERE 1=1
+				<if test="keyword != null and keyword != ''">
+					AND a.cp_name LIKE '%' || #{keyword} || '%'
+				</if>
+				 <if test="scaleId != null and scaleId.size() > 0">
+                AND a.cp_scale IN
+                <foreach collection="scaleId" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            	</if>
+
+	            <if test="regionId != null and regionId.size() > 0">
+	                AND (
+	                <foreach collection="regionId" item="id" separator="OR">
+	                    a.cp_region LIKE (SELECT cc_etc || '%' FROM com_code WHERE cc_id = #{id})
+	                </foreach>
+	                )
+	            </if>
+
+	            <if test="hiringStatus != null and hiringStatus.size() > 0">
+	                AND (CASE
+	                    WHEN c.cp_id IS NOT NULL THEN 'Y'
+	                    ELSE 'N'
+	                END) IN
+	                <foreach collection="hiringStatus" item="status" open="(" separator="," close=")">
+	                    #{status}
+	                </foreach>
+	            </if>
+		)
+	</select>
+	
+
+	<select id="selectCompanyList" parameterType="kr.or.ddit.empt.enp.service.CompanyVO" resultType="kr.or.ddit.empt.enp.service.CompanyVO">
+		SELECT * 
+			FROM (
+			    SELECT sub.*, ROWNUM AS RNUM
+			    FROM (
+			        SELECT
+			            a.cp_id,
+			            a.cp_name,
+			            b.cc_name,
+			            a.cp_description,
+			            a.cp_website,
+			            a.cp_busino,
+			            a.cp_img_url,
+			            a.cp_region,
+			            CASE 
+			                WHEN c.cp_id IS NOT NULL THEN 'Y'
+			                ELSE 'N'
+			            END AS cp_hiring_status
+			        FROM company a
+			        LEFT JOIN com_code b ON a.cp_scale = b.cc_id
+			        LEFT JOIN (SELECT DISTINCT cp_id FROM hire) c ON a.cp_id = c.cp_id
+			        WHERE 1=1
+			            <if test="keyword != null and keyword != ''">
+						    AND a.cp_name LIKE '%' || #{keyword} || '%'
+						</if>
+			            <if test="scaleId != null and scaleId.size() > 0">
+				            AND a.cp_scale IN
+				            <foreach collection="scaleId" item="id" open="(" separator="," close=")">
+				                #{id}
+				            </foreach>
+				        </if>
+				
+				        <if test="regionId != null and regionId.size() > 0">
+				            AND (
+				            <foreach collection="regionId" item="id" separator="OR">
+				                a.cp_region LIKE (SELECT cc_etc || '%' FROM com_code WHERE cc_id = #{id})
+				            </foreach>
+				            )
+				        </if>
+				
+				        <if test="hiringStatus != null and hiringStatus.size() > 0">
+				            AND (CASE
+				                WHEN c.cp_id IS NOT NULL THEN 'Y'
+				                ELSE 'N'
+				            END) IN
+				            <foreach collection="hiringStatus" item="status" open="(" separator="," close=")">
+				                #{status}
+				            </foreach>
+			        	</if>
+			        ORDER BY a.cp_id
+			    ) sub
+			    WHERE ROWNUM <![CDATA[<]]>= #{endNo}
+			)
+			WHERE RNUM <![CDATA[>]]> #{startNo}
+
+	</select>
+	
+	<select id="selectCodeVOCompanyScaleList" resultType="kr.or.ddit.com.ComCodeVO">
+		select CC_ID, CL_CODE, CC_NAME, CC_ETC
+		from COM_CODE
+		where CL_CODE = 'G30'
+	</select>
+	
+	<select id="selectCodeVORegionList" resultType="kr.or.ddit.com.ComCodeVO">
+		select CC_ID, CL_CODE, CC_NAME, CC_ETC
+		from COM_CODE
+		where CL_CODE = 'G23'
+	</select>
 </mapper>
