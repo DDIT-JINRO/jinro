@@ -69,6 +69,13 @@ h2 {
 	flex-direction: column;
 }
 
+.resume-title {
+	font-family: 'Noto Sans KR';
+	font-weight: 700;
+	color: #000;
+	margin-bottom: 32px;
+}
+
 /* Label and Input/Select Styles */
 label {
 	font-weight: 600;

@@ -26,9 +26,9 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			이력서 페이지
 			<section class="personal-info-section">
 				<div class="resume-title">
+					<label for="name">제목 <span class="required-asterisk">*</span></label>
 					<input type="text" name="resumeTitle" id="resumeTitle"
 						placeholder="제목을 입력해주세요." value="${resumeVO.resumeTitle}" required>
 				</div>
@@ -96,7 +96,7 @@
 							</div>
 
 							<div class="form-group address-group">
-								<label for="address">주소</label>
+								<label for="address">주소<span class="required-asterisk">*</span></label>
 								<div class="input-with-icon">
 									<input type="text" id="address" value="" name="address"
 										placeholder="돋보기로 검색해주세요." readonly required > <i class="fa fa-search icon-search"
@@ -108,7 +108,7 @@
 						</div>
 						<div class="form-JobWish">
 							<div class="JobWish-header">
-								<label for="desired-job">희망 직무</label>
+								<label for="desired-job">희망 직무<span class="required-asterisk">*</span></label>
 								<button type="button" id="add-job">추가</button>
 							</div>
 							<div class="job-input-group">
@@ -119,7 +119,7 @@
 
 						<div class="form-Skills">
 							<div class="Skills-header">
-								<label for="skills">스킬</label>
+								<label for="skills">스킬<span class="required-asterisk">*</span></label>
 								<button type="button" id="add-skill">추가</button>
 							</div>
 							<div class="skills-input-group">
