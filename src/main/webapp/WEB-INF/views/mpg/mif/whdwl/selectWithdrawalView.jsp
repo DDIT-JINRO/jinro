@@ -70,7 +70,7 @@
 					</div>
 
 					<div class="button-wrapper">
-						<button type="submit" class="btn btn-danger">탈퇴하기</button>
+						<button type="submit" class="btn btn-danger">탈퇴신청</button>
 					</div>
 				</form>
 			</div>
