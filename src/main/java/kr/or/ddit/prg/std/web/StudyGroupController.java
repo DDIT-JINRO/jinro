@@ -72,8 +72,10 @@ public class StudyGroupController {
 		    						StdBoardVO stdBoardVO,
 		    						Principal principal,
 		    						Model model) {
-		if(stdBoardVO!=null && stdBoardVO.getSize() == 0) stdBoardVO.setSize(size);
-		if(stdBoardVO!=null && stdBoardVO.getCurrentPage() == 0) stdBoardVO.setCurrentPage(currentPage);
+		if (stdBoardVO != null && stdBoardVO.getSize() == 0)
+			stdBoardVO.setSize(size);
+		if (stdBoardVO != null && stdBoardVO.getCurrentPage() == 0)
+			stdBoardVO.setCurrentPage(currentPage);
 
 		int totalCount = this.studyGroupService.selectStudyGroupTotalCount(stdBoardVO);
 		List<StdBoardVO> list = this.studyGroupService.selectStudyGroupList(stdBoardVO);
@@ -83,11 +85,9 @@ public class StudyGroupController {
 		articlePage.setUrl(baseUrl);
 		articlePage.setPagingArea("");
 
-		if(principal!=null && !principal.getName().equals("anonymousUser")) {
+		if (principal != null && !principal.getName().equals("anonymousUser")) {
 			List<ChatRoomVO> roomList = chatService.findRoomsByMemId(principal.getName());
-			Set<Integer> myChatRoomIds = roomList.stream()
-				    .map(ChatRoomVO::getCrId)
-				    .collect(Collectors.toSet());
+			Set<Integer> myChatRoomIds = roomList.stream().map(ChatRoomVO::getCrId).collect(Collectors.toSet());
 			model.addAttribute("myRoomSet", myChatRoomIds);
 		}
 		// 지역목록맵<지역코드, 지역명> 을 받아와서 지역코드순으로 출력하기 위해 리스트로 변환하고 정렬
@@ -99,7 +99,7 @@ public class StudyGroupController {
 		model.addAttribute("interestMap", this.studyGroupService.getInterestsMap());
 		model.addAttribute("regionList", regionList);
 
-		model.addAttribute("region",region);
+		model.addAttribute("region", region);
 		model.addAttribute("gender", gender);
 		model.addAttribute("interestItems", interestItems);
 		model.addAttribute("maxPeople", maxPeople);
@@ -121,7 +121,7 @@ public class StudyGroupController {
 
 		// 채팅방 참여했는지 여부를 체크하는 값 가져오기
 		ChatRoomVO chatRoomVO = stdBoardVO.getChatRoomVO();
-		if(principal!= null && !principal.getName().equals("unonymousUser") && chatRoomVO != null) {
+		if (principal != null && !principal.getName().equals("unonymousUser") && chatRoomVO != null) {
 			boolean isEntered = this.chatService.isEntered(chatRoomVO.getCrId(), principal.getName());
 			model.addAttribute("isEntered", isEntered);
 		}
@@ -143,8 +143,9 @@ public class StudyGroupController {
 		sb.append("&").append("searchKeyword=").append(searchKeyword == null ? "" : searchKeyword);
 		sb.append("&").append("size=").append(size);
 
-		if(interestItems == null || interestItems.size() == 0) return sb.toString();
-		for(String interest : interestItems) {
+		if (interestItems == null || interestItems.size() == 0)
+			return sb.toString();
+		for (String interest : interestItems) {
 			sb.append("&").append("interestItems=").append(interest == null ? "" : interest);
 		}
 
@@ -165,7 +166,7 @@ public class StudyGroupController {
 	@GetMapping("/createStdGroup.do")
 	public String createStdGroup(@AuthenticationPrincipal String memId, Model model) {
 		// jsp 측에서 막아놨지만 혹시 몰라서 걸어둠.
-		if(memId == null || memId.equals("anonymousUser")) {
+		if (memId == null || memId.equals("anonymousUser")) {
 			return "/login";
 		}
 
@@ -185,8 +186,8 @@ public class StudyGroupController {
 	@PostMapping("/createStdGroup.do")
 	public String createStdGroupPost(StdBoardVO stdBoardVO) {
 		int resultBoardId = this.studyGroupService.insertStdBoard(stdBoardVO);
-		if(resultBoardId > 0) {
-			return "redirect:/prg/std/stdGroupDetail.do?stdGroupId="+resultBoardId;
+		if (resultBoardId > 0) {
+			return "redirect:/prg/std/stdGroupDetail.do?stdGroupId=" + resultBoardId;
 		}
 
 		return "redirect:/prg/std/createStdGroup.do";
@@ -194,7 +195,7 @@ public class StudyGroupController {
 
 	@PostMapping("/createStdReply.do")
 	public ResponseEntity<StdReplyVO> createStdReply(StdReplyVO stdReplyVO, Principal principal) {
-		if(principal==null||principal.getName().equals("anonymousUser")) {
+		if (principal == null || principal.getName().equals("anonymousUser")) {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
 		String memIdStr = principal.getName();
@@ -202,22 +203,24 @@ public class StudyGroupController {
 		stdReplyVO.setMemId(memId);
 		StdReplyVO newReplyVO = this.studyGroupService.insertReply(stdReplyVO);
 
-		if(newReplyVO == null) {
+		if (newReplyVO == null) {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 
 		AlarmVO alarmVO = new AlarmVO();
-		if(newReplyVO.getReplyParentId() == 0) {
+		if (newReplyVO.getReplyParentId() == 0) {
 			alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_BOARD);
 			alarmVO.setAlarmTargetId(newReplyVO.getReplyId());
-			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId="+newReplyVO.getBoardId()+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyId());
-		}else {
+			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId=" + newReplyVO.getBoardId() + "#" + "reply-" + newReplyVO.getBoardId() + "-"
+					+ newReplyVO.getReplyId());
+		} else {
 			alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_REPLY);
 			alarmVO.setAlarmTargetId(newReplyVO.getReplyId());
-			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId="+newReplyVO.getBoardId()+"#"+"reply-"+newReplyVO.getBoardId()+"-"+newReplyVO.getReplyParentId());
+			alarmVO.setAlarmTargetUrl("/prg/std/stdGroupDetail.do?stdGroupId=" + newReplyVO.getBoardId() + "#" + "reply-" + newReplyVO.getBoardId() + "-"
+					+ newReplyVO.getReplyParentId());
 		}
 		int targetMemId = alarmService.getTargetMemId(alarmVO);
-		if(memId != targetMemId) {
+		if (memId != targetMemId) {
 			this.alarmService.sendEvent(alarmVO);
 		}
 
@@ -246,13 +249,13 @@ public class StudyGroupController {
 		System.out.println(map);
 		System.out.println("========================================");
 
-		if(principal == null || principal.getName().equals("anonymousUser")
-				|| !principal.getName().equals(map.get("memId"))) throw new CustomException(ErrorCode.INVALID_USER);
+		if (principal == null || principal.getName().equals("anonymousUser") || !principal.getName().equals(map.get("memId")))
+			throw new CustomException(ErrorCode.INVALID_USER);
 
 		try {
 			boolean result = this.studyGroupService.deleteStdBoard(map);
 			return ResponseEntity.ok(true);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
@@ -260,8 +263,7 @@ public class StudyGroupController {
 
 	@PostMapping("/updateStdReply.do")
 	public ResponseEntity<Boolean> updateStdReply(@RequestBody StdReplyVO stdReplyVO, Principal principal) {
-		if(principal == null || principal.getName().equals("anonymousUser")
-				|| !principal.getName().equals(stdReplyVO.getMemId()+"")) {
+		if (principal == null || principal.getName().equals("anonymousUser") || !principal.getName().equals(stdReplyVO.getMemId() + "")) {
 			throw new CustomException(ErrorCode.INVALID_USER);
 		}
 		boolean result = this.studyGroupService.updateStdReply(stdReplyVO);
@@ -276,11 +278,11 @@ public class StudyGroupController {
 		model.addAttribute("csbVO", currentStdBoardVO);
 
 		Map<String, String> interestMap = this.studyGroupService.getInterestsMap();
-		Map<String, String> regionMap 	= this.studyGroupService.getRegionMap();
+		Map<String, String> regionMap = this.studyGroupService.getRegionMap();
 		// 보관되어있는 regionMap<지역코드 : 지역명> 을 순서대로 정렬해서 보내기 위해 리스트로 변환 후 key순 정렬
 		ArrayList<Map.Entry<String, String>> regionList = new ArrayList<>(regionMap.entrySet());
 		regionList.sort(Map.Entry.comparingByKey());
-		Map<String, String> genderMap 	= new HashMap<>();
+		Map<String, String> genderMap = new HashMap<>();
 		genderMap.put("all", "성별제한 없음");
 		genderMap.put("men", "남자만");
 		genderMap.put("women", "여자만");
@@ -296,24 +298,24 @@ public class StudyGroupController {
 	@PostMapping("/updateStdBoardAct.do")
 	public String updateStdBoardAct(@AuthenticationPrincipal String memId, StdBoardVO stdBoardVO, Model model) {
 		// jsp 측에서 막아놨지만 혹시 몰라서 걸어둠.
-		if(memId == null || memId.equals("anonymousUser")) {
+		if (memId == null || memId.equals("anonymousUser")) {
 			return "/login";
 		}
 
 		int resultBoardId = this.studyGroupService.updateStdBoard(stdBoardVO);
-		if(resultBoardId > 0) {
+		if (resultBoardId > 0) {
 			// 성공시 상세페이지로 이동시킴
-			return "redirect:/prg/std/stdGroupDetail.do?stdGroupId="+resultBoardId;
+			return "redirect:/prg/std/stdGroupDetail.do?stdGroupId=" + resultBoardId;
 		}
 
 		// 실패 시 다시 forward
 		StdBoardVO currentStdBoardVO = this.studyGroupService.selectStudyGroupDetail(stdBoardVO.getBoardId());
 		model.addAttribute("csbVO", currentStdBoardVO);
 		Map<String, String> interestMap = this.studyGroupService.getInterestsMap();
-		Map<String, String> regionMap 	= this.studyGroupService.getRegionMap();
+		Map<String, String> regionMap = this.studyGroupService.getRegionMap();
 		ArrayList<Map.Entry<String, String>> regionList = new ArrayList<>(regionMap.entrySet());
 		regionList.sort(Map.Entry.comparingByKey());
-		Map<String, String> genderMap 	= new HashMap<>();
+		Map<String, String> genderMap = new HashMap<>();
 		genderMap.put("all", "성별제한 없음");
 		genderMap.put("men", "남자만");
 		genderMap.put("women", "여자만");

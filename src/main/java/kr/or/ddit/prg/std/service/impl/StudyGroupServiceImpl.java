@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class StudyGroupServiceImpl implements StudyGroupService{
+public class StudyGroupServiceImpl implements StudyGroupService {
 
 	@Autowired
 	StudyGroupMapper studyGroupMapper;
@@ -43,10 +43,10 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	@PostConstruct
 	public void setRegionMap() {
 		List<Map<String, Object>> regionCodeList = this.studyGroupMapper.selectRegionNamesFromComCode();
-		for(Map<String, Object> map : regionCodeList) {
-	        String codeId = String.valueOf(map.get("CC_ID"));
-	        String codeName = String.valueOf(map.get("CC_ETC"));
-	        regionMap.put(codeId, codeName);
+		for (Map<String, Object> map : regionCodeList) {
+			String codeId = String.valueOf(map.get("CC_ID"));
+			String codeName = String.valueOf(map.get("CC_ETC"));
+			regionMap.put(codeId, codeName);
 		}
 		log.info("regionMap 초기화 완료: {}", regionMap);
 	}
@@ -99,7 +99,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		ChatMemberVO chatMemberVO = new ChatMemberVO();
 		chatMemberVO.setCrId(chatRoomVO.getCrId());
 		chatMemberVO.setMemId(stdBoardVO.getMemId());
-		if(result >= 2) {
+		if (result >= 2) {
 			boardId = stdBoardVO.getBoardId();
 		}
 		this.chatService.participateChatRoom(chatMemberVO);
@@ -113,29 +113,22 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	}
 
 	@Override
-	public Map<String, String> getInterestsMap(){
-		Map<String, String> interestMap = Map.ofEntries(
-			    Map.entry("study.general", "공부"),
-			    Map.entry("study.exam", "수능준비"),
-			    Map.entry("study.assignment", "과제"),
+	public Map<String, String> getInterestsMap() {
+		Map<String, String> interestMap = Map.ofEntries(Map.entry("study.general", "공부"), Map.entry("study.exam", "수능준비"), Map.entry("study.assignment", "과제"),
 
-			    Map.entry("career.path", "진로"),
-			    Map.entry("career.admission", "진학"),
+				Map.entry("career.path", "진로"), Map.entry("career.admission", "진학"),
 
-			    Map.entry("job.prepare", "취업준비"),
-			    Map.entry("job.concern", "취업고민"),
+				Map.entry("job.prepare", "취업준비"), Map.entry("job.concern", "취업고민"),
 
-			    Map.entry("social.neighbor", "동네친구"),
-			    Map.entry("social.talk", "잡담")
-			);
+				Map.entry("social.neighbor", "동네친구"), Map.entry("social.talk", "잡담"));
 		return interestMap;
 	}
 
-
 	@Override
 	public StdBoardVO selectStudyGroupDetail(int stdGroupId) {
-		StdBoardVO stdBoardVO =this.studyGroupMapper.selectStudyGroupDetail(stdGroupId);
-		if(stdBoardVO == null) return stdBoardVO;
+		StdBoardVO stdBoardVO = this.studyGroupMapper.selectStudyGroupDetail(stdGroupId);
+		if (stdBoardVO == null)
+			return stdBoardVO;
 
 		Long fileBadgeId = stdBoardVO.getFileBadge();
 		Long fileProfileId = stdBoardVO.getFileProfile();
@@ -145,14 +138,14 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
 		FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
 
-		if(fileBadgeDetail != null) {
+		if (fileBadgeDetail != null) {
 			stdBoardVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
 		}
-		if(fileProfileDetail != null) {
+		if (fileProfileDetail != null) {
 			stdBoardVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
 		}
-		if(fileSubDetail != null) {
-			stdBoardVO.setFileSubStr( this.fileService.getSavePath(fileSubDetail));
+		if (fileSubDetail != null) {
+			stdBoardVO.setFileSubStr(this.fileService.getSavePath(fileSubDetail));
 		}
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -171,8 +164,8 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		}
 
 		List<StdReplyVO> parentReplyList = stdBoardVO.getStdReplyVOList();
-		if(parentReplyList != null && !parentReplyList.isEmpty() && parentReplyList.get(0).getReplyContent() != null) {
-			for(StdReplyVO stdReplyVO : parentReplyList) {
+		if (parentReplyList != null && !parentReplyList.isEmpty() && parentReplyList.get(0).getReplyContent() != null) {
+			for (StdReplyVO stdReplyVO : parentReplyList) {
 				Long replyFileBadgeId = stdReplyVO.getFileBadge();
 				Long replyFileProfileId = stdReplyVO.getFileProfile();
 				Long replyFileSubId = stdReplyVO.getFileSub();
@@ -181,29 +174,29 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 				FileDetailVO replyFileProfileDetail = this.fileService.getFileDetail(replyFileProfileId, 1);
 				FileDetailVO replyFileSubDetail = this.fileService.getFileDetail(replyFileSubId, 1);
 
-				if(replyFileBadgeDetail != null) {
+				if (replyFileBadgeDetail != null) {
 					stdReplyVO.setFileBadgeStr(this.fileService.getSavePath(replyFileBadgeDetail));
 				}
-				if(replyFileProfileDetail != null) {
+				if (replyFileProfileDetail != null) {
 					stdReplyVO.setFileProfileStr(this.fileService.getSavePath(replyFileProfileDetail));
 				}
-				if(replyFileSubDetail != null) {
-					stdReplyVO.setFileSubStr( this.fileService.getSavePath(replyFileSubDetail));
+				if (replyFileSubDetail != null) {
+					stdReplyVO.setFileSubStr(this.fileService.getSavePath(replyFileSubDetail));
 				}
 
+				int childCount = stdReplyVO.getChildCount();
+				if (childCount == 0)
+					continue;
 
-				int childCount =stdReplyVO.getChildCount();
-				if(childCount == 0) continue;
+				if (childCount > 0) {
+					int parentReplyId = stdReplyVO.getReplyId();
+					List<StdReplyVO> childReplies = this.getChildReplies(parentReplyId);
 
-		         if (childCount > 0) {
-		                int parentReplyId = stdReplyVO.getReplyId();
-		                List<StdReplyVO> childReplies = this.getChildReplies(parentReplyId);
-
-		                // 자식댓글 리스트 세팅
-		                stdReplyVO.setChildReplyVOList(childReplies);
-		         }
+					// 자식댓글 리스트 세팅
+					stdReplyVO.setChildReplyVOList(childReplies);
+				}
 			}
-		}else {
+		} else {
 			parentReplyList.clear();
 		}
 		return stdBoardVO;
@@ -220,14 +213,14 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 			FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
 			FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
 
-			if(fileBadgeDetail != null) {
+			if (fileBadgeDetail != null) {
 				replyVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
 			}
-			if(fileProfileDetail != null) {
+			if (fileProfileDetail != null) {
 				replyVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
 			}
-			if(fileSubDetail != null) {
-				replyVO.setFileSubStr( this.fileService.getSavePath(fileSubDetail));
+			if (fileSubDetail != null) {
+				replyVO.setFileSubStr(this.fileService.getSavePath(fileSubDetail));
 			}
 
 			if (replyVO.getChildCount() == 0)
@@ -261,13 +254,13 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
 		FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
 
-		if(fileBadgeDetail != null) {
+		if (fileBadgeDetail != null) {
 			detailReplyVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
 		}
-		if(fileProfileDetail != null) {
+		if (fileProfileDetail != null) {
 			detailReplyVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
 		}
-		if(fileSubDetail != null) {
+		if (fileSubDetail != null) {
 			detailReplyVO.setFileSubStr(this.fileService.getSavePath(fileSubDetail));
 		}
 
@@ -277,7 +270,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	@Override
 	public StdReplyVO insertReply(StdReplyVO stdReplyVO) {
 		int result = this.studyGroupMapper.insertReply(stdReplyVO);
-		if(result > 0) {
+		if (result > 0) {
 			return this.selectReplyDetail(stdReplyVO.getReplyId());
 		}
 		return null;
@@ -292,7 +285,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	@Transactional
 	public boolean deleteStdBoard(Map<String, Object> map) {
 		// 게시글 -> 채팅방 -> 채팅멤버
-		System.out.println("@@@@@@@@@@@@@@@@@@"+map.get("boardId"));
+		System.out.println("@@@@@@@@@@@@@@@@@@" + map.get("boardId"));
 		boolean result = true;
 		String boardIdStr = (String) map.get("boardId");
 		String memIdStr = (String) map.get("memId");
@@ -310,7 +303,8 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		chatRoomVO.setCrId(crId);
 		int resOfDelChatRoom = this.chatService.deleteChatRoom(chatRoomVO);
 
-		if(resOfDelBoard<1) result = false;
+		if (resOfDelBoard < 1)
+			result = false;
 		return result;
 	}
 
@@ -318,7 +312,8 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	public boolean updateStdReply(StdReplyVO stdReplyVO) {
 		int result = this.studyGroupMapper.updateStdReply(stdReplyVO);
 
-		if(result<1) return false;
+		if (result < 1)
+			return false;
 
 		return true;
 	}
@@ -347,7 +342,7 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 
 		result += this.chatService.updateChatRoom(chatRoomVO);
 
-		if(result >= 2) {
+		if (result >= 2) {
 			boardId = stdBoardVO.getBoardId();
 		}
 
