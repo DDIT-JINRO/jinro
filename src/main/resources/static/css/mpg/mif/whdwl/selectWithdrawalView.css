@@ -1,0 +1,118 @@
+.withdrawal-container {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+/* 안내 박스 스타일 */
+.notice-box {
+	background-color: #e7f7fd;
+	border: 2px solid #e5e7eb;
+	padding: 30px;
+	border-radius: 15px;
+}
+
+.notice-box p {
+	margin: 0 0 16px 0;
+	font-size: 0.85rem;
+	line-height: 1.6;
+}
+
+.notice-box ol {
+	margin: 0;
+	padding-left: 20px;
+	font-size: 0.85rem;
+}
+
+.notice-box li {
+	margin-bottom: 4px;
+}
+
+.notice-box li:last-child {
+	margin-bottom: 0;
+}
+
+/* 폼 박스 스타일 */
+.withdrawal-form {
+	background-color: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+#password-check-message {
+	color: #ef4444;
+	font-size: 0.85rem;
+	font-weight: 500;
+	margin: 6px 0 0 0;
+}
+
+.form-row-split {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 24px;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.form-group label {
+	font-size: 1rem;
+	font-weight: 600;
+	color: #374151;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+	padding: 10px 14px;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	font-family: inherit;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus
+	{
+	outline: 2px solid #7881f5;
+	border-color: #7881f5;
+}
+
+.form-group textarea {
+	resize: vertical;
+	min-height: 120px;
+}
+
+/* 버튼 스타일 */
+.button-wrapper {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	margin-top: 16px;
+}
+
+.btn {
+	border: none;
+	padding: 10px 30px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 500;
+	font-size: 1rem;
+	transition: all 0.3s ease;
+}
+
+.btn-danger {
+	background-color: #fee2e2;
+	color: #ef4444;
+}
+
+.btn-danger:hover {
+	transform: scale(1.03);
+	background-color: #F58C8C;
+	color: #ef4444;
+}

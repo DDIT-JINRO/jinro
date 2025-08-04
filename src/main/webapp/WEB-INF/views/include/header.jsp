@@ -83,7 +83,7 @@ const memId = '<sec:authentication property="name" />'
 				</a>
 			</sec:authorize>
 			<sec:authorize access="isAuthenticated()">
-				<a href="">
+				<a href="/mpg/mif/inq/selectMyInquiryView.do">
 					<img src="/images/profile.png" alt="프로필" class="icon-btn" />
 				</a>
 				<a href="" id="alarmBtn">

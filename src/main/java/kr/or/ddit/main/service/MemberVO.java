@@ -1,7 +1,9 @@
 package kr.or.ddit.main.service;
 
 import java.util.Date;
+import java.util.List;
 
+import kr.or.ddit.com.ComCodeVO;
 import lombok.Data;
 
 @Data
@@ -26,7 +28,21 @@ public class MemberVO {
 	private String delYn;
 	private Long fileProfile;
 	private Long fileEtc;
-
+	private Long fileSub;
+	private Long fileBadge;
+	
+	private List<ComCodeVO> interests;
+	private String subName;
+	private int remainingDays;
+	
+	private Date svCreatedAt;
+	private String svStatus;
+	private String svReason;
+	
+	private String profileFilePath;
+	private String badgeFilePath;
+	private String subFilePath;
+	
 	public String getSMemId() {
 		return memId+"";
 	}
