@@ -3,17 +3,6 @@
 
 <footer>
   <div class="footer-container">
-
-    <!-- 로고 및 소개 -->
-    <div class="footer-logo-area">
-      <img class="footer-logoImg" src="/images/logo.png" alt="커리어패스 로고">
-      <p>
-        커리어패스는 진로를 고민하는 청년, 학생, 구직자들을 위한 웹 플랫폼입니다.<br>
-        다양한 직업 정보, 진로 검사, 교육 콘텐츠를 통해<br>
-        나에게 맞는 진로를 탐색하고 결정할 수 있도록 돕습니다.
-      </p>
-    </div>
-
     <!-- 제품 -->
     <div class="footer-column">
       <h4>주요 서비스</h4>

@@ -2,6 +2,35 @@
  * 
  */
 
+const text = "관심 진로와 관련된 유튜브 콘텐츠를 한눈에 확인해보세요.";
+	const target = document.getElementById("typing-js");
+
+	let index = 0;
+	let isDeleting = false;
+
+	function typingLoop() {
+		if (isDeleting) {
+			target.textContent = text.substring(0, index--);
+		} else {
+			target.textContent = text.substring(0, index++);
+		}
+
+		if (!isDeleting && index === text.length + 1) {
+			isDeleting = true;
+			setTimeout(typingLoop, 1500); // 타이핑 다 끝난 후 멈추는 시간
+			return;
+		}
+
+		if (isDeleting && index === 0) {
+			isDeleting = false;
+		}
+
+		const speed = isDeleting ? 50 : 100; // 지울 때는 더 빠르게
+		setTimeout(typingLoop, speed);
+	}
+
+	typingLoop();
+
 document.addEventListener('DOMContentLoaded', function() {
 	fn_init();
     if(memId && memId !='anonymousUser') {
