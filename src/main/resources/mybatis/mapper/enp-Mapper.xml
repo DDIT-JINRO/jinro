@@ -2,15 +2,4 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.empt.enp.service.impl.EnterprisePostingMapper">
 
-<select id="selectCompanyList">
-	select *
-	from company
-	order by CP_ID
-</select>
-
-<update id="updateRegion" parameterType="kr.or.ddit.empt.enp.service.CompanyVO">
-	UPDATE company
-		set CP_REGION = #{cpRegion}
-		where CP_ID = #{cpId}
-</update>
 </mapper>
