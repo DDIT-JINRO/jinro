@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.cdp.sint.service.SelfIntroService;
 import kr.or.ddit.cdp.sint.service.SelfIntroVO;
-import kr.or.ddit.mpg.mat.reh.web.ResumeVO;
-import kr.or.ddit.mpg.mat.sih.service.SelfIntroHistoryService;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 

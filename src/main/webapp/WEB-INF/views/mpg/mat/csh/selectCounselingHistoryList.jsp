@@ -44,7 +44,7 @@
                                 <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                             </svg>
 						</div>
-						<input type="search" name="keyword" placeholder="내 상담내역에서 검색">
+						<input type="search" name="keyword" placeholder="내 상담내역에서 검색" value="${param.keyword}">
 						<button class="com-search-btn" type="submit">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                 <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
@@ -147,10 +147,10 @@
 										<span>${content.counselName}</span>
 										<span class="divider">·</span>
 										<span>신청일</span>
-										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy년 MM월 dd일"/> </span>
+										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy. MM. dd"/> </span>
 										<span class="divider">·</span>
 										<span>예약일</span>
-										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy년 MM월 dd일"/><fmt:formatDate value="${content.counselReqDate}" pattern=" (HH시)"/></span>
+										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy. MM. dd"/><fmt:formatDate value="${content.counselReqDate}" pattern=" (HH시)"/></span>
 									</div>
 								</div>
 								<div class="item-content">

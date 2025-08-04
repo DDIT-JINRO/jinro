@@ -44,7 +44,7 @@
                                 <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                             </svg>
 						</div>
-						<input type="search" name="keyword" placeholder="내 북마크에서 검색">
+						<input type="search" name="keyword" placeholder="내 북마크에서 검색" value="${param.keyword}">
 						<button class="com-search-btn" type="submit">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                 <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
@@ -82,8 +82,8 @@
 						<p class="no-content-message">현재 북마크가 없습니다.</p>
 					</c:when>
 					<c:otherwise>
-						<c:forEach var="bookmark" items="${articlePage.content}">
-							<div class="bookmark-list">
+						<div class="bookmark-list">
+							<c:forEach var="bookmark" items="${articlePage.content}">
 								<div class="bookmark-item">
 									<div class="item-content">
 										<div class="item-header">
@@ -98,23 +98,23 @@
 										<div class="item-meta">
 											<span>${bookmark.content1}</span>
 											<span class="divider">·</span>
-											<span>북마크일 : <fmt:formatDate value="${bookmark.bmCreatedAt}" pattern="yyyy년 MM월 dd일"/></span>
+											<span>북마크일 : <fmt:formatDate value="${bookmark.bmCreatedAt}" pattern="yyyy. MM. dd"/></span>
 										</div>
 									</div>
 									<div class="item-action">
 									    <button class="bookmark-btn active" data-category-id="${bookmark.bmCategoryId}" data-target-id="${bookmark.bmTargetId}">
 									        <span class="icon-active">
-									            <img src="/images/bookmark-btn-active.png" alt="활성 북마크" width="24" height="24">
+									            <img src="/images/bookmark-btn-active.png" alt="활성 북마크" width="30" height="30">
 									        </span>
 									        
 									        <span class="icon-inactive">
-									            <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크" width="24" height="24">
+									            <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크" width="30" height="30">
 									        </span>
 									    </button>
 									</div>
 								</div>
-							</div>
-						</c:forEach>
+							</c:forEach>
+						</div>
 					</c:otherwise>
 				</c:choose>
 				

@@ -249,7 +249,6 @@
 			</div>
 		</div>
 	</div>
-	${member}
 </div>
 
 <div class="modal-overlay" id="password-modal-overlay">
