@@ -7,8 +7,8 @@ public class CompanyVO {
 	private int cpId;
 	private String cpName;
 	private String cpScale;
-	private String cpLocationX;
-	private String cpLocationY;
+	private double cpLocationX;
+	private double cpLocationY;
 	private String cpDescription;
 	private String cpWebsite;
 	private Long cpBusino;
