@@ -1,5 +1,6 @@
 package kr.or.ddit.mpg.pay.web;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,26 +38,31 @@ public class PaymentController {
 	private SubscriptionService subscriptionService;
 
 	@GetMapping("/pay/selectPaymentView.do")
-	public String selectPaymentView(Model model, @AuthenticationPrincipal String loginId) {
+	public String selectPaymentView(Model model, Principal principal) {
 
-		if (loginId != null) {
-			int memId = Integer.parseInt(loginId);
-
-			// 1. 현재 사용자의 구독 정보조회
-			MemberSubscriptionVO currentSub = paymentService.selectByMemberId(memId);
-			model.addAttribute("currentSub", currentSub);
-
-			MemberSubscriptionVO reservedSub = paymentService.findReservedSubscription(memId);
-			model.addAttribute("reservedSub", reservedSub);
-
-			// 2. JS에서 사용할 로그인 사용자 정보 조회
-			MemberVO loginUser = paymentService.selectMemberById(memId);
-			model.addAttribute("loginUser", loginUser);
-
-			// 3. 이 사용자의 전체 결제 내역 조회 (구독 결제 내역 표시)
-			List<PaymentVO> paymentHistory = paymentService.selectPaymentHistory(memId);
-			model.addAttribute("paymentHistory", paymentHistory);
+		// 1. 로그인 확인
+		if (principal == null || principal.getName().equals("anonymousUser")) {
+			return "redirect:/login"; // 로그인 페이지로 리다이렉트
 		}
+
+		String loginId = principal.getName();
+
+		int memId = Integer.parseInt(loginId);
+
+		// 1. 현재 사용자의 구독 정보조회
+		MemberSubscriptionVO currentSub = paymentService.selectByMemberId(memId);
+		model.addAttribute("currentSub", currentSub);
+
+		MemberSubscriptionVO reservedSub = paymentService.findReservedSubscription(memId);
+		model.addAttribute("reservedSub", reservedSub);
+
+		// 2. JS에서 사용할 로그인 사용자 정보 조회
+		MemberVO loginUser = paymentService.selectMemberById(memId);
+		model.addAttribute("loginUser", loginUser);
+
+		// 3. 이 사용자의 전체 결제 내역 조회 (구독 결제 내역 표시)
+		List<PaymentVO> paymentHistory = paymentService.selectPaymentHistory(memId);
+		model.addAttribute("paymentHistory", paymentHistory);
 
 		// 화면에 보여줄 전체 구독 상품 목록 조회
 		List<SubscriptionVO> subProducts = subscriptionService.selectAllProducts();
@@ -68,7 +74,8 @@ public class PaymentController {
 	// 결제 검증
 	@PostMapping("/verify")
 	@ResponseBody
-	public ResponseEntity<PaymentResponseDto> verifyPayment(@RequestBody PaymentRequestDto requestDto, @AuthenticationPrincipal String loginId) {
+	public ResponseEntity<PaymentResponseDto> verifyPayment(@RequestBody PaymentRequestDto requestDto,
+			@AuthenticationPrincipal String loginId) {
 
 		PaymentResponseDto response = paymentService.verifyAndProcessPayment(requestDto, loginId);
 
@@ -99,7 +106,8 @@ public class PaymentController {
 	// 구독 변경
 	@PostMapping("/change-subscription")
 	@ResponseBody
-	public ResponseEntity<String> changeSubscription(@RequestParam("subId") int subId, @AuthenticationPrincipal String loginId) {
+	public ResponseEntity<String> changeSubscription(@RequestParam("subId") int subId,
+			@AuthenticationPrincipal String loginId) {
 		boolean result = paymentService.changeSubscription(Integer.parseInt(loginId), subId);
 		if (result) {
 			return ResponseEntity.ok("다음 결제부터 구독 상품이 변경되도록 예약되었습니다.");
