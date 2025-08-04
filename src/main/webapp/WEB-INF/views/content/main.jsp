@@ -13,7 +13,14 @@
 				<button class="view-button">로드맵 바로가기</button>
 			</div>
 			<div class="banner-right floating-icons">
-				<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> <img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> <img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> <img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> <img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> <img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> <img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> <img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
+				<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
+				<img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> 
+				<img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> 
+				<img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> 
+				<img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> 
+				<img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> 
+				<img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> 
+				<img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
 			</div>
 		</div>
 	</section>
@@ -130,6 +137,3 @@
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 <script src="/js/content/main.js"></script>
-<script>
-	
-</script>
