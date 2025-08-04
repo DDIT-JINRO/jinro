@@ -23,182 +23,132 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class InterviewAnalysisController {
 
-    private final AnalysisService analysisService;
+	private final AnalysisService analysisService;
 
-    /**
-     * 🎯 면접 분석 메인 엔드포인트 (프론트엔드 연동)
-     */
-    @PostMapping("/analyze-interview")
-    public ResponseEntity<?> analyzeInterview(@RequestBody Map<String, Object> requestData) {
-        String sessionId = null;
-        
-        try {            
-            // 세션 ID 추출
-            sessionId = (String) requestData.get("sessionId");
-            if (sessionId == null || sessionId.trim().isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "error", "Invalid session ID",
-                    "message", "세션 ID가 필요합니다."
-                ));
-            }
-                        
-            // 🎯 Service에 분석 요청 위임
-            AnalysisResponse analysisResult = analysisService.analyzeInterviewFromMap(requestData);
-            
-            // 🎯 프론트엔드 형식에 맞는 응답 구성
-            Map<String, Object> response = Map.of(
-                "success", analysisResult.getSuccess(),
-                "sessionId", analysisResult.getSessionId(),
-                "timestamp", analysisResult.getTimestamp().toString(),
-                "overallScore", analysisResult.getOverallScore(),
-                "grade", analysisResult.getGrade(),
-                "analysisMethod", analysisResult.getAnalysisMethod(),
-                "detailed", Map.of(
-                    "audio", Map.of(
-                        "speechClarity", analysisResult.getDetailed().getAudio().getSpeechClarity(),
-                        "paceAppropriate", analysisResult.getDetailed().getAudio().getPaceAppropriate(),
-                        "volumeConsistency", analysisResult.getDetailed().getAudio().getVolumeConsistency(),
-                        "feedback", analysisResult.getDetailed().getAudio().getFeedback()
-                    ),
-                    "video", Map.of(
-                        "eyeContact", analysisResult.getDetailed().getVideo().getEyeContact(),
-                        "facialExpression", analysisResult.getDetailed().getVideo().getFacialExpression(),
-                        "posture", analysisResult.getDetailed().getVideo().getPosture(),
-                        "feedback", analysisResult.getDetailed().getVideo().getFeedback()
-                    ),
-                    "text", Map.of(
-                        "contentQuality", analysisResult.getDetailed().getText().getContentQuality(),
-                        "structureLogic", analysisResult.getDetailed().getText().getStructureLogic(),
-                        "relevance", analysisResult.getDetailed().getText().getRelevance(),
-                        "feedback", analysisResult.getDetailed().getText().getFeedback()
-                    )
-                ),
-                "summary", Map.of(
-                    "strengths", analysisResult.getSummary().getStrengths(),
-                    "improvements", analysisResult.getSummary().getImprovements(),
-                    "recommendation", analysisResult.getSummary().getRecommendation()
-                ),
-                "scores", Map.of(
-                    "communication", analysisResult.getScores().getCommunication(),
-                    "appearance", analysisResult.getScores().getAppearance(),
-                    "content", analysisResult.getScores().getContent(),
-                    "overall", analysisResult.getScores().getOverall()
-                )
-            );
-            
-            return ResponseEntity.ok(response);
-            
-        } catch (Exception e) {
-            log.error("❌ 분석 실패 - 세션 ID: {}, 오류: {}", sessionId, e.getMessage(), e);
-            
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                "success", false,
-                "sessionId", sessionId != null ? sessionId : "unknown",
-                "error", "Analysis failed",
-                "message", "면접 분석 중 오류가 발생했습니다: " + e.getMessage(),
-                "timestamp", LocalDateTime.now().toString()
-            ));
-        }
-    }
+	/**
+	 * 🎯 면접 분석 메인 엔드포인트 (프론트엔드 연동)
+	 */
+	@PostMapping("/analyze-interview")
+	public ResponseEntity<?> analyzeInterview(@RequestBody Map<String, Object> requestData) {
+		String sessionId = null;
 
-    /**
-     * 🎯 분석 진행 상태 확인
-     */
-    @GetMapping("/analyze-interview/progress/{sessionId}")
-    public ResponseEntity<?> getAnalysisProgress(@PathVariable String sessionId) {
-        try {            
-            // 🎯 Service에 진행률 확인 위임
-            Map<String, Object> progressInfo = analysisService.getAnalysisProgress(sessionId);
-            
-            return ResponseEntity.ok(progressInfo);
-            
-        } catch (Exception e) {
-            log.error("❌ 진행 상태 확인 실패 - 세션 ID: {}", sessionId, e);
-            
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                "sessionId", sessionId,
-                "progress", 0,
-                "status", "error",
-                "message", "진행 상태 확인 실패: " + e.getMessage(),
-                "timestamp", LocalDateTime.now().toString()
-            ));
-        }
-    }
+		try {
+			// 세션 ID 추출
+			sessionId = (String) requestData.get("sessionId");
+			if (sessionId == null || sessionId.trim().isEmpty()) {
+				return ResponseEntity.badRequest().body(Map.of("success", false, "error", "Invalid session ID", "message", "세션 ID가 필요합니다."));
+			}
 
-    /**
-     * 🎯 분석 취소
-     */
-    @PostMapping("/analyze-interview/cancel/{sessionId}")
-    public ResponseEntity<?> cancelAnalysis(@PathVariable String sessionId) {
-        try {            
-            // 🎯 Service에 취소 요청 위임
-            Map<String, Object> cancelResult = analysisService.cancelAnalysis(sessionId);
-            
-            return ResponseEntity.ok(cancelResult);
-            
-        } catch (Exception e) {
-            log.error("❌ 분석 취소 실패 - 세션 ID: {}", sessionId, e);
-            
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                "success", false,
-                "sessionId", sessionId,
-                "message", "취소 처리 실패: " + e.getMessage(),
-                "timestamp", LocalDateTime.now().toString()
-            ));
-        }
-    }
+			// 🎯 Service에 분석 요청 위임
+			AnalysisResponse analysisResult = analysisService.analyzeInterviewFromMap(requestData);
 
-    /**
-     * 🎯 API 상태 확인
-     */
-    @GetMapping("/analyze-interview/health")
-    public ResponseEntity<?> healthCheck() {
-        try {            
-            // 🎯 Service에 상태 확인 위임
-            Map<String, Object> healthStatus = analysisService.getHealthStatus();
-            
-            String status = (String) healthStatus.get("status");
-            HttpStatus httpStatus = "OK".equals(status) ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR;
-            
-            return ResponseEntity.status(httpStatus).body(healthStatus);
-            
-        } catch (Exception e) {
-            log.error("❌ Health check 실패", e);
-            
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                "status", "ERROR",
-                "message", "Health check 실패: " + e.getMessage(),
-                "timestamp", LocalDateTime.now().toString()
-            ));
-        }
-    }
+			// 🎯 프론트엔드 형식에 맞는 응답 구성
+			Map<String, Object> response = Map
+					.of("success", analysisResult.getSuccess(), "sessionId", analysisResult.getSessionId(), "timestamp", analysisResult.getTimestamp().toString(), "overallScore",
+							analysisResult.getOverallScore(), "grade", analysisResult.getGrade(), "analysisMethod", analysisResult.getAnalysisMethod(), "detailed",
+							Map.of("audio",
+									Map.of("speechClarity", analysisResult.getDetailed().getAudio().getSpeechClarity(), "paceAppropriate",
+											analysisResult.getDetailed().getAudio().getPaceAppropriate(), "volumeConsistency",
+											analysisResult.getDetailed().getAudio().getVolumeConsistency(), "feedback", analysisResult.getDetailed().getAudio().getFeedback()),
+									"video",
+									Map.of("eyeContact", analysisResult.getDetailed().getVideo().getEyeContact(), "facialExpression",
+											analysisResult.getDetailed().getVideo().getFacialExpression(), "posture", analysisResult.getDetailed().getVideo().getPosture(),
+											"feedback", analysisResult.getDetailed().getVideo().getFeedback()),
+									"text",
+									Map.of("contentQuality", analysisResult.getDetailed().getText().getContentQuality(), "structureLogic",
+											analysisResult.getDetailed().getText().getStructureLogic(), "relevance", analysisResult.getDetailed().getText().getRelevance(),
+											"feedback", analysisResult.getDetailed().getText().getFeedback())),
+									"summary",
+									Map.of("strengths", analysisResult.getSummary().getStrengths(), "improvements", analysisResult.getSummary().getImprovements(), "recommendation",
+											analysisResult.getSummary().getRecommendation()),
+									"scores", Map.of("communication", analysisResult.getScores().getCommunication(), "appearance", analysisResult.getScores().getAppearance(), "content",
+											analysisResult.getScores().getContent(), "overall", analysisResult.getScores().getOverall()));
 
-    /**
-     * 🎯 세션 상태 확인 (추가 엔드포인트)
-     */
-    @GetMapping("/analyze-interview/session/{sessionId}/status")
-    public ResponseEntity<?> getSessionStatus(@PathVariable String sessionId) {
-        try {
-            boolean isActive = analysisService.isSessionActive(sessionId);
-            
-            return ResponseEntity.ok(Map.of(
-                "sessionId", sessionId,
-                "isActive", isActive,
-                "status", isActive ? "active" : "inactive",
-                "timestamp", LocalDateTime.now().toString()
-            ));
-            
-        } catch (Exception e) {
-            log.error("❌ 세션 상태 확인 실패 - 세션 ID: {}", sessionId, e);
-            
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                "sessionId", sessionId,
-                "isActive", false,
-                "status", "error",
-                "message", "세션 상태 확인 실패: " + e.getMessage(),
-                "timestamp", LocalDateTime.now().toString()
-            ));
-        }
-    }
+			return ResponseEntity.ok(response);
+
+		} catch (Exception e) {
+			log.error("❌ 분석 실패 - 세션 ID: {}, 오류: {}", sessionId, e.getMessage(), e);
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "sessionId", sessionId != null ? sessionId : "unknown", "error",
+					"Analysis failed", "message", "면접 분석 중 오류가 발생했습니다: " + e.getMessage(), "timestamp", LocalDateTime.now().toString()));
+		}
+	}
+
+	/**
+	 * 🎯 분석 진행 상태 확인
+	 */
+	@GetMapping("/analyze-interview/progress/{sessionId}")
+	public ResponseEntity<?> getAnalysisProgress(@PathVariable String sessionId) {
+		try {
+			// 🎯 Service에 진행률 확인 위임
+			Map<String, Object> progressInfo = analysisService.getAnalysisProgress(sessionId);
+
+			return ResponseEntity.ok(progressInfo);
+
+		} catch (Exception e) {
+			log.error("❌ 진행 상태 확인 실패 - 세션 ID: {}", sessionId, e);
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+					Map.of("sessionId", sessionId, "progress", 0, "status", "error", "message", "진행 상태 확인 실패: " + e.getMessage(), "timestamp", LocalDateTime.now().toString()));
+		}
+	}
+
+	/**
+	 * 🎯 분석 취소
+	 */
+	@PostMapping("/analyze-interview/cancel/{sessionId}")
+	public ResponseEntity<?> cancelAnalysis(@PathVariable String sessionId) {
+		try {
+			// 🎯 Service에 취소 요청 위임
+			Map<String, Object> cancelResult = analysisService.cancelAnalysis(sessionId);
+
+			return ResponseEntity.ok(cancelResult);
+
+		} catch (Exception e) {
+			log.error("❌ 분석 취소 실패 - 세션 ID: {}", sessionId, e);
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("success", false, "sessionId", sessionId, "message", "취소 처리 실패: " + e.getMessage(), "timestamp", LocalDateTime.now().toString()));
+		}
+	}
+
+	/**
+	 * 🎯 API 상태 확인
+	 */
+	@GetMapping("/analyze-interview/health")
+	public ResponseEntity<?> healthCheck() {
+		try {
+			// 🎯 Service에 상태 확인 위임
+			Map<String, Object> healthStatus = analysisService.getHealthStatus();
+
+			String status = (String) healthStatus.get("status");
+			HttpStatus httpStatus = "OK".equals(status) ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR;
+
+			return ResponseEntity.status(httpStatus).body(healthStatus);
+
+		} catch (Exception e) {
+			log.error("❌ Health check 실패", e);
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("status", "ERROR", "message", "Health check 실패: " + e.getMessage(), "timestamp", LocalDateTime.now().toString()));
+		}
+	}
+
+	/**
+	 * 🎯 세션 상태 확인 (추가 엔드포인트)
+	 */
+	@GetMapping("/analyze-interview/session/{sessionId}/status")
+	public ResponseEntity<?> getSessionStatus(@PathVariable String sessionId) {
+		try {
+			boolean isActive = analysisService.isSessionActive(sessionId);
+
+			return ResponseEntity.ok(Map.of("sessionId", sessionId, "isActive", isActive, "status", isActive ? "active" : "inactive", "timestamp", LocalDateTime.now().toString()));
+
+		} catch (Exception e) {
+			log.error("❌ 세션 상태 확인 실패 - 세션 ID: {}", sessionId, e);
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+					Map.of("sessionId", sessionId, "isActive", false, "status", "error", "message", "세션 상태 확인 실패: " + e.getMessage(), "timestamp", LocalDateTime.now().toString()));
+		}
+	}
 }
