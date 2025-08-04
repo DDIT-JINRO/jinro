@@ -47,20 +47,14 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		if (member == null) {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
-
-		FileDetailVO fileDetail = fileService.getFileDetail(member.getFileProfile(), 1);
 		
-		String savePath = "";
-		
-		if(fileDetail != null) {
-			savePath = this.fileService.getSavePath(fileDetail);
-		}
+		member = getProfileFile(member);
 
 		List<ComCodeVO> interetsKeywordList = this.myInquiryMapper.selectInteretsKeywordList();
 
-		return Map.of("member", member, "imgPath", savePath, "interetsKeywordList", interetsKeywordList);
+		return Map.of("member", member, "interetsKeywordList", interetsKeywordList);
 	}
-
+	
 	/**
 	 * 멤버의 비밀번호를 확인합니다.
 	 * 
@@ -209,5 +203,37 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		}
 
 		return memId;
+	}
+	
+	@Override
+	public MemberVO getProfileFile(MemberVO member) {
+		int memId = member.getMemId();
+		
+		MemberVO profile = new MemberVO();
+		
+		profile = this.myInquiryMapper.getProfileFile(memId);
+		
+		if(profile == null) {
+			return member;
+		}
+		
+		FileDetailVO fileProfile = fileService.getFileDetail(profile.getFileProfile(), 1);
+		FileDetailVO fileBadge = fileService.getFileDetail(profile.getFileBadge(), 1);
+		FileDetailVO fileSub= fileService.getFileDetail(profile.getFileSub(), 1);
+		
+		if(profile.getFileProfile() != null && fileProfile != null) {
+			member.setProfileFilePath(this.fileService.getSavePath(fileProfile)); 
+		}
+		if(fileBadge != null) {
+			member.setBadgeFilePath(this.fileService.getSavePath(fileBadge)); 
+		}
+		if(fileSub != null) {
+			member.setSubFilePath(this.fileService.getSavePath(fileSub)); 
+		}
+		
+		member.setMemId(memId);
+		
+
+		return member;
 	}
 }

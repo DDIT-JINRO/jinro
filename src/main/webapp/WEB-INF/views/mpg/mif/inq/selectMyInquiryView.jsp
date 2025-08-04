@@ -37,7 +37,17 @@
 					<div class="profile-card profile-photo-card">
 						<h3 class="card-title">프로필 사진</h3>
 						<div class="profile-photo-area">
-							<img src="${imgPath}" alt="프로필 사진" class="profile-img">
+							<div class="profile-wrapper">
+								<img class="profile-img" src="<c:out value="${!empty member.profileFilePath ? member.profileFilePath : '/images/defaultProfileImg.png' }"/>" alt="프로필이미지" />
+								
+								<c:if test="${!empty member.badgeFilePath}">
+									<img class="badge-img" src="${member.badgeFilePath}" alt="테두리이미지"/>
+								</c:if>
+								<c:if test="${!empty member.subFilePath}">
+								    <img class="effect-img sparkle" src="${member.subFilePath}" alt="효과이미지"/>
+								</c:if>
+							</div>
+							
 							<div class="profile-photo-buttons">
 								<input type="file" id="change-photo-input" style="display: none;" accept="image/jpeg, image/png" />
 								<button type="button" class="btn btn-primary" id="change-photo-btn">사진 변경</button>

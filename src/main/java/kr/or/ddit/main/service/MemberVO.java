@@ -28,6 +28,8 @@ public class MemberVO {
 	private String delYn;
 	private Long fileProfile;
 	private Long fileEtc;
+	private Long fileSub;
+	private Long fileBadge;
 	
 	private List<ComCodeVO> interests;
 	private String subName;
@@ -36,6 +38,10 @@ public class MemberVO {
 	private Date svCreatedAt;
 	private String svStatus;
 	private String svReason;
+	
+	private String profileFilePath;
+	private String badgeFilePath;
+	private String subFilePath;
 	
 	public String getSMemId() {
 		return memId+"";

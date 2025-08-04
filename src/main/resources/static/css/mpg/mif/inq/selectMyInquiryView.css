@@ -62,13 +62,6 @@ body.scroll-lock {
 	height: 100%;
 }
 
-.profile-img {
-	width: 180px;
-	height: 180px;
-	border-radius: 50%;
-	object-fit: cover;
-}
-
 .profile-photo-buttons {
 	display: flex;
 	gap: 40px;
@@ -502,3 +495,59 @@ body.scroll-lock {
 	cursor: pointer;
 	white-space: nowrap;
 }
+
+
+.profile-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+/* !!!예시 댓글에 작성자 프로필 사이즈 */
+.reply-profile{
+	width: 50px;
+	heigth: 50px;
+}
+
+/* 프로필 영역에 맞게 이미지 두개를 겹침 */
+.badge-img,
+.profile-img,
+.effect-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* 프로필 이미지 뒤로보내기, 사이즈 줄이기, 둥글게 만들기, 가운데 정렬 */
+.profile-img{
+  z-index: 1;
+  border-radius: 50%;
+  width: 95%;
+  height: 95%;
+  justify-self: anchor-center;
+  align-self: anchor-center;
+}
+
+/* 테두리 이미지 앞으로 보내기. 선택이벤트 제거 */
+.badge-img{
+z-index: 2;
+pointer-events: none;
+}
+
+/* 구독 상태에 따른 이미지 제일 앞으로.*/
+.effect-img {
+  z-index: 3;
+}
+
+/* ============구독상태효과============ */
+/* 효과 클래스 정의 */
+.sparkle{
+  animation: sparkle 2s infinite ease-in-out;
+}
+
+/* 애니메이션 효과 정의*/
+@keyframes sparkle {
+  0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+  50%      { opacity: 1;   transform: scale(1.05) rotate(5deg); }
+}
+/* ================================== */

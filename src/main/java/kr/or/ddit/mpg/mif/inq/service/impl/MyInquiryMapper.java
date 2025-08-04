@@ -29,4 +29,6 @@ public interface MyInquiryMapper {
 
 	int insertStudentVerification(StudentVerificationVO studentVerification);
 
+	MemberVO getProfileFile(int memId);
+
 }

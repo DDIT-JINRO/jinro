@@ -24,4 +24,6 @@ public interface MyInquiryService {
 	int parseMemId(String memIdStr);
 
 	Resource insertStudentAuth(String memId, MultipartFile authFile);
+	
+	MemberVO getProfileFile(MemberVO member);
 }
