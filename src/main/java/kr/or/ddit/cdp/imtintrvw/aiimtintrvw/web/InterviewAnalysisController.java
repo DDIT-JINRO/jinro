@@ -41,9 +41,7 @@ public class InterviewAnalysisController {
     public ResponseEntity<?> analyzeInterview(@RequestBody Map<String, Object> requestData) {
         String sessionId = null;
         
-        try {
-            log.info("🚀 면접 분석 요청 받음");
-            
+        try {            
             // 세션 ID 추출
             sessionId = (String) requestData.get("sessionId");
             if (sessionId == null || sessionId.trim().isEmpty()) {
@@ -53,9 +51,7 @@ public class InterviewAnalysisController {
                     "message", "세션 ID가 필요합니다."
                 ));
             }
-            
-            log.info("📊 분석 시작 - 세션 ID: {}", sessionId);
-            
+                        
             // 세션 활성화
             activeSessions.put(sessionId, true);
             updateProgress(sessionId, 5);
@@ -76,13 +72,11 @@ public class InterviewAnalysisController {
             AnalysisRequest analysisRequest = convertToAnalysisRequest(requestData);
             
             updateProgress(sessionId, 25);
-            log.info("🔍 분석 데이터 변환 완료");
             
             // 분석 실행
             AnalysisResponse analysisResult = analysisService.analyzeInterview(analysisRequest);
             
             updateProgress(sessionId, 100);
-            log.info("✅ 분석 완료 - 세션 ID: {}", sessionId);
             
             // 🎯 프론트엔드 형식에 맞는 응답 구성
             Map<String, Object> response = Map.of(
@@ -186,9 +180,7 @@ public class InterviewAnalysisController {
             // 세션 정리
             activeSessions.remove(sessionId);
             analysisProgress.remove(sessionId);
-            
-            log.info("🛑 분석 취소됨 - 세션 ID: {}, 활성 상태였음: {}", sessionId, wasActive);
-            
+                        
             return ResponseEntity.ok(Map.of(
                 "success", true,
                 "sessionId", sessionId,
@@ -309,7 +301,6 @@ public class InterviewAnalysisController {
      */
     private void updateProgress(String sessionId, int progress) {
         analysisProgress.put(sessionId, progress);
-        log.debug("📊 [{}] 진행률: {}%", sessionId, progress);
     }
 
     /**

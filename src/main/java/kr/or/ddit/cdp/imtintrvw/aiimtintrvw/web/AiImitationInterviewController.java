@@ -43,7 +43,6 @@ public class AiImitationInterviewController {
     @ResponseBody
     public ResponseEntity<List<InterviewDetailListVO>> getCustomQuestionList(@AuthenticationPrincipal String memId) {
         try {
-            log.info("=== getCustomQuestionList 호출 시작 ===");
             // 로그인 체크
     	    if (memId == null || memId.equals("anonymousUser")) {
     	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -52,15 +51,7 @@ public class AiImitationInterviewController {
     	    memberVO.setMemId(Integer.parseInt(memId));
     	  
             List<InterviewDetailListVO> list = aiImitationInterviewService.getCustomQuestionList(memberVO);
-            
-            log.info("=== 조회 결과 ===");
-            log.info("리스트 크기: {}", list != null ? list.size() : "null");
-            if (list != null && !list.isEmpty()) {
-                log.info("첫 번째 항목: {}", list.get(0));
-            } else {
-                log.warn("조회된 질문 리스트가 비어있습니다!");
-            }
-            
+  
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             log.error("사용자 정의 질문 리스트 조회 중 오류 발생", e);
@@ -74,21 +65,8 @@ public class AiImitationInterviewController {
     @GetMapping("/getIndustryList")
     @ResponseBody
     public ResponseEntity<List<InterviewQuestionVO>> getIndustryList() {
-        try {
-            log.info("=== getIndustryList 호출 시작 ===");
-            
+        try {            
             List<InterviewQuestionVO> list = aiImitationInterviewService.getIndustryList();
-            
-            log.info("=== 조회 결과 ===");
-            log.info("리스트 크기: {}", list != null ? list.size() : "null");
-            if (list != null && !list.isEmpty()) {
-                log.info("첫 번째 항목: {}", list.get(0));
-                for (InterviewQuestionVO item : list) {
-                    log.info("업종코드: {}, 업종명: {}", item.getIqGubun(), item.getIndustryName());
-                }
-            } else {
-                log.warn("조회된 업종 리스트가 비어있습니다!");
-            }
             
             return ResponseEntity.ok(list);
         } catch (Exception e) {
@@ -108,29 +86,21 @@ public class AiImitationInterviewController {
             @RequestParam(required = false) String industryCode,
             @RequestParam(defaultValue = "10") int questionCount) {
         
-        log.info("=== React에서 면접 질문 조회 요청 ===");
-        log.info("파라미터 - type: {}, questionListId: {}, industryCode: {}, questionCount: {}", 
-                type, questionListId, industryCode, questionCount);
-        
         Map<String, Object> result = new HashMap<>();
         
         try {
             List<InterviewQuestionVO> questions = null;
             
             if ("saved".equals(type) && questionListId != null) {
-                log.info("저장된 질문 리스트 조회 시작 - ID: {}", questionListId);
                 questions = aiImitationInterviewService.getQuestionsByDetailListId(questionListId);
                 result.put("type", "saved");
                 result.put("questionListId", questionListId);
-                log.info("저장된 질문 리스트 조회 완료: {} 개", questions != null ? questions.size() : 0);
                 
             } else if ("random".equals(type) && industryCode != null) {
-                log.info("업종별 랜덤 질문 조회 시작 - 업종: {}, 개수: {}", industryCode, questionCount);
                 questions = aiImitationInterviewService.getRandomQuestionsByIndustry(industryCode, questionCount);
                 result.put("type", "random");
                 result.put("industryCode", industryCode);
                 result.put("questionCount", questionCount);
-                log.info("업종별 랜덤 질문 조회 완료: {} 개", questions != null ? questions.size() : 0);
                 
             } else {
                 log.warn("잘못된 파라미터 - type: {}, questionListId: {}, industryCode: {}", 
@@ -150,9 +120,7 @@ public class AiImitationInterviewController {
             result.put("success", true);
             result.put("questions", questions);
             result.put("totalCount", questions.size());
-            
-            log.info("React 질문 조회 성공 - type: {}, questions count: {}", type, questions.size());
-            
+                        
             return ResponseEntity.ok(result);
             
         } catch (Exception e) {

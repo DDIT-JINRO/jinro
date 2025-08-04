@@ -48,9 +48,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     public AnalysisResponse analyzeInterview(AnalysisRequest request) {
         String sessionId = request.getSessionId();
         
-        try {
-            log.info("🚀 Gemini 분석 시작 - 세션 ID: {}", sessionId);
-            
+        try {            
             // 🎯 API 키 검증
             if (geminiApiKey == null || geminiApiKey.trim().isEmpty()) {
                 log.error("❌ Gemini API 키가 설정되지 않았습니다");
@@ -59,7 +57,6 @@ public class AnalysisServiceImpl implements AnalysisService {
             
             // 1. 프롬프트 생성
             String prompt = buildAnalysisPrompt(request);
-            log.debug("📝 프롬프트 생성 완료 - 길이: {} 문자", prompt.length());
             
             // 2. Gemini API 요청 본문 생성
             Map<String, Object> requestBody = Map.of(
@@ -81,9 +78,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                     Map.of("category", "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold", "BLOCK_NONE")
                 )
             );
-            
-            log.info("🌐 Gemini API 호출 중...");
-            
+                        
             // 3. API 호출
             String response = webClient.post()
                     .uri(geminiApiUrl + "?key=" + geminiApiKey)
@@ -93,9 +88,6 @@ public class AnalysisServiceImpl implements AnalysisService {
                     .bodyToMono(String.class)
                     .timeout(Duration.ofSeconds(60)) // 🎯 타임아웃 증가
                     .block();
-            
-            log.info("✅ Gemini API 응답 받음 - 세션 ID: {}", sessionId);
-            log.debug("📄 응답 내용: {}", response.substring(0, Math.min(500, response.length())) + "...");
             
             // 4. 응답 파싱 및 반환
             return parseGeminiResponse(response, request);
@@ -267,7 +259,6 @@ public class AnalysisServiceImpl implements AnalysisService {
             
             // JSON 부분만 추출
             String jsonContent = extractJsonFromText(generatedText);
-            log.debug("📊 추출된 JSON 길이: {} - 세션 ID: {}", jsonContent.length(), sessionId);
             
             JsonNode analysisNode = objectMapper.readTree(jsonContent);
             
@@ -290,7 +281,6 @@ public class AnalysisServiceImpl implements AnalysisService {
                     audioNode.path("volume_consistency").asInt(75),
                     audioNode.path("feedback").asText("음성 분석이 완료되었습니다.")
                 ));
-                log.debug("🎤 음성 분석 파싱 완료 - 세션 ID: {}", sessionId);
             }
             
             // 비디오 분석
@@ -302,7 +292,6 @@ public class AnalysisServiceImpl implements AnalysisService {
                     videoNode.path("posture").asInt(75),
                     videoNode.path("feedback").asText("비언어적 소통 분석이 완료되었습니다.")
                 ));
-                log.debug("👁️ 영상 분석 파싱 완료 - 세션 ID: {}", sessionId);
             }
             
             // 텍스트 분석
@@ -314,7 +303,6 @@ public class AnalysisServiceImpl implements AnalysisService {
                     textNode.path("relevance").asInt(75),
                     textNode.path("feedback").asText("답변 내용 분석이 완료되었습니다.")
                 ));
-                log.debug("📝 텍스트 분석 파싱 완료 - 세션 ID: {}", sessionId);
             }
             
             analysisResponse.setDetailed(detailed);
@@ -336,9 +324,6 @@ public class AnalysisServiceImpl implements AnalysisService {
             
             analysisResponse.setScores(new AnalysisResponse.ScoreBreakdown(audioScore, videoScore, textScore, analysisResponse.getOverallScore()));
             
-            log.info("✅ Gemini 응답 파싱 완료 - 세션 ID: {}, 총점: {} ({})", 
-                     sessionId, analysisResponse.getOverallScore(), analysisResponse.getGrade());
-            
             return analysisResponse;
             
         } catch (Exception e) {
@@ -350,9 +335,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     /**
      * 텍스트에서 JSON 부분을 추출합니다.
      */
-    private String extractJsonFromText(String text) {
-        log.debug("🔍 JSON 추출 시작...");
-        
+    private String extractJsonFromText(String text) {        
         // 1차: ```json과 ``` 사이의 내용 추출
         int jsonStart = text.indexOf("```json");
         if (jsonStart != -1) {
@@ -360,7 +343,6 @@ public class AnalysisServiceImpl implements AnalysisService {
             int jsonEnd = text.indexOf("```", jsonStart);
             if (jsonEnd != -1) {
                 String extracted = text.substring(jsonStart, jsonEnd).trim();
-                log.debug("✅ Markdown JSON 블록에서 추출 성공");
                 return extracted;
             }
         }
@@ -371,14 +353,12 @@ public class AnalysisServiceImpl implements AnalysisService {
         
         if (braceStart != -1 && braceEnd != -1 && braceEnd > braceStart) {
             String extracted = text.substring(braceStart, braceEnd + 1);
-            log.debug("✅ 중괄호 기반 추출 성공");
             return extracted;
         }
         
         // 3차: 전체 텍스트가 JSON인지 확인
         text = text.trim();
         if (text.startsWith("{") && text.endsWith("}")) {
-            log.debug("✅ 전체 텍스트가 JSON으로 판단");
             return text;
         }
         
