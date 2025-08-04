@@ -117,6 +117,7 @@
 
 	<section class="main-youtube-section">
 		<a href="/main/youtubeJsp">유튜브 API 확인 </a>
+		<a href="/pse/test">크롤링 확인</a>
 		<div class="section-header">
 			<p id="typing-js" class="typing-js"></p>
 		</div>

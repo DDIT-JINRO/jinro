@@ -77,5 +77,11 @@ public class CareerAptitudeTestController {
 		careerAptitudeTestService.delTempSaveTest(no, memId);
 
 	}
+	
+	@GetMapping("/test")
+	public void insertResultKeyword() {
+		this.careerAptitudeTestService.insertResultKeyword("", "1", "24");
+	}
+	
 
 }
