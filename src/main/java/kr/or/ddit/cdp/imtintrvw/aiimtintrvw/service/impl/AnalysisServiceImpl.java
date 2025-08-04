@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -34,6 +35,10 @@ public class AnalysisServiceImpl implements AnalysisService {
     @Value("${gemini.api.url}")
     private String geminiApiUrl;
     
+    // 🎯 진행률 추적을 위한 메모리 저장소 (실제로는 Redis 권장)
+    private final Map<String, Integer> analysisProgress = new ConcurrentHashMap<>();
+    private final Map<String, Boolean> activeSessions = new ConcurrentHashMap<>();
+    
     public AnalysisServiceImpl(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder
                 .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)) // 10MB
@@ -42,7 +47,48 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
     
     /**
-     * Gemini API를 호출하여 면접 분석을 수행합니다.
+     * 🎯 Map 형태의 요청 데이터로 면접 분석 수행 (Controller 로직 이동)
+     */
+    @Override
+    public AnalysisResponse analyzeInterviewFromMap(Map<String, Object> requestData) {
+        String sessionId = (String) requestData.get("sessionId");
+        
+        try {
+            // 세션 활성화
+            activateSession(sessionId);
+            updateProgress(sessionId, 5);
+            
+            // 요청 데이터 검증
+            if (!validateRequest(requestData)) {
+                log.warn("❌ 요청 데이터 검증 실패 - 세션 ID: {}", sessionId);
+                return AnalysisResponse.createDefaultResponse(sessionId, "필수 데이터가 누락되었습니다.");
+            }
+            
+            updateProgress(sessionId, 15);
+            
+            // AnalysisRequest 객체로 변환
+            AnalysisRequest analysisRequest = convertToAnalysisRequest(requestData);
+            
+            updateProgress(sessionId, 25);
+            
+            // 분석 실행
+            AnalysisResponse analysisResult = analyzeInterview(analysisRequest);
+            
+            updateProgress(sessionId, 100);
+            
+            return analysisResult;
+            
+        } catch (Exception e) {
+            log.error("❌ 분석 실패 - 세션 ID: {}, 오류: {}", sessionId, e.getMessage(), e);
+            return AnalysisResponse.createDefaultResponse(sessionId, "면접 분석 중 오류가 발생했습니다: " + e.getMessage());
+        } finally {
+            // 정리 작업
+            deactivateSession(sessionId);
+        }
+    }
+    
+    /**
+     * Gemini API를 호출하여 면접 분석을 수행합니다. (기존 로직 유지)
      */
     @Override
     public AnalysisResponse analyzeInterview(AnalysisRequest request) {
@@ -104,7 +150,262 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
     
     /**
-     * 면접 분석용 프롬프트를 생성합니다.
+     * 🎯 요청 데이터 유효성 검사 (Controller에서 이동)
+     */
+    @Override
+    public boolean validateRequest(Map<String, Object> requestData) {
+        if (requestData == null) return false;
+        
+        String sessionId = (String) requestData.get("sessionId");
+        if (sessionId == null || sessionId.trim().isEmpty()) {
+            log.warn("❌ 세션 ID가 누락됨");
+            return false;
+        }
+        
+        if (!requestData.containsKey("interview_data")) {
+            log.warn("❌ interview_data가 누락됨 - 세션 ID: {}", sessionId);
+            return false;
+        }
+        
+        Map<String, Object> interviewData = (Map<String, Object>) requestData.get("interview_data");
+        if (interviewData == null) {
+            log.warn("❌ interview_data가 null - 세션 ID: {}", sessionId);
+            return false;
+        }
+        
+        if (!interviewData.containsKey("questions") || !interviewData.containsKey("answers")) {
+            log.warn("❌ questions 또는 answers가 누락됨 - 세션 ID: {}", sessionId);
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * 🎯 Map을 AnalysisRequest 객체로 변환 (Controller에서 이동)
+     */
+    @Override
+    public AnalysisRequest convertToAnalysisRequest(Map<String, Object> requestData) {
+        AnalysisRequest request = new AnalysisRequest();
+        
+        // 세션 ID 설정
+        request.setSessionId((String) requestData.get("sessionId"));
+        
+        // Interview Data 설정
+        Map<String, Object> interviewDataMap = (Map<String, Object>) requestData.get("interview_data");
+        if (interviewDataMap != null) {
+            AnalysisRequest.InterviewData interviewData = new AnalysisRequest.InterviewData();
+            interviewData.setQuestions((List<String>) interviewDataMap.get("questions"));
+            interviewData.setAnswers((List<String>) interviewDataMap.get("answers"));
+            interviewData.setDuration(((Number) interviewDataMap.getOrDefault("duration", 0)).intValue());
+            interviewData.setSessionId(request.getSessionId());
+            interviewData.setTimestamp((String) interviewDataMap.get("timestamp"));
+            request.setInterviewData(interviewData);
+        }
+        
+        // Realtime Analysis 설정
+        Map<String, Object> realtimeMap = (Map<String, Object>) requestData.get("realtime_analysis");
+        if (realtimeMap != null) {
+            AnalysisRequest.RealtimeAnalysis realtimeAnalysis = new AnalysisRequest.RealtimeAnalysis();
+            
+            // Audio Data
+            Map<String, Object> audioMap = (Map<String, Object>) realtimeMap.get("audio");
+            if (audioMap != null) {
+                AnalysisRequest.RealtimeAnalysis.AudioData audioData = new AnalysisRequest.RealtimeAnalysis.AudioData();
+                audioData.setAverageVolume(((Number) audioMap.getOrDefault("averageVolume", 0.0)).doubleValue());
+                audioData.setSpeakingTime(((Number) audioMap.getOrDefault("speakingTime", 0)).intValue());
+                audioData.setWordsPerMinute(((Number) audioMap.getOrDefault("wordsPerMinute", 0)).intValue());
+                audioData.setFillerWordsCount(((Number) audioMap.getOrDefault("fillerWordsCount", 0)).intValue());
+                audioData.setSpeechClarity(((Number) audioMap.getOrDefault("speechClarity", 0.0)).doubleValue());
+                audioData.setNoiseLevel(((Number) audioMap.getOrDefault("noiseLevel", 0.0)).doubleValue());
+                audioData.setPauseFrequency(((Number) audioMap.getOrDefault("pauseFrequency", 0.0)).doubleValue());
+                realtimeAnalysis.setAudio(audioData);
+            }
+            
+            // Video Data
+            Map<String, Object> videoMap = (Map<String, Object>) realtimeMap.get("video");
+            if (videoMap != null) {
+                AnalysisRequest.RealtimeAnalysis.VideoData videoData = new AnalysisRequest.RealtimeAnalysis.VideoData();
+                videoData.setFaceDetected((Boolean) videoMap.getOrDefault("faceDetected", false));
+                videoData.setEyeContactPercentage(((Number) videoMap.getOrDefault("eyeContactPercentage", 0.0)).doubleValue());
+                videoData.setSmileDetection(((Number) videoMap.getOrDefault("smileDetection", 0.0)).doubleValue());
+                videoData.setPostureScore(((Number) videoMap.getOrDefault("postureScore", 0.0)).doubleValue());
+                videoData.setFaceDetectionRate(((Number) videoMap.getOrDefault("faceDetectionRate", 0.0)).doubleValue());
+                videoData.setEmotionAnalysis(videoMap.get("emotionAnalysis"));
+                videoData.setLightingQuality(((Number) videoMap.getOrDefault("lightingQuality", 0.0)).doubleValue());
+                videoData.setHeadMovementStability(((Number) videoMap.getOrDefault("headMovementStability", 0.0)).doubleValue());
+                realtimeAnalysis.setVideo(videoData);
+            }
+            
+            // MetaData 설정
+            Map<String, Object> metaMap = (Map<String, Object>) realtimeMap.get("metadata");
+            if (metaMap != null) {
+                AnalysisRequest.RealtimeAnalysis.MetaData metaData = new AnalysisRequest.RealtimeAnalysis.MetaData();
+                metaData.setBrowserInfo((String) metaMap.get("browserInfo"));
+                metaData.setDeviceType((String) metaMap.get("deviceType"));
+                metaData.setAnalysisStartTime((String) metaMap.get("analysisStartTime"));
+                metaData.setClientTimezone((String) metaMap.get("clientTimezone"));
+                realtimeAnalysis.setMetadata(metaData);
+            }
+            
+            request.setRealtimeAnalysis(realtimeAnalysis);
+        }
+        
+        return request;
+    }
+    
+    /**
+     * 🎯 세션 활성화 (Controller에서 이동)
+     */
+    @Override
+    public void activateSession(String sessionId) {
+        if (sessionId != null) {
+            activeSessions.put(sessionId, true);
+            log.debug("🟢 세션 활성화: {}", sessionId);
+        }
+    }
+    
+    /**
+     * 🎯 세션 비활성화 (Controller에서 이동)
+     */
+    @Override
+    public void deactivateSession(String sessionId) {
+        if (sessionId != null) {
+            activeSessions.remove(sessionId);
+            analysisProgress.remove(sessionId);
+            log.debug("🔴 세션 비활성화: {}", sessionId);
+        }
+    }
+    
+    /**
+     * 🎯 진행률 업데이트 (Controller에서 이동)
+     */
+    @Override
+    public void updateProgress(String sessionId, int progress) {
+        if (sessionId != null) {
+            analysisProgress.put(sessionId, progress);
+            log.debug("📊 진행률 업데이트 - 세션: {}, 진행률: {}%", sessionId, progress);
+        }
+    }
+
+    /**
+     * 🎯 분석 진행 상태 확인 (Controller에서 이동)
+     */
+    @Override
+    public Map<String, Object> getAnalysisProgress(String sessionId) {
+        try {
+            int progress = analysisProgress.getOrDefault(sessionId, 0);
+            String status = progress >= 100 ? "completed" : "processing";
+            String message = getProgressMessage(progress);
+            
+            return Map.of(
+                "sessionId", sessionId,
+                "progress", progress,
+                "status", status,
+                "message", message,
+                "timestamp", LocalDateTime.now().toString(),
+                "isActive", isSessionActive(sessionId)
+            );
+            
+        } catch (Exception e) {
+            log.error("❌ 진행 상태 확인 실패 - 세션 ID: {}", sessionId, e);
+            
+            return Map.of(
+                "sessionId", sessionId,
+                "progress", 0,
+                "status", "error",
+                "message", "진행 상태 확인 실패: " + e.getMessage(),
+                "isActive", false
+            );
+        }
+    }
+
+    /**
+     * 🎯 분석 취소 (Controller에서 이동)
+     */
+    @Override
+    public Map<String, Object> cancelAnalysis(String sessionId) {
+        try {
+            boolean wasActive = activeSessions.containsKey(sessionId);
+            
+            // 세션 정리
+            deactivateSession(sessionId);
+            
+            return Map.of(
+                "success", true,
+                "sessionId", sessionId,
+                "message", wasActive ? "분석이 취소되었습니다." : "취소할 분석을 찾을 수 없습니다.",
+                "wasActive", wasActive,
+                "timestamp", LocalDateTime.now().toString()
+            );
+            
+        } catch (Exception e) {
+            log.error("❌ 분석 취소 실패 - 세션 ID: {}", sessionId, e);
+            
+            return Map.of(
+                "success", false,
+                "sessionId", sessionId,
+                "message", "취소 처리 실패: " + e.getMessage(),
+                "timestamp", LocalDateTime.now().toString()
+            );
+        }
+    }
+
+    /**
+     * 🎯 서비스 상태 확인 (Controller에서 이동)
+     */
+    @Override
+    public Map<String, Object> getHealthStatus() {
+        try {
+            // 서비스 상태 확인
+            boolean isHealthy = geminiApiKey != null && !geminiApiKey.trim().isEmpty();
+            
+            return Map.of(
+                "status", isHealthy ? "OK" : "ERROR",
+                "message", isHealthy ? "서비스가 정상 작동 중입니다." : "API 키가 설정되지 않았습니다.",
+                "timestamp", LocalDateTime.now().toString(),
+                "version", "1.0.0",
+                "aiEngine", "Gemini Pro",
+                "activeAnalyses", activeSessions.size(),
+                "geminiApiConfigured", isHealthy
+            );
+            
+        } catch (Exception e) {
+            log.error("❌ Health check 실패", e);
+            
+            return Map.of(
+                "status", "ERROR",
+                "message", "Health check 실패: " + e.getMessage(),
+                "timestamp", LocalDateTime.now().toString(),
+                "activeAnalyses", 0
+            );
+        }
+    }
+    
+    /**
+     * 🎯 세션 활성 상태 확인
+     */
+    @Override
+    public boolean isSessionActive(String sessionId) {
+        return activeSessions.getOrDefault(sessionId, false);
+    }
+
+    /**
+     * 진행률에 따른 메시지 반환 (Controller에서 이동)
+     */
+    private String getProgressMessage(int progress) {
+        if (progress < 10) return "분석 준비 중...";
+        if (progress < 25) return "데이터 검증 중...";
+        if (progress < 40) return "영상 데이터 처리 중...";
+        if (progress < 60) return "음성 분석 중...";
+        if (progress < 80) return "답변 내용 분석 중...";
+        if (progress < 95) return "종합 분석 중...";
+        if (progress < 100) return "결과 생성 중...";
+        return "분석 완료!";
+    }
+    
+    /**
+     * 면접 분석용 프롬프트를 생성합니다. (기존 로직 유지)
      */
     private String buildAnalysisPrompt(AnalysisRequest request) {
         StringBuilder prompt = new StringBuilder();
@@ -144,6 +445,9 @@ public class AnalysisServiceImpl implements AnalysisService {
                 if (audio.getSpeechClarity() != null) {
                     prompt.append("- 발음 명확도: ").append(audio.getSpeechClarity()).append("\n");
                 }
+                if (audio.getNoiseLevel() != null) {
+                    prompt.append("- 배경 소음: ").append(audio.getNoiseLevel()).append("\n");
+                }
                 prompt.append("\n");
             }
             
@@ -154,7 +458,11 @@ public class AnalysisServiceImpl implements AnalysisService {
                 prompt.append("- 아이컨택: ").append(video.getEyeContactPercentage()).append("%\n");
                 prompt.append("- 미소 빈도: ").append(video.getSmileDetection()).append("%\n");
                 prompt.append("- 자세 점수: ").append(video.getPostureScore()).append("점\n");
-                prompt.append("- 얼굴 감지율: ").append(video.getFaceDetectionRate()).append("%\n\n");
+                prompt.append("- 얼굴 감지율: ").append(video.getFaceDetectionRate()).append("%\n");
+                if (video.getLightingQuality() != null) {
+                    prompt.append("- 조명 품질: ").append(video.getLightingQuality()).append("점\n");
+                }
+                prompt.append("\n");
             }
         }
         
@@ -219,7 +527,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
     
     /**
-     * Gemini API 응답을 파싱하여 분석 결과로 변환합니다.
+     * Gemini API 응답을 파싱하여 분석 결과로 변환합니다. (기존 로직 유지)
      */
     private AnalysisResponse parseGeminiResponse(String response, AnalysisRequest request) {
         String sessionId = request.getSessionId();
@@ -333,7 +641,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
     
     /**
-     * 텍스트에서 JSON 부분을 추출합니다.
+     * 텍스트에서 JSON 부분을 추출합니다. (기존 로직 유지)
      */
     private String extractJsonFromText(String text) {        
         // 1차: ```json과 ``` 사이의 내용 추출
@@ -369,7 +677,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
     
     /**
-     * 기본 JSON 응답 생성
+     * 기본 JSON 응답 생성 (기존 로직 유지)
      */
     private String createDefaultJsonResponse() {
         return """
@@ -402,7 +710,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
     
     /**
-     * JSON 배열을 List<String>으로 변환합니다.
+     * JSON 배열을 List<String>으로 변환합니다. (기존 로직 유지)
      */
     private List<String> parseStringArray(JsonNode arrayNode) {
         List<String> result = new ArrayList<>();

@@ -1,9 +1,7 @@
 package kr.or.ddit.cdp.imtintrvw.aiimtintrvw.web;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,29 +13,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.AnalysisService;
-import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.dto.AnalysisRequest;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.dto.AnalysisResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class InterviewAnalysisController {
 
     private final AnalysisService analysisService;
-    
-    // 🎯 진행률 추적을 위한 메모리 저장소 (실제로는 Redis 권장)
-    private final Map<String, Integer> analysisProgress = new ConcurrentHashMap<>();
-    private final Map<String, Boolean> activeSessions = new ConcurrentHashMap<>();
-
-    public InterviewAnalysisController(AnalysisService analysisService) {
-        this.analysisService = analysisService;
-    }
 
     /**
      * 🎯 면접 분석 메인 엔드포인트 (프론트엔드 연동)
      */
-    @PostMapping("/analyze-interview") // 🎯 엔드포인트 변경
+    @PostMapping("/analyze-interview")
     public ResponseEntity<?> analyzeInterview(@RequestBody Map<String, Object> requestData) {
         String sessionId = null;
         
@@ -52,40 +43,17 @@ public class InterviewAnalysisController {
                 ));
             }
                         
-            // 세션 활성화
-            activeSessions.put(sessionId, true);
-            updateProgress(sessionId, 5);
-            
-            // 요청 데이터 검증
-            if (!isValidRequest(requestData)) {
-                return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "error", "Invalid request data", 
-                    "message", "필수 데이터가 누락되었습니다.",
-                    "sessionId", sessionId
-                ));
-            }
-            
-            updateProgress(sessionId, 15);
-            
-            // AnalysisRequest 객체로 변환
-            AnalysisRequest analysisRequest = convertToAnalysisRequest(requestData);
-            
-            updateProgress(sessionId, 25);
-            
-            // 분석 실행
-            AnalysisResponse analysisResult = analysisService.analyzeInterview(analysisRequest);
-            
-            updateProgress(sessionId, 100);
+            // 🎯 Service에 분석 요청 위임
+            AnalysisResponse analysisResult = analysisService.analyzeInterviewFromMap(requestData);
             
             // 🎯 프론트엔드 형식에 맞는 응답 구성
             Map<String, Object> response = Map.of(
-                "success", true,
-                "sessionId", sessionId,
-                "timestamp", LocalDateTime.now().toString(),
+                "success", analysisResult.getSuccess(),
+                "sessionId", analysisResult.getSessionId(),
+                "timestamp", analysisResult.getTimestamp().toString(),
                 "overallScore", analysisResult.getOverallScore(),
                 "grade", analysisResult.getGrade(),
-                "analysisMethod", "Gemini AI Expert Analysis",
+                "analysisMethod", analysisResult.getAnalysisMethod(),
                 "detailed", Map.of(
                     "audio", Map.of(
                         "speechClarity", analysisResult.getDetailed().getAudio().getSpeechClarity(),
@@ -131,11 +99,6 @@ public class InterviewAnalysisController {
                 "message", "면접 분석 중 오류가 발생했습니다: " + e.getMessage(),
                 "timestamp", LocalDateTime.now().toString()
             ));
-        } finally {
-            // 정리 작업
-            if (sessionId != null) {
-                activeSessions.remove(sessionId);
-            }
         }
     }
 
@@ -144,18 +107,11 @@ public class InterviewAnalysisController {
      */
     @GetMapping("/analyze-interview/progress/{sessionId}")
     public ResponseEntity<?> getAnalysisProgress(@PathVariable String sessionId) {
-        try {
-            int progress = analysisProgress.getOrDefault(sessionId, 0);
-            String status = progress >= 100 ? "completed" : "processing";
-            String message = getProgressMessage(progress);
+        try {            
+            // 🎯 Service에 진행률 확인 위임
+            Map<String, Object> progressInfo = analysisService.getAnalysisProgress(sessionId);
             
-            return ResponseEntity.ok(Map.of(
-                "sessionId", sessionId,
-                "progress", progress,
-                "status", status,
-                "message", message,
-                "timestamp", LocalDateTime.now().toString()
-            ));
+            return ResponseEntity.ok(progressInfo);
             
         } catch (Exception e) {
             log.error("❌ 진행 상태 확인 실패 - 세션 ID: {}", sessionId, e);
@@ -164,7 +120,8 @@ public class InterviewAnalysisController {
                 "sessionId", sessionId,
                 "progress", 0,
                 "status", "error",
-                "message", "진행 상태 확인 실패: " + e.getMessage()
+                "message", "진행 상태 확인 실패: " + e.getMessage(),
+                "timestamp", LocalDateTime.now().toString()
             ));
         }
     }
@@ -174,19 +131,11 @@ public class InterviewAnalysisController {
      */
     @PostMapping("/analyze-interview/cancel/{sessionId}")
     public ResponseEntity<?> cancelAnalysis(@PathVariable String sessionId) {
-        try {
-            boolean wasActive = activeSessions.containsKey(sessionId);
+        try {            
+            // 🎯 Service에 취소 요청 위임
+            Map<String, Object> cancelResult = analysisService.cancelAnalysis(sessionId);
             
-            // 세션 정리
-            activeSessions.remove(sessionId);
-            analysisProgress.remove(sessionId);
-                        
-            return ResponseEntity.ok(Map.of(
-                "success", true,
-                "sessionId", sessionId,
-                "message", wasActive ? "분석이 취소되었습니다." : "취소할 분석을 찾을 수 없습니다.",
-                "wasActive", wasActive
-            ));
+            return ResponseEntity.ok(cancelResult);
             
         } catch (Exception e) {
             log.error("❌ 분석 취소 실패 - 세션 ID: {}", sessionId, e);
@@ -194,7 +143,8 @@ public class InterviewAnalysisController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                 "success", false,
                 "sessionId", sessionId,
-                "message", "취소 처리 실패: " + e.getMessage()
+                "message", "취소 처리 실패: " + e.getMessage(),
+                "timestamp", LocalDateTime.now().toString()
             ));
         }
     }
@@ -204,20 +154,14 @@ public class InterviewAnalysisController {
      */
     @GetMapping("/analyze-interview/health")
     public ResponseEntity<?> healthCheck() {
-        try {
-            // 서비스 상태 확인
-            boolean isHealthy = true; // analysisService 상태 확인 로직 추가 가능
+        try {            
+            // 🎯 Service에 상태 확인 위임
+            Map<String, Object> healthStatus = analysisService.getHealthStatus();
             
-            Map<String, Object> health = Map.of(
-                "status", isHealthy ? "OK" : "ERROR",
-                "message", isHealthy ? "서비스가 정상 작동 중입니다." : "서비스에 문제가 있습니다.",
-                "timestamp", LocalDateTime.now().toString(),
-                "version", "1.0.0",
-                "aiEngine", "Gemini Pro",
-                "activeAnalyses", activeSessions.size()
-            );
+            String status = (String) healthStatus.get("status");
+            HttpStatus httpStatus = "OK".equals(status) ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR;
             
-            return ResponseEntity.ok(health);
+            return ResponseEntity.status(httpStatus).body(healthStatus);
             
         } catch (Exception e) {
             log.error("❌ Health check 실패", e);
@@ -231,89 +175,30 @@ public class InterviewAnalysisController {
     }
 
     /**
-     * 요청 데이터 유효성 검사
+     * 🎯 세션 상태 확인 (추가 엔드포인트)
      */
-    private boolean isValidRequest(Map<String, Object> requestData) {
-        if (requestData == null) return false;
-        if (!requestData.containsKey("sessionId")) return false;
-        if (!requestData.containsKey("interview_data")) return false;
-        
-        Map<String, Object> interviewData = (Map<String, Object>) requestData.get("interview_data");
-        if (interviewData == null) return false;
-        if (!interviewData.containsKey("questions") || !interviewData.containsKey("answers")) return false;
-        
-        return true;
-    }
-
-    /**
-     * Map을 AnalysisRequest 객체로 변환
-     */
-    private AnalysisRequest convertToAnalysisRequest(Map<String, Object> requestData) {
-        AnalysisRequest request = new AnalysisRequest();
-        
-        // Interview Data 설정
-        Map<String, Object> interviewDataMap = (Map<String, Object>) requestData.get("interview_data");
-        if (interviewDataMap != null) {
-            AnalysisRequest.InterviewData interviewData = new AnalysisRequest.InterviewData();
-            interviewData.setQuestions((List) interviewDataMap.get("questions"));
-            interviewData.setAnswers((List<String>) interviewDataMap.get("answers"));
-            interviewData.setDuration(((Number) interviewDataMap.getOrDefault("duration", 0)).intValue());
-            interviewData.setSessionId((String) requestData.get("sessionId"));
-            request.setInterviewData(interviewData);
+    @GetMapping("/analyze-interview/session/{sessionId}/status")
+    public ResponseEntity<?> getSessionStatus(@PathVariable String sessionId) {
+        try {
+            boolean isActive = analysisService.isSessionActive(sessionId);
+            
+            return ResponseEntity.ok(Map.of(
+                "sessionId", sessionId,
+                "isActive", isActive,
+                "status", isActive ? "active" : "inactive",
+                "timestamp", LocalDateTime.now().toString()
+            ));
+            
+        } catch (Exception e) {
+            log.error("❌ 세션 상태 확인 실패 - 세션 ID: {}", sessionId, e);
+            
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                "sessionId", sessionId,
+                "isActive", false,
+                "status", "error",
+                "message", "세션 상태 확인 실패: " + e.getMessage(),
+                "timestamp", LocalDateTime.now().toString()
+            ));
         }
-        
-        // Realtime Analysis 설정
-        Map<String, Object> realtimeMap = (Map<String, Object>) requestData.get("realtime_analysis");
-        if (realtimeMap != null) {
-            AnalysisRequest.RealtimeAnalysis realtimeAnalysis = new AnalysisRequest.RealtimeAnalysis();
-            
-            // Audio Data
-            Map<String, Object> audioMap = (Map<String, Object>) realtimeMap.get("audio");
-            if (audioMap != null) {
-                AnalysisRequest.RealtimeAnalysis.AudioData audioData = new AnalysisRequest.RealtimeAnalysis.AudioData();
-                audioData.setAverageVolume(((Number) audioMap.getOrDefault("averageVolume", 0.0)).doubleValue());
-                audioData.setSpeakingTime(((Number) audioMap.getOrDefault("speakingTime", 0)).intValue());
-                audioData.setWordsPerMinute(((Number) audioMap.getOrDefault("wordsPerMinute", 0)).intValue());
-                audioData.setFillerWordsCount(((Number) audioMap.getOrDefault("fillerWordsCount", 0)).intValue());
-                realtimeAnalysis.setAudio(audioData);
-            }
-            
-            // Video Data
-            Map<String, Object> videoMap = (Map<String, Object>) realtimeMap.get("video");
-            if (videoMap != null) {
-                AnalysisRequest.RealtimeAnalysis.VideoData videoData = new AnalysisRequest.RealtimeAnalysis.VideoData();
-                videoData.setFaceDetected((Boolean) videoMap.getOrDefault("faceDetected", false));
-                videoData.setEyeContactPercentage(((Number) videoMap.getOrDefault("eyeContactPercentage", 0.0)).doubleValue());
-                videoData.setSmileDetection(((Number) videoMap.getOrDefault("smileDetection", 0.0)).doubleValue());
-                videoData.setPostureScore(((Number) videoMap.getOrDefault("postureScore", 0.0)).doubleValue());
-                videoData.setFaceDetectionRate(((Number) videoMap.getOrDefault("faceDetectionRate", 0.0)).doubleValue());
-                realtimeAnalysis.setVideo(videoData);
-            }
-            
-            request.setRealtimeAnalysis(realtimeAnalysis);
-        }
-        
-        return request;
-    }
-
-    /**
-     * 진행률 업데이트
-     */
-    private void updateProgress(String sessionId, int progress) {
-        analysisProgress.put(sessionId, progress);
-    }
-
-    /**
-     * 진행률에 따른 메시지 반환
-     */
-    private String getProgressMessage(int progress) {
-        if (progress < 10) return "분석 준비 중...";
-        if (progress < 25) return "데이터 검증 중...";
-        if (progress < 40) return "영상 데이터 처리 중...";
-        if (progress < 60) return "음성 분석 중...";
-        if (progress < 80) return "답변 내용 분석 중...";
-        if (progress < 95) return "종합 분석 중...";
-        if (progress < 100) return "결과 생성 중...";
-        return "분석 완료!";
     }
 }
