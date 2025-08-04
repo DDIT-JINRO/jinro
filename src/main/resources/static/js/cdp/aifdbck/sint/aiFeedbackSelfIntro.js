@@ -179,7 +179,7 @@ function displayFeedback(index, clickedElement) {
 function requestProofread() {
 	const selectedSiId = document.getElementById('selfIntroList').value;
 	if (selectedSiId) {
-		window.location.href = `/sint/sintwrt?siId=${selectedSiId}`;
+		window.location.href = `/cdp/sint/sintwrt/selfIntroWriting.do?siId=${selectedSiId}`;
 	} else {
 		alert('먼저 자기소개서를 선택해주세요.');
 	}
