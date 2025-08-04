@@ -76,6 +76,7 @@
 		       , M.FILE_BADGE
 		       , M.FILE_PROFILE
 		       , M.FILE_SUB
+		       , M.MEM_NICKNAME
 		  FROM CHAT_MESSAGE CM
 		  JOIN MEMBER M ON M.MEM_ID = CM.MEM_ID
 		 WHERE CR_ID = #{crId}
@@ -94,6 +95,7 @@
 		       , M.FILE_PROFILE
 		       , M.FILE_BADGE
 		       , M.FILE_SUB
+		       , M.MEM_NICKNAME
 		  FROM CHAT_MESSAGE CM
 		  JOIN MEMBER M ON CM.MEM_ID = M.MEM_ID
 		 WHERE CM.CR_ID = #{crId}
@@ -237,4 +239,22 @@
 		 WHERE CR_ID = #{crId}
 		   AND CC_ID = #{ccId}
 	</update>
+
+	<select id="selectChatMessage" resultType="kr.or.ddit.chat.service.ChatMessageVO" parameterType="int">
+				SELECT
+		       CM.MSG_ID
+		       , CM.CR_ID
+		       , CM.MEM_ID
+		       , CM.MESSAGE
+		       , CM.SENT_AT
+		       , CM.MESSAGE_TYPE
+		       , CM.FILE_GROUP_ID
+		       , M.FILE_PROFILE
+		       , M.FILE_BADGE
+		       , M.FILE_SUB
+		       , M.MEM_NICKNAME
+		  FROM CHAT_MESSAGE CM
+		  JOIN MEMBER M ON CM.MEM_ID = M.MEM_ID
+		  WHERE CM.MSG_ID = #{msgId}
+	</select>
 </mapper>

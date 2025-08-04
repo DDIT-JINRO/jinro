@@ -135,6 +135,9 @@ public class ChatController {
 		// 채팅메시지 테이블에 채팅 삽입 및 채팅 수신테이블에 삽입
 		this.chatService.saveChatMessage(chatMessageVO);
 
+		// 회원 정보까지 풀 정보 다시 받아오기 위해서 단건 조회
+		chatMessageVO = this.chatService.selectChatMessage(chatMessageVO.getMsgId());
+
 		// 채팅방 열어둔 사람들에게 채팅메시지 전송
 		this.messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessageVO.getCrId(), chatMessageVO);
 

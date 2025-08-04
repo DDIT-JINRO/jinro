@@ -11,8 +11,8 @@
 <link rel="stylesheet" href="/css/footer.css">
 <link rel="stylesheet" href="/css/channel.css">
 <link rel="stylesheet" href="/css/pagenation.css">
-<link rel="stylesheet" href="/css/chatModal.css">
 <link rel="stylesheet" href="/css/user-profile.css">
+<link rel="stylesheet" href="/css/chatModal.css">
 <script src="/js/axios.min.js"></script>
 <script src="/js/com/sockjs.min.js"></script>
 <script src="/js/com/stomp.min.js"></script>

@@ -163,6 +163,8 @@ function subscribeToUnreadDetail() {
 // 채팅방 채팅 불러와서 채우기 -> 채팅방 목록 클릭했을 때 호출
 async function printFetchMessages(el) {
     const crId = el.dataset.crId;
+	// 채팅방 제목 띄워주기
+	// 스크롤
 
     // 현재 채팅방 ID 업데이트
     currentChatRoomId = crId;	// 현재 보고있는 채팅방 변경
@@ -188,8 +190,8 @@ async function printFetchMessages(el) {
 	    .then(resp => resp.json())
 	    .then(data => {
 			console.log(data);
-	        data.forEach(msgVO => appendMessage(msgVO));
 			chatInput.style.display = 'flex';
+	        data.forEach(msgVO => appendMessage(msgVO));
 	    });
 
     // 새 구독 등록 (현재 채팅방)
@@ -252,13 +254,25 @@ function appendMessage(msgVO) {
     const container = document.getElementById('chat-container');
     const isMine = msgVO.memId == memId;
 
+	const timeObj = new Date(msgVO.sentAt);
+	const timeStr = `${(""+timeObj.getFullYear()).slice(-2)}. ${("0"+(timeObj.getMonth()+1)).slice(-2)}. ${("0"+(timeObj.getDate())).slice(-2)}. ${("0"+(timeObj.getHours())).slice(-2)}:${("0"+(timeObj.getMinutes())).slice(-2)}`;
     const chatHTML = `
-	<div class="message-box">
-		<div class="chat-meta"></div>
-		<div class="chat-message ${isMine ? 'mine' : 'other'}">
-		${isMine ? '나' : msgVO.memId} : ${msgVO.message}
+	<div class="message-box ${isMine ? 'mine' : 'other'}">
+		<div class="chat-meta">
+			${isMine ? `<span class="chat-nickname">${msgVO.memNickname}</span>` : '' }
+			<div class="profile-wrapper chat-profile">
+				<img class="profile-img" src="${msgVO.fileProfileStr ? msgVO.fileProfileStr : '/images/defaultProfileImg.png'}" />
+				<img class="badge-img" src="${msgVO.fileBadgeStr ? msgVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
+				${msgVO.fileSubStr ? `<img class="effect-img sparkle" src="${msgVO.fileSubStr}"/>` : ''}
+			</div>
+			${isMine ? '' : `<span class="chat-nickname">${msgVO.memNickname}</span>` }
 		</div>
-		<div class="chat-time"></div>
+		<div class="chat-message ${isMine ? 'mine' : 'other'}">
+			${msgVO.message}
+		</div>
+		<div class="chat-time">
+		${timeStr}
+		</div>
 	</div>
 					  `;
     container.innerHTML += chatHTML;

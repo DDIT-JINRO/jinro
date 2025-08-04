@@ -127,4 +127,11 @@ public interface ChatMapper {
 	 */
 	int updateChatRoom(ChatRoomVO chatRoomVO);
 
+	/**
+	 * 채팅메시지 기본키로 메시지 단건 조회
+	 * @param msgId
+	 * @return
+	 */
+	ChatMessageVO selectChatMessage(int msgId);
+
 }

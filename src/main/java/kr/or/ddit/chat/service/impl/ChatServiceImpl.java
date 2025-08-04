@@ -64,23 +64,7 @@ public class ChatServiceImpl implements ChatService {
 		List<ChatMessageVO> chatList = this.chatMapper.selectChatMsgByChatRoomIdAndMemId(vo);
 
 		for(ChatMessageVO chatVO : chatList) {
-			Long fileBadgeId = chatVO.getFileBadge();
-			Long fileProfileId = chatVO.getFileProfile();
-			Long fileSubId = chatVO.getFileSub();
-
-			FileDetailVO fileBadgeDetail = this.fileService.getFileDetail(fileBadgeId, 1);
-			FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
-			FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
-
-			if(fileBadgeDetail != null) {
-				chatVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
-			}
-			if(fileProfileDetail != null) {
-				chatVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
-			}
-			if(fileSubDetail != null) {
-				chatVO.setFileSubStr(this.fileService.getSavePath(fileSubDetail));
-			}
+			setMemberFileStr(chatVO);
 		}
 		return chatList;
 	}
@@ -182,6 +166,33 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public int updateChatRoom(ChatRoomVO chatRoomVO) {
 		return this.chatMapper.updateChatRoom(chatRoomVO);
+	}
+
+	@Override
+	public ChatMessageVO selectChatMessage(int msgId) {
+		ChatMessageVO selectedChatMessageVO = this.chatMapper.selectChatMessage(msgId);
+		setMemberFileStr(selectedChatMessageVO);
+		return selectedChatMessageVO;
+	}
+
+	private void setMemberFileStr(ChatMessageVO chatMessageVO) {
+		Long fileBadgeId = chatMessageVO.getFileBadge();
+		Long fileProfileId = chatMessageVO.getFileProfile();
+		Long fileSubId = chatMessageVO.getFileSub();
+
+		FileDetailVO fileBadgeDetail = this.fileService.getFileDetail(fileBadgeId, 1);
+		FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
+		FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
+
+		if(fileBadgeDetail != null) {
+			chatMessageVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
+		}
+		if(fileProfileDetail != null) {
+			chatMessageVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
+		}
+		if(fileSubDetail != null) {
+			chatMessageVO.setFileSubStr(this.fileService.getSavePath(fileSubDetail));
+		}
 	}
 
 }

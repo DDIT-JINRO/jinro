@@ -111,8 +111,8 @@
 
 /* ✅ 메시지 스타일 (말풍선) - 기존 스타일 유지 */
 .chat-message {
-  max-width: 70%;
-  margin: 5px;
+  max-width: 60%;
+  min-width: 10%;
   padding: 8px 12px;
   border-radius: 12px;
   word-break: break-word;
@@ -123,14 +123,12 @@
 .chat-message.mine {
   background-color: #d1e7dd;
   color: #000;
-  float: right;
-  text-align: right;
+  text-align: left;
 }
 
 .chat-message.other {
   background-color: #f1f1f1;
   color: #000;
-  float: left;
   text-align: left;
 }
 
@@ -158,4 +156,40 @@
 /* 선택한 채팅방이 없을떄. 모달 처음 오픈했을 때 우측에 표시 */
 .chat-room-no-selected {
 	justify-self: center;
+}
+
+.chat-profile {
+	width : 40px;
+	height: 40px;
+	flex-shrink: 0;
+}
+
+.message-box {
+	display : flex;
+	flex-direction: column;
+	margin-bottom: 15px;
+}
+
+.message-box.mine {
+	align-items: self-end;
+}
+
+.message-box.other {
+	align-items: self-start;
+}
+
+.chat-meta {
+	display: flex;
+	align-items: center;
+}
+
+.chat-meta .chat-nickname {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.chat-time{
+  font-size: 0.75rem;
+  color: #888;
 }
