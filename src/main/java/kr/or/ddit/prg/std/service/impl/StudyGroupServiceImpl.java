@@ -21,6 +21,8 @@ import kr.or.ddit.chat.service.impl.ChatMapper;
 import kr.or.ddit.prg.std.service.StdBoardVO;
 import kr.or.ddit.prg.std.service.StdReplyVO;
 import kr.or.ddit.prg.std.service.StudyGroupService;
+import kr.or.ddit.util.file.service.FileDetailVO;
+import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,6 +34,9 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 
 	@Autowired
 	ChatService chatService;
+
+	@Autowired
+	FileService fileService;
 
 	private final Map<String, String> regionMap = new HashMap<>();
 
@@ -132,6 +137,24 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		StdBoardVO stdBoardVO =this.studyGroupMapper.selectStudyGroupDetail(stdGroupId);
 		if(stdBoardVO == null) return stdBoardVO;
 
+		Long fileBadgeId = stdBoardVO.getFileBadge();
+		Long fileProfileId = stdBoardVO.getFileProfile();
+		Long fileSubId = stdBoardVO.getFileSub();
+
+		FileDetailVO fileBadgeDetail = this.fileService.getFileDetail(fileBadgeId, 1);
+		FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
+		FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
+
+		if(fileBadgeDetail != null) {
+			stdBoardVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
+		}
+		if(fileProfileDetail != null) {
+			stdBoardVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
+		}
+		if(fileSubDetail != null) {
+			stdBoardVO.setFileSubStr( this.fileService.getSavePath(fileSubDetail));
+		}
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			JsonNode json = objectMapper.readTree(stdBoardVO.getBoardContent());
@@ -150,12 +173,32 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 		List<StdReplyVO> parentReplyList = stdBoardVO.getStdReplyVOList();
 		if(parentReplyList != null && !parentReplyList.isEmpty() && parentReplyList.get(0).getReplyContent() != null) {
 			for(StdReplyVO stdReplyVO : parentReplyList) {
+				Long replyFileBadgeId = stdReplyVO.getFileBadge();
+				Long replyFileProfileId = stdReplyVO.getFileProfile();
+				Long replyFileSubId = stdReplyVO.getFileSub();
+
+				FileDetailVO replyFileBadgeDetail = this.fileService.getFileDetail(replyFileBadgeId, 1);
+				FileDetailVO replyFileProfileDetail = this.fileService.getFileDetail(replyFileProfileId, 1);
+				FileDetailVO replyFileSubDetail = this.fileService.getFileDetail(replyFileSubId, 1);
+
+				if(replyFileBadgeDetail != null) {
+					stdReplyVO.setFileBadgeStr(this.fileService.getSavePath(replyFileBadgeDetail));
+				}
+				if(replyFileProfileDetail != null) {
+					stdReplyVO.setFileProfileStr(this.fileService.getSavePath(replyFileProfileDetail));
+				}
+				if(replyFileSubDetail != null) {
+					stdReplyVO.setFileSubStr( this.fileService.getSavePath(replyFileSubDetail));
+				}
+
+
 				int childCount =stdReplyVO.getChildCount();
 				if(childCount == 0) continue;
 
 		         if (childCount > 0) {
 		                int parentReplyId = stdReplyVO.getReplyId();
-		                List<StdReplyVO> childReplies = getChildReplies(parentReplyId);
+		                List<StdReplyVO> childReplies = this.getChildReplies(parentReplyId);
+
 		                // 자식댓글 리스트 세팅
 		                stdReplyVO.setChildReplyVOList(childReplies);
 		         }
@@ -169,6 +212,24 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 	private List<StdReplyVO> getChildReplies(int replyId) {
 		List<StdReplyVO> replyList = this.studyGroupMapper.selectChildReplyList(replyId);
 		for (StdReplyVO replyVO : replyList) {
+			Long fileBadgeId = replyVO.getFileBadge();
+			Long fileProfileId = replyVO.getFileProfile();
+			Long fileSubId = replyVO.getFileSub();
+
+			FileDetailVO fileBadgeDetail = this.fileService.getFileDetail(fileBadgeId, 1);
+			FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
+			FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
+
+			if(fileBadgeDetail != null) {
+				replyVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
+			}
+			if(fileProfileDetail != null) {
+				replyVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
+			}
+			if(fileSubDetail != null) {
+				replyVO.setFileSubStr( this.fileService.getSavePath(fileSubDetail));
+			}
+
 			if (replyVO.getChildCount() == 0)
 				continue;
 			int parentReplyId = replyVO.getReplyId();
@@ -191,14 +252,33 @@ public class StudyGroupServiceImpl implements StudyGroupService{
 
 	@Override
 	public StdReplyVO selectReplyDetail(int replyId) {
-		return this.studyGroupMapper.selectReplyDetail(replyId);
+		StdReplyVO detailReplyVO = this.studyGroupMapper.selectReplyDetail(replyId);
+		Long fileBadgeId = detailReplyVO.getFileBadge();
+		Long fileProfileId = detailReplyVO.getFileProfile();
+		Long fileSubId = detailReplyVO.getFileSub();
+
+		FileDetailVO fileBadgeDetail = this.fileService.getFileDetail(fileBadgeId, 1);
+		FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
+		FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
+
+		if(fileBadgeDetail != null) {
+			detailReplyVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
+		}
+		if(fileProfileDetail != null) {
+			detailReplyVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
+		}
+		if(fileSubDetail != null) {
+			detailReplyVO.setFileSubStr(this.fileService.getSavePath(fileSubDetail));
+		}
+
+		return detailReplyVO;
 	}
 
 	@Override
 	public StdReplyVO insertReply(StdReplyVO stdReplyVO) {
 		int result = this.studyGroupMapper.insertReply(stdReplyVO);
 		if(result > 0) {
-			return this.studyGroupMapper.selectReplyDetail(stdReplyVO.getReplyId());
+			return this.selectReplyDetail(stdReplyVO.getReplyId());
 		}
 		return null;
 	}

@@ -16,6 +16,10 @@ public class StdReplyVO {
 	private Date replyCreatedAt;	// 작성일
 	private Date replyUpdatedAt;	// 수정일
 
+	private Long fileBadge;
+	private Long fileProfile;
+	private Long fileSub;
+
 	private int childCount; // 자식 수
 
 	List<StdReplyVO> childReplyVOList;	//하위 게시글(대댓글) 리스트
@@ -26,7 +30,7 @@ public class StdReplyVO {
 	private String memNickname;
 	private String memEmail;
 
-	private String fileBadge;
-	private String fileProfile;
-	private String fileSub;
+	private String fileBadgeStr;
+	private String fileProfileStr;
+	private String fileSubStr;
 }

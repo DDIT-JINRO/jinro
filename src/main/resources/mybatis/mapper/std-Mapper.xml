@@ -46,9 +46,12 @@
 		<result property="memName" column="MEM_NAME" />
 		<result property="memNickname" column="MEM_NICKNAME" />
 		<result property="memEmail" column="MEM_EMAIL" />
-		<result property="fileBadge" column="FILE_BADGE" />
-		<result property="fileProfile" column="FILE_PROFILE" />
-		<result property="fileSub" column="FILE_SUB" />
+		<result property="fileBadge" column="FILE_BADGE_ID" />
+		<result property="fileProfile" column="FILE_PROFILE_ID" />
+		<result property="fileSub" column="FILE_SUB_ID" />
+		<result property="fileBadgeStr" column="FILE_BADGE" />
+		<result property="fileProfileStr" column="FILE_PROFILE" />
+		<result property="fileSubStr" column="FILE_SUB" />
 
 		<association property="chatRoomVO"
 			javaType="kr.or.ddit.chat.service.ChatRoomVO">
@@ -80,9 +83,13 @@
 		<result property="memName" column="R_MEM_NAME" />
 		<result property="memNickname" column="R_MEM_NICKNAME" />
 		<result property="memEmail" column="R_MEM_EMAIL" />
-		<result property="fileBadge" column="R_FILE_BADGE" />
-		<result property="fileProfile" column="R_FILE_PROFILE" />
-		<result property="fileSub" column="R_FILE_SUB" />
+
+		<result property="fileBadge" column="R_FILE_BADGE_ID" />
+		<result property="fileProfile" column="R_FILE_PROFILE_ID" />
+		<result property="fileSub" column="R_FILE_SUB_ID" />
+		<result property="fileBadgeStr" column="R_FILE_BADGE" />
+		<result property="fileProfileStr" column="R_FILE_PROFILE" />
+		<result property="fileSubStr" column="R_FILE_SUB" />
 	</resultMap>
 
 	<!-- 목록조회. board테이블에서 스터디그룹게시글과 연계된 chat_room테이블&chat_member테이블 -->
@@ -240,6 +247,10 @@
 	        MB.MEM_NAME AS MEM_NAME,
 	        MB.MEM_NICKNAME AS MEM_NICKNAME,
 	        MB.MEM_EMAIL AS MEM_EMAIL,
+
+	        MB.FILE_BADGE AS FILE_BADGE_ID,
+	        MB.FILE_PROFILE AS FILE_PROFILE_ID,
+	        MB.FILE_SUB AS FILE_SUB_ID,
 	        FDB.FILE_SAVE_NAME AS FILE_BADGE,
 	        FDP.FILE_SAVE_NAME AS FILE_PROFILE,
 	        FDS.FILE_SAVE_NAME AS FILE_SUB,
@@ -264,6 +275,9 @@
 	        RM.MEM_NAME AS R_MEM_NAME,
 	        RM.MEM_NICKNAME AS R_MEM_NICKNAME,
 	        RM.MEM_EMAIL AS R_MEM_EMAIL,
+	        RM.FILE_BADGE AS R_FILE_BADGE_ID,
+	        RM.FILE_PROFILE AS R_FILE_PROFILE_ID,
+	        RM.FILE_SUB AS R_FILE_SUB_ID,
 	        RDB.FILE_SAVE_NAME AS R_FILE_BADGE,
 	        RDP.FILE_SAVE_NAME AS R_FILE_PROFILE,
 	        RDS.FILE_SAVE_NAME AS R_FILE_SUB
@@ -319,6 +333,9 @@
 	         , M.MEM_NAME        AS R_MEM_NAME
 	         , M.MEM_NICKNAME    AS R_MEM_NICKNAME
 	         , M.MEM_EMAIL       AS R_MEM_EMAIL
+	         , M.FILE_BADGE      AS R_FILE_BADGE_ID
+	         , M.FILE_PROFILE    AS R_FILE_PROFILE_ID
+	         , M.FILE_SUB        AS R_FILE_SUB_ID
 	         , D1.FILE_SAVE_NAME        AS R_FILE_BADGE
 	         , D2.FILE_SAVE_NAME        AS R_FILE_PROFILE
 	         , D3.FILE_SAVE_NAME        AS R_FILE_SUB
@@ -361,6 +378,9 @@
 	         , M.MEM_NAME        AS R_MEM_NAME
 	         , M.MEM_NICKNAME    AS R_MEM_NICKNAME
 	         , M.MEM_EMAIL       AS R_MEM_EMAIL
+	         , M.FILE_BADGE      AS R_FILE_BADGE_ID
+	         , M.FILE_PROFILE    AS R_FILE_PROFILE_ID
+	         , M.FILE_SUB        AS R_FILE_SUB_ID
 	         , D1.FILE_SAVE_NAME        AS R_FILE_BADGE
 	         , D2.FILE_SAVE_NAME        AS R_FILE_PROFILE
 

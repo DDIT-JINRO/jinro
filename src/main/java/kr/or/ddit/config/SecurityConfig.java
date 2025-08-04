@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @Slf4j
 public class SecurityConfig {
-	
+
 	private final JwtUtil jwtUtil;
 	private final UserDetailsService userDetailsService;
 	private final VisitLogService visitLogService;
@@ -39,9 +39,9 @@ public class SecurityConfig {
 		this.jwtUtil = jwtUtil;
 		this.userDetailsService = userDetailsService;
 		this.visitLogService = visitLogService;
-		
+
 	}
-    
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -54,7 +54,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-    
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
@@ -66,7 +66,7 @@ public class SecurityConfig {
 				.authenticationEntryPoint(authenticationEntryPoint()) // 인증 안됐을 때
 				.accessDeniedHandler(accessDeniedHandler())           // 인증됐지만 권한 없을 때
 			)
-				.formLogin(form -> form.disable()) 
+				.formLogin(form -> form.disable())
 				.httpBasic(httpBasic -> httpBasic.disable()) // HTTP Basic 인증 비활성화
 				.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService, visitLogService),UsernamePasswordAuthenticationFilter.class)
 				.logout(logout -> logout
@@ -102,12 +102,12 @@ public class SecurityConfig {
 			response.sendRedirect("/error/logReq"); // 에러 페이지로 리다이렉트
 		};
 	}
-	
+
 	@Bean
 	public AccessDeniedHandler accessDeniedHandler() {
 		return (request, response, accessDeniedException) -> {
 			response.sendRedirect("/error/authReq"); // 다른 에러 페이지로 리다이렉트 가능
 		};
 	}
-	
+
 }

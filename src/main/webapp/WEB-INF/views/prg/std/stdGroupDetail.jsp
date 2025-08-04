@@ -49,10 +49,10 @@
 			    <h1 class="post-title">${stdBoardVO.boardTitle}</h1>
 			    <div class="author-meta">
 			      <div class="profile-wrapper user-profile">
-			      	<img class="profile-img" src="<c:out value="${not empty stdBoardVO.fileProfile ? stdBoardVO.fileProfile : '/images/defaultProfileImg.png' }"/>" alt="프로필" />
-			      	<img class="badge-img" src="<c:out value="${not empty stdBoardVO.fileBadge ? stdBoardVO.fileBadge : '/images/defaultBorderImg.png' }"/>" alt="테두리" />
-			      	<c:if test="${stdBoardVO.fileSub != null }">
-				      	<img class="effect-img" src="${stdBoardVO.fileSub }" alt="테두리" />
+			      	<img class="profile-img" src="<c:out value="${not empty stdBoardVO.fileProfileStr ? stdBoardVO.fileProfileStr : '/images/defaultProfileImg.png' }"/>" alt="프로필" />
+			      	<img class="badge-img" src="<c:out value="${not empty stdBoardVO.fileBadgeStr ? stdBoardVO.fileBadgeStr : '/images/defaultBorderImg.png' }"/>" alt="테두리" />
+			      	<c:if test="${stdBoardVO.fileSubStr != null }">
+				      	<img class="effect-img sparkle" src="${stdBoardVO.fileSubStr }" alt="테두리" />
 			      	</c:if>
 			      </div>
 			      <span class="author-nickname">${stdBoardVO.memNickname}</span>
@@ -150,10 +150,10 @@
 				</div>
 				<div class="reply-profile">
 				  <div class="profile-wrapper user-profile">
-				    <img class="profile-img" src="<c:out value="${not empty reply.fileProfile ? reply.fileProfile : '/upload/2025/07/30/4b137b23_product_6.jpg' }"/>" alt="profile"/>
-				    <img class="badge-img" src="<c:out value="${not empty reply.fileBadge ? reply.fileBadge : '/images/defaultBorderImg.png' }"/>" alt="badge"/>
-					<c:if test="${reply.fileSub != null }">
-				      	<img class="effect-img" src="${reply.fileSub }" alt="테두리" />
+				    <img class="profile-img" src="<c:out value="${not empty reply.fileProfileStr ? reply.fileProfileStr : '/upload/2025/07/30/4b137b23_product_6.jpg' }"/>" alt="profile"/>
+				    <img class="badge-img" src="<c:out value="${not empty reply.fileBadgeStr ? reply.fileBadgeStr : '/images/defaultBorderImg.png' }"/>" alt="badge"/>
+					<c:if test="${reply.fileSubStr != null }">
+				      	<img class="effect-img sparkle" src="${reply.fileSubStr }" alt="테두리" />
 			      	</c:if>
 				  </div>
 				  <div class="writer-info">
@@ -190,10 +190,10 @@
 						 </div>
 					      <div class="reply-profile">
 					        <div class="profile-wrapper user-profile">
-					          <img class="profile-img" src="<c:out value="${not empty child.fileProfile ? child.fileProfile : '/images/defaultProfileImg.png' }"/>" />
-					          <img class="badge-img" src="<c:out value="${not empty child.fileBadge ? child.fileBadge : '/images/defaultBorderImg.png' }"/>" />
-					          <c:if test="${reply.fileSub != null }">
-						      	<img class="effect-img" src="${reply.fileSub }" alt="테두리" />
+					          <img class="profile-img" src="<c:out value="${not empty child.fileProfileStr ? child.fileProfileStr : '/images/defaultProfileImg.png' }"/>" />
+					          <img class="badge-img" src="<c:out value="${not empty child.fileBadgeStr ? child.fileBadgeStr : '/images/defaultBorderImg.png' }"/>" />
+					          <c:if test="${reply.fileSubStr != null }">
+						      	<img class="effect-img sparkle" src="${reply.fileSubStr }" alt="테두리" />
 					      	  </c:if>
 					        </div>
 					        <div class="writer-info">

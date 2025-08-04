@@ -19,6 +19,10 @@ public class StdBoardVO {
 	private String boardDelYn;
 	private Long filegroupId;
 
+	private Long fileBadge;
+	private Long fileProfile;
+	private Long fileSub;
+
 	private ChatRoomVO chatRoomVO; // 연계된 채팅방
 	private List<StdReplyVO> stdReplyVOList; // 게시글에 연결된 댓글 리스트
 
@@ -31,9 +35,9 @@ public class StdBoardVO {
 	private String memName;
 	private String memNickname;
 	private String memEmail;
-	private String fileBadge;
-	private String fileProfile;
-	private String fileSub;
+	private String fileBadgeStr;
+	private String fileProfileStr;
+	private String fileSubStr;
 
 	// JSON 파싱 후 저장할 필드들
 	private String region;

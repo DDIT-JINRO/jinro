@@ -21,8 +21,8 @@
 .profile-img{
   z-index: 1;
   border-radius: 50%;
-  width: 95%;
-  height: 95%;
+  width: 92%;
+  height: 92%;
   justify-self: anchor-center;
   align-self: anchor-center;
 }
@@ -41,12 +41,13 @@ pointer-events: none;
 /* ============구독상태효과============ */
 /* 효과 클래스 정의 */
 .sparkle{
-  animation: sparkle 2s infinite ease-in-out;
+  animation: sparkle 5s infinite ease-in-out;
 }
 
 /* 애니메이션 효과 정의*/
 @keyframes sparkle {
-  0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
-  50%      { opacity: 1;   transform: scale(1.05) rotate(5deg); }
+  0%    { opacity: 0.2; transform: scale(1.09) rotate(0deg); }
+  50%   { opacity: 0.8;   transform: scale(1.09) rotate(180deg); }
+  100%  { opacity: 0.2; transform: scale(1.09) rotate(360deg); }
 }
 /* ================================== */
