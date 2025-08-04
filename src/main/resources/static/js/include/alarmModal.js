@@ -50,15 +50,15 @@ document.addEventListener('DOMContentLoaded', function(){
 		})
 
 		eventSource.addEventListener('connected', function(e){
-			console.log(e.data);
+			//console.log(e.data);
 		})
 
 		eventSource.onopen = () =>{
-			console.log("sse연결됨");
+			//console.log("sse연결됨");
 		}
 
 		eventSource.onerror = (e) =>{
-			console.log("e :", e);
+			//console.log("e :", e);
 		}
 
 		// 알림 전체삭제 요청 버튼 이벤트 추가
