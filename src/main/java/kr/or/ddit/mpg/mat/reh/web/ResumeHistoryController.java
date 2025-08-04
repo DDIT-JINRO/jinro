@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import kr.or.ddit.cdp.sint.service.SelfIntroVO;
+import kr.or.ddit.cdp.rsm.rsm.service.ResumeService;
+import kr.or.ddit.cdp.rsm.rsm.service.ResumeVO;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 
