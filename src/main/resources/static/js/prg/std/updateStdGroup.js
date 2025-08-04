@@ -74,8 +74,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 		const formEl = document.createElement('form');
 		for(let [key, value] of formData.entries()){
-			console.log(key);
-			console.log(value);
 			const input = document.createElement('input');
 			input.type = "hidden";
 			input.name = key;

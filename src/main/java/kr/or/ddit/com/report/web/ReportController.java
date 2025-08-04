@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.com.report.service.ReportService;
 import kr.or.ddit.com.report.service.ReportVO;
-import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,8 +34,6 @@ public class ReportController {
 	 */
 	@PostMapping("/api/report/selectReport")
 	public ResponseEntity<ReportVO> selectReport(ReportVO reportVO){
-		log.info("selectReport -> reportVO : "+reportVO);
-
 		ReportVO selectedReportVO = this.reportService.selectReport(reportVO);
 		if(selectedReportVO!=null) {
 			return ResponseEntity.ok(selectedReportVO);
@@ -54,7 +51,6 @@ public class ReportController {
 	@PostMapping("/api/report/insertReport")
 	@ResponseBody
 	public ResponseEntity<Boolean> insertReport(@ModelAttribute ReportVO reportVO){
-		log.info("insertReport -> reportVO : "+reportVO);
 		List<MultipartFile> list = reportVO.getReportFile();
 		if(list != null && list.size() >= 1 && list.get(0).getOriginalFilename()!=null) {
 			try {

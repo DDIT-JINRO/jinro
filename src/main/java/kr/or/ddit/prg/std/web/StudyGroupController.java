@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
@@ -40,8 +39,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/prg/std")
 public class StudyGroupController {
 
-    private final ReportController reportController;
-
 	@Autowired
 	StudyGroupService studyGroupService;
 
@@ -50,12 +47,6 @@ public class StudyGroupController {
 
 	@Autowired
 	AlarmService alarmService;
-
-
-    StudyGroupController(ReportController reportController) {
-        this.reportController = reportController;
-    }
-
 
 
 	@GetMapping("/stdGroupList.do")
@@ -245,10 +236,6 @@ public class StudyGroupController {
 
 	@PostMapping("/deleteStdBoard.do")
 	public ResponseEntity<Boolean> deleteStdBoard(@RequestBody Map<String, Object> map, Principal principal){
-		System.out.println("========================================");
-		System.out.println(map);
-		System.out.println("========================================");
-
 		if (principal == null || principal.getName().equals("anonymousUser") || !principal.getName().equals(map.get("memId")))
 			throw new CustomException(ErrorCode.INVALID_USER);
 

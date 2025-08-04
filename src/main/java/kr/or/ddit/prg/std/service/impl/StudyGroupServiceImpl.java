@@ -17,7 +17,6 @@ import jakarta.annotation.PostConstruct;
 import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
-import kr.or.ddit.chat.service.impl.ChatMapper;
 import kr.or.ddit.prg.std.service.StdBoardVO;
 import kr.or.ddit.prg.std.service.StdReplyVO;
 import kr.or.ddit.prg.std.service.StudyGroupService;
@@ -48,7 +47,6 @@ public class StudyGroupServiceImpl implements StudyGroupService {
 			String codeName = String.valueOf(map.get("CC_ETC"));
 			regionMap.put(codeId, codeName);
 		}
-		log.info("regionMap 초기화 완료: {}", regionMap);
 	}
 
 	@Override
@@ -114,12 +112,10 @@ public class StudyGroupServiceImpl implements StudyGroupService {
 
 	@Override
 	public Map<String, String> getInterestsMap() {
-		Map<String, String> interestMap = Map.ofEntries(Map.entry("study.general", "공부"), Map.entry("study.exam", "수능준비"), Map.entry("study.assignment", "과제"),
-
+		Map<String, String> interestMap = Map.ofEntries(Map.entry("study.general", "공부"), 
+				Map.entry("study.exam", "수능준비"), Map.entry("study.assignment", "과제"),
 				Map.entry("career.path", "진로"), Map.entry("career.admission", "진학"),
-
 				Map.entry("job.prepare", "취업준비"), Map.entry("job.concern", "취업고민"),
-
 				Map.entry("social.neighbor", "동네친구"), Map.entry("social.talk", "잡담"));
 		return interestMap;
 	}
@@ -285,7 +281,6 @@ public class StudyGroupServiceImpl implements StudyGroupService {
 	@Transactional
 	public boolean deleteStdBoard(Map<String, Object> map) {
 		// 게시글 -> 채팅방 -> 채팅멤버
-		System.out.println("@@@@@@@@@@@@@@@@@@" + map.get("boardId"));
 		boolean result = true;
 		String boardIdStr = (String) map.get("boardId");
 		String memIdStr = (String) map.get("memId");

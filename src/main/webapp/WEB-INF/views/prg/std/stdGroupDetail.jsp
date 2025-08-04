@@ -58,7 +58,7 @@
 			      <span class="author-nickname">${stdBoardVO.memNickname}</span>
 			    </div>
 			    <div class="post-meta">
-			      <span class="meta-item">작성일: <fmt:formatDate value="${stdBoardVO.boardCreatedAt}" pattern="yyyy-MM-dd"/></span>
+			      <span class="meta-item">작성일: <fmt:formatDate value="${stdBoardVO.boardCreatedAt}" pattern="yyyy. MM. dd"/></span>
 			      <span class="meta-item">조회수: ${stdBoardVO.boardCnt}</span>
 			    </div>
 			  </div>
