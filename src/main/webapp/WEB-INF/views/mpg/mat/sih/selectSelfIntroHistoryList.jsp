@@ -44,7 +44,7 @@
 								<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
 							</svg>
 						</div>
-						<input type="search" name="keyword" placeholder="내가 작성한 자기소개서에서 검색">
+						<input type="search" name="keyword" placeholder="내가 작성한 자기소개서에서 검색" value="${param.keyword}">
 						<button class="com-search-btn" type="submit">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
 								<path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
@@ -66,12 +66,12 @@
 										<div class="item-header">
 											<span class="category-tag ${writing}">${selfIntro.siStatus}</span>
 											<h3 class="item-title">
-												<a href="/sint/sintwrt?siId=${selfIntro.siId}">${selfIntro.siTitle}</a>
+												<a href="/cdp/sint/sintwrt/selfIntroWriting.do?siId=${selfIntro.siId}">${selfIntro.siTitle}</a>
 											</h3>
 										</div>
 										<div class="item-meta">
 											<span>
-												마지막 작성일 : <fmt:formatDate value="${selfIntro.siUpdatedAt}" pattern="yyyy년 MM월 dd일" />
+												마지막 작성일 : <fmt:formatDate value="${selfIntro.siUpdatedAt}" pattern="yyyy. MM. dd" />
 											</span>
 										</div>
 									</div>

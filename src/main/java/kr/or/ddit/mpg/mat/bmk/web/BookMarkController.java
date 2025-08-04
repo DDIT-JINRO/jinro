@@ -51,7 +51,7 @@ public class BookMarkController {
 		
 		switch (bmCategoryId) {
 		case "G03001": {
-			return "redirect:/univ/selectDetail.do";
+			return "redirect:/ertds/univ/uvsrch/selectDetail.do";
 		}
 		case "G03002": {
 			return "redirect:/empt/enp/enterprisePosting.do";
@@ -63,7 +63,7 @@ public class BookMarkController {
 			return "redirect:/pse/cr/crl/selectCareerDetail.do";
 		}
 		case "G03005": {
-			return "redirect:/rsm/rsmb/detail.do";
+			return "redirect:/cdp/rsm/rsmb/detail.do";
 		}
 		default:
 			return "mpg/mat/bmk/selectBookmarkList";
