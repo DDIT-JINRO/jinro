@@ -1,11 +1,14 @@
 @charset "UTF-8";
 
+
+
 .login-req-tag {
 	display: flex;
 	justify-content: center;
 }
 
-.public-wrapper-main {
+.public-wrapper-main-login {
+	margin: 70px auto;
 	display: flex;
 	justify-content: center;
 }

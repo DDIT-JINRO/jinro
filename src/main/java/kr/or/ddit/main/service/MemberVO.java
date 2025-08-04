@@ -44,7 +44,7 @@ public class MemberVO {
 	private String subFilePath;
 	
 	public String getSMemId() {
-		return memId+"";
+		return memId + "";
 	}
 
 }
