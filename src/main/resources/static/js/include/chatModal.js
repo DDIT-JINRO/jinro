@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		// 소켓 연결
 		connectSocket();
 		// 플로팅 버튼 클릭시 모달 오픈
-	
+
 		// 입력창, 전송버튼에 이벤트 등록
 		const inputEl = document.getElementById('chatMessageInput');
 		const sendBtn = document.getElementById('sendMsgBtn');
@@ -22,16 +22,16 @@ document.addEventListener('DOMContentLoaded', function(){
 		        sendCurrentInput();
 		    }
 		});
-	
+
 		function sendCurrentInput() {
 		    const content = inputEl.value.trim();
 		    if (!content) return;
-	
+
 		    inputEl.value = '';
 		    sendMessage(currentChatRoomId, content);
 		}
 	}
-	
+
 	document.getElementById('chatRooms').addEventListener('click',openChatModal);
 })
 
@@ -47,9 +47,14 @@ function closeChatModal(){
 	// 채팅방 목록 비우기
 	document.getElementById('chatRoomList').innerHTML = "";
 	// 채팅창 영역 비우기
-	document.getElementById('chat-container').innerHTML = "";
+	const emptyRoomMsg = `
+		<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
+	`;
+	document.getElementById('chat-container').innerHTML = emptyRoomMsg;
+
 	document.getElementById('chat-modal').style.display = 'none';
 
+	document.getElementById('chat-input').style.display = 'none';
 	// 보고 있는 채팅방 초기화
 	currentChatRoomId = null;
 
@@ -75,7 +80,7 @@ async function openChatModal(){
 		axios.post("/admin/las/chatVisitLog.do");
 		await printChatRoomList();
 		subscribeToUnreadDetail();
-		document.getElementById('chat-modal').style.display = 'flex';		
+		document.getElementById('chat-modal').style.display = 'flex';
 	}
 }
 
@@ -94,6 +99,16 @@ async function printChatRoomList() {
 	unreadList.forEach((unreadVO)=>{
 		unreadMap[unreadVO.crId] = unreadVO.unreadCnt;
 	})
+
+	if (!chatRoomList || chatRoomList.length == 0) {
+		const emptyRoomMsg = `
+			<p class="chat-room-no-selected">
+			입장한 채팅방이 없습니다<br/>
+			<a href="/prg/std/stdGroupList.do">스터디그룹 보러가기</a>
+			</p>
+		`;
+		list.innerHTML = emptyRoomMsg;
+	}
 
     chatRoomList.forEach(chatRoom =>{
 		const wrapper = document.createElement("div");
@@ -130,7 +145,7 @@ async function printChatRoomList() {
 // 참여중인 채팅방 별 안읽은 갯수 받아오기 구독 -> 모달 열때 호출
 function subscribeToUnreadDetail() {
     if (stompClient) {
-        unreadDetailSubscription = stompClient.subscribe(`/sub/chat/unread/detail/${sender}`, (message) => {
+        unreadDetailSubscription = stompClient.subscribe(`/sub/chat/unread/detail/${memId}`, (message) => {
 			const data = JSON.parse(message.body);
 
 			if(data.length >= 1){
@@ -168,10 +183,13 @@ async function printFetchMessages(el) {
 	const container = document.getElementById('chat-container');
 	container.innerHTML = "";
 
+	const chatInput = document.getElementById('chat-input');
 	fetch(`/api/chat/message/list?crId=${crId}`)
 	    .then(resp => resp.json())
 	    .then(data => {
+			console.log(data);
 	        data.forEach(msgVO => appendMessage(msgVO));
+			chatInput.style.display = 'flex';
 	    });
 
     // 새 구독 등록 (현재 채팅방)
@@ -207,7 +225,7 @@ function connectSocket() {
 		})
 
 		// 플로팅 뱃지에 전체 안읽음 갯수를 세팅하기 위한 구독
-		stompClient.subscribe(`/sub/chat/unread/summary/${sender}`, (message) => {
+		stompClient.subscribe(`/sub/chat/unread/summary/${memId}`, (message) => {
 			const data = JSON.parse(message.body);
 			console.log("플로팅용전체",data);
 		    const { unreadCnt } = JSON.parse(message.body);
@@ -223,7 +241,7 @@ function sendMessage(roomId, content) {
     const msg = {
         crId: roomId,
         message: content,
-        memId: sender, // 전역에서 선언된 로그인된 사용자 ID
+        memId: memId, // 전역에서 선언된 로그인된 사용자 ID
     };
 
     stompClient.send("/pub/chat/message", {}, JSON.stringify(msg));
@@ -232,11 +250,17 @@ function sendMessage(roomId, content) {
 // 메시지 출력
 function appendMessage(msgVO) {
     const container = document.getElementById('chat-container');
-    const isMine = msgVO.memId == sender;
+    const isMine = msgVO.memId == memId;
 
-    const chatHTML = `<div class="chat-message ${isMine ? 'mine' : 'other'}">
-                        ${isMine ? '나' : msgVO.memId} : ${msgVO.message}
-                      </div>`;
+    const chatHTML = `
+	<div class="message-box">
+		<div class="chat-meta"></div>
+		<div class="chat-message ${isMine ? 'mine' : 'other'}">
+		${isMine ? '나' : msgVO.memId} : ${msgVO.message}
+		</div>
+		<div class="chat-time"></div>
+	</div>
+					  `;
     container.innerHTML += chatHTML;
     container.scrollTop = container.scrollHeight;
 }

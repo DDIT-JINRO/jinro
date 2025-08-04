@@ -66,26 +66,42 @@
 	<!-- 채팅방 입장 시 해당 채팅방 메시지 전체 불러오기 (상담에서 사용) -->
 	<select id="selectAllChatMsgByChatRoomId" parameterType="kr.or.ddit.chat.service.ChatMessageVO">
 		SELECT
-		       MSG_ID, CR_ID, MEM_ID
-		       , MESSAGE, SENT_AT, MESSAGE_TYPE
-		       , FILE_GROUP_ID
-		  FROM CHAT_MESSAGE
+		       CM.MSG_ID
+		       , CM.CR_ID
+		       , CM.MEM_ID
+		       , CM.MESSAGE
+		       , CM.SENT_AT
+		       , CM.MESSAGE_TYPE
+		       , CM.FILE_GROUP_ID
+		       , M.FILE_BADGE
+		       , M.FILE_PROFILE
+		       , M.FILE_SUB
+		  FROM CHAT_MESSAGE CM
+		  JOIN MEMBER M ON M.MEM_ID = CM.MEM_ID
 		 WHERE CR_ID = #{crId}
 	</select>
 
 	<!-- 채팅방 입장 시 해당 채팅방 메시지 입장유저의 입장일시 기준으로 불러오기 -->
 	<select id="selectChatMsgByChatRoomIdAndMemId" parameterType="kr.or.ddit.chat.service.ChatMessageVO">
 		SELECT
-		       M.MSG_ID, M.CR_ID, M.MEM_ID
-		       , M.MESSAGE, M.SENT_AT, M.MESSAGE_TYPE
-		       , M.FILE_GROUP_ID
-		  FROM CHAT_MESSAGE M
-		 WHERE M.CR_ID = #{crId}
-		   AND M.SENT_AT >= (SELECT JOINED_AT
+		       CM.MSG_ID
+		       , CM.CR_ID
+		       , CM.MEM_ID
+		       , CM.MESSAGE
+		       , CM.SENT_AT
+		       , CM.MESSAGE_TYPE
+		       , CM.FILE_GROUP_ID
+		       , M.FILE_PROFILE
+		       , M.FILE_BADGE
+		       , M.FILE_SUB
+		  FROM CHAT_MESSAGE CM
+		  JOIN MEMBER M ON CM.MEM_ID = M.MEM_ID
+		 WHERE CM.CR_ID = #{crId}
+		   AND CM.SENT_AT >= (SELECT JOINED_AT
 		                       FROM CHAT_MEMBER
 		                      WHERE CR_ID = #{crId}
 		                        AND MEM_ID = #{memId})
-	     ORDER BY M.SENT_AT , MSG_ID
+	     ORDER BY CM.SENT_AT , MSG_ID
 	</select>
 
 	<!-- 입장한 채팅방 읽음시각 현재시간으로 수정하기 -->

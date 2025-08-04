@@ -22,8 +22,8 @@ import kr.or.ddit.chat.service.ChatMessageVO;
 import kr.or.ddit.chat.service.ChatReceiverVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
-import kr.or.ddit.exception.CustomException;
-import kr.or.ddit.exception.ErrorCode;
+import kr.or.ddit.util.file.service.FileDetailVO;
+import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -36,6 +36,9 @@ public class ChatServiceImpl implements ChatService {
 
 	@Autowired
 	ChatMapper chatMapper;
+
+	@Autowired
+	FileService fileService;
 
 	@Override
 	public List<ChatRoomVO> findRoomsByMemId(String memId) {
@@ -58,7 +61,28 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public List<ChatMessageVO> selectChatMsgByChatRoomIdAndMemId(ChatMemberVO vo) {
-		return this.chatMapper.selectChatMsgByChatRoomIdAndMemId(vo);
+		List<ChatMessageVO> chatList = this.chatMapper.selectChatMsgByChatRoomIdAndMemId(vo);
+
+		for(ChatMessageVO chatVO : chatList) {
+			Long fileBadgeId = chatVO.getFileBadge();
+			Long fileProfileId = chatVO.getFileProfile();
+			Long fileSubId = chatVO.getFileSub();
+
+			FileDetailVO fileBadgeDetail = this.fileService.getFileDetail(fileBadgeId, 1);
+			FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
+			FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
+
+			if(fileBadgeDetail != null) {
+				chatVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
+			}
+			if(fileProfileDetail != null) {
+				chatVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
+			}
+			if(fileSubDetail != null) {
+				chatVO.setFileSubStr(this.fileService.getSavePath(fileSubDetail));
+			}
+		}
+		return chatList;
 	}
 
 	@Override

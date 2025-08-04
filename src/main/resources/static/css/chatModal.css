@@ -75,19 +75,16 @@
   border: none;
 }
 
-/* ✅ 메시지 입력창 */
-#chat-input {
-  display : flex;
-  width: 100%;
-  box-sizing: border-box;
-}
 
+/* ✅ 메시지 입력창 */
 .chat-input {
-  display: flex;
+  display: none;
   flex-shrink: 0; /* ✅ 고정 영역, 아래로 밀리지 않도록 */
   border-top: 1px solid #ccc;
   padding: 10px;
   background: #fff;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .chat-input textarea {
@@ -156,4 +153,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+/* 선택한 채팅방이 없을떄. 모달 처음 오픈했을 때 우측에 표시 */
+.chat-room-no-selected {
+	justify-self: center;
 }
