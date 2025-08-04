@@ -207,33 +207,35 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	
 	@Override
 	public MemberVO getProfileFile(MemberVO member) {
-		int memId = member.getMemId();
-		
-		MemberVO profile = new MemberVO();
-		
-		profile = this.myInquiryMapper.getProfileFile(memId);
-		
-		if(profile == null) {
-			return member;
-		}
-		
-		FileDetailVO fileProfile = fileService.getFileDetail(profile.getFileProfile(), 1);
-		FileDetailVO fileBadge = fileService.getFileDetail(profile.getFileBadge(), 1);
-		FileDetailVO fileSub= fileService.getFileDetail(profile.getFileSub(), 1);
-		
-		if(profile.getFileProfile() != null && fileProfile != null) {
-			member.setProfileFilePath(this.fileService.getSavePath(fileProfile)); 
-		}
-		if(fileBadge != null) {
-			member.setBadgeFilePath(this.fileService.getSavePath(fileBadge)); 
-		}
-		if(fileSub != null) {
-			member.setSubFilePath(this.fileService.getSavePath(fileSub)); 
-		}
-		
-		member.setMemId(memId);
-		
-
-		return member;
+	    int memId = member.getMemId();
+	    
+	    MemberVO profile = this.myInquiryMapper.getProfileFile(memId);
+	    
+	    if (profile == null) {
+	        return member;
+	    }
+	    
+	    member.setProfileFilePath(getFilePathFromId(profile.getFileProfile()));
+	    member.setBadgeFilePath(getFilePathFromId(profile.getFileBadge()));
+	    member.setSubFilePath(getFilePathFromId(profile.getFileSub()));
+	    
+	    member.setMemId(memId);
+	    
+	    return member;
+	}
+	
+	private String getFilePathFromId(Long fileId) {
+	    // 파일 ID 자체가 null이면 null 반환
+	    if (fileId == null) {
+	        return null;
+	    }
+	    
+	    FileDetailVO fileDetail = fileService.getFileDetail(fileId, 1);
+	    
+	    if (fileDetail == null) {
+	    	return null;
+	    }
+	    
+	    return this.fileService.getSavePath(fileDetail);
 	}
 }
