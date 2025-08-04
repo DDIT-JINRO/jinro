@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -154,4 +155,20 @@ public class MyInquiryController {
 		}
 	}
 
+	@ResponseBody
+	@PostMapping("/mif/inq/insertStudentAuth.do")
+	public ResponseEntity<Map<String, Object>> insertStudentAuth(@AuthenticationPrincipal String memId, @RequestParam MultipartFile authFile) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			this.myInquiryService.insertStudentAuth(memId, authFile);
+			response.put("status", "success");
+			response.put("message", "학생 인증 신청이 성공적으로 변경되었습니다.");
+			return ResponseEntity.ok(response);
+		} catch (CustomException e) {
+			ErrorCode errorCode = e.getErrorCode();
+			response.put("status", "error");
+			response.put("message", errorCode.getMessage());
+			return new ResponseEntity<>(response, errorCode.getStatus());
+		}
+	}
 }

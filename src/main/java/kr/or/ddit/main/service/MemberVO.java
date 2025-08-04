@@ -33,6 +33,10 @@ public class MemberVO {
 	private String subName;
 	private int remainingDays;
 	
+	private Date svCreatedAt;
+	private String svStatus;
+	private String svReason;
+	
 	public String getSMemId() {
 		return memId+"";
 	}

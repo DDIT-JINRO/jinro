@@ -44,11 +44,6 @@ body.scroll-lock {
 	margin: 0;
 }
 
-.social-login {
-	display: flex;
-	gap: 20px;
-}
-
 /* 개별 카드 스타일 */
 
 /* 1. 프로필 사진 카드 */
@@ -329,6 +324,11 @@ body.scroll-lock {
 
 .info-item input:focus {
 	border-bottom: 2px #7881f5 solid;
+}
+
+.info-item small {
+	color: #6b7280;
+    font-weight: 500;
 }
 
 /* 모달 오버레이 (배경) */

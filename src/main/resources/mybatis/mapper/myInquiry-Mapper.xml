@@ -43,47 +43,28 @@
 		  , A.MEM_PHONE_NUMBER
 		  , A.MEM_BIRTH
 		  , A.MEM_POINT
-		  , (
-		        SELECT
-		            S.SUB_NAME
-		        FROM
-		            SUBSCRIBE S
-		        WHERE
-		            S.SUB_ID = (
-		                SELECT
-		                    MS2.SUB_ID
-		                FROM
-		                    MEMBER_SUBSCRIPTION MS2
-		                WHERE
-		                    MS2.MS_ID = (
-		                        SELECT
-		                            MAX(MS1.MS_ID)
-		                        FROM
-		                            MEMBER_SUBSCRIPTION MS1
-		                        WHERE
-		                            MS1.MEM_ID = A.MEM_ID
-		                    )
-		            )
-		    ) AS SUB_NAME
-		  , (
-		        SELECT
-		            TRUNC(SUB_END_DT) - TRUNC(SUB_START_DT)
-		        FROM
-		            MEMBER_SUBSCRIPTION MS2
-		        WHERE
-		            MS2.MS_ID = (
-		                SELECT
-		                    MAX(MS1.MS_ID)
-		                FROM
-		                    MEMBER_SUBSCRIPTION MS1
-		                WHERE
-		                    MS1.MEM_ID = A.MEM_ID
-		            )
-		    ) AS REMAINING_DAYS
+		  , S.SUB_NAME
+		  , TRUNC(MS.SUB_END_DT) - TRUNC(SYSDATE) AS REMAINING_DAYS
+		  , B.SV_CREATED_AT
+		  , B.SV_STATUS
+		  , B.SV_REASON
 		FROM
 		    MEMBER A
-		WHERE
-		    A.MEM_ID = #{memID}
+        LEFT JOIN
+            MEMBER_SUBSCRIPTION MS 
+            ON A.MEM_ID = MS.MEM_ID
+            AND MS.MS_ID = (
+                SELECT
+                    MAX(MS_INNER.MS_ID)
+                FROM
+                    MEMBER_SUBSCRIPTION MS_INNER
+                WHERE
+                    MS_INNER.MEM_ID = A.MEM_ID
+            )
+        LEFT JOIN SUBSCRIBE S ON MS.SUB_ID = S.SUB_ID
+        LEFT JOIN STUDENT_VERIFICATION B ON A.MEM_ID = B.MEM_ID
+        WHERE
+            A.MEM_ID = #{memId}
 	</select>
 	
 	<select id="checkPassword" resultType="kr.or.ddit.main.service.MemberVO" parameterType="int">
@@ -175,6 +156,22 @@
 			)
 			, #{memId}
 			, #{keyword}
+		)
+	</insert>
+	
+	<insert id="insertStudentVerification" parameterType="kr.or.ddit.mpg.mif.inq.service.impl.StudentVerificationVO">
+		INSERT INTO STUDENT_VERIFICATION (
+		    SV_ID
+		    , MEM_ID
+		    , SV_CREATED_AT
+		    , FILE_GROUP_ID
+		    , SV_STATUS
+		) VALUES (
+			  (SELECT NVL(MAX(SV_ID), 0) + 1 FROM STUDENT_VERIFICATION)
+			, #{memId}
+			, SYSDATE
+			, #{fileGroupId}
+			, 'S05001'
 		)
 	</insert>
 </mapper>

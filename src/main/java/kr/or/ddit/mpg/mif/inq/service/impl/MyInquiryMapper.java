@@ -27,4 +27,6 @@ public interface MyInquiryMapper {
 
 	void insertEmptyInterest(int memId);
 
+	int insertStudentVerification(StudentVerificationVO studentVerification);
+
 }

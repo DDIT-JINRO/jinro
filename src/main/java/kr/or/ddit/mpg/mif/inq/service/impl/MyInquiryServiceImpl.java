@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,10 +49,16 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		}
 
 		FileDetailVO fileDetail = fileService.getFileDetail(member.getFileProfile(), 1);
+		
+		String savePath = "";
+		
+		if(fileDetail != null) {
+			savePath = this.fileService.getSavePath(fileDetail);
+		}
 
 		List<ComCodeVO> interetsKeywordList = this.myInquiryMapper.selectInteretsKeywordList();
 
-		return Map.of("member", member, "imgPath", this.fileService.getSavePath(fileDetail), "interetsKeywordList", interetsKeywordList);
+		return Map.of("member", member, "imgPath", savePath, "interetsKeywordList", interetsKeywordList);
 	}
 
 	/**
@@ -147,6 +154,42 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		}
 	}
 
+	@Override
+	public Resource insertStudentAuth(String memIdStr, MultipartFile authFile) {
+		int memId = parseMemId(memIdStr);
+
+		if (authFile == null || authFile.isEmpty()) {
+			throw new CustomException(ErrorCode.INVALID_FILE);
+		}
+		Long fileGroupId = fileService.createFileGroup();
+
+		StudentVerificationVO studentVerification = new StudentVerificationVO();
+		studentVerification.setMemId(memId);
+		studentVerification.setFileGroupId(fileGroupId);
+		
+		List<MultipartFile> files = new ArrayList<MultipartFile>();
+		files.add(authFile);
+
+		try {
+			this.fileService.uploadFiles(fileGroupId, files);
+		} catch (IOException e) {
+			throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
+		}
+
+		int result = this.myInquiryMapper.insertStudentVerification(studentVerification);
+		if (result == 0) {
+			throw new CustomException(ErrorCode.USER_UPDATE_FAILED);
+		}
+		
+		Resource resource = null;
+		try {
+			resource = this.fileService.downloadFile(fileGroupId, 1);
+			return resource;
+		} catch (IOException e) {
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	/**
 	 * String타입의 멤버 Id를 int 타입으로 변환합니다.
 	 * 

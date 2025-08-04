@@ -41,7 +41,6 @@
 							<div class="profile-photo-buttons">
 								<input type="file" id="change-photo-input" style="display: none;" accept="image/jpeg, image/png" />
 								<button type="button" class="btn btn-primary" id="change-photo-btn">사진 변경</button>
-								<button class="btn btn-primary">테두리 변경</button>
 							</div>
 						</div>
 					</div>
@@ -51,9 +50,8 @@
 							<div class="card-title-wrapper">
 								<h3 class="card-title">나의 정보</h3>
 							</div>
-							<div class="social-login">
-								<img src="/images/kakao-img.png" alt="카카오톡">
-								<img src="/images/naver-img.png" alt="네이버">
+							<div class="info-item profile-update">
+								<button type="button" id="info-update-btn" class="btn btn-primary disable" disabled="disabled">수정</button>
 							</div>
 						</div>
 						<form action="updateMyInquiryDetail.do" method="POST">
@@ -82,7 +80,7 @@
 								<div class="info-item">
 									<label>연락처</label>
 									<span>${member.memPhoneNumber}</span>
-									<button class="btn btn-auth">번호 변경</button>
+									<button type="button" class="btn btn-auth">번호 변경</button>
 								</div>
 								<div class="info-item">
 									<label>생년월일</label>
@@ -94,8 +92,28 @@
 									<label>포인트</label>
 									<span>${member.memPoint} 포인트</span>
 								</div>
-								<div class="info-item profile-update">
-									<button type="button" id="info-update-btn" class="btn btn-primary disable" disabled="disabled">수정</button>
+								<div class="info-item">
+									<label>학생 여부</label>
+									<c:choose>
+										<c:when test="${member.svStatus == 'S05001'}">
+											<span>신청 중</span>
+											<small>
+												<fmt:formatDate pattern="(yyyy년 MM월 dd일)" value="${member.svCreatedAt}" />
+											</small>
+										</c:when>
+										<c:when test="${member.svStatus == 'S05002'}">
+											<span>인증</span>
+										</c:when>
+										<c:when test="${member.svStatus == 'S05003'}">
+											<span>반려</span>
+											<button type="button" id="reject-reason-btn" class="btn btn-secondary">반려 이유</button>
+										</c:when>
+										<c:otherwise>
+											<span>미인증</span>
+											<button type="button" id="auth-student" class="btn btn-auth">학생 인증</button>
+										</c:otherwise>					
+									</c:choose>
+									
 								</div>
 							</div>
 						</form>
@@ -231,6 +249,7 @@
 			</div>
 		</div>
 	</div>
+	${member}
 </div>
 
 <div class="modal-overlay" id="password-modal-overlay">
@@ -283,6 +302,19 @@
 				</div>
 				<button type="submit" class="com-submit-search-btn">수정</button>
 			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal-overlay" id="student-modal-overlay">
+	<div class="modal-content">
+		<button class="modal-close-btn" type="button">&times;</button>
+		<h3>학생 인증 신청</h3>
+		<p>학생 회원 인증을 위하여 증빙서류를 첨부해주세요.</p>
+		<div class="modal-form">
+			<input type="file" id="student-auth-input">
+			<span class="modal-error-msg" id="modal-error-msg"></span>
+			<button class="btn btn-primary" id="student-confirm-btn" type="button">인증</button>
 		</div>
 	</div>
 </div>
