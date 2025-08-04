@@ -96,7 +96,7 @@
 		            			AND (
 		            				A.COUNSEL_TITLE LIKE '%' || #{keyword} || '%'
 			            			OR A.COUNSEL_DESCRIPTION LIKE '%' || #{keyword} || '%'
-			            			OR A.COUNSEL_NAME LIKE '%' || #{keyword} || '%'
+			            			OR A.COUNSEL LIKE '%' || #{keyword} || '%'
 		            			)
 		            		</otherwise>
 		            	</choose>
@@ -106,6 +106,9 @@
 		            </if>
 		            <if test="counselCategory != null and counselCategory != ''">
 		            	AND A.COUNSEL_CATEGORY = #{counselCategory}
+		            </if>
+		            <if test="counselStatus != null and counselCategory != ''">
+		            	AND A.COUNSEL_STATUS = #{counselStatus}
 		            </if>
 		            ORDER BY
 		            	A.COUNSEL_REQ_DATE DESC
@@ -141,7 +144,7 @@
 					AND (
 						A.COUNSEL_TITLE LIKE '%' || #{keyword} || '%'
 		 			OR A.COUNSEL_DESCRIPTION LIKE '%' || #{keyword} || '%'
-		 			OR A.COUNSEL_NAME LIKE '%' || #{keyword} || '%'
+		 			OR A.COUNSEL LIKE '%' || #{keyword} || '%'
 					)
 				</otherwise>
 			</choose>

@@ -28,6 +28,8 @@
 			B.IC_CODE = C.CC_ID
 		WHERE
 		    B.MEM_ID = #{memId}
+        AND
+            C.CC_ID != 'K01001'
 		ORDER BY
 			B.IC_CODE
 	</select>

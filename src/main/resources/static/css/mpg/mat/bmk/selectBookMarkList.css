@@ -238,18 +238,23 @@
 .bookmark-list {
 	display: flex;
 	flex-direction: column;
+	gap: 16px;
 }
 
 .bookmark-item {
 	display: flex;
 	justify-content: space-between;
-	align-items: flex-start;
-	padding: 24px 8px;
-	border-bottom: 1px solid #e5e7eb;
+	align-items: center;
+	gap: 20px;
+	padding: 24px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    transition: box-shadow 0.2s, transform 0.2s;
 }
 
-.bookmark-item:last-child {
-	border-bottom: none;
+.bookmark-item:hover {
+	transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.07);
 }
 
 .item-content {
@@ -378,6 +383,11 @@
 /* 활성 아이콘은 기본적으로 보입니다. */
 .bookmark-btn .icon-active {
     display: inline-block;
+}
+
+.bookmark-btn span img {
+	width: 30px;
+	height: 30px;
 }
 
 /* .active 클래스가 없는 경우 (비활성화 상태) */

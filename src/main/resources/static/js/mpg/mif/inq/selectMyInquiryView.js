@@ -142,6 +142,10 @@ const checkChange = (input, submitBtn) => {
 
 const passwordCheckAPI = (password, errorMsg, passwordInput, closeModal) => {
 	const mainForm = document.querySelector('.my-info-card form');
+	const name = document.querySelector("input[name=memName]").value.trim();
+	const nickname = document.querySelector("input[name=memNickname]").value.trim();
+	const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,10}$/;
+	const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
 
 	fetch("checkPassword.do", {
 		method: "POST",
@@ -155,7 +159,18 @@ const passwordCheckAPI = (password, errorMsg, passwordInput, closeModal) => {
 		return response.json()
 	}).then(result => {
         if (result.status === "success") {
-            closeModal();
+			closeModal();
+			
+			if (!nicknameRegex.test(nickname)) {
+				alert("닉네임은 한글, 영문, 숫자 조합 2~10자로 입력해주세요.");
+				return;
+			}
+			
+			if (!nameRegex.test(name)) {
+				alert("이름은 공백 없이 한글 또는 영문 2~20자로 입력해주세요.");
+				return;
+			}
+
             mainForm.submit();
         } else {
             errorMsg.textContent = result.message || '비밀번호가 일치하지 않습니다.';
