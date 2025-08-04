@@ -9,13 +9,16 @@ const resumeList = document.getElementById('resumeList');
 resumeList.addEventListener('change', loadResumeDetail);
 
 const requestAiFeedbackBtn = document.getElementById('requestAiFeedback');
-requestAiFeedbackBtn.addEventListener('click', requestAiFeedback);
+if (requestAiFeedbackBtn) {
+	requestAiFeedbackBtn.addEventListener('click', requestAiFeedback);
+}
 
 function cleanAiResponse(text) {
 	let cleanedText = text.trim();
 	if (cleanedText.startsWith('```json')) {
 		cleanedText = cleanedText.substring('```json'.length);
 	}
+
 	if (cleanedText.endsWith('```')) {
 		cleanedText = cleanedText.substring(0, cleanedText.length - '```'.length);
 	}
@@ -27,162 +30,210 @@ function loadResumeDetail() {
 
 	if (!selectedResumeId) {
 		document.querySelector('.aifb-title').textContent = '이력서 제목';
-		document.getElementById('questionsWrapper').innerHTML = '이력서 내용이 출력될 공간입니다';
+		document.getElementById('questionsWrapper').innerHTML = '이력서의 내용이 출력될 공간입니다';
 		document.getElementById('feedbackArea').innerHTML = 'AI의 피드백 내용이 출력될 공간입니다';
 		return;
 	}
 
 
-	// 아직 구현되지 않았기 때문에 예시 주석
 	fetch(`/cdp/aifdbck/rsm/getResumeDetail.do?resumeId=${selectedResumeId}`)
 		.then(response => {
 			if (!response.ok) throw new Error('이력서 상세 정보 요청 실패');
 			return response.json();
 		})
 		.then(data => {
-					if (data) {
-						originalData = data;
+			if (data) {
+				// 1️⃣ 이미지 경로 정리
+				data.resumeContent = data.resumeContent.replace(/\\+/g, '/');
+				originalData = data;
 
-						document.querySelector('.aifb-title').textContent = data.title;
+				document.querySelector('.aifb-title').textContent = data.resumeTitle
+					;
 
-						// 질문-답변 영역을 렌더링합니다.
-						let questionsHtml = '';
-						data.questions.forEach((qvo, index) => {
-							const cvo = originalData.contents[index];
-							questionsHtml += `
-		                    <div class="qa-block" data-index="${index}" onclick="displayFeedback(${index}, this)">
-		                        <div class="question-block">
-		                            <span class="question-number">${index + 1}.</span>
-		                            <span class="question-text">${qvo.siqContent}</span>
-		                        </div>
-		                        <div class="answer-block">
-		                            <p>${cvo.sicContent}</p>
-		                            <div class="char-count">
-		                                글자 수: <span>${cvo.sicContent.length}</span> / 2000
-		                            </div>
-		                        </div>
-		                    </div>
-		                `;
-						});
-						document.getElementById('questionsWrapper').innerHTML = questionsHtml;
+				// HTML 내용을 파싱하여 불필요한 요소 제거
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(data.resumeContent, 'text/html');
 
-						//피드백 영역 초기화
-						document.getElementById('feedbackArea').innerHTML = 'AI의 피드백 내용이 출력될 공간입니다';
-					}
-				})
-				.catch(error => {
-					console.error('자기소개서 불러오기 오류:', error);
-					alert('자기소개서 데이터를 불러오는 데 실패했습니다.');
-				});
-		}
+				// '필수 입력 정보입니다.' 문구 제거
+				const requiredInfo = doc.querySelector('.required-info');
+				if (requiredInfo) {
+					requiredInfo.remove();
+				}
 
-		function requestAiFeedback() {
-			if (!originalData) {
-				alert('먼저 자기소개서를 선택해주세요.');
-				return;
+				// 이력서의 HTML 내용을 innerHTML로 삽입
+				document.getElementById('questionsWrapper').innerHTML = data.resumeContent;
+				document.getElementById('feedbackArea').innerHTML = 'AI의 피드백 내용이 출력될 공간입니다';
 			}
+		})
+		.catch(error => {
+			console.error('이력서 불러오기 오류:', error);
+			alert('이력서 데이터를 불러오는 데 실패했습니다.');
+			document.querySelector('.aifb-title').textContent = '오류 발생';
+			document.getElementById('questionsWrapper').innerHTML = '데이터를 불러오는 데 실패했습니다.';
+		});
+}
 
-			const feedbackArea = document.getElementById('feedbackArea');
-			feedbackArea.innerHTML = `
-				  <div class="spinner-wrapper">
-				    <div class="spinner-border text-primary" role="status">
-				      <span class="visually-hidden">Loading...</span>
-				    </div>
-				    <div class="text-center mt-2">AI가 피드백을 생성 중입니다...<br>잠시만 기다려주세요.</div>
-				  </div>
-				`;
+function requestAiFeedback() {
+	if (!originalData) {
+		alert('먼저 이력서를 선택해주세요.');
+		return;
+	}
 
-			// AI 첨삭을 위한 페이로드를 준비
-			const sections = originalData.questions.map((qvo, index) => {
-				const cvo = originalData.contents[index];
-				return {
-					"question_title": qvo.siqContent,
-					"original_content": cvo.sicContent,
-				};
-			});
+	const feedbackArea = document.getElementById('feedbackArea');
+	feedbackArea.innerHTML = `
+		<div class="spinner-wrapper">
+			<div class="spinner-border text-primary" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+			<div class="text-center mt-2">AI가 피드백을 생성 중입니다...<br>잠시만 기다려주세요.</div>
+		</div>
+	`;
 
-			// AI 첨삭 요청 (단일 요청으로 변경)
-			fetch('/ai/proofread/coverletter', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ "sections": sections })
-			})
-				.then(response => {
-					if (!response.ok) throw new Error('AI 첨삭 요청 실패');
-					return response.text();
-				})
-				.then(aiResponseText => {
-					// AI 응답 텍스트를 정리하고 파싱
-					const cleanedText = cleanAiResponse(aiResponseText);
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(originalData.resumeContent, 'text/html');
 
-					// ---로 구분된 피드백을 파싱
-					const sections = cleanedText.split('---').map(section => section.trim()).filter(section => section.length > 0);
+	// 이미지 제거
+	doc.querySelectorAll('img').forEach(img => img.remove());
 
-					// aiFeedbackData에 저장
-					aiFeedbackData = {
-						sections_feedback: sections,
-						questions: originalData.questions.map(qvo => qvo.siqContent)
-					};
+	// 제거된 HTML을 다시 HTML 문자열로 변환
+	const cleanedHtml = doc.body.innerHTML;
 
-					displayAllFeedback();
-				})
-				.catch(error => {
-					console.error('Error fetching self-intro details:', error);
-					const feedbackArea = document.getElementById('feedbackArea');
-					feedbackArea.textContent = '데이터를 불러오는 데 실패했습니다.';
-					alert('데이터를 불러오는 데 실패했습니다.');
-				});
-		}
+	fetch('/ai/proofread/resume', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ "html": cleanedHtml })
+	})
+		.then(response => {
+			if (!response.ok) throw new Error('AI 첨삭 요청 실패');
+			return response.text();
+		})
+		.then(aiResponseText => {
+			console.log("🔍 AI 응답 원문:", aiResponseText);
+			const cleanedText = cleanAiResponse(aiResponseText);
+
+			console.log("🧼 정리된 텍스트:", cleanedText);
+			feedbackArea.innerHTML = cleanedText.replace(/\n/g, '<br>');
+		})
+		.catch(error => {
+			console.error('AI 피드백 요청 오류:', error);
+			feedbackArea.textContent = 'AI 피드백을 불러오는 데 실패했습니다.';
+			alert('AI 피드백을 불러오는 데 실패했습니다.');
+		});
+}
 
 
-		function displayAllFeedback() {
-			if (!aiFeedbackData) return;
-			const feedbackArea = document.getElementById('feedbackArea');
-
-			let feedbackHtml = '';
-
-			// 섹션별 피드백 출력 (핵심 내용만 간결하게)
-			if (aiFeedbackData.sections_feedback && aiFeedbackData.sections_feedback.length > 0) {
-				aiFeedbackData.sections_feedback.forEach((feedbackText, index) => {
-					feedbackHtml += `<div class="feedback-section" id="feedback-section-${index}">`;
-
-					// 질문을 제목으로 출력
-					const questionTitle = aiFeedbackData.questions?.[index] || `문항 ${index + 1}`;
-					feedbackHtml += `<h4>${index + 1}. ${questionTitle}</h4>`;
-
-					// "[문항 N번 - AI 피드백]" 제거 후 줄바꿈 처리
-					const cleanedText = feedbackText.replace(/\[문항 \d+번 - AI 피드백\]/, '').trim();
-					feedbackHtml += `<p>${cleanedText.replace(/\n/g, '<br>')}</p>`;
-
-					feedbackHtml += `</div>`;
-				});
-			} else {
-				feedbackHtml += '<p>제공된 피드백이 없습니다.</p>';
-			}
-
-			feedbackArea.innerHTML = feedbackHtml;
-			feedbackArea.scrollTop = 0;
-		}
-
-		function displayFeedback(index, clickedElement) {
-			document.querySelectorAll('.qa-block').forEach(el => el.classList.remove('active'));
-			clickedElement.classList.add('active');
-
-			const feedbackSection = document.getElementById(`feedback-section-${index}`);
-			if (feedbackSection) {
-				const feedbackArea = document.getElementById('feedbackArea');
-				const offset = feedbackSection.offsetTop - feedbackArea.offsetTop;
-				feedbackArea.scrollTop = offset;
-			}
-		}
 
 function requestProofread() {
 	const selectedResumeId = document.getElementById('resumeList').value;
 	if (selectedResumeId) {
-		// 아직 미구현이므로 주석
-		// window.location.href = `/rsm/rsmwrt?resumeId=${selectedResumeId}`;
-		alert('이력서 수정 기능은 아직 구현되지 않았습니다.');
+		window.location.href = `/cdp/rsm/rsm/resumeWriter.do?resumeId=${selectedResumeId}`;
 	} else {
 		alert('먼저 이력서를 선택해주세요.');
 	}
 }
+
+//jsp 미리보기/다운로드
+function generateHtmlFromFeedbackForResume(feedbackHtml) {
+  return `
+    <div class="pdf-feedback">
+      <h1>AI 이력서 피드백</h1>
+      <div class="feedback-content">
+        ${feedbackHtml}
+      </div>
+    </div>
+  `;
+}
+
+function getFeedbackPdfCssForResume() {
+  return `
+    .pdf-feedback {
+      width: 100%;
+      font-family: 'NanumGothic', sans-serif;
+    }
+    .pdf-feedback h1 {
+      font-size: 24pt;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .feedback-content {
+      font-size: 12pt;
+      line-height: 1.6;
+      color: #333;
+    }
+  `;
+}
+//미리보기
+function previewPdfFromAI() {
+  const feedbackArea = document.getElementById("feedbackArea");
+  if (!feedbackArea || feedbackArea.innerHTML.trim() === '' || feedbackArea.innerText.includes('출력될 공간')) {
+    alert("AI 피드백 결과가 없습니다. 먼저 피드백을 요청하세요.");
+    return;
+  }
+
+  const htmlContent = generateHtmlFromFeedbackForResume(feedbackArea.innerHTML);
+  const cssContent = getFeedbackPdfCssForResume();
+
+  const formData = new FormData();
+  formData.append("htmlContent", htmlContent);
+  formData.append("cssContent", cssContent);
+
+  fetch("/pdf/preview", {
+    method: "POST",
+    body: formData
+  })
+    .then(response => {
+      if (!response.ok) throw new Error("미리보기 요청 실패");
+      return response.blob();
+    })
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const pdfUrlWithZoom = url + "#zoom=75";
+      const width = 900, height = 700;
+      const left = (screen.width - width) / 2;
+      const top = (screen.height - height) / 2;
+      const windowFeatures = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`;
+      const previewWindow = window.open(pdfUrlWithZoom, "pdfPreview", windowFeatures);
+      if (!previewWindow) window.open(pdfUrlWithZoom, "_blank");
+    })
+    .catch(err => {
+      console.error("PDF 미리보기 오류:", err);
+      alert("PDF 미리보기 실패: " + err.message);
+    });
+}
+
+//다운로드
+function downloadPdfFromAI() {
+  const feedbackArea = document.getElementById("feedbackArea");
+  if (!feedbackArea || feedbackArea.innerHTML.trim() === '' || feedbackArea.innerText.includes('출력될 공간')) {
+    alert("AI 피드백 결과가 없습니다. 먼저 피드백을 요청하세요.");
+    return;
+  }
+
+  const htmlContent = generateHtmlFromFeedbackForResume(feedbackArea.innerHTML);
+  const cssContent = getFeedbackPdfCssForResume();
+
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "/pdf/download";
+  form.target = "_blank";
+  form.style.display = "none";
+
+  const htmlInput = document.createElement("input");
+  htmlInput.type = "hidden";
+  htmlInput.name = "htmlContent";
+  htmlInput.value = htmlContent;
+
+  const cssInput = document.createElement("input");
+  cssInput.type = "hidden";
+  cssInput.name = "cssContent";
+  cssInput.value = cssContent;
+
+  form.appendChild(htmlInput);
+  form.appendChild(cssInput);
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+}
+document.getElementById("previewPdfBtn")?.addEventListener("click", previewPdfFromAI);
+document.getElementById("downloadPdfBtn")?.addEventListener("click", downloadPdfFromAI);
+

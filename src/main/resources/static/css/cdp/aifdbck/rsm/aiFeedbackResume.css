@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+/* 기본 컨테이너 */
 .aifb-container {
 	padding: 60px 40px 40px;
 	border: 1px solid #858E96;
@@ -79,7 +80,7 @@
 .aifb-questions-wrapper, .aifb-feedback-area {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 20px;
 	white-space: pre-wrap;
 	font-family: 'Noto Sans KR';
 	font-size: 14px;
@@ -187,80 +188,43 @@ body {
 	padding: 0;
 }
 
-.answer-block {
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-	text-align: left;
-	padding: 0;
+/* ========================================= */
+/* resumeWriter.css 오버라이드 (이력서 내용 스타일) */
+/* ========================================= */
+.aifb-questions-wrapper .personal-info-form .section-header {
+    display: none;
 }
 
-.answer-block p {
-	margin: 0;
-	padding: 0;
-	white-space: pre-wrap;
-	line-height: 1.6;
-	font-size: 14px;
-	color: #333;
+.aifb-questions-wrapper .personal-info-form .form-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 40px;
 }
 
-.char-count {
-	text-align: right;
-	font-size: 12px;
-	color: #999;
-	margin-top: 4px;
+/* 편집 관련 버튼들 숨김 */
+.aifb-questions-wrapper #add-job,
+.aifb-questions-wrapper #add-skill,
+.aifb-questions-wrapper #photo-delete-btn,
+.aifb-questions-wrapper .btn-group,
+.aifb-questions-wrapper .load-button-group,
+.aifb-questions-wrapper .resume-title {
+    display: none;
 }
 
-.question-block {
-	display: flex;
-	flex-direction: row;
-	gap: 8px;
-	align-items: center;
-	font-size: 13px;
-	color: #666;
-	margin-bottom: 6px;
-	line-height: 1.5;
+/* 주소 검색 아이콘도 숨깁니다. */
+.aifb-questions-wrapper .icon-search {
+    display: none;
 }
 
-.question-number {
-	font-weight: bold;
-	color: #444;
+/* 필수 입력 표시(*), 오류 메시지 등도 숨깁니다. */
+.aifb-questions-wrapper .required-asterisk,
+.aifb-questions-wrapper .error-message {
+    display: none;
 }
 
-.question-text {
-	flex: 1;
-	white-space: pre-wrap;
-}
-
-.aifb-feedback-area {
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-	white-space: pre-wrap;
-	font-family: 'Noto Sans KR';
-	font-size: 14px;
-	color: #333;
-	line-height: 1.6;
-	padding: 0; /* 여백 초기화 */
-}
-
-.feedback-section {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	text-align: left;
-	padding: 0;
-	gap: 8px;
-}
-
-.feedback-section h4 {
-	margin: 0;
-	font-weight: bold;
-	font-size: 14px;
-	color: #444;
-}
-
-.feedback-section p {
-	margin: 0;
-	padding: 0;
+/* 이력서의 사진은 그대로 표시되도록 하고, 삭제 버튼만 숨깁니다. */
+.aifb-questions-wrapper .form-group.photo-group .photo-upload-area img {
+    display: block;
+    width: 100px;
+    height: 100px;
 }
