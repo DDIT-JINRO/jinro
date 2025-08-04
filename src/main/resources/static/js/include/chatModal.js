@@ -216,7 +216,16 @@ async function printFetchMessages(el) {
 	document.getElementById('chat-title').textContent=chatTitle;
 	// 채팅방 제목 띄워주기
 	document.querySelector('.chat-room-meta').style.display='flex';
-	// 스크롤
+
+	// active 활성화된 채팅방 있으면 지우기.
+	const activeRoom = document.querySelectorAll('.chat-room-entry.active');
+	if(activeRoom || activeRoom.length > 0){
+		activeRoom.forEach(room =>{
+			room.classList.remove('active');
+		})
+	}
+	// 클릭된 div active 활성화
+	el.classList.add('active');
 
     // 현재 채팅방 ID 업데이트
     currentChatRoomId = crId;	// 현재 보고있는 채팅방 변경
