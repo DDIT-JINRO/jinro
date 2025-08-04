@@ -46,10 +46,68 @@ public interface StudyGroupService {
 	 * @return
 	 */
 	StdBoardVO selectStudyGroupDetail(int stdGroupId);
-	
+
 	/**
 	 * 지역코드 맵 불러오기
 	 * @return
 	 */
 	Map<String, String> getRegionMap();
+
+	/**
+	 * 조회수 증가
+	 * @param stdBoardVO
+	 */
+	void increaseViewCnt(int stdGroupId);
+
+	/**
+	 * 단일 댓글 선택
+	 * 댓글생성 비동기 요청 insert 후 회원정보 등을 포함해서 돌려주기 위함
+	 * @param replyId
+	 * @return
+	 */
+	StdReplyVO selectReplyDetail(int replyId);
+
+	/**
+	 * 댓글 삽입 후 삽입된 댓글 조회해서 반환
+	 * 삽입 실패하면 null 반환
+	 * @param stdReplyVO
+	 * @return
+	 */
+	StdReplyVO insertReply(StdReplyVO stdReplyVO);
+
+	/**
+	 * 댓글 삭제. 회원번호 까지 확인함
+	 * @param stdReplyVO
+	 * @return
+	 */
+	boolean deleteReply(StdReplyVO stdReplyVO);
+
+	/**
+	 * 스터디그룹 게시글 삭제 -> 채팅방 삭제 -> 채팅멤버 전체 삭제
+	 * 3단계 모두 update 처리
+	 * map : crId, memId, boardId
+	 * @param stdBoardVO
+	 * @return
+	 */
+	boolean deleteStdBoard(Map<String, Object> map);
+
+	/**
+	 * 댓글 수정 replyId, memId, replyContent 필요
+	 * @param stdReplyVO
+	 * @return
+	 */
+	boolean updateStdReply(StdReplyVO stdReplyVO);
+
+	/**
+	 * 스터디그룹 게시글 수정, 내부에서 채팅방 같이 수정
+	 * 필요파라미터5<br/>
+	 * boardTitle<br/>
+	 * boardContent<br/>
+	 * boardId<br/>
+	 * memId<br/>
+	 * ccId<br/>
+	 * @param stdBoardVO
+	 * @return boardId. 수정된 게시글 번호를 반환합니다
+	 */
+	int updateStdBoard(StdBoardVO stdBoardVO);
 }

@@ -11,9 +11,9 @@
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-item"><a href="/rsm/rsm">이력서</a></div>
-		<div class="channel-sub-section-item"><a href="/sint/qestnlst">자기소개서</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/imtintrvw/bsintrvw">모의면접</a></div>
+		<div class="channel-sub-section-item"><a href="/cdp/rsm/rsm/resumeList.do">이력서</a></div>
+		<div class="channel-sub-section-item"><a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a></div>
 		<div class="channel-sub-section-item"><a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a></div>
 	</div>
 </section>
@@ -21,16 +21,16 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <a class="tab" href="/imtintrvw/bsintrvw">면접의 기본</a>
-		    <a class="tab" href="/imtintrvw/intrvwqestnlst">면접 질문 리스트</a>
-		    <a class="tab" href="/imtintrvw/intrvwqestnmn">면접 질문 관리</a>
-		    <a class="tab active" href="/imtintrvw/aiimtintrvw">AI 모의 면접</a>
+		    <a class="tab" href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">면접의 기본</a>
+		    <a class="tab" href="/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do">면접 질문 리스트</a>
+		    <a class="tab" href="/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do">면접 질문 관리</a>
+		    <a class="tab active" href="/cdp/imtintrvw/aiimtintrvw/aiImitationInterview.do">AI 모의 면접</a>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
   			AI모의 면접
   			</br></br></br></br>
-  			<a href="/imtintrvw/aiimtintrvw/detail.do">AI모의면접 디테일</a>
+  			<a href="/cdp/imtintrvw/aiimtintrvw/detail.do">AI모의면접 디테일</a>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>

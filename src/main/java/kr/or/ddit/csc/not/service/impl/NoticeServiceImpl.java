@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.csc.not.service.NoticeService;
 import kr.or.ddit.csc.not.service.NoticeVO;
@@ -35,7 +36,6 @@ public class NoticeServiceImpl implements NoticeService {
 		return this.noticeMapper.getList(map);
 	}
 
-	// 수정 후
 	// 1. 사용자 목록 조회
 	@Override
 	public ArticlePage<NoticeVO> getUserNoticePage(int currentPage, int size, String keyword) {
@@ -112,13 +112,12 @@ public class NoticeServiceImpl implements NoticeService {
 	public NoticeVO getAdminNoticeDetail(String noticeIdStr) {
 
 		int noticeId = Integer.parseInt(noticeIdStr);
-
 		// 게시글 상세 조회
 		NoticeVO noticeDetail = noticeMapper.getNoticeDetail(noticeId);
 
 		// 파일 불러오기
 		List<FileDetailVO> getFileList = fileService.getFileList(noticeDetail.getFileGroupNo());
-		if (getFileList != null && getFileList.size() > 0) {
+		if (getFileList != null) {
 			noticeDetail.setGetFileList(getFileList);
 		}
 
@@ -128,52 +127,73 @@ public class NoticeServiceImpl implements NoticeService {
 	// 5. 관리자 공지사항 등록
 	@Override
 	@Transactional
-	public int insertNotice(NoticeVO noticeVo) {		
-		// 첨부파일이 있는 경우
-		if(!noticeVo.getFiles().isEmpty()) {
-			// 파일 그룹 생성
-			Long createFileGroupId = fileService.createFileGroup();
-			noticeVo.setFileGroupNo(createFileGroupId);
+	public int insertNotice(NoticeVO noticeVo) {
+		
+		// 실제로 첨부된 유효한 파일만 필터링
+		List<MultipartFile> validFiles = noticeVo.getFiles().stream()
+			.filter(file -> file != null && !file.isEmpty() && file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank())
+			.toList();
+		
+		// 파일이 있을 경우에만 업로드 처리
+		if (!validFiles.isEmpty()) {
 			
-			// 첨부파일 추가
-	        try {
-				fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			log.info("파일 업롣");
+			
+		    // 파일 그룹 ID 생성
+			noticeVo.setFileGroupNo(fileService.createFileGroup());
+
+		    // 파일 업로드
+		    try {
+		        fileService.uploadFiles(noticeVo.getFileGroupNo(), validFiles);
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+		} else {
+			// 파일 그룹 오류 해결
+			noticeVo.setFileGroupNo(0L);
 		}
 		
-		// 공지사항 등록
-		int result = this.noticeMapper.insertNotice(noticeVo);
-
-		return result;
+		return noticeMapper.insertNotice(noticeVo);
 	}
 
 	// 6. 공지사항 수정
 	@Override
 	@Transactional
 	public int updateNotice(NoticeVO noticeVo) {
-		// 공지사항 수정
-	    int result = noticeMapper.updateNotice(noticeVo);
-	    
-        // 첨부파일이 없던 공지사항의 경우 파일그룹 생성
-	    if(noticeVo.getFileGroupNo() == null) {
-        	Long newGroupId = fileService.createFileGroup();
-        	noticeVo.setFileGroupNo(newGroupId);
-        	
-        	// 공지사항 테이블에 FILE_GROUP_NO 업데이트
-        	noticeMapper.updateNoticeFileGroup(noticeVo.getNoticeId(), newGroupId);
-        } 
-    	
-	    // 첨부파일 추가
-        try {
-			fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		// 실제 첨부된 유효한 파일만 필터링
+		List<MultipartFile> validFiles = noticeVo.getFiles().stream().filter(file -> file != null && !file.isEmpty()
+				&& file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank()).toList();
+		
+		// 파일이 있을 경우
+		if (!validFiles.isEmpty()) {
+			log.info("파일이 있을 경우");
+
+			// 기존 파일이 있을 경우
+			if (noticeVo.getFileGroupNo() != null && noticeVo.getFileGroupNo() != 0L) {
+				// 파일 업로드
+				try {
+					fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				// 기존파일이 없을 경우
+				// 파일 그룹 ID 생성
+				noticeVo.setFileGroupNo(fileService.createFileGroup());
+
+				// 파일 업로드
+				try {
+					fileService.uploadFiles(noticeVo.getFileGroupNo(), noticeVo.getFiles());
+					noticeMapper.updateNoticeFileGroup(noticeVo.getNoticeId(), noticeVo.getFileGroupNo());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-	    return result;
+    	
+
+		return noticeMapper.updateNotice(noticeVo);
 	}
 
 

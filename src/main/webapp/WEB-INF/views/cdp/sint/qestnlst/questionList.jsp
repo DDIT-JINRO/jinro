@@ -16,13 +16,13 @@
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-item">
-			<a href="/rsm/rsm">이력서</a>
+			<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
 		</div>
 		<div class="channel-sub-section-itemIn">
-			<a href="/sint/qestnlst">자기소개서</a>
+			<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
 		</div>
 		<div class="channel-sub-section-item">
-			<a href="/imtintrvw/bsintrvw">모의면접</a>
+			<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a>
 		</div>
 		<div class="channel-sub-section-item">
 			<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>
@@ -33,14 +33,14 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-			<a class="tab active" href="/sint/qestnlst">질문 리스트</a> 
-			<a class="tab" href="/sint/sintlst">자기소개서 리스트</a> 
-			<a class="tab" href="/sint/sintwrt">자기소개서 작성</a>
+			<a class="tab active" href="/cdp/sint/qestnlst/questionList.do">질문 리스트</a> 
+			<a class="tab" href="/cdp/sint/sintlst/selfIntroList.do">자기소개서 리스트</a> 
+			<a class="tab" href="/cdp/sint/sintwrt/selfIntroWriting.do">자기소개서 작성</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
 			<div class="public-wrapper-main">
-				<form method="get" action="/sint/qestnlst">
+				<form method="get" action="/cdp/sint/qestnlst/questionList.do">
 					<div class="search-wrapper">
 						<input type="text" name="keyword" value="${articlePage.keyword}"
 							placeholder="질문 검색" class="search-input" />
@@ -72,7 +72,7 @@
 				</form>
 
 
-				<form id="cartForm" method="post" action="/sint/qestnlst/cart">
+				<form id="cartForm" method="post" action="/cdp/sint/qestnlst/cart">
 					<input type="hidden" id="questionIds" name="questionIds" />
 
 					<div class="question-list">
@@ -93,18 +93,8 @@
 					<!-- 오른쪽 패널 -->
 					<div class="cart-panel">
 						<div id="cartSidebar"></div>
-						<!-- 로그인된 사용자에게는 실제 장바구니 제출 버튼 -->
-						<sec:authorize access="isAuthenticated()">
-							<button type="button" onclick="submitCartForm()">자기소개서
+							<button type="button" class="submitCartForm" >자기소개서
 								작성</button>
-						</sec:authorize>
-
-						<!-- 익명(비로그인) 사용자에게는 로그인 페이지로 -->
-						<sec:authorize access="!isAuthenticated()">
-							<button type="button"
-								onclick="location.href='${pageContext.request.contextPath}/login?'">
-								로그인 후 작성</button>
-						</sec:authorize>
 					</div>
 				</form>
 

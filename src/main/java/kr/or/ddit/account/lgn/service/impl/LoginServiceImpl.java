@@ -63,8 +63,9 @@ public class LoginServiceImpl implements LoginService {
 					resultMap.put("status", "delRequest");
 					return resultMap;
 				} else {
+					
 					MemberPenaltyVO pntStat = loginMapper.selectMemPnt(resMemVO.getMemId());
-
+					
 					resultMap.put("mpWarnReason", pntStat.getMpWarnReason());
 					resultMap.put("mpCompleteAt", pntStat.getMpCompleteAt());
 					resultMap.put("status", "suspend");
@@ -92,7 +93,8 @@ public class LoginServiceImpl implements LoginService {
 				} else {
 					log.info("리프레쉬 토큰 db 저장 중 에러 발생");
 				}
-
+				
+				resultMap.put("memId", memId);
 				resultMap.put("status", "success");
 				resultMap.put("accessToken", accessToken);
 				resultMap.put("refreshToken", refreshToken);
@@ -147,7 +149,8 @@ public class LoginServiceImpl implements LoginService {
 			} else {
 				log.info("리프레쉬 토큰 db 저장 중 에러 발생");
 			}
-
+			
+			resultMap.put("memId", memId);
 			resultMap.put("status", "success");
 			resultMap.put("accessToken", accessToken);
 			resultMap.put("refreshToken", refreshToken);
@@ -184,7 +187,8 @@ public class LoginServiceImpl implements LoginService {
 				} else {
 					log.info("리프레쉬 토큰 db 저장 중 에러 발생");
 				}
-
+				
+				resultMap.put("memId", memId);
 				resultMap.put("status", "success");
 				resultMap.put("accessToken", accessToken);
 				resultMap.put("refreshToken", refreshToken);
@@ -220,7 +224,8 @@ public class LoginServiceImpl implements LoginService {
 			} else {
 				log.info("리프레쉬 토큰 db 저장 중 에러 발생");
 			}
-
+			
+			resultMap.put("memId", memId);
 			resultMap.put("status", "success");
 			resultMap.put("accessToken", accessToken);
 			resultMap.put("refreshToken", refreshToken);
@@ -257,7 +262,8 @@ public class LoginServiceImpl implements LoginService {
 				} else {
 					log.info("리프레쉬 토큰 db 저장 중 에러 발생");
 				}
-
+				
+				resultMap.put("memId", memId);
 				resultMap.put("status", "success");
 				resultMap.put("accessToken", accessToken);
 				resultMap.put("refreshToken", refreshToken);
@@ -286,6 +292,8 @@ public class LoginServiceImpl implements LoginService {
 		// TODO Auto-generated method stub
 		return loginMapper.insertEncodePass(memVO);
 	}
+
+	
 
 	
 }

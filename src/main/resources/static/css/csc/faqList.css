@@ -1,0 +1,199 @@
+@charset "UTF-8";
+
+/* FAQ 제목 영역 */
+.faq-title {
+	font-size: 28px;
+	font-weight: bold;
+	color: #222;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+/* FAQ 아코디언 리스트 */
+.faq-list {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+/* 각 FAQ 아이템 */
+.faq-item {
+	background-color: #fff;
+	border: 1px solid #e0e6ed;
+	border-radius: 12px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+	overflow: hidden;
+}
+
+/* 질문 버튼 */
+.faq-question {
+	padding: 20px 24px;
+	font-size: 16px;
+	font-weight: bold;
+	background: white;
+	color: #333;
+	border: none;
+	outline: none;
+	width: 100%;
+	text-align: left;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+}
+
+/* 펼칠 답변 영역 */
+.faq-answer {
+	max-height: 0;
+	overflow: hidden;
+	padding: 0 24px;
+	background: white;
+	color: black;
+	font-size: 15px;
+	line-height: 1.6;
+	transition: all 0.3s ease;
+}
+
+.faq-answer.active {
+	padding: 16px 24px;
+	max-height: 300px;
+}
+
+/* 화살표 */
+.arrow {
+	font-size: 16px;
+	color: #888;
+	transition: transform 0.3s;
+}
+
+/* 아이콘과 텍스트 정렬용 */
+.faq-icon-title {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.faq-icon {
+	width: 20px;
+	height: 20px;
+	background-color: #e0f2ff;
+	color: #3a8dff;
+	border-radius: 50%;
+	font-size: 13px;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.faq-title-text {
+	font-weight: bold;
+	color: #222;
+}
+/* 검색창 */
+.com-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    /* 우측 구분선 */
+    border-right: 2px solid #e5e7eb;
+}
+
+/* 검색창 select 박스 스타일 */
+.com-status-filter {
+    /* 기본 select 스타일 초기화 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0 36px 0 16px; /* 오른쪽 패딩으로 화살표 공간 확보 */
+    font-size: 1rem;
+    color: #4b5563;
+    cursor: pointer;
+    height: 100%;
+}
+.com-status-filter:focus {
+    outline: none;
+}
+/* IE 브라우저용 화살표 숨기기 */
+.com-status-filter::-ms-expand {
+    display: none;
+}
+
+/* 커스텀 화살표 아이콘 */
+.com-select-arrow {
+    position: absolute;
+    right: 12px;
+    width: 20px;
+    height: 20px;
+    color: #6b7280;
+    pointer-events: none; /* 화살표가 select 클릭을 방해하지 않도록 */
+}
+
+/* 1. 기본 검색창 스타일 */
+.com-default-search {
+    display: flex;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background-color: #fff;
+}
+
+.com-default-search input {
+    width: 100%;
+    border: none;
+    padding: 12px 16px;
+    font-size: 1rem;
+}
+
+.com-default-search input:focus {
+    outline: none;
+}
+
+.com-default-search .com-search-btn {
+    background: none;
+    border: none;
+    padding: 0 16px;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+
+/* FAQ 파일 다운로드 영역 */
+.faq-file {
+	width: 96%;
+	background: white;
+	border: 2px solid #e0e6ed;
+	border-radius: 8px;
+	padding: 14px 20px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 15px;
+	margin-top: auto;
+}
+
+/* 다운로드 텍스트 */
+.faq-file span {
+	font-weight: 500;
+	color: #1d4ed8;
+}
+
+/* 파일 항목 */
+.file-item {
+	background-color: white;
+	padding: 6px 12px;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+	color: #2563eb;
+	font-size: 13px;
+}
+
+.file-item:hover {
+	color: #0056b3;
+}

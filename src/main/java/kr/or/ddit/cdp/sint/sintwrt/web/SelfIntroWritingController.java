@@ -20,7 +20,7 @@ import kr.or.ddit.cdp.sint.service.SelfIntroVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/sint/sintwrt")
+@RequestMapping("/cdp/sint/sintwrt")
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class SelfIntroWritingController {
 
 	private final SelfIntroService selfIntroService;
 
-	@GetMapping()
+	@GetMapping("/selfIntroWriting.do")
 	public String showSelfIntroWrite(@RequestParam(value = "siId", required = false) String siId, Model model,
 			Principal principal) {
 
@@ -121,20 +121,18 @@ public class SelfIntroWritingController {
 			selfIntroService.updateContent(siqIdList, qToSicId, sicContentList);
 		}
 
-		return "redirect:/sint/sintlst";
+		return "redirect:/cdp/sint/sintlst/selfIntroList.do";
 	}
 
 	@PostMapping("/delete.do")
 	public String selfIntroDelete(@RequestParam(required = true) String siId) {
-		log.info("asd");
-
 		SelfIntroVO selfIntroVO = new SelfIntroVO();
 		selfIntroVO.setSiId(Integer.parseInt(siId));
 
 		// 자소서 전체 삭제
 		selfIntroService.deleteSelfIntro(selfIntroVO);
 
-		return "redirect:/sint/sintlst";
+		return "redirect:/cdp/sint/sintlst/selfIntroList.do";
 	}
 
 }

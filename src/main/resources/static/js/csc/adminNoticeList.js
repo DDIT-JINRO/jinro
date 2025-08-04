@@ -129,7 +129,7 @@ waitForInit();
 
 function showDetail(noticeId) {
 	if (!noticeId) return;
-
+	resetDetail();
 	axios.get('csc/not/admin/noticeDetail.do', { params: { noticeId } })
 		.then(response => {
 			window.currentNoticeId = noticeId;
@@ -155,6 +155,7 @@ function showDetail(noticeId) {
 			const ul = document.getElementById("existing-files");
 			if (!resp.getFileList || resp.getFileList.length === 0) {
 				ul.innerHTML = '<li>첨부된 파일이 없습니다.</li>';
+				document.getElementById("file").style.display = "block";
 			} else {
 				document.getElementById('fileGroupNo').value = resp.getFileList[0].fileGroupId;
 				document.getElementById("file").style.display = "block";
@@ -200,6 +201,7 @@ function deleteExistingFile(fileGroupId, seq, noticeId) {
 
 
 function resetDetail() {
+	document.getElementById('fileGroupNo').value = '';
 	document.getElementById("btn-delete").style.display = "none";
 	document.getElementById("file").style.display = "none";
 	document.getElementById("existing-files").innerHTML = "";
@@ -214,12 +216,12 @@ function resetDetail() {
 function insertOrUpdate() {
 	const form = document.getElementById('form-data');
 	const fd = new FormData(form);
-	
-	
-	
+
 	fd.set('noticeContent', window.editor?.getData() || '');
 
 	if (document.querySelector('.info-table').style.display === 'none') {
+
+		
 		axios.post('/csc/not/admin/insertNotice', fd)
 			.then(() => {
 				resetDetail();

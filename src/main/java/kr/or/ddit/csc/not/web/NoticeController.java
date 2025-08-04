@@ -81,7 +81,7 @@ public class NoticeController {
 	@ResponseBody
 	@PostMapping(value = "/admin/insertNotice", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public int insertNotice(@ModelAttribute NoticeVO noticeVo) {
-	
+		log.info(noticeVo.toString()+"");
 		return noticeService.insertNotice(noticeVo);
 	}
 	

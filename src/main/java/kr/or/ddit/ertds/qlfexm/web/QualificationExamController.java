@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/qlfexm")
+@RequestMapping("/ertds")
 @Controller
 @Slf4j
 public class QualificationExamController {
 
 	// 검정고시
-	@GetMapping("/selectQlfexmList.do")
+	@GetMapping("/qlfexm/selectQlfexmList.do")
 	public String qlfexmListPage() {
 
 		return "ertds/qlfexm/list"; // /WEB-INF/views/erds/qlfexm/list.jsp

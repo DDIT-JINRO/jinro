@@ -1,0 +1,35 @@
+package kr.or.ddit.admin.las.web;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import kr.or.ddit.admin.las.service.VisitLogService;
+
+@Controller
+@RequestMapping("/admin")
+public class VisitLogController {
+	
+	@Autowired
+	VisitLogService visitLogService;
+	
+	@PostMapping("/las/roadMapVisitLog.do")
+	public void roadMapVisitLog(@AuthenticationPrincipal String memId) {
+		visitLogService.insertPageLog(memId, "로드맵", "/roadmap", null);
+	}
+	
+	@PostMapping("/las/worldCupVisitLog.do")
+	public void worldCupVisitLog(@AuthenticationPrincipal String memId) {
+		visitLogService.insertPageLog(memId, "월드컵", "/worldcup", null);
+	}
+	
+	@PostMapping("/las/chatVisitLog.do")
+	public void chatVisitLog(@AuthenticationPrincipal String memId) {
+		visitLogService.insertPageLog(memId, "채팅", "/chat", null);
+	}
+	
+	
+	
+}

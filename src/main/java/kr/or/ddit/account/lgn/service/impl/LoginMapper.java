@@ -43,5 +43,9 @@ public interface LoginMapper {
 	public MemberVO validateUser(MemberVO inputMem);
 
 	public int insertEncodePass(MemberVO memVO);
+
+	public void insertLoginLog(int intMemId);
+
+	public void insertLogoutLog(int intMemId);
 	
 }

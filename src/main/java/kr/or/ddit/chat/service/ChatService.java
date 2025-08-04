@@ -91,4 +91,26 @@ public interface ChatService {
 	 */
 	boolean isEntered(int crId, String memIdStr);
 
+	/**
+	 * 채팅방 삭제 처리
+	 * @param chatRoomVO
+	 * @return
+	 */
+	int deleteChatRoom(ChatRoomVO chatRoomVO);
+
+
+	/**
+	 * 채팅방 정보만 조회
+	 * @param crId
+	 * @return
+	 */
+	ChatRoomVO selectChatRoom(int crId);
+
+	/**
+	 * 채팅방 정보 수정
+	 * 입장인원 제한 등의 로직은 화면단에서 수행
+	 * @param chatRoomVO
+	 * @return
+	 */
+	int updateChatRoom(ChatRoomVO chatRoomVO);
 }

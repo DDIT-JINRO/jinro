@@ -40,7 +40,7 @@ public class EmailService {
     		String htmlContent = "<div style='font-family:sans-serif;'>"
     		        + "<h3>커리어패스 임시 비밀번호 발급 안내</h3>"
     		        + "<p>아래 버튼을 눌러 임시 비밀번호를 발급받으세요.</p><br/>"
-    		        + "<a href='http://localhost:8080/lgn/reissuePwPage.do?email=" + toEmail + "' style='"
+    		        + "<a href='http://localhost/lgn/reissuePwPage.do?email=" + toEmail + "' style='"
     		        + "display: inline-block; padding: 10px 20px; background-color: rgb(120, 129, 245); color: white; "
     		        + "text-decoration: none; border-radius: 5px;'>임시 비밀번호 발급</a>"
     		        + "</div>";

@@ -14,7 +14,7 @@
 			NOTICE_ID IS NOT NULL
 			AND NOTICE_DEL_YN = 'N'
 			<if test="keyword != null and keyword != ''">
-				AND NOTICE_CONTENT LIKE '%' || #{keyword} || '%'
+				AND NOTICE_TITLE LIKE '%' || #{keyword} || '%'
 			</if>
 			<if test="status != null and status!= '선택하세요.'">
 				AND TO_CHAR(NOTICE_UPDATED_AT, 'YYYY') = #{status}
@@ -59,8 +59,8 @@
 		NOTICE_DEL_YN, NOTICE_CNT, NOTICE_CREATED_AT, FILE_GROUP_NO
 		)
 		VALUES (
-		(SELECT NVL(MAX(NOTICE_ID),0) + 1 FROM NOTICE),
-		#{noticeTitle},
+		(SELECT NVL(MAX(NOTICE_ID), 0) + 1 FROM NOTICE),
+		#{noticeTitle},	
 		#{noticeContent},
 		'N',
 		0,

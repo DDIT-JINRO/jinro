@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
 	const selectedFiltersContainer = document.getElementById('selected-filters');
 
+	restoreFiltersFromUrl();
+
 
 	// 체크박스를 클릭할 때마다 필터 조건을 업데이트
 	filterCheckboxes.forEach(function(checkbox) {
@@ -56,23 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	});
 
-	document.querySelectorAll('.filter-checkbox').forEach(cb => {
-		const parent = cb.closest('.filter-item');
-		// 초기 체크 상태 반영 (수정 검색 등)
-		if (cb.checked) {
-			parent.classList.add('checked');
-		}
-
-		cb.addEventListener('change', () => {
-			if (cb.checked) {
-				parent.classList.add('checked');
-			} else {
-				parent.classList.remove('checked');
-			}
-		});
-	});
-
-
 	// 필터를 선택했을 때, 필터 조건에 추가
 	function addFilterToConditions(name, id) {
 		const filterItem = document.createElement('span');
@@ -80,6 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		filterItem.setAttribute('data-id', id);
 		filterItem.innerHTML = `${name} <span class="remove-filter" onclick="removeFilter('${id}')">×</span>`;
 		selectedFiltersContainer.appendChild(filterItem);
+		
+		// ✅ 해당하는 체크박스의 부모 .filter-item에 'checked' 클래스 추가
+        const checkbox = document.querySelector(`.filter-checkbox[data-id="${id}"]`);
+        if (checkbox) {
+            const parent = checkbox.closest('.filter-item');
+            if (parent) {
+                parent.classList.add('checked');
+            }
+        }
 	}
 
 	// 필터를 제거할 때, 필터 조건에서 삭제
@@ -100,6 +94,49 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}
 	}
+	
+	function restoreFiltersFromUrl() {
+	        const urlParams = new URLSearchParams(window.location.search);
+	        const selectedJobFilters = urlParams.getAll('siqJobFilter');
+
+	        const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
+
+	        if (selectedJobFilters.length > 0) {
+	            filterCheckboxes.forEach(checkbox => {
+	                // URL 파라미터에 현재 체크박스의 value 값 (id)이 포함되어 있다면
+	                if (selectedJobFilters.includes(checkbox.value)) {
+	                    checkbox.checked = true; // 실제 체크박스 상태를 'checked'로 만듦
+
+	                    // '선택된 필터' 영역에 태그를 추가하고 상단 필터에 'checked' 클래스를 적용
+	                    // addFilterToConditions 함수가 이 두 가지 작업을 모두 수행하도록 수정했으므로 호출합니다.
+	                    addFilterToConditions(checkbox.dataset.name, checkbox.dataset.id);
+	                }
+	            });
+	        }
+	    }
+	
+	const submitCart = document.querySelector(".submitCartForm");
+	
+	if(!memId || memId =='anonymousUser'){
+		if (submitCart) { // 버튼이 존재하는지 확인 (에러 방지)
+		    submitCart.textContent = '로그인 하러 가기';
+			submitCart.addEventListener('click', function(){
+				window.location.href = '/login';
+			});
+		  }
+	}else
+	
+	// 6) 폼 제출
+	submitCart.addEventListener("click",function(){
+		
+		if (selectedQuestions.length === 0) {
+			alert('자기소개서 작성을 위해 질문을 선택해주세요.');
+			return;
+		}
+		// 필요하다면 여기서 sessionStorage.removeItem('selectedQuestions');
+		document.getElementById('cartForm').submit();
+		sessionStorage.clear();
+	}) 
 });
 
 // 2) 선택 토글 함수
@@ -171,13 +208,5 @@ function updateQuestionIdsInput() {
 		selectedQuestions.map(q => q.id).join(',');
 }
 
-// 6) 폼 제출
-function submitCartForm() {
-	if (selectedQuestions.length === 0) {
-		alert('자기소개서 작성을 위해 질문을 선택해주세요.');
-		return;
-	}
-	// 필요하다면 여기서 sessionStorage.removeItem('selectedQuestions');
-	document.getElementById('cartForm').submit();
-	sessionStorage.clear();
-}
+
+

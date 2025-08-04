@@ -1,7 +1,6 @@
 @charset "UTF-8";
-/* 이미지에서 추출한 CSS 속성들을 기반으로 스타일을 정의합니다. */
+
 .aifb-container {
-	/* 기존 padding 및 border 유지 */
 	padding: 60px 40px 40px;
 	border: 1px solid #858E96;
 	border-radius: 5px;
@@ -21,8 +20,7 @@
 	color: #000000;
 }
 
-/* 자기소개서 목록 드롭다운 */
-.self-intro-select {
+.self-intro-select, .resume-select {
 	width: 100%;
 	padding: 15px 14px;
 	border: 1px solid #D8D8D8;
@@ -32,7 +30,7 @@
 	color: #9D9D9D;
 	appearance: none;
 	background: #FFFFFF
-		url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none"><rect width="13" height="12" rx="1" fill="#D8D8D8" transform="matrix(1 0 0 -1 0 12)"/></svg>')
+		url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13' height='12' viewBox='0 0 13 12' fill='none'><rect width='13' height='12' rx='1' fill='%23D8D8D8'/></svg>")
 		no-repeat right 14px center;
 	background-size: 13px;
 	cursor: pointer;
@@ -42,14 +40,11 @@
 .aifb-content-wrapper {
 	display: flex;
 	flex-direction: row;
-	align-items: flex-start;
+	align-items: stretch;
 	gap: 20px;
 	width: 100%;
-	/* 양쪽 박스 높이를 맞추고 균형을 유지하도록 수정 */
-	align-items: stretch;
 }
 
-/* 각 섹션(자기소개서, AI 피드백)의 스타일 */
 .aifb-section, .aifb-feedback-wrapper {
 	flex: 1;
 	box-sizing: border-box;
@@ -59,7 +54,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	/* 최소 높이를 설정하여 내용이 적어도 레이아웃이 유지되도록 합니다. */
 	min-height: 500px;
 }
 
@@ -67,9 +61,10 @@
 	border-bottom: 2px solid #848EFB;
 	padding-bottom: 20px;
 	display: flex;
-	align-items: flex-end;
-	/* 상단 마진 제거 */
-	margin-top: 0;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
 }
 
 .aifb-section-header h2, .aifb-feedback-header h2 {
@@ -78,77 +73,62 @@
 	font-size: 24px;
 	color: #000000;
 	margin: 0;
+	white-space: nowrap;
 }
 
-.aifb-questions-wrapper {
+.aifb-questions-wrapper, .aifb-feedback-area {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
-}
-
-.aifb-question-item {
-	display: flex;
-	flex-direction: column;
-	gap: 15px;
-}
-
-.aifb-question-item h3 {
-	font-family: 'Noto Sans KR';
-	font-weight: 700;
-	font-size: 18px;
-	color: #000000;
-}
-
-.aifb-question-item textarea {
-	width: 100%;
-	min-height: 150px;
-	padding: 10px;
-	border: 1px solid #D8D8D8;
-	border-radius: 5px;
-	font-family: 'Noto Sans KR';
-	font-size: 14px;
-	line-height: 1.6;
-	resize: vertical;
-}
-
-.aifb-char-count {
-	font-family: 'Noto Sans KR';
-	font-weight: 500;
-	font-size: 14px;
-	color: #626262;
-	text-align: right;
-}
-
-.aifb-feedback-area {
-	min-height: 500px;
-	font-family: 'Noto Sans KR';
-	font-size: 14px;
-	line-height: 1.6;
+	gap: 4px;
 	white-space: pre-wrap;
+	font-family: 'Noto Sans KR';
+	font-size: 14px;
+	line-height: 1.6;
 }
 
-/* 버튼 스타일 */
-.aifb-button-wrapper {
+.feedback-section {
+	padding: 15px;
+	border-radius: 5px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+	transition: all 0.3s ease;
+	background-color: transparent;
+	border-left: none;
+	box-shadow: none;
+}
+
+.feedback-section:hover {
+	background-color: #f0f2ff;
+}
+
+.feedback-section h4 {
+	font-weight: 600;
+	font-size: 16px;
+	color: #222;
+	margin-bottom: 8px;
+}
+
+.aifb-button-group {
 	display: flex;
-	/* 버튼을 양쪽 끝으로 배치 */
-	justify-content: space-between;
+	gap: 10px;
 	align-items: center;
-	margin-top: 30px;
-	width: 100%;
-	box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
-	padding: 0 30px; /* 좌우 여백 추가 */
 }
 
 .aifb-button {
-	padding: 15px 30px;
+	padding: 10px 18px;
 	font-family: 'IBM Plex Sans KR';
 	font-weight: 600;
-	font-size: 18px;
-	border-radius: 5px;
-	cursor: pointer;
+	font-size: 14px;
+	border-radius: 6px;
 	border: none;
-	/* 버튼 텍스트의 줄바꿈 방지 */
+	cursor: pointer;
+	background-color: #5a57f0;
+	color: white;
+	transition: background-color 0.2s ease;
 	white-space: nowrap;
+}
+
+.aifb-button:hover {
+	background-color: #3e3bdb;
 }
 
 .aifb-button.back {
@@ -161,10 +141,9 @@
 	color: #FFFFFF;
 }
 
-/* 탭 메뉴 스타일 */
 .tab-container .tab {
 	position: relative;
-	padding: 0px 58px;
+	padding: 0 58px;
 	height: 69px;
 	display: flex;
 	align-items: center;
@@ -193,149 +172,95 @@
 	background: #848EFB;
 }
 
-/* body에 여백이 있을 경우 제거 */
+.aifb-footer-wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 30px;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0;
+}
+
 body {
 	margin: 0;
 	padding: 0;
 }
-/* 답변 블록에 relative 포지션 적용 */
+
 .answer-block {
-	position: relative;
-	padding-bottom: 20px; /* 글자수 정보가 겹치지 않도록 아래쪽에 여백 추가 */
-}
-
-/* 글자수 정보를 오른쪽에 배치 */
-.char-count {
-	position: absolute;
-	bottom: 5px; /* 아래쪽에서 5px 떨어진 위치에 배치 */
-	right: 5px; /* 오른쪽에서 5px 떨어진 위치에 배치 */
-	font-size: 12px;
-	color: #888;
-}
-
-/* AI 피드백 영역 내 제목 및 단락 스타일 */
-.aifb-feedback-area h3 {
-	font-family: 'Noto Sans KR', sans-serif;
-	font-weight: 700;
-	font-size: 20px;
-	color: #333;
-	border-bottom: 2px solid #848EFB;
-	padding-bottom: 8px;
-	margin-top: 30px;
-	margin-bottom: 15px;
-}
-
-.aifb-feedback-area h4 {
-	font-family: 'Noto Sans KR', sans-serif;
-	font-weight: 600;
-	font-size: 18px;
-	color: #1a1a1a;
-	margin-top: 25px;
-	margin-bottom: 10px;
-}
-
-.aifb-feedback-area h5 {
-	font-family: 'Noto Sans KR', sans-serif;
-	font-weight: 500;
-	font-size: 16px;
-	color: #555;
-	margin-top: 15px;
-	margin-bottom: 5px;
-}
-
-
-/* 굵은 글씨 (Strong) 스타일 */
-.aifb-feedback-area strong {
-	font-weight: 700;
-	color: #000;
-}
-
-/* 각 상세 피드백 항목 컨테이너 스타일 */
-.feedback-item {
-	border-left: 3px solid #848EFB; /* 피드백 항목을 구분하는 라인 */
-	background-color: #f9faff;
-	padding: 15px;
-	margin-bottom: 15px;
-	border-radius: 5px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-	transition: all 0.3s ease;
-}
-
-.feedback-item:hover {
-	background-color: #f0f2ff;
-}
-
-/* 섹션 구분선 */
-.aifb-feedback-area hr {
-	border: 0;
-	border-top: 1px dashed #ddd;
-	margin: 20px 0;
-}
-
-.feedback-block {
-	padding: 6px 0;
-	background-color: transparent;
-	margin: 0 0 10px;
-	border-radius: 0;
-	margin-bottom: 0; /* margin 제거 */
-}
-
-.feedback-title h4 {
-	margin: 0 !important;
- 	margin-bottom: 5px !important;  /* 너무 붙지 않게 약간 여유 */
-	font-size: 16px;
-	font-weight: 600;
-	color: #222;
-}
-.qa-block {
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-	padding: 15px;
-	border-radius: 10px;
-	border: 1px solid transparent;
-	margin-bottom: 0 !important;
-}
-
-.question-block {
-	font-family: 'Noto Sans KR';
-	font-weight: 600;
-	font-size: 16px;
-	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	text-align: left;
+	padding: 0;
 }
 
 .answer-block p {
-	font-family: 'Noto Sans KR';
-	font-size: 14px;
+	margin: 0;
+	padding: 0;
+	white-space: pre-wrap;
 	line-height: 1.6;
-	color: #666;
-	margin-bottom: 5px;
-	padding-left: 10px;
+	font-size: 14px;
+	color: #333;
 }
 
-.aifb-questions-wrapper, .aifb-feedback-area {
+.char-count {
+	text-align: right;
+	font-size: 12px;
+	color: #999;
+	margin-top: 4px;
+}
+
+.question-block {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	align-items: center;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 6px;
+	line-height: 1.5;
+}
+
+.question-number {
+	font-weight: bold;
+	color: #444;
+}
+
+.question-text {
+	flex: 1;
+	white-space: pre-wrap;
+}
+
+.aifb-feedback-area {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 24px;
+	white-space: pre-wrap;
+	font-family: 'Noto Sans KR';
+	font-size: 14px;
+	color: #333;
+	line-height: 1.6;
+	padding: 0; /* 여백 초기화 */
 }
 
-.aifb-section>.aifb-questions-wrapper, .aifb-feedback-wrapper>.aifb-feedback-area
-	{
-	padding-top: 0 !important;
-}
-.spinner-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100px;
-  flex-direction: column;
-  color: #555;
-  font-size: 14px;
+.feedback-section {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	text-align: left;
+	padding: 0;
+	gap: 8px;
 }
 
-.text-center {
-  text-align: center;
+.feedback-section h4 {
+	margin: 0;
+	font-weight: bold;
+	font-size: 14px;
+	color: #444;
 }
 
-.mt-2 {
-  margin-top: 0.5rem;
+.feedback-section p {
+	margin: 0;
+	padding: 0;
 }

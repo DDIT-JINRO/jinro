@@ -41,7 +41,6 @@ public class AiFeedbackSelfIntroController {
 		// SelfIntroListController와 동일한 SelfIntroVO를 사용
 		SelfIntroVO selfIntroVO = new SelfIntroVO();
 		selfIntroVO.setMemId(Integer.parseInt(memId));
-		// 이 페이지에서는 페이지네이션이 필요 없으므로 다른 파라미터는 설정하지 않습니다.
 
 		selfIntroVO.setCurrentPage(1); // 시작 번호
 		selfIntroVO.setSize(9999); // 충분히 큰 값으로 설정하여 모든 데이터를 가져옴
@@ -65,14 +64,11 @@ public class AiFeedbackSelfIntroController {
 	    // 1. 로그인 확인
 	    if (principal == null || principal.getName().equals("anonymousUser")) {
 	        // 인증 실패 시 적절한 응답 코드 반환
-	        log.error("유효하지 않은 memId로 요청이 들어왔습니다.");
 	        return null; // 또는 DTO에 에러 메시지를 담아 반환
 	    }
 	    int siIdInt = Integer.parseInt(siId);
 
-	    log.info("요청 파라미터 siId: {}", siId);
 	    String memId = principal.getName();
-	    log.info("Principal에서 가져온 memId: {}", memId);
 	    // 2. 서비스 로직을 통해 데이터 조회
 	    SelfIntroVO selfIntroVO = new SelfIntroVO();
 	    selfIntroVO.setSiId(siIdInt);

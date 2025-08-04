@@ -15,7 +15,7 @@ import kr.or.ddit.util.ArticlePage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/sint/sintlst")
+@RequestMapping("/cdp/sint/sintlst")
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class SelfIntroListController {
 
 	private final SelfIntroService selfIntroService;
 
-	@GetMapping()
+	@GetMapping("/selfIntroList.do")
 	public String selfIntroListPage(Principal principal, Model model, @RequestParam(required = false) String keyword,
 			@RequestParam(required = false) String status,
 			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
@@ -39,13 +39,13 @@ public class SelfIntroListController {
 			selfIntroVO.setKeyword(keyword);
 			selfIntroVO.setStatus(status);
 
+			int total = selfIntroService.selectSelfIntroTotalBymemId(selfIntroVO);
 			// 사용자 자소서 리스트 불러옴
 			List<SelfIntroVO> SelfIntroVOList = selfIntroService.selectSelfIntroBymemId(selfIntroVO);
 
-			ArticlePage<SelfIntroVO> articlePage = new ArticlePage<SelfIntroVO>(SelfIntroVOList.size(), currentPage, 5,
+			ArticlePage<SelfIntroVO> articlePage = new ArticlePage<SelfIntroVO>(total, currentPage, 5,
 					SelfIntroVOList, keyword);
-			log.info("list->articlePage : " + articlePage);
-			articlePage.setUrl("/sint/sintlst");
+			articlePage.setUrl("/cdp/sint/sintlst/selfIntroList.do");
 
 			model.addAttribute("articlePage", articlePage);
 

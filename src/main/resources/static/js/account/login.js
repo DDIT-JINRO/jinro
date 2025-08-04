@@ -4,7 +4,7 @@
 
 async function naverLogin(){
 	let CLIENT_ID = "";
-	const CALLBACK_URL = 'http://localhost:8080/lgn/naverCallback.do';	
+	const CALLBACK_URL = 'http://localhost/lgn/naverCallback.do';	
 	
 	await axios.post('/lgn/naverClientKey.do')
 	  .then(response => {
@@ -22,7 +22,7 @@ async function naverLogin(){
 	
 async function kakaoLogin() {
   let REST_API_KEY = "";
-  const REDIRECT_URI = 'http://localhost:8080/lgn/kakaoCallback.do';
+  const REDIRECT_URI = 'http://localhost/lgn/kakaoCallback.do';
 	
   await axios.post('/lgn/kakaoRestApiKey.do')
   	  .then(response => {

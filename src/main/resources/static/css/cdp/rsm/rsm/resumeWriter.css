@@ -1,0 +1,440 @@
+/* General Body and Container Styles */
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	line-height: 1.6;
+	color: #333;
+	margin: 0;
+	padding: 20px;
+	background-color: #f4f7f6;
+}
+
+.public-wrapper-main {
+	max-width: 900px;
+	margin: 20px auto;
+	padding: 30px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Section Styling */
+section {
+	margin-bottom: 30px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #eee;
+}
+
+section:last-of-type {
+	border-bottom: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.section-header, .JobWish-header, .Skills-header, .education-header,
+	.certificate-header, .Activities-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #007bff;
+	/* Primary color for section headers */
+}
+
+h2 {
+	color: #007bff;
+	font-size: 1.8em;
+	margin: 0;
+}
+
+.required-info {
+	color: #888;
+	font-size: 0.9em;
+}
+
+.required-asterisk {
+	color: red;
+	margin-left: 2px;
+}
+
+/* Form Group Layouts */
+.form-profile-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 20px;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+}
+
+.resume-title {
+	font-family: 'Noto Sans KR';
+	font-weight: 700;
+	color: #000;
+	margin-bottom: 32px;
+}
+
+/* Label and Input/Select Styles */
+label {
+	font-weight: 600;
+	margin-bottom: 8px;
+	color: #555;
+	display: block; /* Ensure label takes full width */
+}
+
+input[type="text"], input[type="email"], input[type="tel"], input[type="date"],
+	select {
+	width: 100%;
+	padding: 12px 15px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	font-size: 1em;
+	box-sizing: border-box;
+	/* Include padding and border in the element's total width and height */
+	transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
+	input[type="date"]:focus, select:focus {
+	border-color: #007bff;
+	outline: none;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.error-message {
+	color: #e74c3c;
+	font-size: 0.85em;
+	margin-top: 5px;
+	display: none; /* Hidden by default, show with JavaScript */
+}
+
+.address-group, .form-JobWish, .form-Skills, .form-Education,
+	.form-certificate, .certificate-input-container {
+	margin-bottom: 15px;
+}
+
+/* Specific Group Adjustments */
+.name-group, .email-group, .mobile-phone-group {
+	grid-column: span 1; /* These take one column */
+}
+
+.address-group {
+	grid-column: 1/-1; /* Address takes full width */
+}
+
+/* Photo Upload */
+.photo-group {
+	grid-column: span 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.photo-upload-area {
+	width: 150px;
+	height: 150px;
+	border: 2px dashed #ccc;
+	border-radius: 50%;
+	flex-direction: column; /* 항목들을 수직으로 쌓습니다. */
+	align-items: center; /* 가로(수평) 중앙 정렬합니다. */
+	justify-content: center; /* 세로(수직) 중앙 정렬합니다. */
+	cursor: pointer;
+	overflow: hidden;
+	position: relative;
+	background-color: #f9f9f9;
+}
+
+.photo-upload-area:hover {
+	border-color: #007bff;
+	background-color: #e9f5ff;
+}
+
+.photo-upload-area img#photo-preview {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+.upload-placeholder {
+	text-align: center;
+	color: #888;
+	display: flex; /* upload-placeholder도 플렉스 컨테이너로 만듭니다. */
+	flex-direction: column; /* 자식 요소들을 수직으로 쌓습니다. */
+	align-items: center; /* 자식 요소들을 가로 중앙에 정렬합니다. */
+	justify-content: center; /* 자식 요소들을 세로 중앙에 정렬합니다. */
+	height: 100%; /* 부모(photo-upload-area)의 전체 높이를 차지하도록 합니다. */
+	width: 100%; /* 부모(photo-upload-area)의 전체 너비를 차지하도록 합니다. */
+}
+
+.upload-placeholder i {
+	font-size: 2em;
+	margin-bottom: 5px;
+}
+
+.photo-delete-btn {
+	background-color: #e74c3c;
+	color: white;
+	border: none;
+	padding: 8px 15px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.9em;
+	margin-top: 10px;
+	transition: background-color 0.3s ease;
+}
+
+.photo-delete-btn:hover {
+	background-color: #c0392b;
+}
+
+/* Input with Icon (Address Search) */
+.input-with-icon {
+	position: relative;
+	width: 100%;
+}
+
+.input-with-icon input {
+	padding-right: 40px; /* Space for the icon */
+}
+
+.input-with-icon .icon-search {
+	position: absolute;
+	right: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #888;
+	cursor: pointer;
+	font-size: 1.1em;
+}
+
+/* Dynamic Input Groups (Job Wish, Skills, Education, Certificate, Activities) */
+.job-input-group, .skills-input-group, .education-input-container,
+	.certificate-input-container, .activities-input-container {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin-top: 15px;
+}
+
+.input-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.input-container input[type="text"], .input-container select {
+	flex-grow: 1; /* Allows the input/select to take available space */
+}
+
+/* Education specific adjustments */
+.education-input-group {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.education-input-group select {
+	flex-basis: 35%; /* Give select box a bit more width */
+}
+
+.education-input-group input {
+	flex-basis: 65%;
+}
+
+/* Button Groups */
+.btn-group {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 40px;
+	padding-top: 20px;
+	border-top: 1px solid #eee;
+	gap: 20px;
+}
+
+.btn-left-group, .btn-right-group {
+	display: flex;
+	gap: 10px;
+}
+
+button {
+	padding: 10px 15px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 0.9em;
+	font-weight: 600;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	white-space: nowrap; /* Prevent text wrapping on buttons */
+}
+
+.delete-button {
+	background-color: #ff6262;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 0.9rem;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+	background-color: #d9363e;
+}
+
+.btn-resume-delete {
+	background-color: #e74c3c;
+	color: white;
+}
+
+.btn-resume-delete:hover {
+	background-color: #c0392b;
+	transform: translateY(-2px);
+}
+
+#btn-submit-Temp {
+	background: transparent;
+	color: #666;
+	border: 1px solid #ccc;
+}
+
+#btn-submit-Temp:hover {
+	background: #e2e2e2;
+}
+
+.btn-preview {
+	background: #fff;
+	color: #5a3fdb;
+	border: 1px solid #5a3fdb;
+}
+
+.btn-preview:hover {
+	background: #717bfb;
+	color: #fff;
+}
+
+#btn-submit {
+	background: #717bfb;
+	color: #fff;
+}
+
+#btn-submit:hover {
+	background: #4a2fb8;
+}
+
+/* General Body and Container Styles (from previous CSS - keep as is) */
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	line-height: 1.6;
+	color: #333;
+	margin: 0;
+	padding: 20px;
+	background-color: #f4f7f6;
+}
+
+.public-wrapper-main {
+	max-width: 900px;
+	margin: 20px auto;
+	padding: 30px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	position: relative; /* 중요: 내부 absolute 요소의 기준점이 됩니다 */
+}
+
+/* --- 새로 추가되거나 수정될 load-button-group 관련 CSS --- */
+.load-button-group {
+	position: fixed; /* 절대 위치 지정 */
+	top: 20%; /* 상단에서 20px 떨어짐 */
+	right: 10%; /* 오른쪽에서 30px 떨어짐 (padding 고려) */
+	background-color: #f8f9fa; /* 배경색으로 구분 */
+	border: 1px solid #dee2e6; /* 테두리 추가 */
+	border-radius: 8px; /* 둥근 모서리 */
+	padding: 15px 20px; /* 내부 여백 */
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+	display: flex;
+	flex-direction: column; /* 버튼들을 세로로 정렬 */
+	gap: 10px; /* 버튼 사이 간격 */
+	align-items: flex-end; /* 버튼들을 오른쪽으로 정렬 */
+	z-index: 10; /* 다른 요소 위에 오도록 z-index 설정 */
+	min-width: 150px; /* 최소 너비 지정 */
+}
+
+.load-button-group::before { /* 장바구니/사진 같은 느낌을 위한 아이콘 또는 장식 */
+	content: "\f02d"; /* Font Awesome 책 아이콘 (자료를 불러오는 느낌) */
+	font-family: 'Font Awesome 6 Free'; /* Font Awesome 폰트 지정 */
+	font-weight: 900; /* Solid 아이콘을 위해 */
+	color: #6c75ff; /* 아이콘 색상 */
+	font-size: 1.5em; /* 아이콘 크기 */
+	margin-bottom: 10px; /* 아이콘과 버튼 사이 간격 */
+	text-align: center; /* 아이콘 중앙 정렬 */
+	width: 100%; /* 아이콘이 부모 너비를 차지하도록 */
+}
+
+.load-button-group button {
+	background-color: #6c75ff; /* 버튼 배경색 (회색 계열) */
+	color: white;
+	padding: 8px 15px; /* 버튼 패딩 */
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.9em;
+	font-weight: 500;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	width: 100%; /* 부모에 맞춰 너비 100% */
+	text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.load-button-group button:hover {
+	background-color: #5159ff; /* 호버 시 색상 변경 */
+	transform: translateY(-1px); /* 살짝 위로 이동 효과 */
+}
+
+/* 나머지 기존 CSS (form-group, input, button 등)는 그대로 유지됩니다. */
+
+/* Responsive Adjustments for load-button-group */
+@media ( max-width : 768px) {
+	.load-button-group {
+		position: static; /* 작은 화면에서는 정적 위치로 변경하여 흐름에 맞춤 */
+		margin-top: 20px; /*다른 요소와 간격 */
+		right: auto;
+		top: auto;
+		width: 90%; /* 화면 너비에 맞게 조정 */
+		max-width: 300px; /* 최대 너비 설정 */
+		margin-left: auto; /* 중앙 정렬 */
+		margin-right: auto; /* 중앙 정렬 */
+		flex-direction: row; /* 작은 화면에서는 가로로 정렬 */
+		flex-wrap: wrap; /* 필요하면 줄바꿈 */
+		justify-content: center; /* 중앙 정렬 */
+		padding: 15px;
+	}
+	.load-button-group::before {
+		display: none; /* 작은 화면에서는 아이콘 숨김 */
+	}
+	.load-button-group button {
+		width: auto; /* 자동으로 너비 조정 */
+		flex-grow: 1; /* 남는 공간 채우기 */
+	}
+}
+
+@media ( max-width : 480px) {
+	.load-button-group {
+		flex-direction: column; /* 더 작은 화면에서는 다시 세로로 */
+		width: 100%;
+		padding: 10px;
+	}
+	.load-button-group button {
+		width: 100%;
+	}
+}
+
+/* Utility Classes (e.g., for JS toggling) */
+.hidden {
+	display: none !important;
+}

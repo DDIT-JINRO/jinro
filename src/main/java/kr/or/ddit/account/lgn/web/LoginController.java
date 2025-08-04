@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.or.ddit.account.lgn.service.LoginLogService;
 import kr.or.ddit.account.lgn.service.LoginService;
 import kr.or.ddit.account.lgn.service.impl.ReissueMailService;
 import kr.or.ddit.config.jwt.JwtUtil;
@@ -29,6 +31,8 @@ public class LoginController {
 	
 	@Autowired
 	LoginService loginService;
+	@Autowired
+	LoginLogService loginLogService;
 	
 	@Autowired
 	JwtUtil jwtUtil;
@@ -138,6 +142,14 @@ public class LoginController {
 	    model.addAttribute("email", email);
 		
 		return "account/reissuePw";
+	}
+	
+	@GetMapping("/logoutProcess")
+	public String logoutProcess(@AuthenticationPrincipal String memId) {
+		
+		loginLogService.insertLogoutLog(memId);
+		
+		return "redirect:/logout";
 	}
 	
 }

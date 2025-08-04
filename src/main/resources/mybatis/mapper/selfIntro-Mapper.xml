@@ -22,9 +22,9 @@
             </where>
             ORDER BY SIQ_ID
         ) B
-        WHERE ROWNUM <![CDATA[<=]]> #{endRow}
+        WHERE ROWNUM <![CDATA[<]]> = #{endRow}
     )
-    WHERE RNUM <![CDATA[>=]]> #{startRow}
+    WHERE RNUM <![CDATA[>]]> #{startRow}
 </select>
 
 
@@ -205,7 +205,7 @@
 			) B
 		WHERE ROWNUM <![CDATA[<]]>= #{endNo}
 	)
-	WHERE RNUM<![CDATA[>]]>= #{startNo}
+	WHERE RNUM<![CDATA[>]]> #{startNo}
   </select>
 
 <delete id="deleteSelfIntro" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
@@ -217,4 +217,10 @@
 	DELETE FROM SELF_INTRO_CONTENT
 	WHERE SI_ID = #{siId}
 </delete>
+
+<select id="selectSelfIntroTotalBymemId" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO" resultType="int">
+	SELECT COUNT(*)
+	FROM SELF_INTRO
+	WHERE MEM_ID = #{memId}
+</select>
 </mapper>

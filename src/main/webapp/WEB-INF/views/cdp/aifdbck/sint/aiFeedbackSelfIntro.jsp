@@ -13,18 +13,10 @@
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-item">
-			<a href="/rsm/rsm">이력서</a>
-		</div>
-		<div class="channel-sub-section-item">
-			<a href="/sint/qestnlst">자기소개서</a>
-		</div>
-		<div class="channel-sub-section-item">
-			<a href="/imtintrvw/bsintrvw">모의면접</a>
-		</div>
-		<div class="channel-sub-section-itemIn">
-			<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>
-		</div>
+		<div class="channel-sub-section-item"><a href="/cdp/rsm/rsm/resumeList.do">이력서</a></div>
+		<div class="channel-sub-section-item"><a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a></div>
+		<div class="channel-sub-section-item"><a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>	</div>
 	</div>
 </section>
 <div>
@@ -52,23 +44,27 @@
 						<div class="aifb-section-header">
 							<h2>자기소개서</h2>
 						</div>
-						<div class="aifb-questions-wrapper" id="questionsWrapper">
-							자기소개서 내용이 출력될 공간입니다</div>
+						<div class="aifb-questions-wrapper" id="questionsWrapper">자기소개서 내용이 출력될 공간입니다</div>
 					</div>
 
 					<!-- AI 피드백 출력 영역 -->
 					<div class="aifb-feedback-wrapper">
 						<div class="aifb-feedback-header">
 							<h2>AI 피드백</h2>
+							<!-- 피드백 밑에 버튼 추가 -->
+							<div class="aifb-button-group">
+							  <button id="previewPdfBtn" class="aifb-button">미리보기</button>
+							  <button id="downloadPdfBtn" class="aifb-button">다운로드</button>
+							</div>
 						</div>
 						<div class="aifb-feedback-area" id="feedbackArea">AI의 피드백 내용이 출력될 공간입니다</div>
 					</div>
 				</div>
 
-				<div class="aifb-button-wrapper">
+				<div class="aifb-footer-wrapper">
 					<button class="aifb-button back" onclick="history.back()">뒤로가기</button>
-					<button class="aifb-button proofread" onclick="requestProofread()">내
-						자기소개서 수정하러 가기</button>
+					<button id="requestAiFeedback" class="aifb-button feedback">ai 피드백 요청</button>
+					<button class="aifb-button proofread" onclick="requestProofread()">내 자기소개서 수정하러 가기</button>
 				</div>
 			</div>
 		</div>
