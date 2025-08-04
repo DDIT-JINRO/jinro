@@ -120,16 +120,20 @@ document.addEventListener('DOMContentLoaded', function(){
 	})
 
 	// 모달 닫기버튼 이벤트 등록
-	alarmClose.addEventListener('click', (e) =>{
-		e.preventDefault();
-		alarmModal.classList.add('hidden');
-	})
+	if(alarmClose){
+		alarmClose.addEventListener('click', (e) =>{
+			e.preventDefault();
+			alarmModal.classList.add('hidden');
+		})
+	}
 
 	// 모달 토글
-	alarmBtn.addEventListener('click', (e) => {
-		e.preventDefault();
-		alarmModal.classList.toggle('hidden');
-	});
+	if(alarmBtn){
+		alarmBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			alarmModal.classList.toggle('hidden');
+		});
+	}
 })
 
 
