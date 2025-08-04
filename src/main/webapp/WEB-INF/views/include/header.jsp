@@ -124,7 +124,7 @@ const memId = '<sec:authentication property="name" />'
 					<a href="/empt/ema/employmentAdvertisement.do">취업</a>
 				</li>
 				<li>
-					<a href="/rsm/rsm">경력관리</a>
+					<a href="/cdp/rsm/rsm/resumeList.do">경력관리</a>
 				</li>
 				<li>
 					<a href="/cnslt/off/crsv/offlineReservation.do">상담</a>

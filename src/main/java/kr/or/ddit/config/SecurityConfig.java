@@ -32,8 +32,8 @@ public class SecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final VisitLogService visitLogService;
 	
-	@Value("${DEV.SERVER.BASE_URL}")
-	private String SERVER_URL;
+	@Value("${app.front-url}")
+	private String FRONT_URL;
 	
 	public SecurityConfig(JwtUtil jwtUtil, UserDetailsService userDetailsService, VisitLogService visitLogService) {
 		this.jwtUtil = jwtUtil;
@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(SERVER_URL+":5173"));  // React dev 서버
+        config.setAllowedOrigins(List.of(FRONT_URL));  // React dev 서버
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

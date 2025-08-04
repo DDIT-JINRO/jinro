@@ -44,4 +44,6 @@ public interface SelfIntroService {
 
 	// 자소서 전체 삭제
 	public void deleteSelfIntro(SelfIntroVO selfIntroVO);
+
+	public int selectSelfIntroTotalBymemId(SelfIntroVO selfIntroVO);
 }

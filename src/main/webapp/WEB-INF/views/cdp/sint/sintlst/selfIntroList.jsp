@@ -13,7 +13,7 @@
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-item">
-			<a href="/rsm/rsm">이력서</a>
+			<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
 		</div>
 		<div class="channel-sub-section-itemIn">
 			<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
@@ -38,7 +38,7 @@
 		<div class="public-wrapper-main">
 			<form method="get" action="/cdp/sint/sintlst/selfIntroList.do" class="intro-search-filter">
 				<!-- 검색어 입력 -->
-				<input type="text" name="keyword" value="${keyword.param}"
+				<input type="text" name="keyword" value="${param.keyword}"
 					placeholder="자기소개서 제목 검색" class="intro-search-input" />
 
 				<!-- 상태 선택 -->
