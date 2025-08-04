@@ -11,7 +11,8 @@ public class CompanyVO {
 	private String cpLocationY;
 	private String cpDescription;
 	private String cpWebsite;
-	private int cpBusino;
+	private Long cpBusino;
 	private String cpImgUrl;
+	private String cpRegion;
 	private int fileGroupId;
 }
