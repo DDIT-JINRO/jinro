@@ -126,8 +126,6 @@ public class SelfIntroWritingController {
 
 	@PostMapping("/delete.do")
 	public String selfIntroDelete(@RequestParam(required = true) String siId) {
-		log.info("asd");
-
 		SelfIntroVO selfIntroVO = new SelfIntroVO();
 		selfIntroVO.setSiId(Integer.parseInt(siId));
 

@@ -45,7 +45,6 @@ public class SelfIntroListController {
 
 			ArticlePage<SelfIntroVO> articlePage = new ArticlePage<SelfIntroVO>(total, currentPage, 5,
 					SelfIntroVOList, keyword);
-			log.info("list->articlePage : " + articlePage);
 			articlePage.setUrl("/cdp/sint/sintlst/selfIntroList.do");
 
 			model.addAttribute("articlePage", articlePage);

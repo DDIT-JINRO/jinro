@@ -124,7 +124,6 @@ public class ResumeController {
 			result.put("status", "fail");
 			result.put("message", e.getMessage());
 		}
-		log.info("result"+result);
 		return result;
 	}
 
