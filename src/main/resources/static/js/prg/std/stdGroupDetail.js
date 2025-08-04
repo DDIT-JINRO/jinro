@@ -261,7 +261,7 @@ function createParentReply(replyVO, e){
 	const div = document.createElement('div');
 	div.classList.add('reply-box');
 	const createdTime = new Date(replyVO.replyCreatedAt);
-	const createdTimeFormat = `${createdTime.getFullYear()}. ${("0"+(createdTime.getMonth()+1)).slice(-2)}. ${createdTime.getDate()}. ${createdTime.getHours()}:${createdTime.getMinutes()}`;
+	const createdTimeFormat = `${createdTime.getFullYear()}. ${("0"+(createdTime.getMonth()+1)).slice(-2)}. ${("0"+(createdTime.getDate())).slice(-2)}. ${("0"+(createdTime.getHours())).slice(-2)}:${("0"+(createdTime.getMinutes())).slice(-2)}`;
 	div.id = `reply-${replyVO.boardId}-${replyVO.replyId }`;
 	div.innerHTML = `
 	<span class="etcBtn">…</span>

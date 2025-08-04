@@ -250,7 +250,7 @@
 						</div>
 					</div>
 					<div class="group-meta">👁️ ${stdBoardVO.boardCnt} &nbsp; 💬
-						${stdBoardVO.replyCnt} &nbsp;&nbsp;<fmt:formatDate value="${stdBoardVO.boardCreatedAt}"/></div>
+						${stdBoardVO.replyCnt} &nbsp;&nbsp;<fmt:formatDate value="${stdBoardVO.boardCreatedAt}" pattern="yyyy. MM. dd"/></div>
 				</div>
 			</c:forEach>
 			<div class="group-write-btn-wrapper">

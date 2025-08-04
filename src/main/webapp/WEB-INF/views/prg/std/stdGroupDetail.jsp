@@ -150,7 +150,7 @@
 				</div>
 				<div class="reply-profile">
 				  <div class="profile-wrapper user-profile">
-				    <img class="profile-img" src="<c:out value="${not empty reply.fileProfileStr ? reply.fileProfileStr : '/upload/2025/07/30/4b137b23_product_6.jpg' }"/>" alt="profile"/>
+				    <img class="profile-img" src="<c:out value="${not empty reply.fileProfileStr ? reply.fileProfileStr : '/images/defaultProfileImg.png' }"/>" alt="profile"/>
 				    <img class="badge-img" src="<c:out value="${not empty reply.fileBadgeStr ? reply.fileBadgeStr : '/images/defaultBorderImg.png' }"/>" alt="badge"/>
 					<c:if test="${reply.fileSubStr != null }">
 				      	<img class="effect-img sparkle" src="${reply.fileSubStr }" alt="테두리" />

@@ -80,6 +80,9 @@
 /* ─── 4) 커스텀 셀렉트 ─── */
 .custom-select {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .custom-select__options {
   top: calc(100% + 4px);
@@ -281,8 +284,7 @@
   gap: 10px;                /* label과 컨트롤 사이 여백 */
 }
 
-.form-group > label {
-  font-size: 14px;
+.form-group label {
   font-weight: 500;
   color: #212529;
 }
