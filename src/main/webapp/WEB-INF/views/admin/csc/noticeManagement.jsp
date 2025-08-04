@@ -19,13 +19,17 @@
  				  <button type="button" class="btn-save">조회</button>
 			</form>
 		</div>
-
-
 		<p>
 			총 <span id="notice-count"></span>건
 		</p>
 		<div class="table-wrapper">
 			<table>
+				<colgroup>
+					<col style="width: 10%;">
+					<col style="width: 50%;">
+					<col style="width: 15%;">
+					<col style="width: 25%;">
+				</colgroup>
 				<thead>
 					<tr>
 						<th>번 호</th>
@@ -68,9 +72,9 @@
 			</tbody>
 		</table>
 
-		<form id="form-data" enctype="multipart/form-data">
+		<form class="noticeFormGroup" id="form-data" enctype="multipart/form-data">
 			<div>
-				<label>제목</label> 
+				<label>제 목</label> 
 				<input type="text" name="noticeTitle" placeholder="제목을 입력하세요" />
 			</div>
 			
@@ -91,9 +95,11 @@
 
 			
 			<!-- 기존에 업로드된 파일을 뿌릴 곳 -->
-			<div id="file" style="display: none;">
-				<label>기존 첨부파일</label>
-				<div id="existing-files" class="existing-files" > 
+			<div class="noticeFormGroup" id="file" style="display: none;">
+				<div style="float:left;">
+					<label>기존 첨부파일</label>
+				</div>				
+				<div id="existing-files" class="existing-files"> 
 					
 				</div>
 			</div>
