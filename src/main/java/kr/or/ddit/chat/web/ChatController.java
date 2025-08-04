@@ -80,7 +80,7 @@ public class ChatController {
 
 	// 채팅방 참여 db삽입 -> 스터디그룹 게시글상세 등에서 개설된 채팅방에 참여를 요청.
 	@PostMapping("/api/chat/room/participate")
-	public ResponseEntity<String> participateChatRoom(@RequestParam int crId, @AuthenticationPrincipal String memId){
+	public ResponseEntity<String> participateChatRoom(@RequestParam int crId, @AuthenticationPrincipal String memId, Principal principal){
 	    log.info("채팅방 참여 요청 -> crId: {}, memId: {}", crId, memId);
 
 	    // 로그인 체크
@@ -94,7 +94,14 @@ public class ChatController {
 	    vo.setMemId(Integer.parseInt(memId));
 
 	    try {
-	        this.chatService.participateChatRoom(vo);  // 채팅방 참여.
+	        ChatMessageVO chatMessageVO = new ChatMessageVO();
+			chatMessageVO.setCrId(vo.getCrId());
+			chatMessageVO.setMemId(vo.getMemId());
+			chatMessageVO.setMessageType("enter");
+			chatMessageVO.setMessage("회원 입장");
+			sendMessage(chatMessageVO, principal);
+
+			this.chatService.participateChatRoom(vo);  // 채팅방 참여.
 	        return ResponseEntity.ok("채팅방참여성공");
 	    } catch (Exception e) {
 	        log.error("채팅방참여실패", e);
@@ -178,12 +185,19 @@ public class ChatController {
 	}
 
 	@PostMapping("/api/chat/exit")
-	public ResponseEntity<Boolean> exitChatRoom(@RequestBody ChatMemberVO chatMemberVO){
+	public ResponseEntity<Boolean> exitChatRoom(@RequestBody ChatMemberVO chatMemberVO, Principal principal){
 		System.out.println("===========================================");
 		System.out.println(chatMemberVO);
 		System.out.println("===========================================");
 		try {
 			this.chatService.exitChatRoom(chatMemberVO);
+
+			ChatMessageVO chatMessageVO = new ChatMessageVO();
+			chatMessageVO.setCrId(chatMemberVO.getCrId());
+			chatMessageVO.setMemId(chatMemberVO.getMemId());
+			chatMessageVO.setMessageType("exit");
+			chatMessageVO.setMessage("회원 퇴장");
+			this.sendMessage(chatMessageVO, principal);
 			return ResponseEntity.ok(true);
 		} catch (Exception e) {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);

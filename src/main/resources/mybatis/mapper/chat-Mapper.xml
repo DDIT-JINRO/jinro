@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.chat.service.impl.ChatMapper">
 
-	<!--### UI 구성을 고려하여 최신 메시지, 안읽은 수, 채팅방 현재참여 인원수 등의 확장성 고려 ###-->
-
-	<!--### UI 구성을 고려하여 최신 메시지, 안읽은 수, 채팅방 현재참여 인원수 등의 확장성 고려 ###-->
 	<!-- 현재 내가 참여한 채팅방 목록 (스터디그룹만) -->
 	<select id="findRoomsByMemId" resultType="kr.or.ddit.chat.service.ChatRoomVO" parameterType="String" >
 		SELECT
@@ -241,7 +238,7 @@
 	</update>
 
 	<select id="selectChatMessage" resultType="kr.or.ddit.chat.service.ChatMessageVO" parameterType="int">
-				SELECT
+		SELECT
 		       CM.MSG_ID
 		       , CM.CR_ID
 		       , CM.MEM_ID
@@ -255,6 +252,7 @@
 		       , M.MEM_NICKNAME
 		  FROM CHAT_MESSAGE CM
 		  JOIN MEMBER M ON CM.MEM_ID = M.MEM_ID
-		  WHERE CM.MSG_ID = #{msgId}
+		 WHERE CM.MSG_ID = #{msgId}
 	</select>
+
 </mapper>

@@ -30,9 +30,55 @@ document.addEventListener('DOMContentLoaded', function(){
 		    inputEl.value = '';
 		    sendMessage(currentChatRoomId, content);
 		}
+
 	}
 
 	document.getElementById('chatRooms').addEventListener('click',openChatModal);
+
+	const exitBtn = document.getElementById('exitBtn');
+	if(exitBtn){
+		exitBtn.addEventListener('click',function(){
+			const crId =  exitBtn.dataset.crId;
+			const data = {memId, crId}
+			fetch(`/api/chat/exit`,{
+				method:"POST",
+				headers:{"Content-Type":"application/json"},
+				body:JSON.stringify(data),
+			})
+			.then(resp =>resp.json())
+			.then(result =>{
+				console.log(result);
+				if(result){
+					// 채팅방 구독 해제
+					if(chatRoomSubscription){
+						chatRoomSubscription.unsubscribe();
+						chatRoomSubscription = null;
+					}
+					document.querySelector(`.chat-room-entry[data-cr-id="${crId}"]`).remove();
+					document.getElementById('chat-input').style.display = 'none';
+					document.querySelector('.chat-room-meta').style.display = 'none';
+					const emptyChatMsg = `
+						<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
+					`;
+					document.getElementById('chat-container').innerHTML = emptyChatMsg;
+
+					const roomList = document.querySelectorAll('.chat-room-entry');
+					if(roomList.length == 0){
+						const emptyRoomListMsg = `
+							<p class="chat-room-no-selected">
+							입장한 채팅방이 없습니다<br/>
+							<a href="/prg/std/stdGroupList.do">스터디그룹 보러가기</a>
+							</p>
+						`;
+						document.getElementById('chatRoomList').innerHTML = emptyRoomListMsg;
+					}
+				}
+			})
+			.catch(err =>{
+				console.log(err);
+			})
+		})
+	}
 })
 
 document.addEventListener('click', function(e){
@@ -55,6 +101,8 @@ function closeChatModal(){
 	document.getElementById('chat-modal').style.display = 'none';
 
 	document.getElementById('chat-input').style.display = 'none';
+
+	document.querySelector('.chat-room-meta').style.display = 'none';
 	// 보고 있는 채팅방 초기화
 	currentChatRoomId = null;
 
@@ -108,8 +156,8 @@ async function printChatRoomList() {
 			</p>
 		`;
 		list.innerHTML = emptyRoomMsg;
+		return;
 	}
-
     chatRoomList.forEach(chatRoom =>{
 		const wrapper = document.createElement("div");
 		wrapper.classList.add("chat-room-entry");
@@ -163,7 +211,11 @@ function subscribeToUnreadDetail() {
 // 채팅방 채팅 불러와서 채우기 -> 채팅방 목록 클릭했을 때 호출
 async function printFetchMessages(el) {
     const crId = el.dataset.crId;
+	document.getElementById('exitBtn').dataset.crId = crId;
+	const chatTitle = el.querySelector('.chat-room-title').textContent;
+	document.getElementById('chat-title').textContent=chatTitle;
 	// 채팅방 제목 띄워주기
+	document.querySelector('.chat-room-meta').style.display='flex';
 	// 스크롤
 
     // 현재 채팅방 ID 업데이트
@@ -186,6 +238,7 @@ async function printFetchMessages(el) {
 	container.innerHTML = "";
 
 	const chatInput = document.getElementById('chat-input');
+
 	fetch(`/api/chat/message/list?crId=${crId}`)
 	    .then(resp => resp.json())
 	    .then(data => {
@@ -256,6 +309,24 @@ function appendMessage(msgVO) {
 
 	const timeObj = new Date(msgVO.sentAt);
 	const timeStr = `${(""+timeObj.getFullYear()).slice(-2)}. ${("0"+(timeObj.getMonth()+1)).slice(-2)}. ${("0"+(timeObj.getDate())).slice(-2)}. ${("0"+(timeObj.getHours())).slice(-2)}:${("0"+(timeObj.getMinutes())).slice(-2)}`;
+
+	// 입장/퇴장 시스템 메시지 분기
+	if (msgVO.messageType == 'enter' || msgVO.messageType == 'exit') {
+	    const text = msgVO.messageType == 'enter'
+	        ? `${msgVO.memNickname}님이 채팅방에 입장했습니다.`
+	        : `${msgVO.memNickname}님이 채팅방에서 나갔습니다.`;
+
+	    const systemHTML = `
+	      <div class="message-box system">
+	        <div class="system-message">${text}</div>
+			<div class="chat-time system-time">${timeStr}</div>
+	      </div>
+	    `;
+	    container.innerHTML += systemHTML;
+	    container.scrollTop = container.scrollHeight;
+	    return;  // 여기서 끝내고 일반 메시지 렌더링은 건너뜀
+	}
+
     const chatHTML = `
 	<div class="message-box ${isMine ? 'mine' : 'other'}">
 		<div class="chat-meta">

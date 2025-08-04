@@ -119,4 +119,5 @@ public interface ChatService {
 	 * @return
 	 */
 	ChatMessageVO selectChatMessage(int msgId);
+
 }

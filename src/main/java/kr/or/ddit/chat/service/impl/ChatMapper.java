@@ -134,4 +134,12 @@ public interface ChatMapper {
 	 */
 	ChatMessageVO selectChatMessage(int msgId);
 
+	/**
+	 * 채팅방 상세정보 불러오기.
+	 * 클릭 했을 때 채팅방 정보 출력용
+	 * @param crId
+	 * @return
+	 */
+	ChatRoomVO selectCrDetail(int crId);
+
 }

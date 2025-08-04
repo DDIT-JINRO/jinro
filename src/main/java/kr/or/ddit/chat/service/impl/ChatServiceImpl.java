@@ -49,13 +49,15 @@ public class ChatServiceImpl implements ChatService {
 	public void participateChatRoom(ChatMemberVO chatMemberVO) {
 		ChatMemberVO participatedMember = this.chatMapper.selectChatMember(chatMemberVO);
 		// 이 객체가 null 값이면 최초입장. 객체가 있으면 퇴장했던 멤버의 재입장.
-		log.info("participateChatRoom -> participatedMember : "+participatedMember);
 
 		int result = this.chatMapper.insertAndUpdateChatMember(chatMemberVO);
+
+		ChatMessageVO chatMessageVO = new ChatMessageVO();
 	}
 
 	@Override
 	public void exitChatRoom(ChatMemberVO chatMemberVO) {
+
 		this.chatMapper.chatMemberExitChatRoomUpdate(chatMemberVO);
 	}
 
@@ -64,7 +66,7 @@ public class ChatServiceImpl implements ChatService {
 		List<ChatMessageVO> chatList = this.chatMapper.selectChatMsgByChatRoomIdAndMemId(vo);
 
 		for(ChatMessageVO chatVO : chatList) {
-			setMemberFileStr(chatVO);
+			setChatMessageMemberFileStr(chatVO);
 		}
 		return chatList;
 	}
@@ -171,11 +173,11 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public ChatMessageVO selectChatMessage(int msgId) {
 		ChatMessageVO selectedChatMessageVO = this.chatMapper.selectChatMessage(msgId);
-		setMemberFileStr(selectedChatMessageVO);
+		setChatMessageMemberFileStr(selectedChatMessageVO);
 		return selectedChatMessageVO;
 	}
 
-	private void setMemberFileStr(ChatMessageVO chatMessageVO) {
+	private void setChatMessageMemberFileStr(ChatMessageVO chatMessageVO) {
 		Long fileBadgeId = chatMessageVO.getFileBadge();
 		Long fileProfileId = chatMessageVO.getFileProfile();
 		Long fileSubId = chatMessageVO.getFileSub();

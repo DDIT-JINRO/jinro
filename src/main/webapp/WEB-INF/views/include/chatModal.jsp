@@ -14,12 +14,16 @@
 
 	  <!-- 오른쪽: 채팅 메시지 및 입력 -->
 	  <div class="chat-message-area">
+	  	<div class="chat-room-meta">
+        	<div class="chat-title" id="chat-title">제목영역</div>
+		</div>
 	    <div id="chat-container">
 	    	<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
 	    </div>
 	    <div class="chat-input" id="chat-input">
 	      <textarea id="chatMessageInput" placeholder="메시지를 입력하세요..."></textarea>
 	      <button id="sendMsgBtn">전송</button>
+	      <button id="exitBtn" data-cr-id>퇴장</button>
 	    </div>
 	  </div>
 	</div>
