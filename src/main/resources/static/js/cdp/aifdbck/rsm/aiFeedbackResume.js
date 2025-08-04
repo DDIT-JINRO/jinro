@@ -170,7 +170,7 @@ function previewPdfFromAI() {
     return;
   }
 
-  const htmlContent = generateHtmlFromFeedbackForResume(feedbackArea.innerHTML);
+  const htmlContent = generateHtmlFromFeedbackForResume();
   const cssContent = getFeedbackPdfCssForResume();
 
   const formData = new FormData();
@@ -209,7 +209,7 @@ function downloadPdfFromAI() {
     return;
   }
 
-  const htmlContent = generateHtmlFromFeedbackForResume(feedbackArea.innerHTML);
+  const htmlContent = generateHtmlFromFeedbackForResume();
   const cssContent = getFeedbackPdfCssForResume();
 
   const form = document.createElement("form");
@@ -234,6 +234,7 @@ function downloadPdfFromAI() {
   form.submit();
   document.body.removeChild(form);
 }
+//이벤트 리스너
 document.getElementById("previewPdfBtn")?.addEventListener("click", previewPdfFromAI);
 document.getElementById("downloadPdfBtn")?.addEventListener("click", downloadPdfFromAI);
 
