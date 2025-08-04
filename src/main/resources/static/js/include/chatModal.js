@@ -5,7 +5,6 @@
 document.addEventListener('DOMContentLoaded', function(){
 	// 로그인 여부 확인
 	if(memId && memId !='anonymousUser'){
-		console.log("로그인 성공");
 		// 소켓 연결
 		connectSocket();
 		// 플로팅 버튼 클릭시 모달 오픈
@@ -47,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function(){
 			})
 			.then(resp =>resp.json())
 			.then(result =>{
-				console.log(result);
 				if(result){
 					// 채팅방 구독 해제
 					if(chatRoomSubscription){
@@ -75,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function(){
 				}
 			})
 			.catch(err =>{
-				console.log(err);
+				console.error(err);
 			})
 		})
 	}
@@ -251,7 +249,6 @@ async function printFetchMessages(el) {
 	fetch(`/api/chat/message/list?crId=${crId}`)
 	    .then(resp => resp.json())
 	    .then(data => {
-			console.log(data);
 			chatInput.style.display = 'flex';
 	        data.forEach(msgVO => appendMessage(msgVO));
 	    });
@@ -273,8 +270,8 @@ function connectSocket() {
     const socket = new SockJS('/ws-stomp');
     stompClient = Stomp.over(socket);
 
+	stompClient.debug = () => {};	// 콘솔 출력안되게 덮어쓰기
     stompClient.connect({}, (frame) => {
-        console.log('Connected: ' + frame);
 		// 연결된 직후 최초 전체 안읽음 갯수 받아오기
 		fetch('/api/chat/totalUnread')
 		.then(resp =>{
@@ -291,7 +288,6 @@ function connectSocket() {
 		// 플로팅 뱃지에 전체 안읽음 갯수를 세팅하기 위한 구독
 		stompClient.subscribe(`/sub/chat/unread/summary/${memId}`, (message) => {
 			const data = JSON.parse(message.body);
-			console.log("플로팅용전체",data);
 		    const { unreadCnt } = JSON.parse(message.body);
 		    updateFloatingBadge(unreadCnt);
 		});
@@ -387,7 +383,6 @@ async function removeUnreadBadge(roomId) {
 	    method: 'POST'
 	}).then(res => {
 	    if (!res.ok) throw new Error("서버 읽음 처리 실패");
-	    console.log(`채팅방 ${roomId} 읽음 처리 완료`);
 	}).catch(err => {
 	    console.error("읽음 처리 오류:", err);
 	});

@@ -73,8 +73,6 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public void saveChatMessage(ChatMessageVO chatMessageVO) {
-		System.out.println(chatMessageVO);
-
 		if(chatMessageVO.getMessageType()==null) {
 			chatMessageVO.setMessageType("TEXT");
 		}
