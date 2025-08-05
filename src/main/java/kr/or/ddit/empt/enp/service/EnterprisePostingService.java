@@ -14,4 +14,11 @@ public interface EnterprisePostingService {
 
 	List<ComCodeVO> selectCodeVORegionList();
 
+	int updateEnterprisePosting(CompanyVO companyVO);
+
+	int checkCompanyByCpId(CompanyVO companyVO);
+
+	int deleteEnterprisePosting(CompanyVO companyVO);
+
+
 }

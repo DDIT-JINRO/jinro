@@ -172,7 +172,7 @@
 							</div> --%>
 							<div class="company-address-section">
 								<h4>기업 주소</h4>
-								<p>${company.cpRegion})</p>
+								<p>${company.cpRegion}</p>
 							</div>
 							<div class="company-hiring-status-section">
 								<h4>현재 채용 여부</h4>

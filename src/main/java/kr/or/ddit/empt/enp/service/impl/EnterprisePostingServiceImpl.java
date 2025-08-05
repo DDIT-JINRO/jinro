@@ -41,4 +41,30 @@ public class EnterprisePostingServiceImpl implements EnterprisePostingService {
 		return enterprisePostingMapper.selectCodeVORegionList();
 	}
 
+	@Override
+	public int updateEnterprisePosting(CompanyVO companyVO) {
+		// TODO Auto-generated method stub
+		return enterprisePostingMapper.updateEnterprisePosting(companyVO);
+	}
+
+	@Override
+	public int checkCompanyByCpId(CompanyVO companyVO) {
+		int cpId=0;
+		companyVO = enterprisePostingMapper.checkCompanyByCpId(companyVO);
+		
+		if(companyVO == null) {
+			cpId = enterprisePostingMapper.getMaxCpId();
+		}else {
+			cpId = companyVO.getCpId();
+		}
+			
+		return cpId;
+	}
+
+	@Override
+	public int deleteEnterprisePosting(CompanyVO companyVO) {
+		// TODO Auto-generated method stub
+		return enterprisePostingMapper.deleteEnterprisePosting(companyVO);
+	}
+
 }

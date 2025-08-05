@@ -284,7 +284,7 @@
 
 /* 기업 이미지 */
 .company-image {
-    width: 60px; /* 이미지 크기 조정 */
+    width: 130px; /* 이미지 크기 조정 */
     height: 60px;
     object-fit: contain; /* 비율 유지하며 컨테이너에 맞춤 */
     border-radius: 4px; /* 살짝 둥근 모서리 */

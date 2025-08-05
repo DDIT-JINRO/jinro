@@ -110,4 +110,69 @@
 		from COM_CODE
 		where CL_CODE = 'G23'
 	</select>
+	
+	<update id="updateEnterprisePosting" parameterType="kr.or.ddit.empt.enp.service.CompanyVO">
+		 MERGE INTO COMPANY c
+	    USING DUAL
+	    ON (c.CP_ID = #{cpId})
+	    WHEN MATCHED THEN
+	        UPDATE
+	        <set>
+	            <if test="cpName != null">
+	                c.CP_NAME = #{cpName},
+	            </if>
+	            <if test="cpScale != null">
+	                c.CP_SCALE = #{cpScale},
+	            </if>
+	            <if test="cpDescription != null">
+	                c.CP_DESCRIPTION = #{cpDescription},
+	            </if>
+   	            <if test="cpWebsite != null">
+	                c.CP_WEBSITE = #{cpWebsite},
+	            </if>
+   	            <if test="cpBusino != null">
+	                c.CP_BUSINO = #{cpBusino},
+	            </if>
+   	            <if test="cpImgUrl != null">
+	                c.CP_IMG_URL = #{cpImgUrl},
+	            </if>
+   	            <if test="cpRegion != null">
+	                c.CP_REGION = #{cpRegion},
+	            </if>
+       		</set>
+				
+    WHEN NOT MATCHED THEN
+        INSERT (CP_ID, CP_NAME
+            <if test="cpScale != null and cpScale != ''">, CP_SCALE</if>
+            <if test="cpDescription != null and cpDescription != ''">, CP_DESCRIPTION</if>
+            <if test="cpWebsite != null and cpWebsite != ''">, CP_WEBSITE</if>
+            <if test="cpRegion != null and cpRegion != ''">, CP_REGION</if>
+            <if test="cpBusino != null and cpBusino != ''">, CP_BUSINO</if>
+            <if test="cpImgUrl != null and cpImgUrl != ''">, CP_IMG_URL</if>
+        )
+        VALUES (#{cpId}, #{cpName}
+            <if test="cpScale != null and cpScale != ''">, #{cpScale}</if>
+            <if test="cpDescription != null and cpDescription != ''">, #{cpDescription}</if>
+            <if test="cpWebsite != null and cpWebsite != ''">, #{cpWebsite}</if>
+            <if test="cpRegion != null and cpRegion != ''">, #{cpRegion}</if>
+            <if test="cpBusino != null and cpBusino != ''">, #{cpBusino}</if>
+            <if test="cpImgUrl != null and cpImgUrl != ''">, #{cpImgUrl}</if>
+        )
+	</update>
+	
+	<select id="checkCompanyByCpId" parameterType="kr.or.ddit.empt.enp.service.CompanyVO" resultType="kr.or.ddit.empt.enp.service.CompanyVO">
+		select *
+		from company
+		where CP_ID = #{cpId}
+	</select>
+	
+	<select id="getMaxCpId" resultType="int">
+		SELECT NVL(MAX(CP_ID),0)+1
+		FROM COMPANY
+	</select>
+	
+	<delete id="deleteEnterprisePosting" parameterType="kr.or.ddit.empt.enp.service.CompanyVO">
+		DELETE COMPANY
+		WHERE CP_ID = #{cpId}
+	</delete>
 </mapper>

@@ -2,10 +2,14 @@ package kr.or.ddit.empt.enp.web;
 
 import java.util.List;
 
+import org.apache.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -50,5 +54,34 @@ public class EnterprisePostingController {
 		return "empt/enp/enterprisePosting";
 	}
 	
+	@PostMapping("/enp/enterprisePostingUpdate.do")
+	public ResponseEntity<String> enterprisePostingUpdate(@RequestBody CompanyVO companyVO){
+		
+		log.info("companyVO"+companyVO);
+		
+		int cpId = enterprisePostingService.checkCompanyByCpId(companyVO);
+		
+		companyVO.setCpId(cpId);
+		
+		int cnt = enterprisePostingService.updateEnterprisePosting(companyVO);
+		
+		if(cnt >0) {
+			return ResponseEntity.ok("sucess");
+		}else {
+			return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body("처리중 문제발생");
+		}
+	}
+	
+	@PostMapping("/enp/enterprisePostingDelete.do")
+	public ResponseEntity<String> enterprisePostingDelete(@RequestBody CompanyVO companyVO){
+		log.info("companyVO"+companyVO);
+		int cnt = enterprisePostingService.deleteEnterprisePosting(companyVO);
+		if(cnt>0) {
+			return ResponseEntity.ok("sucess");
+		}else {
+			return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body("처리중 문제발생");
+		}
+		
+	}
 	
 }

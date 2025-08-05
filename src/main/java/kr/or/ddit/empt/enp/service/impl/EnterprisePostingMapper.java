@@ -18,4 +18,12 @@ public interface EnterprisePostingMapper {
 
 	List<ComCodeVO> selectCodeVORegionList();
 
+	int updateEnterprisePosting(CompanyVO companyVO);
+
+	CompanyVO checkCompanyByCpId(CompanyVO companyVO);
+
+	int getMaxCpId();
+
+	int deleteEnterprisePosting(CompanyVO companyVO);
+
 }
