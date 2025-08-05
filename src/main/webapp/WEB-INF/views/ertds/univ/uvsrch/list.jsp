@@ -17,6 +17,7 @@
 	</div>
 </section>
 <div>
+	${articlePage}
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">

@@ -1,30 +1,59 @@
 package kr.or.ddit.ertds.univ.uvsrch.web;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RequestMapping("/ertds")
+import kr.or.ddit.ertds.univ.uvsrch.service.UniversityService;
+import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
+import kr.or.ddit.util.ArticlePage;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequestMapping("/ertds/univ/uvsrch")
 @Controller
 public class UniversitySearchController {
 
+	@Autowired
+	UniversityService universityService;
+	
 	// 중분류 대학검색으로 이동
-	@GetMapping("/univ/uvsrch/selectUnivList.do")
-	public String qlfexmListPage() {
-
+	@GetMapping("/selectUnivList.do")
+	public String selectUnivList(
+			@RequestParam(required = false) String searchKeyword,
+			@RequestParam(required = false, defaultValue = "1") int currentPage,
+			@RequestParam(required = false, defaultValue = "5") int size,
+			UniversityVO universityVO,
+			Model model) {
+		if (universityVO != null && universityVO.getSize() == 0) universityVO.setSize(size);
+		if (universityVO != null && universityVO.getCurrentPage() == 0) universityVO.setCurrentPage(currentPage);		
+		
+		List<UniversityVO> list = this.universityService.selectUniversityList();
+		int totalCount = this.universityService.selectUniversityTotalCount(universityVO);
+		
+		log.info("list : ", list);
+		log.info("totalCount : ", totalCount);
+		ArticlePage<UniversityVO> articlePage = new ArticlePage<>(totalCount, currentPage, size, list, searchKeyword);
+		model.addAttribute("articlePage", articlePage);
+		
 		return "ertds/univ/uvsrch/list"; // /WEB-INF/views/erds/univ/list.jsp
 	}
 
 	// 대학비교
-	@GetMapping("/univ/uvsrch/selectCompare.do")
-	public String univComparePage() {
+	@GetMapping("/selectCompare.do")
+	public String selectCompare() {
 
 		return "ertds/univ/uvsrch/compare"; // /WEB-INF/views/erds/univ/compare.jsp
 	}
 
 	// 대학
-	@GetMapping("/univ/uvsrch/selectDetail.do")
-	public String univDetailPage() {
+	@GetMapping("/selectDetail.do")
+	public String selectDetail() {
 
 		return "ertds/univ/uvsrch/detail"; // /WEB-INF/views/erds/univ/detail.jsp
 	}
