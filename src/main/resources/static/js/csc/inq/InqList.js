@@ -69,13 +69,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	// inq 모달창 (질문/답변 열고 닫기)
 	document.querySelectorAll(".inq-question").forEach(button => {
 		
-		const currentMemId = document.getElementById("getMemId").value;
-		console.log("currentMemId => ",currentMemId);
+			const currentMemId = document.getElementById("getMemId").value;
 			button.addEventListener("click", () => {
 				const parentItem = button.closest(".inq-item");
 				const isPublic = parentItem.dataset.isPublic === 'Y'; // 문의의 공개 여부 ('Y' 또는 'N')
 				const authorId = parentItem.dataset.authorId;       // 문의 작성자의 ID
-				console.log("authorId => ",authorId);
 				// 조건: 문의가 공개이거나 (AND 문의가 비공개이면서 현재 사용자가 작성자인 경우)
 				const canOpen = isPublic || (!isPublic && currentMemId && currentMemId === authorId);
 

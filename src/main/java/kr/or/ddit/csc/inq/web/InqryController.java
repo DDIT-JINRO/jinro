@@ -3,7 +3,6 @@ package kr.or.ddit.csc.inq.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.or.ddit.csc.faq.service.FaqVO;
 import kr.or.ddit.csc.inq.service.InqService;
 import kr.or.ddit.csc.inq.service.InqVO;
 import kr.or.ddit.util.ArticlePage;
@@ -27,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/csc/inq")
 public class InqryController {
 
-	
 	// 서비스 
 	@Autowired
 	InqService inqService;
@@ -55,14 +52,13 @@ public class InqryController {
 	// 사용자 1:1 문의 등록 페이지 이동
 	@GetMapping("/insertInq.do")
 	public String insertInq() {
-		
 		return "csc/inq/insertInq";
 	}
+	
 	// 사용자 1:1 문의 등록
 	@ResponseBody
 	@PostMapping("/insertInqData.do")
 	public int insertInqData(@RequestBody InqVO inqVO, @AuthenticationPrincipal String memId ) {
-		
 		inqVO.setMemId(Integer.parseInt(memId));
 		return inqService.insertInqData(inqVO);
 	}
@@ -85,7 +81,6 @@ public class InqryController {
 	@ResponseBody
 	@GetMapping("/admin/inqDetail.do")
 	public InqVO admininqDetail(@RequestParam String inqId) {
-		
 		return inqService.getAdminInqDetail(Integer.parseInt(inqId));
 	}
 	
@@ -94,7 +89,6 @@ public class InqryController {
 	@ResponseBody
 	@PostMapping("/admin/insertInq.do")
 	public int adminInsertInq(@ModelAttribute InqVO inqVO) {
-		log.info(inqVO.toString());
 		return inqService.insertInq(inqVO);
 	}
 	

@@ -39,8 +39,6 @@ function insertInq() {
     const title = document.getElementById('post-title').value.trim();
     const content = document.getElementById('description').value.trim();
 
-    console.log("contactIsPublic:", contactIsPublic);
-
     // 유효성 검사
     if (!contactIsPublic) {
         alert("공개 여부를 선택해주세요.");

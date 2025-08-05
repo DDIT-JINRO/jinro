@@ -108,9 +108,6 @@ public class InqServiceimpl implements InqService{
 	@Transactional
 	@Override
 	public int insertInq(InqVO inqVO) {
-		
-		log.info(inqVO.toString());
-		
 		//AlarmVO 생성
 		AlarmVO alarmVO = new AlarmVO();
 		
@@ -119,7 +116,6 @@ public class InqServiceimpl implements InqService{
 		
 		// 1:1문의 사용자 ID 조회
 		int memId = inqMapper.getMemId(inqVO.getContactId());	
-		log.info("memId : "+memId);
 		
 		// 알림 타겟 지정
 		alarmVO.setMemId(memId);

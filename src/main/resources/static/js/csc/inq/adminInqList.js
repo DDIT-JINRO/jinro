@@ -4,7 +4,7 @@ function formatDateYYYYMMDD(iso) {
     const yy = String(d.getFullYear()); // "2025"
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
-    return `${yy}.${mm}.${dd}`;
+    return `${yy}. ${mm}. ${dd}`;
 }
 
 // 전역 상태
@@ -124,7 +124,6 @@ document.addEventListener('DOMContentLoaded', initAdminInqPage);
 // 1:1 문의 세부조회
 function showDetail(inqId) { 
     if (!inqId) return;
-	console.log("inqId : ",inqId)
     resetDetail();
     axios.get('/csc/inq/admin/inqDetail.do', { params: { inqId } })
         .then(response => {
@@ -165,8 +164,6 @@ function resetDetail() {
 
 // 1:1 문의 삽입 및 수정
 function insertAnswer() {
-	
-	console.log("asdasdasd");
     const form = document.getElementById('form-data');
     const fd = new FormData(form);
     
