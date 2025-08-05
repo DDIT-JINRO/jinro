@@ -1,5 +1,3 @@
-@charset "UTF-8";
-
 .aifb-container {
 	padding: 60px 40px 40px;
 	border: 1px solid #858E96;
@@ -22,19 +20,19 @@
 
 .self-intro-select, .resume-select {
 	width: 100%;
-	padding: 15px 14px;
+	padding: 12px 40px 12px 14px;
 	border: 1px solid #D8D8D8;
-	border-radius: 5px;
+	border-radius: 8px;
 	font-family: 'Noto Sans KR';
-	font-size: 18px;
-	color: #9D9D9D;
+	font-size: 16px;
+	color: #333;
 	appearance: none;
-	background: #FFFFFF
-		url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13' height='12' viewBox='0 0 13 12' fill='none'><rect width='13' height='12' rx='1' fill='%23D8D8D8'/></svg>")
-		no-repeat right 14px center;
-	background-size: 13px;
-	cursor: pointer;
-	outline: none;
+	background-color: #FFFFFF;
+	background-image:
+		url("data:image/svg+xml;utf8,<svg fill='%239D9D9D' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+	background-repeat: no-repeat;
+	background-position: right 14px center;
+	background-size: 18px;
 }
 
 .aifb-content-wrapper {
@@ -65,6 +63,7 @@
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 10px;
+	min-height: 65px; 
 }
 
 .aifb-section-header h2, .aifb-feedback-header h2 {
@@ -141,37 +140,6 @@
 	color: #FFFFFF;
 }
 
-.tab-container .tab {
-	position: relative;
-	padding: 0 58px;
-	height: 69px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	text-decoration: none;
-	color: #000000;
-	font-family: 'Do Hyeon';
-	font-size: 25px;
-}
-
-.tab-container .tab::after {
-	content: '';
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background: #D8D8D8;
-}
-
-.tab-container .tab.active {
-	color: #848EFB;
-}
-
-.tab-container .tab.active::after {
-	background: #848EFB;
-}
-
 .aifb-footer-wrapper {
 	display: flex;
 	justify-content: space-between;
@@ -179,11 +147,6 @@
 	margin-top: 30px;
 	width: 100%;
 	box-sizing: border-box;
-	padding: 0;
-}
-
-body {
-	margin: 0;
 	padding: 0;
 }
 
@@ -263,4 +226,68 @@ body {
 .feedback-section p {
 	margin: 0;
 	padding: 0;
+}
+/* ========================================= */
+/* 부트스트랩 없는 순수 CSS 스피너 구현 */
+/* ========================================= */
+
+/* 스피너를 감싸고 전체를 중앙 정렬하는 컨테이너 */
+.spinner-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 40px 20px;
+	min-height: 250px; /* 로딩 중 최소 높이 확보 */
+	text-align: center;
+	color: #666; /* 로딩 텍스트 색상 */
+}
+
+/* 스피너 아이콘 자체의 스타일 */
+.spinner-border {
+	display: inline-block;
+	width: 2.5rem; /* 스피너 크기 */
+	height: 2.5rem; /* 스피너 크기 */
+	vertical-align: -0.125em;
+	/* 테두리의 한쪽만 투명하게 만들어 회전하는 효과를 줍니다. */
+	border: 0.25em solid currentColor; /* 'text-primary' 클래스의 color를 사용 */
+	border-right-color: transparent;
+	border-radius: 50%;
+	/* 'spinner-spin' 애니메이션을 0.75초 동안 무한 반복 */
+	animation: spinner-spin .75s linear infinite;
+}
+
+/* 스피너 회전 애니메이션 정의 */
+@keyframes spinner-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* 부트스트랩의 .text-primary 클래스를 흉내 냅니다. */
+.text-primary {
+	color: #6c75ff; /* 스피너의 색상 */
+}
+
+/* 부트스트랩의 .text-center 클래스를 흉내 냅니다. */
+.text-center {
+	text-align: center;
+}
+
+/* 부트스트랩의 .mt-2 (margin-top) 클래스를 흉내 냅니다. */
+.mt-2 {
+	margin-top: 0.8rem; /* 스피너와 텍스트 사이의 간격 */
+}
+
+/* 스크린 리더는 읽을 수 있지만, 화면에는 보이지 않게 처리 (접근성) */
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
 }

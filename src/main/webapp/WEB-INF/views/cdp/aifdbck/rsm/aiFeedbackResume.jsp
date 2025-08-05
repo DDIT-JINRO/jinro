@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/cdp/rsm/rsm/resumeWriter.css"><!-- 이력서 작성 페이지 css -->
 <link rel="stylesheet" href="/css/cdp/aifdbck/rsm/aiFeedbackResume.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <section class="channel">
 	<div class="channel-title">
 		<div class="channel-title-text">경력관리</div>
