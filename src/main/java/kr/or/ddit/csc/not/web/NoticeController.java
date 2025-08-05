@@ -42,7 +42,7 @@ public class NoticeController {
 	    model.addAttribute("getAllNotice", articlePage.getTotal());
 	    model.addAttribute("getList", articlePage.getContent());
 		
-		return "csc/noticeList";
+		return "csc/not/noticeList";
 	}
 	
 	// 공지사항 세부 화면
@@ -52,7 +52,7 @@ public class NoticeController {
 		NoticeVO noticeDetail = noticeService.getUserNoticeDetail(noticeId);
 		model.addAttribute("noticeDetail", noticeDetail);
 
-		return "csc/noticeDetail";
+		return "csc/not/noticeDetail";
 	}
 	
 	// 관리자 목록 조회

@@ -3,20 +3,21 @@ function formatDateMMDD(iso) {
 	const d = new Date(iso);
 	const mm = String(d.getMonth() + 1).padStart(2, '0');
 	const dd = String(d.getDate()).padStart(2, '0');
-	return `${mm}.${dd}`;
+	const fullYear = String(d.getFullYear()); 
+	return `${fullYear}.${mm}.${dd}`;
 }
 
 // 전역 상태
 window.currentPage = 1;
-window.currentNoticeId = null;
+window.currentFaqId = null;
 
 // 실제 데이터 + 페이징 조회
-function fetchNotices(page = 1) {
+function fetchFaqs(page = 1) {
 	const pageSize = 5;
 	const keyword = document.querySelector('input[name="keyword"]').value;
 	const status = document.querySelector('select[name="status"]').value;
 
-	axios.get('/csc/not/admin/noticeList.do', {
+	axios.get('/csc/faq/admin/faqList.do', {
 			params: {
 				currentPage: page,
 				size: pageSize,
@@ -25,10 +26,10 @@ function fetchNotices(page = 1) {
 			}
 		})
 		.then(({ data }) => {
-			const countEl = document.getElementById('notice-count');
+			const countEl = document.getElementById('faq-count');
 			if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
 
-			const listEl = document.getElementById('notice-list');
+			const listEl = document.getElementById('faq-list');
 			if (!listEl) return;
 
 			if (data.content.length < 1 && keyword.trim() !== '') {
@@ -36,18 +37,17 @@ function fetchNotices(page = 1) {
 			} else {
 				const rows = data.content.map(item => `
           <tr>
-            <td>${item.noticeId}</td>
-            <td><a href="javascript:showDetail(${item.noticeId})" style="cursor: pointer; text-decoration: none; color:black;">${item.noticeTitle}</a></td>
-            <td>${item.noticeCnt}</td>
-            <td>${formatDateMMDD(item.noticeUpdatedAt)}</td>
+            <td>${item.faqId}</td>
+            <td><a href="javascript:showDetail(${item.faqId})" style="cursor: pointer; text-decoration: none; color:black;">${item.faqTitle}</a></td>
+            <td>${formatDateMMDD(item.faqUpdatedAt)}</td>
           </tr>`).join('');
 				listEl.innerHTML = rows;
 				renderPagination(data);
 			}
 		})
-		.catch(err => console.error('공지 목록 조회 중 에러:', err));
+		.catch(err => console.error('FAQ 목록 조회 중 에러:', err));
 }
-
+//페이지네이션(하단 페이지 버튼들)을 렌더링
 function renderPagination({ startPage, endPage, currentPage, totalPages }) {
 	let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 
@@ -62,26 +62,27 @@ function renderPagination({ startPage, endPage, currentPage, totalPages }) {
 }
 
 
-if (typeof window.noticeEventsBound === 'undefined') {
-	window.noticeEventsBound = false;
+if (typeof window.faqEventsBound === 'undefined') {
+	window.faqEventsBound = false;
 }
-function bindNoticeEvents() {
-	if (noticeEventsBound) return;
-	noticeEventsBound = true;
+//FAQ 검색 및 초기화 버튼에 클릭 이벤트를 바인딩
+function bindFaqEvents() {
+	if (faqEventsBound) return;
+	faqEventsBound = true;
 
 	const searchBtn = document.querySelector('.btn-save');
 	if (searchBtn) {
-		searchBtn.addEventListener('click', () => fetchNotices(1));
+		searchBtn.addEventListener('click', () => fetchFaqs(1));
 	}
 
-	const noticeHeader = document.getElementById('noticeHeader');
-	if (noticeHeader) {
-		noticeHeader.addEventListener('click', () => {
+	const faqHeader = document.getElementById('faqHeader');
+	if (faqHeader) {
+		faqHeader.addEventListener('click', () => {
 			const kwInput = document.querySelector('input[name="keyword"]');
 			const statusSelect = document.querySelector('select[name="status"]');
 			if (kwInput) kwInput.value = '';
 			if (statusSelect) statusSelect.selectedIndex = 0;
-			fetchNotices(1);
+			fetchFaqs(1);
 		});
 	}
 }
@@ -97,14 +98,15 @@ if (!window._paginationDelegated) {
     if (isNaN(page) || page < 1) return;
 
     window.currentPage = page;
-    fetchNotices(page);
+    fetchFaqs(page);
   });
 }
 
+// DOM이 준비된 후 에디터를 초기화하고 FAQ 데이터 불러오기
 function waitForInit() {
 	const checkReady = () => {
 		const keywordInput = document.querySelector('input[name="keyword"]');
-		const editorTarget = document.getElementById("noticeContent");
+		const editorTarget = document.getElementById("faqContent");
 
 		if (keywordInput && editorTarget) {
 			ClassicEditor
@@ -113,8 +115,8 @@ function waitForInit() {
 				})
 				.then(editor => {
 					window.editor = editor;
-					fetchNotices(1);      // 공지사항 불러오기
-					bindNoticeEvents();   // 이벤트 바인딩
+					fetchFaqs(1);      // 공지사항 불러오기
+					bindFaqEvents();   // 이벤트 바인딩
 				})
 				.catch(err => console.error("에디터 생성 실패:", err));
 		} else {
@@ -126,16 +128,16 @@ function waitForInit() {
 
 waitForInit();
 
-
-function showDetail(noticeId) {
-	if (!noticeId) return;
+// FAQ 세부조회
+function showDetail(faqId) {
+	if (!faqId) return;
 	resetDetail();
-	axios.get('csc/not/admin/noticeDetail.do', { params: { noticeId } })
+	axios.get('csc/faq/admin/faqDetail.do', { params: { faqId } })
 		.then(response => {
-			window.currentNoticeId = noticeId;
+			window.currentFaqId=faqId;
 			document.getElementById("btn-delete").style.display = "block";
 			document.getElementById("btn-save").innerHTML = "수정";
-			document.getElementById('noticeId').value = noticeId;
+			document.getElementById('faqId').value = faqId;
 
 			const infoTable = document.querySelector('.info-table');
 			infoTable.style.display = 'table';
@@ -143,33 +145,32 @@ function showDetail(noticeId) {
 			const resp = response.data;
 			document.getElementById("info-table-tbody").innerHTML = `
 	        <tr>
-	          <td>${resp.noticeId}</td>
-	          <td>${resp.noticeTitle}</td>
-	          <td>${formatDateMMDD(resp.noticeUpdatedAt)}</td>
-	          <td>${resp.noticeCnt}</td>
+	          <td>${resp.faqId}</td>
+	          <td>${resp.faqTitle}</td>
+	          <td>${formatDateMMDD(resp.faqUpdatedAt)}</td>
 	        </tr>`;
 
-			document.querySelector('input[name="noticeTitle"]').value = resp.noticeTitle;
-			window.editor?.setData(resp.noticeContent);
+			document.querySelector('input[name="faqTitle"]').value = resp.faqTitle;
+			window.editor?.setData(resp.faqContent);
 
 			const ul = document.getElementById("existing-files");
 			if (!resp.getFileList || resp.getFileList.length === 0) {
-				ul.innerHTML = '<li>첨부된 파일이 없습니다.</li>';
 				document.getElementById("file").style.display = "block";
+				ul.innerHTML = '<li>첨부된 파일이 없습니다.</li>';
 			} else {
 				document.getElementById('fileGroupNo').value = resp.getFileList[0].fileGroupId;
 				document.getElementById("file").style.display = "block";
 				ul.innerHTML = resp.getFileList.map(f => `
 	          	<li>
 	            <div onclick="filedownload('${f.fileGroupId}', ${f.fileSeq})" target="_blank">${f.fileOrgName}</div>&nbsp;&nbsp;
-	            <button type="button" onclick="deleteExistingFile('${f.fileGroupId}', ${f.fileSeq}, ${noticeId})">삭제</button>
+	            <button type="button" onclick="deleteExistingFile('${f.fileGroupId}', ${f.fileSeq}, ${faqId})">삭제</button>
 	          	</li>`
 				).join('');
 			}
 		})
 		.catch(console.error);
 }
-
+// 파일 다운로드
 function filedownload(fileGroupId, fileSeq) {
 	axios({
 			method: 'get',
@@ -191,16 +192,18 @@ function filedownload(fileGroupId, fileSeq) {
 		.catch(error => console.error('파일 다운로드 실패:', error));
 }
 
-function deleteExistingFile(fileGroupId, seq, noticeId) {
-	axios.get('/csc/not/admin/deleteFile', {
+// 기존 파일 삭제
+function deleteExistingFile(fileGroupId, seq, faqId) {
+	axios.get('/csc/faq/admin/deleteFile', {
 			params: { groupId: fileGroupId, seq }
 		})
-		.then(() => showDetail(noticeId))
+		.then(() => showDetail(faqId))
 		.catch(console.error);
 }
 
-
+// 기존 상세 조회 초기화
 function resetDetail() {
+
 	document.getElementById('fileGroupNo').value = '';
 	document.getElementById("btn-delete").style.display = "none";
 	document.getElementById("file").style.display = "none";
@@ -208,45 +211,44 @@ function resetDetail() {
 	document.getElementById("btn-save").innerHTML = "등록";
 	document.querySelector('.info-table').style.display = 'none';
 	document.getElementById('info-table-tbody').innerHTML = '';
-	document.querySelector('input[name="noticeTitle"]').value = '';
+	document.querySelector('input[name="faqTitle"]').value = '';
 	window.editor?.setData('');
-	document.getElementById('noticeFileInput').value = '';
+	document.getElementById('faqFileInput').value = '';
 }
 
+// 파일 삽입 및 수정
 function insertOrUpdate() {
 	const form = document.getElementById('form-data');
 	const fd = new FormData(form);
-
-	fd.set('noticeContent', window.editor?.getData() || '');
+	
+	fd.set('faqContent', window.editor?.getData() || '');
 
 	if (document.querySelector('.info-table').style.display === 'none') {
-
-		
-		axios.post('/csc/not/admin/insertNotice', fd)
+		axios.post('/csc/faq/admin/insertFaq', fd)
 			.then(() => {
 				resetDetail();
-				fetchNotices(1);
+				fetchFaqs(1);
 			})
 			.catch(err => console.error('등록 실패:', err.response || err));
 	} else {
-		axios.post('/csc/not/admin/updateNotice', fd)
+		axios.post('/csc/faq/admin/updateFaq', fd)
 			.then(() => {
 				resetDetail();
-				fetchNotices(window.currentPage);
-				showDetail(window.currentNoticeId);
+				fetchFaqs(window.currentPage);
+				showDetail(window.currentFaqId);
 			})
 			.catch(err => console.error('수정 실패:', err.response || err));
 	}
 }
 
-function deleteNotice() {
+function deleteFaq() {
 	const form = document.getElementById('form-data');
 	const fd = new FormData(form);
-	fd.set('noticeContent', window.editor?.getData() || '');
+	fd.set('faqContent', window.editor?.getData() || '');
 
-	axios.post('/csc/not/admin/deleteNotice', fd)
+	axios.post('/csc/faq/admin/deleteFaq', fd)
 		.then(() => {
-			fetchNotices(1);
+			fetchFaqs(1);
 			resetDetail();
 		})
 		.catch(err => console.error('삭제 실패:', err.response || err));

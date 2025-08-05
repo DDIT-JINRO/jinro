@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/css/csc/adminFaq.css">
+<link rel="stylesheet" href="/css/csc/faq/adminFaq.css">
 <h3>고객센터 > FAQ</h3>
 <div class="template-container">
 	<!-- 리스트 패널 -->
@@ -10,7 +10,7 @@
 
 		<!-- 리스트 패널 상단: 필터 영역 -->
 		<div class="filter-box">
-			<form action="/csc/admin/faqList.do" method="get">
+			<form action="/csc/faq/admin/faqList.do" method="get">
 				<select name="status">
 				    <option value="2025">2025</option>
 				    <!-- … -->
@@ -27,8 +27,8 @@
 		<div class="table-wrapper">
 			<table>
 				<colgroup>
-					<col style="width: 10%;">
-					<col style="width: 60%;">
+					<col style="width: 20%;">
+					<col style="width: 50%;">
 					<col style="width: 30%;">
 				</colgroup>
 				<thead>
@@ -64,7 +64,6 @@
 					<th>번 호</th>
 					<th>제 목</th>
 					<th>생성일(수정일)</th>
-					<th>조회수</th>
 				</tr>
 			</thead>
 			<tbody id="info-table-tbody">
@@ -92,16 +91,12 @@
 				<label for="faqFileInput">첨부 파일</label> 
 				<input id="faqFileInput" type="file" name="files" multiple/>
 			</div>
-
-			
 			<!-- 기존에 업로드된 파일을 뿌릴 곳 -->
 			<div class="faqFormGroup" id="file" style="display: none;">
-				<div style="float:left;">
+				<div style="float: left;">
 					<label>기존 첨부파일</label>
-				</div>				
-				<div id="existing-files" class="existing-files"> 
-					
 				</div>
+				<div id="existing-files" class="existing-files"></div>
 			</div>
 
 			<div class="panel-footer button-group">
@@ -112,5 +107,5 @@
 		</form>
 	</div>
 </div>
-<script type="text/javascript" src="/js/csc/adminFaqList.js"></script>
+<script type="text/javascript" src="/js/csc/faq/adminFaqList.js"></script>
 
