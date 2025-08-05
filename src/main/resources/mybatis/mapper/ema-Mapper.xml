@@ -28,25 +28,26 @@
 	                (a.hire_title LIKE '%' || #{keyword} || '%' OR b.cp_name LIKE '%' || #{keyword} || '%')
 	            </if>
 	            <if test="hireTypeNames != null and hireTypeNames.size() > 0">
-	                AND c.cc_name IN
+	                AND c.cc_id IN
 	                <foreach collection="hireTypeNames" item="typeName" open="(" separator="," close=")">
 	                    #{typeName}
 	                </foreach>
 	            </if>
 	            <if test="hireClassCodeNames != null and hireClassCodeNames.size() > 0">
-	                AND d.cc_name IN
+	                AND d.cc_id IN
 	                <foreach collection="hireClassCodeNames" item="className" open="(" separator="," close=")">
 	                    #{className}
 	                </foreach>
 	            </if>
 	            <if test="regions != null and regions.size() > 0">
-	                AND b.cp_region IN
-	                <foreach collection="regions" item="region" open="(" separator="," close=")">
-	                    #{region}
-	                </foreach>
+		            AND (
+		                <foreach collection="regions" item="region" separator="OR">
+		                    b.cp_region LIKE (SELECT cc_etc || '%' FROM com_code WHERE cc_id = #{region})
+		                </foreach>
+		                )
 	            </if>
 	        </where>
-	        ORDER BY a.hire_created_at DESC
+	        ORDER BY a.hire_id DESC
 	    )
 	    WHERE RNUM BETWEEN #{startNo} AND #{endNo}
 	</select>
@@ -64,24 +65,30 @@
 	            (a.hire_title LIKE '%' || #{keyword} || '%' OR b.cp_name LIKE '%' || #{keyword} || '%')
 	        </if>
 	        <if test="hireTypeNames != null and hireTypeNames.size() > 0">
-	            AND c.cc_name IN
+	            AND c.cc_id IN
 	            <foreach collection="hireTypeNames" item="typeName" open="(" separator="," close=")">
 	                #{typeName}
 	            </foreach>
 	        </if>
 	        <if test="hireClassCodeNames != null and hireClassCodeNames.size() > 0">
-	            AND d.cc_name IN
+	            AND d.cc_id IN
 	            <foreach collection="hireClassCodeNames" item="className" open="(" separator="," close=")">
 	                #{className}
 	            </foreach>
 	        </if>
 	        <if test="regions != null and regions.size() > 0">
-	            AND b.cp_region IN
-	            <foreach collection="regions" item="region" open="(" separator="," close=")">
-	                #{region}
-	            </foreach>
+	            AND (
+	                <foreach collection="regions" item="region" separator="OR">
+	                    b.cp_region LIKE (SELECT cc_etc || '%' FROM com_code WHERE cc_id = #{region})
+	                </foreach>
+	                )
 	        </if>
 	    </where>
 	</select>
     
+    <select id="selectCodeVOList" parameterType="kr.or.ddit.worldcup.service.ComCodeVO" resultType="kr.or.ddit.com.ComCodeVO">
+    	select CC_ID, CL_CODE, CC_NAME, CC_ETC
+		from COM_CODE
+		where CL_CODE = #{clCode}
+    </select>
 </mapper>
