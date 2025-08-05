@@ -362,6 +362,29 @@ p:first-of-type { /* 이 부분이 '총 10건'을 의미하는 것으로 가정 
     padding: 15px;
 }
 
+.hire-date-section .date-container {
+    display: flex;
+    gap: 30px;
+    font-size: 0.9rem;
+    color: #4b5563; /* 기본 텍스트 색상 */
+}
+
+/* 마감일 텍스트 스타일 */
+.hire-date-section .date-container label .deadline-text {
+	font-weight: 500;
+}
+
+/* D-3일 이내 임박한 공고 마감일 텍스트 */
+.deadline-text.deadline-imminent {
+    color: #ef4444; /* 붉은색 */
+}
+
+/* 마감된 공고 마감일 텍스트 */
+.deadline-text.deadline-passed {
+    color: #9ca3af; /* 회색 */
+    text-decoration: line-through; /* 글자에 줄 긋기 */
+}
+
 .accordion-content label {
     font-size: 0.9rem;
     color: #1f2937;

@@ -1,5 +1,8 @@
 package kr.or.ddit.empt.ema.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +27,6 @@ public class HireVO {
 	private String hireClassCodeName; //직업대분류
 	
 	
-	
 	//필터링
     private String keyword; // 검색어 (제목 또는 기업명)
     private List<String> hireTypeNames; // 채용 유형 (체크박스)
@@ -38,6 +40,19 @@ public class HireVO {
 	private int startNo;
 	private int endNo;
 	
+	// D-day를 계산하여 반환하는 getter 메서드
+	public long getDday() {
+	    if (this.hireEndDate == null) {
+	        return Long.MAX_VALUE;
+	    }
+
+	    LocalDate today = LocalDate.now();
+	    // java.util.Date를 LocalDate로 안전하게 변환
+	    LocalDate endDate = this.hireEndDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+	    return ChronoUnit.DAYS.between(today, endDate);
+	}
+	
 	public int getStartNo() {
 		this.currentPage = (this.currentPage < 1) ? 1 : this.currentPage;
 		return (this.currentPage - 1) * size;
@@ -47,4 +62,5 @@ public class HireVO {
 		this.currentPage = (this.currentPage < 1) ? 1 : this.currentPage;
 		return this.currentPage * size;
 	}
+	
 }

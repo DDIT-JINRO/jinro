@@ -146,12 +146,21 @@
 							</div>
 							<div class="hire-date-section">
 								<h4>채용 기간</h4>
-								<div>
-									<label>공고 시작일 :
-									<fmt:formatDate value="${hire.hireStartDate}" pattern="yyyy. MM. dd" />
-									</label>
-									<label>공고 마감일 :
-									<fmt:formatDate value="${hire.hireEndDate}" pattern="yyyy. MM. dd" />
+								<div class="date-container">
+									<label>공고 시작일 : <fmt:formatDate
+											value="${hire.hireStartDate}" pattern="yyyy. MM. dd" />
+									</label> <label> 공고 마감일 : <span
+										class="deadline-text
+							                <c:choose>
+							                    <c:when test="${hire.dday >= 0 and hire.dday <= 3}">deadline-imminent</c:when>
+							                    <c:when test="${hire.dday < 0}">deadline-passed</c:when>
+							                </c:choose>">
+											<fmt:formatDate value="${hire.hireEndDate}"
+												pattern="yyyy. MM. dd" /> <%-- D-day 표시 --%> <c:choose>
+												<c:when test="${hire.dday >= 0}"> (D-${hire.dday})</c:when>
+												<c:when test="${hire.dday < 0}"> (마감됨)</c:when>
+											</c:choose>
+									</span>
 									</label>
 								</div>
 							</div>
