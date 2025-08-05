@@ -192,39 +192,37 @@ body {
 /* resumeWriter.css 오버라이드 (이력서 내용 스타일) */
 /* ========================================= */
 .aifb-questions-wrapper .personal-info-form .section-header {
-    display: none;
+	display: none;
 }
 
 .aifb-questions-wrapper .personal-info-form .form-profile-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px 40px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 20px 40px;
 }
 
 /* 편집 관련 버튼들 숨김 */
-.aifb-questions-wrapper #add-job,
-.aifb-questions-wrapper #add-skill,
-.aifb-questions-wrapper #photo-delete-btn,
-.aifb-questions-wrapper .btn-group,
-.aifb-questions-wrapper .load-button-group,
-.aifb-questions-wrapper .resume-title {
-    display: none;
+.aifb-questions-wrapper #add-job, .aifb-questions-wrapper #add-skill,
+	.aifb-questions-wrapper #photo-delete-btn, .aifb-questions-wrapper .btn-group,
+	.aifb-questions-wrapper .load-button-group, .aifb-questions-wrapper .resume-title
+	{
+	display: none;
 }
 
 /* 주소 검색 아이콘도 숨깁니다. */
 .aifb-questions-wrapper .icon-search {
-    display: none;
+	display: none;
 }
 
 /* 필수 입력 표시(*), 오류 메시지 등도 숨깁니다. */
-.aifb-questions-wrapper .required-asterisk,
-.aifb-questions-wrapper .error-message {
-    display: none;
+.aifb-questions-wrapper .required-asterisk, .aifb-questions-wrapper .error-message
+	{
+	display: none;
 }
 
 /* 이력서의 사진은 그대로 표시되도록 하고, 삭제 버튼만 숨깁니다. */
 .aifb-questions-wrapper .form-group.photo-group .photo-upload-area img {
-    display: block;
-    width: 100px;
-    height: 100px;
+	display: block;
+	width: 100px;
+	height: 100px;
 }

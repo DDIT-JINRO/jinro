@@ -1,4 +1,4 @@
-package kr.or.ddit.cdp.aifdbck.sint.service; 
+package kr.or.ddit.cdp.aifdbck.sint.service;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class SelfIntroDetailDto {
-    private String title;
-    private List<SelfIntroQVO> questions;
-    private List<SelfIntroContentVO> contents;
+	private String title;
+	private List<SelfIntroQVO> questions;
+	private List<SelfIntroContentVO> contents;
 }

@@ -51,7 +51,7 @@ public class AiProofreadResumeServiceImpl implements AiProofreadResumeService {
 
 				이력서 내용 (HTML 형식):
 				%s
-				
+
 				다만 사진이 입력되는 형식은 언급하지 않고 넘어가시오
 				""", resumeItems);
 

@@ -14,6 +14,7 @@ if (requestAiFeedbackBtn) {
 	requestAiFeedbackBtn.addEventListener('click', requestAiFeedback);
 }
 
+//불필요한 문장정리
 function cleanAiResponse(text) {
 	let cleanedText = text.trim();
 	if (cleanedText.startsWith('```json')) {
@@ -26,6 +27,7 @@ function cleanAiResponse(text) {
 	return cleanedText.trim();
 }
 
+//이력서 상세 호출
 function loadResumeDetail() {
 	const selectedResumeId = resumeList.value;
 
@@ -74,6 +76,7 @@ function loadResumeDetail() {
 		});
 }
 
+//이력서 ai첨삭 호출
 function requestAiFeedback() {
 	if (!originalData) {
 		alert('먼저 이력서를 선택해주세요.');
@@ -122,7 +125,7 @@ function requestAiFeedback() {
 }
 
 
-
+//이력서 수정화면으로 이동
 function requestProofread() {
 	const selectedResumeId = document.getElementById('resumeList').value;
 	if (selectedResumeId) {
@@ -131,6 +134,7 @@ function requestProofread() {
 		alert('먼저 이력서를 선택해주세요.');
 	}
 }
+
 
 //jsp 미리보기/다운로드
 const previewPdfBtn = document.getElementById("previewPdfBtn");

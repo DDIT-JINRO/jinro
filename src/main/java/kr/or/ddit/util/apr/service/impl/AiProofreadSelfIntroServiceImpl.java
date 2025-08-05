@@ -73,9 +73,7 @@ public class AiProofreadSelfIntroServiceImpl implements AiProofreadSelfIntroServ
 
 	private List<String> proofreadEachSection(List<Map<String, String>> sections) {
 
-
 		List<CompletableFuture<String>> futures = new ArrayList<>();
-
 
 		for (int i = 0; i < sections.size(); i++) {
 			final int index = i;

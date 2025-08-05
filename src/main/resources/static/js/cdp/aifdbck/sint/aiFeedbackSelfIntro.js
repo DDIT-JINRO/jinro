@@ -12,6 +12,7 @@ selfIntroList.addEventListener('change', loadSelfIntroDetail);
 const requestAiFeedbackBtn = document.getElementById('requestAiFeedback');
 requestAiFeedbackBtn.addEventListener('click', requestAiFeedback);
 
+//불필요한 문장정리
 function cleanAiResponse(text) {
 	let cleanedText = text.trim();
 	if (cleanedText.startsWith('```json')) {
@@ -24,7 +25,7 @@ function cleanAiResponse(text) {
 }
 
 
-//자기소개서 내용만 불러오기
+//자기소개서 상세 호출
 function loadSelfIntroDetail() {
 	const selectedSiId = document.getElementById('selfIntroList').value;
 
@@ -77,6 +78,7 @@ function loadSelfIntroDetail() {
 		});
 }
 
+//자기소개서 ai 첨삭 호출
 function requestAiFeedback() {
 	if (!originalData) {
 		alert('먼저 자기소개서를 선택해주세요.');
@@ -134,8 +136,6 @@ function requestAiFeedback() {
 			alert('데이터를 불러오는 데 실패했습니다.');
 		});
 }
-
-
 function displayAllFeedback() {
 	if (!aiFeedbackData) return;
 	const feedbackArea = document.getElementById('feedbackArea');
@@ -164,7 +164,6 @@ function displayAllFeedback() {
 	feedbackArea.innerHTML = feedbackHtml;
 	feedbackArea.scrollTop = 0;
 }
-
 function displayFeedback(index, clickedElement) {
 	document.querySelectorAll('.qa-block').forEach(el => el.classList.remove('active'));
 	clickedElement.classList.add('active');
@@ -176,6 +175,8 @@ function displayFeedback(index, clickedElement) {
 		feedbackArea.scrollTop = offset;
 	}
 }
+
+//자기소개서 수정화면 이동
 function requestProofread() {
 	const selectedSiId = document.getElementById('selfIntroList').value;
 	if (selectedSiId) {
@@ -186,7 +187,6 @@ function requestProofread() {
 }
 
 //pdf 미리보기/ 다운로드
-// HTML 요소 참조
 const previewPdfBtn = document.getElementById("previewPdfBtn");
 const downloadPdfBtn = document.getElementById("downloadPdfBtn");
 

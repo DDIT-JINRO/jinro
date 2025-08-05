@@ -24,10 +24,11 @@ public class AiProofreadSelfIntroController {
 
 	@PostMapping("/coverletter")
 	@ResponseBody
-	public ResponseEntity<String> proofreadCoverLetter(@RequestBody Map<String, List<Map<String, String>>> requestPayload) {
+	public ResponseEntity<String> proofreadCoverLetter(
+			@RequestBody Map<String, List<Map<String, String>>> requestPayload) {
 
 		List<Map<String, String>> selfIntroSections = requestPayload.get("sections");
-		
+
 		// AI 첨삭 서비스의 proofreadCoverLetter() 메서드를 호출하여
 		// 병렬 처리와 응답 조합까지 한 번에 처리하도록 변경
 		String result = aiProofreadSelfIntroService.proofreadCoverLetter(selfIntroSections);
