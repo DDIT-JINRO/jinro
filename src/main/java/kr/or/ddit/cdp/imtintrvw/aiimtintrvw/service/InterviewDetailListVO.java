@@ -11,6 +11,6 @@ public class InterviewDetailListVO {
 	private String idlTitle;
 	private Date idlCreatedAt;
 	private String idlDelYN;
-	
+
 	private int questionCount;
 }

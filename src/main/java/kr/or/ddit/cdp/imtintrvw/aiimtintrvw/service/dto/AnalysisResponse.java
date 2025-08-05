@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AnalysisResponse {
 
-	// 🎯 세션 ID 추가
+	// 세션 ID 추가
 	private String sessionId;
 
-	// 🎯 성공 여부 추가 (프론트엔드 호환성)
+	// 성공 여부 추가 (프론트엔드 호환성)
 	private Boolean success = true;
 
 	private Integer overallScore;
 	private String grade;
 
-	// 🎯 timestamp를 문자열로 반환하도록 포맷 지정
+	// timestamp를 문자열로 반환하도록 포맷 지정
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private LocalDateTime timestamp;
 
@@ -30,7 +30,7 @@ public class AnalysisResponse {
 	private AnalysisSummary summary;
 	private ScoreBreakdown scores;
 
-	// 🎯 생성자 추가 (편의성)
+	// 생성자 추가 (편의성)
 	public AnalysisResponse(String sessionId) {
 		this.sessionId = sessionId;
 		this.timestamp = LocalDateTime.now();
@@ -53,7 +53,7 @@ public class AnalysisResponse {
 			private Integer volumeConsistency;
 			private String feedback;
 
-			// 🎯 생성자 추가
+			// 생성자 추가
 			public AudioAnalysis(Integer speechClarity, Integer paceAppropriate, Integer volumeConsistency, String feedback) {
 				this.speechClarity = speechClarity;
 				this.paceAppropriate = paceAppropriate;
@@ -70,7 +70,7 @@ public class AnalysisResponse {
 			private Integer posture;
 			private String feedback;
 
-			// 🎯 생성자 추가
+			// 생성자 추가
 			public VideoAnalysis(Integer eyeContact, Integer facialExpression, Integer posture, String feedback) {
 				this.eyeContact = eyeContact;
 				this.facialExpression = facialExpression;
@@ -87,7 +87,7 @@ public class AnalysisResponse {
 			private Integer relevance;
 			private String feedback;
 
-			// 🎯 생성자 추가
+			// 생성자 추가
 			public TextAnalysis(Integer contentQuality, Integer structureLogic, Integer relevance, String feedback) {
 				this.contentQuality = contentQuality;
 				this.structureLogic = structureLogic;
@@ -104,7 +104,7 @@ public class AnalysisResponse {
 		private List<String> improvements;
 		private String recommendation;
 
-		// 🎯 생성자 추가
+		// 생성자 추가
 		public AnalysisSummary(List<String> strengths, List<String> improvements, String recommendation) {
 			this.strengths = strengths;
 			this.improvements = improvements;
@@ -120,7 +120,7 @@ public class AnalysisResponse {
 		private Integer content;
 		private Integer overall;
 
-		// 🎯 생성자 추가
+		// 생성자 추가
 		public ScoreBreakdown(Integer communication, Integer appearance, Integer content, Integer overall) {
 			this.communication = communication;
 			this.appearance = appearance;
@@ -129,7 +129,7 @@ public class AnalysisResponse {
 		}
 	}
 
-	// 🎯 기본값으로 응답 생성하는 정적 메서드
+	// 기본값으로 응답 생성하는 정적 메서드
 	public static AnalysisResponse createDefaultResponse(String sessionId, String errorMessage) {
 		AnalysisResponse response = new AnalysisResponse(sessionId);
 		response.setOverallScore(70);

@@ -8,6 +8,6 @@ public class InterviewQuestionVO {
 	private String iqGubun;
 	private String iqContent;
 	private String iqSuggest;
-	
-    private String industryName;
+
+	private String industryName;
 }

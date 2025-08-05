@@ -35,7 +35,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Value("${gemini.api.url}")
 	private String geminiApiUrl;
 
-	// 🎯 진행률 추적을 위한 메모리 저장소 (실제로는 Redis 권장)
+	// 진행률 추적을 위한 메모리 저장소
 	private final Map<String, Integer> analysisProgress = new ConcurrentHashMap<>();
 	private final Map<String, Boolean> activeSessions = new ConcurrentHashMap<>();
 
@@ -46,7 +46,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	/**
-	 * 🎯 Map 형태의 요청 데이터로 면접 분석 수행 (Controller 로직 이동)
+	 * Map 형태의 요청 데이터로 면접 분석 수행 (Controller 로직 이동)
 	 */
 	@Override
 	public AnalysisResponse analyzeInterviewFromMap(Map<String, Object> requestData) {
@@ -94,7 +94,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 		String sessionId = request.getSessionId();
 
 		try {
-			// 🎯 API 키 검증
+			// API 키 검증
 			if (geminiApiKey == null || geminiApiKey.trim().isEmpty()) {
 				log.error("❌ Gemini API 키가 설정되지 않았습니다");
 				return AnalysisResponse.createDefaultResponse(sessionId, "API 키가 설정되지 않았습니다");
@@ -112,7 +112,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 			// 3. API 호출
 			String response = webClient.post().uri(geminiApiUrl + "?key=" + geminiApiKey).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).bodyValue(requestBody)
-					.retrieve().bodyToMono(String.class).timeout(Duration.ofSeconds(60)) // 🎯 타임아웃 증가
+					.retrieve().bodyToMono(String.class).timeout(Duration.ofSeconds(60))
 					.block();
 
 			// 4. 응답 파싱 및 반환
@@ -129,7 +129,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	/**
-	 * 🎯 요청 데이터 유효성 검사 (Controller에서 이동)
+	 * 요청 데이터 유효성 검사 (Controller에서 이동)
 	 */
 	@Override
 	public boolean validateRequest(Map<String, Object> requestData) {
@@ -162,7 +162,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	/**
-	 * 🎯 Map을 AnalysisRequest 객체로 변환 (Controller에서 이동)
+	 * Map을 AnalysisRequest 객체로 변환 (Controller에서 이동)
 	 */
 	@Override
 	public AnalysisRequest convertToAnalysisRequest(Map<String, Object> requestData) {
@@ -235,41 +235,38 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	/**
-	 * 🎯 세션 활성화 (Controller에서 이동)
+	 * 세션 활성화 (Controller에서 이동)
 	 */
 	@Override
 	public void activateSession(String sessionId) {
 		if (sessionId != null) {
 			activeSessions.put(sessionId, true);
-			log.debug("🟢 세션 활성화: {}", sessionId);
 		}
 	}
 
 	/**
-	 * 🎯 세션 비활성화 (Controller에서 이동)
+	 * 세션 비활성화 (Controller에서 이동)
 	 */
 	@Override
 	public void deactivateSession(String sessionId) {
 		if (sessionId != null) {
 			activeSessions.remove(sessionId);
 			analysisProgress.remove(sessionId);
-			log.debug("🔴 세션 비활성화: {}", sessionId);
 		}
 	}
 
 	/**
-	 * 🎯 진행률 업데이트 (Controller에서 이동)
+	 * 진행률 업데이트 (Controller에서 이동)
 	 */
 	@Override
 	public void updateProgress(String sessionId, int progress) {
 		if (sessionId != null) {
 			analysisProgress.put(sessionId, progress);
-			log.debug("📊 진행률 업데이트 - 세션: {}, 진행률: {}%", sessionId, progress);
 		}
 	}
 
 	/**
-	 * 🎯 분석 진행 상태 확인 (Controller에서 이동)
+	 * 분석 진행 상태 확인 (Controller에서 이동)
 	 */
 	@Override
 	public Map<String, Object> getAnalysisProgress(String sessionId) {
@@ -289,7 +286,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	/**
-	 * 🎯 분석 취소 (Controller에서 이동)
+	 * 분석 취소 (Controller에서 이동)
 	 */
 	@Override
 	public Map<String, Object> cancelAnalysis(String sessionId) {
@@ -310,7 +307,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	/**
-	 * 🎯 서비스 상태 확인 (Controller에서 이동)
+	 * 서비스 상태 확인 (Controller에서 이동)
 	 */
 	@Override
 	public Map<String, Object> getHealthStatus() {
@@ -329,7 +326,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	/**
-	 * 🎯 세션 활성 상태 확인
+	 * 세션 활성 상태 확인
 	 */
 	@Override
 	public boolean isSessionActive(String sessionId) {
@@ -365,7 +362,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 		prompt.append("당신은 15년 경력의 전문 면접관이자 진로 상담사입니다. ").append("청소년과 청년들의 면접을 분석하여 건설적이고 격려적인 피드백을 제공해주세요.\n\n");
 
-		// 🎯 세션 정보 추가
+		// 세션 정보 추가
 		prompt.append("=== 분석 세션 정보 ===\n");
 		prompt.append("- 세션 ID: ").append(request.getSessionId()).append("\n");
 		prompt.append("- 분석 시간: ").append(LocalDateTime.now()).append("\n\n");
@@ -487,7 +484,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 		try {
 			JsonNode responseNode = objectMapper.readTree(response);
 
-			// 🎯 API 응답 오류 체크
+			// API 응답 오류 체크
 			if (responseNode.has("error")) {
 				JsonNode errorNode = responseNode.get("error");
 				String errorMessage = errorNode.path("message").asText("Unknown API error");
@@ -509,14 +506,12 @@ public class AnalysisServiceImpl implements AnalysisService {
 				return AnalysisResponse.createDefaultResponse(sessionId, "빈 응답 텍스트");
 			}
 
-			log.debug("🔍 Gemini 원본 응답 텍스트 길이: {} - 세션 ID: {}", generatedText.length(), sessionId);
-
 			// JSON 부분만 추출
 			String jsonContent = extractJsonFromText(generatedText);
 
 			JsonNode analysisNode = objectMapper.readTree(jsonContent);
 
-			// 🎯 응답 객체 생성 (세션 ID 포함)
+			// 응답 객체 생성 (세션 ID 포함)
 			AnalysisResponse analysisResponse = new AnalysisResponse(sessionId);
 
 			// 기본 점수 및 등급

@@ -14,26 +14,26 @@ import kr.or.ddit.main.service.MemberVO;
 public class AiImitationInterviewServiceImpl implements AiImitationInterviewService {
 
 	@Autowired
-	InterviewListMapper interviewListMapper; 
-	
-	@Override
-    public List<InterviewDetailListVO> getCustomQuestionList(MemberVO memberVO) {
-        return interviewListMapper.getCustomQuestionList(memberVO);
-    }
+	InterviewListMapper interviewListMapper;
 
-    @Override
-    public List<InterviewQuestionVO> getIndustryList() {
-        return interviewListMapper.getIndustryList();
-    }
-    
-    @Override
-    public List<InterviewQuestionVO> getQuestionsByDetailListId(String idlId) {
-        return interviewListMapper.getQuestionsByDetailListId(idlId);
-    }
-    
-    @Override
-    public List<InterviewQuestionVO> getRandomQuestionsByIndustry(String industryCode, int questionCount) {
-        return interviewListMapper.getRandomQuestionsByIndustry(industryCode, questionCount);
-    }
+	@Override
+	public List<InterviewDetailListVO> getCustomQuestionList(MemberVO memberVO) {
+		return interviewListMapper.getCustomQuestionList(memberVO);
+	}
+
+	@Override
+	public List<InterviewQuestionVO> getIndustryList() {
+		return interviewListMapper.getIndustryList();
+	}
+
+	@Override
+	public List<InterviewQuestionVO> getQuestionsByDetailListId(String idlId) {
+		return interviewListMapper.getQuestionsByDetailListId(idlId);
+	}
+
+	@Override
+	public List<InterviewQuestionVO> getRandomQuestionsByIndustry(String industryCode, int questionCount) {
+		return interviewListMapper.getRandomQuestionsByIndustry(industryCode, questionCount);
+	}
 
 }

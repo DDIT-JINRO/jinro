@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AnalysisRequest {
 
-	// 🎯 세션 ID 추가
+	// 세션 ID 추가
 	@JsonProperty("sessionId")
 	private String sessionId;
 
@@ -28,7 +28,7 @@ public class AnalysisRequest {
 		private List<String> answers;
 		private int duration;
 
-		// 🎯 timestamp 필드 추가 (프론트엔드에서 전송)
+		// timestamp 필드 추가 (프론트엔드에서 전송)
 		private String timestamp;
 
 		// sessionId는 상위 레벨로 이동
@@ -41,7 +41,7 @@ public class AnalysisRequest {
 		private AudioData audio;
 		private VideoData video;
 
-		// 🎯 메타데이터 추가 (선택사항)
+		// 메타데이터 추가 (선택사항)
 		private MetaData metadata;
 
 		@Data
@@ -52,7 +52,7 @@ public class AnalysisRequest {
 			private Integer wordsPerMinute;
 			private Integer fillerWordsCount;
 
-			// 🎯 추가 음성 분석 필드들
+			// 추가 음성 분석 필드들
 			private Double speechClarity;
 			private Double noiseLevel;
 			private Double pauseFrequency;
@@ -67,7 +67,7 @@ public class AnalysisRequest {
 			private Double postureScore;
 			private Double faceDetectionRate;
 
-			// 🎯 추가 영상 분석 필드들
+			// 추가 영상 분석 필드들
 			private Object emotionAnalysis; // Map 형태로 감정 분석 결과
 			private Double lightingQuality;
 			private Double headMovementStability;

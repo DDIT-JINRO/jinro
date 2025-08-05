@@ -26,7 +26,7 @@ public class InterviewAnalysisController {
 	private final AnalysisService analysisService;
 
 	/**
-	 * 🎯 면접 분석 메인 엔드포인트 (프론트엔드 연동)
+	 * 면접 분석 메인 엔드포인트 (프론트엔드 연동)
 	 */
 	@PostMapping("/analyze-interview")
 	public ResponseEntity<?> analyzeInterview(@RequestBody Map<String, Object> requestData) {
@@ -39,10 +39,10 @@ public class InterviewAnalysisController {
 				return ResponseEntity.badRequest().body(Map.of("success", false, "error", "Invalid session ID", "message", "세션 ID가 필요합니다."));
 			}
 
-			// 🎯 Service에 분석 요청 위임
+			// Service에 분석 요청 위임
 			AnalysisResponse analysisResult = analysisService.analyzeInterviewFromMap(requestData);
 
-			// 🎯 프론트엔드 형식에 맞는 응답 구성
+			// 프론트엔드 형식에 맞는 응답 구성
 			Map<String, Object> response = Map
 					.of("success", analysisResult.getSuccess(), "sessionId", analysisResult.getSessionId(), "timestamp", analysisResult.getTimestamp().toString(), "overallScore",
 							analysisResult.getOverallScore(), "grade", analysisResult.getGrade(), "analysisMethod", analysisResult.getAnalysisMethod(), "detailed",
@@ -58,11 +58,11 @@ public class InterviewAnalysisController {
 									Map.of("contentQuality", analysisResult.getDetailed().getText().getContentQuality(), "structureLogic",
 											analysisResult.getDetailed().getText().getStructureLogic(), "relevance", analysisResult.getDetailed().getText().getRelevance(),
 											"feedback", analysisResult.getDetailed().getText().getFeedback())),
-									"summary",
-									Map.of("strengths", analysisResult.getSummary().getStrengths(), "improvements", analysisResult.getSummary().getImprovements(), "recommendation",
-											analysisResult.getSummary().getRecommendation()),
-									"scores", Map.of("communication", analysisResult.getScores().getCommunication(), "appearance", analysisResult.getScores().getAppearance(), "content",
-											analysisResult.getScores().getContent(), "overall", analysisResult.getScores().getOverall()));
+							"summary",
+							Map.of("strengths", analysisResult.getSummary().getStrengths(), "improvements", analysisResult.getSummary().getImprovements(), "recommendation",
+									analysisResult.getSummary().getRecommendation()),
+							"scores", Map.of("communication", analysisResult.getScores().getCommunication(), "appearance", analysisResult.getScores().getAppearance(), "content",
+									analysisResult.getScores().getContent(), "overall", analysisResult.getScores().getOverall()));
 
 			return ResponseEntity.ok(response);
 
@@ -75,12 +75,12 @@ public class InterviewAnalysisController {
 	}
 
 	/**
-	 * 🎯 분석 진행 상태 확인
+	 * 분석 진행 상태 확인
 	 */
 	@GetMapping("/analyze-interview/progress/{sessionId}")
 	public ResponseEntity<?> getAnalysisProgress(@PathVariable String sessionId) {
 		try {
-			// 🎯 Service에 진행률 확인 위임
+			// Service에 진행률 확인 위임
 			Map<String, Object> progressInfo = analysisService.getAnalysisProgress(sessionId);
 
 			return ResponseEntity.ok(progressInfo);
@@ -94,12 +94,12 @@ public class InterviewAnalysisController {
 	}
 
 	/**
-	 * 🎯 분석 취소
+	 * 분석 취소
 	 */
 	@PostMapping("/analyze-interview/cancel/{sessionId}")
 	public ResponseEntity<?> cancelAnalysis(@PathVariable String sessionId) {
 		try {
-			// 🎯 Service에 취소 요청 위임
+			// Service에 취소 요청 위임
 			Map<String, Object> cancelResult = analysisService.cancelAnalysis(sessionId);
 
 			return ResponseEntity.ok(cancelResult);
@@ -113,12 +113,12 @@ public class InterviewAnalysisController {
 	}
 
 	/**
-	 * 🎯 API 상태 확인
+	 * API 상태 확인
 	 */
 	@GetMapping("/analyze-interview/health")
 	public ResponseEntity<?> healthCheck() {
 		try {
-			// 🎯 Service에 상태 확인 위임
+			// Service에 상태 확인 위임
 			Map<String, Object> healthStatus = analysisService.getHealthStatus();
 
 			String status = (String) healthStatus.get("status");
@@ -135,7 +135,7 @@ public class InterviewAnalysisController {
 	}
 
 	/**
-	 * 🎯 세션 상태 확인 (추가 엔드포인트)
+	 * 세션 상태 확인 (추가 엔드포인트)
 	 */
 	@GetMapping("/analyze-interview/session/{sessionId}/status")
 	public ResponseEntity<?> getSessionStatus(@PathVariable String sessionId) {
