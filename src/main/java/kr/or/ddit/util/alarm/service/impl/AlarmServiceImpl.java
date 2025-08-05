@@ -105,6 +105,8 @@ public class AlarmServiceImpl implements AlarmService{
 			return "게시글에 좋아요가 눌렸습니다";
 		case LIKE_TO_REPLY:
 			return "댓글에 좋아요가 눌렸습니다";
+		case REPLY_TO_CONTACT:
+			return "문의에 대한 답변이 도착했습니다.";
 		default:
 			throw new IllegalArgumentException("정의되지 않은 알림 유형 : "+type);
 		}

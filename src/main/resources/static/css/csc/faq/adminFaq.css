@@ -1,16 +1,6 @@
 @charset "UTF-8";
 
 /* ──────────────────────────────────────────────────────────
-   섹션 제목(h3) 통일
-──────────────────────────────────────────────────────────*/
-h3 {
-	margin-top: 0px;
-	margin-bottom: 15px;
-	font-size: 16px;
-	color: #333;
-}
-
-/* ──────────────────────────────────────────────────────────
    컨테이너 & 패널 공통
 ──────────────────────────────────────────────────────────*/
 .template-container {
@@ -268,7 +258,7 @@ h3 {
 /* ──────────────────────────────────────────────────────────
    CKEditor 개선: label 포함 정렬 및 너비 고정
 ──────────────────────────────────────────────────────────*/
-.template-panel form .noticeFormGroup,
+.template-panel form .faqFormGroup,
 .template-panel form > div.ck-row {
 	display: flex;
 	align-items: flex-start;
@@ -315,9 +305,14 @@ li {
 	list-style-type: none;
 }
 
-/* ──────────────────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────────"existing-files"
    기존 첨부파일 리스트 스타일
 ──────────────────────────────────────────────────────────*/
+#file {
+ 	justify-content:between;
+ 	display:flex;
+}
+
 .existing-files {
 	height: 100px;
 	overflow: scroll;
@@ -348,7 +343,7 @@ li {
 	text-decoration: none;
 	flex-grow: 1;
 	white-space: nowrap;
-	overflow: hidden;
+	overflow: scroll;
 	text-overflow: ellipsis;
 	font-size: 14px;
 }
@@ -375,8 +370,8 @@ li {
 	box-shadow: none;
 }
 
-.noticeFormGroup > div > label,
-.noticeFormGroup > label {
+.faqFormGroup > div > label,
+.faqFormGroup > label {
 	display: block;
 	font-weight: bold;
 	margin-bottom: 4px;

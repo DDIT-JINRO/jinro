@@ -1,6 +1,5 @@
 @charset "UTF-8";
 
-
 /* ──────────────────────────────────────────────────────────
    컨테이너 & 패널 공통
 ──────────────────────────────────────────────────────────*/
@@ -133,7 +132,10 @@
 .template-panel tbody tr:hover {
 	background: #f0f8ff;
 }
-
+.status-pending {
+    color: #C00003; /* 빨간색 계열 */
+    font-weight: bold; /* 선택 사항: 좀 더 강조하고 싶다면 */
+}
 /* ──────────────────────────────────────────────────────────
    기본정보 테이블 (오른쪽 패널)
 ──────────────────────────────────────────────────────────*/
@@ -168,7 +170,7 @@
 }
 
 .template-panel form input[type="text"],
-.template-panel form textarea {
+.template-panel form textarea { /* textarea에 대한 일반적인 스타일 */
 	flex: 1;
 	padding: 6px 10px;
 	font-size: 14px;
@@ -177,14 +179,21 @@
 	box-sizing: border-box;
 }
 
+/* 텍스트 영역의 기본 높이 설정 (CKEditor 대체 후) */
 .template-panel form textarea {
-	height: 180px;
+	height: 180px; /* 기존 값. 필요에 따라 조절하세요. */
+	resize: vertical; /* 사용자가 수직으로 크기 조절 가능하게 함 */
+}
+/* disabled된 textarea 스타일 */
+#txtInqContent[disabled] {
+    background-color: white; /* 원하는 배경색 (아주 연한 회색) */
+    opacity: 1;              /* 투명도 100% (일부 브라우저에서 disabled 시 투명도가 적용될 수 있음) */
+    -webkit-text-fill-color: #333; /* 웹킷 브라우저 (Chrome, Safari) 글자색 문제 해결 */
 }
 
 /* ──────────────────────────────────────────────────────────
-   버튼 그룹 (삭제/초기화/저장)
+   버튼 그룹 (초기화/저장)
 ──────────────────────────────────────────────────────────*/
-.template-panel .btn-delete,
 .template-panel .btn-reset,
 .template-panel .btn-save {
 	padding: 8px 16px;
@@ -194,14 +203,12 @@
 	cursor: pointer;
 }
 
-.template-panel .btn-delete,
 .template-panel .btn-reset {
 	background: #C00003;
 	color: #fff;
 	margin-right: 8px;
 }
 
-.template-panel .btn-delete:hover,
 .template-panel .btn-reset:hover {
 	background: #A00002;
 }
@@ -257,123 +264,39 @@
 }
 
 /* ──────────────────────────────────────────────────────────
-   CKEditor 개선: label 포함 정렬 및 너비 고정
+   textarea (CKEditor 제거 후)
 ──────────────────────────────────────────────────────────*/
-.template-panel form .faqFormGroup,
-.template-panel form > div.ck-row {
+
+/* ck-row는 그대로 유지하고 label에 padding-top을 줍니다 */
+.template-panel form .ck-row { /* .inqFormGroup 에서도 사용되므로 그대로 유지 */
 	display: flex;
-	align-items: flex-start;
+	align-items: flex-start; /* label과 textarea가 상단에 정렬되도록 */
 	margin-bottom: 16px;
 }
 
-.template-panel form > div.ck-row label {
+.template-panel form .ck-row label {
 	width: 100px;
 	font-size: 14px;
 	color: #333;
-	padding-top: 10px;
+	padding-top: 10px; /* 라벨을 textarea의 시작점과 맞추기 위함 */
 }
 
-.template-panel form > div.ck-row .ck-editor {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	min-width: 0;
+/* 새로운 ID에 대한 스타일 추가 및 높이 조절 */
+#txtInqContent, #txtInqAnswer {
+	/* 원하는 높이로 조절하세요 */
+	height: 220px; /* 예시: CKEditor의 기본 높이보다 조금 더 크게 */
+	resize: vertical; /* 사용자가 수직으로 크기 조절 가능하게 함 */
+    flex: 1; /* 부모인 .ck-row에서 남은 공간을 채우도록 */
 }
 
-.template-panel .ck-editor .ck-editor__editable_inline {
-	width: 100%;
-	min-height: 300px;
-	max-height: 320px;
-	overflow-y: auto;
-	box-sizing: border-box;
-	padding: 6px 10px;
-}
-
-.template-panel .ck-editor .ck-content {
-	white-space: pre-wrap;
-	word-wrap: break-word;
-	word-break: break-word;
-	overflow-x: auto;
-}
-
-.template-panel .ck-editor .ck-content pre {
-	white-space: pre;
-	overflow-x: auto;
-}
-
-/* 리스트 스타일 제거 */
+/* 기존 리스트 스타일 제거는 그대로 유지 */
 li {
 	list-style-type: none;
 }
 
-/* ──────────────────────────────────────────────────────────"existing-files"
-   기존 첨부파일 리스트 스타일
-──────────────────────────────────────────────────────────*/
-#file {
- 	justify-content:between;
- 	display:flex;
-}
 
-.existing-files {
-	height: 100px;
-	overflow: scroll;
-	list-style: none;
-	padding: 0;
-	margin: 8px 0;
-}
-
-.existing-files li {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 6px 10px;
-	margin-bottom: 4px;
-	border: 1px solid #e0e0e0;
-	border-radius: 6px;
-	background-color: #fafafa;
-	transition: background-color 0.2s ease;
-}
-
-.existing-files li:hover {
-	background-color: #f5f9ff;
-	transform: none;
-}
-
-.existing-files li a {
-	color: #007bff;
-	text-decoration: none;
-	flex-grow: 1;
-	white-space: nowrap;
-	overflow: scroll;
-	text-overflow: ellipsis;
-	font-size: 14px;
-}
-
-.existing-files li a:hover {
-	color: #0056b3;
-	text-decoration: underline;
-}
-
-.existing-files li button {
-	background: #dc3545;
-	border: none;
-	color: #fff;
-	padding: 4px 12px;
-	border-radius: 4px;
-	cursor: pointer;
-	font-size: 12px;
-	transition: background-color 0.2s ease;
-}
-
-.existing-files li button:hover {
-	background: #c82333;
-	transform: none;
-	box-shadow: none;
-}
-
-.faqFormGroup > div > label,
-.faqFormGroup > label {
-	display: block;
+.inqFormGroup > div > label,
+.inqFormGroup > label {
 	font-weight: bold;
 	margin-bottom: 4px;
 	font-size: 14px;

@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <!-- 스타일 여기 적어주시면 가능 -->
-<link rel="stylesheet" href="/css/csc/notice.css">
+<link rel="stylesheet" href="/css/csc/not/notice.css">
 
 <section class="channel">
 	<!-- 여기가 네비게이션 역할을 합니다.  -->
@@ -33,7 +33,7 @@
 			<form method="get" action="/csc/not/noticeList.do">
 				<div class="com-default-search">
 					<input type="search" name="keyword" placeholder="공지사항 내에서 검색">
-					<button class="com-search-btn" type="button">
+					<button class="com-search-btn" type="submit">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
 				                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
 				        </svg>
@@ -90,7 +90,7 @@
 	</div>
 </div>
 <!-- js 파일 -->
-<script src="/js/csc/noticeList.js"></script>
+<script src="/js/csc/not/noticeList.js"></script>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>

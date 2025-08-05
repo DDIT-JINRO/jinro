@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/csc/noticeDetail.css">
+<link rel="stylesheet" href="/css/csc/not/noticeDetail.css">
 
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -54,6 +54,6 @@
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
-<script type="text/javascript" src="/js/csc/noticeDetail.js" defer></script>
+<script type="text/javascript" src="/js/csc/not/noticeDetail.js" defer></script>
 </body>
 </html>

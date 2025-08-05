@@ -43,7 +43,7 @@ public class FAQController {
 		
 		model.addAttribute("faqList", faqList);
 		
-		return "csc/faqList";
+		return "csc/faq/faqList";
 	}
 	
 	// 관리자 FAQ 조회

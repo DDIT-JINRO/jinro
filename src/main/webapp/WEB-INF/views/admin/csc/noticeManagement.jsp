@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/css/csc/adminNotice.css">
+<link rel="stylesheet" href="/css/csc/not/adminNotice.css">
 <h3>고객센터 > 공지사항</h3>
 <div class="template-container">
 	<!-- 리스트 패널 -->
@@ -113,5 +113,5 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/js/csc/adminNoticeList.js"></script>
+<script type="text/javascript" src="/js/csc/not/adminNoticeList.js"></script>
 
