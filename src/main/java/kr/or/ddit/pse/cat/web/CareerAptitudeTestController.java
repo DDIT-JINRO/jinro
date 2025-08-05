@@ -78,10 +78,4 @@ public class CareerAptitudeTestController {
 
 	}
 	
-	@GetMapping("/test")
-	public void insertResultKeyword() {
-		this.careerAptitudeTestService.insertResultKeyword("", "1", "24");
-	}
-	
-
 }

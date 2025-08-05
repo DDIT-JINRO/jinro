@@ -2,14 +2,15 @@ package kr.or.ddit.pse.cat.service.impl;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -31,7 +32,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import kr.or.ddit.account.lgn.service.LoginService;
+import kr.or.ddit.exception.CustomException;
+import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
+import kr.or.ddit.pse.cat.service.AptitudeTestVO;
 import kr.or.ddit.pse.cat.service.CareerAptitudeTestService;
 import kr.or.ddit.pse.cat.service.TemporarySaveVO;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +46,7 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 
 	@Value("${DEV.TEST.API_KEY}")
 	private String TEST_API_KEY;
-
+	
 	@Autowired
 	LoginService loginService;
 
@@ -292,7 +296,6 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 
 	@Override
 	public void insertResultKeyword(String url, String memId, String testNo) {
-		url = "https://www.career.go.kr/cloud/w/inspect/value2/report?seq=NzgyMDY4NDk=";
 
 		WebDriver driver = null;
 		try {
@@ -309,55 +312,42 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
 			String result = "";
-			
+
 			switch (testNo) {
-			case "24": {
-				// 1. 상위 가치관
-	            List<WebElement> topResultElements = driver.findElements(By.cssSelector(".aptitude-tbl-list.value.import tbody tr td:nth-of-type(1)"));
-	            String topResultValues = topResultElements.stream().map(WebElement::getText).collect(Collectors.joining(" , "));
-
-	            // 2. 내가 중요하게 생각하는 가치관
-	            List<WebElement> myChoiceElements = driver.findElements(By.cssSelector(".aptitude-tbl-list.value.import tbody tr td:nth-of-type(2)"));
-	            String myChoiceValues = myChoiceElements.stream().map(WebElement::getText).collect(Collectors.joining(" , "));
-	            
-	            // 3. 나의 가치지향 텍스트 추출
-	            WebElement myTypeElement = driver.findElement(By.cssSelector("p.value-custom > span.fcolor-green"));
-	            String myValueType = myTypeElement.getText().replace("\"", "").trim(); // "성취지향" -> 성취지향
-
-	            // 3-2. 해당 유형에 맞는 직업 목록 찾기
-	            String recommendedJobs = findJobsByValueType(driver, myValueType);
-
-				result = "상위 가치관 : " + topResultValues + " / 내가 중요하게 생각하는 가치관 : " + myChoiceValues + " / 나의 가치지향 유형 : " + myValueType + " / 추천 직업 목록 : " + recommendedJobs;
-				
+			case "20": // 직업적성검사(중학생용) 크롤링
+			case "21": {
+				// 직업적성검사(고등학생용) 크롤링
+				result = scrapeAptitudeTestResult(driver);
 				break;
 			}
-			
+			case "24": // 직업가치관검사(중학생용) 크롤링
 			case "25": {
-				List<WebElement> elements = driver.findElements(By.cssSelector(".cont_result > p.txt_guide > span.emph_b"));
-
-				String keyword1 = "";
-				String keyword2 = "";
-
-				if (elements.size() >= 2) {
-					keyword1 = elements.get(1).getText().trim();
-					keyword2 = elements.get(2).getText().trim();
-				}
-
-				List<String> educationResults = parseTable(driver, ".cont_result > table.tbl_result:nth-of-type(1)", testNo);
-				List<String> majorResults = parseTable(driver, ".cont_result > table.tbl_result:nth-of-type(2)", testNo);
-				
-				result = "직업 가치관 상위 2개 단어 : " + keyword1 + ", " + keyword2 + "/ 학력별 추천 직업 : " + educationResults + " / 전공별 추천 직업 : " + majorResults;
-				
+				// 직업가치관검사(고등학생용) 크롤링
+				result = scrapeJuniorValueTestResult(driver);
+				break;
+			}
+			case "30": // 직업흥미검사(K)(중학생용) 크롤링
+			case "31": {
+				// 직업흥미검사(K)(고등학생용) 크롤링
+				result = scrapeCareerInterestTestResult(driver);
 				break;
 			}
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + testNo);
 			}
+
+
+			AptitudeTestVO aptitudeTestVO = AptitudeTestVO.builder().memId(Integer.parseInt(memId))
+					.atTestNo(Integer.parseInt(testNo))
+					.atResultUrl(url)
+					.atResultText(result)
+					.build();
 			
 			log.info("전체 겨로가다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ : " + result);
+			this.careerAptitudeMapper.insertAptitudeResult(aptitudeTestVO);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		} finally {
 			if (driver != null) {
 				driver.quit();
@@ -365,39 +355,187 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 		}
 	}
 
-	private List<String> parseTable(WebDriver driver, String tableSelector, String testNo) {
-		List<String> results = new ArrayList<>();
+	/**
+	 * 직업적성검사(중·고등학생용) 결과를 크롤링하여 하나의 문자열로 조합합니다. (testNo 20, 21)
+	 * 
+	 * @param driver WebDriver 인스턴스
+	 * @return "높은 적성 : ... / 적성1 추천 직업 : ..." 형태의 최종 문자열
+	 */
+	private String scrapeAptitudeTestResult(WebDriver driver) {
+		// 1. 높은 적성 키워드 3개 추출
+		List<WebElement> topAptitudeElements = driver.findElements(By.cssSelector("ul.total-result-list > li > strong"));
+		List<String> topAptitudes = topAptitudeElements.stream().map(WebElement::getText).collect(Collectors.toList());
 
-		List<WebElement> rows = driver.findElements(By.cssSelector(tableSelector + " > tbody > tr"));
+		// 2. 추천 직업군 및 직업 목록을 Map 형태로 추출 (헬퍼 메서드 호출)
+		Map<String, List<String>> recommendedJobsMap = findAptitudeJobs(driver, topAptitudes);
 
-		for (WebElement row : rows) {
-			String title = row.findElement(By.cssSelector("td:nth-child(1)")).getText().trim();
-			List<WebElement> jobNames = row.findElements(By.cssSelector("td:nth-child(2) a"));
+		// 3. 모든 결과를 하나의 문자열로 조합
+		List<String> finalParts = new ArrayList<>();
 
-			String content = jobNames.stream().map(WebElement::getText).collect(Collectors.joining(" , "));
-
-			results.add(title + ": " + content);
+		// 3-1. 높은 적성 분야 추가
+		if (!topAptitudes.isEmpty()) {
+			finalParts.add("높은 적성 : " + String.join(", ", topAptitudes));
 		}
 
+		// 3-2. 각 적성별 추천 직업 목록 추가
+		recommendedJobsMap.forEach((aptitude, jobs) -> {
+			finalParts.add(aptitude + " 추천 직업 : " + String.join(", ", jobs));
+		});
+
+		// 3-3. 모든 부분을 " / "로 연결하여 최종 문자열 생성 후 반환
+		return String.join(" / ", finalParts);
+	}
+
+	/**
+	 * [헬퍼] 직업적성검사 페이지에서 주어진 적성들에 해당하는 직업 목록을 찾아 반환합니다.
+	 * 
+	 * @param driver       WebDriver 인스턴스
+	 * @param topAptitudes 상위 적성 목록
+	 * @return 적성 이름을 Key로, 직업 목록을 Value로 갖는 Map
+	 */
+	private Map<String, List<String>> findAptitudeJobs(WebDriver driver, List<String> topAptitudes) {
+		Map<String, List<String>> results = new LinkedHashMap<>();
+
+		// 페이지의 모든 '추천 직업군' 섹션 컨테이너를 XPath로 찾음
+		List<WebElement> jobGroupSections = driver.findElements(By.xpath("//strong[@class='title-aptitude-box']/ancestor::div[1]"));
+
+		for (WebElement section : jobGroupSections) {
+			String fullTitle = section.findElement(By.className("title-aptitude-box")).getText();
+			String aptitudeName = fullTitle.replace(" 직업군", "").trim();
+
+			if (topAptitudes.contains(aptitudeName)) {
+				// 해당 섹션 내의 모든 직업 링크(a) 또는 텍스트(span)를 찾음
+				List<WebElement> jobElements = section.findElements(By.cssSelector("td.left > a, td.left > span"));
+
+				List<String> jobNames = jobElements.stream().map(job -> job.getText().trim()).filter(name -> !name.isEmpty()) // 가끔 빈 텍스트가 들어오는 경우 제외
+						.collect(Collectors.toList());
+
+				results.put(aptitudeName, jobNames);
+			}
+		}
 		return results;
 	}
-	
-	// 가치지향 직업 추출
-    private String findJobsByValueType(WebDriver driver, String valueType) {
-        List<WebElement> jobSections = driver.findElements(By.cssSelector("ul.value4-job > li"));
-        
-        for (WebElement section : jobSections) {
-        	// 가치지향 제목
-            WebElement titleElement = section.findElement(By.tagName("dt"));
-            if (titleElement.getText().contains(valueType)) {
-            	
-                // 직업 텍스트를 추출하여 반환
-                List<WebElement> jobLinks = section.findElements(By.cssSelector("dd > a"));
-                log.info("리스트 길이 이거 실화임? : " + jobLinks.size());
-                return jobLinks.stream().map(WebElement::getText).collect(Collectors.joining(" , "));
-            }
-        }
-        // 일치하는 유형을 찾지 못한 경우 빈 리스트 반환
-        return "";
-    }
+
+	/**
+	 * 직업가치관검사(중·고등학생용) 결과를 크롤링하여 하나의 문자열로 조합합니다. (testNo 24)
+	 * 
+	 * @param driver WebDriver 인스턴스
+	 * @return "상위 가치관 : ... / 내가 중요하게 생각하는 가치관 : ..." 형태의 최종 문자열
+	 */
+	private String scrapeJuniorValueTestResult(WebDriver driver) {
+		// 1. 검사 결과 상위 가치관
+		List<WebElement> topResultElements = driver.findElements(By.cssSelector(".aptitude-tbl-list.value.import tbody tr td:nth-of-type(1)"));
+		String topResultValues = topResultElements.stream().map(WebElement::getText).collect(Collectors.joining(", "));
+
+		// 2. 내가 중요하게 생각하는 가치관
+		List<WebElement> myChoiceElements = driver.findElements(By.cssSelector(".aptitude-tbl-list.value.import tbody tr td:nth-of-type(2)"));
+		String myChoiceValues = myChoiceElements.stream().map(WebElement::getText).collect(Collectors.joining(", "));
+
+		// 3. 나의 가치지향 유형 텍스트 추출
+		WebElement myTypeElement = driver.findElement(By.cssSelector("p.value-custom > span.fcolor-green"));
+		String myValueType = myTypeElement.getText().replace("\"", "").trim();
+
+		// 4. 해당 유형에 맞는 직업 목록 찾기 (헬퍼 메서드 호출)
+		String recommendedJobs = findJobsByValueType(driver, myValueType);
+
+		// 5. 최종 문자열 조합 후 반환
+		return "상위 가치관 :: " + topResultValues + " / 내가 중요하게 생각하는 가치관 :: " + myChoiceValues + " / 나의 가치지향 유형 :: " + myValueType + " / 추천 직업 목록 :: "
+				+ recommendedJobs;
+	}
+
+	/**
+	 * 직업흥미검사(K) 결과를 크롤링하여 하나의 문자열로 조합합니다. (testNo 30)
+	 * 
+	 * @param driver WebDriver 인스턴스
+	 * @return "높은 흥미 분야 : ... / 흥미군 제목1 : 직업..." 형태의 최종 문자열
+	 */
+	private String scrapeCareerInterestTestResult(WebDriver driver) {
+		// 1. 높은 흥미 분야 추출
+		List<WebElement> highInterestElements = driver.findElements(By.cssSelector("ul.interest-part > li > span"));
+		List<String> highInterestFields = highInterestElements.stream().map(WebElement::getText).collect(Collectors.toList());
+
+		// 2. 상위 3개 직업 흥미군 및 직업명 추출
+		Map<String, List<String>> top3JobGroups = new LinkedHashMap<>();
+
+		// --- 선택자 수정 부분 ---
+		// 특정 섹션을 지정하여 원하는 테이블의 제목만 가져오도록 수정
+		List<WebElement> headerElements = driver
+				.findElements(By.cssSelector(".aptitude-result-content > .cont-wrap:nth-of-type(2) .aptitude-tbl-list.violet thead tr th"));
+		// 마찬가지로 원하는 테이블의 내용만 가져오도록 수정
+		List<WebElement> jobCellElements = driver
+				.findElements(By.cssSelector(".aptitude-result-content > .cont-wrap:nth-of-type(2) .aptitude-tbl-list.violet tbody tr.td-background > td"));
+		// --- 선택자 수정 끝 ---
+
+		if (headerElements.size() == jobCellElements.size()) {
+			for (int i = 0; i < headerElements.size(); i++) {
+				String groupTitle = headerElements.get(i).getText();
+				WebElement jobCell = jobCellElements.get(i);
+				List<WebElement> jobSpans = jobCell.findElements(By.tagName("span"));
+				List<String> jobNames = jobSpans.stream().map(WebElement::getText).collect(Collectors.toList());
+				top3JobGroups.put(groupTitle, jobNames);
+			}
+		}
+
+		// 3. 모든 결과를 하나의 문자열로 조합
+		List<String> finalParts = new ArrayList<>();
+
+		// 3-1. 높은 흥미 분야 추가
+		if (!highInterestFields.isEmpty()) {
+			finalParts.add("높은 흥미 분야 :: " + String.join(", ", highInterestFields));
+		}
+
+		finalParts.add("상위 3개 직업 흥미군의 관련 직업목록 ::");
+
+		// 3-2. 상위 3개 직업 흥미군 추가
+		top3JobGroups.forEach((group, jobs) -> {
+			finalParts.add(group + " : " + String.join(", ", jobs));
+		});
+
+		// 3-3. 모든 부분을 " / "로 연결하여 최종 문자열 생성 후 반환
+		return String.join(" / ", finalParts);
+	}
+
+	// 직업가치관(중학생) 가치지향 직업 추출 (헬퍼 메소드)
+	private String findJobsByValueType(WebDriver driver, String valueType) {
+		List<WebElement> jobSections = driver.findElements(By.cssSelector("ul.value4-job > li"));
+
+		for (WebElement section : jobSections) {
+			// 가치지향 제목
+			WebElement titleElement = section.findElement(By.tagName("dt"));
+			if (titleElement.getText().contains(valueType)) {
+
+				try {
+					// 1. 현재 섹션 내에서 '더보기' 링크를 찾습니다.
+					WebElement moreButton = section.findElement(By.linkText("더보기"));
+
+					// 2. 버튼이 화면에 보일 경우에만 클릭합니다.
+					if (moreButton.isDisplayed()) {
+						log.info("'{}' 섹션의 '더보기' 버튼을 클릭합니다.", valueType);
+
+						// JavascriptExecutor를 사용하여 강제로 클릭
+						JavascriptExecutor js = (JavascriptExecutor) driver;
+						// 1. 먼저 요소를 화면 중앙으로 스크롤합니다. (선택사항이지만 안정성을 높여줍니다)
+						js.executeScript("arguments[0].scrollIntoView({block: 'center'});", moreButton);
+						// 2. Javascript를 통해 클릭 이벤트를 직접 실행합니다.
+						js.executeScript("arguments[0].click();", moreButton);
+
+						Thread.sleep(500); // 내용이 로딩될 시간을 기다립니다.
+					}
+				} catch (NoSuchElementException e) {
+					// '더보기' 버튼이 없는 경우, 아무것도 하지 않고 넘어갑니다.
+					log.info("'{}' 섹션에는 '더보기' 버튼이 없습니다.", valueType);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+
+				// 직업 텍스트를 추출하여 반환
+				List<WebElement> jobLinks = section.findElements(By.cssSelector("dd > a"));
+
+				return jobLinks.stream().map(WebElement::getText).collect(Collectors.joining(" , "));
+			}
+		}
+		// 일치하는 유형을 찾지 못한 경우 빈 리스트 반환
+		return "";
+	}
+
 }
