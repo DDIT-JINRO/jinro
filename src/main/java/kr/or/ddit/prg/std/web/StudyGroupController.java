@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.chat.service.ChatMemberVO;
+import kr.or.ddit.chat.service.ChatMessageVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
+import kr.or.ddit.chat.web.ChatController;
 import kr.or.ddit.com.report.web.ReportController;
 import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
@@ -41,6 +43,9 @@ public class StudyGroupController {
 
 	@Autowired
 	StudyGroupService studyGroupService;
+
+	@Autowired
+	ChatController chatController;
 
 	@Autowired
 	ChatService chatService;
@@ -144,9 +149,16 @@ public class StudyGroupController {
 	}
 
 	@PostMapping("/api/enterStdGroup")
-	public ResponseEntity<String> enterStdGroup(@RequestBody ChatMemberVO chatMemberVO){
+	public ResponseEntity<String> enterStdGroup(@RequestBody ChatMemberVO chatMemberVO, Principal principal){
 		try {
 			this.chatService.participateChatRoom(chatMemberVO);
+	        ChatMessageVO chatMessageVO = new ChatMessageVO();
+			chatMessageVO.setCrId(chatMemberVO.getCrId());
+			chatMessageVO.setMemId(chatMemberVO.getMemId());
+			chatMessageVO.setMessageType("enter");
+			chatMessageVO.setMessage("회원 입장");
+			chatController.sendMessage(chatMessageVO, principal);
+
 			return ResponseEntity.ok().build();
 		} catch (Exception e) {
 			e.printStackTrace();

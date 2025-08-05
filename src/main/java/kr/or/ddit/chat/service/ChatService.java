@@ -113,4 +113,11 @@ public interface ChatService {
 	 * @return
 	 */
 	int updateChatRoom(ChatRoomVO chatRoomVO);
+
+	/**
+	 * 채팅메시지 기본키로 단건 조회
+	 * @return
+	 */
+	ChatMessageVO selectChatMessage(int msgId);
+
 }

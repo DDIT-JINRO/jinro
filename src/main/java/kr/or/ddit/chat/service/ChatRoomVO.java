@@ -2,6 +2,7 @@ package kr.or.ddit.chat.service;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Data;
 
@@ -13,4 +14,7 @@ public class ChatRoomVO {
 	private String crTitle;		//	채팅방 제목
 	private int crMaxCnt;		//	채팅방 제한 인원
 	private LocalDateTime createdAt;	//	채팅방 생성일
+	private String crDelYn;
+
+	private List<ChatMemberVO> chatMemberVOList;
 }

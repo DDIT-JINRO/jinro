@@ -12,4 +12,12 @@ public class ChatMemberVO {
 	private LocalDateTime joinedAt;		//	입장 일시 (입장 시각 이후 부터 채팅을 받아오기 위함)
 	private LocalDateTime exitedAt;		//	퇴장 일시
 	private String isExited;			//	퇴장 여부
+
+	private Long fileBadge;
+	private Long fileProfile;
+	private Long fileSub;
+
+	private String fileBadgeStr;
+	private String fileProfileStr;
+	private String fileSubStr;
 }

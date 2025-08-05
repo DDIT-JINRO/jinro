@@ -127,4 +127,19 @@ public interface ChatMapper {
 	 */
 	int updateChatRoom(ChatRoomVO chatRoomVO);
 
+	/**
+	 * 채팅메시지 기본키로 메시지 단건 조회
+	 * @param msgId
+	 * @return
+	 */
+	ChatMessageVO selectChatMessage(int msgId);
+
+	/**
+	 * 채팅방 상세정보 불러오기.
+	 * 클릭 했을 때 채팅방 정보 출력용
+	 * @param crId
+	 * @return
+	 */
+	ChatRoomVO selectCrDetail(int crId);
+
 }

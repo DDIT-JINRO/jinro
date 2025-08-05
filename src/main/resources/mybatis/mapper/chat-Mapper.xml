@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.chat.service.impl.ChatMapper">
 
-	<!--### UI 구성을 고려하여 최신 메시지, 안읽은 수, 채팅방 현재참여 인원수 등의 확장성 고려 ###-->
-
-	<!--### UI 구성을 고려하여 최신 메시지, 안읽은 수, 채팅방 현재참여 인원수 등의 확장성 고려 ###-->
 	<!-- 현재 내가 참여한 채팅방 목록 (스터디그룹만) -->
 	<select id="findRoomsByMemId" resultType="kr.or.ddit.chat.service.ChatRoomVO" parameterType="String" >
 		SELECT
@@ -66,26 +63,44 @@
 	<!-- 채팅방 입장 시 해당 채팅방 메시지 전체 불러오기 (상담에서 사용) -->
 	<select id="selectAllChatMsgByChatRoomId" parameterType="kr.or.ddit.chat.service.ChatMessageVO">
 		SELECT
-		       MSG_ID, CR_ID, MEM_ID
-		       , MESSAGE, SENT_AT, MESSAGE_TYPE
-		       , FILE_GROUP_ID
-		  FROM CHAT_MESSAGE
+		       CM.MSG_ID
+		       , CM.CR_ID
+		       , CM.MEM_ID
+		       , CM.MESSAGE
+		       , CM.SENT_AT
+		       , CM.MESSAGE_TYPE
+		       , CM.FILE_GROUP_ID
+		       , M.FILE_BADGE
+		       , M.FILE_PROFILE
+		       , M.FILE_SUB
+		       , M.MEM_NICKNAME
+		  FROM CHAT_MESSAGE CM
+		  JOIN MEMBER M ON M.MEM_ID = CM.MEM_ID
 		 WHERE CR_ID = #{crId}
 	</select>
 
 	<!-- 채팅방 입장 시 해당 채팅방 메시지 입장유저의 입장일시 기준으로 불러오기 -->
 	<select id="selectChatMsgByChatRoomIdAndMemId" parameterType="kr.or.ddit.chat.service.ChatMessageVO">
 		SELECT
-		       M.MSG_ID, M.CR_ID, M.MEM_ID
-		       , M.MESSAGE, M.SENT_AT, M.MESSAGE_TYPE
-		       , M.FILE_GROUP_ID
-		  FROM CHAT_MESSAGE M
-		 WHERE M.CR_ID = #{crId}
-		   AND M.SENT_AT >= (SELECT JOINED_AT
+		       CM.MSG_ID
+		       , CM.CR_ID
+		       , CM.MEM_ID
+		       , CM.MESSAGE
+		       , CM.SENT_AT
+		       , CM.MESSAGE_TYPE
+		       , CM.FILE_GROUP_ID
+		       , M.FILE_PROFILE
+		       , M.FILE_BADGE
+		       , M.FILE_SUB
+		       , M.MEM_NICKNAME
+		  FROM CHAT_MESSAGE CM
+		  JOIN MEMBER M ON CM.MEM_ID = M.MEM_ID
+		 WHERE CM.CR_ID = #{crId}
+		   AND CM.SENT_AT >= (SELECT JOINED_AT
 		                       FROM CHAT_MEMBER
 		                      WHERE CR_ID = #{crId}
 		                        AND MEM_ID = #{memId})
-	     ORDER BY M.SENT_AT , MSG_ID
+	     ORDER BY CM.SENT_AT , MSG_ID
 	</select>
 
 	<!-- 입장한 채팅방 읽음시각 현재시간으로 수정하기 -->
@@ -221,4 +236,23 @@
 		 WHERE CR_ID = #{crId}
 		   AND CC_ID = #{ccId}
 	</update>
+
+	<select id="selectChatMessage" resultType="kr.or.ddit.chat.service.ChatMessageVO" parameterType="int">
+		SELECT
+		       CM.MSG_ID
+		       , CM.CR_ID
+		       , CM.MEM_ID
+		       , CM.MESSAGE
+		       , CM.SENT_AT
+		       , CM.MESSAGE_TYPE
+		       , CM.FILE_GROUP_ID
+		       , M.FILE_PROFILE
+		       , M.FILE_BADGE
+		       , M.FILE_SUB
+		       , M.MEM_NICKNAME
+		  FROM CHAT_MESSAGE CM
+		  JOIN MEMBER M ON CM.MEM_ID = M.MEM_ID
+		 WHERE CM.MSG_ID = #{msgId}
+	</select>
+
 </mapper>

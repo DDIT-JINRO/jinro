@@ -6,24 +6,30 @@
 	  <span>채팅</span>
 	  <button onclick="closeChatModal()">X</button>
 	</div>
-	
+
 	<div class="chat-content">
 	  <!-- 왼쪽: 채팅방 목록 -->
-	  <div id="chatRoomList" class="chat-room-list"></div>
-	
+	  <div id="chatRoomList" class="chat-room-list">
+	  </div>
+
 	  <!-- 오른쪽: 채팅 메시지 및 입력 -->
 	  <div class="chat-message-area">
-	    <div id="chat-container"></div>
-	    <div class="chat-input">
+	  	<div class="chat-room-meta">
+        	<div class="chat-title" id="chat-title">제목영역</div>
+		</div>
+	    <div id="chat-container">
+	    	<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
+	    </div>
+	    <div class="chat-input" id="chat-input">
 	      <textarea id="chatMessageInput" placeholder="메시지를 입력하세요..."></textarea>
 	      <button id="sendMsgBtn">전송</button>
+	      <button id="exitBtn" data-cr-id>퇴장</button>
 	    </div>
 	  </div>
 	</div>
 </div>
 <!-- 채팅 모달 끝 -->
 <script>
-const sender = '<sec:authentication property="name" />';
 let stompClient = null;	// 소켓 연결 객체
 let currentChatRoomId = null; // 현재 보고 있는 채팅방 ID
 let unreadCounts = {}; // 안 보고 있는 채팅방의 읽지 않은 메시지 수 관리

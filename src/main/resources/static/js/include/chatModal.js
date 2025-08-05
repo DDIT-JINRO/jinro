@@ -5,11 +5,10 @@
 document.addEventListener('DOMContentLoaded', function(){
 	// 로그인 여부 확인
 	if(memId && memId !='anonymousUser'){
-		console.log("로그인 성공");
 		// 소켓 연결
 		connectSocket();
 		// 플로팅 버튼 클릭시 모달 오픈
-	
+
 		// 입력창, 전송버튼에 이벤트 등록
 		const inputEl = document.getElementById('chatMessageInput');
 		const sendBtn = document.getElementById('sendMsgBtn');
@@ -22,17 +21,62 @@ document.addEventListener('DOMContentLoaded', function(){
 		        sendCurrentInput();
 		    }
 		});
-	
+
 		function sendCurrentInput() {
 		    const content = inputEl.value.trim();
 		    if (!content) return;
-	
+
 		    inputEl.value = '';
 		    sendMessage(currentChatRoomId, content);
 		}
+
 	}
-	
+
 	document.getElementById('chatRooms').addEventListener('click',openChatModal);
+
+	const exitBtn = document.getElementById('exitBtn');
+	if(exitBtn){
+		exitBtn.addEventListener('click',function(){
+			const crId =  exitBtn.dataset.crId;
+			const data = {memId, crId}
+			fetch(`/api/chat/exit`,{
+				method:"POST",
+				headers:{"Content-Type":"application/json"},
+				body:JSON.stringify(data),
+			})
+			.then(resp =>resp.json())
+			.then(result =>{
+				if(result){
+					// 채팅방 구독 해제
+					if(chatRoomSubscription){
+						chatRoomSubscription.unsubscribe();
+						chatRoomSubscription = null;
+					}
+					document.querySelector(`.chat-room-entry[data-cr-id="${crId}"]`).remove();
+					document.getElementById('chat-input').style.display = 'none';
+					document.querySelector('.chat-room-meta').style.display = 'none';
+					const emptyChatMsg = `
+						<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
+					`;
+					document.getElementById('chat-container').innerHTML = emptyChatMsg;
+
+					const roomList = document.querySelectorAll('.chat-room-entry');
+					if(roomList.length == 0){
+						const emptyRoomListMsg = `
+							<p class="chat-room-no-selected">
+							입장한 채팅방이 없습니다<br/>
+							<a href="/prg/std/stdGroupList.do">스터디그룹 보러가기</a>
+							</p>
+						`;
+						document.getElementById('chatRoomList').innerHTML = emptyRoomListMsg;
+					}
+				}
+			})
+			.catch(err =>{
+				console.error(err);
+			})
+		})
+	}
 })
 
 document.addEventListener('click', function(e){
@@ -47,9 +91,16 @@ function closeChatModal(){
 	// 채팅방 목록 비우기
 	document.getElementById('chatRoomList').innerHTML = "";
 	// 채팅창 영역 비우기
-	document.getElementById('chat-container').innerHTML = "";
+	const emptyRoomMsg = `
+		<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
+	`;
+	document.getElementById('chat-container').innerHTML = emptyRoomMsg;
+
 	document.getElementById('chat-modal').style.display = 'none';
 
+	document.getElementById('chat-input').style.display = 'none';
+
+	document.querySelector('.chat-room-meta').style.display = 'none';
 	// 보고 있는 채팅방 초기화
 	currentChatRoomId = null;
 
@@ -75,7 +126,7 @@ async function openChatModal(){
 		axios.post("/admin/las/chatVisitLog.do");
 		await printChatRoomList();
 		subscribeToUnreadDetail();
-		document.getElementById('chat-modal').style.display = 'flex';		
+		document.getElementById('chat-modal').style.display = 'flex';
 	}
 }
 
@@ -95,6 +146,16 @@ async function printChatRoomList() {
 		unreadMap[unreadVO.crId] = unreadVO.unreadCnt;
 	})
 
+	if (!chatRoomList || chatRoomList.length == 0) {
+		const emptyRoomMsg = `
+			<p class="chat-room-no-selected">
+			입장한 채팅방이 없습니다<br/>
+			<a href="/prg/std/stdGroupList.do">스터디그룹 보러가기</a>
+			</p>
+		`;
+		list.innerHTML = emptyRoomMsg;
+		return;
+	}
     chatRoomList.forEach(chatRoom =>{
 		const wrapper = document.createElement("div");
 		wrapper.classList.add("chat-room-entry");
@@ -130,7 +191,7 @@ async function printChatRoomList() {
 // 참여중인 채팅방 별 안읽은 갯수 받아오기 구독 -> 모달 열때 호출
 function subscribeToUnreadDetail() {
     if (stompClient) {
-        unreadDetailSubscription = stompClient.subscribe(`/sub/chat/unread/detail/${sender}`, (message) => {
+        unreadDetailSubscription = stompClient.subscribe(`/sub/chat/unread/detail/${memId}`, (message) => {
 			const data = JSON.parse(message.body);
 
 			if(data.length >= 1){
@@ -148,6 +209,21 @@ function subscribeToUnreadDetail() {
 // 채팅방 채팅 불러와서 채우기 -> 채팅방 목록 클릭했을 때 호출
 async function printFetchMessages(el) {
     const crId = el.dataset.crId;
+	document.getElementById('exitBtn').dataset.crId = crId;
+	const chatTitle = el.querySelector('.chat-room-title').textContent;
+	document.getElementById('chat-title').textContent=chatTitle;
+	// 채팅방 제목 띄워주기
+	document.querySelector('.chat-room-meta').style.display='flex';
+
+	// active 활성화된 채팅방 있으면 지우기.
+	const activeRoom = document.querySelectorAll('.chat-room-entry.active');
+	if(activeRoom || activeRoom.length > 0){
+		activeRoom.forEach(room =>{
+			room.classList.remove('active');
+		})
+	}
+	// 클릭된 div active 활성화
+	el.classList.add('active');
 
     // 현재 채팅방 ID 업데이트
     currentChatRoomId = crId;	// 현재 보고있는 채팅방 변경
@@ -168,9 +244,12 @@ async function printFetchMessages(el) {
 	const container = document.getElementById('chat-container');
 	container.innerHTML = "";
 
+	const chatInput = document.getElementById('chat-input');
+
 	fetch(`/api/chat/message/list?crId=${crId}`)
 	    .then(resp => resp.json())
 	    .then(data => {
+			chatInput.style.display = 'flex';
 	        data.forEach(msgVO => appendMessage(msgVO));
 	    });
 
@@ -191,8 +270,8 @@ function connectSocket() {
     const socket = new SockJS('/ws-stomp');
     stompClient = Stomp.over(socket);
 
+	stompClient.debug = () => {};	// 콘솔 출력안되게 덮어쓰기
     stompClient.connect({}, (frame) => {
-        console.log('Connected: ' + frame);
 		// 연결된 직후 최초 전체 안읽음 갯수 받아오기
 		fetch('/api/chat/totalUnread')
 		.then(resp =>{
@@ -207,9 +286,8 @@ function connectSocket() {
 		})
 
 		// 플로팅 뱃지에 전체 안읽음 갯수를 세팅하기 위한 구독
-		stompClient.subscribe(`/sub/chat/unread/summary/${sender}`, (message) => {
+		stompClient.subscribe(`/sub/chat/unread/summary/${memId}`, (message) => {
 			const data = JSON.parse(message.body);
-			console.log("플로팅용전체",data);
 		    const { unreadCnt } = JSON.parse(message.body);
 		    updateFloatingBadge(unreadCnt);
 		});
@@ -223,7 +301,7 @@ function sendMessage(roomId, content) {
     const msg = {
         crId: roomId,
         message: content,
-        memId: sender, // 전역에서 선언된 로그인된 사용자 ID
+        memId: memId, // 전역에서 선언된 로그인된 사용자 ID
     };
 
     stompClient.send("/pub/chat/message", {}, JSON.stringify(msg));
@@ -232,11 +310,47 @@ function sendMessage(roomId, content) {
 // 메시지 출력
 function appendMessage(msgVO) {
     const container = document.getElementById('chat-container');
-    const isMine = msgVO.memId == sender;
+    const isMine = msgVO.memId == memId;
 
-    const chatHTML = `<div class="chat-message ${isMine ? 'mine' : 'other'}">
-                        ${isMine ? '나' : msgVO.memId} : ${msgVO.message}
-                      </div>`;
+	const timeObj = new Date(msgVO.sentAt);
+	const timeStr = `${(""+timeObj.getFullYear()).slice(-2)}. ${("0"+(timeObj.getMonth()+1)).slice(-2)}. ${("0"+(timeObj.getDate())).slice(-2)}. ${("0"+(timeObj.getHours())).slice(-2)}:${("0"+(timeObj.getMinutes())).slice(-2)}`;
+
+	// 입장/퇴장 시스템 메시지 분기
+	if (msgVO.messageType == 'enter' || msgVO.messageType == 'exit') {
+	    const text = msgVO.messageType == 'enter'
+	        ? `${msgVO.memNickname}님이 채팅방에 입장했습니다.`
+	        : `${msgVO.memNickname}님이 채팅방에서 나갔습니다.`;
+
+	    const systemHTML = `
+	      <div class="message-box system">
+	        <div class="system-message">${text}</div>
+			<div class="chat-time system-time">${timeStr}</div>
+	      </div>
+	    `;
+	    container.innerHTML += systemHTML;
+	    container.scrollTop = container.scrollHeight;
+	    return;  // 여기서 끝내고 일반 메시지 렌더링은 건너뜀
+	}
+
+    const chatHTML = `
+	<div class="message-box ${isMine ? 'mine' : 'other'}">
+		<div class="chat-meta">
+			${isMine ? `<span class="chat-nickname">${msgVO.memNickname}</span>` : '' }
+			<div class="profile-wrapper chat-profile">
+				<img class="profile-img" src="${msgVO.fileProfileStr ? msgVO.fileProfileStr : '/images/defaultProfileImg.png'}" />
+				<img class="badge-img" src="${msgVO.fileBadgeStr ? msgVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
+				${msgVO.fileSubStr ? `<img class="effect-img sparkle" src="${msgVO.fileSubStr}"/>` : ''}
+			</div>
+			${isMine ? '' : `<span class="chat-nickname">${msgVO.memNickname}</span>` }
+		</div>
+		<div class="chat-message ${isMine ? 'mine' : 'other'}">
+			${msgVO.message}
+		</div>
+		<div class="chat-time">
+		${timeStr}
+		</div>
+	</div>
+					  `;
     container.innerHTML += chatHTML;
     container.scrollTop = container.scrollHeight;
 }
@@ -269,7 +383,6 @@ async function removeUnreadBadge(roomId) {
 	    method: 'POST'
 	}).then(res => {
 	    if (!res.ok) throw new Error("서버 읽음 처리 실패");
-	    console.log(`채팅방 ${roomId} 읽음 처리 완료`);
 	}).catch(err => {
 	    console.error("읽음 처리 오류:", err);
 	});

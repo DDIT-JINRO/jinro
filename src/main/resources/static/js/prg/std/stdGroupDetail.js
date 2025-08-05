@@ -201,16 +201,9 @@ function confirmReport(){
 	const targetType = document.getElementById('report-target-type').value;
 	const reportReason 	 = document.getElementById('report-content-input').value;
 	const reportFileEl = document.getElementById('report-file');
-	const FILE_MAX_M = 1;
-	const FILE_MAX_SIZE = FILE_MAX_M*1024;
 
 	const formData = new FormData();
 	if(reportFileEl.files.length>0){
-		console.log(reportFileEl.files[0].size);
-	/*	if(reportFileEl.files[0].size > FILE_MAX_SIZE){
-			alert(`파일이 너무 큽니다 제한:${FILE_MAX_M}KB`);
-			reportFileEl.value = '';
-		}*/
 		formData.append('reportFile', reportFileEl.files[0]);
 	}
 
@@ -407,7 +400,6 @@ function closeReplyBtn(e){
 // 이벤트 함수 4 댓글,답글 작성 비동기 호출 이벤트 ; submit
 function submitCreateReply(e){
 	e.preventDefault();
-	console.log(e.target);
 	if(!e.target.classList.contains('comment-form')) return false;
 	const formData = new FormData(e.target);
 	fetch(e.target.action,{
@@ -420,7 +412,6 @@ function submitCreateReply(e){
 		return resp.json();
 	})
 	.then(data =>{
-		console.log(data);
 		if(data.replyParentId>0){
 			createChildReply(data, e);
 		}else{
@@ -459,7 +450,6 @@ function eventEtcContainerClicked(e){
 	if(!e.target.closest('.etc-container')) return;
 	const el = e.target;
 	if(!el.textContent.trim()) return;
-	console.log(el.textContent.trim());
 	if(el.classList.contains('reply-child-container')) return;
 	if(!e.target.classList.contains('etc-act-btn')) return;
 
@@ -473,9 +463,7 @@ function eventEtcContainerClicked(e){
 	const targetReplyChildBox = targetReply.nextElementSibling;
 	const targetReplyId = targetReply.id.split('-')[2];
 	const data = {"replyId":targetReplyId};
-	console.log(data);
 	if(action == '삭제'){
-		console.log("삭제 fetch")
 	fetch('/prg/std/deleteStdReply.do',{
 			method:"POST",
 			headers:{
@@ -560,7 +548,6 @@ function closeBoardEtcContainer(e){
 function modifyReplyAct(e){
 	const modifyActEl = e.target;
 	if(!modifyActEl || !modifyActEl.classList.contains('modify-btn')) return;
-	console.log('수정동작확인');
 	const targetReply = modifyActEl.closest('.reply-box');
 	const targetReplyId = targetReply.id.split('-')[2];
 	const modifiedContent = targetReply.querySelector('.reply-modify-input').value;
@@ -581,7 +568,6 @@ function modifyReplyAct(e){
 	})
 	.then(result =>{
 		if(result){
-			console.log("댓글 수정 성공");
 			const contentArea = modifyActEl.closest('.reply-content');
 			const modifiedContent = contentArea.querySelector('textarea').value.trim();
 
