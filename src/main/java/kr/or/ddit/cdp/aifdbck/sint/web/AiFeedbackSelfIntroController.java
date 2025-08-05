@@ -45,9 +45,6 @@ public class AiFeedbackSelfIntroController {
 		selfIntroVO.setCurrentPage(1); // 시작 번호
 		selfIntroVO.setSize(9999); // 충분히 큰 값으로 설정하여 모든 데이터를 가져옴
 		// 서비스 메서드를 호출하여 해당 사용자의 자기소개서 전체 목록을 가져옴
-		// selectSelfIntroBymemId는 페이지네이션을 위한 로직이 포함되어 있을 수 있으므로
-		// 서비스에 전체 목록을 가져오는 새로운 메서드를 추가하는 것이 더 좋을 수 있습니다.
-		// 예: selfIntroService.getAllSelfIntrosByMemId(memId);
 		List<SelfIntroVO> selfIntroList = selfIntroService.selectSelfIntroBymemId(selfIntroVO);
 
 		// JSP로 넘겨줄 모델에 담기. JSTL <c:forEach>의 items 속성과 일치하도록 "selfIntroList"로 명명.
@@ -57,7 +54,6 @@ public class AiFeedbackSelfIntroController {
 		return "cdp/aifdbck/sint/aiFeedbackSelfIntro";
 	}
 	
-	// AiFeedbackSelfIntroController.java에 추가
 	@GetMapping("/getSelfIntroDetail.do")
 	@ResponseBody // JSON 데이터를 반환하기 위해 필요
 	public SelfIntroDetailDto getSelfIntroDetail(@RequestParam(value = "siId", required = false) String siId, Principal principal) {
@@ -88,7 +84,6 @@ public class AiFeedbackSelfIntroController {
 	    dto.setTitle(detailVO.getSiTitle());
 	    dto.setQuestions(qList);
 	    dto.setContents(contentList);
-	    // dto.setAiFeedback(aiFeedback);
 
 	    return dto; // JSON 형태로 변환되어 클라이언트로 전송됨
 	}

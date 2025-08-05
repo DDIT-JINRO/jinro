@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +59,6 @@ public class AiProofreadSelfIntroServiceImpl implements AiProofreadSelfIntroServ
 
 	@Override
 	public String proofreadCoverLetter(List<Map<String, String>> selfIntroSections) {
-		log.info("🔥 proofreadCoverLetter() 메서드 진입 확인");
-		long startTime = System.currentTimeMillis();
 
 		if (selfIntroSections == null || selfIntroSections.isEmpty()) {
 			throw new IllegalArgumentException("자기소개서 섹션 내용이 비어있습니다.");
@@ -72,28 +68,20 @@ public class AiProofreadSelfIntroServiceImpl implements AiProofreadSelfIntroServ
 
 		String result = feedbacks.stream().collect(Collectors.joining("\n---\n"));
 
-		log.info("🚀 AI 첨삭 응답 완료 | 전체 소요: {}ms", System.currentTimeMillis() - startTime);
 		return result;
 	}
 
 	private List<String> proofreadEachSection(List<Map<String, String>> sections) {
-		// Client client = Client.builder().apiKey(apiKey).build();
-		log.info("✏️ 문항별 첨삭 시작 - 총 {}문항", sections.size());
 
-		long totalStart = System.currentTimeMillis();
 
 		List<CompletableFuture<String>> futures = new ArrayList<>();
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
 		for (int i = 0; i < sections.size(); i++) {
 			final int index = i;
 			final Map<String, String> section = sections.get(index);
 
 			futures.add(CompletableFuture.supplyAsync(() -> {
-				long secStart = System.currentTimeMillis();
-				LocalDateTime startTime = LocalDateTime.now();
-				log.info("🚀 [문항 {}번] 시작 시간: {}", index + 1, startTime.format(formatter));
 
 				String question = section.getOrDefault("question_title", "");
 				String answer = section.getOrDefault("original_content", "");
@@ -102,10 +90,6 @@ public class AiProofreadSelfIntroServiceImpl implements AiProofreadSelfIntroServ
 
 				try {
 					GenerateContentResponse response = client.models.generateContent("gemini-1.5-flash", prompt, null);
-
-					long duration = System.currentTimeMillis() - secStart;
-					LocalDateTime endTime = LocalDateTime.now();
-					log.info("✅ [문항 {}번] 종료 시간: {} | 소요: {}ms", index + 1, endTime.format(formatter), duration);
 
 					return String.format("[문항 %d번 - AI 피드백]\n%s", index + 1, response.text());
 				} catch (Exception e) {
@@ -117,9 +101,6 @@ public class AiProofreadSelfIntroServiceImpl implements AiProofreadSelfIntroServ
 		}
 
 		List<String> results = futures.stream().map(CompletableFuture::join).collect(Collectors.toList());
-
-		long totalDuration = System.currentTimeMillis() - totalStart;
-		log.info("🏁 전체 문항 첨삭 완료 | 총 소요 시간: {}ms", totalDuration);
 
 		return results;
 	}

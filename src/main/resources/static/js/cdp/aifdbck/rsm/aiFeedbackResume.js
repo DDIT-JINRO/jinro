@@ -1,3 +1,4 @@
+
 /**
  * 이력서 AI 피드백 화면을 위한 자바스크립트
  */
@@ -91,11 +92,6 @@ function requestAiFeedback() {
 
 	const parser = new DOMParser();
 	const doc = parser.parseFromString(originalData.resumeContent, 'text/html');
-
-	// 이미지 제거
-	doc.querySelectorAll('img').forEach(img => img.remove());
-
-	// 제거된 HTML을 다시 HTML 문자열로 변환
 	const cleanedHtml = doc.body.innerHTML;
 
 	fetch('/ai/proofread/resume', {
@@ -108,11 +104,15 @@ function requestAiFeedback() {
 			return response.text();
 		})
 		.then(aiResponseText => {
-			console.log("🔍 AI 응답 원문:", aiResponseText);
 			const cleanedText = cleanAiResponse(aiResponseText);
 
-			console.log("🧼 정리된 텍스트:", cleanedText);
-			feedbackArea.innerHTML = cleanedText.replace(/\n/g, '<br>');
+			aiFeedbackData = {
+				sections_feedback: [cleanedText], // 배열로 감싸기!
+				questions: ["이력서 전체 피드백"] // 제목만 하나 넣기
+			};
+
+			// 화면 표시
+			document.getElementById('feedbackArea').innerHTML = cleanedText.replace(/\n/g, '<br>');
 		})
 		.catch(error => {
 			console.error('AI 피드백 요청 오류:', error);
@@ -133,19 +133,103 @@ function requestProofread() {
 }
 
 //jsp 미리보기/다운로드
-function generateHtmlFromFeedbackForResume(feedbackHtml) {
-  return `
+const previewPdfBtn = document.getElementById("previewPdfBtn");
+const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+
+previewPdfBtn?.addEventListener("click", previewPdfFromAI);
+downloadPdfBtn?.addEventListener("click", downloadPdfFromAI);
+
+function previewPdfFromAI() {
+	if (!aiFeedbackData || !aiFeedbackData.sections_feedback) {
+		alert("AI 피드백 결과가 없습니다. 먼저 피드백을 요청하세요.");
+		return;
+	}
+
+	const htmlContent = generateHtmlFromFeedback(aiFeedbackData);
+	const cssContent = getFeedbackPdfCss();
+
+	const formData = new FormData();
+	formData.append("htmlContent", htmlContent);
+	formData.append("cssContent", cssContent);
+
+	fetch("/pdf/preview", {
+		method: "POST",
+		body: formData
+	})
+		.then(response => {
+			if (!response.ok) throw new Error("미리보기 요청 실패");
+			return response.blob();
+		})
+		.then(blob => {
+			const url = window.URL.createObjectURL(blob);
+			const pdfUrlWithZoom = url + "#zoom=75";
+			const width = 900, height = 700;
+			const left = (screen.width - width) / 2;
+			const top = (screen.height - height) / 2;
+			const windowFeatures = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`;
+			const previewWindow = window.open(pdfUrlWithZoom, "pdfPreview", windowFeatures);
+			if (!previewWindow) window.open(pdfUrlWithZoom, "_blank");
+		})
+		.catch(err => {
+			console.error("PDF 미리보기 오류:", err);
+			alert("PDF 미리보기 실패: " + err.message);
+		});
+}
+
+function downloadPdfFromAI() {
+	if (!aiFeedbackData || !aiFeedbackData.sections_feedback) {
+		alert("AI 피드백 결과가 없습니다. 먼저 피드백을 요청하세요.");
+		return;
+	}
+
+	const htmlContent = generateHtmlFromFeedback(aiFeedbackData);
+	const cssContent = getFeedbackPdfCss();
+
+	const form = document.createElement("form");
+	form.method = "POST";
+	form.action = "/pdf/download";
+	form.target = "_blank";
+	form.style.display = "none";
+
+	const htmlInput = document.createElement("input");
+	htmlInput.type = "hidden";
+	htmlInput.name = "htmlContent";
+	htmlInput.value = htmlContent;
+
+	const cssInput = document.createElement("input");
+	cssInput.type = "hidden";
+	cssInput.name = "cssContent";
+	cssInput.value = cssContent;
+
+	form.appendChild(htmlInput);
+	form.appendChild(cssInput);
+	document.body.appendChild(form);
+	form.submit();
+	document.body.removeChild(form);
+}
+
+// 이력서용 HTML 콘텐츠 생성
+function generateHtmlFromFeedback(feedbackData) {
+	const sectionsHtml = feedbackData.sections_feedback.map((feedback, i) => {
+		const title = feedbackData.questions?.[i] || `항목 ${i + 1}`;
+		return `
+      <div class="section">
+        <h2 class="question-title">${i + 1}. ${title}</h2>
+        <p class="feedback">${feedback.replace(/\n/g, "<br />")}</p>
+      </div>`;
+	}).join("");
+
+	return `
     <div class="pdf-feedback">
       <h1>AI 이력서 피드백</h1>
-      <div class="feedback-content">
-        ${feedbackHtml}
-      </div>
+      ${sectionsHtml}
     </div>
   `;
 }
 
-function getFeedbackPdfCssForResume() {
-  return `
+// 이력서용 CSS 정의
+function getFeedbackPdfCss() {
+	return `
     .pdf-feedback {
       width: 100%;
       font-family: 'NanumGothic', sans-serif;
@@ -155,86 +239,19 @@ function getFeedbackPdfCssForResume() {
       text-align: center;
       margin-bottom: 30px;
     }
-    .feedback-content {
+    .section {
+      margin-bottom: 20px;
+    }
+    .question-title {
+      font-size: 14pt;
+      font-weight: bold;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #aaa;
+      padding-bottom: 4px;
+    }
+    .feedback {
       font-size: 12pt;
       line-height: 1.6;
-      color: #333;
     }
   `;
 }
-//미리보기
-function previewPdfFromAI() {
-  const feedbackArea = document.getElementById("feedbackArea");
-  if (!feedbackArea || feedbackArea.innerHTML.trim() === '' || feedbackArea.innerText.includes('출력될 공간')) {
-    alert("AI 피드백 결과가 없습니다. 먼저 피드백을 요청하세요.");
-    return;
-  }
-
-  const htmlContent = generateHtmlFromFeedbackForResume();
-  const cssContent = getFeedbackPdfCssForResume();
-
-  const formData = new FormData();
-  formData.append("htmlContent", htmlContent);
-  formData.append("cssContent", cssContent);
-
-  fetch("/pdf/preview", {
-    method: "POST",
-    body: formData
-  })
-    .then(response => {
-      if (!response.ok) throw new Error("미리보기 요청 실패");
-      return response.blob();
-    })
-    .then(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const pdfUrlWithZoom = url + "#zoom=75";
-      const width = 900, height = 700;
-      const left = (screen.width - width) / 2;
-      const top = (screen.height - height) / 2;
-      const windowFeatures = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`;
-      const previewWindow = window.open(pdfUrlWithZoom, "pdfPreview", windowFeatures);
-      if (!previewWindow) window.open(pdfUrlWithZoom, "_blank");
-    })
-    .catch(err => {
-      console.error("PDF 미리보기 오류:", err);
-      alert("PDF 미리보기 실패: " + err.message);
-    });
-}
-
-//다운로드
-function downloadPdfFromAI() {
-  const feedbackArea = document.getElementById("feedbackArea");
-  if (!feedbackArea || feedbackArea.innerHTML.trim() === '' || feedbackArea.innerText.includes('출력될 공간')) {
-    alert("AI 피드백 결과가 없습니다. 먼저 피드백을 요청하세요.");
-    return;
-  }
-
-  const htmlContent = generateHtmlFromFeedbackForResume();
-  const cssContent = getFeedbackPdfCssForResume();
-
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = "/pdf/download";
-  form.target = "_blank";
-  form.style.display = "none";
-
-  const htmlInput = document.createElement("input");
-  htmlInput.type = "hidden";
-  htmlInput.name = "htmlContent";
-  htmlInput.value = htmlContent;
-
-  const cssInput = document.createElement("input");
-  cssInput.type = "hidden";
-  cssInput.name = "cssContent";
-  cssInput.value = cssContent;
-
-  form.appendChild(htmlInput);
-  form.appendChild(cssInput);
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
-}
-//이벤트 리스너
-document.getElementById("previewPdfBtn")?.addEventListener("click", previewPdfFromAI);
-document.getElementById("downloadPdfBtn")?.addEventListener("click", downloadPdfFromAI);
-

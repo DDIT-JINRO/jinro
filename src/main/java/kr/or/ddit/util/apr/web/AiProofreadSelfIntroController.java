@@ -25,8 +25,6 @@ public class AiProofreadSelfIntroController {
 	@PostMapping("/coverletter")
 	@ResponseBody
 	public ResponseEntity<String> proofreadCoverLetter(@RequestBody Map<String, List<Map<String, String>>> requestPayload) {
-		log.info("📩 AI 첨삭 요청 수신 - URI: /ai/proofread/coverletter");
-		long startTime = System.currentTimeMillis();
 
 		List<Map<String, String>> selfIntroSections = requestPayload.get("sections");
 		
@@ -34,7 +32,6 @@ public class AiProofreadSelfIntroController {
 		// 병렬 처리와 응답 조합까지 한 번에 처리하도록 변경
 		String result = aiProofreadSelfIntroService.proofreadCoverLetter(selfIntroSections);
 
-		log.info("🚀 AI 첨삭 응답 완료 | 전체 소요: {}ms", System.currentTimeMillis() - startTime);
 		return ResponseEntity.ok(result);
 	}
 }
