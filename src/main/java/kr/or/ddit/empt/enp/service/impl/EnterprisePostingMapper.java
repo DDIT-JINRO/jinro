@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.empt.enp.service.CompanyVO;
+import kr.or.ddit.empt.enp.service.InterviewReviewVO;
+import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
 
 @Mapper
 public interface EnterprisePostingMapper {
@@ -26,4 +28,7 @@ public interface EnterprisePostingMapper {
 
 	int deleteEnterprisePosting(CompanyVO companyVO);
 
+	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookMarkVO);
+
+	List<InterviewReviewVO> selectEnpInterviewReview(InterviewReviewVO interviewReviewVO);
 }

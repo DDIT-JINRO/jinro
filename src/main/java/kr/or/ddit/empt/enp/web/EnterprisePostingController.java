@@ -1,6 +1,10 @@
 package kr.or.ddit.empt.enp.web;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.empt.enp.service.CompanyVO;
 import kr.or.ddit.empt.enp.service.EnterprisePostingService;
+import kr.or.ddit.empt.enp.service.InterviewReviewVO;
+import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
 import kr.or.ddit.util.ArticlePage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +38,9 @@ public class EnterprisePostingController {
 	public String enterprisePosting(
 			@ModelAttribute CompanyVO companyVO,
 			@RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
-			Model model) {
+			Model model,
+			Principal principal) {
 		
-		log.info("companyVO"+companyVO);
 		companyVO.setCurrentPage(currentPage);
 		companyVO.setSize(5);
 		int total = enterprisePostingService.selectCompanyListCount(companyVO);
@@ -46,8 +52,28 @@ public class EnterprisePostingController {
 		
 		ArticlePage<CompanyVO> articlePage =
 				new ArticlePage<CompanyVO>(total, companyVO.getCurrentPage(), companyVO.getSize(), companyVOList, companyVO.getKeyword());
+		//북마크 VO
+		List<BookMarkVO> bookMarkVOList = new ArrayList<>();
+		
+		//기업리뷴
+		InterviewReviewVO interviewReviewVO = new InterviewReviewVO();
+		interviewReviewVO.setIrType("G02002");
+		List<InterviewReviewVO> interviewReviewVOList = enterprisePostingService.selectEnpInterviewReview(interviewReviewVO);
+		
+		if(principal!=null && !principal.getName().equals("anonymousUser")) {
+			int memId = Integer.parseInt(principal.getName());
+			BookMarkVO bookMarkVO = new BookMarkVO();
+			bookMarkVO.setMemId(memId);
+			bookMarkVO.setBmCategoryId("G03002");
+			
+			bookMarkVOList = enterprisePostingService.selectBookMarkVO(bookMarkVO);
+			log.info("bookMarkVOList"+bookMarkVOList);
+			
+		}
 		
 		articlePage.setUrl("/empt/enp/enterprisePosting.do");
+		model.addAttribute("interviewReviewVOList",interviewReviewVOList);
+		model.addAttribute("bookMarkVOList",bookMarkVOList);
 		model.addAttribute("articlePage", articlePage);
 		model.addAttribute("codeVOCompanyScaleList",codeVOCompanyScaleList);
 		model.addAttribute("CodeVORegionList",CodeVORegionList);

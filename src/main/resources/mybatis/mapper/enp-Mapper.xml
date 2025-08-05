@@ -175,4 +175,27 @@
 		DELETE COMPANY
 		WHERE CP_ID = #{cpId}
 	</delete>
+	
+	<select id="selectBookMarkVO" parameterType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO" resultType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO">
+		select BM_ID, MEM_ID, BM_CATEGORY_ID, BM_TARGET_ID
+		from BOOKMARK
+		where MEM_ID = #{memId}
+		and BM_CATEGORY_ID =#{bmCategoryId}
+	</select>
+	
+	<select id="selectEnpInterviewReview" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO" resultType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+	    SELECT A.IR_ID, A.MEM_ID, A.IR_TYPE, A.TARGET_ID, A.IR_CONTENT, A.IR_CREATED_AT, A.IR_RATING, B.MEM_NICKNAME
+	    FROM (
+	        SELECT 
+	            IR_ID, MEM_ID, IR_TYPE, TARGET_ID, IR_CONTENT, IR_CREATED_AT, IR_RATING
+	        FROM 
+	            INTERVIEW_REVIEW 
+	        WHERE 
+	            IR_TYPE = #{irType}
+	    ) A
+	    LEFT JOIN MEMBER B
+	    ON A.MEM_ID = B.MEM_ID
+	    ORDER BY A.IR_CREATED_AT DESC
+	    FETCH FIRST 2 ROWS ONLY
+	</select>
 </mapper>

@@ -3,6 +3,7 @@ package kr.or.ddit.empt.enp.service;
 import java.util.List;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
 
 public interface EnterprisePostingService {
 
@@ -19,6 +20,10 @@ public interface EnterprisePostingService {
 	int checkCompanyByCpId(CompanyVO companyVO);
 
 	int deleteEnterprisePosting(CompanyVO companyVO);
+
+	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookMarkVO);
+
+	List<InterviewReviewVO> selectEnpInterviewReview(InterviewReviewVO interviewReviewVO);
 
 
 }

@@ -100,10 +100,9 @@
 			<p>총 ${articlePage.total}건</p>
 
 			<div class="company-list">
-				<div class="accordion-header" style="background-color: #e9e9e9;">
+				<div class="accordion-header">
 					<div style="flex: 1;">기업이미지</div>
-					<div style="flex: 2;">기업명</div>
-					<div style="flex: 1.5;">사업자번호</div>
+					<div style="flex: 1;">기업명</div>
 					<div style="flex: 1;">기업규모</div>
 					<div style="flex: 1;">홈페이지</div>
 					<div style="width: 80px;">북마크</div>
@@ -119,11 +118,7 @@
 								<img src="${company.cpImgUrl}" alt="기업 이미지"
 									class="company-image">
 							</div>
-							<div class="company-info-item" style="flex: 2;">${company.cpName}</div>
-							<div class="company-info-item" style="flex: 1.5;">
-								<fmt:formatNumber value="${company.cpBusino}"
-									pattern="###-##-#####" />
-							</div>
+							<div class="company-info-item" style="flex: 1;">${company.cpName}</div>
 							<div class="company-info-item" style="flex: 1;">${company.ccName}</div>
 							<div class="company-info-item" style="flex: 1;">
 								<c:choose>
@@ -138,15 +133,23 @@
 							</div>
 							<div class="company-info-item" style="width: 80px;">
 								<div class="item-action">
-								    <button class="bookmark-btn active" data-category-id="${bookmark.bmCategoryId}" data-target-id="${bookmark.bmTargetId}">
-								        <span class="icon-active">
-								            <img src="/images/bookmark-btn-active.png" alt="활성 북마크">
-								        </span>
-								        
-								        <span class="icon-inactive">
-								            <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
-								        </span>
-								    </button>
+									<c:set var="isBookmarked" value="false" />
+
+									<c:forEach var="bookmark" items="${bookMarkVOList}">
+										<c:if test="${company.cpId eq bookmark.bmTargetId}">
+											<c:set var="isBookmarked" value="true" />
+										</c:if>
+									</c:forEach>
+
+									<button class="bookmark-btn ${isBookmarked ? 'active' : ''}"
+										data-category-id="G03002"
+										data-target-id="${fn:escapeXml(company.cpId)}">
+										<span class="icon-active"> <img
+											src="/images/bookmark-btn-active.png" alt="활성 북마크">
+										</span> <span class="icon-inactive"> <img
+											src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+										</span>
+									</button>
 								</div>
 							</div>
 							<div class="company-info-item" style="width: 20px;">
@@ -158,27 +161,55 @@
 								<h4>기업 설명</h4>
 								<p>${company.cpDescription}</p>
 							</div>
-							<%-- 							<div class="company-review-section">
-								<h4>기업 면접 후기</h4>
-								<c:choose>
-									<c:when test="${not empty company.cpInterviewReview}">
-										cpInterviewReview 필드가 CompanyVO에 있다고 가정
-										<p>${company.cpInterviewReview}</p>
-									</c:when>
-									<c:otherwise>
-										<p>등록된 면접 후기가 없습니다.</p>
-									</c:otherwise>
-								</c:choose>
-							</div> --%>
 							<div class="company-address-section">
 								<h4>기업 주소</h4>
 								<p>${company.cpRegion}</p>
 							</div>
 							<div class="company-hiring-status-section">
 								<h4>현재 채용 여부</h4>
-								<p>${company.cpHiringStatus == 'Y' ? '채용 중' : '채용 없음'}</p>
+								<c:choose>
+									<c:when test="${company.cpHiringStatus eq 'Y'}">
+										<p>
+											<a
+												href="/empt/ema/employmentAdvertisement.do?keyword=${fn:escapeXml(company.cpName)}"
+												class="hiring-link"> 채용 중 (채용공고 바로가기) </a>
+										</p>
+									</c:when>
+									<c:otherwise>
+										<p>채용 없음</p>
+									</c:otherwise>
+								</c:choose>
 							</div>
-							<%-- 여기에 채용 공고를 띄울 수 있지만, 현재 요청에서는 제외합니다. --%>
+							<div class="company-review-section">
+								<h4>기업 면접 후기</h4>
+
+								<c:set var="isReview" value="false" />
+
+								<c:forEach var="interviewReview"
+									items="${interviewReviewVOList}">
+									<c:if test="${company.cpId eq interviewReview.targetId}">
+										<div class="review-item">
+											<div class="review-meta">
+												<span><strong> ${interviewReview.memNickname}</strong></span>
+												<div class="rating-and-date">
+													<span><strong class="review-rating-icon">★</strong>
+														${interviewReview.irRating}</span>
+												</div>
+											</div>
+											<p class="review-content">${interviewReview.irContent}</p>
+											<p class="review-date">
+												<fmt:formatDate value="${interviewReview.irCreatedAt}"
+													pattern="yyyy. MM. dd" />
+											</p>
+										</div>
+										<c:set var="isReview" value="true" />
+									</c:if>
+								</c:forEach>
+
+								<c:if test="${!isReview}">
+									<p class="no-review-message">등록된 면접 후기가 없습니다.</p>
+								</c:if>
+							</div>
 						</div>
 					</div>
 				</c:forEach>
