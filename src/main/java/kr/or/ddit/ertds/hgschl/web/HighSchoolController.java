@@ -15,14 +15,14 @@ public class HighSchoolController {
 	@GetMapping("/hgschl/selectHgschList.do")
 	public String highSchoolListPage() {
 
-		return "ertds/hgschl/list"; // /WEB-INF/views/erds/hgschl/list.jsp
+		return "ertds/hgschl/HighSchoolList"; // /WEB-INF/views/erds/hgschl/list.jsp
 	}
 
-	// 고등학교 리스트
+	// 고등학교 상세
 	@GetMapping("/hgschl/selectHgschDetail.do")
 	public String highSchoolDetailPage() {
 
-		return "ertds/hgschl/detail"; // /WEB-INF/views/erds/hgschl/detail.jsp
+		return "ertds/hgschl/HighSchoolDetail"; // /WEB-INF/views/erds/hgschl/detail.jsp
 	}
 
 }
