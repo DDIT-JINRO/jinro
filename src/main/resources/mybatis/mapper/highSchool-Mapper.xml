@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.ertds.hgschl.service.impl.HighSchoolMapper">
+
+	<!-- 
+	// 모든 고등학교 정보를 조회하는 메서드 (주소 포함)
+	public List<HighSchoolVO> selectAllHighSchools();
+	 -->
+	 <select id="selectAllHighSchools" resultType="kr.or.ddit.ertds.hgschl.service.HighSchoolVO">
+	 	SELECT HS_ID
+		     , HS_CODE
+		     , HS_NAME
+		     , HS_REGION_CODE
+		     , HS_JURIS_CODE
+		     , HS_FOUND_TYPE
+		     , HS_ZIPCODE
+		     , HS_ADDR
+		     , HS_ADDR_DETAIL
+		     , HS_TEL
+		     , HS_HOMEPAGE
+		     , HS_COEDU_TYPE
+		     , HS_TYPE_NAME
+		     , HS_GENERAL_TYPE
+		     , HS_FOUND_DATE
+		     , HS_ANNIV_AT
+		     , HS_LAT
+		     , HS_LOT
+		FROM HIGH_SCHOOL
+	 </select>
+	 
+	  <!-- 
+    //특정 고등학교 ID로 상세 정보를 조회
+	public HighSchoolVO selectHighSchoolById(@Param("hsId") int hsId);
+     -->
+     <select id="selectHighSchoolById" resultType="kr.or.ddit.ertds.hgschl.service.HighSchoolVO">
+        SELECT
+            HS_ID,
+            HS_CODE,
+            HS_NAME,
+            HS_REGION_CODE AS hsRegion,
+            HS_JURIS_CODE AS hsJurisCode,
+            HS_FOUND_TYPE AS hsFoundType,
+            HS_ZIPCODE AS hsZipcode,
+            HS_ADDR AS hsAddr,
+            HS_ADDR_DETAIL AS hsAddrDetail,
+            HS_TEL AS hsTel,
+            HS_HOMEPAGE AS hsHomepage,
+            HS_COEDU_TYPE AS hsCoeduType,
+            HS_TYPE_NAME AS hsTypeName,
+            HS_GENERAL_TYPE AS hsGeneralType,
+            HS_FOUND_DATE AS hsFoundDate,
+            HS_ANNIV_AT AS hsAnnivAt,
+            HS_LAT AS hsLat,
+            HS_LOT AS hsLot
+        FROM HIGH_SCHOOL
+        WHERE HS_ID = #{hsId}
+    </select>
+    
+    <!-- 
+	// 특정 고등학교 이름을 파라미터로 받아 HighSchoolVO 리스트를 반환
+	public List<HighSchoolVO> selectHighSchoolsByName(@Param("schoolName") String schoolName);
+    -->
+    <select id="selectHighSchoolsByName" resultType="kr.or.ddit.ertds.hgschl.service.HighSchoolVO">
+       SELECT HS_ID
+            , HS_CODE
+            , HS_NAME
+            , HS_REGION_CODE AS hsRegion
+            , HS_JURIS_CODE AS hsJurisCode
+            , HS_FOUND_TYPE AS hsFoundType
+            , HS_ZIPCODE AS hsZipcode
+            , HS_ADDR AS hsAddr
+            , HS_ADDR_DETAIL AS hsAddrDetail
+            , HS_TEL AS hsTel
+            , HS_HOMEPAGE AS hsHomepage
+            , HS_COEDU_TYPE AS hsCoeduType
+            , HS_TYPE_NAME AS hsTypeName
+            , HS_GENERAL_TYPE AS hsGeneralType
+            , HS_FOUND_DATE AS hsFoundDate
+            , HS_ANNIV_AT AS hsAnnivAt
+            , HS_LAT AS hsLat
+            , HS_LOT AS hsLot
+       FROM HIGH_SCHOOL
+       WHERE HS_NAME LIKE '%' || #{schoolName} || '%'  -- Oracle/MySQL/PostgreSQL 등에서 사용
+    </select>
+
+</mapper>

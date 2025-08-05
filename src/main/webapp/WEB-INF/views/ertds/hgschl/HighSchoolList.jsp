@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="">
+<link rel="stylesheet" href="/css/ertds/hgschl/HighSchoolList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -36,56 +36,67 @@
 		<div class="public-wrapper-main">
 			<!-- 검색 및 필터 영역 -->
 			<form method="get" action="/ertds/hgschl/selectHgschList.do">
-				<div class="search-wrapper">
-
-					<!-- 학교명 검색 -->
-					<input type="text" name="schoolName" placeholder="학교명을 입력하세요"
-						class="search-input" value="${param.schoolName}" />
-
-					<!-- 기본 필터 -->
-					<div class="filter-section">
-						<div class="filter-title">지역</div>
-						<div class="filter-options">
-							<c:forEach var="region" items="${regionList}">
-								<label class="filter-item"> <input type="checkbox"
-									name="regionFilter" value="${region.code}" /> <span
-									class="filter-label">${region.name}</span>
-								</label>
-							</c:forEach>
-						</div>
-
-						<div class="filter-title">학교유형</div>
-						<div class="filter-options">
-							<label><input type="radio" name="schoolType" value="일반" />
-								일반</label> <label><input type="radio" name="schoolType"
-								value="자사고" /> 자사고</label> <label><input type="radio"
-								name="schoolType" value="과학고" /> 과학고</label>
-							<!-- 기타 -->
-						</div>
-
-						<div class="filter-title">계열</div>
-						<div class="filter-options">
-							<label><input type="radio" name="courseType" value="문과" />
-								문과</label> <label><input type="radio" name="courseType"
-								value="이과" /> 이과</label>
+				<div class="search-filter-box">
+					<div class="filter-row">
+						<div class="filter-controls" style="width: 100%;">
+							<div class="main-search-bar">
+								<input type="text" name="schoolName" placeholder="학교명을 입력하세요."
+									class="search-input" value="${param.schoolName}" />
+								<button type="submit" class="search-button">검색</button>
+							</div>
 						</div>
 					</div>
 
-					<!-- 검색 버튼 -->
-					<button type="submit" class="search-button">검색</button>
+					<div class="filter-row">
+						<div class="filter-label-title">지역</div>
+						<div class="filter-controls">
+							<c:forEach var="region" items="${regionList}">
+								<label> <input type="checkbox" name="regionFilter"
+									value="${region.code}" /> <span class="filter-tag">${region.name}</span>
+								</label>
+							</c:forEach>
+						</div>
+					</div>
+
+					<div class="filter-row">
+						<div class="filter-label-title">학교유형</div>
+						<div class="filter-controls">
+							<label><input type="radio" name="schoolType" value="일반" /><span
+								class="filter-tag">일반</span></label> <label><input type="radio"
+								name="schoolType" value="자사고" /><span class="filter-tag">자사고</span></label>
+							<label><input type="radio" name="schoolType" value="과학고" /><span
+								class="filter-tag">과학고</span></label>
+						</div>
+					</div>
+
+					
 				</div>
 			</form>
 
 			<!-- 고등학교 리스트 -->
-			<div class="highschool-list">
-				<c:forEach var="school" items="${schoolList}">
-					<div class="school-item">
-						<a href="/ertds/hgschl/selectHgschDetail.do?schoolId=${school.id}"
-							class="school-name">${school.name}</a>
-						<div class="school-info">지역: ${school.region} / 유형:
-							${school.type} / 계열: ${school.course}</div>
-					</div>
-				</c:forEach>
+			<div class="result-list-wrapper">
+				<div class="list-header">
+					<div class="header-item">대학명</div>
+					<div class="header-item">공학여부</div>
+					<div class="header-item">설립구분</div> <!-- 일반계/전문계 -->
+					<div class="header-item">설립유형</div> <!-- 국공립/사립 -->
+					<div class="header-item">지역</div>
+					<div class="header-item">북마크</div>
+				</div>
+				<div class="highschool-list">
+					<c:forEach var="school" items="${schoolList}">
+						<div class="school-item">
+							<a
+								href="/ertds/hgschl/selectHgschDetail.do?schoolId=${school.hsId}"
+								class="school-name">${school.hsName}</a>
+							<div>${school.hsCoeduType}</div><!-- 공학여부 -->
+							<div>${school.hsGeneralType}</div><!-- 일반계/전문계 -->
+							<div>${school.hsFoundType}</div><!-- 국공립/사립 -->
+							<div>${school.hsRegion}</div>
+							<div class="bookmark-icon">&star;</div>
+						</div>
+					</c:forEach>
+				</div>
 			</div>
 		</div>
 	</div>

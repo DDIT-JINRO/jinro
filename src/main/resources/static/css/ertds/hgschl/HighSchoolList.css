@@ -1,0 +1,226 @@
+@charset "UTF-8";
+
+/* =================================================== */
+/* 진학 정보 페이지 맞춤 스타일 (.public-wrapper 내부 한정) */
+/* =================================================== */
+
+/* ----- 메인 콘텐츠 영역 ----- */
+
+.public-wrapper .public-wrapper-main {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 40px;
+}
+
+/* ----- 검색 및 필터 영역 ----- */
+.public-wrapper .search-filter-box {
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.public-wrapper .filter-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 15px 0;
+    border-bottom: 1px dashed #EAEAEA;
+}
+.public-wrapper .filter-row:last-child {
+    border-bottom: none;
+}
+
+.public-wrapper .filter-label-title {
+    flex-basis: 120px; /* 라벨 너비 고정 */
+    font-weight: 600;
+    color: #333;
+    padding-top: 8px;
+}
+
+.public-wrapper .filter-controls {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* 메인 검색창 */
+.public-wrapper .main-search-bar {
+    display: flex;
+    width: 100%;
+}
+.public-wrapper .search-input {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    padding: 12px 15px;
+    border-radius: 6px 0 0 6px;
+    font-size: 16px;
+}
+.public-wrapper .search-input:focus {
+    outline: none;
+    border-color: #5A67D8;
+    box-shadow: 0 0 0 2px rgba(90, 103, 216, 0.2);
+}
+.public-wrapper .search-button {
+    padding: 0 30px;
+    border: none;
+    background-color: #343A40;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+}
+
+/* 필터 버튼 스타일 */
+.public-wrapper .filter-controls label {
+    display: inline-block;
+}
+.public-wrapper .filter-controls input[type="checkbox"],
+.public-wrapper .filter-controls input[type="radio"] {
+    display: none; /* 원래 체크박스/라디오 숨김 */
+}
+.public-wrapper .filter-controls .filter-tag {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid #D1D5DB;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #4B5563;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+.public-wrapper .filter-controls input:checked + .filter-tag {
+    background-color: #EBF4FF;
+    border-color: #60A5FA;
+    color: #1D4ED8;
+    font-weight: 600;
+}
+
+
+/* ----- 결과 리스트 영역 ----- */
+.public-wrapper .result-list-wrapper {
+    margin-top: 40px;
+}
+
+/* 리스트 헤더 (테이블 제목) */
+.public-wrapper .list-header {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr; /* 5개 컬럼 비율 */
+    padding: 15px 20px;
+    border-bottom: 2px solid #333;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+}
+.public-wrapper .list-header .header-item:first-child {
+    text-align: left;
+}
+
+/* 리스트 아이템 */
+.public-wrapper .school-item {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr; /* 헤더와 동일한 비율 */
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #EAEAEA;
+    text-align: center;
+    color: #555;
+    transition: background-color 0.2s;
+}
+.public-wrapper .school-item:hover {
+    background-color: #F9FAFB;
+}
+.public-wrapper .school-item .school-name {
+    text-align: left;
+    font-weight: 600;
+    color: #111;
+    text-decoration: none;
+}
+.public-wrapper .school-item .school-name:hover {
+    color: #5A67D8;
+    text-decoration: underline;
+}
+
+/* 북마크 아이콘 (예시) */
+.public-wrapper .bookmark-icon {
+    font-size: 24px;
+    color: #A0AEC0;
+    cursor: pointer;
+}
+.public-wrapper .bookmark-icon.active {
+    color: #F6AD55;
+}
+
+/* ========================================= */
+/* 페이지네이션 (Pagination) 스타일             */
+/* ========================================= */
+
+/* 페이지네이션 전체를 감싸는 컨테이너 */
+.card-footer.clearfix {
+    padding: 20px 0;
+    text-align: center;
+    border-top: 1px solid #E8ECEF; /* 다른 카드들과 유사한 구분선 */
+    margin-top: 40px;
+}
+
+/* ul 태그 기본 스타일 제거 및 flex 정렬 */
+.pagination {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* 각 버튼 사이의 간격 */
+}
+
+/* 페이지 번호 및 이전/다음 버튼(a 태그) 기본 스타일 */
+.pagination li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 40px; /* 버튼의 최소 너비 고정 */
+    height: 40px;    /* 버튼 높이 고정 */
+    padding: 0 12px;
+    border: 1px solid #E8ECEF;
+    border-radius: 8px; /* 다른 요소들과 통일성 있는 둥근 모서리 */
+    background-color: #fff;
+    color: #555;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+/* 마우스를 올렸을 때의 스타일 */
+.pagination li a:hover {
+    border-color: #848EFB;
+    color: #848EFB;
+    background-color: #f0f0ff;
+}
+
+/* 현재 활성화된 페이지 번호 스타일 */
+.pagination li a.active {
+    background-color: #848EFB;
+    border-color: #848EFB;
+    color: #fff;
+    font-weight: 700;
+    cursor: default;
+}
+
+/* 비활성화된 이전/다음 버튼 스타일 */
+.pagination li a.disabled {
+    background-color: #F8F9FA;
+    color: #ADB5BD;
+    border-color: #E8ECEF;
+    cursor: not-allowed;
+    pointer-events: none; /* 클릭 이벤트 비활성화 */
+}
+
+/* 비활성화된 버튼에는 호버 효과 제거 */
+.pagination li a.disabled:hover {
+    background-color: #F8F9FA;
+    color: #ADB5BD;
+    border-color: #E8ECEF;
+}
