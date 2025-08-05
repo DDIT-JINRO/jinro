@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.cns.service.impl.CounselorMapper">
+
+	<select id="selectCompletedCounselList" resultType="kr.or.ddit.cns.service.CounselingVO" parameterType="kr.or.ddit.cns.service.CounselingVO">
+		SELECT
+			MEM_NAME
+			, COUNSEL_ID
+			, COUNSEL_NAME
+			, COUNSEL_CATEGORY
+			, COUNSEL_METHOD
+			, COUNSEL_TITLE
+			, COUNSEL_DESCRIPTION
+			, COUNSEL_STATUS
+			, COUNSEL_REQ_DATE
+			, COUNSEL_REQ_TIME
+			, COUNSEL_URL
+			, COUNSEL_REVIEWD
+			, COUNSEL_CREATED_AT
+			, COUNSEL_UPDATED_AT
+		FROM (
+		    SELECT
+		        ROWNUM
+		        , D.*
+		    FROM
+		        (
+		            SELECT
+		                A.COUNSEL_ID
+		              , M1.MEM_NAME AS MEM_NAME
+		              , M2.MEM_NAME AS COUNSEL_NAME
+		              , A.COUNSEL_CATEGORY
+		              , A.COUNSEL_METHOD
+		              , A.COUNSEL_TITLE
+		              , A.COUNSEL_DESCRIPTION
+		              , A.COUNSEL_STATUS
+		              , A.COUNSEL_REQ_DATE
+		              , A.COUNSEL_REQ_TIME
+		              , A.COUNSEL_URL
+		              , A.COUNSEL_REVIEWD
+		              , A.COUNSEL_CREATED_AT
+		              , A.COUNSEL_UPDATED_AT
+		            FROM
+		                COUNSELING A
+		                LEFT JOIN MEMBER M1 ON A.MEM_ID = M1.MEM_ID
+		                LEFT JOIN MEMBER M2 ON A.COUNSEL = M2.MEM_ID
+		            WHERE
+		                A.COUNSEL = #{counsel}
+		              AND
+		                A.COUNSEL_STATUS='S04004'
+		            <if test="keyword != null and keyword != ''">
+		            	<choose>
+		            		<when test="status == 'title'">
+		            			AND A.COUNSEL_TITLE LIKE '%' || #{keyword} || '%'
+		            		</when>
+		            		<when test="status == 'content'">
+		            			AND A.COUNSEL_DESCRIPTION LIKE '%' || #{keyword} || '%'
+		            		</when>
+		            		<when test="status == 'counsel'">
+		            			AND M2.COUNSEL_NAME LIKE '%' || #{keyword} || '%'
+		            		</when>
+		            		<otherwise>
+		            			AND (
+		            				A.COUNSEL_TITLE LIKE '%' || #{keyword} || '%'
+			            			OR A.COUNSEL_DESCRIPTION LIKE '%' || #{keyword} || '%'
+			            			OR A.COUNSEL LIKE '%' || #{keyword} || '%'
+		            			)
+		            		</otherwise>
+		            	</choose>
+		            </if>
+		            <if test="year != null and year != ''">
+		            	EXTRACT(YEAR FROM COUNSEL_REQ_DATE) = #{year}
+		            </if>
+		            ORDER BY
+		            	A.COUNSEL_REQ_DATE DESC
+		        ) D
+		    WHERE
+		        ROWNUM <![CDATA[<=]]> #{endNo}
+		)
+		WHERE
+		    ROWNUM <![CDATA[>=]]> #{startNo}
+	</select>
+
+	<select id="selectCounselList" resultType="kr.or.ddit.cns.service.CounselingVO">
+	</select>
+
+</mapper>
