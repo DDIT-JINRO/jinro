@@ -73,4 +73,12 @@
         WHERE COUNSEL_ID = #{counselId}
     </update>
     
+       <select id="selectBookedTimesByCounselorAndDate" resultType="java.util.Date" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+        SELECT COUNSEL_REQ_TIME
+        FROM COUNSEL
+        WHERE COUNSELOR_ID = #{counsel}
+        AND COUNSEL_REQ_DATE = #{counselReqDate}
+        AND COUNSEL_STATUS IN ('S04001', 'S04003')
+    </select>
+    
 </mapper>

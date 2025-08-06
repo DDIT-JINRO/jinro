@@ -1,5 +1,6 @@
 package kr.or.ddit.cnslt.resve.crsv.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -24,4 +25,6 @@ public interface CounselingReserveMapper {
 
     // 5. 상담 예약 상태 업데이트
     int updateReservationStatus(CounselingVO counselingVO);
+
+	List<Date> selectBookedTimesByCounselorAndDate(CounselingVO counselingVO);
 }
