@@ -53,20 +53,25 @@ public class BookMarkServiceImpl implements BookMarkService{
 
 	@Override
 	public void deleteBookmark(String memIdStr, BookMarkVO bookmarkVO) {
-		if (!"".equals(memIdStr) && !"anonymousUser".equals(memIdStr)) {
-			int memId = Integer.parseInt(memIdStr);
-			bookmarkVO.setMemId(memId);
-			this.bookmarkMapper.deleteBookmark(bookmarkVO);
+		if("".equals(memIdStr) && "anonymousUser".equals(memIdStr)) {
+			throw new RuntimeException();
 		}
+		
+		int memId = Integer.parseInt(memIdStr);
+		bookmarkVO.setMemId(memId);
+		this.bookmarkMapper.deleteBookmark(bookmarkVO);
 	}
-
+	
 	@Override
 	public void insertBookmark(String memIdStr, BookMarkVO bookmarkVO) {
-		if (!"".equals(memIdStr) && !"anonymousUser".equals(memIdStr)) {
-			int memId = Integer.parseInt(memIdStr);
-			bookmarkVO.setMemId(memId);
-			this.bookmarkMapper.insertBookmark(bookmarkVO);
+		if("".equals(memIdStr) && "anonymousUser".equals(memIdStr)) {
+			throw new RuntimeException();
 		}
+		
+		int memId = Integer.parseInt(memIdStr);
+		bookmarkVO.setMemId(memId);
+		this.bookmarkMapper.insertBookmark(bookmarkVO);
 	}
+
 
 }
