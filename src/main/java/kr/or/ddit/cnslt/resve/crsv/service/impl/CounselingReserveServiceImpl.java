@@ -1,7 +1,12 @@
 package kr.or.ddit.cnslt.resve.crsv.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -74,6 +79,49 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
                 redisTemplate.delete(lockKey);
             }
         }
+    }
+
+	@Override
+	public List<String> getAvailableTimes(int counselId, Date counselReqDate) {
+		// 1. 상담사가 해당 날짜에 휴가 중인지 확인
+	    VacationVO vacationVO = new VacationVO();
+	    vacationVO.setVaRequestor(counselId);
+	    vacationVO.setVaStart(counselReqDate);
+	    
+	    int vacationCount = counselingReserveMapper.selectCounselorVacations(vacationVO);
+	    if (vacationCount > 0) {
+	        return new ArrayList<>(); // 휴가 중이면 빈 리스트 반환
+	    }
+
+	    // 2. 예약된 시간 목록 조회
+	    CounselingVO counselingVO = new CounselingVO();
+	    counselingVO.setCounsel(counselId);
+	    counselingVO.setCounselReqDate(counselReqDate);
+	    
+	    List<Date> bookedTimes = counselingReserveMapper.selectBookedTimesByCounselorAndDate(counselingVO);
+	    
+	    // 3. 예약된 시간 목록을 "HH:mm" 형식의 문자열로 변환
+	    List<String> bookedTimesFormatted = new ArrayList<>();
+	    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	    for (Date time : bookedTimes) {
+	        bookedTimesFormatted.add(timeFormat.format(time));
+	    }
+
+	    // 4. 전체 상담 가능 시간대(9시~18시)와 비교하여 가능한 시간 필터링
+	    List<String> allPossibleTimes = new ArrayList<>();
+	    for (int hour = 9; hour <= 18; hour++) {
+	        allPossibleTimes.add(String.format("%02d:00", hour));
+	    }
+	    
+	    // 5. 전체 시간 목록에서 예약된 시간을 제거하여 최종 가능한 시간 목록 생성
+	    List<String> availableTimes = new ArrayList<>();
+	    for (String possibleTime : allPossibleTimes) {
+	        if (!bookedTimesFormatted.contains(possibleTime)) {
+	            availableTimes.add(possibleTime);
+	        }
+	    }
+	    
+	    return availableTimes;
     }
 	
 }
