@@ -18,7 +18,7 @@
     transform: translateY(-50%);
     color: #adb5bd;
     /* 돋보기 아이콘 SVG 또는 폰트 아이콘 사용 시 필요 */
-    /* content: '🔍'; */ 
+    content: '🔍';  
 }
 .main-search-input {
     width: 100%;
@@ -65,7 +65,7 @@
     display: flex;
     align-items: flex-start;
     padding: 20px;
-    border-bottom: 1px dashed #e0e0e0;
+    border-bottom: 1px #e0e0e0;
 }
 .filter-row:last-child { border-bottom: none; }
 .filter-label-title {
@@ -78,12 +78,18 @@
     flex-grow: 1;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+}
+
+.filter-item {
+    /* 각 버튼에 오른쪽(10px), 아래쪽(12px) 여백을 주어 간격을 만듭니다. */
+    margin-right: 10px;
+    margin-bottom: 12px;
 }
 
 /* 필터 버튼 (pill-shape) */
 .filter-item input { display: none; }
 .filter-item span {
+    display: inline-block; /* margin 적용을 위해 추가 */
     padding: 8px 16px;
     border: 1px solid #d1d5db;
     border-radius: 20px;
@@ -106,18 +112,156 @@
     gap: 8px;
     min-height: 24px;
 }
+
 .selected-tag {
     display: inline-flex;
     align-items: center;
-    padding: 6px 12px;
+    padding: 5px 10px;
     background-color: #e9ecef;
     color: #495057;
     border-radius: 16px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
 }
 .remove-tag-btn {
-    margin-left: 8px;
+    margin-left: 6px;
+    background: none;
+    border: none;
+    color: #868e96;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* ========================================= */
+/* 검색 및 필터 영역 (새로운 디자인)         */
+/* ========================================= */
+.main-search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.main-search-input-wrapper {
+    flex-grow: 1;
+    position: relative;
+}
+.main-search-input-wrapper .icon-search {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #adb5bd;
+    /* 돋보기 아이콘 SVG 또는 폰트 아이콘 사용 시 필요 */
+    content: '🔍';  
+}
+.main-search-input {
+    width: 100%;
+    border: 1px solid #ced4da;
+    padding: 14px 18px 14px 50px; /* 아이콘 공간 확보 */
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box;
+}
+.main-search-btn {
+    padding: 0 30px;
+    border: none;
+    background-color: #495057;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* 상세 필터 박스 */
+.search-filter-box {
+    border: 1px solid #c7d2fe;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.filter-toggle-bar {
+    padding: 12px 20px;
+    color: #4f46e5;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 1px solid #c7d2fe;
+}
+
+.filter-content {
+    /* JS로 제어하기 위해 초기엔 닫아둠 */
+    display: none; 
+}
+
+.filter-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px #e0e0e0;
+}
+.filter-row:last-child { border-bottom: none; }
+.filter-label-title {
+    flex-basis: 120px;
+    font-weight: 500;
+    color: #333;
+    padding-top: 8px;
+}
+.filter-controls {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.filter-item {
+    /* 각 버튼에 오른쪽(10px), 아래쪽(12px) 여백을 주어 간격을 만듭니다. */
+    margin-right: 10px;
+    margin-bottom: 12px;
+}
+
+/* 필터 버튼 (pill-shape) */
+.filter-item input { display: none; }
+.filter-item span {
+    display: inline-block; /* margin 적용을 위해 추가 */
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    background-color: #f9fafb;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.filter-item input:checked + span {
+    background-color: #e0e7ff;
+    border-color: #a5b4fc;
+    color: #4f46e5;
+    font-weight: 600;
+}
+
+/* 선택된 필터 태그 스타일 */
+.selected-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 24px;
+}
+.selected-filter-label {
+    font-size: 13px;       /* 폰트 크기를 약간 작게 */
+    font-weight: 400;      /* 폰트 굵기를 보통으로 */
+    color: #6c757d;        /* 색상을 조금 더 연하게 */
+}
+.selected-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: #e9ecef;
+    color: #495057;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.remove-tag-btn {
+    margin-left: 6px;
     background: none;
     border: none;
     color: #868e96;
@@ -137,11 +281,11 @@
 /* 리스트 헤더 (목록 제목) */
 .list-header {
     display: grid;
-    grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr; 
-    align-items: center; /* [추가] 세로 중앙 정렬 */
-    padding: 20px 30px; /* [수정] school-item과 동일한 패딩 */
+    grid-template-columns: 2.5fr 1.5fr 1.5fr 1.5fr 1.5fr; 
+    align-items: center; /* 세로 중앙 정렬 */
+    padding: 12px 30px; /* school-item과 동일한 패딩 */
     
-    /* [수정] school-item과 동일한 카드 스타일 적용 */
+    /* school-item과 동일한 카드 스타일 적용 */
     background-color: #fff;
     border: 1px solid #e9ecef;
     border-radius: 12px;
@@ -174,7 +318,85 @@
 /* 각 학교 아이템 (하나의 카드) */
 .school-item {
 	display: grid;
-	grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr; /* 헤더와 동일한 컬럼 비율 */
+	grid-template-columns: 2.5fr 1.5fr 1.5fr 1.5fr 1.5fr; /* 헤더와 동일한 컬럼 비율 */
+	align-items: center;
+	padding: 20px 30px;
+	background-color: #fff;
+	border: 1px solid #e9ecef;
+	border-radius: 12px; /* 카드를 둥글게 */
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
+	text-align: center;
+	color: #333;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* 마우스를 올렸을 때 카드에 효과 주기 */
+.school-item:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.school-item .school-name {
+	text-align: left;
+	font-weight: 600;
+	color: #111;
+	text-decoration: none;
+}
+
+.school-item .school-name:hover {
+	color: #5A67D8;
+	text-decoration: underline;
+}
+
+
+/* ========================================= */
+/* 결과 리스트 영역 (새로운 디자인 적용)     */
+/* ========================================= */
+.result-list-wrapper {
+	margin-top: 40px;
+}
+
+/* 리스트 헤더 (목록 제목) */
+.list-header {
+    display: grid;
+    grid-template-columns: 2.5fr 1.5fr 1.5fr 1.5fr 1.5fr; 
+    align-items: center; /* 세로 중앙 정렬 */
+    padding: 12px 30px; /* school-item과 동일한 패딩 */
+    
+    /* school-item과 동일한 카드 스타일 적용 */
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+    text-align: center;
+    
+    /* 헤더이므로 글씨는 조금 더 진하게 유지 */
+    font-weight: 600;
+    font-size: 14px;
+    color: #495057;
+}
+
+.list-header .header-item:first-child {
+	text-align: left;
+}
+
+/* 각 학교 리스트 아이템을 감싸는 컨테이너 */
+.highschool-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px; /* 각 카드(행) 사이의 간격 */
+	/* 헤더와 연결되는 느낌을 주기 위해 상단 그림자 제거 */
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	margin-top: 12px; /* 헤더와의 간격 */
+}
+
+/* 각 학교 아이템 (하나의 카드) */
+.school-item {
+	display: grid;
+	grid-template-columns: 2.5fr 1.5fr 1.5fr 1.5fr 1.5fr; /* 헤더와 동일한 컬럼 비율 */
 	align-items: center;
 	padding: 20px 30px;
 	background-color: #fff;
