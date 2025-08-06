@@ -38,6 +38,7 @@
 			data-hs-addr="${highSchool.hsAddr}" data-hs-tel="${highSchool.hsTel}"
 			data-hs-lat="${empty highSchool.hsLat ? 0 : highSchool.hsLat}"
 			data-hs-lot="${empty highSchool.hsLot ? 0 : highSchool.hsLot}">
+			
 			<div class="detail-container">
 				<div class="school-summary-box">
 					<h2>${highSchool.hsName}</h2>
@@ -47,7 +48,6 @@
 							${highSchool.hsCoeduType}</li>
 						<li><strong>설립:</strong> ${highSchool.hsFoundType}</li>
 					</ul>
-					<a href="/ertds/hgschl/selectHgschList.do" class="btn-list-top">목록으로</a>
 				</div>
 
 				<div class="detail-section">
@@ -96,6 +96,8 @@
 				</c:if>
 
 				<div class="bottom-button-wrapper">
+					<button type="button" id="pdf-preview-btn" class="btn-pdf-preview">PDF 미리보기</button>
+				    <button type="button" id="pdf-download-btn" class="btn-pdf-download">PDF 다운로드</button>
 					<a href="/ertds/hgschl/selectHgschList.do" class="btn-list-bottom">목록</a>
 				</div>
 
