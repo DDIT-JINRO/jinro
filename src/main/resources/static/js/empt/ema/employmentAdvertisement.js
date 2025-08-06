@@ -209,7 +209,7 @@ const handleBookmarkToggle = (button) => {
     .then(data => {
 		console.log(data);
 		console.log(memId);
-        if (data.success&&(memId!=null && memId !='anonymousUser')) {
+        if (data.success) {
 			alert(data.message);
             button.classList.toggle('active');
         } else {
