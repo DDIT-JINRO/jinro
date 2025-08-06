@@ -65,7 +65,7 @@ public class UniversitySearchController {
 		model.addAttribute("codeVOUniversityTypeList", codeVOUniversityTypeList);
 		model.addAttribute("codeVOUniversityGubunList", codeVOUniversityGubunList);
 		
-		return "ertds/univ/uvsrch/list"; // /WEB-INF/views/erds/univ/list.jsp
+		return "ertds/univ/uvsrch/selectUnivList"; // /WEB-INF/views/erds/univ/list.jsp
 	}
 
 	// 대학비교
