@@ -29,7 +29,7 @@ public class UniversitySearchController {
 	// 중분류 대학검색으로 이동
 	@GetMapping("/selectUnivList.do")
 	public String selectUnivList(
-			@RequestParam(required = false) String searchKeyword,
+			@RequestParam(required = false) String keyword,
 			@RequestParam(required = false, defaultValue = "1") int currentPage,
 			@RequestParam(required = false, defaultValue = "5") int size,
 			UniversityVO universityVO,
@@ -47,7 +47,7 @@ public class UniversitySearchController {
 		
 		log.info("codeVOUniversityTypeList : {}", codeVOUniversityTypeList);
 		log.info("codeVOUniversityGubunList : {}", codeVOUniversityGubunList);
-		ArticlePage<UniversityVO> articlePage = new ArticlePage<>(totalCount, currentPage, size, list, searchKeyword);
+		ArticlePage<UniversityVO> articlePage = new ArticlePage<>(totalCount, currentPage, size, list, keyword);
 		List<BookMarkVO> bookMarkVOList = new ArrayList<>();
 		if(principal!=null && !principal.getName().equals("anonymousUser")) {
 			int memId = Integer.parseInt(principal.getName());

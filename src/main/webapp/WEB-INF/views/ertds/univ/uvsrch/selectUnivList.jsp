@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/ertds/univ/univList.css">
+<link rel="stylesheet" href="/css/ertds/univ/uvsrch/univList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -21,7 +21,7 @@
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
 		    <a class="tab active" href="/ertds/univ/uvsrch/selectUnivList.do">대학 검색</a>
-		    <a class="tab" href="/ertds/univ/mjsrch/selectMajorList.do">학과 정보</a>
+		    <a class="tab" href="/ertds/univ/dpsrch/selectDeptList.do">학과 정보</a>
 		</div>
 	</div>
 </div>
@@ -184,4 +184,4 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script type="text/javascript" src="/js/ertds/univ/univList.js"></script>
+<script type="text/javascript" src="/js/ertds/univ/uvsrch/univList.js"></script>
