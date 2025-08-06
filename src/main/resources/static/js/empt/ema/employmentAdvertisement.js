@@ -19,12 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleButton.addEventListener('click', function () {
             this.classList.toggle('active');
             panel.classList.toggle('open');
-
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + 'px';
-            }
         });
     }
 	

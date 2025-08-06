@@ -20,11 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
             this.classList.toggle('active');
             panel.classList.toggle('open');
 
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + 'px';
-            }
         });
     }
 	
