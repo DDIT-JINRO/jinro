@@ -29,9 +29,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.genai.Client;
+import com.google.genai.errors.ServerException;
+import com.google.genai.types.GenerateContentResponse;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import kr.or.ddit.account.lgn.service.LoginService;
+import kr.or.ddit.admin.las.service.RecommendKeywordVO;
 import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
@@ -47,12 +51,15 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 	@Value("${DEV.TEST.API_KEY}")
 	private String TEST_API_KEY;
 	
+	@Value("${DEV.AI.GEMINI.KEY}")
+	private String geminiApiKey;
+	
 	@Autowired
 	LoginService loginService;
 
 	@Autowired
-	CareerAptitudeTestMapper careerAptitudeMapper;
-
+	CareerAptitudeTestMapper careerAptitudeTestMapper;
+	
 	@Override
 	public Map<String, Object> testSubmit(Map<String, Object> data, String memId) {
 		int testSeq = (int) data.get("testNo");
@@ -236,7 +243,7 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 			temporarySaveVO.setMemId(intMemId);
 			temporarySaveVO.setTsContent(json);
 			temporarySaveVO.setTsType(testType);
-			int result = careerAptitudeMapper.testSave(temporarySaveVO);
+			int result = careerAptitudeTestMapper.testSave(temporarySaveVO);
 
 			if (result == 1) {
 				return "success";
@@ -262,7 +269,7 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 		temporarySaveVO.setTsType(testType);
 		temporarySaveVO.setMemId(intMemId);
 
-		TemporarySaveVO savingTest = careerAptitudeMapper.getSavingTest(temporarySaveVO);
+		TemporarySaveVO savingTest = careerAptitudeTestMapper.getSavingTest(temporarySaveVO);
 		if (savingTest == null) {
 			map.put("msg", "failed");
 			return map;
@@ -291,12 +298,11 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 		TemporarySaveVO temporarySaveVO = new TemporarySaveVO();
 		temporarySaveVO.setTsType(testType);
 		temporarySaveVO.setMemId(intMemId);
-		careerAptitudeMapper.delTempSaveTest(temporarySaveVO);
+		careerAptitudeTestMapper.delTempSaveTest(temporarySaveVO);
 	}
 
 	@Override
 	public void insertResultKeyword(String url, String memId, String testNo) {
-
 		WebDriver driver = null;
 		try {
 			WebDriverManager.chromedriver().setup();
@@ -343,8 +349,8 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 					.atResultText(result)
 					.build();
 			
-			log.info("전체 겨로가다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ : " + result);
-			this.careerAptitudeMapper.insertAptitudeResult(aptitudeTestVO);
+			insertRecommendKeyword(result, memId);
+			this.careerAptitudeTestMapper.insertAptitudeResult(aptitudeTestVO);
 
 		} catch (Exception e) {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
@@ -354,6 +360,39 @@ public class CareerAptitudeTestServiceImpl implements CareerAptitudeTestService 
 			}
 		}
 	}
+	
+    public void insertRecommendKeyword(String aptitudeTestResult, String memId) {
+        
+        // 기존 로직은 그대로 유지합니다.
+        Client client = Client.builder().apiKey(geminiApiKey).build();
+
+        StringBuilder sb = new StringBuilder();
+    	
+        sb.append(aptitudeTestResult).append("를 바탕으로 직업 1가지를 추천해주세요.\n");
+        sb.append("단어는 1개로 제한합니다.");
+        sb.append("앞 뒤에 대한 내용 없이 답변 하는 내용 또한 1단어로만 합니다.");
+        sb.append("직업에 대하여 전문가, 교수, CEO 등의 뭉뚱한 대답보다는 경찰, 의사처럼 특정 직업을 답변합니다.");
+        
+     	String prompt = sb.toString();
+        
+        try {
+            GenerateContentResponse response = client.models.generateContent("gemini-1.5-flash", prompt, null);
+            String rkName = response.text();
+            
+            RecommendKeywordVO recommendKeywordVO = new RecommendKeywordVO();
+            recommendKeywordVO.setMemId(Integer.parseInt(memId));
+            recommendKeywordVO.setRkName(rkName);
+            
+            this.careerAptitudeTestMapper.insertRecommendKeyword(recommendKeywordVO);
+            
+            System.out.println("비동기 키워드 추천 및 저장 완료: " + rkName); // 로그 추가
+            
+        } catch (ServerException e) {
+            log.error("Google GenAI API를 호출하는 중 서버 에러(503 등)가 발생했습니다. 추천 키워드 생성을 건너뜁니다.", e);
+        } catch (Exception e) {
+            log.error("Google GenAI API 호출 중 예상치 못한 에러가 발생했습니다.", e);
+        }
+    }
 
 	/**
 	 * 직업적성검사(중·고등학생용) 결과를 크롤링하여 하나의 문자열로 조합합니다. (testNo 20, 21)

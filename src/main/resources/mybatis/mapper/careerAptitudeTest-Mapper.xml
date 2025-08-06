@@ -50,4 +50,19 @@
 			, #{atResultText}
 		)
 	</insert>
+	
+	<insert id="insertRecommendKeyword" parameterType="kr.or.ddit.admin.las.service.RecommendKeywordVO">
+		INSERT INTO RECOMMEND_KEYWORD (
+		    RK_ID
+		    , MEM_ID
+		    , RK_NAME
+		    , RK_CREATED_AT
+		) VALUES (
+		    (SELECT NVL(MAX(RK_ID), 0) + 1 FROM RECOMMEND_KEYWORD)
+		  , #{memId}
+		  , #{rkName}
+		  , SYSDATE
+		)
+	</insert>
+	
 </mapper>
