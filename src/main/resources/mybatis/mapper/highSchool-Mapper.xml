@@ -269,7 +269,7 @@
 	        HIGH_SCHOOL_DEPT
 	    WHERE
 	        HS_ID = #{hsId}
-        AND	HS_DEL_YN = 'N'
+        AND	HSD_DEL_YN = 'N'
 	    ORDER BY
 	        HSD_NAME
 	</select> 
