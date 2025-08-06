@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.mpg.mat.csh.service.CounselingHistoryService;
-import kr.or.ddit.mpg.mat.csh.service.CounselingVO;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 

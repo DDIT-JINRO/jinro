@@ -2,6 +2,7 @@ package kr.or.ddit.mpg.mat.csh.service;
 
 import java.util.Map;
 
+import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.util.ArticlePage;
 
 public interface CounselingHistoryService {

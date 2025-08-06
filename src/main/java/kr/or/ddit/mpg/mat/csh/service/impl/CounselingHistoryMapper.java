@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import kr.or.ddit.mpg.mat.csh.service.CounselingVO;
+import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 
 @Mapper
 public interface CounselingHistoryMapper {
