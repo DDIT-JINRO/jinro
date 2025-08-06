@@ -107,6 +107,8 @@ public class AlarmServiceImpl implements AlarmService{
 			return "댓글에 좋아요가 눌렸습니다";
 		case REPLY_TO_CONTACT:
 			return "문의에 대한 답변이 도착했습니다.";
+		case DEADLINE_HIRE:
+			return "채용공고 마감 임박!!";
 		default:
 			throw new IllegalArgumentException("정의되지 않은 알림 유형 : "+type);
 		}
