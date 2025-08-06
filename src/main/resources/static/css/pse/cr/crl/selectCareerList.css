@@ -115,19 +115,29 @@
 
 /* 아코디언 내부 패널 */
 .com-accordion-panel {
-	max-height: 0;
-	overflow: hidden;
-	transition: max-height 0.3s ease-out;
-	background-color: #f9fafb;
-	padding: 0 24px;
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	border-top: 1px solid #e5e7eb;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out;
+    overflow: hidden;
 }
 
 .com-accordion-panel.open {
-	padding: 24px; /* 열릴 때만 패딩 적용 */
+    grid-template-rows: 1fr;
+}
+
+.com-accordion-content {
+    background-color: #f9fafb;
+    padding: 0 24px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+    transition: padding 0.3s ease-out;
+}
+
+.com-accordion-panel.open .com-accordion-content {
+    padding: 24px;
 }
 
 .com-button-container {
