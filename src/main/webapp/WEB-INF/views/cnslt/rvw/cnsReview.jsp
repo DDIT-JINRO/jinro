@@ -11,7 +11,7 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/cnslt/resve/crsv/Reservation.do">상담 예약</a></div>
+		<div class="channel-sub-section-item"><a href="/cnslt/resve/crsv/reservation.do">상담 예약</a></div>
 		<div class="channel-sub-section-itemIn"><a href="/cnslt/rvw/cnsReview.do">상담 후기</a></div>		
 	</div>
 </section>
