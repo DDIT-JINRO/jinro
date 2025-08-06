@@ -1,0 +1,507 @@
+@charset "UTF-8";
+
+/* =================================================== */
+/* AI 피드백 이력서 페이지 - 기본 레이아웃 및 UI 구성 */
+/* =================================================== */
+
+/* 컨테이너 전체 */
+.aifb-container {
+	padding: 60px 40px 40px;
+	border: 1px solid #858E96;
+	border-radius: 5px;
+	background-color: #ffffff;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+}
+
+.aifb-title {
+	font-family: 'Noto Sans KR';
+	font-weight: 700;
+	font-size: 36px;
+	text-align: center;
+	color: #000000;
+}
+
+/* 드롭다운 (이력서 선택) */
+.self-intro-select,
+.resume-select {
+	width: 100%;
+	padding: 12px 40px 12px 14px;
+	border: 1px solid #D8D8D8;
+	border-radius: 8px;
+	font-family: 'Noto Sans KR';
+	font-size: 16px;
+	color: #333;
+	appearance: none;
+	background-color: #FFFFFF;
+	background-image: url("data:image/svg+xml;utf8,<svg fill='%239D9D9D' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+	background-repeat: no-repeat;
+	background-position: right 14px center;
+	background-size: 18px;
+}
+
+/* 메인 콘텐츠 */
+.aifb-content-wrapper {
+	display: flex;
+	gap: 20px;
+	width: 100%;
+	align-items: stretch;
+}
+
+.aifb-section,
+.aifb-feedback-wrapper {
+	flex: 1;
+	border: 2px solid #D8D8D8;
+	border-radius: 20px;
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	min-height: 500px;
+	box-sizing: border-box;
+}
+
+/* 섹션 헤더 (이력서 / 피드백 공통) */
+.aifb-section-header,
+.aifb-feedback-header {
+	border-bottom: 2px solid #848EFB;
+	padding-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	min-height: 65px; 
+}
+
+.aifb-section-header h2,
+.aifb-feedback-header h2 {
+	font-family: 'Noto Sans KR';
+	font-weight: 700;
+	font-size: 24px;
+	color: #000;
+	margin: 0;
+	white-space: nowrap;
+}
+
+/* 내용 영역 */
+.aifb-questions-wrapper,
+.aifb-feedback-area {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	white-space: pre-wrap;
+	font-family: 'Noto Sans KR';
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+/* 피드백 박스 */
+.feedback-section {
+	padding: 15px;
+	border-radius: 5px;
+	transition: all 0.3s ease;
+	background-color: transparent;
+	box-shadow: none;
+}
+
+.feedback-section:hover {
+	background-color: #f0f2ff;
+}
+
+.feedback-section h4 {
+	font-weight: 600;
+	font-size: 16px;
+	color: #222;
+	margin-bottom: 8px;
+}
+
+/* 버튼 그룹 */
+.aifb-button-group {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.aifb-button {
+	padding: 10px 18px;
+	font-family: 'IBM Plex Sans KR';
+	font-weight: 600;
+	font-size: 14px;
+	border-radius: 6px;
+	border: none;
+	cursor: pointer;
+	background-color: #5a57f0;
+	color: white;
+	transition: background-color 0.2s ease;
+	white-space: nowrap;
+}
+
+.aifb-button:hover {
+	background-color: #3e3bdb;
+}
+
+.aifb-button.back {
+	background: #E9E9E9;
+	color: #9C9B9D;
+}
+
+.aifb-button.proofread {
+	background: #848EFB;
+	color: #FFFFFF;
+}
+
+/* 하단 버튼 영역 */
+.aifb-footer-wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 30px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* =================================================== */
+/* 가져온 이력서 HTML (.personal-info-form) 스타일 정리 */
+/* =================================================== */
+
+/* Section Styling */
+.section-header, .JobWish-header, .Skills-header, .education-header,
+	.certificate-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 5px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #007bff;
+}
+
+h2 {
+	color: #007bff;
+	font-size: 1.8em;
+	margin: 0;
+}
+
+.required-info {
+	color: #888;
+	font-size: 0.9em;
+}
+
+.required-asterisk {
+	color: red;
+	margin-left: 2px;
+}
+
+/* Form Group Layouts */
+.form-profile-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 5px;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+}
+
+/* Label and Input/Select Styles */
+label {
+	font-weight: 600;
+	margin-bottom: 5px;
+	color: #555;
+	display: block;
+}
+
+input[type="text"], input[type="email"], input[type="tel"], input[type="date"],
+	select {
+	width: 100%;
+	padding: 12px 15px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	font-size: 1em;
+	box-sizing: border-box;
+	transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
+	input[type="date"]:focus, select:focus {
+	border-color: #007bff;
+	outline: none;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.error-message {
+	color: #e74c3c;
+	font-size: 0.85em;
+	margin-top: 5px;
+	display: none;
+}
+
+.address-group, .form-JobWish, .form-Skills, .form-Education,
+	.form-certificate, .certificate-input-container {
+	margin-bottom: 5px;
+}
+
+/* Specific Group Adjustments */
+.name-group, .email-group, .mobile-phone-group {
+	grid-column: span 1;
+}
+
+.address-group {
+	grid-column: 1/-1;
+}
+
+/* Photo Upload */
+.photo-group {
+	grid-column: span 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.photo-upload-area {
+	/* --- 크기 조절 --- */
+	/* 원하는 크기로 너비만 조절하세요. */
+	width: 180px; 
+	
+	/* 가로 세로 비율을 1:1로 강제하여 항상 정사각형을 유지합니다. */
+	aspect-ratio: 1 / 1; 
+
+	/* --- 모양 스타일 (기존과 동일) --- */
+	border-radius: 50%;   /* 정사각형이므로 완벽한 원이 됩니다. */
+	border: 2px dashed #ccc;
+	overflow: hidden;      /* 이미지가 원 밖으로 나가지 않도록 합니다. */
+	
+	/* flex 관련 속성은 제거하거나 그대로 두셔도 괜찮습니다. */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	background-color: #f9f9f9;
+}
+
+.photo-upload-area img {
+    width: 100%;
+    height: 100%;
+    /* 핵심 속성: 이미지 비율을 유지하면서 컨테이너를 가득 채웁니다. */
+    object-fit: cover; 
+    /* 이미지가 잘릴 경우 중앙을 기준으로 표시합니다. */
+    object-position: center; 
+}
+
+.photo-upload-area:hover {
+	border-color: #007bff;
+	background-color: #e9f5ff;
+}
+
+.photo-upload-area img#photo-preview {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+.upload-placeholder {
+	text-align: center;
+	color: #888;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+}
+
+.upload-placeholder i {
+	font-size: 2em;
+	margin-bottom: 5px;
+}
+
+/* Input with Icon (Address Search) */
+.input-with-icon {
+	position: relative;
+	width: 100%;
+}
+
+.input-with-icon input {
+	padding-right: 40px;
+}
+
+.input-with-icon .icon-search {
+	position: absolute;
+	right: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #888;
+	cursor: pointer;
+	font-size: 1.1em;
+}
+
+/* Dynamic Input Groups */
+.job-input-group, .skills-input-group, .education-input-container,
+	.certificate-input-container, .activities-input-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: 15px;
+}
+
+.input-container {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.input-container input[type="text"], .input-container select {
+	flex-grow: 1;
+}
+
+/* Education specific adjustments */
+.education-input-group {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+}
+
+.education-input-group select {
+	flex-basis: 35%;
+}
+
+.education-input-group input {
+	flex-basis: 65%;
+}
+
+
+.delete-button {
+	background-color: #ff6262;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 0.9rem;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+	background-color: #d9363e;
+}
+
+/* Utility Classes */
+.hidden {
+	display: none !important;
+}
+
+
+/* 편집 관련 버튼들 모두 숨김 */
+.aifb-questions-wrapper #add-job,
+.aifb-questions-wrapper #add-skill,
+.aifb-questions-wrapper #add-education,
+.aifb-questions-wrapper #add-certificate,
+.aifb-questions-wrapper .delete-button,
+.aifb-questions-wrapper #photo-delete-btn,
+.aifb-questions-wrapper .btn-group,
+.aifb-questions-wrapper .load-button-group,
+.aifb-questions-wrapper .resume-title {
+	display: none;
+}
+
+/* 주소 검색 아이콘도 숨김 */
+.aifb-questions-wrapper .icon-search {
+	display: none;
+}
+
+/* 필수 입력 표시(*), 오류 메시지 등도 숨김 */
+.aifb-questions-wrapper .required-asterisk,
+.aifb-questions-wrapper .error-message {
+	display: none;
+}
+
+/* 이력서 사진 크기 조정 (삭제 버튼은 위에서 숨겨짐) */
+.aifb-questions-wrapper .form-group.photo-group .photo-upload-area img {
+	display: block;
+	width: 100px;
+	height: 100px;
+}
+
+/* ========================================= */
+/* resumeWriter.css 오버라이드 (이력서 내용 스타일) */
+/* ========================================= */
+.aifb-questions-wrapper .personal-info-form .section-header {
+	display: none;
+}
+
+.aifb-questions-wrapper .personal-info-form .form-profile-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 5px 10px;
+}
+
+/* ========================================= */
+/* 부트스트랩 없는 순수 CSS 스피너 구현 */
+/* ========================================= */
+
+/* 스피너를 감싸고 전체를 중앙 정렬하는 컨테이너 */
+.spinner-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 40px 20px;
+	min-height: 250px; /* 로딩 중 최소 높이 확보 */
+	text-align: center;
+	color: #666; /* 로딩 텍스트 색상 */
+}
+
+/* 스피너 아이콘 자체의 스타일 */
+.spinner-border {
+	display: inline-block;
+	width: 2.5rem; /* 스피너 크기 */
+	height: 2.5rem; /* 스피너 크기 */
+	vertical-align: -0.125em;
+	/* 테두리의 한쪽만 투명하게 만들어 회전하는 효과를 줍니다. */
+	border: 0.25em solid currentColor; /* 'text-primary' 클래스의 color를 사용 */
+	border-right-color: transparent;
+	border-radius: 50%;
+	/* 'spinner-spin' 애니메이션을 0.75초 동안 무한 반복 */
+	animation: spinner-spin .75s linear infinite;
+}
+
+/* 스피너 회전 애니메이션 정의 */
+@keyframes spinner-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* 부트스트랩의 .text-primary 클래스를 흉내 냅니다. */
+.text-primary {
+	color: #6c75ff; /* 스피너의 색상 */
+}
+
+/* 부트스트랩의 .text-center 클래스를 흉내 냅니다. */
+.text-center {
+	text-align: center;
+}
+
+/* 부트스트랩의 .mt-2 (margin-top) 클래스를 흉내 냅니다. */
+.mt-2 {
+	margin-top: 0.8rem; /* 스피너와 텍스트 사이의 간격 */
+}
+
+/* 스크린 리더는 읽을 수 있지만, 화면에는 보이지 않게 처리 (접근성) */
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}

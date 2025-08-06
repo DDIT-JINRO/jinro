@@ -1,43 +1,76 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="">
-<!-- 스타일 여기 적어주시면 가능 -->
+<link rel="stylesheet" href="/css/cdp/aifdbck/rsm/aiFeedbackResume.css">
 <section class="channel">
-	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
-		<!-- 대분류 -->
 		<div class="channel-title-text">경력관리</div>
 	</div>
-	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-item"><a href="/cdp/rsm/rsm/resumeList.do">이력서</a></div>
 		<div class="channel-sub-section-item"><a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a></div>
 		<div class="channel-sub-section-item"><a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/aifdbck/rsm">AI 피드백</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a></div>
 	</div>
 </section>
+
 <div>
 	<div class="public-wrapper">
-		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <a class="tab active" href="/aifdbck/rsm">이력서</a>
-		    <a class="tab" href="/aifdbck/sint">자기소개서</a>
-  		</div>
-		<!-- 여기부터 작성해 주시면 됩니다 -->
-  		<div class="public-wrapper-main">
-  			AI 피드백 이력서
-  			</br></br></br></br>
-  			<a href="/aifdbck/rsm/detail.do">AI 피드백 이력서 디테일</a>
-  			</br></br></br></br>
-  			</br></br></br></br>
-  			</br></br></br></br>
-  		</div>
+			<a class="tab active" href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">이력서</a>
+			<a class="tab" href="/cdp/aifdbck/sint/aiFeedbackSelfIntroList.do">자기소개서</a>
+		</div>
+
+		<div class="public-wrapper-main">
+			<!-- 이력서 목록 드롭다운 -->
+			<select class="self-intro-select" id="resumeList">
+				<option value="">내가 작성한 이력서를 선택하세요.</option>
+				<c:forEach var="resume" items="${resumeList}">
+					<option value="${resume.resumeId}">${resume.resumeTitle}</option>
+				</c:forEach>
+			</select> <br /><br />
+
+			<div class="aifb-container">
+				<!-- 제목 -->
+				<h1 class="aifb-title">이력서 제목</h1>
+
+				<div class="aifb-content-wrapper">
+					<!-- 이력서 원본 -->
+					<div class="aifb-section">
+						<div class="aifb-section-header">
+							<h2>이력서</h2>
+						</div>
+						<div class="aifb-questions-wrapper" id="questionsWrapper">이력서의 내용이 출력될 공간입니다</div>
+					</div>
+
+					<!-- AI 피드백 -->
+					<div class="aifb-feedback-wrapper">
+						<div class="aifb-feedback-header">
+							<h2>AI 피드백</h2>
+							<div class="aifb-button-group">
+								<button id="previewPdfBtn" class="aifb-button">미리보기</button>
+								<button id="downloadPdfBtn" class="aifb-button">다운로드</button>
+							</div>
+						</div>
+						<div class="aifb-feedback-area" id="feedbackArea">AI의 피드백 내용이 출력될 공간입니다</div>
+					</div>
+				</div>
+
+				<!-- 하단 버튼 -->
+				<div class="aifb-footer-wrapper">
+					<button class="aifb-button back" onclick="history.back()">뒤로가기</button>
+					<button id="requestAiFeedback" class="aifb-button feedback">ai 피드백 요청</button>
+					<button class="aifb-button proofread" onclick="requestProofread()">내 이력서 수정하러 가기</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
+
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
+
+<script src="/js/cdp/aifdbck/rsm/aiFeedbackResume.js" defer></script>
 <script>
-	// 스크립트 작성 해주시면 됩니다.
+	// 기능 추가 가능
 </script>
