@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.ertds.hgschl.service.HighSchoolDeptVO;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolService;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
 import kr.or.ddit.util.ArticlePage;
@@ -81,23 +82,17 @@ public class HighSchoolController {
 	@GetMapping("/hgschl/selectHgschDetail.do")
 	public String highSchoolDetailPage(@RequestParam("hsId") int hsId, Model model) {
 		
+		// 1. 기존 학교 상세 정보 조회
 		HighSchoolVO highSchool = highSchoolService.highSchoolDetail(hsId); // DB에서 상세 정보를 조회
 
+	    // 2. 해당 학교의 학과 목록 조회
+	    List<HighSchoolDeptVO> deptList = highSchoolService.selectDeptsBySchoolId(hsId);
 
+	    // 3. 모델에 두 가지 정보를 모두 담아서 전달
 		model.addAttribute("highSchool", highSchool); // HighSchoolVO 객체 자체를 JSP로 전달
+		model.addAttribute("deptList", deptList);
 		
 		return "ertds/hgschl/HighSchoolDetail"; // /WEB-INF/views/erds/hgschl/detail.jsp
 	}
-	
-	 //특정 고등학교 ID로 상세 정보를 JSON 형태로 반환하는 API 엔드포인트
-    @GetMapping("/api/highschools/{hsId}") // 이 경로로 요청이 오면
-    @ResponseBody // HighSchoolVO 객체를 JSON으로 변환하여 HTTP 응답 본문에 씀
-    public ResponseEntity<HighSchoolVO> getHighSchoolByIdApi(@PathVariable("hsId") int hsId) {
-        HighSchoolVO highSchool = highSchoolService.highSchoolDetail(hsId);
-        if (highSchool == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found
-        }
-        return new ResponseEntity<>(highSchool, HttpStatus.OK); // 200 OK와 데이터 반환
-    }
 
 }

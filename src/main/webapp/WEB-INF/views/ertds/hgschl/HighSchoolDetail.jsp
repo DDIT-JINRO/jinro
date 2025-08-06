@@ -33,50 +33,72 @@
 	  		</div>
   		-->
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-		<div class="public-wrapper-main" id="highSchoolDetailContainer"
-			data-hs-name="${highSchool.hsName}" data-hs-addr="${highSchool.hsAddr}" data-hs-tel="${highSchool.hsTel}"
-			data-hs-lat="${highSchool.hsLat}" data-hs-lot="${highSchool.hsLot}">
-
-			<div class="detail-card">
-				<div class="card-header">
+		<div class="detail-container" id="highSchoolDetailContainer"
+			data-hs-name="${highSchool.hsName}"
+			data-hs-addr="${highSchool.hsAddr}" data-hs-tel="${highSchool.hsTel}"
+			data-hs-lat="${empty highSchool.hsLat ? 0 : highSchool.hsLat}"
+			data-hs-lot="${empty highSchool.hsLot ? 0 : highSchool.hsLot}">
+			<div class="detail-container">
+				<div class="school-summary-box">
 					<h2>${highSchool.hsName}</h2>
-					<a href="/ertds/hgschl/selectHgschList.do" class="btn-list">목록으로</a>
+					<ul class="summary-info-list">
+						<li><strong>지역:</strong> ${highSchool.hsRegion}</li>
+						<li><strong>유형:</strong> ${highSchool.hsTypeName},
+							${highSchool.hsCoeduType}</li>
+						<li><strong>설립:</strong> ${highSchool.hsFoundType}</li>
+					</ul>
+					<a href="/ertds/hgschl/selectHgschList.do" class="btn-list-top">목록으로</a>
 				</div>
-				<div class="card-body">
-					<div class="info-grid">
-						<div class="info-item">
-							<span class="label">지역</span> <span class="value">${highSchool.hsRegion}</span>
-						</div>
-						<div class="info-item">
-							<span class="label">설립유형</span> <span class="value">${highSchool.hsFoundType}</span>
-						</div>
-						<div class="info-item">
-							<span class="label">학교유형</span> <span class="value">${highSchool.hsTypeName}</span>
-						</div>
-						<div class="info-item">
-							<span class="label">공학여부</span> <span class="value">${highSchool.hsCoeduType}</span>
-						</div>
-						<div class="info-item full-width">
-							<span class="label">주소</span> <span class="value clickable"
-								id="schoolAddress">${highSchool.hsAddr}</span>
-						</div>
-						<div class="info-item">
-							<span class="label">연락처</span> <span class="value">${highSchool.hsTel}</span>
-						</div>
-						<div class="info-item">
-							<span class="label">홈페이지</span> <span class="value"><a
-								href="${highSchool.hsHomepage}" target="_blank">${highSchool.hsHomepage}</a></span>
-						</div>
-					</div>
+
+				<div class="detail-section">
+					<h3 class="section-title">학교 위치</h3>
+					<div id="map"></div>
 				</div>
-			</div>
-			
-			<!-- 지도가 그려지는 공간(Map Canvas) -->
-			<div class="map-modal" id="schoolMapModal">
-				<div class="modal-content">
-					<span class="modal-close-btn" id="closeMapModalButton">&times;</span>
-					<div id="map" style="width: 100%; height: 100%;"></div>
+
+				<div class="detail-section">
+					<h3 class="section-title">상세 정보</h3>
+					<table class="details-table">
+						<tbody>
+							<tr>
+								<th>주소</th>
+								<td id="schoolAddress">${highSchool.hsAddr}</td>
+							</tr>
+							<tr>
+								<th>연락처</th>
+								<td>${highSchool.hsTel}</td>
+							</tr>
+							<tr>
+								<th>홈페이지</th>
+								<td><a href="${highSchool.hsHomepage}" target="_blank">${highSchool.hsHomepage}</a></td>
+							</tr>
+							<tr>
+								<th>설립일</th>
+								<td>${highSchool.hsFoundDate}</td>
+							</tr>
+							<tr>
+								<th>개교기념일</th>
+								<td>${highSchool.hsAnnivAt}</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
+				
+				
+				<c:if test="${!empty deptList}">
+				    <div class="detail-section">
+				        <h3 class="section-title">학과 정보</h3>
+				        <ul class="dept-list">
+				            <c:forEach var="dept" items="${deptList}">
+				                <li>${dept.hsdName}</li>
+				            </c:forEach>
+				        </ul>
+				    </div>
+				</c:if>
+
+				<div class="bottom-button-wrapper">
+					<a href="/ertds/hgschl/selectHgschList.do" class="btn-list-bottom">목록</a>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -85,7 +107,6 @@
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1881066df7ed9e16e4315953d2419995&libraries=services,clusterer,drawing"></script>
 
-<script src="/js/util/mapUtil.js"></script>
 <script src="/js/ertds/hgschl/HighSchoolDetail.js"></script>
 </body>
 </html>

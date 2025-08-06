@@ -1,9 +1,9 @@
-/**
- * 
- */
-// 페이지가 모두 로드되면 실행
 document.addEventListener('DOMContentLoaded', () => {
-    
+    // 이 스크립트에서 사용할 지도와 마커 변수
+    let map;
+    let currentMarker = null;
+    let currentInfoWindow = null;
+
     // 1. JSP의 data-* 속성에서 데이터 읽어오기
     const container = document.getElementById('highSchoolDetailContainer');
     const highSchoolData = {
@@ -13,30 +13,46 @@ document.addEventListener('DOMContentLoaded', () => {
         hsLat: parseFloat(container.dataset.hsLat), // 숫자로 변환
         hsLot: parseFloat(container.dataset.hsLot)  // 숫자로 변환
     };
-
-    // 2. 필요한 DOM 요소들 찾기
+    
+    const mapContainer = document.getElementById('map');
     const schoolAddressElement = document.getElementById('schoolAddress');
-    const closeMapModalButton = document.getElementById('closeMapModalButton');
-    const schoolMapModal = document.getElementById('schoolMapModal');
 
-    // 3. 이벤트 리스너 등록 (위치 정보가 있을 때만)
-    if (highSchoolData.hsLat && highSchoolData.hsLot) {
-        // 주소 클릭 시 지도 모달 열기
+    // 2. 페이지 로드 시, 지도를 기본 위치(대전 시청)로 초기화
+    kakao.maps.load(() => {
+        const initialPosition = new kakao.maps.LatLng(36.3504, 127.3845);
+        const mapOption = { 
+            center: initialPosition,
+            level: 7
+        };
+        map = new kakao.maps.Map(mapContainer, mapOption);
+    });
+
+    // 3. 주소에 '클릭' 이벤트 리스너 추가
+    if (schoolAddressElement) {
         schoolAddressElement.addEventListener('click', () => {
-            // mapUtil.js의 함수 호출
-            openSchoolMapModal(highSchoolData);
+            if (highSchoolData.hsLat && highSchoolData.hsLot) {
+                showSchoolOnMap(highSchoolData);
+            } else {
+                alert('이 학교의 위치 정보가 없습니다.');
+            }
         });
     }
 
-    // 모달 닫기 버튼
-    closeMapModalButton.addEventListener('click', () => {
-        schoolMapModal.style.display = 'none';
-    });
+    // 지도에 특정 학교를 표시하는 함수
+    function showSchoolOnMap(school) {
+        if (currentMarker) currentMarker.setMap(null);
+        if (currentInfoWindow) currentInfoWindow.close();
 
-    // 모달 외부 클릭 시 닫기
-    schoolMapModal.addEventListener('click', (e) => {
-        if (e.target === schoolMapModal) {
-            schoolMapModal.style.display = 'none';
-        }
-    });
+        const schoolPosition = new kakao.maps.LatLng(school.hsLat, school.hsLot);
+        map.panTo(schoolPosition);
+        
+        currentMarker = new kakao.maps.Marker({ position: schoolPosition });
+        currentMarker.setMap(map);
+
+        const iwContent = `<div style="padding:5px; font-size:14px;"><b>${school.hsName}</b></div>`;
+        currentInfoWindow = new kakao.maps.InfoWindow({ content: iwContent });
+        currentInfoWindow.open(map, currentMarker);
+        
+        map.setLevel(3, { animate: true });
+    }
 });

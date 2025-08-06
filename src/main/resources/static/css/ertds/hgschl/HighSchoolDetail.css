@@ -1,109 +1,163 @@
-@charset "UTF-8";
-.detail-card {
+/* ========================================= */
+/* 상세 페이지 CSS (대학교 상세 디자인 기준) */
+/* ========================================= */
+
+/* 페이지 전체 배경 */
+.public-wrapper {
+    background-color: #f8f9fa;
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+/* 메인 컨테이너 (하나의 긴 카드) */
+.detail-container {
     background-color: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    border-radius: 8px;
+	border: 1px solid #e2e8f0;
+    padding: 40px;
 }
 
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 30px;
-    border-bottom: 1px solid #e2e8f0;
+/* 1. 상단 요약 정보 박스 */
+.school-summary-box {
+    border: 1px solid #c7d2fe; /* 연한 파란색 테두리 */
+    border-radius: 8px;
+    padding: 25px;
+    position: relative;
+    margin-bottom: 40px;
 }
-
-.card-header h2 {
-    margin: 0;
-    font-size: 24px;
+.school-summary-box h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 26px;
     font-weight: 700;
 }
-
-.btn-list {
+.summary-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    color: #495057;
+}
+.summary-info-list li {
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+}
+.summary-info-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #868e96;
+}
+.btn-list-top {
+    position: absolute;
+    top: 25px;
+    right: 25px;
     background-color: #f1f5f9;
     color: #475569;
-    padding: 8px 16px;
+    padding: 8px 24px;
     border-radius: 8px;
     font-weight: 600;
     font-size: 14px;
     text-decoration: none;
 }
 
-.card-body {
-    padding: 30px;
+/* 2. 각 정보 섹션 */
+.detail-section {
+    margin-bottom: 40px;
 }
-
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+.detail-section:last-of-type {
+    margin-bottom: 0;
 }
-
-.info-item {
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 20px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+}
+/* 파란색 별 아이콘 */
+.section-title::before {
+    content: '✲';
+    color: #4f46e5;
+    font-size: 24px;
+    margin-right: 10px;
 }
 
-.info-item.full-width {
-    grid-column: 1 / -1;
+/* 지도 섹션 */
+#map {
+    width: 100%;
+    height: 350px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
 }
 
-.info-item .label {
-    font-size: 14px;
-    color: #64748b;
-    margin-bottom: 8px;
+/* 상세정보 테이블 스타일 */
+.details-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+.details-table th, .details-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #f1f3f5;
+}
+.details-table th {
+    width: 180px;
+    background-color: #f8f9fa;
+    color: #495057;
     font-weight: 500;
 }
-
-.info-item .value {
-    font-size: 16px;
-    color: #1e293b;
-    font-weight: 600;
+.details-table td {
+    color: #212529;
 }
-
-.info-item .value.clickable {
+.details-table a {
+    color: #1971c2;
+    text-decoration: none;
+    font-weight: 500;
+}
+.details-table a:hover {
+    text-decoration: underline;
+}
+#schoolAddress {
     cursor: pointer;
-    color: #4f46e5;
+    color: #1971c2;
     text-decoration: underline;
 }
 
-/* 지도 모달 스타일 */
-.map-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
+/* 3. 하단 목록 버튼 */
+.bottom-button-wrapper {
+    text-align: center;
+    margin-top: 40px;
 }
-
-.modal-content {
-    background-color: #fefefe;
-    padding: 20px;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 900px;
-    height: 70%;
-    position: relative;
-}
-
-.modal-close-btn {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
+.btn-list-bottom {
+    background-color: #495057;
+    color: white;
+    padding: 14px 80px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    border: none;
     cursor: pointer;
 }
-.info-window-content {
-    padding: 8px;
-    font-size: 14px;
-}
 
+/* 학과 리스트 스타일 */
+.dept-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.dept-list li {
+    background-color: #f1f3f5;
+    color: #495057;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 500;
+}

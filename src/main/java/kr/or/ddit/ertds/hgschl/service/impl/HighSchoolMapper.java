@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.ertds.hgschl.service.HighSchoolDeptVO;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
 
 @Mapper
@@ -27,4 +28,7 @@ public interface HighSchoolMapper {
 
     //공학 여부 필터 옵션 목록 조회
 	public List<ComCodeVO> selectCoedTypeList();
+	
+	//특정 고등학교의 학과 목록 조회
+    public List<HighSchoolDeptVO> selectDeptsBySchoolId(int hsId);
 }

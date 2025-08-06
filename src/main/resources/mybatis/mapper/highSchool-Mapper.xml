@@ -11,29 +11,29 @@
 			SELECT ROWNUM AS RNUM, B.*
 			FROM (
 			 SELECT 
-			    HS.HS_ID          AS hsId
-			  , HS.HS_CODE        AS hsCode
-			  , HS.HS_NAME        AS hsName
-			  , REGION.CC_NAME    AS hsRegion
-			  , JURIS.CC_ETC      AS hsJurisCode
-			  , FOUND.CC_NAME     AS hsFoundType
-			  , HS.HS_ZIPCODE     AS hsZipcode
-			  , HS.HS_ADDR        AS hsAddr
-			  , HS.HS_TEL         AS hsTel
-			  , HS.HS_HOMEPAGE    AS hsHomepage
-			  , COEDU.CC_NAME     AS hsCoeduType
-			  , TYPE.CC_NAME      AS hsTypeName
-			  , GENERAL.CC_NAME   AS hsGeneralType
-			  , HS.HS_FOUND_DATE  AS hsFoundDate
-			  , HS.HS_ANNIV_AT    AS hsAnnivAt
-			  , HS.HS_LAT         AS hsLat
-			  , HS.HS_LOT         AS hsLot
+			    HS.HS_ID									AS hsId
+			  , HS.HS_CODE									AS hsCode
+			  , HS.HS_NAME									AS hsName
+			  , REGION.CC_NAME								AS hsRegion
+			  , JURIS.CC_ETC								AS hsJurisCode
+			  , FOUND.CC_NAME								AS hsFoundType
+			  , HS.HS_ZIPCODE								AS hsZipcode
+			  , HS.HS_ADDR									AS hsAddr
+			  , HS.HS_TEL									AS hsTel
+			  , HS.HS_HOMEPAGE								AS hsHomepage
+			  , COEDU.CC_NAME								AS hsCoeduType
+			  , TYPE.CC_NAME								AS hsTypeName
+			  , GENERAL.CC_NAME								AS hsGeneralType
+			  , TO_CHAR(HS.HS_FOUND_DATE, 'YYYY. MM. DD')	AS hsFoundDate
+			  , TO_CHAR(HS.HS_ANNIV_AT, 'YYYY. MM. DD')		AS hsAnnivAt
+			  , HS.HS_LAT									AS hsLat
+			  , HS.HS_LOT									AS hsLot
 			FROM 
 			    HIGH_SCHOOL HS
 			LEFT JOIN
 			    COM_CODE REGION  
 			    ON HS.HS_REGION_CODE = REGION.CC_ID 
-			    AND REGION.CL_CODE = 'G23' 
+			    AND REGION.CC_MAJOR = 'G23' 
 			LEFT JOIN
 			    COM_CODE JURIS  
 			    ON HS.HS_JURIS_CODE = JURIS.CC_ID 
@@ -202,23 +202,23 @@
      -->
      <select id="highSchoolDetail" resultType="kr.or.ddit.ertds.hgschl.service.HighSchoolVO">
 		 SELECT 
-		    HS.HS_ID          AS hsId
-		  , HS.HS_CODE        AS hsCode
-		  , HS.HS_NAME        AS hsName
-		  , REGION.CC_NAME    AS hsRegion
-		  , JURIS.CC_ETC      AS hsJurisCode
-		  , FOUND.CC_NAME     AS hsFoundType
-		  , HS.HS_ZIPCODE     AS hsZipcode
-		  , HS.HS_ADDR        AS hsAddr
-		  , HS.HS_TEL         AS hsTel
-		  , HS.HS_HOMEPAGE    AS hsHomepage
-		  , COEDU.CC_NAME     AS hsCoeduType
-		  , TYPE.CC_NAME      AS hsTypeName
-		  , GENERAL.CC_NAME   AS hsGeneralType
-		  , HS.HS_FOUND_DATE  AS hsFoundDate
-		  , HS.HS_ANNIV_AT    AS hsAnnivAt
-		  , HS.HS_LAT         AS hsLat
-		  , HS.HS_LOT         AS hsLot
+		    HS.HS_ID									AS hsId
+		  , HS.HS_CODE									AS hsCode
+		  , HS.HS_NAME									AS hsName
+		  , REGION.CC_NAME								AS hsRegion
+		  , JURIS.CC_ETC								AS hsJurisCode
+		  , FOUND.CC_NAME								AS hsFoundType
+		  , HS.HS_ZIPCODE								AS hsZipcode
+		  , HS.HS_ADDR									AS hsAddr
+		  , HS.HS_TEL									AS hsTel
+		  , HS.HS_HOMEPAGE								AS hsHomepage
+		  , COEDU.CC_NAME								AS hsCoeduType
+		  , TYPE.CC_NAME								AS hsTypeName
+		  , GENERAL.CC_NAME								AS hsGeneralType
+		  , TO_CHAR(HS.HS_FOUND_DATE, 'YYYY. MM. DD')	AS hsFoundDate
+		  , TO_CHAR(HS.HS_ANNIV_AT, 'YYYY. MM. DD')		AS hsAnnivAt
+		  , HS.HS_LAT									AS hsLat
+		  , HS.HS_LOT									AS hsLot
 		FROM 
 		    HIGH_SCHOOL HS
 		LEFT JOIN
@@ -249,4 +249,22 @@
         	HS_ID = #{hsId}
     </select>
     
+    <!-- 
+    //특정 고등학교의 학과 목록 조회
+    public List<HighSchoolDeptVO> selectDeptsBySchoolId(int hsId)
+     -->
+    <select id="selectDeptsBySchoolId" parameterType="int" resultType="kr.or.ddit.ertds.hgschl.service.HighSchoolDeptVO">
+    SELECT
+	        HSD_ID      AS hsdId,
+	        HS_ID       AS hsId,
+	        HSD_CODE    AS hsdCode,
+	        HSD_NAME    AS hsdName,
+	        HSD_TRACK_NAME AS hsdTrackName
+	    FROM
+	        HIGH_SCHOOL_DEPT
+	    WHERE
+	        HS_ID = #{hsId}
+	    ORDER BY
+	        HSD_NAME
+	</select> 
 </mapper>

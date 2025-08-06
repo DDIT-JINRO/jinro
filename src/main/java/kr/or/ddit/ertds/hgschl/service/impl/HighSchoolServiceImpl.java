@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.ertds.hgschl.service.HighSchoolDeptVO;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolService;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
 
@@ -55,6 +56,13 @@ public class HighSchoolServiceImpl implements HighSchoolService {
 	public List<ComCodeVO> selectCoedTypeList() {
 	
 		return highSchoolMapper.selectCoedTypeList();
+	}
+
+	//특정 고등학교의 학과 목록 조회
+	@Override
+	public List<HighSchoolDeptVO> selectDeptsBySchoolId(int hsId) {
+		
+		return highSchoolMapper.selectDeptsBySchoolId(hsId);
 	}
 
 }
