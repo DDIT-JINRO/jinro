@@ -16,11 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// 디테일 페이지로 이동
 	document.querySelectorAll('.univ-item').forEach(univ => {
-		univ.addEventListener('click', () => {
+		univ.addEventListener('click', (e) => {
+			// 북마크 버튼 눌렀을 때에는 디테일 페이지로 넘어가지 않도록 방지
+			if (e.target.closest('.bookmark-btn')) {
+				return;
+			}
 			location.href = '/ertds/univ/uvsrch/selectDetail.do?univId=' + univ.dataset.univId;
 		});
 	});
-
+	
 	// 아코디언 코드
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
@@ -81,8 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	});
 
-
-
 	// 초기화 버튼 클릭 시 이벤트 처리
 	if (resetButton) {
 		resetButton.addEventListener('click', () => {
@@ -93,4 +95,56 @@ document.addEventListener('DOMContentLoaded', function() {
 			selectedFiltersContainer.innerHTML = '';
 		});
 	}
+	
+	// 이벤트 추가
+	document.querySelectorAll('.bookmark-btn').forEach(button => {
+		button.addEventListener('click', function(event) {
+			event.preventDefault();
+			// 함수 전달
+			handleBookmarkToggle(this);
+		});
+	});
 });
+
+const handleBookmarkToggle = (button) => {
+	const bmCategoryId = button.dataset.categoryId;
+	const bmTargetId = button.dataset.targetId;
+
+	// 현재 버튼이 'active' 클래스를 가지고 있는지 확인
+	const isBookmarked = button.classList.contains('active');
+
+	const data = {
+		bmCategoryId: bmCategoryId,
+		bmTargetId: bmTargetId
+	};
+
+	const apiUrl = isBookmarked ? '/mpg/mat/bmk/deleteBookmark.do' : '/mpg/mat/bmk/insertBookmark.do';
+
+	fetch(apiUrl, {
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	})
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('서버 응답에 실패했습니다.');
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log(data);
+			if (data.success) {
+				alert(data.message);
+				button.classList.toggle('active');
+			} else {
+				alert(data.message || '북마크 처리에 실패했습니다.');
+			}
+		})
+		.catch(error => {
+			// 네트워크 오류나 서버 응답 실패 시
+			console.error('북마크 처리 중 오류 발생:', error);
+			alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+		});
+}

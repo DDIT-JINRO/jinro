@@ -20,6 +20,8 @@ public class UniversityVO {
 	private List<String> typeIds; 		//대학 타입 선택
 	private List<String> gubunIds;	 	//대학 구분 선택
 	
+	private int deptCount;
+	
 	// 목록 조회시 페이징 처리를 위한 필드 추가
 	private int currentPage;
 	private int size;

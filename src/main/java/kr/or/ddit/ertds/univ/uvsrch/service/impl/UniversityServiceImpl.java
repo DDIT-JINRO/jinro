@@ -21,7 +21,11 @@ public class UniversityServiceImpl implements UniversityService {
 	@Override
 	public List<UniversityVO> selectUniversityList(UniversityVO universityVO) {
 		List<UniversityVO> list = this.universityMapper.selectUniversityList(universityVO);
-
+		int deptCount = 0;
+		for (UniversityVO univ : list) {
+			deptCount = this.universityMapper.selectUnivDeptCount(univ.getUnivId());
+			univ.setDeptCount(deptCount);
+		}
 		log.info("selectUniversityList : ", list);
 		return list;
 	}

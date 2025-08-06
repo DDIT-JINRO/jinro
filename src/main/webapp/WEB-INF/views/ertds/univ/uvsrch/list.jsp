@@ -93,32 +93,27 @@
 						<button type="submit" class="com-submit-search-btn">검색</button>
 					</div>
 				</div>
-			</form>
-			<p>총 ${articlePage.total}건</p>
-			
+			</form>			
 
 			<div class="company-list">
 				<div class="accordion-header">
-					<div style="flex: 2;">대학명</div>
-					<div style="flex: 0.5;">지역</div>
-					<div style="flex: 0.5;">대학유형</div>
+					<div style="flex: 1.8;">대학명</div>
+					<div style="flex: 0.8;">지역</div>
+					<div style="flex: 0.6;">대학유형</div>
 					<div style="flex: 0.5;">설립유형</div>
-					<div style="flex: 0.5;">학과</div>
-					<div style="flex: 0.5;">북마크갯수</div>
+					<div style="flex: 0.5;">설치학과</div>
 					<div style="width: 80px;">북마크</div>
-					<div style="width: 20px;"></div>
 					<%-- 펼치기/접기 아이콘 자리 --%>
 				</div>
 
 				<c:forEach var="university" items="${articlePage.content}" varStatus="status">
 					<div class="univ-item" data-univ-id="${university.univId}">
 						<div class="accordion-header">
-							<div class="company-info-item" style="flex: 2;">${university.univName}</div>
-							<div class="company-info-item" style="flex: 0.5;">${university.univRegion}</div>
-							<div class="company-info-item" style="flex: 0.5;">${university.univType}</div>
+							<div class="company-info-item" style="flex: 1.8;">${university.univName}</div>
+							<div class="company-info-item" style="flex: 0.8;">${university.univRegion}</div>
+							<div class="company-info-item" style="flex: 0.6;">${university.univType}</div>
 							<div class="company-info-item" style="flex: 0.5;">${university.univGubun}</div>
-							<div class="company-info-item" style="flex: 0.5;">학과갯수?</div>
-							<div class="company-info-item" style="flex: 0.5;">북마크갯수?</div>
+							<div class="company-info-item" style="flex: 0.5;">${university.deptCount}</div>
 							<div class="company-info-item" style="width: 80px;">
 								<div class="item-action">
 									<c:set var="isBookmarked" value="false" />
@@ -139,9 +134,6 @@
 										</span>
 									</button>
 								</div>
-							</div>
-							<div class="company-info-item" style="width: 20px;">
-								<span class="toggle-icon">+</span>
 							</div>
 						</div>
 					</div>

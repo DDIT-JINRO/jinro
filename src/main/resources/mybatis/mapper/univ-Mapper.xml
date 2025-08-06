@@ -112,5 +112,10 @@
 		where CL_CODE = 'G23'
 	</select>
 
+	<select id="selectUnivDeptCount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		FROM UNIV_DEPT
+		WHERE UNIV_ID = #{univId}
+	</select>
 
 </mapper>

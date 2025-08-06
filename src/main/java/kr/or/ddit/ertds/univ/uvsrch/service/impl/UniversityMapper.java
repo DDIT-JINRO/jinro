@@ -22,4 +22,6 @@ public interface UniversityMapper {
 	List<ComCodeVO> selectCodeVORegionList();
 	
 	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookMarkVO);
+	
+	int selectUnivDeptCount(int univId);
 }
