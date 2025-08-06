@@ -31,7 +31,7 @@
 	            WHEN AVG_SALARY <![CDATA[>=]]> 10000 THEN
 	                TRUNC(AVG_SALARY / 10000) || '억' ||
 	                CASE
-	                	WHEN MOD(AVG_SALARY, 10000) > 0 THEN
+	                	WHEN MOD(AVG_SALARY, 10000) <![CDATA[>]]> 0 THEN
 	                		' ' || TO_CHAR(ROUND(MOD(AVG_SALARY, 10000) / 1000)) || '천만원'
 	                	ELSE
 	                		'' END
@@ -42,6 +42,7 @@
 	        (
 	            SELECT
 	                B.*
+	                , ROWNUM AS RNUM
 	            FROM
 		            (
 		                SELECT
@@ -61,34 +62,36 @@
 		                        , JOB_WAY
 		                        , JOB_LCL
 		                        , JOB_SAL
-		                        , ROUND(
-		                            (OUTLOOK_INCREASE * 5 + OUTLOOK_SLIGHT_INCREASE * 4 + OUTLOOK_STABLE * 3 + OUTLOOK_SLIGHT_DECREASE * 2 + OUTLOOK_DECREASE * 1)
-		                            / NVL((OUTLOOK_INCREASE + OUTLOOK_SLIGHT_INCREASE + OUTLOOK_STABLE + OUTLOOK_DECREASE + OUTLOOK_DECREASE), 1)
-		                        ) AS PROSPECT_SCORE
+						        , ROUND(
+						            (OUTLOOK_INCREASE * 5 + OUTLOOK_SLIGHT_INCREASE * 4 + OUTLOOK_STABLE * 3 + OUTLOOK_SLIGHT_DECREASE * 2 + OUTLOOK_DECREASE * 1)
+						            / NVL((OUTLOOK_INCREASE + OUTLOOK_SLIGHT_INCREASE + OUTLOOK_STABLE + OUTLOOK_SLIGHT_DECREASE + OUTLOOK_DECREASE), 1)
+						        ) AS PROSPECT_SCORE
 		                        , TO_NUMBER(
 		                            TRIM(SUBSTR(JOB_SAL, INSTR(JOB_SAL, '평균(50%)') + 7, INSTR(JOB_SAL, '만원', INSTR(JOB_SAL, '평균(50%)')) - (INSTR(JOB_SAL, '평균(50%)') + 7)))
 		                        ) AS AVG_SALARY
 		                    FROM JOBS
 		                ) A
 		                WHERE 1=1
-						<choose>
-							<when test="status == 'title'">
-								AND JOB_NAME LIKE '%' || '' || '%'
-							</when>
-							<when test="status == 'content'">
-								AND (
-									JOB_MAIN_DUTY LIKE '%' || '' || '%'
-									OR JOB_WAY LIKE '%' || '' || '%'
-								)
-							</when>
-							<otherwise>
-								AND (
-									JOB_NAME LIKE '%' || '' || '%'
-									OR JOB_MAIN_DUTY LIKE '%' || '' || '%'
-									OR JOB_WAY LIKE '%' || '' || '%'
-								)
-							</otherwise>
-						</choose>
+		                <if test = "keyword != null and keyword != ''">
+							<choose>
+								<when test="status == 'title'">
+									AND JOB_NAME LIKE '%' || '' || '%'
+								</when>
+								<when test="status == 'content'">
+									AND (
+										JOB_MAIN_DUTY LIKE '%' || '' || '%'
+										OR JOB_WAY LIKE '%' || '' || '%'
+									)
+								</when>
+								<otherwise>
+									AND (
+										JOB_NAME LIKE '%' || '' || '%'
+										OR JOB_MAIN_DUTY LIKE '%' || '' || '%'
+										OR JOB_WAY LIKE '%' || '' || '%'
+									)
+								</otherwise>
+							</choose>
+						</if>
 		                <if test="jobSal != null and !jobSal.isEmpty()">
 		                    AND (
 		                        <foreach collection="jobSal" item="salItem" separator=" OR ">
@@ -112,7 +115,7 @@
 		            ) B
 	            WHERE ROWNUM <![CDATA[<=]]> #{endRow} 
 	        )
-	    WHERE ROWNUM <![CDATA[>=]]> #{startRow}
+	    WHERE RNUM <![CDATA[>=]]> #{startRow}
 	</select>
 	
 	<select id="selectCareerTotal" parameterType="kr.or.ddit.worldcup.service.JobsVO" resultType="int">

@@ -26,6 +26,7 @@
 			<a class="tab" href="/pse/cr/crr/selectCareerRcmList.do">추천 직업</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
+		${articlePage}
 		<div class="public-wrapper-main">
 			<div class="activity-container">
 				<form method="GET" action="/pse/cr/crl/selectCareerList.do">
@@ -99,60 +100,98 @@
 						</div>
 					</div>
 				</form>
-				<%-- <c:choose> --%>
+				<c:choose>
 					<c:when test="${empty articlePage.content || articlePage.content == null }">
 						<p class="no-content-message">현재 북마크가 없습니다.</p>
 					</c:when>
-					<%-- <c:otherwise> --%>
-				<div class="bookmark-list">
-					<%-- <c:forEach var="bookmark" items="${articlePage.content}"> --%>
-					<div class="bookmark-item">
-						<div class="item-content">
-							<div class="item-header">
-								<span class="category-tag">
-									<%-- ${bookmark.categoryName} --%>
-								</span>
-								<h3 class="item-title">
-									<a href="<%-- /mpg/mat/bmk/selectBookMarkDetail.do?bmCategoryId=${bookmark.bmCategoryId}&bmTargetId=${bookmark.bmTargetId} --%>">
-										<%-- ${bookmark.title} --%>
-									</a>
-								</h3>
-							</div>
-							<%-- <c:if test="${bookmark.bmCategoryId != 'G03005'}"> --%>
-							<p class="item-snippet">
-								<%-- ${bookmark.content2} --%>
-							</p>
-							<%-- </c:if> --%>
-							<div class="item-meta">
-								<span>
-									<%-- ${bookmark.content1} --%>
-								</span>
-								<span class="divider">·</span>
-								<span>
-									북마크일 :
-									<%-- <fmt:formatDate value="${bookmark.bmCreatedAt}" pattern="yyyy. MM. dd"/> --%>
-								</span>
-							</div>
+					<c:otherwise>
+						<div class="jobs-list">
+							<c:forEach var="jobs" items="${articlePage.content}">
+								<div class="jobs-item">
+									<div class="item-content job-info">
+										<div class="item-header">
+											<h3 class="item-title">
+												<a href="/pse/cr/crl/selectCareerDetail.do?jobCode=${jobs.jobCode}">
+													${jobs.jobName}
+												</a>
+											</h3>
+										</div>
+										<p class="item-snippet">
+											${jobs.jobMainDuty}
+										</p>
+									</div>
+									<div class="item-content job-detail-wrapper">
+										<div class="job-detail">
+											<div class="job-img-wrapper">
+												<img src="/images/jobAverageImg.png" alt="연봉 이미지">						
+											</div>
+											<div>
+												<div class="item-header">
+													<h2 class="item-title item-job-detail-title">
+														평균 연봉
+													</h2>
+												</div>
+												<p class="item-snippet item-job-snippet">
+													${jobs.averageSal}
+												</p>
+											</div>
+										</div>
+										<div class="job-detail">
+											<div class="job-img-wrapper">
+												<img src="/images/jobProspectImg.png" alt="연봉 이미지">										
+											</div>
+											<div>
+												<div class="item-header">
+													<h2 class="item-title item-job-detail-title">
+														미래 전망
+													</h2>
+												</div>
+												<p class="item-snippet item-job-snippet">
+													${jobs.prospect}
+												</p>
+											</div>
+										</div>
+										<div class="job-detail">
+											<div class="job-img-wrapper">
+												<img src="/images/jobSatisImg.png" alt="연봉 이미지">										
+											</div>
+											<div>
+												<div class="item-header">
+													<h2 class="item-title item-job-detail-title">
+														만족도
+													</h2>
+												</div>
+												<p class="item-snippet item-job-snippet">
+													${jobs.jobSatis}
+												</p>
+											</div>
+										</div>
+									</div>
+									<div class="item-action">
+										<button class="bookmark-btn" data-category-id="<%-- ${bookmark.bmCategoryId} --%>" data-target-id="<%-- ${bookmark.bmTargetId} --%>">
+											<span class="icon-active">
+												<img src="/images/bookmark-btn-active.png" alt="활성 북마크" width="30" height="30">
+											</span>
+			
+											<span class="icon-inactive">
+												<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크" width="30" height="30">
+											</span>
+										</button>
+										<button class="select-btn">
+											<span>비교</span>
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                                				<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.052-.143z" clip-rule="evenodd" />
+                            				</svg>
+										</button>
+									</div>
+								</div>
+							</c:forEach>
 						</div>
-						<div class="item-action">
-							<button class="bookmark-btn active" data-category-id="<%-- ${bookmark.bmCategoryId} --%>" data-target-id="<%-- ${bookmark.bmTargetId} --%>">
-								<span class="icon-active">
-									<img src="/images/bookmark-btn-active.png" alt="활성 북마크" width="30" height="30">
-								</span>
-
-								<span class="icon-inactive">
-									<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크" width="30" height="30">
-								</span>
-							</button>
-						</div>
-					</div>
-					<%-- </c:forEach> --%>
-				</div>
-				<%-- 					</c:otherwise>
-				</c:choose> --%>
+					</c:otherwise>
+				</c:choose>
 
 				<ul class="pagination">
-					<%-- 					<li>
+					<li>
 						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="
 							<c:if test='${articlePage.startPage < 6}'>
 								disabled
@@ -173,7 +212,7 @@
 							<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
 								disabled
 							</c:if>"> Next → </a>
-					</li> --%>
+					</li>
 				</ul>
 			</div>
 		</div>

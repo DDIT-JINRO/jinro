@@ -41,6 +41,9 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 		
 		ArticlePage<JobsVO> articlePage = new ArticlePage<>(total, jobs.getCurrentPage(), jobs.getSize(), careerList, jobs.getKeyword());
 		
+		
+		articlePage.setUrl("/pse/cr/crl/selectCareerList.do");
+		
 		return articlePage;
 	}
 	
