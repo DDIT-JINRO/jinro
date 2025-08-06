@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
+import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.alarm.service.AlarmService;
 import kr.or.ddit.util.alarm.service.AlarmType;
 import kr.or.ddit.util.alarm.service.AlarmVO;
@@ -34,7 +36,7 @@ import kr.or.ddit.util.file.service.FileService;
 @Controller
 @RequestMapping("/comm/path")
 public class CommunityPathController {
-	
+
 	@Autowired
 	MyInquiryService myInquiryService;
 	@Autowired
@@ -43,16 +45,17 @@ public class CommunityPathController {
 	FileService fileService;
 	@Autowired
 	AlarmService alarmService;
-	
-	@GetMapping("/pathList.do")
-	public String selectPathList(Model model) {
-		List<CommBoardVO> pathList = teenCommService.selectTeenList("G09002");
 
-		model.addAttribute("pathList", pathList);
+	@GetMapping("/pathList.do")
+	public String selectPathList(Model model, @ModelAttribute CommBoardVO commBoardVO) {
+
+		ArticlePage<CommBoardVO> articlePage = teenCommService.selectTeenList("G09002", commBoardVO);
+
+		model.addAttribute("articlePage", articlePage);
 
 		return "comm/path/pathList";
 	}
-	
+
 	@GetMapping("/pathDetail.do")
 	public String selectPathDetail(@RequestParam int boardId, Model model, @AuthenticationPrincipal String memId) {
 
@@ -77,16 +80,16 @@ public class CommunityPathController {
 
 		return "comm/path/pathDetail";
 	}
-	
+
 	@GetMapping("/pathInsert.do")
 	public String insertPath(Principal principal) {
 		if (principal == null || principal.getName().equals("anonymousUser")) {
 			return "redirect:/error/logReq";
 		}
-		
+
 		return "comm/path/pathInsert";
 	}
-	
+
 	@PostMapping("/pathInsert.do")
 	@ResponseBody
 	public ResponseEntity<String> insertPathPost(@RequestParam("title") String title,
@@ -129,20 +132,20 @@ public class CommunityPathController {
 
 		return ResponseEntity.ok("success");
 	}
-	
+
 	@PostMapping("/createPathReply.do")
 	@ResponseBody
-	public ResponseEntity<CommReplyVO> createYouthReply(CommReplyVO commReplyVO, Principal principal, HttpServletRequest request) {
+	public ResponseEntity<CommReplyVO> createYouthReply(CommReplyVO commReplyVO, Principal principal,
+			HttpServletRequest request) {
 		if (principal == null || principal.getName().equals("anonymousUser")) {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
-		
+
 		String memIdStr = principal.getName();
 		int memId = Integer.parseInt(memIdStr);
 		commReplyVO.setMemId(memId);
 		CommReplyVO newReplyVO = this.teenCommService.insertReply(commReplyVO);
-		
-		
+
 		if (newReplyVO == null) {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}

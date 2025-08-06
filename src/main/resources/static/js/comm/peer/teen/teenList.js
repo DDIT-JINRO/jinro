@@ -21,8 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			location.href = "/comm/peer/teen/teenInsert.do";
 		}
 	})
-	
-	
 });
 
 

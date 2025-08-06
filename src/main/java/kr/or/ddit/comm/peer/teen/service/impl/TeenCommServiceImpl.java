@@ -3,6 +3,7 @@ package kr.or.ddit.comm.peer.teen.service.impl;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import kr.or.ddit.comm.vo.CommBoardLikeVO;
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyLikeVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
+import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +29,23 @@ public class TeenCommServiceImpl implements TeenCommService {
 	FileService fileService;
 
 	@Override
-	public List<CommBoardVO> selectTeenList(String ccId) {
-
-		List<CommBoardVO> teenList = teenCommMapper.selectTeenList(ccId);
-
-		return teenList;
+	public ArticlePage<CommBoardVO> selectTeenList(String ccId, CommBoardVO commBoardVO) {
+		
+		log.info("VO임 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ : " + commBoardVO);
+		
+		commBoardVO.setCcId(ccId);
+		
+		int total = teenCommMapper.selectBoardTotal(commBoardVO);
+		
+		List<CommBoardVO> commBoardList = teenCommMapper.selectTeenList(commBoardVO);
+		log.info("commBoardList임 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ : " + commBoardList);
+		
+		ArticlePage<CommBoardVO> articlePage = new ArticlePage<>(total, commBoardVO.getCurrentPage(), commBoardVO.getSize(), commBoardList, commBoardVO.getKeyword());
+		
+		log.info("articlePage임 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ : " + articlePage);
+		
+		
+		return articlePage;
 	}
 
 	@Override

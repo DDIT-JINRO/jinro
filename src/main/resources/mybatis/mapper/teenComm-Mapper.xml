@@ -28,32 +28,73 @@
 		<result property="fileSubStr" column="R_FILE_SUB" />
 	</resultMap>
 
-	<select id="selectTeenList"
-		resultType="kr.or.ddit.comm.vo.CommBoardVO" parameterType="String">
+	<select id="selectBoardTotal" parameterType="kr.or.ddit.comm.vo.CommBoardVO" resultType="int">
 		SELECT
-		B.BOARD_ID,
-		B.MEM_ID,
-		M.MEM_NAME,
-		B.CC_ID,
-		B.BOARD_TITLE,
-		B.BOARD_CONTENT,
-		B.BOARD_CREATED_AT,
-		B.BOARD_UPDATED_AT,
-		B.BOARD_CNT,
-		B.BOARD_DEL_YN,
-		B.FILEGROUP_ID,
-		(
-		SELECT COUNT(*)
+		COUNT(*)
+		FROM
+		BOARD B
+		WHERE
+		B.CC_ID = #{ccId}
+		AND B.BOARD_DEL_YN = 'N'
+		<if test="status != null and status != '' and status == '3'">
+			AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR B.BOARD_CONTENT LIKE '%'||#{keyword}||'%')
+		</if>
+		<if test="status != null and status != '' and status == '1'">
+			AND B.BOARD_TITLE LIKE '%'||#{keyword}||'%'
+		</if>
+		<if test="status != null and status != '' and status == '2'">
+			AND B.BOARD_CONTENT LIKE '%'||#{keyword}||'%'
+		</if>
+
+	</select>
+
+	<select id="selectTeenList"
+		resultType="kr.or.ddit.comm.vo.CommBoardVO"
+		parameterType="kr.or.ddit.comm.vo.CommBoardVO">
+		SELECT * FROM (
+		SELECT ROWNUM AS RNUM, C.*
+		FROM (
+		SELECT
+		B.BOARD_ID
+		, B.MEM_ID
+		, M.MEM_NICKNAME
+		, B.CC_ID
+		, B.BOARD_TITLE
+		, B.BOARD_CONTENT
+		, B.BOARD_CREATED_AT
+		, B.BOARD_UPDATED_AT
+		, B.BOARD_CNT
+		, B.BOARD_DEL_YN
+		, B.FILEGROUP_ID
+		, (
+		SELECT
+		COUNT(*)
 		FROM
 		BOARD_LIKE
-		WHERE BOARD_ID = B.BOARD_ID
+		WHERE
+		BOARD_ID = B.BOARD_ID
 		) AS BOARD_LIKE_CNT
-		FROM BOARD B
+		FROM
+		BOARD B
 		JOIN MEMBER M ON B.MEM_ID = M.MEM_ID
-		WHERE B.CC_ID = #{ccId} AND
-		B.BOARD_DEL_YN = 'N'
+		WHERE
+		B.CC_ID = #{ccId}
+		AND B.BOARD_DEL_YN = 'N'
+		<if test="status != null and status != '' and status == 3">
+			AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR B.BOARD_CONTENT LIKE '%'||#{keyword}||'%')
+		</if>
+		<if test="status != null and status != '' and status == 1">
+			AND B.BOARD_TITLE LIKE '%'||#{keyword}||'%'
+		</if>
+		<if test="status != null and status != '' and status == 2">
+			AND B.BOARD_CONTENT LIKE '%'||#{keyword}||'%'
+		</if>
 		ORDER BY
 		B.BOARD_CREATED_AT DESC
+		) C
+		WHERE ROWNUM &lt;= #{endNo}
+		)
+		WHERE RNUM &gt;= #{startNo}
 	</select>
 
 	<select id="selectTeenDetail"
@@ -105,10 +146,12 @@
 		CASE
 		WHEN EXISTS (
 		SELECT 1
-		FROM REPLY_LIKE
+		FROM
+		REPLY_LIKE
 		WHERE REPLY_ID = R.REPLY_ID
 		AND BOARD_ID = R.BOARD_ID
-		AND MEM_ID =
+		AND
+		MEM_ID =
 		#{memId}
 		)
 		THEN 1
@@ -167,36 +210,47 @@
 
 		, M.MEM_ID AS R_MEM_ID
 		, M.MEM_GEN AS R_MEM_GEN
-		, M.MEM_NAME AS R_MEM_NAME
+		, M.MEM_NAME
+		AS R_MEM_NAME
 		, M.MEM_NICKNAME AS R_MEM_NICKNAME
 		,
-		M.MEM_EMAIL AS R_MEM_EMAIL
+		M.MEM_EMAIL AS
+		R_MEM_EMAIL
 		, M.FILE_BADGE AS R_FILE_BADGE_ID
 		,
-		M.FILE_PROFILE AS R_FILE_PROFILE_ID
+		M.FILE_PROFILE AS
+		R_FILE_PROFILE_ID
 		, M.FILE_SUB AS R_FILE_SUB_ID
 		,
-		D1.FILE_SAVE_NAME AS R_FILE_BADGE
+		D1.FILE_SAVE_NAME AS
+		R_FILE_BADGE
 		, D2.FILE_SAVE_NAME AS R_FILE_PROFILE
-		, D3.FILE_SAVE_NAME AS R_FILE_SUB
+		, D3.FILE_SAVE_NAME
+		AS R_FILE_SUB
 
 		FROM REPLY R1
 		LEFT JOIN MEMBER M ON
 		M.MEM_ID = R1.MEM_ID
 		LEFT JOIN FILE_GROUP FG1 ON FG1.FILE_GROUP_ID =
 		M.FILE_BADGE
-		LEFT JOIN FILE_DETAIL D1 ON D1.FILE_GROUP_ID =
+		LEFT JOIN
+		FILE_DETAIL D1 ON D1.FILE_GROUP_ID =
 		FG1.FILE_GROUP_ID
-		LEFT JOIN FILE_GROUP FG2 ON FG2.FILE_GROUP_ID =
+		LEFT JOIN
+		FILE_GROUP FG2 ON FG2.FILE_GROUP_ID =
 		M.FILE_PROFILE
-		LEFT JOIN FILE_DETAIL D2 ON D2.FILE_GROUP_ID =
+		LEFT JOIN
+		FILE_DETAIL D2 ON D2.FILE_GROUP_ID =
 		FG2.FILE_GROUP_ID
-		LEFT JOIN FILE_GROUP FG3 ON FG3.FILE_GROUP_ID =
+		LEFT JOIN
+		FILE_GROUP FG3 ON FG3.FILE_GROUP_ID =
 		M.FILE_SUB
-		LEFT JOIN FILE_DETAIL D3 ON D2.FILE_GROUP_ID =
+		LEFT JOIN FILE_DETAIL
+		D3 ON D2.FILE_GROUP_ID =
 		FG3.FILE_GROUP_ID
 
-		WHERE R1.REPLY_PARENT_ID = #{replyId}
+		WHERE R1.REPLY_PARENT_ID =
+		#{replyId}
 		AND
 		R1.REPLY_DEL_YN = 'N'
 
@@ -227,28 +281,37 @@
 
 		, M.MEM_ID AS R_MEM_ID
 		, M.MEM_GEN AS R_MEM_GEN
-		, M.MEM_NAME AS R_MEM_NAME
+		, M.MEM_NAME
+		AS R_MEM_NAME
 		, M.MEM_NICKNAME AS R_MEM_NICKNAME
 		,
-		M.MEM_EMAIL AS R_MEM_EMAIL
+		M.MEM_EMAIL AS
+		R_MEM_EMAIL
 		, M.FILE_BADGE AS R_FILE_BADGE_ID
 		,
-		M.FILE_PROFILE AS R_FILE_PROFILE_ID
+		M.FILE_PROFILE AS
+		R_FILE_PROFILE_ID
 		, M.FILE_SUB AS R_FILE_SUB_ID
 		,
-		D1.FILE_SAVE_NAME AS R_FILE_BADGE
+		D1.FILE_SAVE_NAME AS
+		R_FILE_BADGE
 		, D2.FILE_SAVE_NAME AS R_FILE_PROFILE
 
 		FROM REPLY R1
-		LEFT JOIN MEMBER M ON M.MEM_ID = R1.MEM_ID
+		LEFT
+		JOIN MEMBER M ON M.MEM_ID = R1.MEM_ID
 		LEFT JOIN
-		FILE_GROUP FG1 ON FG1.FILE_GROUP_ID = M.FILE_BADGE
+		FILE_GROUP FG1 ON
+		FG1.FILE_GROUP_ID = M.FILE_BADGE
 		LEFT JOIN
-		FILE_DETAIL D1 ON D1.FILE_GROUP_ID = FG1.FILE_GROUP_ID
+		FILE_DETAIL D1 ON
+		D1.FILE_GROUP_ID = FG1.FILE_GROUP_ID
 		LEFT JOIN
-		FILE_GROUP FG2 ON FG2.FILE_GROUP_ID = M.FILE_PROFILE
+		FILE_GROUP FG2 ON
+		FG2.FILE_GROUP_ID = M.FILE_PROFILE
 		LEFT JOIN
-		FILE_DETAIL D2 ON D2.FILE_GROUP_ID = FG2.FILE_GROUP_ID
+		FILE_DETAIL D2 ON
+		D2.FILE_GROUP_ID = FG2.FILE_GROUP_ID
 
 		WHERE
 		R1.REPLY_ID = #{replyId}
@@ -425,14 +488,18 @@
 		)
 	</update>
 
-	<select id="selectBoardLikedCnt" parameterType="int" resultType="int">
+	<select id="selectBoardLikedCnt" parameterType="int"
+		resultType="int">
 		SELECT COUNT(*)
 		AS likeCnt
 		FROM BOARD_LIKE
-		WHERE BOARD_ID = #{boardId}
+		WHERE BOARD_ID =
+		#{boardId}
 	</select>
-	
-	<select id="selectReplyLiked" parameterType="kr.or.ddit.comm.vo.CommReplyLikeVO" resultType="kr.or.ddit.comm.vo.CommReplyLikeVO">
+
+	<select id="selectReplyLiked"
+		parameterType="kr.or.ddit.comm.vo.CommReplyLikeVO"
+		resultType="kr.or.ddit.comm.vo.CommReplyLikeVO">
 		SELECT
 		BOARD_ID
 		, MEM_ID
@@ -441,10 +508,12 @@
 		FROM
 		REPLY_LIKE
 		WHERE MEM_ID =
-		#{memId} AND BOARD_ID = #{boardId} AND REPLY_ID = #{replyId}
+		#{memId} AND BOARD_ID = #{boardId} AND REPLY_ID =
+		#{replyId}
 	</select>
-	
-	<update id="deleteReplyLiked" parameterType="kr.or.ddit.comm.vo.CommReplyLikeVO">
+
+	<update id="deleteReplyLiked"
+		parameterType="kr.or.ddit.comm.vo.CommReplyLikeVO">
 		DELETE FROM REPLY_LIKE
 		WHERE
 		BOARD_ID = #{boardId}
@@ -453,13 +522,14 @@
 		AND
 		REPLY_ID = #{replyId}
 	</update>
-	
+
 	<update id="insertReplyLiked">
 		INSERT INTO REPLY_LIKE (
 		BOARD_ID
 		, MEM_ID
 		, LIKE_AT
-		, REPLY_ID
+		,
+		REPLY_ID
 		)
 		VALUES (
 		#{boardId}
@@ -468,12 +538,15 @@
 		, #{replyId}
 		)
 	</update>
-	
-	<select id="selectReplyLikedCnt" parameterType="kr.or.ddit.comm.vo.CommReplyLikeVO" resultType="int">
-		SELECT COUNT(*)
+
+	<select id="selectReplyLikedCnt"
+		parameterType="kr.or.ddit.comm.vo.CommReplyLikeVO" resultType="int">
+		SELECT
+		COUNT(*)
 		AS likeCnt
 		FROM REPLY_LIKE
-		WHERE BOARD_ID = #{boardId} AND REPLY_ID = #{replyId}
-		
+		WHERE BOARD_ID = #{boardId} AND
+		REPLY_ID = #{replyId}
+
 	</select>
 </mapper>

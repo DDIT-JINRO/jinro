@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kr.or.ddit.cdp.sint.service.SelfIntroVO;
 import kr.or.ddit.comm.peer.teen.service.TeenCommService;
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
@@ -27,6 +29,7 @@ import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
+import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.alarm.service.AlarmService;
 import kr.or.ddit.util.alarm.service.AlarmType;
 import kr.or.ddit.util.alarm.service.AlarmVO;
@@ -53,12 +56,11 @@ public class CommunityTeenController {
 	AlarmService alarmService;
 
 	@GetMapping("/teenList.do")
-	public String selectTeenList(Model model) {
+	public String selectTeenList(Model model, @ModelAttribute CommBoardVO commBoardVO) {
 		
+		ArticlePage<CommBoardVO> articlePage = teenCommService.selectTeenList("G09001", commBoardVO);
 		
-		List<CommBoardVO> teenList = teenCommService.selectTeenList("G09001");
-
-		model.addAttribute("teenList", teenList);
+		model.addAttribute("articlePage", articlePage);
 
 		return "comm/peer/teen/teenList";
 	}
@@ -208,19 +210,19 @@ public class CommunityTeenController {
 
 	@PostMapping("/createTeenReply.do")
 	@ResponseBody
-	public ResponseEntity<CommReplyVO> createCommReply(CommReplyVO commReplyVO, Principal principal, HttpServletRequest request) {
+	public ResponseEntity<CommReplyVO> createCommReply(CommReplyVO commReplyVO, Principal principal,
+			HttpServletRequest request) {
 		if (principal == null || principal.getName().equals("anonymousUser")) {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
-		
-		log.info("@@@@@"+request.getParameter("redirectUrl"));
-		
+
+		log.info("@@@@@" + request.getParameter("redirectUrl"));
+
 		String memIdStr = principal.getName();
 		int memId = Integer.parseInt(memIdStr);
 		commReplyVO.setMemId(memId);
 		CommReplyVO newReplyVO = this.teenCommService.insertReply(commReplyVO);
-		
-		
+
 		if (newReplyVO == null) {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
@@ -276,21 +278,22 @@ public class CommunityTeenController {
 	@PostMapping("/likeBoard.do")
 	@ResponseBody
 	public Map<String, Object> likeBoard(@RequestParam("boardId") int boardId, Principal principal) {
-	    String memId = principal.getName();
-	    int isLiked = teenCommService.updateBoardLiked(boardId, memId);
-	    int likeCnt = teenCommService.selectBoardLikedCnt(boardId);
-	    
-	    return Map.of("isLiked", isLiked, "likeCnt", likeCnt);
+		String memId = principal.getName();
+		int isLiked = teenCommService.updateBoardLiked(boardId, memId);
+		int likeCnt = teenCommService.selectBoardLikedCnt(boardId);
+
+		return Map.of("isLiked", isLiked, "likeCnt", likeCnt);
 	}
-	
+
 	@PostMapping("/likeReply.do")
 	@ResponseBody
-	public Map<String, Object> likeReply(@RequestParam("replyId") int replyId, @RequestParam("boardId") int boardId, Principal principal) {
+	public Map<String, Object> likeReply(@RequestParam("replyId") int replyId, @RequestParam("boardId") int boardId,
+			Principal principal) {
 		String memId = principal.getName();
-	    int isLiked = teenCommService.updateReplyLiked(boardId, replyId, memId);
-	    int likeCnt = teenCommService.selectReplyLikedCnt(boardId, replyId);
-	    
-	    return Map.of("isLiked", isLiked, "likeCnt", likeCnt);
+		int isLiked = teenCommService.updateReplyLiked(boardId, replyId, memId);
+		int likeCnt = teenCommService.selectReplyLikedCnt(boardId, replyId);
+
+		return Map.of("isLiked", isLiked, "likeCnt", likeCnt);
 	}
-	
+
 }

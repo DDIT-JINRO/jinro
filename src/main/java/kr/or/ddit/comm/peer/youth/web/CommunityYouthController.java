@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +27,7 @@ import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
+import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.alarm.service.AlarmService;
 import kr.or.ddit.util.alarm.service.AlarmType;
 import kr.or.ddit.util.alarm.service.AlarmVO;
@@ -46,11 +49,14 @@ public class CommunityYouthController {
 	
 	
 	@GetMapping("/youthList.do")
-	public String selectYouthList(Model model) {
-		List<CommBoardVO> youthList = teenCommService.selectTeenList("G09006");
-
-		model.addAttribute("youthList", youthList);
-
+	public String selectYouthList(Model model, @ModelAttribute CommBoardVO commBoardVO) {
+		
+		ArticlePage<CommBoardVO> articlePage = teenCommService.selectTeenList("G09006", commBoardVO);
+		
+		model.addAttribute("articlePage", articlePage);
+		
+		
+		
 		return "comm/peer/youth/youthList";
 	}
 	

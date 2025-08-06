@@ -57,7 +57,7 @@
 					<div class="cnt">조회수</div>
 				</div>
 			</div>
-			<c:forEach var="commBoardVO" varStatus="stat" items="${pathList}">
+			<c:forEach var="commBoardVO" varStatus="stat" items="${articlePage.content}">
 				<div class="teenList-list">
 					<div class="group-card" data-tbd-id="${commBoardVO.boardId}">
 						<div class="group-info">
@@ -65,9 +65,9 @@
 							<div class="group-title-list">${commBoardVO.boardTitle}</div>
 						</div>
 						<div class="group-meta">
-							<div class="likeCnt">${commBoardVO.boardLikeCnt}</div>
-							<div class="writer">${commBoardVO.memName}</div>
-							<div class="writeAt">
+							<div id="likeCnt">${commBoardVO.boardLikeCnt}</div>
+							<div id="writer">${commBoardVO.memNickname}</div>
+							<div id="writeAt">
 								<fmt:formatDate value="${commBoardVO.boardUpdatedAt}" pattern="yyyy. MM. dd" />
 							</div>
 							<div id="cnt">${commBoardVO.boardCnt}</div>

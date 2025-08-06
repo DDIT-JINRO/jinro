@@ -1,13 +1,15 @@
 package kr.or.ddit.comm.peer.teen.service;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
+import kr.or.ddit.util.ArticlePage;
 
 public interface TeenCommService {
 
-	public List<CommBoardVO> selectTeenList(String string);
+	public ArticlePage<CommBoardVO> selectTeenList(String string, CommBoardVO commBoardVO);
 
 	public CommBoardVO selectTeenDetail(int boardId, String memId);
 

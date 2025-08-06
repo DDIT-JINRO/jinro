@@ -12,7 +12,7 @@ import kr.or.ddit.comm.vo.CommReplyVO;
 @Mapper
 public interface TeenCommMapper {
 
-	List<CommBoardVO> selectTeenList(String ccId);
+	List<CommBoardVO> selectTeenList(CommBoardVO commBoardVO);
 
 	CommBoardVO selectTeenDetail(CommBoardVO paramBoard);
 
@@ -59,5 +59,7 @@ public interface TeenCommMapper {
 	void insertReplyLiked(CommReplyLikeVO replyLikeVO);
 
 	int selectReplyLikedCnt(CommReplyLikeVO replyLikeVO);
+
+	int selectBoardTotal(CommBoardVO commBoardVO);
 	
 }
