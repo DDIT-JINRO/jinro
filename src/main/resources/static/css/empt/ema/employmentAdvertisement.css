@@ -303,9 +303,6 @@
 	margin-bottom: 10px;
 }
 
-.accordion-item:last-child {
-	border-bottom: none; /* 마지막 항목의 하단 보더 제거 */
-}
 
 /* 각 기업 항목의 헤더 (펼치기/접기 버튼 포함) */
 .accordion-item .accordion-header {
