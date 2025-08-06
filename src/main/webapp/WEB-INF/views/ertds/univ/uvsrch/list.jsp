@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="">
+<link rel="stylesheet" href="/css/ertds/univ/univList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -17,23 +17,176 @@
 	</div>
 </section>
 <div>
-	${articlePage}
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
 		    <a class="tab active" href="/ertds/univ/uvsrch/selectUnivList.do">대학 검색</a>
 		    <a class="tab" href="/ertds/univ/mjsrch/selectMajorList.do">학과 정보</a>
 		</div>
-		<!-- 여기부터 작성해 주시면 됩니다 -->
-  		<div class="public-wrapper-main">
-  			여기가 작성해야할 공간입니다. 대학교 리스트
-  			</br></br></br></br>
-  			<a href="/ertds/univ/uvsrch/selectCompare.do">대학 비교</a>
-  			</br></br></br></br>
-  			<a href="/ertds/univ/uvsrch/selectDetail.do">대학 상세</a>
-  			</br></br></br></br>
-  			</br></br></br></br>
-  		</div>
+	</div>
+</div>
+<div>
+	<div class="public-wrapper">
+		<div class="public-wrapper-main">
+			<form method="get" action="/empt/enp/enterprisePosting.do">
+				<div class="com-default-search">
+					<div class="com-select-wrapper">
+						<svg class="com-select-arrow" xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+								d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+								clip-rule="evenodd" />
+            </svg>
+					</div>
+					<input type="search" name="keyword" placeholder="대학 명으로 검색">
+					<button class="com-search-btn" type="button">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+							fill="currentColor" width="20" height="20">
+                <path fill-rule="evenodd"
+								d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
+								clip-rule="evenodd" />
+            </svg>
+					</button>
+				</div>
+				<!-- 
+				<div class="com-accordion-filter">
+					<button type="button" class="com-accordion-header"
+						id="com-accordion-toggle">
+						<span>필터</span> <span class="com-arrow-icon">▲</span>
+					</button>
+					<div class="com-accordion-panel" id="com-accordion-panel">
+						<div class="com-filter-section">
+							<label class="com-filter-title">기업 규모</label>
+							<div class="com-filter-options">
+								<c:forEach var="scale" items="${codeVOCompanyScaleList}">
+									<label class="com-filter-item"> <input type="checkbox"
+										name="scaleId" value="${scale.ccId}"> <span>${scale.ccName}</span>
+									</label>
+								</c:forEach>
+							</div>
+
+							<label class="com-filter-title">지역</label>
+							<div class="com-filter-options">
+								<c:forEach var="region" items="${CodeVORegionList}">
+									<label class="com-filter-item"> <%-- regionId는 CompanyVO의 필터링할 값입니다. value는 실제 데이터베이스 코드 값으로 매핑되어야 합니다. --%>
+										<input type="checkbox" name="regionId" value="${region.ccId}">
+										<span>${region.ccEtc}</span>
+									</label>
+								</c:forEach>
+							</div>
+
+							<label class="com-filter-title">채용여부</label>
+							<div class="com-filter-options">
+								<label class="com-filter-item"> <input type="checkbox"
+									name="hiringStatus" value="Y"><span>채용 중</span>
+								</label> <label class="com-filter-item"> <input type="checkbox"
+									name="hiringStatus" value="N"><span>채용 없음</span>
+								</label>
+							</div>
+						</div>
+						<div class="com-filter-section">
+							<div class="com-button-container">
+								<label class="com-filter-title">선택된 필터</label>
+								<button type="button" class="com-filter-reset-btn">초기화</button>
+							</div>
+							<div class="com-selected-filters"></div>
+						</div>
+						<button type="submit" class="com-submit-search-btn">검색</button>
+					</div>
+				</div>
+				 -->
+			</form>
+			<p>총 ${articlePage.total}건</p>
+			
+
+			<div class="company-list">
+				<div class="accordion-header">
+					<div style="flex: 2;">대학명</div>
+					<div style="flex: 0.5;">지역</div>
+					<div style="flex: 0.5;">대학유형</div>
+					<div style="flex: 0.5;">설립유형</div>
+					<div style="flex: 0.5;">학과</div>
+					<div style="flex: 0.5;">북마크갯수</div>
+					<div style="width: 80px;">북마크</div>
+					<div style="width: 20px;"></div>
+					<%-- 펼치기/접기 아이콘 자리 --%>
+				</div>
+
+				<c:forEach var="university" items="${articlePage.content}"
+					varStatus="status">
+					<div class="accordion-item">
+						<div class="accordion-header">
+							<div class="company-info-item" style="flex: 2;">${university.univName}</div>
+							<div class="company-info-item" style="flex: 0.5;">${university.univRegion}</div>
+							<div class="company-info-item" style="flex: 0.5;">${university.univType}</div>
+							<div class="company-info-item" style="flex: 0.5;">${university.univGubun}</div>
+							<div class="company-info-item" style="flex: 0.5;">학과갯수?</div>
+							<div class="company-info-item" style="flex: 0.5;">북마크갯수?</div>
+							<div class="company-info-item" style="width: 80px;">
+								<div class="item-action">
+									<c:set var="isBookmarked" value="false" />
+
+									<c:forEach var="bookmark" items="${bookMarkVOList}">
+										<c:if test="${university.univId eq bookmark.bmTargetId}">
+											<c:set var="isBookmarked" value="true" />
+										</c:if>
+									</c:forEach>
+
+									<button class="bookmark-btn ${isBookmarked ? 'active' : ''}"
+										data-category-id="G03001"
+										data-target-id="${fn:escapeXml(university.univId)}">
+										<span class="icon-active"> <img
+											src="/images/bookmark-btn-active.png" alt="활성 북마크">
+										</span> <span class="icon-inactive"> <img
+											src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+										</span>
+									</button>
+								</div>
+							</div>
+							<div class="company-info-item" style="width: 20px;">
+								<span class="toggle-icon">+</span>
+							</div>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+
+			<!-- 페이징 -->
+			<div class="card-footer clearfix">
+				<ul class="pagination">
+					<!-- Previous -->
+					<li><a
+						href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${articlePage.keyword}
+						<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
+						<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
+						&hiringStatus=${param.hiringStatus}"	
+						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
+							← Previous </a></li>
+
+					<!-- Page Numbers -->
+					<c:forEach var="pNo" begin="${articlePage.startPage}"
+						end="${articlePage.endPage}">
+						<li><a
+							href="${articlePage.url}?currentPage=${pNo}&keyword=${articlePage.keyword}
+							<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
+							<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
+							&hiringStatus=${param.hiringStatus}"
+							class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
+								${pNo} </a></li>
+					</c:forEach>
+
+					<!-- Next -->
+					<li><a
+						href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
+						<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
+						<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
+						&hiringStatus=${param.hiringStatus}"				
+						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
+							Next → </a></li>
+				</ul>
+			</div>
+
+		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>

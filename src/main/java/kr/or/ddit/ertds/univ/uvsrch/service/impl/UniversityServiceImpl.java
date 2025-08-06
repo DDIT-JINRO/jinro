@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityService;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
+import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -17,8 +18,8 @@ public class UniversityServiceImpl implements UniversityService {
 	UniversityMapper universityMapper;
 
 	@Override
-	public List<UniversityVO> selectUniversityList() {
-		List<UniversityVO> list = this.universityMapper.selectUniversityList();
+	public List<UniversityVO> selectUniversityList(UniversityVO universityVO) {
+		List<UniversityVO> list = this.universityMapper.selectUniversityList(universityVO);
 
 		log.info("selectUniversityList : ", list);
 		return list;
@@ -27,6 +28,11 @@ public class UniversityServiceImpl implements UniversityService {
 	@Override
 	public int selectUniversityTotalCount(UniversityVO universityVO) {
 		return this.universityMapper.selectUniversityTotalCount(universityVO);
+	}
+
+	@Override
+	public List<BookMarkVO> selectBookMarkVO(BookMarkVO bookmarkVO) {
+		return this.universityMapper.selectBookMarkVO(bookmarkVO);
 	}
 	
 	

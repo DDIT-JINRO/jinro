@@ -2,21 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.ertds.univ.uvsrch.service.impl.UniversityMapper">
 
-	<select id="selectUniversityList" resultType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
-		SELECT
-		    CASE
-		        WHEN UNIV_CAMPUS IN ('제2캠퍼스', '제3캠퍼스', '국제캠퍼스', '서울캠퍼스')
-		        THEN UNIV_NAME || '[' || UNIV_CAMPUS || ']'
-		        ELSE UNIV_NAME
-		    END AS UNIV_NAME
-		    , COALESCE(CC1.CC_NAME, UNIV_TYPE) AS UNIV_TYPE
-		    , COALESCE(CC2.CC_NAME, UNIV_GUBUN) AS UNIV_GUBUN
-		    , UNIV_URL
-		    , UNIV_REGION
-		    , UNIV_ADDR
-		FROM UNIVERSITY U
-		LEFT JOIN COM_CODE CC1 ON U.UNIV_TYPE = CC1.CC_ID
-		LEFT JOIN COM_CODE CC2 ON U.UNIV_GUBUN = CC2.CC_ID
+	<select id="selectUniversityList" parameterType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO" resultType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
+		SELECT *
+		FROM (
+			SELECT sub.*, ROWNUM AS RNUM
+			FROM ( 
+				SELECT
+				    CASE
+				        WHEN UNIV_CAMPUS IN ('제2캠퍼스', '제3캠퍼스', '국제캠퍼스', '서울캠퍼스')
+				        THEN UNIV_NAME || '[' || UNIV_CAMPUS || ']'
+				        ELSE UNIV_NAME
+				    END AS UNIV_NAME
+				    , COALESCE(CC1.CC_NAME, UNIV_TYPE) AS UNIV_TYPE
+				    , COALESCE(CC2.CC_NAME, UNIV_GUBUN) AS UNIV_GUBUN
+				    , UNIV_URL
+				    , UNIV_REGION
+				    , UNIV_ADDR
+				FROM UNIVERSITY U
+				LEFT JOIN COM_CODE CC1 ON U.UNIV_TYPE = CC1.CC_ID
+				LEFT JOIN COM_CODE CC2 ON U.UNIV_GUBUN = CC2.CC_ID
+				ORDER BY U.UNIV_NAME
+			) sub
+			WHERE ROWNUM <![CDATA[<=]]> #{endNo}
+		)
+		WHERE RNUM <![CDATA[>]]> #{startNo}
 	</select>
 	
 	<select id="selectUniversityTotalCount" resultType="int" parameterType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
@@ -33,6 +42,13 @@
 	      AND U.UNIV_GUBUN = #{univGubun}
 	    </if>
 	  </where>
+	</select>
+	
+	<select id="selectBookMarkVO" parameterType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO" resultType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO">
+		SELECT BM_ID, MEM_ID, BM_CATEGORY_ID, BM_TARGET_ID
+		FROM BOOKMARK
+		WHERE MEM_ID = #{memId}
+		AND BM_CATEGORY_ID =#{bmCategoryId}
 	</select>
 
 
