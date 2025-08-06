@@ -4,11 +4,10 @@ import java.util.List;
 
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
-import kr.or.ddit.prg.std.service.StdReplyVO;
 
 public interface TeenCommService {
 
-	public List<CommBoardVO> selectTeenList();
+	public List<CommBoardVO> selectTeenList(String string);
 
 	public CommBoardVO selectTeenDetail(int boardId, String memId);
 
@@ -39,6 +38,5 @@ public interface TeenCommService {
 	public int updateReplyLiked(int boardId, int replyId, String memId);
 
 	public int selectReplyLikedCnt(int boardId, int replyId);
-
 	
 }

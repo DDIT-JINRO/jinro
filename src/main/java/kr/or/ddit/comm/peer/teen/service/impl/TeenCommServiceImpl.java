@@ -27,9 +27,9 @@ public class TeenCommServiceImpl implements TeenCommService {
 	FileService fileService;
 
 	@Override
-	public List<CommBoardVO> selectTeenList() {
+	public List<CommBoardVO> selectTeenList(String ccId) {
 
-		List<CommBoardVO> teenList = teenCommMapper.selectTeenList();
+		List<CommBoardVO> teenList = teenCommMapper.selectTeenList(ccId);
 
 		return teenList;
 	}
@@ -263,5 +263,7 @@ public class TeenCommServiceImpl implements TeenCommService {
 		
 		return teenCommMapper.selectReplyLikedCnt(replyLikeVO);
 	}
+
+	
 
 }

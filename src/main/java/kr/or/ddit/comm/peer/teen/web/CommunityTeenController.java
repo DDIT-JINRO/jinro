@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.or.ddit.comm.peer.teen.service.TeenCommService;
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
@@ -53,8 +54,9 @@ public class CommunityTeenController {
 
 	@GetMapping("/teenList.do")
 	public String selectTeenList(Model model) {
-
-		List<CommBoardVO> teenList = teenCommService.selectTeenList();
+		
+		
+		List<CommBoardVO> teenList = teenCommService.selectTeenList("G09001");
 
 		model.addAttribute("teenList", teenList);
 
@@ -72,7 +74,7 @@ public class CommunityTeenController {
 		boolean isTeen = teenCommService.isTeen(memId);
 		if (!isTeen) {
 			model.addAttribute("message", "청소년만 접근 가능합니다.");
-			return "comm/peer/teen/alert";
+			return "comm/peer/alert";
 		}
 
 		teenCommService.cntPlus(boardId);
@@ -109,7 +111,7 @@ public class CommunityTeenController {
 		boolean isTeen = teenCommService.isTeen(memId);
 		if (!isTeen) {
 			model.addAttribute("message", "청소년만 접근 가능합니다.");
-			return "comm/peer/teen/alert";
+			return "comm/peer/alert";
 		}
 
 		return "comm/peer/teen/teenInsert";
@@ -206,17 +208,18 @@ public class CommunityTeenController {
 
 	@PostMapping("/createTeenReply.do")
 	@ResponseBody
-	public ResponseEntity<CommReplyVO> createCommReply(CommReplyVO commReplyVO, Principal principal) {
-		log.info("asd : " + commReplyVO + "dsa : " + principal.getName());
+	public ResponseEntity<CommReplyVO> createCommReply(CommReplyVO commReplyVO, Principal principal, HttpServletRequest request) {
 		if (principal == null || principal.getName().equals("anonymousUser")) {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
+		
+		log.info("@@@@@"+request.getParameter("redirectUrl"));
+		
 		String memIdStr = principal.getName();
 		int memId = Integer.parseInt(memIdStr);
 		commReplyVO.setMemId(memId);
 		CommReplyVO newReplyVO = this.teenCommService.insertReply(commReplyVO);
 		
-		log.info("@@@@"+newReplyVO.getBoardId());
 		
 		if (newReplyVO == null) {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);

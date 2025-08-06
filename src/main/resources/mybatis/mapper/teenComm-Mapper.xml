@@ -29,7 +29,7 @@
 	</resultMap>
 
 	<select id="selectTeenList"
-		resultType="kr.or.ddit.comm.vo.CommBoardVO">
+		resultType="kr.or.ddit.comm.vo.CommBoardVO" parameterType="String">
 		SELECT
 		B.BOARD_ID,
 		B.MEM_ID,
@@ -50,7 +50,7 @@
 		) AS BOARD_LIKE_CNT
 		FROM BOARD B
 		JOIN MEMBER M ON B.MEM_ID = M.MEM_ID
-		WHERE B.CC_ID = 'G09001' AND
+		WHERE B.CC_ID = #{ccId} AND
 		B.BOARD_DEL_YN = 'N'
 		ORDER BY
 		CREATED_AT ASC

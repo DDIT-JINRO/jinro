@@ -12,7 +12,7 @@ import kr.or.ddit.comm.vo.CommReplyVO;
 @Mapper
 public interface TeenCommMapper {
 
-	List<CommBoardVO> selectTeenList();
+	List<CommBoardVO> selectTeenList(String ccId);
 
 	CommBoardVO selectTeenDetail(CommBoardVO paramBoard);
 
