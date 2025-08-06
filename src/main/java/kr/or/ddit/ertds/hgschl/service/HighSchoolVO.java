@@ -10,7 +10,6 @@ public class HighSchoolVO {
 	private String hsCode; // 학교코드
 	private String hsName; // 학교명
 	private String hsRegion; // 시도명
-	private String hsJurisCode; // 관할 교육청 코드
 	private String hsFoundType; // 설립유형
 	private String hsZipcode; // 우편번호
 	private String hsAddr; // 기본주소
@@ -25,6 +24,13 @@ public class HighSchoolVO {
 	private Double hsLat; // 위도
 	private Double hsLot; // 경도
 
+	// --- 코드를 담는 필드 (INSERT/UPDATE/FILTER 시 사용) ---
+    private String hsRegionCode;    // 예: "G23001"
+    private String hsJurisCode;		 // 관할 교육청 코드
+    private String hsFoundTypeCode; // 예: "G21001"
+    private String hsCoeduTypeCode; // 예: "G24001"
+    private String hsTypeNameCode;  // 예: "G25001"
+    private String hsGeneralTypeCode;
 	// 필터조건
 	// 검색
     private String keyword;
@@ -39,8 +45,6 @@ public class HighSchoolVO {
     private List<String> coedTypeFilter;
 
 	// 페이징
-	private int currentPage;
-	private int size;
 	private int startRow;
 	private int endRow;
 

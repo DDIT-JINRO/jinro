@@ -55,8 +55,10 @@
 			    ON HS.HS_GENERAL_TYPE = GENERAL.CC_ID 
 			    AND GENERAL.CL_CODE = 'G26'
 			<where>
+				HS.HS_DEL_YN = 'N'
+				
 			    <if test="keyword != null and keyword != ''">
-			        HS.HS_NAME LIKE '%' || #{keyword} || '%'
+			        AND HS.HS_NAME LIKE '%' || #{keyword} || '%'
 			    </if>
 			    <if test="regionFilter != null and regionFilter.size() > 0">
 			        AND HS.HS_REGION_CODE IN
@@ -119,8 +121,10 @@
 	    	ON HS.HS_GENERAL_TYPE = GENERAL.CC_ID 
 	    	AND GENERAL.CL_CODE = 'G26'
 	    <where>
+	    	HS.HS_DEL_YN = 'N'
+	    	
 		    <if test="keyword != null and keyword != ''">
-		        HS.HS_NAME LIKE '%' || #{keyword} || '%'
+		        AND HS.HS_NAME LIKE '%' || #{keyword} || '%'
 		    </if>
 		    <if test="regionFilter != null and regionFilter.size() > 0">
 		        AND HS.HS_REGION_CODE IN
@@ -247,6 +251,7 @@
 		    AND GENERAL.CL_CODE = 'G26'
         WHERE 
         	HS_ID = #{hsId}
+        AND	HS.HS_DEL_YN = 'N'
     </select>
     
     <!-- 
@@ -264,7 +269,114 @@
 	        HIGH_SCHOOL_DEPT
 	    WHERE
 	        HS_ID = #{hsId}
+        AND	HS_DEL_YN = 'N'
 	    ORDER BY
 	        HSD_NAME
 	</select> 
+	
+	<!-- 
+	
+    // 고등학교 정보 논리적 삭제
+    public int highSchoolDelete(int hsId);
+    -->
+    <update id="highSchoolDelete" parameterType="int">
+    UPDATE	HIGH_SCHOOL
+    SET		HS_DEL_YN = 'Y'
+    WHERE	HS_ID = #{hsId}
+	</update>
+    <!--
+    // 학과 정보 논리적 삭제
+    public int highSchoolDeptDelete(int hsdId);
+	 -->
+	 <update id="highSchoolDeptDelete" parameterType="int">
+	    UPDATE	HIGH_SCHOOL_DEPT
+	    SET		HSD_DEL_YN = 'Y'
+	    WHERE	HSD_ID = #{hsdId}
+	</update>
+
+	<!-- 
+	// 고등학교 정보 입력 
+    public int highSchoolInsert(HighSchoolVO highSchoolVO);
+     -->
+	<insert id="highSchoolInsert" parameterType="kr.or.ddit.ertds.hgschl.service.HighSchoolVO">
+		INSERT INTO HIGH_SCHOOL  (
+	            HS_ID					
+			  , HS_CODE			
+			  , HS_NAME			
+			  , HS_REGION_CODE	
+			  , HS_JURIS_CODE
+			  , HS_FOUND_TYPE
+			  , HS_ZIPCODE					
+			  , HS_ADDR								
+			  , HS_TEL				
+			  , HS_HOMEPAGE								
+			  , HS_COEDU_TYPE				
+			  , HS_TYPE_NAME					
+			  , HS_GENERAL_TYPE						
+			  , HS_FOUND_DATE	
+			  , HS_ANNIV_AT
+			  , HS_LAT
+			  , HS_LOT	
+	) VALUES (
+	            HIGH_SCHOOL_SEQ.NEXTVAL
+	          , #{hsCode, jdbcType=VARCHAR}
+	          , #{hsName}
+	          , #{hsRegionCode}
+	          , #{hsJurisCode}
+	          , #{hsFoundTypeCode}
+	          , #{hsZipcode}
+	          , #{hsAddr}
+	          , #{hsTel, jdbcType=VARCHAR}
+	          , #{hsHomepage, jdbcType=VARCHAR}
+	          , #{hsCoeduTypeCode}
+	          , #{hsTypeNameCode}
+	          , #{hsGeneralTypeCode}
+	          , #{hsFoundDate, jdbcType=DATE}
+	          , #{hsAnnivAt, jdbcType=DATE}
+	          , #{hsLat, jdbcType=DOUBLE}
+	          , #{hsLot, jdbcType=DOUBLE}
+	)
+	</insert>
+	
+	<!-- 
+	//고등학교 학과 입력
+    public int highSchoolDeptInsert(HighSchoolDeptVO highSchoolDeptVO);
+     -->
+	 <insert id="highSchoolDeptInsert" parameterType="kr.or.ddit.ertds.hgschl.service.HighSchoolDeptVO">
+        INSERT INTO HIGH_SCHOOL_DEPT (HSD_ID, HS_ID, HSD_NAME)
+        VALUES (HIGH_SCHOOL_DEPT_SEQ.NEXTVAL, #{hsId}, #{hsdName})
+    </insert>
+    
+    <select id="selectAllHighSchoolsForCoords" resultType="kr.or.ddit.ertds.hgschl.service.HighSchoolVO">
+        SELECT HS_ID, HS_NAME, HS_ADDR, HS_LAT, HS_LOT
+        FROM HIGH_SCHOOL
+        WHERE HS_DEL_YN = 'N' AND HS_ADDR IS NOT NULL AND (HS_LAT IS NULL OR HS_LOT IS NULL)
+    </select>
+    
+	<!-- 
+	// 고등학교 정보 수정
+    public int highSchoolUpdate(HighSchoolVO highSchoolVO);
+     -->
+	<update id="highSchoolUpdate" parameterType="kr.or.ddit.ertds.hgschl.service.HighSchoolVO">
+	    UPDATE HIGH_SCHOOL
+	    <set>
+	        <if test="hsName != null"> HS_NAME = #{hsName}, </if>
+            <if test="hsRegionCode != null"> HS_REGION_CODE = #{hsRegionCode}, </if>
+            <if test="hsAddr != null"> HS_ADDR = #{hsAddr}, </if>
+	        </set>
+	    WHERE HS_ID = #{hsId}
+	</update>
+
+	<!-- 
+	//고등학교 학과 수정
+    public int highSchoolDeptUpdate(HighSchoolDeptVO highSchoolDeptVO);
+     -->
+     <update id="highSchoolDeptUpdate" parameterType="int">
+        UPDATE HIGH_SCHOOL_DEPT
+        <set>
+            <if test="hsdName != null"> HSD_NAME = #{hsdName}, </if>
+            <if test="hsdTrackName != null"> HSD_TRACK_NAME = #{hsdTrackName}, </if>
+        </set>
+        WHERE HSD_ID = #{hsdId}
+    </update>
 </mapper>

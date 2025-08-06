@@ -26,4 +26,24 @@ public interface HighSchoolService {
     //특정 고등학교의 학과 목록 조회
     public List<HighSchoolDeptVO> selectDeptsBySchoolId(int hsId);
     
+    // 고등학교 정보 논리적 삭제
+    public int highSchoolDelete(int hsId);
+    
+    // 학과 정보 논리적 삭제
+    public int highSchoolDeptDelete(int hsdId);
+
+    // 고등학교 정보 입력 
+    public int highSchoolInsert(HighSchoolVO highSchoolVO);
+    
+    // 고등학교 학과 입력
+    public int highSchoolDeptInsert(HighSchoolDeptVO highSchoolDeptVO);
+
+    // 좌표 일괄 업데이트용
+    public void updateAllHighSchoolCoordinates();
+
+    //고등학교 정보 수정
+    public int highSchoolUpdate(HighSchoolVO highSchoolVO);
+    
+    //고등학교 학과 정보 수정
+    public int highSchoolDeptUpdate(HighSchoolDeptVO highSchoolDeptVO);
 }
