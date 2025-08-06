@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.cnslt.resve.crsv.service.impl.CounselingReserveMapper">
+
+	<!-- 최종 상담신청  -->
+	<insert id="insertReservation" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+		INSERT
+		    INTO counseling (
+		        counsel_id,
+		        mem_id,
+		        counsel,
+		        counsel_category,
+		        counsel_method,
+		        counsel_title,
+		        counsel_description,
+		        counsel_status,
+		        counsel_req_date,
+		        counsel_req_time,
+		        counsel_url,
+		        counsel_reviewd,
+		        counsel_created_at,
+		        counsel_updated_at
+		    )
+		VALUES (COUNSEL_ID_SEQ.NEXTVAL,
+		        #{memId},
+		        #{counsel},
+		        #{counselCategory},
+		        #{counselMethod},
+		        #{counselTitle},
+		        #{counselDescription},
+		        #'S04001',
+		        #{counselReqDate},
+		        #{counselReqTime},
+		        #{counselUrl},
+		        #{counselReviewd},
+		        sysdate,
+		        sysdate
+		        )
+	</insert>
+
+	<!-- 회원 상담중복 검사 -->
+    <select id="selectDuplicateCounselingByMemId" resultType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+        SELECT count(*)
+        FROM COUNSELING
+        WHERE MEM_ID = #{memId}
+        AND COUNSEL_REQ_DATE = #{counselReqDate}
+        AND COUNSEL_REQ_TIME = #{counselReqTime}
+        AND COUNSEL_STATUS IN ('S04001', 'S04003')
+    </select>
+    
+    <!-- 상담사 예약  -->
+    <select id="selectReservationByCounselorAndTime" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+    SELECT count(*)
+        FROM COUNSEL
+        WHERE COUNSELOR_ID = #{counselorId}
+        AND COUNSEL_REQ_DATE = #{counselReqDate}
+        AND COUNSEL_REQ_TIME = #{counselReqTime}
+        AND COUNSEL_STATUS IN ('S04001', 'S04003')
+    </select>
+    
+    <!-- {vaRequestor} 상담사 id로 검색 -->
+    <select id="selectCounselorVacations" resultType="int" parameterType="kr.or.ddit.cnslt.resve.crsv.service.VacationVO">
+        SELECT count(*)
+        FROM VACATION_APPLICATION
+        WHERE VA_REQUESTOR = #{vaRequestor}
+        AND VA_CONFIRM = 'S03003'  AND #{vaStart} BETWEEN VA_START AND VA_END
+    </select>
+    
+    <update id="updateReservationStatus" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+        UPDATE COUNSEL
+        SET COUNSEL_STATUS = #{counselStatus},
+            COUNSEL_UPDATED_AT = SYSDATE
+        WHERE COUNSEL_ID = #{counselId}
+    </update>
+    
+</mapper>

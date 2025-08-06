@@ -251,6 +251,12 @@
 			<version>4.12.0</version> <!-- 또는 안정적인 최신 버전 -->
 		</dependency>
 		<!-- 구르미 API 관련 디펜던시 끝-->
+		<!--레디스-->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<!--레디스-->
 	</dependencies>
 
 	<build>
