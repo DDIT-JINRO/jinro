@@ -1,9 +1,27 @@
 package kr.or.ddit.cnslt.resve.crsv.service.impl;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
+import kr.or.ddit.cnslt.resve.crsv.service.VacationVO;
 
 @Mapper
 public interface CounselingReserveMapper {
+	
+	 // 1. 상담 예약 정보 삽입
+    int insertReservation(CounselingVO counselingVO);
+
+    // 2. 회원의 특정 시간대 중복 예약 확인(상태 : 신청, 확정) count로 중복 확인
+    int selectDuplicateCounselingByMemId(CounselingVO counselingVO);
+
+    // 3. 상담사의 특정 시간대 예약 가능 여부 확인
+    int selectReservationByCounselorAndTime(CounselingVO counselingVO);
+    
+    // 4. 상담사의 휴가 기간 조회 (휴가 테이블 사용)
+    int selectCounselorVacations(VacationVO vacationVO);
+
+    // 5. 상담 예약 상태 업데이트
+    int updateReservationStatus(CounselingVO counselingVO);
 }
