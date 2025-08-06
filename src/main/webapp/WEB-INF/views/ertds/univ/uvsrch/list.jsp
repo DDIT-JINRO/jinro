@@ -28,7 +28,7 @@
 <div>
 	<div class="public-wrapper">
 		<div class="public-wrapper-main">
-			<form method="get" action="/empt/enp/enterprisePosting.do">
+			<form method="get" action="/ertds/univ/uvsrch/selectUnivList.do">
 				<div class="com-default-search">
 					<div class="com-select-wrapper">
 						<svg class="com-select-arrow" xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +38,7 @@
 								clip-rule="evenodd" />
             </svg>
 					</div>
-					<input type="search" name="keyword" placeholder="대학 명으로 검색">
+					<input type="search" name="keyword" placeholder="대학명으로 검색">
 					<button class="com-search-btn" type="button">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
 							fill="currentColor" width="20" height="20">
@@ -59,7 +59,7 @@
 							<div class="com-filter-options">
 								<c:forEach var="region" items="${codeVORegionList}">
 									<label class="com-filter-item">
-										<input type="checkbox" name="regionId" value="${region.ccId}">
+										<input type="checkbox" name="regionIds" value="${region.ccId}">
 										<span>${region.ccEtc}</span>
 									</label>
 								</c:forEach>
@@ -68,7 +68,7 @@
 							<div class="com-filter-options">
 								<c:forEach var="type" items="${codeVOUniversityTypeList}">
 									<label class="com-filter-item">
-										<input type="checkbox" name="typeId" value="${type.ccId}">
+										<input type="checkbox" name="typeIds" value="${type.ccId}">
 										<span>${type.ccName}</span>
 									</label>
 								</c:forEach>
@@ -77,7 +77,7 @@
 							<div class="com-filter-options">
 								<c:forEach var="gubun" items="${codeVOUniversityGubunList}">
 									<label class="com-filter-item">
-										<input type="checkbox" name="gubunId" value="${gubun.ccId}">
+										<input type="checkbox" name="gubunIds" value="${gubun.ccId}">
 										<span>${gubun.ccName}</span>
 									</label>
 								</c:forEach>
@@ -155,8 +155,9 @@
 					<!-- Previous -->
 					<li><a
 						href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${articlePage.keyword}
-						<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
-						<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
+						<c:forEach var='regionIds' items='${paramValues.regionIds}'>&regionIds=${regionIds}</c:forEach>
+						<c:forEach var='typeIds' items='${paramValues.typeIds}'>&typeIds=${typeIds}</c:forEach>
+						<c:forEach var='gubunIds' items='${paramValues.gubunIds}'>&gubunIds=${gubunIds}</c:forEach>
 						&hiringStatus=${param.hiringStatus}"	
 						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
 							← Previous </a></li>
@@ -166,8 +167,9 @@
 						end="${articlePage.endPage}">
 						<li><a
 							href="${articlePage.url}?currentPage=${pNo}&keyword=${articlePage.keyword}
-							<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
-							<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
+							<c:forEach var='regionIds' items='${paramValues.regionIds}'>&regionIds=${regionIds}</c:forEach>
+							<c:forEach var='typeIds' items='${paramValues.typeIds}'>&typeIds=${typeIds}</c:forEach>
+							<c:forEach var='gubunIds' items='${paramValues.gubunIds}'>&gubunIds=${gubunIds}</c:forEach>
 							&hiringStatus=${param.hiringStatus}"
 							class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
 								${pNo} </a></li>
@@ -176,8 +178,9 @@
 					<!-- Next -->
 					<li><a
 						href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
-						<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
-						<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
+						<c:forEach var='regionIds' items='${paramValues.regionIds}'>&regionIds=${regionIds}</c:forEach>
+						<c:forEach var='typeIds' items='${paramValues.typeIds}'>&typeIds=${typeIds}</c:forEach>
+						<c:forEach var='gubunIds' items='${paramValues.gubunIds}'>&gubunIds=${gubunIds}</c:forEach>
 						&hiringStatus=${param.hiringStatus}"				
 						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
 							Next → </a></li>

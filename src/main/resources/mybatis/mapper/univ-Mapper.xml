@@ -21,7 +21,34 @@
 				FROM UNIVERSITY U
 				LEFT JOIN COM_CODE CC1 ON U.UNIV_TYPE = CC1.CC_ID
 				LEFT JOIN COM_CODE CC2 ON U.UNIV_GUBUN = CC2.CC_ID
-				ORDER BY U.UNIV_NAME
+				<where>
+					<if test="keyword != null and keyword != ''">
+		                AND (U.UNIV_NAME LIKE '%' || #{keyword} || '%')
+		            </if>
+		            <if test="regionIds != null and regionIds.size() > 0">
+			            AND (
+			            <foreach collection="regionIds" item="id" separator="OR">
+			                U.UNIV_REGION LIKE (SELECT CC_ETC || '%' FROM COM_CODE WHERE CC_ID = #{id})
+			            </foreach>
+			            )
+			        </if>
+		            <if test="typeIds != null and typeIds.size() > 0">
+			            AND (
+			            <foreach collection="typeIds" item="id" separator="OR">
+			                U.UNIV_TYPE = #{id}
+			            </foreach>
+			            )
+			        </if>
+		            <if test="gubunIds != null and gubunIds.size() > 0">
+			            AND (
+			            <foreach collection="gubunIds" item="id" separator="OR">
+			                U.UNIV_GUBUN = #{id}
+			            </foreach>
+			            )
+			        </if>
+		        </where>
+		        ORDER BY U.UNIV_NAME
+		
 			) sub
 			WHERE ROWNUM <![CDATA[<=]]> #{endNo}
 		)
@@ -32,16 +59,31 @@
 	  SELECT COUNT(*)
 	  FROM UNIVERSITY U
 	  <where>
-	    <if test="univRegion != null and univRegion != ''">
-	      U.UNIV_REGION = #{univRegion}
-	    </if>
-	    <if test="univType != null and univType != ''">
-	      AND U.UNIV_TYPE = #{univType}
-	    </if>
-	    <if test="univGubun != null and univGubun != ''">
-	      AND U.UNIV_GUBUN = #{univGubun}
-	    </if>
-	  </where>
+			<if test="keyword != null and keyword != ''">
+                AND (U.UNIV_NAME LIKE '%' || #{keyword} || '%')
+            </if>
+            <if test="regionIds != null and regionIds.size() > 0">
+	            AND (
+	            <foreach collection="regionIds" item="id" separator="OR">
+	                U.UNIV_REGION LIKE (SELECT CC_ETC || '%' FROM COM_CODE WHERE CC_ID = #{id})
+	            </foreach>
+	            )
+	        </if>
+            <if test="typeIds != null and typeIds.size() > 0">
+	            AND (
+	            <foreach collection="typeIds" item="id" separator="OR">
+	                U.UNIV_TYPE = #{id}
+	            </foreach>
+	            )
+	        </if>
+            <if test="gubunIds != null and gubunIds.size() > 0">
+	            AND (
+	            <foreach collection="gubunIds" item="id" separator="OR">
+	                U.UNIV_GUBUN = #{id}
+	            </foreach>
+	            )
+	        </if>
+        </where>
 	</select>
 	
 	<select id="selectBookMarkVO" parameterType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO" resultType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO">

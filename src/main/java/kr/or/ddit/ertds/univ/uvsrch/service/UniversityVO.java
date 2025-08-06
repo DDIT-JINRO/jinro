@@ -16,9 +16,9 @@ public class UniversityVO {
 	private String univAddr;
 	
 	private String keyword;
-	private List<String> regionId; 		//대학 위치 선택
-	private List<String> typeId; 		//대학 타입 선택
-	private List<String> gubunId;	 	//대학 구분 선택
+	private List<String> regionIds; 		//대학 위치 선택
+	private List<String> typeIds; 		//대학 타입 선택
+	private List<String> gubunIds;	 	//대학 구분 선택
 	
 	// 목록 조회시 페이징 처리를 위한 필드 추가
 	private int currentPage;
