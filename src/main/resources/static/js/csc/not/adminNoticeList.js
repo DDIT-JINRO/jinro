@@ -3,7 +3,7 @@ function formatDateMMDD(iso) {
 	const d = new Date(iso);
 	const mm = String(d.getMonth() + 1).padStart(2, '0');
 	const dd = String(d.getDate()).padStart(2, '0');
-	const fullYear = String(d.getFullYear()); 
+	const fullYear = String(d.getFullYear());
 	return `${fullYear}. ${mm}. ${dd}`;
 }
 
@@ -179,7 +179,9 @@ function filedownload(fileGroupId, fileSeq) {
 			responseType: 'blob'
 		})
 		.then(response => {
-			const blob = new Blob([response.data]);
+			const headers = response.headers;
+			const contentType = headers['content-type'] || 'application/octet-stream';
+			const blob = new Blob([response.data], {type:contentType});
 			const url = window.URL.createObjectURL(blob);
 			const atag = document.createElement('a');
 			atag.href = url;
@@ -222,7 +224,7 @@ function insertOrUpdate() {
 
 	if (document.querySelector('.info-table').style.display === 'none') {
 
-		
+
 		axios.post('/csc/not/admin/insertNotice', fd)
 			.then(() => {
 				resetDetail();

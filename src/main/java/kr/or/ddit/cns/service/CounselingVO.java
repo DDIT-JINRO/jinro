@@ -1,6 +1,7 @@
 package kr.or.ddit.cns.service;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -21,9 +22,17 @@ public class CounselingVO {
 	private Date counselUpdatedAt;
 	private int counselId;
 
+	private CounselingLogVO counselingLog;
+
+	private String memName;
+	private String memEmail;
+	private String memPhoneNumber;
+	private String memBirth;
+	private String memGen;
+
 	// 검색 키워드
 	private String keyword;
-	private String stauts;
+	private String status;
 
 	// 필터링 연도
 	private String year;

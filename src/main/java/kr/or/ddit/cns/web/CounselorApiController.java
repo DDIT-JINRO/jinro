@@ -1,18 +1,72 @@
 package kr.or.ddit.cns.web;
 
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.or.ddit.cns.service.CounselingLogVO;
+import kr.or.ddit.cns.service.CounselingVO;
+import kr.or.ddit.cns.service.CounselorService;
+import kr.or.ddit.util.ArticlePage;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/cns")
 public class CounselorApiController {
 
+	@Autowired
+	CounselorService counselorService;
 
+	/**
+	 * 상담일지 출력을 위해 상담완료된 상담 목록 조회
+	 * @param counselingVO
+	 * @param counselStr
+	 * @return
+	 */
 	@GetMapping("/counselList.do")
-	public ResponseEntity<?> counselList(){
-		return null;
+	public ResponseEntity<ArticlePage<CounselingVO>> counselList(CounselingVO counselingVO, @AuthenticationPrincipal String counselStr){
+		counselingVO.setCounsel(Integer.parseInt(counselStr));
+		ArticlePage<CounselingVO> articlePage = this.counselorService.selectCompletedCounselList(counselingVO);
+		return ResponseEntity.ok(articlePage);
+	}
+
+	@GetMapping("/counselDetail.do")
+	public ResponseEntity<CounselingVO> counselDetail(@RequestParam int counselId){
+		CounselingVO counselingVO = counselorService.selectCounselDetail(counselId);
+		return ResponseEntity.ok(counselingVO);
+	}
+
+	@PostMapping(value = "/updateCnsLog.do",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<String> updateCnsLog(@ModelAttribute CounselingLogVO counselingLogVO){
+		log.info("@@@@@@@@@@@@@@@@@updateCnsLog -> counselingLogVO : "+counselingLogVO);
+		boolean result = this.counselorService.updateCnsLog(counselingLogVO);
+		String status = counselingLogVO.getClConfirm();
+
+		if(result && status == null) {
+			return ResponseEntity.ok("저장완료");
+		}
+		if(result && status.equals("S03001")) {
+			return ResponseEntity.ok("제출완료");
+		}
+
+		return ResponseEntity.internalServerError().build();
+	}
+
+	@GetMapping("/counsel/deleteFile.do")
+	public ResponseEntity<Boolean> deleteFile(@RequestParam Long fileGroupId, @RequestParam int seq){
+		return ResponseEntity.ok(this.counselorService.deleteFile(fileGroupId, seq));
 	}
 
 }
