@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.main.service.MemberVO;
+import kr.or.ddit.rdm.service.RoadmapResultRequestVO;
 import kr.or.ddit.rdm.service.RoadmapStepVO;
 import kr.or.ddit.rdm.service.RoadmapVO;
 
@@ -98,18 +99,12 @@ public interface RoadmapMapper {
 	void insertCompleteRoadmap(int memId);
 
 	/**
-	 * 특정 회원의 정보를 조회
-	 * @param memId 회원 식별 번호
-	 * @return 조회된 회원 정보가 담긴 {@link MemberVO} 객체
-	 */
-	String selectMember(int memId);
-
-	/**
 	 * 로드맵 완료시 특정 회원의 포인트 추가
 	 * @param parameter 회원 ID, 추가 포인트양을 포함하는 Map
 	 * @return 업데이트된 행의 수
 	 */
 	int updateUserPoint(Map<String, Object> parameter);
 
+	RoadmapResultRequestVO selectResultData(int memId);
 
 }

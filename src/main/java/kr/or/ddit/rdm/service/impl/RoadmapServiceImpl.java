@@ -8,10 +8,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.google.genai.Client;
+import com.google.genai.types.GenerateContentResponse;
 
 import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
+import kr.or.ddit.rdm.service.RoadmapResultRequestVO;
 import kr.or.ddit.rdm.service.RoadmapService;
 import kr.or.ddit.rdm.service.RoadmapStepVO;
 import kr.or.ddit.rdm.service.RoadmapVO;
@@ -31,6 +36,9 @@ public class RoadmapServiceImpl implements RoadmapService {
 	private final Set<String> ALLOWED_TABLE_NAMES = new HashSet<>(
 			Arrays.asList("INTEREST_CN", "APTITUDE_TEST", "WORLDCUP", "BOOKMARK", "CHAT_MEMBER", "COUNSELING", "BOARD",
 					"RESUME", "SELF_INTRO", "MOCK_INTERVIEW_HISTORY"));
+	
+	@Value("${DEV.AI.GEMINI.KEY}")
+	private String geminiApiKey;
 
 	@Autowired
 	RoadmapMapper roadmapMapper;
@@ -224,12 +232,103 @@ public class RoadmapServiceImpl implements RoadmapService {
 		    throw new CustomException(ErrorCode.INVALID_USER);
 		}
 		
-		String memName = this.roadmapMapper.selectMember(memId);
-		if (memName == null) {
+		RoadmapResultRequestVO roadmapResultRequestVO = this.roadmapMapper.selectResultData(memId);
+		String result = geminiAnalysis(roadmapResultRequestVO);
+		
+		if (result == null) {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
 		
-		return memName;
+		return result;
 	}
+	
+	@Override
+    public String geminiAnalysis(RoadmapResultRequestVO roadmapResultRequest) {
+		Client client = Client.builder().apiKey(geminiApiKey).build();
+
+		String prompt = buildPrompt(roadmapResultRequest);
+		
+		GenerateContentResponse response = client.models.generateContent("gemini-2.5-flash", prompt, null);
+
+    	return response.text();
+    }
+    
+	@Override
+	public String buildPrompt(RoadmapResultRequestVO roadmapResultRequest) {
+    	StringBuilder prompt = new StringBuilder();
+    	
+    	prompt.append("당신은 15년 경력의 진로 상담사입니다.")
+    		  .append("청소년과 청년들을 대상으로 상담 결과를 제출할 예정입니다.\n")
+    		  .append("상담을 받은 대상의 연령대는 " + roadmapResultRequest.getMemAge() + "세 입니다. \n\n")
+    		  .append("상담 데이터의 분류에는 총 6가지의 분류가 있습니다. \n")
+    		  .append("======== 상담 대상의 상담 결과 도출을 위한 데이터 시작 ======= \n")
+    		  .append("1. INTEREST_CN : 상담 대상의 관심사 키워드 ::: " + roadmapResultRequest.getInterestCn() + "\n")
+    		  .append("2. SELF_INTRO : 상담 대상이 작성했던 자기소개서의 질문 항목에 대한 내용 ::: " + roadmapResultRequest.getSiqJob() + "\n")
+    		  .append("3. WORLDCUP : 상담 대상이 직업 월드컵의 우승 결과로 선택된 선호하는 직업 ::: " + roadmapResultRequest.getWdResult() + "\n")
+    		  .append("4. BOOKMARK : 상담 대상이 평소에 즐겨 찾던 직업명 ::: " + roadmapResultRequest.getBookmarkJob() + "\n")
+    		  .append("5. APTITUDE_TEST : " + roadmapResultRequest.getAptitudeTestName() + "의 검사 결과 데이터 :::" + roadmapResultRequest.getAptitudeResult() + "\n")
+    		  .append("6. RECOMMEND_KEYWORD : 상담 대상의 기존 추천 직업 키워드 :::" + roadmapResultRequest.getRecommendKeyword() + "\n")
+    		  .append("======== 상담 대상의 상담 결과 도출을 위한 데이터 종료 ======= \n\n")
+    		  .append("당신은 위와 같은 데이터를 바탕으로 3가지 분석 결과를 도출 하려고 합니다. \n")
+    		  .append("======== 상담 대상의 상담 결과 필요 내용 시작 ======= \n")
+    		  .append("1. 상담 대상의 관심분야 분석\n")
+    		  .append("1-1. 상담 대상이 특히 관심있어하는 관심분야 키워드 2종류\n")
+    		  .append("1-2. 이러한 키워드 2종류가 두드러지게 나타나는 데이터 분류(INTEREST_CN, MOCK_INTERVIEW_HISTORY, SELF_INTRO, WORLDCUP, BOOKMARK, APTITUDE_TEST 중 하나)\n")
+    		  .append("2. 상담 대상에게 추천하는 추천 직업 5가지\n")
+    		  .append("2-1. 추천 직업명과 추천 직업에 대한 간단한 설명 및 관련 역량 한글로 100글자 내외\n")
+    		  .append("2-2. 추천 직업 이외의 관련 산업분야 2가지\n")
+    		  .append("3. 상담 대상에게 전하는 추가 제언\n")
+    		  .append("- 상담 대상의 관심 분야에 대한 구체적인 학습 계획\n")
+    		  .append("- 추천 직업에 대하여 사용자가 쌓으면 좋은 경험\n")
+    		  .append("- 상담 분석 결과를 통한 상담 대상이 강화하면 좋은 필요 역량과 강화 방법\n")
+    		  .append("======== 상담 대상의 상담 결과 필요 내용 종료 ======= \n\n")
+    		  .append("=== 분석 요청 사항 ===\n")
+    		  .append("위 데이터를 종합적으로 분석하여 다음과 같은 JSON 형식으로 상세한 분석을 제공해주세요.\\n")
+    		  .append("청소년/청년 대상이므로 격려와 성장 중심의 건설적 피드백을 부탁드립니다:\n\n")
+    		  .append("```json\n")
+    		  .append("{ \n")
+    		  .append("  \"interest\" : {  \n")
+    		  .append("    \"interestKeyword\" : [\"관심분야1\", \"관심분야2\"],  \n")
+    		  .append("    \"interestDataType\" : \"데이터 분류\"  \n")
+    		  .append("  }, \n")
+    		  .append("  \"recommendJob\" : [ \n")
+    		  .append("    { \n")
+    		  .append("      \"jobName\" : \"직업명1\", \n")
+    		  .append("      \"jobDetail\" : \"추천 직업에 대한 간단한 설명 및 관련 역량 내용\", \n")
+    		  .append("    }, \n")
+    		  .append("    { \n")
+    		  .append("      \"jobName\" : \"직업명2\", \n")
+    		  .append("      \"jobDetail\" : \"추천 직업에 대한 간단한 설명 및 관련 역량 내용\", \n")
+    		  .append("    }, \n")
+    		  .append("    { \n")
+    		  .append("      \"jobName\" : \"직업명3\", \n")
+    		  .append("      \"jobDetail\" : \"추천 직업에 대한 간단한 설명 및 관련 역량 내용\", \n")
+    		  .append("    }, \n")
+    		  .append("    { \n")
+    		  .append("      \"jobName\" : \"직업명4\", \n")
+    		  .append("      \"jobDetail\" : \"추천 직업에 대한 간단한 설명 및 관련 역량 내용\", \n")
+    		  .append("    }, \n")
+    		  .append("    { \n")
+    		  .append("      \"jobName\" : \"직업명5\", \n")
+    		  .append("      \"jobDetail\" : \"추천 직업에 대한 간단한 설명 및 관련 역량 내용\", \n")
+    		  .append("    }, \n")
+    		  .append("  ], \n")
+    		  .append("  \"related\" : [\"관련 산업분야1\", \"관련 산업분야2\"],  \n")
+    		  .append("  \"suggest\" : {  \n")
+    		  .append("    \"planner\" : \"구체적인 학습 계획\",  \n")
+    		  .append("    \"experience\" : \"쌓으면 좋은 경험\",  \n")
+    		  .append("    \"enhance\" : \"강화하면 좋은 필요 역량과 강화 방법\",  \n")
+    		  .append("  } \n")
+    		  .append("} \n")
+    		  .append("```\n\n");
+    	
+    	prompt.append("⚠️ 중요 지침:\n");
+		prompt.append("- 구체적이고 실행 가능한 개선 방안 제시\n");
+		prompt.append("- JSON 형식을 정확히 준수 (문법 오류 금지)\n");
+		prompt.append("- 상담 대상에게 전하는 추가 제언은 각 planner, experience, enhance별로 200자 제한으로 상세하게 적어주세요.\n");
+		prompt.append("- interestDataType의 경우 INTEREST_CN뿐만이 아니라 다양한 데이터의 분석을 통하여 결정되어야 합니다.\n");
+    		
+    	return prompt.toString();
+    }
 
 }
