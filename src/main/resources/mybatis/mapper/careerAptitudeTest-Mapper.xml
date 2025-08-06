@@ -33,4 +33,36 @@
 		DELETE FROM TEMPORARY_SAVE WHERE MEM_ID = #{memId} AND TS_TYPE = #{tsType}
 	</update>
 	
+	<insert id="insertAptitudeResult" parameterType="kr.or.ddit.pse.cat.service.AptitudeTestVO">
+		INSERT INTO APTITUDE_TEST (
+			AT_ID
+			, MEM_ID
+			, AT_TEST_NO
+			, AT_DATE
+			, AT_RESULT_URL
+			, AT_RESULT_TEXT
+		) VALUES (
+			(SELECT NVL(MAX(AT_ID), 0) + 1 FROM APTITUDE_TEST)
+			, #{memId}
+			, #{atTestNo}
+			, SYSDATE
+			, #{atResultUrl}
+			, #{atResultText}
+		)
+	</insert>
+	
+	<insert id="insertRecommendKeyword" parameterType="kr.or.ddit.admin.las.service.RecommendKeywordVO">
+		INSERT INTO RECOMMEND_KEYWORD (
+		    RK_ID
+		    , MEM_ID
+		    , RK_NAME
+		    , RK_CREATED_AT
+		) VALUES (
+		    (SELECT NVL(MAX(RK_ID), 0) + 1 FROM RECOMMEND_KEYWORD)
+		  , #{memId}
+		  , #{rkName}
+		  , SYSDATE
+		)
+	</insert>
+	
 </mapper>

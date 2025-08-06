@@ -57,5 +57,9 @@ public interface RoadmapService {
 	 * @return 아직 어떤 데이터가 나올지 모르겠습니다.
 	 */
 	public String selectResultData(String memId);
+	
+	public String geminiAnalysis(RoadmapResultRequestVO roadmapResultRequest);
+	
+	public String buildPrompt(RoadmapResultRequestVO roadmapResultRequest);
 
 }

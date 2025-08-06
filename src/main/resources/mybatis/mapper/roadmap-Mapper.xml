@@ -211,12 +211,155 @@
 		VALUES(ROADMAP_SEQ.NEXTVAL, #{memId}, 11, 'Y', SYSDATE, SYSDATE, SYSDATE)
 	</insert>
 	
-	<select id="selectMember" parameterType="int" resultType="String">
+	<select id="selectResultData" parameterType="int" resultType="kr.or.ddit.rdm.service.RoadmapResultRequestVO">
 		SELECT
-			MEM_NAME
+		    (
+		        SELECT
+		            TRUNC((SYSDATE - MEM_BIRTH) / 365) + 1
+		        FROM
+		            MEMBER
+		        WHERE
+		            MEM_ID = #{memId}
+		    ) AS MEM_AGE
+		  , (
+		        SELECT
+		            LISTAGG(CC_NAME, ', ') WITHIN GROUP(
+		            ORDER BY
+		                IC_ID DESC
+		            )
+		        FROM
+		            (
+		                SELECT
+		                    C.CC_NAME
+		                  , I.IC_ID
+		                FROM
+		                         COM_CODE C
+		                    JOIN INTEREST_CN I ON C.CC_ID = I.IC_CODE
+		                WHERE
+		                    I.MEM_ID = #{memId}
+		                ORDER BY
+		                    I.IC_ID DESC
+		            )
+		        WHERE
+		            ROWNUM <![CDATA[<=]]> 3
+		    ) AS INTEREST_CN
+		  , (
+		        SELECT
+		            CC_NAME
+		        FROM
+		            COM_CODE
+		        WHERE
+		            CC_ID IN (
+		                SELECT
+		                    C.SIQ_JOB
+		                FROM
+		                    SELF_INTRO         A
+		                    LEFT JOIN SELF_INTRO_CONTENT B ON A.SI_ID = B.SI_ID
+		                    LEFT JOIN SELF_INTRO_Q       C ON B.SIQ_ID = C.SIQ_ID
+		                WHERE
+		                        A.MEM_ID = 1
+		                    AND A.SI_STATUS = '완료'
+		                    AND C.SIQ_JOB IS NOT NULL
+		                    AND A.SI_UPDATED_AT = (
+		                        SELECT
+		                            MAX(SI_UPDATED_AT)
+		                        FROM
+		                            SELF_INTRO
+		                        WHERE
+		                            MEM_ID = #{memId}
+		                    )
+		            )
+		    ) AS SIQ_JOB
+		  , (
+		        SELECT
+		            J.JOB_NAME
+		        FROM
+		                 JOBS J
+		            JOIN WORLDCUP W ON J.JOB_CODE = W.WD_RESULT
+		        WHERE
+		                W.MEM_ID = 1
+		            AND W.WD_ID = (
+		                SELECT
+		                    MAX(WD_ID)
+		                FROM
+		                    WORLDCUP
+		                WHERE
+		                    MEM_ID = #{memId}
+		            )
+		    ) AS WD_RESULT
+		  , (
+		        SELECT
+		            LISTAGG(B.JOB_NAME, ', ') WITHIN GROUP(
+		            ORDER BY
+		                B.JOB_NAME
+		            )
+		        FROM
+		                 JOBS B
+		            JOIN BOOKMARK A ON B.JOB_TARGET_ID = A.BM_TARGET_ID
+		        WHERE
+		                A.MEM_ID = #{memId}
+		            AND A.BM_CATEGORY_ID = 'G03004'
+		    ) AS BOOKMARK_JOB
+		  , (
+		        SELECT
+		            CASE
+		                WHEN AT_TEST_NO IN ( 20, 21 ) THEN
+		                    '직업적성검사'
+		                WHEN AT_TEST_NO IN ( 24, 25 ) THEN
+		                    '직업가치관검사'
+		                WHEN AT_TEST_NO IN ( 30, 31 ) THEN
+		                    '직업흥미검사(K)'
+		            END
+		        FROM
+		            APTITUDE_TEST
+		        WHERE
+		                MEM_ID = #{memId}
+		            AND AT_ID = (
+		                SELECT
+		                    MAX(AT_ID)
+		                FROM
+		                    APTITUDE_TEST
+		            )
+		    ) AS APTITUDE_TEST_NAME
+		  , (
+		        SELECT
+		            AT_RESULT_TEXT
+		        FROM
+		            (
+		                SELECT
+		                    AT_RESULT_TEXT
+		                FROM
+		                    APTITUDE_TEST
+		                WHERE
+		                    MEM_ID = #{memId}
+		                ORDER BY
+		                    AT_ID DESC
+		            )
+		        WHERE
+		            ROWNUM = 1
+		    ) AS APTITUDE_RESULT
+		    , (
+		        SELECT
+		            LISTAGG(RK_NAME, ', ') WITHIN GROUP(
+		            ORDER BY
+		                RK_ID DESC
+		            )
+		        FROM
+		            (
+		                SELECT
+		                    RK_NAME
+		                  , RK_ID
+		                FROM
+		                    RECOMMEND_KEYWORD
+		                WHERE
+		                    MEM_ID = 1
+		                ORDER BY
+		                    RK_ID DESC
+		            )
+		        WHERE
+		            ROWNUM <![CDATA[<=]]> 3
+		    ) AS RECOMMEND_KEYWORD
 		FROM
-			MEMBER
-		WHERE
-			MEM_ID = #{memId}
+		    DUAL;
 	</select>
 </mapper>

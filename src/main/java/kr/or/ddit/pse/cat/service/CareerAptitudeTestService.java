@@ -14,4 +14,6 @@ public interface CareerAptitudeTestService {
 
 	public void delTempSaveTest(String no, String memId);
 
+	public void insertResultKeyword(String url, String memId, String testNo);
+
 }
