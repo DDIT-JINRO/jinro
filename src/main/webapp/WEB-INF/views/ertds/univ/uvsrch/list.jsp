@@ -110,9 +110,8 @@
 					<%-- 펼치기/접기 아이콘 자리 --%>
 				</div>
 
-				<c:forEach var="university" items="${articlePage.content}"
-					varStatus="status">
-					<div class="accordion-item">
+				<c:forEach var="university" items="${articlePage.content}" varStatus="status">
+					<div class="univ-item" data-univ-id="${university.univId}">
 						<div class="accordion-header">
 							<div class="company-info-item" style="flex: 2;">${university.univName}</div>
 							<div class="company-info-item" style="flex: 0.5;">${university.univRegion}</div>

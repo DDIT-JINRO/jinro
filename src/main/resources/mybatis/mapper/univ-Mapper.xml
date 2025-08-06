@@ -8,11 +8,12 @@
 			SELECT sub.*, ROWNUM AS RNUM
 			FROM ( 
 				SELECT
-				    CASE
-				        WHEN UNIV_CAMPUS IN ('제2캠퍼스', '제3캠퍼스', '국제캠퍼스', '서울캠퍼스')
-				        THEN UNIV_NAME || '[' || UNIV_CAMPUS || ']'
-				        ELSE UNIV_NAME
-				    END AS UNIV_NAME
+					UNIV_ID
+				    , CASE
+						WHEN UNIV_CAMPUS IN ('제2캠퍼스', '제3캠퍼스', '국제캠퍼스', '서울캠퍼스')
+						THEN UNIV_NAME || '[' || UNIV_CAMPUS || ']'
+						ELSE UNIV_NAME
+				      END AS UNIV_NAME
 				    , COALESCE(CC1.CC_NAME, UNIV_TYPE) AS UNIV_TYPE
 				    , COALESCE(CC2.CC_NAME, UNIV_GUBUN) AS UNIV_GUBUN
 				    , UNIV_URL

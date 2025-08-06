@@ -245,19 +245,19 @@
 }
 
 /* 개별 기업 항목 */
-.accordion-item {
+.univ-item {
     border: 1px solid #e5e7eb;
     border-radius: 10px;
     background-color: #fff;
     margin-bottom: 10px;
 }
 
-.accordion-item:last-child {
+.univ-item:last-child {
     border-bottom: none; /* 마지막 항목의 하단 보더 제거 */
 }
 
 /* 각 기업 항목의 헤더 (펼치기/접기 버튼 포함) */
-.accordion-item .accordion-header {
+.univ-item .accordion-header {
     display: flex;
     align-items: center;
     padding: 15px 20px;
@@ -265,7 +265,7 @@
     transition: background-color 0.2s ease;
 }
 
-.accordion-item .accordion-header:hover {
+.univ-item .accordion-header:hover {
     background-color: #f9fafb;
 }
 
@@ -355,7 +355,7 @@
 }
 
 /* 아코디언 내용이 열렸을 때 */
-.accordion-item.open .accordion-content {
+.univ-item.open .accordion-content {
     max-height: 500px; /* 충분히 큰 값으로 설정하여 내용이 다 보이도록 */
     padding: 20px; /* 열릴 때 패딩 적용 */
     border-radius: 10px;
