@@ -4,10 +4,14 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.or.ddit.com.ComCodeVO;
@@ -76,6 +80,36 @@ public class EmploymentAdvertisementController {
 		model.addAttribute("bookMarkVOList",bookMarkVOList);
 		
 		return "empt/ema/employmentAdvertisement";
+	}
+	
+	@PostMapping("/ema/employmentAdvertisementUpdate.do")
+	public ResponseEntity<String> employmentAdvertisementUpdate(@RequestBody HireVO hireVO){
+		
+		log.info("hireVO"+hireVO);
+		
+		int hireId = employmentAdvertisementService.checkHireByHireId(hireVO);
+		
+		hireVO.setHireId(hireId);
+		
+		int cnt = employmentAdvertisementService.updateEmploymentAdvertisement(hireVO);
+		
+		if(cnt >0) {
+			return ResponseEntity.ok("sucess");
+		}else {
+			return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body("처리중 문제발생");
+		}
+	}
+	
+	@PostMapping("/ema/employmentAdvertisementDelete.do")
+	public ResponseEntity<String> employmentAdvertisementDelete(@RequestBody HireVO hireVO){
+		log.info("hireVO"+hireVO);
+		int cnt = employmentAdvertisementService.deleteEmploymentAdvertisement(hireVO);
+		if(cnt>0) {
+			return ResponseEntity.ok("sucess");
+		}else {
+			return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body("처리중 문제발생");
+		}
+		
 	}
 	
 }

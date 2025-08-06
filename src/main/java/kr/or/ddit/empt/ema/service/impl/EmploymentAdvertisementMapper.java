@@ -24,4 +24,12 @@ public interface EmploymentAdvertisementMapper {
 
 	List<String> getAllUserIds();
 
+	HireVO checkHireByHireId(HireVO hireVO);
+
+	int getMaxHireId();
+
+	int updateEmploymentAdvertisement(HireVO hireVO);
+
+	int deleteEmploymentAdvertisement(HireVO hireVO);
+
 }

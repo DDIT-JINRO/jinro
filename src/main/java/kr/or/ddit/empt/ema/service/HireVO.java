@@ -10,7 +10,6 @@ import lombok.Data;
 
 @Data
 public class HireVO {
-	private String hireClassCode;
 	private int hireId;
 	private int cpId;
 	private String hireTitle;
@@ -19,6 +18,7 @@ public class HireVO {
 	private Date hireStartDate;
 	private Date hireEndDate;
 	private String hireUrl;
+	private String hireClassCode;
 	
 	//새로 받는 값
 	private String cpName; //회사이름

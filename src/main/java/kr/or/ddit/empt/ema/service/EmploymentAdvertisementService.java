@@ -14,4 +14,10 @@ public interface EmploymentAdvertisementService {
 
 	//채용공고 북마크한 회원 id 얻어오기
 	void sendDeadlineReminders();
+
+	int checkHireByHireId(HireVO hireVO);
+
+	int updateEmploymentAdvertisement(HireVO hireVO);
+
+	int deleteEmploymentAdvertisement(HireVO hireVO);
 }

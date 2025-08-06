@@ -71,4 +71,30 @@ public class EmploymentAdvertisementServiceImpl implements EmploymentAdvertiseme
             }
         }
 	}
+
+	@Override
+	public int checkHireByHireId(HireVO HireVO) {
+		int hireId=0;
+		HireVO = employmentAdvertisementMapper.checkHireByHireId(HireVO);
+		
+		if(HireVO == null) {
+			hireId = employmentAdvertisementMapper.getMaxHireId();
+		}else {
+			hireId = HireVO.getHireId();
+		}
+			
+		return hireId;
+	}
+
+	@Override
+	public int updateEmploymentAdvertisement(HireVO hireVO) {
+		// TODO Auto-generated method stub
+		return employmentAdvertisementMapper.updateEmploymentAdvertisement(hireVO);
+	}
+
+	@Override
+	public int deleteEmploymentAdvertisement(HireVO hireVO) {
+		// TODO Auto-generated method stub
+		return employmentAdvertisementMapper.deleteEmploymentAdvertisement(hireVO);
+	}
 }

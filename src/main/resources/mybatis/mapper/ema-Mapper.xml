@@ -113,4 +113,71 @@
 			from BOOKMARK
 			where BM_CATEGORY_ID ='G03003'
     </select>
+    
+    <select id="checkHireByHireId" parameterType="kr.or.ddit.empt.ema.service.HireVO" resultType="kr.or.ddit.empt.ema.service.HireVO">
+	    select *
+			from hire
+			where HIRE_ID = #{hireId}
+    </select>
+    
+    <select id="getMaxHireId" resultType="int">
+    	SELECT NVL(MAX(HIRE_ID),0)+1
+		FROM HIRE
+    </select>
+    
+    <update id="updateEmploymentAdvertisement" parameterType="kr.or.ddit.empt.ema.service.HireVO">
+		 MERGE INTO HIRE H
+	    USING DUAL
+	    ON (H.HIRE_ID = #{hireId})
+	    WHEN MATCHED THEN
+	        UPDATE
+	        <set>
+	            <if test="hireTitle != null">
+	                H.HIRE_TITLE = #{hireTitle},
+	            </if>
+	            <if test="hireDescription != null">
+	                H.HIRE_DESCRIPTION = #{hireDescription},
+	            </if>
+	            <if test="hireType != null">
+	                H.HIRE_TYPE = #{hireType},
+	            </if>
+   	            <if test="hireStartDate != null">
+	                H.HIRE_START_DATE = #{hireStartDate},
+	            </if>
+   	            <if test="hireEndDate != null">
+	                H.HIRE_END_DATE = #{hireEndDate},
+	            </if>
+   	            <if test="hireUrl != null">
+	                H.HIRE_URL = #{hireUrl},
+	            </if>
+   	            <if test="hireClassCode != null">
+	                H.HIRE_CLASS_CODE = #{hireClassCode},
+	            </if>
+       		</set>
+				
+    WHEN NOT MATCHED THEN
+        INSERT (HIRE_ID, CP_ID
+            <if test="hireTitle != null and hireTitle != ''">, HIRE_TITLE</if>
+            <if test="hireDescription != null and hireDescription != ''">, HIRE_DESCRIPTION</if>
+            <if test="hireType != null and hireType != ''">, HIRE_TYPE</if>
+            <if test="hireStartDate != null">, HIRE_START_DATE</if>
+            <if test="hireEndDate != null">, HIRE_END_DATE</if>
+            <if test="hireUrl != null and hireUrl != ''">, HIRE_URL</if>
+            <if test="hireClassCode != null and hireClassCode != ''">, HIRE_CLASS_CODE</if>
+        )
+        VALUES (#{hireId}, #{cpId}
+            <if test="hireTitle != null and hireTitle != ''">, #{hireTitle}</if>
+            <if test="hireDescription != null and hireDescription != ''">, #{hireDescription}</if>
+            <if test="hireType != null and hireType != ''">, #{hireType}</if>
+            <if test="hireStartDate != null">, #{hireStartDate}</if>
+            <if test="hireEndDate != null">, #{hireEndDate}</if>
+            <if test="hireUrl != null and hireUrl != ''">, #{hireUrl}</if>
+            <if test="hireClassCode != null and hireClassCode != ''">, #{hireClassCode}</if>
+        )
+	</update>
+	
+	<delete id="deleteEmploymentAdvertisement" parameterType="kr.or.ddit.empt.ema.service.HireVO">
+		DELETE HIRE
+		WHERE HIRE_ID = #{hireId}
+	</delete>
 </mapper>
