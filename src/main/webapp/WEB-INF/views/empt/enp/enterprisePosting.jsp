@@ -57,6 +57,7 @@
 						<span>필터</span> <span class="com-arrow-icon">▲</span>
 					</button>
 					<div class="com-accordion-panel" id="com-accordion-panel">
+						<div class="com-accordion-content">
 						<div class="com-filter-section">
 							<label class="com-filter-title">기업 규모</label>
 							<div class="com-filter-options">
@@ -94,6 +95,7 @@
 							<div class="com-selected-filters"></div>
 						</div>
 						<button type="submit" class="com-submit-search-btn">검색</button>
+						</div>
 					</div>
 				</div>
 			</form>
