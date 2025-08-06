@@ -16,7 +16,7 @@ public class VisitViewUriMap {
 		uriNameMap.put("/pse/cr/crl/selectCareerList.do", "직업백과 - 직업목록");
 		uriNameMap.put("/pse/cr/crr/selectCareerRcmList.do", "직업백과 - 추천직업");
 		uriNameMap.put("/ertds/univ/uvsrch/selectUnivList.do", "대학교 정보 - 대학검색");
-		uriNameMap.put("/ertds/univ/mjsrch/selectMajorList.do", "대학교 정보 - 학과정보");
+		uriNameMap.put("/ertds/univ/dpsrch/selectDeptList.do", "대학교 정보 - 학과정보");
 		uriNameMap.put("/ertds/hgschl/selectHgschList.do", "고등학교정보");
 		uriNameMap.put("/ertds/qlfexm/selectQlfexmList.do", "검정고시");
 		uriNameMap.put("/empt/ema/employmentAdvertisement.do", "채용공고");
