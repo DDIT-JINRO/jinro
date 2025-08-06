@@ -8,47 +8,37 @@
 			SELECT sub.*, ROWNUM AS RNUM
 			FROM ( 
 				SELECT
-					UNIV_ID
-				    , CASE
-						WHEN UNIV_CAMPUS IN ('제2캠퍼스', '제3캠퍼스', '국제캠퍼스', '서울캠퍼스')
-						THEN UNIV_NAME || '[' || UNIV_CAMPUS || ']'
-						ELSE UNIV_NAME
-				      END AS UNIV_NAME
-				    , COALESCE(CC1.CC_NAME, UNIV_TYPE) AS UNIV_TYPE
-				    , COALESCE(CC2.CC_NAME, UNIV_GUBUN) AS UNIV_GUBUN
-				    , UNIV_URL
-				    , UNIV_REGION
-				    , UNIV_ADDR
-				FROM UNIVERSITY U
-				LEFT JOIN COM_CODE CC1 ON U.UNIV_TYPE = CC1.CC_ID
-				LEFT JOIN COM_CODE CC2 ON U.UNIV_GUBUN = CC2.CC_ID
+					UDD_ID
+				    , COALESCE(CC1.CC_NAME, UDD_L_CLASS) AS UDD_L_CLASS
+				    , COALESCE(CC2.CC_NAME, UDD_M_CLASS) AS UDD_M_CLASS
+				    , UDD_SUM
+				    , UDD_INTEREST
+				    , UDD_PROPERTY
+				    , UDD_JOB_LIST
+				    , UDD_LI_LIST
+				FROM UNIV_DEPT_DETAIL UD
+				LEFT JOIN COM_CODE CC1 ON UD.UDD_L_CLASS = CC1.CC_ID
+				LEFT JOIN COM_CODE CC2 ON UD.UDD_M_CLASS = CC2.CC_ID
 				<where>
 					<if test="keyword != null and keyword != ''">
-		                AND (U.UNIV_NAME LIKE '%' || #{keyword} || '%')
+		                AND (UD.UDD_M_CLASS LIKE '%' || #{keyword} || '%')
 		            </if>
-		            <if test="regionIds != null and regionIds.size() > 0">
+		            <if test="lClass != null and lClass.size() > 0">
 			            AND (
-			            <foreach collection="regionIds" item="id" separator="OR">
-			                U.UNIV_REGION LIKE (SELECT CC_ETC || '%' FROM COM_CODE WHERE CC_ID = #{id})
+			            <foreach collection="lClass" item="id" separator="OR">
+			                UD.UDD_L_CLASS = #{id}
 			            </foreach>
 			            )
 			        </if>
-		            <if test="typeIds != null and typeIds.size() > 0">
+		            <if test="mClass != null and mClass.size() > 0">
 			            AND (
-			            <foreach collection="typeIds" item="id" separator="OR">
-			                U.UNIV_TYPE = #{id}
-			            </foreach>
-			            )
-			        </if>
-		            <if test="gubunIds != null and gubunIds.size() > 0">
-			            AND (
-			            <foreach collection="gubunIds" item="id" separator="OR">
-			                U.UNIV_GUBUN = #{id}
+			            <foreach collection="mClass" item="id" separator="OR">
+			                UD.UDD_M_CLASS = #{id}
 			            </foreach>
 			            )
 			        </if>
 		        </where>
-		        ORDER BY U.UNIV_NAME
+		        ORDER BY UD.UDD_ID
 		
 			) sub
 			WHERE ROWNUM <![CDATA[<=]]> #{endNo}
@@ -58,33 +48,26 @@
 	
 	<select id="selectUniversityTotalCount" resultType="int" parameterType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
 	  SELECT COUNT(*)
-	  FROM UNIVERSITY U
-	  <where>
+	  FROM UNIV_DEPT UD
+		<where>
 			<if test="keyword != null and keyword != ''">
-                AND (U.UNIV_NAME LIKE '%' || #{keyword} || '%')
-            </if>
-            <if test="regionIds != null and regionIds.size() > 0">
-	            AND (
-	            <foreach collection="regionIds" item="id" separator="OR">
-	                U.UNIV_REGION LIKE (SELECT CC_ETC || '%' FROM COM_CODE WHERE CC_ID = #{id})
-	            </foreach>
-	            )
-	        </if>
-            <if test="typeIds != null and typeIds.size() > 0">
-	            AND (
-	            <foreach collection="typeIds" item="id" separator="OR">
-	                U.UNIV_TYPE = #{id}
-	            </foreach>
-	            )
-	        </if>
-            <if test="gubunIds != null and gubunIds.size() > 0">
-	            AND (
-	            <foreach collection="gubunIds" item="id" separator="OR">
-	                U.UNIV_GUBUN = #{id}
-	            </foreach>
-	            )
-	        </if>
-        </where>
+				AND (UD.UDD_M_CLASS LIKE '%' || #{keyword} || '%')
+			</if>
+			<if test="lClass != null and lClass.size() > 0">
+				AND (
+				<foreach collection="lClass" item="id" separator="OR">
+					UD.UDD_L_CLASS = #{id}
+				</foreach>
+				)
+			</if>
+			<if test="mClass != null and mClass.size() > 0">
+				AND (
+				<foreach collection="mClass" item="id" separator="OR">
+					UD.UDD_M_CLASS = #{id}
+				</foreach>
+				)
+			</if>
+		</where>
 	</select>
 	
 	<select id="selectBookMarkVO" parameterType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO" resultType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO">
@@ -94,28 +77,16 @@
 		AND BM_CATEGORY_ID =#{bmCategoryId}
 	</select>
 	
-	<select id="selectCodeVOUniversityTypeList" resultType="kr.or.ddit.com.ComCodeVO">
+	<select id="selectCodeVOUnivDeptLClassList" resultType="kr.or.ddit.com.ComCodeVO">
 		select CC_ID, CL_CODE, CC_NAME, CC_ETC
 		from COM_CODE
-		where CL_CODE = 'G20'
+		where CL_CODE = 'G18'
 	</select>
 	
-	<select id="selectCodeVOUniversityGubunList" resultType="kr.or.ddit.com.ComCodeVO">
+	<select id="selectCodeVOUnivDeptMClassList" resultType="kr.or.ddit.com.ComCodeVO">
 		select CC_ID, CL_CODE, CC_NAME, CC_ETC
 		from COM_CODE
-		where CL_CODE = 'G21'
-	</select>
-	
-	<select id="selectCodeVORegionList" resultType="kr.or.ddit.com.ComCodeVO">
-		select CC_ID, CL_CODE, CC_NAME, CC_ETC
-		from COM_CODE
-		where CL_CODE = 'G23'
-	</select>
-
-	<select id="selectUnivDeptCount" parameterType="int" resultType="int">
-		SELECT COUNT(*)
-		FROM UNIV_DEPT
-		WHERE UNIV_ID = #{univId}
+		where CL_CODE = 'G19'
 	</select>
 
 </mapper>
