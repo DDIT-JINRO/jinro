@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolService;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
 
@@ -33,6 +34,27 @@ public class HighSchoolServiceImpl implements HighSchoolService {
 	public int selectHighSchoolCount(HighSchoolVO highSchoolVO) {
 
 		return highSchoolMapper.selectHighSchoolCount(highSchoolVO);
+	}
+
+	//지역 필터 옵션 목록 조회
+	@Override
+	public List<ComCodeVO> selectRegionList() {
+
+		return highSchoolMapper.selectRegionList();
+	}
+
+    //학교 유형 필터 옵션 목록 조회
+	@Override
+	public List<ComCodeVO> selectSchoolTypeList() {
+
+		return highSchoolMapper.selectSchoolTypeList();
+	}
+
+    //공학 여부 필터 옵션 목록 조회
+	@Override
+	public List<ComCodeVO> selectCoedTypeList() {
+	
+		return highSchoolMapper.selectCoedTypeList();
 	}
 
 }

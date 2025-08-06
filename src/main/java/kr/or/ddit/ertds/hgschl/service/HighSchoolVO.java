@@ -32,14 +32,11 @@ public class HighSchoolVO {
     // CEG-D02-004: 지역별 필터
     private List<String> regionFilter;
     
-    // CEG-D02-005: 학교유형(일반/전문) 필터
-    private String schoolType;
-    
-    // CEG-D02-006: 학과별 필터 (특목고용)
-    private String departmentFilter; 
+    // CEG-D02-005: 학교 종류 필터
+    private List<String> schoolType;
     
     // CEG-D02-007: 남/녀/공학 필터
-    private String coedTypeFilter;
+    private List<String> coedTypeFilter;
 
 	// 페이징
 	private int currentPage;
@@ -47,11 +44,4 @@ public class HighSchoolVO {
 	private int startRow;
 	private int endRow;
 
-	public int getStartNo() {
-		return (this.currentPage - 1) * size;
-	}
-
-	public int getEndNo() {
-		return this.currentPage * size;
-	}
 }

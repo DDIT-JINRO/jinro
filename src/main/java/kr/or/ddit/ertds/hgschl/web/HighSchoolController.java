@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolService;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
 import kr.or.ddit.util.ArticlePage;
@@ -32,14 +33,12 @@ public class HighSchoolController {
 	public String highSchoolListPage(@RequestParam(defaultValue = "1") int currentPage,
 			@RequestParam(required = false) String keyword,
 			@RequestParam(value = "regionFilter", required = false) List<String> regionFilter,
-			@RequestParam(value = "schoolType", required = false) String schoolType,
-			@RequestParam(value = "coedTypeFilter", required = false) String coedTypeFilter,
-			@RequestParam(value = "departmentFilter", required = false) String departmentFilter,
+			@RequestParam(value = "schoolType", required = false) List<String> schoolType,
+			@RequestParam(value = "coedTypeFilter", required = false) List<String> coedTypeFilter,
 			Model model) {
 		log.info("regionFilter : " + regionFilter);
 		log.info("schoolType : " + schoolType);
 		log.info("coedTypeFilter : " + coedTypeFilter);
-		log.info("departmentFilter : " + departmentFilter);
 	
 		int size = 5; // 한 페이지에 5개
 		int startRow = (currentPage - 1) * size;
@@ -54,9 +53,16 @@ public class HighSchoolController {
 		highSchoolVO.setRegionFilter(regionFilter);
 		highSchoolVO.setSchoolType(schoolType);
 		highSchoolVO.setCoedTypeFilter(coedTypeFilter);
-		highSchoolVO.setDepartmentFilter(departmentFilter);
 		highSchoolVO.setStartRow(startRow);
 		highSchoolVO.setEndRow(endRow);
+		
+		List<ComCodeVO> regionList = highSchoolService.selectRegionList();
+	    List<ComCodeVO> schoolTypeList = highSchoolService.selectSchoolTypeList();
+	    List<ComCodeVO> coedTypeList = highSchoolService.selectCoedTypeList();
+	    
+	    model.addAttribute("regionList", regionList);
+	    model.addAttribute("schoolTypeList", schoolTypeList);
+	    model.addAttribute("coedTypeList", coedTypeList);
 		
 		int total = highSchoolService.selectHighSchoolCount(highSchoolVO);
 		List<HighSchoolVO> schoolList = highSchoolService.highSchoolList(highSchoolVO);
@@ -66,10 +72,7 @@ public class HighSchoolController {
 		page.setUrl("/ertds/hgschl/selectHgschList.do");
 		
 		model.addAttribute("articlePage", page);
-		model.addAttribute("checkedRegionFilter", regionFilter);
-		model.addAttribute("checkedSchoolType", schoolType);
-		model.addAttribute("checkedCoedTypeFilter", coedTypeFilter);
-		model.addAttribute("checkedDepartmentFilter", departmentFilter);
+		model.addAttribute("checkedRegionFilter", highSchoolVO);
 
 		return "ertds/hgschl/HighSchoolList"; // /WEB-INF/views/erds/hgschl/list.jsp
 	}
@@ -96,7 +99,5 @@ public class HighSchoolController {
         }
         return new ResponseEntity<>(highSchool, HttpStatus.OK); // 200 OK와 데이터 반환
     }
-    
-   
 
 }
