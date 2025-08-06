@@ -11,9 +11,7 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/cnslt/off/crsv/offlineReservation.do">오프라인 상담</a></div>
-		<div class="channel-sub-section-item"><a href="/cnslt/vid/crsv/videoReservation.do">화상 상담</a></div>
-		<div class="channel-sub-section-item"><a href="/cnslt/cht/crsv/chattingReservation.do">채팅상담</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/cnslt/resve/crsv/Reservation.do">상담 예약</a></div>
 		<div class="channel-sub-section-item"><a href="/cnslt/rvw/cnsReview.do">상담 후기</a></div>		
 	</div>
 </section>
@@ -21,12 +19,12 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <a class="tab active" href="/cnslt/off/crsv/offlineReservation.do">상담 예약</a>
-		    <a class="tab" href="/cnslt/off/cnsh/offlineReservationHistory.do">상담 내역</a>
+		    <a class="tab " href="/cnslt/resve/crsv/Reservation.do">상담 예약</a>
+		    <a class="tab active" href="/cnslt/resve/cnsh/ReservationHistory.do">상담 내역</a>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			<h3>오프라인상담 예약 JSP</h3>
+  			<h3>오프라인상담 내역 JSP</h3>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>

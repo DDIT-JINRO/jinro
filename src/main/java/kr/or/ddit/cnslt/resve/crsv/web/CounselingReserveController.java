@@ -1,4 +1,4 @@
-package kr.or.ddit.cnslt.off.crsv.web;
+package kr.or.ddit.cnslt.resve.crsv.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,13 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-@RequestMapping("/cnslt/off")
-public class OfflineCounselingReserveController {
+@RequestMapping("/cnslt/resve")
+public class CounselingReserveController {
 	
-	@GetMapping("/crsv/offlineReservation.do")
-	public String offlineReservation() {
+	@GetMapping("/crsv/Reservation.do")
+	public String counselingReservation() {
 		log.info("asdasd");
-		return "cnslt/off/crsv/offlineReservation";
+		return "cnslt/resve/crsv/counselingreserve";
 	}
 	
 }
