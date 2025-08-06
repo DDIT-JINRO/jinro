@@ -9,10 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/cnslt/resve")
 @Controller
 @Slf4j
-public class CounselingHistoryController {
+public class CounselingReserveHistoryController {
 	
-	@GetMapping("cnsh/counselingHistory.do")
+	@GetMapping("/cnsh/counselingReserveHistory.do")
 	public String counselingHistory() {
-		return "cnslt/resve/cnsh/counselinghistory";
+		return "cnslt/resve/cnsh/counselingreservehistory";
 	}
 }

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/cnslt/resve")
 public class CounselingReserveController {
 	
-	@GetMapping("/crsv/Reservation.do")
+	@GetMapping("/crsv/reservation.do")
 	public String counselingReservation() {
 		log.info("asdasd");
 		return "cnslt/resve/crsv/counselingreserve";
