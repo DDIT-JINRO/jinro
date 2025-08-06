@@ -13,11 +13,11 @@ public class CareerEncyclopediaController {
 	
 	@GetMapping("/cr/crl/selectCareerList.do")
 	public String selectCareerList () {
-		return "pse/cr/crl/careerEncyclopediaList";
+		return "pse/cr/crl/selectCareerList";
 	}
 	
 	@GetMapping("/cr/crl/selectCareerDetail.do")
 	public String selectCareerDetail () {
-		return "pse/cr/crl/careerEncyclopediaDetail";
+		return "pse/cr/crl/selectCareerList";
 	}
 }
