@@ -1,4 +1,4 @@
-package kr.or.ddit.mpg.mat.csh.service;
+package kr.or.ddit.cnslt.resve.crsv.service;
 
 import java.util.Date;
 
@@ -19,6 +19,16 @@ public class CounselingVO {
 	private String counselReviewd;
 	private Date counselCreatedAt;
 	private Date counselUpdatedAt;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//보람님 사용
 	
 	private String memName;
 	private String counselName;

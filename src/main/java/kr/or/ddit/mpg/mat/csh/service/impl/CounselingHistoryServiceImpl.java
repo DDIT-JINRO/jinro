@@ -7,8 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.mpg.mat.csh.service.CounselingHistoryService;
-import kr.or.ddit.mpg.mat.csh.service.CounselingVO;
 import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;

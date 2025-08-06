@@ -24,7 +24,7 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			<h3>오프라인상담 예약 JSP</h3>
+  			<h3>상담 예약 JSP</h3>
   			</br></br></br></br>
   			</br></br></br></br>
   			</br></br></br></br>
