@@ -48,7 +48,6 @@
             </svg>
 					</button>
 				</div>
-				<!-- 
 				<div class="com-accordion-filter">
 					<button type="button" class="com-accordion-header"
 						id="com-accordion-toggle">
@@ -56,32 +55,32 @@
 					</button>
 					<div class="com-accordion-panel" id="com-accordion-panel">
 						<div class="com-filter-section">
-							<label class="com-filter-title">기업 규모</label>
+							<label class="com-filter-title">대학 지역</label>
 							<div class="com-filter-options">
-								<c:forEach var="scale" items="${codeVOCompanyScaleList}">
-									<label class="com-filter-item"> <input type="checkbox"
-										name="scaleId" value="${scale.ccId}"> <span>${scale.ccName}</span>
-									</label>
-								</c:forEach>
-							</div>
-
-							<label class="com-filter-title">지역</label>
-							<div class="com-filter-options">
-								<c:forEach var="region" items="${CodeVORegionList}">
-									<label class="com-filter-item"> <%-- regionId는 CompanyVO의 필터링할 값입니다. value는 실제 데이터베이스 코드 값으로 매핑되어야 합니다. --%>
+								<c:forEach var="region" items="${codeVORegionList}">
+									<label class="com-filter-item">
 										<input type="checkbox" name="regionId" value="${region.ccId}">
 										<span>${region.ccEtc}</span>
 									</label>
 								</c:forEach>
 							</div>
-
-							<label class="com-filter-title">채용여부</label>
+							<label class="com-filter-title">대학 유형</label>
 							<div class="com-filter-options">
-								<label class="com-filter-item"> <input type="checkbox"
-									name="hiringStatus" value="Y"><span>채용 중</span>
-								</label> <label class="com-filter-item"> <input type="checkbox"
-									name="hiringStatus" value="N"><span>채용 없음</span>
-								</label>
+								<c:forEach var="type" items="${codeVOUniversityTypeList}">
+									<label class="com-filter-item">
+										<input type="checkbox" name="typeId" value="${type.ccId}">
+										<span>${type.ccName}</span>
+									</label>
+								</c:forEach>
+							</div>
+							<label class="com-filter-title">설립 유형</label>
+							<div class="com-filter-options">
+								<c:forEach var="gubun" items="${codeVOUniversityGubunList}">
+									<label class="com-filter-item">
+										<input type="checkbox" name="gubunId" value="${gubun.ccId}">
+										<span>${gubun.ccName}</span>
+									</label>
+								</c:forEach>
 							</div>
 						</div>
 						<div class="com-filter-section">
@@ -94,7 +93,6 @@
 						<button type="submit" class="com-submit-search-btn">검색</button>
 					</div>
 				</div>
-				 -->
 			</form>
 			<p>총 ${articlePage.total}건</p>
 			
@@ -192,6 +190,4 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script>
-	// 스크립트 작성 해주시면 됩니다.
-</script>
+<script type="text/javascript" src="/js/ertds/univ/univList.js"></script>

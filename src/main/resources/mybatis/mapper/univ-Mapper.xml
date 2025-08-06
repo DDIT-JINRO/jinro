@@ -50,6 +50,24 @@
 		WHERE MEM_ID = #{memId}
 		AND BM_CATEGORY_ID =#{bmCategoryId}
 	</select>
+	
+	<select id="selectCodeVOUniversityTypeList" resultType="kr.or.ddit.com.ComCodeVO">
+		select CC_ID, CL_CODE, CC_NAME, CC_ETC
+		from COM_CODE
+		where CL_CODE = 'G20'
+	</select>
+	
+	<select id="selectCodeVOUniversityGubunList" resultType="kr.or.ddit.com.ComCodeVO">
+		select CC_ID, CL_CODE, CC_NAME, CC_ETC
+		from COM_CODE
+		where CL_CODE = 'G21'
+	</select>
+	
+	<select id="selectCodeVORegionList" resultType="kr.or.ddit.com.ComCodeVO">
+		select CC_ID, CL_CODE, CC_NAME, CC_ETC
+		from COM_CODE
+		where CL_CODE = 'G23'
+	</select>
 
 
 </mapper>

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityService;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
@@ -33,6 +34,21 @@ public class UniversityServiceImpl implements UniversityService {
 	@Override
 	public List<BookMarkVO> selectBookMarkVO(BookMarkVO bookmarkVO) {
 		return this.universityMapper.selectBookMarkVO(bookmarkVO);
+	}
+
+	@Override
+	public List<ComCodeVO> selectCodeVOUniversityTypeList() {
+		return this.universityMapper.selectCodeVOUniversityTypeList();
+	}
+
+	@Override
+	public List<ComCodeVO> selectCodeVOUniversityGubunList() {
+		return this.universityMapper.selectCodeVOUniversityGubunList();
+	}
+
+	@Override
+	public List<ComCodeVO> selectCodeVORegionList() {
+		return this.universityMapper.selectCodeVORegionList();
 	}
 	
 	

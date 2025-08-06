@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityService;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
@@ -40,8 +41,12 @@ public class UniversitySearchController {
 		List<UniversityVO> list = this.universityService.selectUniversityList(universityVO);
 		int totalCount = this.universityService.selectUniversityTotalCount(universityVO);
 		
-		log.info("list : ", list);
-		log.info("totalCount : ", totalCount);
+		List<ComCodeVO> codeVORegionList = this.universityService.selectCodeVORegionList();
+		List<ComCodeVO> codeVOUniversityTypeList = this.universityService.selectCodeVOUniversityTypeList();
+		List<ComCodeVO> codeVOUniversityGubunList = this.universityService.selectCodeVOUniversityGubunList();
+		
+		log.info("codeVOUniversityTypeList : {}", codeVOUniversityTypeList);
+		log.info("codeVOUniversityGubunList : {}", codeVOUniversityGubunList);
 		ArticlePage<UniversityVO> articlePage = new ArticlePage<>(totalCount, currentPage, size, list, searchKeyword);
 		List<BookMarkVO> bookMarkVOList = new ArrayList<>();
 		if(principal!=null && !principal.getName().equals("anonymousUser")) {
@@ -56,6 +61,9 @@ public class UniversitySearchController {
 		}
 		model.addAttribute("articlePage", articlePage);
 		model.addAttribute("bookMarkVOList", bookMarkVOList);
+		model.addAttribute("codeVORegionList", codeVORegionList);
+		model.addAttribute("codeVOUniversityTypeList", codeVOUniversityTypeList);
+		model.addAttribute("codeVOUniversityGubunList", codeVOUniversityGubunList);
 		
 		return "ertds/univ/uvsrch/list"; // /WEB-INF/views/erds/univ/list.jsp
 	}
