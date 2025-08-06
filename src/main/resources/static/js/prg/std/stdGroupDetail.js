@@ -265,9 +265,9 @@ function createParentReply(replyVO, e){
 	</div>
 	<div class="reply-profile">
 	  <div class="profile-wrapper user-profile">
-	    <img class="profile-img" src="${replyVO.fileProfile ? replyVO.fileProfile : '/images/defaultProfileImg.png' }" alt="profile"/>
-	    <img class="badge-img" src="${replyVO.fileBadge ? replyVO.fileBadge : '/images/defaultBorderImg.png'}" alt="badge"/>
-		<img class="effect-img sparkle" src="${replyVO.fileSub}" style='${replyVO.fileSub ? "" :"display:none;"}'/>
+	    <img class="profile-img" src="${replyVO.fileProfileStr ? replyVO.fileProfileStr : '/images/defaultProfileImg.png' }" alt="profile"/>
+	    <img class="badge-img" src="${replyVO.fileBadgeStr ? replyVO.fileBadgeStr : '/images/defaultBorderImg.png'}" alt="badge"/>
+		${replyVO.fileSubStr ? `<img class="effect-img sparkle" src=${replyVO.fileSubStr} />` : ""}
 	  </div>
 	  <div class="writer-info">
 	    <div class="reply-nickname">${replyVO.memNickname}</div>
@@ -323,9 +323,9 @@ function createChildReply(replyVO, e){
 		</div>
 		<div class="reply-profile">
 		  <div class="profile-wrapper user-profile">
-		    <img class="profile-img" src="${replyVO.fileProfile ? replyVO.fileProfile : '/images/defaultProfileImg.png' }"/>
-		    <img class="badge-img" src="${replyVO.fileBadge ? replyVO.fileBadge : '/images/defaultBorderImg.png' }" />
-			<img class="effect-img sparkle" src="${replyVO.fileSub}" style='${replyVO.fileSub ? "" :"display:none;"}'/>
+		    <img class="profile-img" src="${replyVO.fileProfileStr ? replyVO.fileProfileStr : '/images/defaultProfileImg.png' }"/>
+		    <img class="badge-img" src="${replyVO.fileBadgeStr ? replyVO.fileBadgeStr : '/images/defaultBorderImg.png' }" />
+			${replyVO.fileSubStr ? `<img class="effect-img sparkle" src=${replyVO.fileSubStr} />` : ""}
 		  </div>
 		  <div class="writer-info">
 		    <div class="reply-nickname">${replyVO.memNickname}</div>

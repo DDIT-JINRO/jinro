@@ -21,7 +21,6 @@
 </section>
 <div>
 	<div class="public-wrapper">
-
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
 			<a class="tab active" href="/comm/peer/teen/teenList.do">청소년 게시판</a>
@@ -29,6 +28,10 @@
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
+		<div class="teenListTop">
+		<p class="textmessage">또래 게시판은 연령 기준에 따라 이용이 제한될 수 있습니다.</p>
+		<button id=btnWrite>글작성</button>
+		</div>
 			<form method="" action="/">
 				<div class="com-default-search">
 					<div class="com-select-wrapper">

@@ -12,16 +12,16 @@ document.addEventListener('DOMContentLoaded', function() {
 		})
 	})
 
-	/*
+	
 	document.getElementById('btnWrite').addEventListener('click', function() {
 		if (!memId || memId == 'anonymousUser') {
 			sessionStorage.setItem("redirectUrl", location.href);
 			location.href = "/login";
 		} else {
-			location.href = "/prg/std/createStdGroup.do";
+			location.href = "/comm/peer/teen/teenInsert.do";
 		}
 	})
-	*/
+	
 	
 });
 

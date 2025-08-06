@@ -15,7 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 29px 34px;
+  padding-top: 30px;
   border-bottom: 2px solid #e8ecef;
 }
 
@@ -31,7 +31,6 @@
   font-size: 20px;
   font-weight: 700;
   flex-grow: 1;
-  margin-left: 30px;
   color: #000;
 }
 
@@ -336,6 +335,11 @@
   margin-bottom: 30px;
 }
 
+.detailMainContent {
+	padding: 50px 0;
+	border-bottom: 2px solid var(--card-border);
+}
+
 .post-title {
   font-size: 1.75rem;
   font-weight: 700;
@@ -570,6 +574,10 @@
 	color: #fe81a0;
 }
 
+.fileClass {
+	padding-top: 10px;
+}
+
 /* ===================신고모달 css================= */
 
 /* 모달 오버레이 (배경) */
@@ -687,6 +695,11 @@
   border-radius: 8px;
   cursor: pointer;
   box-sizing: border-box;
+}
+
+.liked:hover {
+	transform: scale(1.2);
+	cursor: pointer;
 }
 
 /* ─── 파일 선택 버튼 커스텀 ─── */

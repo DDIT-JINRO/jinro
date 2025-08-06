@@ -16,7 +16,7 @@ public class CommBoardVO {
 	private Date boardUpdatedAt;
 	private int boardCnt;
 	private String boardDelYn;
-	private Long filegroupId;
+	private Long fileGroupId;
 	
 	private String memName;		// 작성자 이름 추출을 위해
 	private int boardLikeCnt;     // 게시글 좋아요 수

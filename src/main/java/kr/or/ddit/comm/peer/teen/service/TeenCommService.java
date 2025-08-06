@@ -4,6 +4,7 @@ import java.util.List;
 
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
+import kr.or.ddit.prg.std.service.StdReplyVO;
 
 public interface TeenCommService {
 
@@ -13,4 +14,31 @@ public interface TeenCommService {
 
 	public List<CommReplyVO> selectBoardReply(int boardId, String memId);
 
+	public CommReplyVO insertReply(CommReplyVO commReplyVO);
+	
+	public CommReplyVO selectReplyDetail(int replyId);
+
+	public void insertBoard(CommBoardVO commBoardVO);
+
+	public CommBoardVO selectTeenBoard(int boardId);
+
+	public void updateBoard(CommBoardVO commBoardVO);
+
+	public void deleteteenBoard(CommBoardVO commBoardVO);
+
+	public boolean deleteReply(CommReplyVO commReplyVO);
+	
+	public boolean isTeen(String memId);
+
+	public void cntPlus(int boardId);
+
+	public int updateBoardLiked(int boardId, String memId);
+
+	public int selectBoardLikedCnt(int boardId);
+
+	public int updateReplyLiked(int boardId, int replyId, String memId);
+
+	public int selectReplyLikedCnt(int boardId, int replyId);
+
+	
 }

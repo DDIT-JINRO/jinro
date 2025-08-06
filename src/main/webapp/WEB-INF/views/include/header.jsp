@@ -16,6 +16,7 @@
 <script src="/js/axios.min.js"></script>
 <script src="/js/com/sockjs.min.js"></script>
 <script src="/js/com/stomp.min.js"></script>
+<script src="/ckeditor5/ckeditor.js"></script>
 <meta charset="UTF-8">
 <title>CareerPath</title>
 <script src="/js/include/header.js"></script>

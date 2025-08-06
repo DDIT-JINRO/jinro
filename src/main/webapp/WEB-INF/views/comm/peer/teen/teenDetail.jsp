@@ -71,17 +71,34 @@
 							<fmt:formatDate value="${boardVO.boardCreatedAt}" pattern="yyyy. MM. dd" />
 						</span>
 						<span class="meta-item">조회수: ${boardVO.boardCnt}</span>
+						<span class="meta-item" id="like-board-wrapper-${boardVO.boardId}">
+							<c:choose>
+								<c:when test="${boardVO.boardIsLiked == 1}">
+									<img alt="" src="/images/likedFill.png" class="liked"  data-board-id="${boardVO.boardId}"><span class="like-cnt" id="board-like-cnt-${boardVO.boardId}">${boardVO.boardLikeCnt}</span></c:when>
+								<c:when test="${boardVO.boardIsLiked == 0}">
+									<img alt="" src="/images/likedBean.png" class="liked" data-board-id="${boardVO.boardId}"><span class="like-cnt" id="board-like-cnt-${boardVO.boardId}">${boardVO.boardLikeCnt}</span></c:when>
+							</c:choose>
+						</span>
 					</div>
 				</div>
 
 				<!-- 2) 핵심 정보 그리드 -->
-				<div>${boardVO.boardContent}</div>
+				<div class="detailMainContent">
+					<div class="detailContent">${boardVO.boardContent}</div>
+				</div>
+				<div class="fileClass">
+					<c:forEach var="file" items="${fileList}">
+						<div class="detailFile">
+							<a href="/files/download?fileGroupId=${file.fileGroupId }&seq=${file.fileSeq }">${file.fileOrgName }</a>
+						</div>
+					</c:forEach>
+				</div>
 			</div>
 		</div>
 		<!-- 여기까지 게시글 끝 -->
 
 		<!-- 댓글 입력창 -->
-		<form action="/prg/std/createStdReply.do" method="post" class="comment-form">
+		<form action="/comm/peer/teen/createTeenReply.do" method="post" class="comment-form">
 			<input type="hidden" name="boardId" value="${boardVO.boardId}" />
 			<textarea id="replyContent" name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
 			<div class="comment-footer">
@@ -128,6 +145,16 @@
 						<span class="child-count">
 							<c:if test="${reply.childCount > 0 }"> ${reply.childCount }</c:if>
 						</span>
+						<c:choose>
+							<c:when test="${reply.replyIsLiked == 1}">
+								<img alt="" src="/images/likedFill.png" class="liked" data-board-id="${boardVO.boardId }" data-reply-id="${reply.replyId}">
+    							<span class="like-cnt" id="reply-like-cnt-${reply.replyId}">${reply.replyLikeCnt}</span>
+  							</c:when>
+							<c:when test="${reply.replyIsLiked == 0}">
+								<img alt="" src="/images/likedBean.png" class="liked" data-board-id="${boardVO.boardId }" data-reply-id="${reply.replyId}">
+    							<span class="like-cnt" id="reply-like-cnt-${reply.replyId}">${reply.replyLikeCnt}</span>
+ 							 </c:when>
+						</c:choose>
 					</div>
 				</div>
 				<div class="reply-child-container" data-parent-id="${reply.replyId }">
@@ -163,8 +190,8 @@
 							<div class="reply-content">${child.replyContent}</div>
 						</div>
 					</c:forEach>
-					<form action="/prg/std/createStdReply.do" method="post" class="comment-form child-form">
-						<input type="hidden" name="boardId" value="${stdBoardVO.boardId}" />
+					<form action="/comm/peer/teen/createTeenReply.do" method="post" class="comment-form child-form">
+						<input type="hidden" name="boardId" value="${boardVO.boardId }" />
 						<input type="hidden" name="replyParentId" value="${reply.replyId }" />
 						<textarea name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
 						<div class="comment-footer">
@@ -177,8 +204,29 @@
 						</div>
 					</form>
 				</div>
+			</c:forEach>
+			<div class="bottom-button">
+				<a href="/comm/peer/teen/teenList.do" class="btn-back">목록</a>
+			</div>
 		</div>
-		</c:forEach>
+	</div>
+
+	<div class="modal-overlay" id="report-modal-overlay">
+		<div class="modal-content">
+			<button class="modal-close-btn" type="button">&times;</button>
+			<h3>신고 사유 입력</h3>
+			<p>
+				신고하실 내용을 구체적으로 입력해주세요.<br /> 예: 욕설·비방, 개인정보 노출, 허위 사실 유포, 부적절한 홍보 등<br /> 위반 항목과 상황을 간략히 작성해 주시면 처리에 도움이 됩니다.
+			</p>
+			<div class="modal-form">
+				<input type="hidden" id="report-target-id" />
+				<input type="hidden" id="report-target-type" />
+				<textarea id="report-content-input" placeholder="사유를 작성해주세요"></textarea>
+				<input type="file" id="report-file" />
+				<span class="modal-error-msg" id="modal-error-msg"></span>
+				<button class="btn btn-primary" id="report-confirm-btn" type="button">확인</button>
+			</div>
+		</div>
 	</div>
 
 	<!-- 목록 버튼 -->
