@@ -94,7 +94,7 @@
 									<c:set var="isBookmarked" value="false" />
 
 									<c:forEach var="bookmark" items="${bookMarkVOList}">
-										<c:if test="${univDept.uddId eq bookmark.bmTargetId}">
+										<c:if test="${university.univId eq bookmark.bmTargetId}">
 											<c:set var="isBookmarked" value="true" />
 										</c:if>
 									</c:forEach>
@@ -121,7 +121,8 @@
 					<!-- Previous -->
 					<li><a
 						href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${articlePage.keyword}
-						<c:forEach var='lClassIds' items='${paramValues.lClassIds}'>&lClassIds=${lClassIds}</c:forEach>"	
+						<c:forEach var='lClassIds' items='${paramValues.lClassIds}'>&lClassIds=${lClassIds}</c:forEach>
+						&hiringStatus=${param.hiringStatus}"	
 						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
 							← Previous </a></li>
 
@@ -130,7 +131,8 @@
 						end="${articlePage.endPage}">
 						<li><a
 							href="${articlePage.url}?currentPage=${pNo}&keyword=${articlePage.keyword}
-							<c:forEach var='lClassIds' items='${paramValues.lClassIds}'>&lClassIds=${lClassIds}</c:forEach>"
+							<c:forEach var='lClassIds' items='${paramValues.lClassIds}'>&lClassIds=${lClassIds}</c:forEach>
+\							&hiringStatus=${param.hiringStatus}"
 							class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
 								${pNo} </a></li>
 					</c:forEach>
@@ -138,7 +140,8 @@
 					<!-- Next -->
 					<li><a
 						href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
-						<c:forEach var='lClassIds' items='${paramValues.lClassIds}'>&lClassIds=${lClassIds}</c:forEach>"				
+						<c:forEach var='lClassIds' items='${paramValues.lClassIds}'>&lClassIds=${lClassIds}</c:forEach>
+						&hiringStatus=${param.hiringStatus}"				
 						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
 							Next → </a></li>
 				</ul>

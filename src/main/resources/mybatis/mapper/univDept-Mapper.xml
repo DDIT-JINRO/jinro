@@ -21,19 +21,12 @@
 				LEFT JOIN COM_CODE CC2 ON UD.UDD_M_CLASS = CC2.CC_ID
 				<where>
 					<if test="keyword != null and keyword != ''">
-		                AND (UD.UDD_M_CLASS LIKE '%' || #{keyword} || '%')
+		                AND COALESCE(CC2.CC_NAME, UD.UDD_M_CLASS) LIKE '%' || #{keyword} || '%'
 		            </if>
-		            <if test="lClass != null and lClass.size() > 0">
+		            <if test="lClassIds != null and lClassIds.size() > 0">
 			            AND (
-			            <foreach collection="lClass" item="id" separator="OR">
+			            <foreach collection="lClassIds" item="id" separator="OR">
 			                UD.UDD_L_CLASS = #{id}
-			            </foreach>
-			            )
-			        </if>
-		            <if test="mClass != null and mClass.size() > 0">
-			            AND (
-			            <foreach collection="mClass" item="id" separator="OR">
-			                UD.UDD_M_CLASS = #{id}
 			            </foreach>
 			            )
 			        </if>
@@ -48,22 +41,16 @@
 	
 	<select id="selectUniversityTotalCount" resultType="int" parameterType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
 	  SELECT COUNT(*)
-	  FROM UNIV_DEPT UD
+	  FROM UNIV_DEPT_DETAIL UD
+	  LEFT JOIN COM_CODE CC2 ON UD.UDD_M_CLASS = CC2.CC_ID
 		<where>
 			<if test="keyword != null and keyword != ''">
-				AND (UD.UDD_M_CLASS LIKE '%' || #{keyword} || '%')
+				AND COALESCE(CC2.CC_NAME, UD.UDD_M_CLASS) LIKE '%' || #{keyword} || '%'
 			</if>
-			<if test="lClass != null and lClass.size() > 0">
+			<if test="lClassIds != null and lClassIds.size() > 0">
 				AND (
-				<foreach collection="lClass" item="id" separator="OR">
+				<foreach collection="lClassIds" item="id" separator="OR">
 					UD.UDD_L_CLASS = #{id}
-				</foreach>
-				)
-			</if>
-			<if test="mClass != null and mClass.size() > 0">
-				AND (
-				<foreach collection="mClass" item="id" separator="OR">
-					UD.UDD_M_CLASS = #{id}
 				</foreach>
 				)
 			</if>
@@ -81,12 +68,6 @@
 		select CC_ID, CL_CODE, CC_NAME, CC_ETC
 		from COM_CODE
 		where CL_CODE = 'G18'
-	</select>
-	
-	<select id="selectCodeVOUnivDeptMClassList" resultType="kr.or.ddit.com.ComCodeVO">
-		select CC_ID, CL_CODE, CC_NAME, CC_ETC
-		from COM_CODE
-		where CL_CODE = 'G19'
 	</select>
 
 </mapper>

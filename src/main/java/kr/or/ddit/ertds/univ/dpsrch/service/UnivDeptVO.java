@@ -16,8 +16,7 @@ public class UnivDeptVO {
 	private String uddLiList;   // 관련 자격
 	
 	private String keyword;
-	private List<String> lClass; 		//대학 위치 선택
-	private List<String> mClass; 		//대학 타입 선택
+	private List<String> lClassIds; 		//대학 위치 선택
 		
 	// 목록 조회시 페이징 처리를 위한 필드 추가
 	private int currentPage;
