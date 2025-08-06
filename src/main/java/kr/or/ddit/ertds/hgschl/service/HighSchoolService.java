@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface HighSchoolService {
 	// 모든 고등학교 리스트
-	public List<HighSchoolVO> getAllHighSchools();
+	public List<HighSchoolVO> highSchoolList(HighSchoolVO highSchoolVO);
 
 	// 고등학교 상세
-	public HighSchoolVO getHighSchoolById(int hsId);
+	public HighSchoolVO highSchoolDetail(int hsId);
 
-	// 특정 이름으로 고등학교를 조회하는 메서드 추가
-	public List<HighSchoolVO> getHighSchoolsByName(String schoolName);
+	// 검색 결과 갯수
+	public int selectHighSchoolCount(HighSchoolVO highSchoolVO);
 }

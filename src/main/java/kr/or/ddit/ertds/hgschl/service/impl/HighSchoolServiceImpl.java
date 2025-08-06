@@ -13,26 +13,26 @@ public class HighSchoolServiceImpl implements HighSchoolService {
 
 	@Autowired
 	private HighSchoolMapper highSchoolMapper;
-	
-	//모든 고등학교 리스트
-		@Override
-		public List<HighSchoolVO> getAllHighSchools() {
-			
-			return highSchoolMapper.selectAllHighSchools();
-		}
 
-		//고등학교 상세
-		@Override
-		public HighSchoolVO getHighSchoolById(int hsId) {
-			
-			return highSchoolMapper.selectHighSchoolById(hsId);
-		}
-		
-		//특정 이름의 고등학교 조회
-		@Override
-		public List<HighSchoolVO> getHighSchoolsByName(String schoolName) {
+	// 모든 고등학교 리스트
+	@Override
+	public List<HighSchoolVO> highSchoolList(HighSchoolVO highSchoolVO) {
 
-			return highSchoolMapper.selectHighSchoolsByName(schoolName);
-		}
+		return highSchoolMapper.highSchoolList(highSchoolVO);
+	}
+
+	// 고등학교 상세
+	@Override
+	public HighSchoolVO highSchoolDetail(int hsId) {
+
+		return highSchoolMapper.highSchoolDetail(hsId);
+	}
+
+	// 검색 결과 갯수
+	@Override
+	public int selectHighSchoolCount(HighSchoolVO highSchoolVO) {
+
+		return highSchoolMapper.selectHighSchoolCount(highSchoolVO);
+	}
 
 }

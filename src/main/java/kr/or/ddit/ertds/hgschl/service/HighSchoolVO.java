@@ -1,5 +1,7 @@
 package kr.or.ddit.ertds.hgschl.service;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -22,4 +24,34 @@ public class HighSchoolVO {
 	private String hsAnnivAt; // 개교기념일
 	private Double hsLat; // 위도
 	private Double hsLot; // 경도
+
+	// 필터조건
+	// 검색
+    private String keyword;
+    
+    // CEG-D02-004: 지역별 필터
+    private List<String> regionFilter;
+    
+    // CEG-D02-005: 학교유형(일반/전문) 필터
+    private String schoolType;
+    
+    // CEG-D02-006: 학과별 필터 (특목고용)
+    private String departmentFilter; 
+    
+    // CEG-D02-007: 남/녀/공학 필터
+    private String coedTypeFilter;
+
+	// 페이징
+	private int currentPage;
+	private int size;
+	private int startRow;
+	private int endRow;
+
+	public int getStartNo() {
+		return (this.currentPage - 1) * size;
+	}
+
+	public int getEndNo() {
+		return this.currentPage * size;
+	}
 }

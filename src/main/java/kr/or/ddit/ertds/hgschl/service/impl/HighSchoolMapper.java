@@ -10,11 +10,11 @@ import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
 @Mapper
 public interface HighSchoolMapper {
 	// 모든 고등학교 정보를 조회하는 메서드 (주소 포함)
-	public List<HighSchoolVO> selectAllHighSchools();
+	public List<HighSchoolVO> highSchoolList(HighSchoolVO highSchoolVO);
 
-	// 특정 고등학교 ID로 상세 정보를 조회
-	public HighSchoolVO selectHighSchoolById(@Param("hsId") int hsId);
+	// 특정 고등학교 상세 정보를 조회
+	public HighSchoolVO highSchoolDetail(@Param("hsId") int hsId);
 
-	// 특정 고등학교 이름을 파라미터로 받아 HighSchoolVO 리스트를 반환
-	public List<HighSchoolVO> selectHighSchoolsByName(@Param("schoolName") String schoolName);
+	// 전체 개수를 조회
+	public int selectHighSchoolCount(HighSchoolVO highSchoolVO);
 }
