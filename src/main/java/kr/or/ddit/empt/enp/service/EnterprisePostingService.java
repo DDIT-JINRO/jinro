@@ -25,5 +25,4 @@ public interface EnterprisePostingService {
 
 	List<InterviewReviewVO> selectEnpInterviewReview(InterviewReviewVO interviewReviewVO);
 
-
 }

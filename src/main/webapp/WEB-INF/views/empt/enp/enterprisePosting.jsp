@@ -190,7 +190,8 @@
 									<c:if test="${company.cpId eq interviewReview.targetId}">
 										<div class="review-item">
 											<div class="review-meta">
-												<span><strong> ${interviewReview.memNickname}</strong></span>
+												<span><strong>
+														${interviewReview.memNickname}</strong></span>
 												<div class="rating-and-date">
 													<span><strong class="review-rating-icon">★</strong>
 														${interviewReview.irRating}</span>
@@ -223,7 +224,7 @@
 						href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${articlePage.keyword}
 						<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
 						<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
-						&hiringStatus=${param.hiringStatus}"	
+						&hiringStatus=${param.hiringStatus}"
 						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
 							← Previous </a></li>
 
@@ -244,7 +245,7 @@
 						href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
 						<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
 						<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
-						&hiringStatus=${param.hiringStatus}"				
+						&hiringStatus=${param.hiringStatus}"
 						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
 							Next → </a></li>
 				</ul>
@@ -258,5 +259,5 @@
 </html>
 <script type="text/javascript" src="/js/empt/enp/enterprisePosting.js"></script>
 <script>
-
+	
 </script>

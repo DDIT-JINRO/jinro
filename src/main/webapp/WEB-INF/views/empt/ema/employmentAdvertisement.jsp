@@ -7,19 +7,28 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">취업 정보</div> 
+		<div class="channel-title-text">취업 정보</div>
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/empt/ema/employmentAdvertisement.do">채용공고</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/empt/enp/enterprisePosting.do">기업정보</a></div>
-		<div class="channel-sub-section-item"><a href="/empt/ivfb/interViewFeedback.do">면접후기</a></div>
-		<div class="channel-sub-section-item"><a href="/empt/cte/careerTechnicalEducation.do">직업교육</a></div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/empt/ema/employmentAdvertisement.do">채용공고</a>
+		</div>
+		<!-- 중분류 -->
+		<div class="channel-sub-section-item">
+			<a href="/empt/enp/enterprisePosting.do">기업정보</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/empt/ivfb/interViewFeedback.do">면접후기</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/empt/cte/careerTechnicalEducation.do">직업교육</a>
+		</div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
-  		<div class="public-wrapper-main">
+		<div class="public-wrapper-main">
 			<form method="get" action="/empt/ema/employmentAdvertisement.do">
 				<div class="com-default-search">
 					<div class="com-select-wrapper">
@@ -48,49 +57,48 @@
 					</button>
 					<div class="com-accordion-panel" id="com-accordion-panel">
 						<div class="com-accordion-content">
-						<div class="com-filter-section">
-							<label class="com-filter-title">직무</label>
-							<div class="com-filter-options">
-								<c:forEach var="hireClass" items="${CodeVOHireClassList}">
-									<label class="com-filter-item"> <input type="checkbox"
-										name="hireClassCodeNames" value="${hireClass.ccId}"> <span>${hireClass.ccName}</span>
-									</label>
-								</c:forEach>
-							</div>
+							<div class="com-filter-section">
+								<label class="com-filter-title">직무</label>
+								<div class="com-filter-options">
+									<c:forEach var="hireClass" items="${CodeVOHireClassList}">
+										<label class="com-filter-item"> <input type="checkbox"
+											name="hireClassCodeNames" value="${hireClass.ccId}">
+											<span>${hireClass.ccName}</span>
+										</label>
+									</c:forEach>
+								</div>
 
-							<label class="com-filter-title">지역</label>
-							<div class="com-filter-options">
-								<c:forEach var="region" items="${CodeVORegionList}">
-									<label class="com-filter-item">
-										<input type="checkbox" name="regions" value="${region.ccId}">
-										<span>${region.ccEtc}</span>
-									</label>
-								</c:forEach>
-							</div>
+								<label class="com-filter-title">지역</label>
+								<div class="com-filter-options">
+									<c:forEach var="region" items="${CodeVORegionList}">
+										<label class="com-filter-item"> <input type="checkbox"
+											name="regions" value="${region.ccId}"> <span>${region.ccEtc}</span>
+										</label>
+									</c:forEach>
+								</div>
 
-							<label class="com-filter-title">채용유형</label>
-							<div class="com-filter-options">
-								<c:forEach var="hireType" items="${CodeVOHireTypeList}">
-									<label class="com-filter-item">
-										<input type="checkbox" name="hireTypeNames" value="${hireType.ccId}">
-										<span>${hireType.ccName}</span>
-									</label>
-								</c:forEach>
+								<label class="com-filter-title">채용유형</label>
+								<div class="com-filter-options">
+									<c:forEach var="hireType" items="${CodeVOHireTypeList}">
+										<label class="com-filter-item"> <input type="checkbox"
+											name="hireTypeNames" value="${hireType.ccId}"> <span>${hireType.ccName}</span>
+										</label>
+									</c:forEach>
+								</div>
 							</div>
-						</div>
-						<div class="com-filter-section">
-							<div class="com-button-container">
-								<label class="com-filter-title">선택된 필터</label>
-								<button type="button" class="com-filter-reset-btn">초기화</button>
+							<div class="com-filter-section">
+								<div class="com-button-container">
+									<label class="com-filter-title">선택된 필터</label>
+									<button type="button" class="com-filter-reset-btn">초기화</button>
+								</div>
+								<div class="com-selected-filters"></div>
 							</div>
-							<div class="com-selected-filters"></div>
-						</div>
-						<button type="submit" class="com-submit-search-btn">검색</button>
+							<button type="submit" class="com-submit-search-btn">검색</button>
 						</div>
 					</div>
 				</div>
 			</form>
-						<p>총 ${articlePage.total}건</p>
+			<p>총 ${articlePage.total}건</p>
 
 			<div class="hire-list">
 				<div class="accordion-header">
@@ -107,8 +115,7 @@
 					<div class="accordion-item">
 						<div class="accordion-header">
 							<div class="hire-info-item" style="flex: 1;">
-								${hire.hireTitle}
-							</div>
+								${hire.hireTitle}</div>
 							<div class="hire-info-item" style="flex: 1;">${hire.cpName}</div>
 							<div class="hire-info-item" style="flex: 1;">${hire.hireTypename}</div>
 							<div class="hire-info-item" style="width: 80px;">
@@ -143,8 +150,8 @@
 							</div>
 							<div class="hire-url-section">
 								<h4>채용 홈페이지</h4>
-								<a href="${hire.hireUrl}" target="_blank"
-											class="homepage-link">홈페이지로 이동하기</a>
+								<a href="${hire.hireUrl}" target="_blank" class="homepage-link">홈페이지로
+									이동하기</a>
 							</div>
 							<div class="hire-date-section">
 								<h4>채용 기간</h4>
@@ -191,7 +198,7 @@
 							<c:forEach var='hireClassCodeNames' items='${paramValues.hireClassCodeNames}'>&hireClassCodeNames=${hireClassCodeNames}</c:forEach>
 							<c:forEach var='regions' items='${paramValues.regions}'>&regions=${regions}</c:forEach>
 							<c:forEach var='hireTypeNames' items='${paramValues.hireTypeNames}'>&hireTypeNames=${hireTypeNames}</c:forEach>"
-								class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
+							class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
 								${pNo} </a></li>
 					</c:forEach>
 
@@ -200,7 +207,7 @@
 						href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
 						<c:forEach var='hireClassCodeNames' items='${paramValues.hireClassCodeNames}'>&hireClassCodeNames=${hireClassCodeNames}</c:forEach>
 						<c:forEach var='regions' items='${paramValues.regions}'>&regions=${regions}</c:forEach>
-						<c:forEach var='hireTypeNames' items='${paramValues.hireTypeNames}'>&hireTypeNames=${hireTypeNames}</c:forEach>"		
+						<c:forEach var='hireTypeNames' items='${paramValues.hireTypeNames}'>&hireTypeNames=${hireTypeNames}</c:forEach>"
 						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
 							Next → </a></li>
 				</ul>
@@ -211,7 +218,8 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script type="text/javascript" src="/js/empt/ema/employmentAdvertisement.js"></script>
+<script type="text/javascript"
+	src="/js/empt/ema/employmentAdvertisement.js"></script>
 <script>
 	// 스크립트 작성 해주시면 됩니다.
 </script>

@@ -12,7 +12,7 @@ public interface EmploymentAdvertisementService {
 
 	List<ComCodeVO> selectCodeVOList(ComCodeVO comCodeVO);
 
-	//채용공고 북마크한 회원 id 얻어오기
+	// 채용공고 북마크한 회원 id 얻어오기
 	void sendDeadlineReminders();
 
 	int checkHireByHireId(HireVO hireVO);

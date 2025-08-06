@@ -51,15 +51,15 @@ public class EnterprisePostingServiceImpl implements EnterprisePostingService {
 
 	@Override
 	public int checkCompanyByCpId(CompanyVO companyVO) {
-		int cpId=0;
+		int cpId = 0;
 		companyVO = enterprisePostingMapper.checkCompanyByCpId(companyVO);
-		
-		if(companyVO == null) {
+
+		if (companyVO == null) {
 			cpId = enterprisePostingMapper.getMaxCpId();
-		}else {
+		} else {
 			cpId = companyVO.getCpId();
 		}
-			
+
 		return cpId;
 	}
 

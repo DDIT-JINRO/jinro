@@ -3,8 +3,6 @@ package kr.or.ddit.empt.enp.web;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,83 +29,77 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class EnterprisePostingController {
-	
+
 	private final EnterprisePostingService enterprisePostingService;
-	
+
 	@GetMapping("/enp/enterprisePosting.do")
-	public String enterprisePosting(
-			@ModelAttribute CompanyVO companyVO,
-			@RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
-			Model model,
+	public String enterprisePosting(@ModelAttribute CompanyVO companyVO,
+			@RequestParam(value = "currentPage", defaultValue = "1") int currentPage, Model model,
 			Principal principal) {
-		
+
 		companyVO.setCurrentPage(currentPage);
 		companyVO.setSize(5);
 		int total = enterprisePostingService.selectCompanyListCount(companyVO);
-		log.info("total : "+total);
-		
+
 		List<CompanyVO> companyVOList = enterprisePostingService.selectCompanyList(companyVO);
 		List<ComCodeVO> codeVOCompanyScaleList = enterprisePostingService.selectCodeVOCompanyScaleList();
-		List<ComCodeVO>  CodeVORegionList = enterprisePostingService.selectCodeVORegionList();
-		
-		ArticlePage<CompanyVO> articlePage =
-				new ArticlePage<CompanyVO>(total, companyVO.getCurrentPage(), companyVO.getSize(), companyVOList, companyVO.getKeyword());
-		//북마크 VO
+		List<ComCodeVO> CodeVORegionList = enterprisePostingService.selectCodeVORegionList();
+
+		ArticlePage<CompanyVO> articlePage = new ArticlePage<CompanyVO>(total, companyVO.getCurrentPage(),
+				companyVO.getSize(), companyVOList, companyVO.getKeyword());
+		// 북마크 VO
 		List<BookMarkVO> bookMarkVOList = new ArrayList<>();
-		
-		//기업리뷴
+
+		// 기업리뷴
 		InterviewReviewVO interviewReviewVO = new InterviewReviewVO();
 		interviewReviewVO.setIrType("G02002");
-		List<InterviewReviewVO> interviewReviewVOList = enterprisePostingService.selectEnpInterviewReview(interviewReviewVO);
-		
-		if(principal!=null && !principal.getName().equals("anonymousUser")) {
+		List<InterviewReviewVO> interviewReviewVOList = enterprisePostingService
+				.selectEnpInterviewReview(interviewReviewVO);
+
+		if (principal != null && !principal.getName().equals("anonymousUser")) {
 			int memId = Integer.parseInt(principal.getName());
 			BookMarkVO bookMarkVO = new BookMarkVO();
 			bookMarkVO.setMemId(memId);
 			bookMarkVO.setBmCategoryId("G03002");
-			
+
 			bookMarkVOList = enterprisePostingService.selectBookMarkVO(bookMarkVO);
-			log.info("bookMarkVOList"+bookMarkVOList);
-			
+
 		}
-		
+
 		articlePage.setUrl("/empt/enp/enterprisePosting.do");
-		model.addAttribute("interviewReviewVOList",interviewReviewVOList);
-		model.addAttribute("bookMarkVOList",bookMarkVOList);
+		model.addAttribute("interviewReviewVOList", interviewReviewVOList);
+		model.addAttribute("bookMarkVOList", bookMarkVOList);
 		model.addAttribute("articlePage", articlePage);
-		model.addAttribute("codeVOCompanyScaleList",codeVOCompanyScaleList);
-		model.addAttribute("CodeVORegionList",CodeVORegionList);
+		model.addAttribute("codeVOCompanyScaleList", codeVOCompanyScaleList);
+		model.addAttribute("CodeVORegionList", CodeVORegionList);
 		return "empt/enp/enterprisePosting";
 	}
-	
+
 	@PostMapping("/enp/enterprisePostingUpdate.do")
-	public ResponseEntity<String> enterprisePostingUpdate(@RequestBody CompanyVO companyVO){
-		
-		log.info("companyVO"+companyVO);
-		
+	public ResponseEntity<String> enterprisePostingUpdate(@RequestBody CompanyVO companyVO) {
+
 		int cpId = enterprisePostingService.checkCompanyByCpId(companyVO);
-		
+
 		companyVO.setCpId(cpId);
-		
+
 		int cnt = enterprisePostingService.updateEnterprisePosting(companyVO);
-		
-		if(cnt >0) {
+
+		if (cnt > 0) {
 			return ResponseEntity.ok("sucess");
-		}else {
+		} else {
 			return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body("처리중 문제발생");
 		}
 	}
-	
+
 	@PostMapping("/enp/enterprisePostingDelete.do")
-	public ResponseEntity<String> enterprisePostingDelete(@RequestBody CompanyVO companyVO){
-		log.info("companyVO"+companyVO);
+	public ResponseEntity<String> enterprisePostingDelete(@RequestBody CompanyVO companyVO) {
 		int cnt = enterprisePostingService.deleteEnterprisePosting(companyVO);
-		if(cnt>0) {
+		if (cnt > 0) {
 			return ResponseEntity.ok("sucess");
-		}else {
+		} else {
 			return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body("처리중 문제발생");
 		}
-		
+
 	}
-	
+
 }
