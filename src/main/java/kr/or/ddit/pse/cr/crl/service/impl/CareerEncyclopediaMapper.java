@@ -5,9 +5,15 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.or.ddit.worldcup.service.JobsVO;
+
 @Mapper
 public interface CareerEncyclopediaMapper {
 
 	List<Map<String, String>> selectJobLclCode();
+
+	List<JobsVO> selectCareerList(JobsVO jobs);
+
+	int selectCareerTotal(JobsVO jobs);
 
 }

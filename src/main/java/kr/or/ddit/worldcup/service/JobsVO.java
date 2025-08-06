@@ -32,4 +32,27 @@ public class JobsVO {
 	private int outlookDecrease;
 	
 	private List<String> jobsRel;
+	private List<String> jobSals;
+	private List<String> jobLcls;
+	
+	// 추가 출력값
+	private String prospect;
+	private String averageSal;
+	
+	// 필터조건
+	private String keyword;
+	private String status;
+
+	// 페이징
+	private int currentPage = 1;
+	private int size = 5;
+	private int rum;
+	
+	public int getStartRow() {
+		return (this.currentPage - 1) * this.size + 1;
+	}
+	
+	public int getEndRow() {
+		return this.currentPage * this.size;
+	}
 }

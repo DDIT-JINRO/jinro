@@ -12,4 +12,167 @@
 		    CL_CODE = 'G15'
 	</select>
 
+	<select id="selectCareerList" parameterType="kr.or.ddit.worldcup.service.JobsVO" resultType="kr.or.ddit.worldcup.service.JobsVO">
+	    SELECT
+	        JOB_CODE
+	        , JOB_NAME
+	        , JOB_MAIN_DUTY
+	        , JOB_SATIS
+	        , CASE PROSPECT_SCORE
+	            WHEN 5 THEN '증가'
+	            WHEN 4 THEN '다소 증가'
+	            WHEN 3 THEN '유지'
+	            WHEN 2 THEN '다소 감소'
+	            WHEN 1 THEN '감소'
+	        END AS PROSPECT
+	        , CASE
+	            WHEN AVG_SALARY <![CDATA[<]]> 10000 THEN
+	            	TO_CHAR(ROUND(AVG_SALARY / 1000)) || '천만원'
+	            WHEN AVG_SALARY <![CDATA[>=]]> 10000 THEN
+	                TRUNC(AVG_SALARY / 10000) || '억' ||
+	                CASE
+	                	WHEN MOD(AVG_SALARY, 10000) > 0 THEN
+	                		' ' || TO_CHAR(ROUND(MOD(AVG_SALARY, 10000) / 1000)) || '천만원'
+	                	ELSE
+	                		'' END
+	            ELSE
+	            	TO_CHAR(AVG_SALARY) || '만원'
+	        END AS AVERAGE_SAL
+	    FROM
+	        (
+	            SELECT
+	                B.*
+	            FROM
+		            (
+		                SELECT
+		                    JOB_CODE
+		                    , JOB_NAME
+		                    , JOB_MAIN_DUTY
+		                    , ROUND(JOB_SATIS) AS JOB_SATIS
+		                    , PROSPECT_SCORE
+		                    , AVG_SALARY
+		                FROM
+		                (
+		                    SELECT
+		                        JOB_CODE
+		                        , JOB_NAME
+		                        , JOB_MAIN_DUTY
+		                        , JOB_SATIS
+		                        , JOB_WAY
+		                        , JOB_LCL
+		                        , JOB_SAL
+		                        , ROUND(
+		                            (OUTLOOK_INCREASE * 5 + OUTLOOK_SLIGHT_INCREASE * 4 + OUTLOOK_STABLE * 3 + OUTLOOK_SLIGHT_DECREASE * 2 + OUTLOOK_DECREASE * 1)
+		                            / NVL((OUTLOOK_INCREASE + OUTLOOK_SLIGHT_INCREASE + OUTLOOK_STABLE + OUTLOOK_DECREASE + OUTLOOK_DECREASE), 1)
+		                        ) AS PROSPECT_SCORE
+		                        , TO_NUMBER(
+		                            TRIM(SUBSTR(JOB_SAL, INSTR(JOB_SAL, '평균(50%)') + 7, INSTR(JOB_SAL, '만원', INSTR(JOB_SAL, '평균(50%)')) - (INSTR(JOB_SAL, '평균(50%)') + 7)))
+		                        ) AS AVG_SALARY
+		                    FROM JOBS
+		                ) A
+		                WHERE 1=1
+						<choose>
+							<when test="status == 'title'">
+								AND JOB_NAME LIKE '%' || '' || '%'
+							</when>
+							<when test="status == 'content'">
+								AND (
+									JOB_MAIN_DUTY LIKE '%' || '' || '%'
+									OR JOB_WAY LIKE '%' || '' || '%'
+								)
+							</when>
+							<otherwise>
+								AND (
+									JOB_NAME LIKE '%' || '' || '%'
+									OR JOB_MAIN_DUTY LIKE '%' || '' || '%'
+									OR JOB_WAY LIKE '%' || '' || '%'
+								)
+							</otherwise>
+						</choose>
+		                <if test="jobSal != null and !jobSal.isEmpty()">
+		                    AND (
+		                        <foreach collection="jobSal" item="salItem" separator=" OR ">
+		                            <choose>
+		                                <when test="salItem == 'sal1'"> (A.AVG_SALARY <![CDATA[<]]> 3000) </when>
+		                                <when test="salItem == 'sal2'"> (A.AVG_SALARY BETWEEN 3000 AND 4999) </when>
+		                                <when test="salItem == 'sal3'"> (A.AVG_SALARY BETWEEN 5000 AND 9999) </when>
+		                                <when test="salItem == 'sal4'"> (A.AVG_SALARY <![CDATA[>]]> 10000) </when>
+		                            </choose>
+		                        </foreach>
+		                    )
+		                </if>
+		                <if test="jobLcl != null and !jobLcl.isEmpty()">
+		                    AND A.JOB_LCL IN
+		                    <foreach collection="jobLcl" item="lclItem" open="(" close=")" separator=",">
+		                        #{lclItem}
+		                    </foreach>
+		                </if>
+		                ORDER BY
+		                    JOB_SATIS DESC, JOB_NAME ASC
+		            ) B
+	            WHERE ROWNUM <![CDATA[<=]]> #{endRow} 
+	        )
+	    WHERE ROWNUM <![CDATA[>=]]> #{startRow}
+	</select>
+	
+	<select id="selectCareerTotal" parameterType="kr.or.ddit.worldcup.service.JobsVO" resultType="int">
+	    SELECT
+	        COUNT(*)
+	    FROM
+	        (
+	            SELECT
+	                JOB_CODE
+	                , JOB_NAME
+	                , JOB_MAIN_DUTY
+	                , JOB_SATIS
+	                , JOB_WAY
+	                , JOB_LCL
+	                , JOB_SAL
+	                , ROUND(
+	                    (OUTLOOK_INCREASE * 5 + OUTLOOK_SLIGHT_INCREASE * 4 + OUTLOOK_STABLE * 3 + OUTLOOK_SLIGHT_DECREASE * 2 + OUTLOOK_DECREASE * 1)
+	                    / NVL((OUTLOOK_INCREASE + OUTLOOK_SLIGHT_INCREASE + OUTLOOK_STABLE + OUTLOOK_DECREASE + OUTLOOK_DECREASE), 1)
+	                ) AS PROSPECT_SCORE
+	                , TO_NUMBER(
+	                    TRIM(SUBSTR(JOB_SAL, INSTR(JOB_SAL, '평균(50%)') + 7, INSTR(JOB_SAL, '만원', INSTR(JOB_SAL, '평균(50%)')) - (INSTR(JOB_SAL, '평균(50%)') + 7)))
+	                ) AS AVG_SALARY
+	            FROM JOBS
+	        ) A
+	    WHERE 1=1
+		<choose>
+			<when test="status == 'title'">
+				AND JOB_NAME LIKE '%' || '' || '%'
+			</when>
+			<when test="status == 'content'">
+				AND (
+					JOB_MAIN_DUTY LIKE '%' || '' || '%'
+					OR JOB_WAY LIKE '%' || '' || '%'
+				)
+			</when>
+			<otherwise>
+				AND (
+					JOB_NAME LIKE '%' || '' || '%'
+					OR JOB_MAIN_DUTY LIKE '%' || '' || '%'
+					OR JOB_WAY LIKE '%' || '' || '%'
+				)
+			</otherwise>
+		</choose>
+        <if test="jobSal != null and !jobSal.isEmpty()">
+            AND (
+                <foreach collection="jobSal" item="salItem" separator=" OR ">
+                    <choose>
+                        <when test="salItem == 'sal1'"> (A.AVG_SALARY &lt; 3000) </when>
+                        <when test="salItem == 'sal2'"> (A.AVG_SALARY &gt;= 3000 AND A.AVG_SALARY &lt; 5000) </when>
+                        <when test="salItem == 'sal3'"> (A.AVG_SALARY &gt;= 5000 AND A.AVG_SALARY &lt; 10000) </when>
+                        <when test="salItem == 'sal4'"> (A.AVG_SALARY &gt;= 10000) </when>
+                    </choose>
+                </foreach>
+            )
+        </if>
+        <if test="jobLcl != null and !jobLcl.isEmpty()">
+            AND A.JOB_LCL IN
+            <foreach collection="jobLcl" item="lclItem" open="(" close=")" separator=",">
+                #{lclItem}
+            </foreach>
+        </if>
+	</select>
 </mapper>

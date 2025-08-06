@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.or.ddit.pse.cr.crl.service.CareerEncyclopediaService;
+import kr.or.ddit.util.ArticlePage;
+import kr.or.ddit.worldcup.service.JobsVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -28,6 +30,18 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 		Map<String, String> jobLclCode = parseMap(jobLclCodeList);
 	
 		return jobLclCode;
+	}
+	
+	@Override
+	public ArticlePage<JobsVO> selectCareerList(JobsVO jobs) {
+		
+		List<JobsVO> careerList = this.careerEncyclopediaMapper.selectCareerList(jobs);
+		
+		int total = this.careerEncyclopediaMapper.selectCareerTotal(jobs);
+		
+		ArticlePage<JobsVO> articlePage = new ArticlePage<>(total, jobs.getCurrentPage(), jobs.getSize(), careerList, jobs.getKeyword());
+		
+		return articlePage;
 	}
 	
 	public Map<String, String> parseMap (List<Map<String, String>> mapList) {
