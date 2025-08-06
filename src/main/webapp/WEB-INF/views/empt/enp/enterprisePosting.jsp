@@ -41,7 +41,7 @@
             </svg>
 					</div>
 					<input type="search" name="keyword" placeholder="기업명으로 검색">
-					<button class="com-search-btn" type="button">
+					<button class="com-search-btn" type="submit">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
 							fill="currentColor" width="20" height="20">
                 <path fill-rule="evenodd"
