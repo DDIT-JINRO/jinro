@@ -2,8 +2,10 @@
 <!-- 사이드바 -->
 <link rel="stylesheet" href="/css/cns/cnsSideBar.css">
 <link rel="shortcut icon" href="/images/crppvc.png">
-<script src="/js/include/cns/sidebar.js">
-</script>
+<link rel="stylesheet" href="/css/pagenation.css">
+<script src="/js/include/cns/sidebar.js"></script>
+<script src="/js/axios.min.js"></script>
+<script src="/ckeditor5/ckeditor.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 	 sidebar();
