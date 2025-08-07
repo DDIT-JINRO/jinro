@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.cnslt.resve.crsv.service.VacationVO;
+import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.main.service.MemberVO;
 
 @Mapper
 public interface CounselingReserveMapper {
@@ -26,6 +28,14 @@ public interface CounselingReserveMapper {
     // 5. 상담 예약 상태 업데이트
     int updateReservationStatus(CounselingVO counselingVO);
 
-    //6. 상담사 상담예약 날짜
+    // 6. 상담사 상담예약 날짜
 	List<Date> selectBookedTimesByCounselorAndDate(CounselingVO counselingVO);
+	
+    // 7. 상담사 목록 가져오기
+	List<MemberVO> selectCounselorList();
+    
+    // 8. 상담목적 가져오기
+    List<ComCodeVO> selectCounselCategoryList();
+    // 9. 상담방법 가져오기
+    List<ComCodeVO> selectCounselMethodList();
 }
