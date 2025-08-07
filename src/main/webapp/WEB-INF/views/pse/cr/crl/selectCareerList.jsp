@@ -26,7 +26,6 @@
 			<a class="tab" href="/pse/cr/crr/selectCareerRcmList.do">추천 직업</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-		${articlePage}
 		<div class="public-wrapper-main">
 			<div class="activity-container">
 				<form method="GET" action="/pse/cr/crl/selectCareerList.do">
@@ -184,12 +183,16 @@
 												<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크" width="30" height="30">
 											</span>
 										</button>
-										<button class="select-btn">
-											<span>비교</span>
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+										<label class="select-btn">
+											<input type="checkbox" id="compare-btn${jobs.jobCode}" name="jobLcls" value="${jobs.jobCode}"
+												data-job-name="${jobs.jobName}" data-job-sal="${jobs.averageSal}" data-job-prospect="${jobs.prospect}" data-job-satis="${jobs.jobSatis}"/>
+											<span>
+												비교
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
                                 				<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.052-.143z" clip-rule="evenodd" />
                             				</svg>
-										</button>
+											</span>
+										</label>
 									</div>
 								</div>
 							</c:forEach>
@@ -249,6 +252,31 @@
 		</div>
 	</div>
 </div>
+
+<div class="job-compare-popup">
+    <header class="popup-header">
+        <div class="popup-title-group">
+            <img src="/images/jobCompareImg.png" alt="직업 비교 아이콘" class="popup-logo">
+            <h2 class="popup-title">직업 비교</h2>
+        </div>
+        <button type="button" class="btn-close-popup" aria-label="닫기">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1E1E1E" width="28" height="28">
+                <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </header>
+
+    <div class="popup-content">
+        <div class="compare-list">
+        </div>
+    </div>
+
+    <footer class="popup-footer">
+        <button type="button" class="btn-clear-all">모두 삭제</button>
+        <button type="button" class="btn-view-results">직업 비교하기</button>
+    </footer>
+</div>
+
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 <script src="/js/pse/cr/crl/selectCareerList.js"></script>
