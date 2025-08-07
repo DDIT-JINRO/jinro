@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const channelSection = document.querySelector(".channel");
-    if (channelSection) {
-        const errorMessage = channelSection.dataset.errorMessage;
-        if (errorMessage) alert(errorMessage);
-    }
+	const channelSection = document.querySelector(".channel");
+	if (channelSection) {
+	    const errorMessage = channelSection.dataset.errorMessage;
+	    if (errorMessage) {
+			alert(errorMessage);
+			window.location.href="/"
+		}
+	}
 
 	// 필터 정렬 순서
 	const filterOrder = ['jobLclCategory', 'jobSalCategory'];

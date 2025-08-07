@@ -20,7 +20,6 @@
 </section>
 <div>
 	<div class="public-wrapper">
-	${jobs}
 		<div class="dept-detail-container">
 			<!-- 제목 섹션 -->
 			<div class="dept-title-section">
