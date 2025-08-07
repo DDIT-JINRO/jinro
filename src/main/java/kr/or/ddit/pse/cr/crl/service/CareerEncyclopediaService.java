@@ -13,6 +13,6 @@ public interface CareerEncyclopediaService {
 
 	JobsVO selectCareerDetail(JobsVO jobs);
 
-	void insertCareer(JobsVO jobs);
+	void updateCareer(JobsVO jobs);
 	
 }

@@ -55,10 +55,10 @@ public class CareerEncyclopediaController {
 		return "pse/cr/crl/selectCareerDetail";
 	}
 	
-	@PostMapping("/cr/crl/insertCareer.do")
-	public void insertCareer (@RequestBody JobsVO jobs) {
+	@PostMapping("/cr/crl/updateCareer.do")
+	public void updateCareer (@RequestBody JobsVO jobs) {
 		
-		this.careerEncyclopediaService.insertCareer(jobs);
+		this.careerEncyclopediaService.updateCareer(jobs);
 		
 	}
 }

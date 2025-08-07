@@ -270,56 +270,89 @@
     </select>
     
     <insert id="insertCareer" parameterType="kr.or.ddit.worldcup.service.JobsVO">
-    	INSERT INTO JOBS (
-		    JOB_CODE
-		    , JOB_NAME
-		    , JOB_LCL
-		    , JOB_MCL
-		    , JOB_SAL
-		    , JOB_SATIS
-		    , JOB_WAY
-		    , JOB_RELATED_MAJOR
-		    , JOB_RELATED_CERT
-		    , JOB_MAIN_DUTY
-		    , JOB_CREATED_AT
-		    , FILE_GROUP_NO
-		    , EDUBG_MGRADU_UNDR
-		    , EDUBG_HGRADU
-		    , EDUBG_CGRADU_UNDR
-		    , EDUBG_UGRADU
-		    , EDUBG_GGRADU
-		    , EDUBG_DGRADU
-		    , OUTLOOK_INCREASE
-		    , OUTLOOK_SLIGHT_INCREASE
-		    , OUTLOOK_STABLE
-		    , OUTLOOK_SLIGHT_DECREASE
-		    , OUTLOOK_DECREASE
-		    , JOB_TARGET_ID
-		) VALUES (
-		    #{jobCode}
-		  , #{jobName}
-		  , #{jobLcl}
-		  , #{jobMcl}
-		  , #{jobSal}
-		  , #{jobSatis}
-		  , #{jobWay}
-		  , #{jobRelatedMajor}
-		  , #{jobRelatedCert}
-		  , #{jobMainDuty}
-		  , SYSDATE
-		  , #{fileGroupNo}
-		  , #{edubgMgraduUndr}
-		  , #{edubgHgradu}
-		  , #{edubgCgraduUndr}
-		  , #{edubgUgradu}
-		  , #{edubgGgradu}
-		  , #{edubgDgradu}
-		  , #{outlookIncrease}
-		  , #{outlookSlightIncrease}
-		  , #{outlookStable}
-		  , #{outlookSlightDecrease}
-		  , #{outlookDecrease}
-		  , (SELECT NVL(MAX(JOB_CODE), 0)+1 FROM JOBS)
-		);
+    	MERGE
+		INTO
+			JOBS A
+				USING DUAL
+			ON (A.JOB_CODE = #{jobCode})
+			WHEN MATCHED THEN
+		UPDATE
+		SET
+		    JOB_NAME                  = #{jobName}
+		    , JOB_LCL                 = #{jobLcl}
+		    , JOB_MCL                 = #{jobMcl}
+		    , JOB_SAL                 = #{jobSal}
+		    , JOB_SATIS               = #{jobSatis}
+		    , JOB_WAY                 = #{jobWay}
+		    , JOB_RELATED_MAJOR       = #{jobRelatedMajor}
+		    , JOB_RELATED_CERT        = #{jobRelatedCert}
+		    , JOB_MAIN_DUTY           = #{jobMainDuty}
+		    , FILE_GROUP_NO           = #{fileGroupNo}
+		    , EDUBG_MGRADU_UNDR       = #{edubgMgraduUndr}
+		    , EDUBG_HGRADU            = #{edubgHgradu}
+		    , EDUBG_CGRADU_UNDR       = #{edubgCgraduUndr}
+		    , EDUBG_UGRADU            = #{edubgUgradu}
+		    , EDUBG_GGRADU            = #{edubgGgradu}
+		    , EDUBG_DGRADU            = #{edubgDgradu}
+		    , OUTLOOK_INCREASE        = #{outlookIncrease}
+		    , OUTLOOK_SLIGHT_INCREASE = #{outlookSlightIncrease}
+		    , OUTLOOK_STABLE          = #{outlookStable}
+		    , OUTLOOK_SLIGHT_DECREASE = #{outlookSlightDecrease}
+		    , OUTLOOK_DECREASE        = #{outlookDecrease}
+			WHEN NOT MATCHED THEN                         
+		INSERT
+			(
+				JOB_CODE
+				, JOB_NAME
+				, JOB_LCL
+				, JOB_MCL
+				, JOB_SAL
+				, JOB_SATIS
+				, JOB_WAY
+				, JOB_RELATED_MAJOR
+				, JOB_RELATED_CERT
+				, JOB_MAIN_DUTY
+				, JOB_CREATED_AT
+				, FILE_GROUP_NO
+				, EDUBG_MGRADU_UNDR
+				, EDUBG_HGRADU
+				, EDUBG_CGRADU_UNDR
+				, EDUBG_UGRADU
+				, EDUBG_GGRADU
+				, EDUBG_DGRADU
+				, OUTLOOK_INCREASE
+				, OUTLOOK_SLIGHT_INCREASE
+				, OUTLOOK_STABLE
+				, OUTLOOK_SLIGHT_DECREASE
+				, OUTLOOK_DECREASE
+				, JOB_TARGET_ID
+			)
+		VALUES
+			(
+				#{jobCode}
+			  , #{jobName}
+			  , #{jobLcl}
+			  , #{jobMcl}
+			  , #{jobSal}
+			  , #{jobSatis}
+			  , #{jobWay}
+			  , #{jobRelatedMajor}
+			  , #{jobRelatedCert}
+			  , #{jobMainDuty}
+			  , SYSDATE
+			  , #{fileGroupNo}
+			  , #{edubgMgraduUndr}
+			  , #{edubgHgradu}
+			  , #{edubgCgraduUndr}
+			  , #{edubgUgradu}
+			  , #{edubgGgradu}
+			  , #{edubgDgradu}
+			  , #{outlookIncrease}
+			  , #{outlookSlightIncrease}
+			  , #{outlookStable}
+			  , #{outlookSlightDecrease}
+			  , #{outlookDecrease}
+			  , (SELECT NVL(MAX(JOB_CODE), 0)+1 FROM JOBS)
+			 )
     </insert>
 </mapper>

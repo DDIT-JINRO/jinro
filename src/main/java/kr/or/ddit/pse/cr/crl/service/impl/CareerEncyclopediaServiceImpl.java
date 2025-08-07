@@ -86,7 +86,7 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 	}
 
 	@Override
-	public void insertCareer(JobsVO jobs) {
+	public void updateCareer(JobsVO jobs) {
 		List<MultipartFile> fileList = jobs.getFiles();
 		Long fileGroupNo = fileService.createFileGroup();
 		
@@ -98,7 +98,7 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 		
 		jobs.setFileGroupNo(fileGroupNo);
 		
-		this.careerEncyclopediaMapper.insertCareer(jobs);
+		this.careerEncyclopediaMapper.updateCareer(jobs);
 	}
 
 }
