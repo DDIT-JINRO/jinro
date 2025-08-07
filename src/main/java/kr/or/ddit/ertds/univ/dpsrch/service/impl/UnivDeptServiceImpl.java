@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptDetailVO;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptService;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptVO;
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
@@ -38,8 +39,12 @@ public class UnivDeptServiceImpl implements UnivDeptService {
 
 	@Override
 	public List<BookMarkVO> selectBookMarkVO(BookMarkVO bookmarkVO) {
-		// TODO Auto-generated method stub
 		return this.univDeptMapper.selectBookMarkVO(bookmarkVO);
+	}
+
+	@Override
+	public UnivDeptDetailVO selectDeptDetail(int uddId) {
+		return this.univDeptMapper.selectDeptDetail(uddId);
 	}
 
 	

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptDetailVO;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptVO;
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
 
@@ -19,4 +20,5 @@ public interface UnivDeptMapper {
 	
 	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookmarkVO);
 	
+	UnivDeptDetailVO selectDeptDetail(int uddId);
 }

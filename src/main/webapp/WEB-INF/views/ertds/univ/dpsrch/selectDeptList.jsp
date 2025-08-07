@@ -80,6 +80,9 @@
 				<div class="accordion-header">
 					<div style="flex: 1.8;">학과명</div>
 					<div style="flex: 0.8;">학과계열</div>
+					<div style="flex: 0.8;">입학경쟁률</div>
+					<div style="flex: 0.8;">취업률</div>
+					<div style="flex: 0.8;">취직후평균임금</div>
 					<div style="width: 80px;">북마크</div>
 					<%-- 펼치기/접기 아이콘 자리 --%>
 				</div>
@@ -89,6 +92,9 @@
 						<div class="accordion-header">
 							<div class="company-info-item" style="flex: 1.8;">${univDept.uddMClass}</div>
 							<div class="company-info-item" style="flex: 0.8;">${univDept.uddLClass}</div>
+							<div class="company-info-item" style="flex: 0.8;">${univDept.admissionRate}</div>
+							<div class="company-info-item" style="flex: 0.8;">${univDept.empRate} %</div>
+							<div class="company-info-item" style="flex: 0.8;">${univDept.avgSalary}만원</div>
 							<div class="company-info-item" style="width: 80px;">
 								<div class="item-action">
 									<c:set var="isBookmarked" value="false" />
@@ -100,8 +106,8 @@
 									</c:forEach>
 
 									<button class="bookmark-btn ${isBookmarked ? 'active' : ''}"
-										data-category-id="G03001"
-										data-target-id="${fn:escapeXml(university.univId)}">
+										data-category-id="G03005"
+										data-target-id="${fn:escapeXml(univDept.uddId)}">
 										<span class="icon-active"> <img
 											src="/images/bookmark-btn-active.png" alt="활성 북마크">
 										</span> <span class="icon-inactive"> <img

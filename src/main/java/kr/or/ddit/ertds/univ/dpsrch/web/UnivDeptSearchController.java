@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptDetailVO;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptService;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptVO;
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
@@ -45,15 +46,15 @@ public class UnivDeptSearchController {
 		
 		ArticlePage<UnivDeptVO> articlePage = new ArticlePage<>(totalCount, currentPage, size, list, keyword);
 		List<BookMarkVO> bookMarkVOList = new ArrayList<>();
-		/*
-		 * if(principal!=null && !principal.getName().equals("anonymousUser")) { int
-		 * memId = Integer.parseInt(principal.getName()); BookMarkVO bookMarkVO = new
-		 * BookMarkVO(); bookMarkVO.setMemId(memId);
-		 * bookMarkVO.setBmCategoryId("G03001");
-		 * 
-		 * bookMarkVOList = this.univDeptService.selectBookMarkVO(bookMarkVO);
-		 * log.info("bookMarkVOList"+bookMarkVOList); }
-		 */
+		
+		if(principal!=null && !principal.getName().equals("anonymousUser")) { 
+			int	memId = Integer.parseInt(principal.getName()); BookMarkVO bookMarkVO = new
+			BookMarkVO(); bookMarkVO.setMemId(memId);
+			bookMarkVO.setBmCategoryId("G03005");
+			
+			bookMarkVOList = this.univDeptService.selectBookMarkVO(bookMarkVO);
+			log.info("bookMarkVOList"+bookMarkVOList); 
+		}
 		
 		model.addAttribute("articlePage", articlePage);
 		model.addAttribute("bookMarkVOList", bookMarkVOList);
@@ -65,14 +66,29 @@ public class UnivDeptSearchController {
 	// 대학비교
 	@GetMapping("/univ/dpsrch/selectCompare.do")
 	public String selectCompare() {
-
 		return "ertds/univ/dpsrch/selectCompare"; // /WEB-INF/views/erds/univ/compare.jsp
 	}
 
 	// 대학
 	@GetMapping("/univ/dpsrch/selectDetail.do")
-	public String selectDetail() {
-
+	public String selectDetail(
+			@RequestParam int uddId, 
+			Model model,
+			Principal principal) {
+		UnivDeptDetailVO deptDetail = this.univDeptService.selectDeptDetail(uddId);
+		List<BookMarkVO> bookMarkVOList = new ArrayList<>();
+				
+		if(principal!=null && !principal.getName().equals("anonymousUser")) { 
+			int	memId = Integer.parseInt(principal.getName()); BookMarkVO bookMarkVO = new
+			BookMarkVO(); bookMarkVO.setMemId(memId);
+			bookMarkVO.setBmCategoryId("G03005");
+			
+			bookMarkVOList = this.univDeptService.selectBookMarkVO(bookMarkVO);
+			log.info("bookMarkVOList"+bookMarkVOList); 
+		}
+		
+		model.addAttribute("deptDetail", deptDetail);
+		model.addAttribute("bookMarkVOList", bookMarkVOList);
 		return "ertds/univ/dpsrch/selectDetail"; // /WEB-INF/views/erds/univ/detail.jsp
 	}
 

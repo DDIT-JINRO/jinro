@@ -14,5 +14,7 @@ public interface UnivDeptService {
 	List<ComCodeVO> selectCodeVOUnivDeptLClassList();
 	
 	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookmarkVO);
+	
+	UnivDeptDetailVO selectDeptDetail(int uddId);
 
 }

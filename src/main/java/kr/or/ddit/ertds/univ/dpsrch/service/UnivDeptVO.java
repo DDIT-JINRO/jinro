@@ -14,6 +14,9 @@ public class UnivDeptVO {
 	private String uddProperty; // 학과 특성
 	private String uddJobList;  // 관련 직업
 	private String uddLiList;   // 관련 자격
+	private String admissionRate;
+	private String empRate;
+	private String avgSalary;
 	
 	private String keyword;
 	private List<String> lClassIds; 		//대학 위치 선택
