@@ -136,18 +136,12 @@
                                                             <span class="current-value 
                                                                 ${dept.udTuition > dept.avgTuition ? 'higher' : 
                                                                   dept.udTuition < dept.avgTuition ? 'lower' : 'equal'}">
-                                                                <fmt:formatNumber value="${dept.udTuition}" pattern="#,###"/>원
+                                                                <fmt:formatNumber value="${dept.udTuition}" pattern="#,###"/>원 ${dept.udTuition > dept.avgTuition ? '↑' : '↓'}
                                                             </span>
                                                             <c:if test="${dept.avgTuition != null and dept.avgTuition > 0}">
                                                                 <span class="avg-value">
                                                                     (<fmt:formatNumber value="${dept.avgTuition}" pattern="#,###"/>원)
                                                                 </span>
-                                                                <c:if test="${dept.udTuition != dept.avgTuition}">
-                                                                    <span class="comparison-indicator 
-                                                                        ${dept.udTuition > dept.avgTuition ? 'higher' : 'lower'}">
-                                                                        ${dept.udTuition > dept.avgTuition ? '↑' : '↓'}
-                                                                    </span>
-                                                                </c:if>
                                                             </c:if>
                                                         </c:when>
                                                         <c:otherwise>
@@ -165,18 +159,12 @@
                                                             <span class="current-value 
                                                                 ${dept.udScholar > dept.avgScholar ? 'higher' : 
                                                                   dept.udScholar < dept.avgScholar ? 'lower' : 'equal'}">
-                                                                <fmt:formatNumber value="${dept.udScholar}" pattern="#,###"/>원
+                                                                <fmt:formatNumber value="${dept.udScholar}" pattern="#,###"/>원 ${dept.udScholar > dept.avgScholar ? '↑' : '↓'}
                                                             </span>
                                                             <c:if test="${dept.avgScholar != null and dept.avgScholar > 0}">
                                                                 <span class="avg-value">
                                                                     (<fmt:formatNumber value="${dept.avgScholar}" pattern="#,###"/>원)
                                                                 </span>
-                                                                <c:if test="${dept.udScholar != dept.avgScholar}">
-                                                                    <span class="comparison-indicator 
-                                                                        ${dept.udScholar > dept.avgScholar ? 'higher' : 'lower'}">
-                                                                        ${dept.udScholar > dept.avgScholar ? '↑' : '↓'}
-                                                                    </span>
-                                                                </c:if>
                                                             </c:if>
                                                         </c:when>
                                                         <c:otherwise>
@@ -211,16 +199,10 @@
                                                             <span class="current-value 
                                                                 ${dept.udEmpRate > dept.avgEmpRate ? 'higher' : 
                                                                   dept.udEmpRate < dept.avgEmpRate ? 'lower' : 'equal'}">
-                                                                ${dept.udEmpRate}%
+                                                                ${dept.udEmpRate}% ${dept.udEmpRate > dept.avgEmpRate ? '↑' : '↓'}
                                                             </span>
                                                             <c:if test="${dept.avgEmpRate != null and dept.avgEmpRate > 0}">
                                                                 <span class="avg-value">(${dept.avgEmpRate}%)</span>
-                                                                <c:if test="${dept.udEmpRate != dept.avgEmpRate}">
-                                                                    <span class="comparison-indicator 
-                                                                        ${dept.udEmpRate > dept.avgEmpRate ? 'higher' : 'lower'}">
-                                                                        ${dept.udEmpRate > dept.avgEmpRate ? '↑' : '↓'}
-                                                                    </span>
-                                                                </c:if>
                                                             </c:if>
                                                         </c:when>
                                                         <c:otherwise>
