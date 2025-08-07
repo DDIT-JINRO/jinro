@@ -123,6 +123,11 @@ function sortTableByColumn(sortKey, clickedHeader) {
     updateSortIndicator(clickedHeader, currentOrder);
 }
 
+/**
+ * ===================================================
+ * 데이터와 관련된 부분 정렬을 위한 기준을 정의하는 곳
+ * ===================================================
+ */
 
 function parseSortValue(text, key) {
     switch (key) {
