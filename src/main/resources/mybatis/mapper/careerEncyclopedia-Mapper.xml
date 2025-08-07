@@ -19,7 +19,9 @@
 	        , JOB_MAIN_DUTY
 	        , JOB_SATIS
 	        , JOB_TARGET_ID
+	        <if test="memId != null and memId !=''">
 	        , IS_BOOKMARK
+	        </if>
 	        , CASE PROSPECT_SCORE
 	            WHEN 5 THEN '증가'
 	            WHEN 4 THEN '다소 증가'
@@ -55,7 +57,9 @@
 		                    , PROSPECT_SCORE
 		                    , AVG_SALARY
 		                    , JOB_TARGET_ID
+		                    <if test="memId != null and memId !=''">
 		                    , IS_BOOKMARK
+		                    </if>
 		                FROM
 		                (
 		                    SELECT
@@ -66,6 +70,7 @@
 		                        , JOB_WAY
 		                        , JOB_LCL
 		                        , JOB_SAL
+		                        , JOB_TARGET_ID
 		                        <if test="memId != null and memId !=''">
 		                        , (
 			                        SELECT
@@ -194,4 +199,56 @@
             </foreach>
         </if>
 	</select>
+	
+    <resultMap id="careerDetailMap" type="kr.or.ddit.worldcup.service.JobsVO">
+        <id property="jobCode" column="JOB_CODE"/>
+        
+        <result property="jobName" column="JOB_NAME"/>
+        <result property="jobLcl" column="JOB_LCL"/>
+        <result property="jobMcl" column="JOB_MCL"/>
+        <result property="jobSal" column="JOB_SAL"/>
+        <result property="jobTargetId" column="JOB_TARGET_ID"/>
+
+        <collection property="jobsRelVOList" ofType="kr.or.ddit.pse.cr.crl.service.JobsRelVO">
+            <id property="jrCode" column="JR_CODE"/>
+            <result property="jobName" column="RELATED_JOB_NAME"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectCareerDetail" resultMap="careerDetailMap" parameterType="kr.or.ddit.worldcup.service.JobsVO">
+        SELECT
+              A.JOB_CODE
+            , A.JOB_NAME
+            , A.JOB_LCL
+            , A.JOB_MCL
+            , A.JOB_SAL
+            , A.JOB_SATIS
+            , A.JOB_WAY
+            , A.JOB_RELATED_MAJOR
+            , A.JOB_RELATED_CERT
+            , A.JOB_MAIN_DUTY
+            , A.JOB_CREATED_AT
+            , A.FILE_GROUP_NO
+            , A.EDUBG_MGRADU_UNDR
+            , A.EDUBG_HGRADU
+            , A.EDUBG_CGRADU_UNDR
+            , A.EDUBG_UGRADU
+            , A.EDUBG_GGRADU
+            , A.EDUBG_DGRADU
+            , A.OUTLOOK_INCREASE
+            , A.OUTLOOK_SLIGHT_INCREASE
+            , A.OUTLOOK_STABLE
+            , A.OUTLOOK_SLIGHT_DECREASE
+            , A.OUTLOOK_DECREASE
+            , A.JOB_TARGET_ID
+            , B.JR_CODE
+            , (
+                SELECT JOB_NAME FROM JOBS WHERE JOB_CODE = B.JR_CODE
+              ) AS RELATED_JOB_NAME
+        FROM
+            JOBS A
+            LEFT JOIN JOBS_REL B ON A.JOB_CODE = B.JOB_CODE
+        WHERE
+            A.JOB_CODE = #{jobCode}
+    </select>
 </mapper>

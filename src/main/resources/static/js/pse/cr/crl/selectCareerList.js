@@ -114,15 +114,17 @@ document.addEventListener('DOMContentLoaded', function() {
     bookmarkButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault(); 
-            
-            // 함수 전달
             handleBookmarkToggle(this);
         });
     });
-
 });
 
 const handleBookmarkToggle = (button) => {
+    if (memId == "" || memId == "anonymousUser") {
+        alert("북마크는 로그인 후 이용 하실 수 있습니다.");
+        return;
+    }
+
     const bmCategoryId = button.dataset.categoryId;
     const bmTargetId = button.dataset.targetId;
 
@@ -165,6 +167,7 @@ const handleBookmarkToggle = (button) => {
     });
 }
 
+// 비교 팝업
 document.addEventListener('DOMContentLoaded', function() {
     const popup = document.querySelector(".job-compare-popup");
     const compareListContainer = document.querySelector(".compare-list");
