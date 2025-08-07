@@ -122,22 +122,41 @@ async function handleNextButtonClick(counsel,date,time) {
         alert('모든 필수 정보를 선택해주세요.');
         return;
     }
+	//상담방법
+	const counselMethodElement = document.getElementById('counselMethodSelect');
+	const counselMethodValue = counselMethodElement.value;
+	//상담목적
+	const counselCategoryElement = document.getElementById('counselCategorySelect');
+	const counselCategoryValue = counselCategoryElement.value;
 	
 
     // 날짜와 시간을 합쳐서 ISO 8601 형식으로 만듭니다.
     const combinedDateTime = `${date} ${time}`;
 	
+	
     try {
-        // [새로 추가] /reserve/hold API 호출
-        await axios.post('/cnslt/resve/holdAndRedirect', {
+        const response = await axios.post('/cnslt/resve/holdAndRedirect', {
             counsel: counsel,
-            counselReqDatetime: combinedDateTime
+            counselReqDatetime: combinedDateTime,
+			counselCategory: counselCategoryValue,
+			counselMethod: counselMethodValue
         });
+		
+		if (response.data && response.data.redirectUrl) {
+		    window.location.href = response.data.redirectUrl;
+		}
 
 
     } catch (error) {
-        if (error.response && error.response.status === 409) {
-            alert('죄송합니다. 해당 시간은 이미 점유되었습니다. 다른 시간을 선택해주세요.');
+		// 실패 시 로직
+        if (error.response) {
+            const data = error.response.data;
+            if (data.errorMessage) {
+                alert(data.errorMessage);
+            }
+            if (data.redirectUrl) {
+                window.location.href = data.redirectUrl;
+            }
         } else {
             console.error('락 획득 중 오류 발생:', error);
             alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');

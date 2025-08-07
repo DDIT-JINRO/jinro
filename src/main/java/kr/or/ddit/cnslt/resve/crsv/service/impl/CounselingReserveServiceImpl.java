@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.or.ddit.cnslt.resve.crsv.service.CounselingReserveService;
 import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.cnslt.resve.crsv.service.VacationVO;
+import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.main.service.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,9 +43,6 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
         
         // Redis에 키가 존재하지 않으면(false) 키를 설정하고 true 반환
         Boolean isLocked = redisTemplate.opsForValue().setIfAbsent(lockKey, lockValue, Duration.ofMinutes(10));
-        if(isLocked) {
-        	log.info("임시 락 성공!!");
-        }
         
         return isLocked != null && isLocked;
 	}
@@ -115,7 +114,6 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 	    
 	    //상담사 상담 날짜로 시간 가져오기
 	    List<Date> bookedTimes = counselingReserveMapper.selectBookedTimesByCounselorAndDate(counselingVO);
-	    log.info("bookedTimes"+bookedTimes);
 	    
 	    // 3. 예약된 시간 목록을 "HH:mm" 형식의 문자열로 변환
 	    List<String> bookedTimesFormatted = new ArrayList<>();
@@ -140,5 +138,23 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 	    
 	    return availableTimes;
     }
+
+	@Override
+	public List<MemberVO> selectCounselorList() {
+		// TODO Auto-generated method stub
+		return counselingReserveMapper.selectCounselorList();
+	}
+
+	@Override
+	public List<ComCodeVO> selectCounselCategoryList() {
+		// TODO Auto-generated method stub
+		return counselingReserveMapper.selectCounselCategoryList();
+	}
+
+	@Override
+	public List<ComCodeVO> selectCounselMethodList() {
+		// TODO Auto-generated method stub
+		return counselingReserveMapper.selectCounselMethodList();
+	}
 	
 }

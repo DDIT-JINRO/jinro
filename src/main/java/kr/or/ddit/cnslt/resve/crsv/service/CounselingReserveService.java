@@ -3,6 +3,9 @@ package kr.or.ddit.cnslt.resve.crsv.service;
 import java.util.Date;
 import java.util.List;
 
+import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.main.service.MemberVO;
+
 public interface CounselingReserveService {
 	
 	 /**
@@ -23,5 +26,22 @@ public interface CounselingReserveService {
      */
     boolean tryReserveCounsel(CounselingVO counselingVO);
     
+    /**
+     * 상담사 예약 가능 시간 가져오는 메소드
+     */
     List<String> getAvailableTimes(int counselId, Date counselReqDate);
+    
+    /**
+     * 상담사 목록 가져오는 메소드
+     */
+	List<MemberVO> selectCounselorList();
+    
+    /**
+     * 상담목적 가져오는 메소드
+     */
+    List<ComCodeVO> selectCounselCategoryList();
+    /**
+     * 상담방법 가져오는 메소드
+     */
+    List<ComCodeVO> selectCounselMethodList();
 }

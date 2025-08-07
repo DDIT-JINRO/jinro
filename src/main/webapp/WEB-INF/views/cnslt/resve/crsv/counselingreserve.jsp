@@ -28,9 +28,29 @@
   			<h3>상담 예약 JSP</h3>
   			<!-- db에서 불러와야함 -->
 			<div class="counselor-select-area">
-				<span>상담사 선택: </span> <select id="counselorSelect">
-					<option value="3">상담사 A</option>
-					<option value="3">상담사 B</option>
+				<span>상담사 선택: </span> 
+				<select id="counselorSelect">
+					<c:forEach var="counselor" items="${counselorList}">
+						<option value="${counselor.memId}">${counselor.memName}</option>
+					</c:forEach>
+				</select>
+			</div>
+
+			<div class="counselor-select-area">
+				<span>상담방법 선택: </span> 
+				<select id="counselMethodSelect">
+					<c:forEach var="method" items="${counselMethodList}">
+						<option value="${method.ccId}">${method.ccName}</option>
+					</c:forEach>
+				</select>
+			</div>
+
+			<div class="counselor-select-area">
+				<span>상담목적 선택: </span> 
+				<select id="counselCategorySelect">
+					<c:forEach var="category" items="${counselCategoryList}">
+						<option value="${category.ccId}">${category.ccName}</option>
+					</c:forEach>
 				</select>
 			</div>
 

@@ -77,4 +77,24 @@
 	    AND COUNSEL_STATUS IN ('S04001', 'S04003')
     </select>
     
+    <!-- 상담사 목록 가져오기 -->
+	    <select id="selectCounselorList" resultType="kr.or.ddit.main.service.MemberVO">
+	    select MEM_ID, MEM_NICKNAME, MEM_NAME, MEM_GEN, MEM_ROLE, MEM_EMAIL
+			from MEMBER
+			where MEM_ROLE = 'R01003'
+    </select>
+    
+    <!-- 상담목적 가져오기 -->
+    <select id="selectCounselCategoryList" resultType="kr.or.ddit.com.ComCodeVO">
+	    select CC_ID, CC_NAME
+			from COM_CODE
+			where CL_CODE = 'G07'
+    </select>
+    
+    <!-- 상담방법 가져오기 -->
+    <select id="selectCounselMethodList" resultType="kr.or.ddit.com.ComCodeVO">
+	    select CC_ID, CC_NAME
+			from COM_CODE
+			where CL_CODE = 'G08'
+	</select>
 </mapper>
