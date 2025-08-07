@@ -73,7 +73,7 @@
 		<form class="inqFormGroup" id="form-data" enctype="multipart/form-data">
 			<div>
 				<label>제 목</label> 
-				<input type="text" name="inqTitle" placeholder="제목을 입력하세요" readonly />
+				<input type="text" name="inqTitle" placeholder="제목을 입력하세요" />
 			</div>
 			
 			<input type="hidden" name="inqId" id="inqId" value="0"/>

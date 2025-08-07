@@ -1,9 +1,10 @@
+// 파일 다운로드
 function filedownload(fileGroupId,fileSeq,fileOrgName){
 	axios({
 	  method: 'get',
 	  url: `/files/download`,
 	  params: {
-		groupId: fileGroupId, 
+		fileGroupId: fileGroupId, 
 		seq: fileSeq            
 	  },
 	  responseType: 'blob' // 중요: 파일 다운로드 시 꼭 필요

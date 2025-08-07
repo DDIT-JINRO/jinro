@@ -26,6 +26,8 @@ function fetchNotices(page = 1) {
 			}
 		})
 		.then(({ data }) => {
+			
+			
 			const countEl = document.getElementById('notice-count');
 			if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
 
@@ -66,11 +68,13 @@ function renderPagination({ startPage, endPage, currentPage, totalPages }) {
 if (typeof window.noticeEventsBound === 'undefined') {
 	window.noticeEventsBound = false;
 }
+
+// 검색
 function bindNoticeEvents() {
-	if (noticeEventsBound) return;
 	noticeEventsBound = true;
 
 	const searchBtn = document.querySelector('.btn-save');
+
 	if (searchBtn) {
 		searchBtn.addEventListener('click', () => fetchNotices(1));
 	}
@@ -86,6 +90,7 @@ function bindNoticeEvents() {
 		});
 	}
 }
+
 if (!window._paginationDelegated) {
   window._paginationDelegated = true;
 
@@ -106,7 +111,7 @@ function waitForInit() {
 	const checkReady = () => {
 		const keywordInput = document.querySelector('input[name="keyword"]');
 		const editorTarget = document.getElementById("noticeContent");
-
+		
 		if (keywordInput && editorTarget) {
 			ClassicEditor
 				.create(editorTarget, {
@@ -162,7 +167,7 @@ function showDetail(noticeId) {
 				document.getElementById("file").style.display = "block";
 				ul.innerHTML = resp.getFileList.map(f => `
 	          	<li>
-	            <div onclick="filedownload('${f.fileGroupId}', ${f.fileSeq})" target="_blank">${f.fileOrgName}</div>&nbsp;&nbsp;
+	            <div onclick="filedownload('${f.fileGroupId}', ${f.fileSeq},'${f.fileOrgName}')" target="_blank">${f.fileOrgName}</div>&nbsp;&nbsp;
 	            <button type="button" onclick="deleteExistingFile('${f.fileGroupId}', ${f.fileSeq}, ${noticeId})">삭제</button>
 	          	</li>`
 				).join('');
@@ -171,25 +176,33 @@ function showDetail(noticeId) {
 		.catch(console.error);
 }
 
-function filedownload(fileGroupId, fileSeq) {
+// 파일 다운로드
+function filedownload(fileGroupId,fileSeq,fileOrgName){
 	axios({
-			method: 'get',
-			url: `/files/download`,
-			params: { groupId: fileGroupId, seq: fileSeq },
-			responseType: 'blob'
-		})
-		.then(response => {
-			const blob = new Blob([response.data]);
-			const url = window.URL.createObjectURL(blob);
-			const atag = document.createElement('a');
-			atag.href = url;
-			atag.download = `download_${fileSeq}`;
-			document.body.appendChild(atag);
-			atag.click();
-			document.body.removeChild(atag);
-			window.URL.revokeObjectURL(url);
-		})
-		.catch(error => console.error('파일 다운로드 실패:', error));
+	  method: 'get',
+	  url: `/files/download`,
+	  params: {
+		fileGroupId: fileGroupId, 
+		seq: fileSeq            
+	  },
+	  responseType: 'blob' // 중요: 파일 다운로드 시 꼭 필요
+	})
+	.then(response => {
+	  // 브라우저에서 파일 저장 처리
+	  const blob = new Blob([response.data]);
+	  const url = window.URL.createObjectURL(blob);
+	  
+	  const a = document.createElement('a');
+	  a.href = url;
+	  a.download = fileOrgName;
+	  document.body.appendChild(a);
+	  a.click();
+	  document.body.removeChild(a);
+	  window.URL.revokeObjectURL(url);
+	})
+	.catch(error => {
+	  console.error('파일 다운로드 실패:', error);
+	});
 }
 
 function deleteExistingFile(fileGroupId, seq, noticeId) {

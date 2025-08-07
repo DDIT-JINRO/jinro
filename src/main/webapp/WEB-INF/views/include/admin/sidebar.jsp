@@ -4,9 +4,11 @@
 <link rel="stylesheet" href="/css/admin/admSideBar.css">
 <link rel="shortcut icon" href="/images/crppvc.png">
 <link rel="stylesheet" href="/css/pagenation.css">
+<script src="/js/chart/chart.umd.js"></script>
 <script src="/js/include/admin/sidebar.js"></script>
 <script src="/js/axios.min.js"></script>
 <script src="/ckeditor5/ckeditor.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 	sidebar();

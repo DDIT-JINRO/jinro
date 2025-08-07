@@ -36,7 +36,6 @@ public class NoticeController {
 			@RequestParam(value="size",required=false,defaultValue="5") int size,
 			@RequestParam(value="keyword",required=false) String keyword) {
 
-		
 	    ArticlePage<NoticeVO> articlePage = noticeService.getUserNoticePage(currentPage, size, keyword);
 	    model.addAttribute("articlePage", articlePage);
 	    model.addAttribute("getAllNotice", articlePage.getTotal());
@@ -64,6 +63,9 @@ public class NoticeController {
 			//연도별 구분
 			@RequestParam(value="status",required = false)String status) {
 
+
+		log.info(""+currentPage,size,keyword,status);
+		
 		return noticeService.getAdminNoticePage(currentPage, size, keyword, status);
 	}
 	
@@ -71,7 +73,7 @@ public class NoticeController {
 	@ResponseBody
 	@GetMapping("/admin/noticeDetail.do")
 	public NoticeVO adminNoticeDetail(@RequestParam String noticeId) {
-		
+
 		return noticeService.getAdminNoticeDetail(noticeId);
 	}
 

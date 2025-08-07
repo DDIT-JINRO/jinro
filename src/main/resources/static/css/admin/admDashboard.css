@@ -9,3 +9,26 @@ body {
 	margin-left: 260px;
 	padding: 5px 20px;
 }
+
+.template-panel {
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	min-width: 0;
+}
+
+.panel-header {
+    background: #07223D;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px 16px;
+    border-radius: 8px 8px 0 0;
+    margin: -20px -20px 16px;
+    box-sizing: border-box;
+}
