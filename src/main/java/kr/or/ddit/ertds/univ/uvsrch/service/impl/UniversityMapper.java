@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
 
@@ -24,4 +25,9 @@ public interface UniversityMapper {
 	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookMarkVO);
 	
 	int selectUnivDeptCount(int univId);
+	
+	UniversityDetailVO selectUniversityDetailInfo(int univId);
+
+	List<UniversityDetailVO.DeptInfo> selectUniversityDeptStats(int univId);
+
 }

@@ -19,4 +19,5 @@ public interface UniversityService {
 	
 	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookmarkVO);
 	
+	UniversityDetailVO selectUniversityDetail(int univId);
 }
