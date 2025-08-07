@@ -71,8 +71,6 @@ public class CounselorServiceImpl implements CounselorService {
 		// 파일이 있을 경우에만 업로드 처리
 		if (!validFiles.isEmpty()) {
 
-			log.info("파일 업롣");
-
 			// 파일그룹이 이미 존재하는 경우 체크해서 존재하면 기존 그룹ID 없으면 새로운 ID
 			if(counselingLogVO.getFileGroupId() == null || counselingLogVO.getFileGroupId() == 0L) {
 				counselingLogVO.setFileGroupId(fileService.createFileGroup());
@@ -118,8 +116,6 @@ public class CounselorServiceImpl implements CounselorService {
 					.filter(file -> file != null && !file.isEmpty() && file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank())
 					.toList();
 			if (!validFiles.isEmpty()) {
-
-				log.info("파일 업롣");
 
 				// 파일그룹이 이미 존재하는 경우 체크해서 존재하면 기존 그룹ID 없으면 새로운 ID
 				if(vacationVO.getFileGroupId() == null || vacationVO.getFileGroupId() == 0L) {

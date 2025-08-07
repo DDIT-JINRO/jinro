@@ -52,7 +52,6 @@ public class CounselorApiController {
 
 	@PostMapping(value = "/updateCnsLog.do",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> updateCnsLog(@ModelAttribute CounselingLogVO counselingLogVO){
-		log.info("@@@@@@@@@@@@@@@@@updateCnsLog -> counselingLogVO : "+counselingLogVO);
 		boolean result = this.counselorService.updateCnsLog(counselingLogVO);
 		String status = counselingLogVO.getClConfirm();
 
