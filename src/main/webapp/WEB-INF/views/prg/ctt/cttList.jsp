@@ -24,86 +24,108 @@
 
 <div class="public-wrapper">
     <div class="public-wrapper-main">
-        공모전목록
         <div class="filter-section">
-            <div class="filter-tabs">
-                <span class="filter-tab active">전체</span>
-                <span class="filter-tab">인턴십</span>
-                <span class="filter-tab">봉사활동</span>
-                <span class="filter-tab">서포터즈</span>
-            </div>
-            <div class="search-bar">
-                <input type="text" placeholder="검색어를 입력하세요.">
-                <button class="search-button">검색</button>
-            </div>
-        </div>
-
-        <div class="list-container">
-            <c:forEach var="contest" items="${contestList}">
-                <div class="contest-card">
-                    <div class="card-image-box">
-                        <img src="/files/download?fileGroupId=${contest.fileGroupId}&seq=1"
-                             alt="포스터 이미지" class="contest-image">
+            <form method="get" action="/prg/ctt/cttList.do">
+                <input type="hidden" name="activityGubunFilter" value="G32001" /> <div class="main-search-container">
+                    <div class="main-search-input-wrapper">
+                        <i class="icon-search"></i>
+                        <input type="text" name="keyword" class="main-search-input"
+                               placeholder="검색어를 입력하세요." value="${articlePage.keyword}">
                     </div>
-                    <div class="card-content">
-                        <h3 class="contest-title">
-                            <a href="/prg/ctt/cttDetail.do?cttId=${contest.contestId}">
-                                ${contest.contestTitle}
-                            </a>
-                        </h3>
-                        <p class="contest-description">${contest.contestDescription}</p>
-                        <div class="contest-meta">
-                            <span class="meta-item">${contest.contestStartDate} ~ ${contest.contestEndDate}</span><br />
-                            <span class="meta-item">조회수 ${contest.contestRecruitCount}</span>
-                            <span class="meta-item">작성일자 ${contest.contestCreatedAt}</span>
+                    <button type="submit" class="main-search-btn">검색</button>
+                </div>
+
+                <div class="search-filter-box">
+                    <div class="filter-toggle-bar" id="filter-toggle-btn">
+                        <span>상세검색</span>
+                    </div>
+
+                    <div class="filter-content" id="filter-content">
+                        <div class="filter-row">
+                            <div class="filter-label-title">모집 분야</div>
+                            <div class="filter-controls">
+                                <label class="filter-item">
+                                    <input type="checkbox" name="contestTypeFilter" value="G35001" data-label="모집 분야" data-name="건축"
+                                           <c:if test="${fn:contains(checkedFilters.contestTypeFilter, 'G35001')}">checked</c:if> />
+                                    <span>건축</span>
+                                </label>
+                                </div>
+                        </div>
+
+                        <div class="filter-row">
+                            <div class="filter-label-title">모집 대상</div>
+                            <div class="filter-controls">
+                                <label class="filter-item">
+                                    <input type="checkbox" name="contestTargetFilter" value="G34001" data-label="모집 대상" data-name="전체"
+                                           <c:if test="${fn:contains(checkedFilters.contestTargetFilter, 'G34001')}">checked</c:if> />
+                                    <span>전체</span>
+                                </label>
+                                </div>
+                        </div>
+
+                        <div class="filter-row">
+                            <div class="filter-label-title selected-filter-label">필터 조건</div>
+                            <div class="selected-filters" id="selected-filters-container">
+                                </div>
                         </div>
                     </div>
                 </div>
-            </c:forEach>
+            </form>
+
+            <div class="list-container">
+                <c:if test="${not empty articlePage.content}">
+                    <c:forEach var="contest" items="${articlePage.content}">
+                        <div class="contest-card">
+                            <div class="card-image-box">
+                                <img src="/files/download?fileGroupId=${contest.fileGroupId}&seq=1"
+                                     alt="포스터 이미지" class="contest-image">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="contest-title">
+                                    <a href="/prg/ctt/cttDetail.do?cttId=${contest.contestId}">
+                                        ${contest.contestTitle}
+                                    </a>
+                                </h3>
+                                <p class="contest-description">${contest.contestDescription}</p>
+                                <div class="contest-meta">
+                                    <span class="meta-item">
+                                        ${contest.contestGubunName} | ${contest.contestTypeName} | ${contest.contestTargetName}
+                                    </span>
+                                    <br />
+                                    <span class="meta-item">조회수 ${contest.contestRecruitCount}</span>
+                                    <span class="meta-item">
+                                        <fmt:formatDate value="${contest.contestCreatedAt}" pattern="yyyy. MM. dd" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${empty articlePage.content}">
+                    <div style="text-align: center; padding: 50px;">검색 결과가 없습니다.</div>
+                </c:if>
+            </div>
         </div>
 
         <div class="card-footer clearfix">
             <ul class="pagination">
                 <li>
-                    <c:url value="/ertds/hgschl/selectHgschList.do" var="prevUrl">
-                        <c:param name="currentPage" value="${articlePage.startPage - 5}" />
-                        <c:param name="keyword" value="${checkedFilters.keyword}" />
-                        <c:forEach var="region" items="${checkedFilters.regionFilter}">
-                            <c:param name="regionFilter" value="${region}" />
-                        </c:forEach>
-                        <c:param name="schoolType" value="${checkedFilters.schoolType}" />
-                        <c:param name="coedTypeFilter" value="${checkedFilters.coedTypeFilter}" />
-                        <c:param name="departmentFilter" value="${checkedFilters.departmentFilter}" />
+                    <c:url value="${articlePage.url}" var="prevUrl">
+                        <c:param name="currentPage" value="${articlePage.startPage - 1}" />
                     </c:url>
-                    <a href="${prevUrl}" class="${articlePage.startPage < 6 ? 'disabled' : ''}">← Previous</a>
+                    <a href="${prevUrl}" class="${articlePage.startPage <= 1 ? 'disabled' : ''}">← Previous</a>
                 </li>
-
                 <c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
                     <li>
-                        <c:url value="/ertds/hgschl/selectHgschList.do" var="pageUrl">
+                        <c:url value="${articlePage.url}" var="pageUrl">
                             <c:param name="currentPage" value="${pNo}" />
-                            <c:param name="keyword" value="${checkedFilters.keyword}" />
-                            <c:forEach var="region" items="${checkedFilters.regionFilter}">
-                                <c:param name="regionFilter" value="${region}" />
-                            </c:forEach>
-                            <c:param name="schoolType" value="${checkedFilters.schoolType}" />
-                            <c:param name="coedTypeFilter" value="${checkedFilters.coedTypeFilter}" />
-                            <c:param name="departmentFilter" value="${checkedFilters.departmentFilter}" />
                         </c:url>
                         <a href="${pageUrl}" class="${pNo == articlePage.currentPage ? 'active' : ''}">${pNo}</a>
                     </li>
                 </c:forEach>
-
                 <li>
-                    <c:url value="/ertds/hgschl/selectHgschList.do" var="nextUrl">
-                        <c:param name="currentPage" value="${articlePage.startPage + 5}" />
-                        <c:param name="keyword" value="${checkedFilters.keyword}" />
-                        <c:forEach var="region" items="${checkedFilters.regionFilter}">
-                            <c:param name="regionFilter" value="${region}" />
-                        </c:forEach>
-                        <c:param name="schoolType" value="${checkedFilters.schoolType}" />
-                        <c:param name="coedTypeFilter" value="${checkedFilters.coedTypeFilter}" />
-                        <c:param name="departmentFilter" value="${checkedFilters.departmentFilter}" />
+                    <c:url value="${articlePage.url}" var="nextUrl">
+                        <c:param name="currentPage" value="${articlePage.endPage + 1}" />
                     </c:url>
                     <a href="${nextUrl}" class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : ''}">Next →</a>
                 </li>
