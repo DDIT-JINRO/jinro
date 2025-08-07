@@ -26,5 +26,6 @@ public interface CounselingReserveMapper {
     // 5. 상담 예약 상태 업데이트
     int updateReservationStatus(CounselingVO counselingVO);
 
+    //6. 상담사 상담예약 날짜
 	List<Date> selectBookedTimesByCounselorAndDate(CounselingVO counselingVO);
 }
