@@ -2,10 +2,36 @@
 
 body {
 	margin: 0px;
-	font-family: 'Noto Sans KR', sans-serif;
+	background-color: #EDF2F9;
 }
 
 .main-content {
 	margin-left: 260px;
 	padding: 5px 20px;
+}
+
+.template-panel {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	min-width: 0;
+	transition: all 0.3s ease;
+	transform: translateY(0);
+}
+
+.template-panel:hover {
+	transform: translateY(-1px);
+}
+
+.panel-header {
+	margin-bottom: 20px;
+	font-size: 15px;
+	font-weight: 600;
+	padding: 6px 8px;
+	border-radius: 8px 8px 0 0;
+	box-sizing: border-box;
 }

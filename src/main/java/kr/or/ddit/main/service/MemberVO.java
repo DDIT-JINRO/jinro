@@ -30,21 +30,37 @@ public class MemberVO {
 	private Long fileEtc;
 	private Long fileSub;
 	private Long fileBadge;
-	
+
 	private List<ComCodeVO> interests;
 	private String subName;
 	private int remainingDays;
-	
+
 	private Date svCreatedAt;
 	private String svStatus;
 	private String svReason;
-	
+
 	private String profileFilePath;
 	private String badgeFilePath;
 	private String subFilePath;
-	
+
 	public String getSMemId() {
-		return memId+"";
+		return memId + "";
+	}
+
+	private String keyword;	 
+	private String status;
+
+	private int currentPage;
+	private int size;
+	private int startNo;
+	private int endNo;
+
+	public int getStartNo() {
+		return (this.currentPage - 1) * size;
+	}
+
+	public int getEndNo() {
+		return this.currentPage * size;
 	}
 
 }
