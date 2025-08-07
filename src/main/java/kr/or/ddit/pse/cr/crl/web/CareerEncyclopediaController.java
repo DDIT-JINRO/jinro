@@ -43,9 +43,9 @@ public class CareerEncyclopediaController {
 	}
 	
 	@GetMapping("/cr/crl/selectCareerDetail.do")
-	public String selectCareerDetail (@ModelAttribute JobsVO jobs, Model model, RedirectAttributes redirectAttributes) {
+	public String selectCareerDetail (@AuthenticationPrincipal String memId, @ModelAttribute JobsVO jobs, Model model, RedirectAttributes redirectAttributes) {
 		try {
-			jobs = this.careerEncyclopediaService.selectCareerDetail(jobs);
+			jobs = this.careerEncyclopediaService.selectCareerDetail(jobs, memId);
 			model.addAttribute("jobs", jobs);
 		} catch (Exception e) {
 			log.error("에러 발생 : " + e.getMessage());

@@ -225,6 +225,7 @@
 		<result property="outlookSlightDecrease" column="OUTLOOK_SLIGHT_DECREASE"/>
 		<result property="outlookDecrease" column="OUTLOOK_DECREASE"/>
 		<result property="jobTargetId" column="JOB_TARGET_ID"/>
+		<result property="isBookmark" column="IS_BOOKMARK"/>
 
         <collection property="jobsRelVOList" ofType="kr.or.ddit.pse.cr.crl.service.JobsRelVO">
             <id property="jrCode" column="JR_CODE"/>
@@ -259,6 +260,17 @@
             , A.OUTLOOK_DECREASE
             , A.JOB_TARGET_ID
             , B.JR_CODE
+			<if test="memId != null and memId != ''">
+			, (
+				SELECT
+					BM_TARGET_ID
+				FROM
+					BOOKMARK
+				WHERE
+					BM_CATEGORY_ID = 'G03004'
+				AND MEM_ID = #{memId}
+				AND BM_TARGET_ID = A.JOB_TARGET_ID) AS IS_BOOKMARK
+			</if>
             , (
                 SELECT JOB_NAME FROM JOBS WHERE JOB_CODE = B.JR_CODE
               ) AS RELATED_JOB_NAME

@@ -20,13 +20,14 @@
 </section>
 <div>
 	<div class="public-wrapper">
+	${jobs}
 		<div class="dept-detail-container">
 			<!-- 제목 섹션 -->
 			<div class="dept-title-section">
 				<div class="dept-header">
 					<div class="dept-university-name">${jobs.jobName}</div>
 					<div class="item-action">
-						<button class="bookmark-btn active" data-category-id="${bookmark.bmCategoryId}" data-target-id="${bookmark.bmTargetId}">
+						<button class="bookmark-btn ${jobs.isBookmark == jobs.jobTargetId ? 'active' : '' }" data-category-id="G03004" data-target-id="${jobs.jobTargetId}">
 							<span class="icon-active">
 								<img src="/images/bookmark-btn-active.png" alt="활성 북마크" width="30" height="30">
 							</span>
@@ -39,7 +40,7 @@
 				</div>
 				<div class="dept-divider"></div>
 				<div class="dept-info row">
-					<div class="dept-info-item">${jobs.jobLcl}> ${jobs.jobMcl}</div>
+					<div class="dept-info-item">${jobs.jobLcl} > ${jobs.jobMcl}</div>
 					<div class="job-source">[ 정보제공 : 한국고용정보원 고용24 (구 워크넷) ]</div>
 				</div>
 			</div>

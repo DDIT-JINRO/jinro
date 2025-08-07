@@ -1,7 +1,6 @@
 package kr.or.ddit.pse.cr.crl.service.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.pse.cr.crl.service.CareerEncyclopediaService;
 import kr.or.ddit.util.ArticlePage;
-import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
 import kr.or.ddit.worldcup.service.JobsVO;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +57,11 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 	}
 	
 	@Override
-	public JobsVO selectCareerDetail(JobsVO jobs) {
+	public JobsVO selectCareerDetail(JobsVO jobs, String memIdStr) {
+		
+		if (!"".equals(memIdStr) && !"anonymousUser".equals(memIdStr)) {
+			jobs.setMemId(Integer.parseInt(memIdStr));
+		}
 		
 		JobsVO careerDetail = this.careerEncyclopediaMapper.selectCareerDetail(jobs);
 		
