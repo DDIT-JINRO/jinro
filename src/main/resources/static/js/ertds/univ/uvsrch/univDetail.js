@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 검색 결과가 없을 때 메시지 표시/숨김
         handleSearchResults(visibleCount, searchTerm);
+        
+        // 검색 후 경쟁률 비교 다시 처리
+        processCompetitionRates();
     }
 
     // 검색 결과 메시지 처리 함수
@@ -64,13 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            // 실시간 검색 (디바운싱 적용)
-            let searchTimeout;
-            deptSearchInput.addEventListener('input', function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(searchDepartments, 300);
-            });
-
             // 검색창 포커스 시 전체 텍스트 선택
             deptSearchInput.addEventListener('focus', function() {
                 this.select();
@@ -103,10 +99,42 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+	
+	// 학과 아이템 클릭 이벤트 (전체 행 클릭 가능)
+	document.querySelectorAll('.dept-item.clickable-item').forEach(item => {
+        // 커서 스타일 추가
+        item.style.cursor = 'pointer';
+        
+        item.addEventListener('click', function(e) {
+            const href = this.dataset.href;
+            const deptName = this.dataset.deptName;
+            
+            if (href) {
+                // 학과 클릭 추적 (구글 애널리틱스 등)
+                console.log('학과 상세페이지 이동:', {
+                    deptName: deptName,
+                    href: href
+                });
+                
+                // 페이지 이동
+                window.location.href = href;
+            }
+        });
+        
+        // 호버 효과 추가
+        item.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#f8f9fa';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '';
+        });
+    });
 
     // 초기화 함수들 실행
     initializeSearchListeners();
     initializeDeptLinkListeners();
+	processCompetitionRates();
 
     // 페이지 로드 완료 시 검색창에 포커스 (선택사항)
     if (deptSearchInput) {
@@ -209,6 +237,53 @@ function showToastMessage(message, type = 'info') {
             }
         }, 300);
     }, 3000);
+}
+
+// 경쟁률 비교 처리 함수
+function processCompetitionRates() {
+    // 모든 경쟁률 항목 찾기
+    const competitionItems = document.querySelectorAll('.dept-competition .value-comparison');
+    
+    competitionItems.forEach(item => {
+        const currentValueSpan = item.querySelector('.current-value');
+        const avgValueSpan = item.querySelector('.avg-value');
+        
+        if (!currentValueSpan || !avgValueSpan) return;
+        
+        // 텍스트에서 숫자 추출
+        const currentText = currentValueSpan.textContent.trim();
+        const avgText = avgValueSpan.textContent.trim();
+        
+        // "16.4:1" 또는 "16.4 : 1" 형태에서 숫자 추출
+        const currentRate = extractCompetitionRate(currentText);
+        const avgRate = extractCompetitionRate(avgText);
+        
+        if (currentRate !== null && avgRate !== null) {
+            // 비교 및 클래스 적용
+            if (currentRate > avgRate) {
+                currentValueSpan.classList.add('higher');
+                currentValueSpan.textContent = currentText + ' ↑';
+            } else if (currentRate < avgRate) {
+                currentValueSpan.classList.add('lower');
+                currentValueSpan.textContent = currentText + ' ↓';
+            } else {
+                currentValueSpan.classList.add('equal');
+            }
+        }
+    });
+}
+
+// 경쟁률 문자열에서 숫자 추출하는 함수
+function extractCompetitionRate(text) {
+    // 괄호 제거하고 숫자:1 패턴에서 숫자 부분 추출
+    const cleanText = text.replace(/[()]/g, '');
+    const match = cleanText.match(/(\d+\.?\d*)\s*:\s*1/);
+    
+    if (match && match[1]) {
+        return parseFloat(match[1]);
+    }
+    
+    return null;
 }
 
 // 유틸리티 함수들

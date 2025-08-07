@@ -61,14 +61,6 @@
                             <span class="info-value">${universityDetail.univGubun}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">지역</span>
-                            <span class="info-value">${universityDetail.univRegion}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">주소</span>
-                            <span class="info-value">${universityDetail.univAddr}</span>
-                        </div>
-                        <div class="info-item">
                             <span class="info-label">홈페이지</span>
                             <span class="info-value">
                                 <c:choose>
@@ -81,6 +73,15 @@
                                 </c:choose>
                             </span>
                         </div>
+                        <div class="info-item">
+                            <span class="info-label">지역</span>
+                            <span class="info-value">${universityDetail.univRegion}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">주소</span>
+                            <span class="info-value">${universityDetail.univAddr}</span>
+                        </div>
+                        
                         <div class="info-item">
                             <span class="info-label">총 학과 수</span>
                             <span class="info-value">${universityDetail.totalDeptCount}개</span>
@@ -119,13 +120,13 @@
                         <c:choose>
                             <c:when test="${not empty universityDetail.deptList}">
                                 <c:forEach var="dept" items="${universityDetail.deptList}">
-                                    <div class="dept-item" data-dept-name="${dept.udName}">
+                                    <div class="dept-item clickable-item" 
+					                     data-dept-name="${dept.udName}"
+					                     data-href="/ertds/univ/dpsrch/selectDetail.do?uddId=${dept.uddId}">
                                         <div class="dept-item-content">
                                             <!-- 학과명 - 클릭 가능한 링크 -->
                                             <div class="dept-info-item dept-name">
-                                                <a href="/ertds/univ/dpsrch/selectDetail.do?uddId=${dept.uddId}" class="dept-link">
                                                     ${dept.udName}
-                                                </a>
                                             </div>
                                             
                                             <!-- 등록금 비교 -->

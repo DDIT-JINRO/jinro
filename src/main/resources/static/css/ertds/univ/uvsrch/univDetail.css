@@ -369,9 +369,9 @@
     padding: 6px 12px;
     border: 1px solid #d1d5db;
     border-radius: 15px;
-    background-color: #f3f4f6;
+    background-color: #6c75ff;
     font-size: 0.85rem;
-    color: #4b5563;
+    color: #fff;
     text-decoration: none;
     transition: all 0.2s ease;
     white-space: nowrap;
@@ -406,7 +406,6 @@
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 10px;
-    border-left: 4px solid #007bff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
