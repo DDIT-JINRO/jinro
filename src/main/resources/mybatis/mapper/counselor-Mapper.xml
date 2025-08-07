@@ -285,6 +285,23 @@
 	</update>
 
 	<select id="selectCounselList" resultType="kr.or.ddit.cns.service.CounselingVO">
+		SELECT
+		       COUNSEL_ID
+		     , MEM_ID
+		     , COUNSEL
+		     , COUNSEL_CATEGORY
+		     , COUNSEL_METHOD
+		     , COUNSEL_TITLE
+		     , COUNSEL_DESCRIPTION
+		     , COUNSEL_STATUS
+		     , COUNSEL_REQ_DATE
+		     , COUNSEL_REQ_TIME
+		     , COUNSEL_URL_COU
+		     , COUNSEL_REVIEWD
+		     , COUNSEL_CREATED_AT
+		     , COUNSEL_UPDATED_AT
+		     , COUNSEL_URL_USER
+		  FROM COUNSELING
 	</select>
 
 	<select id="selectTotalMyVationList" resultType="int" parameterType="kr.or.ddit.cns.service.VacationVO">
