@@ -17,4 +17,5 @@ public interface UnivDeptService {
 	
 	UnivDeptDetailVO selectDeptDetail(int uddId);
 
+	List<UnivDeptCompareVO> getDeptCompareList(List<Integer> uddIdList);
 }

@@ -23,10 +23,10 @@
                         WHEN (UDS.UDS_SALARY_0_150_RATE + UDS.UDS_SALARY_151_200_RATE + UDS.UDS_SALARY_201_250_RATE + UDS.UDS_SALARY_251_300_RATE + UDS.UDS_SALARY_301_PLUS_RATE) > 0
                         THEN ROUND(
                             (UDS.UDS_SALARY_0_150_RATE * 75 +
-                             UDS.UDS_SALARY_151_200_RATE * 175.5 +
-                             UDS.UDS_SALARY_201_250_RATE * 225.5 +
-                             UDS.UDS_SALARY_251_300_RATE * 275.5 +
-                             UDS.UDS_SALARY_301_PLUS_RATE * 375) /
+                             UDS.UDS_SALARY_151_200_RATE * 175 +
+                             UDS.UDS_SALARY_201_250_RATE * 225 +
+                             UDS.UDS_SALARY_251_300_RATE * 275 +
+                             UDS.UDS_SALARY_301_PLUS_RATE * 350) /
                             (UDS.UDS_SALARY_0_150_RATE + UDS.UDS_SALARY_151_200_RATE + UDS.UDS_SALARY_201_250_RATE + UDS.UDS_SALARY_251_300_RATE + UDS.UDS_SALARY_301_PLUS_RATE), 0
                         )
                         ELSE NULL
@@ -148,5 +148,64 @@
         FROM COM_CODE
         WHERE CL_CODE = 'G18'
     </select>
+    
+    <!-- 학과 비교 데이터 조회 -->
+	<select id="selectDeptCompareList" parameterType="list" resultType="kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptCompareVO">
+	    SELECT 
+	        uds.UDD_ID as uddId,
+	        lc.CC_NAME as uddLClass,
+	        mc.CC_NAME as uddMClass,
+	        
+	        -- 기존 데이터에서 가져오기
+	        COALESCE(uds.UDS_ADMISSION_RATE, '정보없음') as admissionRate,
+	        CONCAT(ROUND(uds.UDS_EMPLOYMENT_RATE_TOTAL, 1), '') as empRate,
+	        
+	        -- 평균 급여 계산 (급여 구간별 중간값으로 추정)
+	        ROUND(
+	            (COALESCE(uds.UDS_SALARY_0_150_RATE, 0) * 75 +           -- 0-150만원 구간 중간값: 75
+	             COALESCE(uds.UDS_SALARY_151_200_RATE, 0) * 175 +        -- 151-200만원 구간 중간값: 175  
+	             COALESCE(uds.UDS_SALARY_201_250_RATE, 0) * 225 +        -- 201-250만원 구간 중간값: 225
+	             COALESCE(uds.UDS_SALARY_251_300_RATE, 0) * 275 +        -- 251-300만원 구간 중간값: 275
+	             COALESCE(uds.UDS_SALARY_301_PLUS_RATE, 0) * 350), 0     -- 301만원 이상 구간 추정값: 350
+	        ) as avgSalary,
+	        
+	        -- 전국 평균 등록금 계산
+	        (SELECT ROUND(AVG(dept.UD_TUITION), 0)
+	         FROM UNIV_DEPT dept
+	         WHERE dept.UDD_ID = uds.UDD_ID
+	         AND dept.UD_TUITION IS NOT NULL) AS AVG_TUITION,
+	         
+	        -- 전국 평균 장학금 계산  
+	        (SELECT ROUND(AVG(dept.UD_SCHOLAR), 0)
+	         FROM UNIV_DEPT dept
+	         WHERE dept.UDD_ID = uds.UDD_ID
+	         AND dept.UD_SCHOLAR IS NOT NULL) AS AVG_SCHOLAR,
+	         
+	        -- 만족도 가중평균 계산 (1~5점)
+	        ROUND(
+	            (COALESCE(uds.UDS_SATISFACTION_VERY_DISSATISFIED, 0) * 1 +
+	             COALESCE(uds.UDS_SATISFACTION_DISSATISFIED, 0) * 2 +
+	             COALESCE(uds.UDS_SATISFACTION_NEUTRAL, 0) * 3 +
+	             COALESCE(uds.UDS_SATISFACTION_SATISFIED, 0) * 4 +
+	             COALESCE(uds.UDS_SATISFACTION_VERY_SATISFIED, 0) * 5) /
+	            NULLIF(
+	                COALESCE(uds.UDS_SATISFACTION_VERY_DISSATISFIED, 0) +
+	                COALESCE(uds.UDS_SATISFACTION_DISSATISFIED, 0) +
+	                COALESCE(uds.UDS_SATISFACTION_NEUTRAL, 0) +
+	                COALESCE(uds.UDS_SATISFACTION_SATISFIED, 0) +
+	                COALESCE(uds.UDS_SATISFACTION_VERY_SATISFIED, 0), 0
+	            ), 1
+	        ) AS satisfactionAvg
+	        
+	    FROM UNIV_DEPT_STAT uds
+	    JOIN UNIV_DEPT_DETAIL udd ON uds.UDD_ID = udd.UDD_ID
+	    LEFT JOIN COM_CODE lc ON udd.UDD_L_CLASS = lc.CC_ID
+	    LEFT JOIN COM_CODE mc ON udd.UDD_M_CLASS = mc.CC_ID
+	    WHERE uds.UDD_ID IN
+	    <foreach collection="list" item="uddId" open="(" separator="," close=")">
+	        #{uddId}
+	    </foreach>
+	    ORDER BY udd.UDD_M_CLASS
+	</select>
 
 </mapper>

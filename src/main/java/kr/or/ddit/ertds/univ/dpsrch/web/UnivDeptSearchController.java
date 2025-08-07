@@ -2,16 +2,23 @@ package kr.or.ddit.ertds.univ.dpsrch.web;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptCompareVO;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptDetailVO;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptService;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptVO;
@@ -65,7 +72,23 @@ public class UnivDeptSearchController {
 	
 	// 대학비교
 	@GetMapping("/univ/dpsrch/selectCompare.do")
-	public String selectCompare() {
+	public String selectCompare(
+			@RequestParam(value = "uddIds", required = false) List<Integer> uddIdList,
+            Model model) {
+        
+	    log.info("학과 비교 페이지 진입 - 학과 IDs: {}", uddIdList);
+        
+        // URL 파라미터로 학과 ID가 전달된 경우 미리 조회
+	    if (uddIdList != null && !uddIdList.isEmpty()) {
+	        try {
+	            List<UnivDeptCompareVO> compareList = univDeptService.getDeptCompareList(uddIdList);
+	            model.addAttribute("compareList", compareList);
+	            model.addAttribute("preloadedDepts", uddIdList);  // ✅ 변경
+
+	        } catch (Exception e) {
+	            log.error("학과 비교 데이터 조회 오류: {}", uddIdList, e);
+	        }
+	    }
 		return "ertds/univ/dpsrch/selectCompare"; // /WEB-INF/views/erds/univ/compare.jsp
 	}
 
