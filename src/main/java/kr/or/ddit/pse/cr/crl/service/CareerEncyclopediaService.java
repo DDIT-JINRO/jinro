@@ -9,6 +9,6 @@ public interface CareerEncyclopediaService {
 
 	Map<String, String> selectJobLclCode();
 
-	ArticlePage<JobsVO> selectCareerList(JobsVO jobs);
+	ArticlePage<JobsVO> selectCareerList(JobsVO jobs, String memId);
 	
 }

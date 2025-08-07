@@ -33,14 +33,17 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 	}
 	
 	@Override
-	public ArticlePage<JobsVO> selectCareerList(JobsVO jobs) {
+	public ArticlePage<JobsVO> selectCareerList(JobsVO jobs, String memIdStr) {
+		
+		if (!"".equals(memIdStr) || !"anonymousUser".equals(memIdStr)) {
+			jobs.setMemId(Integer.parseInt(memIdStr));
+		}
 		
 		List<JobsVO> careerList = this.careerEncyclopediaMapper.selectCareerList(jobs);
 		
 		int total = this.careerEncyclopediaMapper.selectCareerTotal(jobs);
 		
 		ArticlePage<JobsVO> articlePage = new ArticlePage<>(total, jobs.getCurrentPage(), jobs.getSize(), careerList, jobs.getKeyword());
-		
 		
 		articlePage.setUrl("/pse/cr/crl/selectCareerList.do");
 		

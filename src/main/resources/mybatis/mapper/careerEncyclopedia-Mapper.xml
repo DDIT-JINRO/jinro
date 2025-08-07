@@ -18,6 +18,8 @@
 	        , JOB_NAME
 	        , JOB_MAIN_DUTY
 	        , JOB_SATIS
+	        , JOB_TARGET_ID
+	        , IS_BOOKMARK
 	        , CASE PROSPECT_SCORE
 	            WHEN 5 THEN '증가'
 	            WHEN 4 THEN '다소 증가'
@@ -52,6 +54,8 @@
 		                    , ROUND(JOB_SATIS) AS JOB_SATIS
 		                    , PROSPECT_SCORE
 		                    , AVG_SALARY
+		                    , JOB_TARGET_ID
+		                    , IS_BOOKMARK
 		                FROM
 		                (
 		                    SELECT
@@ -62,6 +66,17 @@
 		                        , JOB_WAY
 		                        , JOB_LCL
 		                        , JOB_SAL
+		                        <if test="memId != null and memId !=''">
+		                        , (
+			                        SELECT
+			                        	BM_TARGET_ID
+			                        FROM
+			                        	BOOKMARK
+			                        WHERE
+			                        	BM_CATEGORY_ID = 'G03004'
+			                        	AND MEM_ID = #{memId}
+			                        	AND BM_TARGET_ID = JOB_TARGET_ID) AS IS_BOOKMARK
+		                        </if>
 						        , ROUND(
 						            (OUTLOOK_INCREASE * 5 + OUTLOOK_SLIGHT_INCREASE * 4 + OUTLOOK_STABLE * 3 + OUTLOOK_SLIGHT_DECREASE * 2 + OUTLOOK_DECREASE * 1)
 						            / NVL((OUTLOOK_INCREASE + OUTLOOK_SLIGHT_INCREASE + OUTLOOK_STABLE + OUTLOOK_SLIGHT_DECREASE + OUTLOOK_DECREASE), 1)
@@ -69,32 +84,33 @@
 		                        , TO_NUMBER(
 		                            TRIM(SUBSTR(JOB_SAL, INSTR(JOB_SAL, '평균(50%)') + 7, INSTR(JOB_SAL, '만원', INSTR(JOB_SAL, '평균(50%)')) - (INSTR(JOB_SAL, '평균(50%)') + 7)))
 		                        ) AS AVG_SALARY
+		                        , JOB_TARGET_ID
 		                    FROM JOBS
 		                ) A
 		                WHERE 1=1
 		                <if test = "keyword != null and keyword != ''">
 							<choose>
 								<when test="status == 'title'">
-									AND JOB_NAME LIKE '%' || '' || '%'
+									AND JOB_NAME LIKE '%' || UPPER(#{keyword}) || '%'
 								</when>
 								<when test="status == 'content'">
 									AND (
-										JOB_MAIN_DUTY LIKE '%' || '' || '%'
-										OR JOB_WAY LIKE '%' || '' || '%'
+										JOB_MAIN_DUTY LIKE '%' || UPPER(#{keyword}) || '%'
+										OR JOB_WAY LIKE '%' || UPPER(#{keyword}) || '%'
 									)
 								</when>
 								<otherwise>
 									AND (
-										JOB_NAME LIKE '%' || '' || '%'
-										OR JOB_MAIN_DUTY LIKE '%' || '' || '%'
-										OR JOB_WAY LIKE '%' || '' || '%'
+										JOB_NAME LIKE '%' || UPPER(#{keyword}) || '%'
+										OR JOB_MAIN_DUTY LIKE '%' || UPPER(#{keyword}) || '%'
+										OR JOB_WAY LIKE '%' || UPPER(#{keyword}) || '%'
 									)
 								</otherwise>
 							</choose>
 						</if>
-		                <if test="jobSal != null and !jobSal.isEmpty()">
+		                <if test="jobSals != null and !jobSals.isEmpty()">
 		                    AND (
-		                        <foreach collection="jobSal" item="salItem" separator=" OR ">
+		                        <foreach collection="jobSals" item="salItem" separator=" OR ">
 		                            <choose>
 		                                <when test="salItem == 'sal1'"> (A.AVG_SALARY <![CDATA[<]]> 3000) </when>
 		                                <when test="salItem == 'sal2'"> (A.AVG_SALARY BETWEEN 3000 AND 4999) </when>
@@ -104,9 +120,9 @@
 		                        </foreach>
 		                    )
 		                </if>
-		                <if test="jobLcl != null and !jobLcl.isEmpty()">
+		                <if test="jobLcls != null and !jobLcls.isEmpty()">
 		                    AND A.JOB_LCL IN
-		                    <foreach collection="jobLcl" item="lclItem" open="(" close=")" separator=",">
+		                    <foreach collection="jobLcls" item="lclItem" open="(" close=")" separator=",">
 		                        #{lclItem}
 		                    </foreach>
 		                </if>
@@ -161,7 +177,7 @@
 		</choose>
         <if test="jobSal != null and !jobSal.isEmpty()">
             AND (
-                <foreach collection="jobSal" item="salItem" separator=" OR ">
+                <foreach collection="jobSals" item="salItem" separator=" OR ">
                     <choose>
                         <when test="salItem == 'sal1'"> (A.AVG_SALARY &lt; 3000) </when>
                         <when test="salItem == 'sal2'"> (A.AVG_SALARY &gt;= 3000 AND A.AVG_SALARY &lt; 5000) </when>
@@ -171,9 +187,9 @@
                 </foreach>
             )
         </if>
-        <if test="jobLcl != null and !jobLcl.isEmpty()">
+        <if test="jobLcls != null and !jobLcls.isEmpty()">
             AND A.JOB_LCL IN
-            <foreach collection="jobLcl" item="lclItem" open="(" close=")" separator=",">
+            <foreach collection="jobLcls" item="lclItem" open="(" close=")" separator=",">
                 #{lclItem}
             </foreach>
         </if>

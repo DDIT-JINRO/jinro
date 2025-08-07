@@ -30,10 +30,16 @@ public class JobsVO {
 	private int outlookStable;
 	private int outlookSlightDecrease;
 	private int outlookDecrease;
+	private int jobTargetId;
 	
 	private List<String> jobsRel;
 	private List<String> jobSals;
 	private List<String> jobLcls;
+	private List<String> jobCodes;
+
+	// 북마크 확인값
+	private String isBookmark;
+	private int memId;
 	
 	// 추가 출력값
 	private String prospect;

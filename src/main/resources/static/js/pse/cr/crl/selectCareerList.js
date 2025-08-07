@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// 필터 키워드
     const allCheckboxGroups = {
-        jobLclCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="jobLcl"]'),
-        jobSalCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="jobSal"]'),
+        jobLclCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="jobLcls"]'),
+        jobSalCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="jobSals"]'),
     };
 	
 	// 선택 필터 영역

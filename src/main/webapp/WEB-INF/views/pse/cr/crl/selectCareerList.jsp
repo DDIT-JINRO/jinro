@@ -60,8 +60,16 @@
 									<label class="com-filter-title">직업 대분류</label>
 									<div class="com-filter-options">
 										<c:forEach var="jobLcl" items="${jobLclCode}">
+											<c:set var="isChecked" value="${false}" />
+
+											<c:forEach var="submittedLcl" items="${paramValues.jobLcls}">
+												<c:if test="${jobLcl.key eq submittedLcl}">
+													<c:set var="isChecked" value="${true}" />
+												</c:if>
+											</c:forEach>
+
 											<label class="com-filter-item">
-												<input id="${jobLcl.key}" type="checkbox" name="jobLcl" value="${jobLcl.key}" ${param.jobLcl == jobLcl.key ? 'checked' : ''} />
+												<input id="${jobLcl.key}" type="checkbox" name="jobLcls" value="${jobLcl.key}" ${isChecked ? 'checked' : ''} />
 												<span>${jobLcl.value}</span>
 											</label>
 										</c:forEach>
@@ -70,22 +78,22 @@
 								<div class="com-filter-section">
 									<label class="com-filter-title">연봉</label>
 									<div class="com-filter-options">
-										<label class="com-filter-item">
-											<input id="sal1" type="checkbox" name="jobSal" value="sal1" ${param.jobSal == 'sal1' ? 'checked' : ''} />
-											<span>3000천만원 미만</span>
-										</label>
-										<label class="com-filter-item">
-											<input id="sal2" type="checkbox" name="jobSal" value="sal2" ${param.jobSal == 'sal2' ? 'checked' : ''} />
-											<span>3천만원 이상 5천만원 미만</span>
-										</label>
-										<label class="com-filter-item">
-											<input id="sal3" type="checkbox" name="jobSal" value="sal3" ${param.jobSal == 'sal3' ? 'checked' : ''} />
-											<span>5천만원 이상 1억원 미만</span>
-										</label>
-										<label class="com-filter-item">
-											<input id="sal4" type="checkbox" name="jobSal" value="sal4" ${param.jobSal == 'sal4' ? 'checked' : ''} />
-											<span>1억원 이상</span>
-										</label>
+										<c:forEach var="salOption" items="<%=new String[] {\"sal1\",\"sal2\",\"sal3\",\"sal4\" }%>">
+											<c:set var="salLabels" value="${{'sal1':'3000천만원 미만', 'sal2':'3천만원 이상 5천만원 미만', 'sal3':'5천만원 이상 1억원 미만', 'sal4':'1억원 이상'}}" />
+
+											<c:set var="isSalChecked" value="${false}" />
+
+											<c:forEach var="submittedSal" items="${paramValues.jobSals}">
+												<c:if test="${salOption eq submittedSal}">
+													<c:set var="isSalChecked" value="${true}" />
+												</c:if>
+											</c:forEach>
+
+											<label class="com-filter-item">
+												<input id="${salOption}" type="checkbox" name="jobSals" value="${salOption}" ${isSalChecked ? 'checked' : ''} />
+												<span>${salLabels[salOption]}</span>
+											</label>
+										</c:forEach>
 									</div>
 								</div>
 								<div class="com-filter-section">
@@ -93,7 +101,22 @@
 										<label class="com-filter-title">선택된 필터</label>
 										<button type="button" class="com-filter-reset-btn">초기화</button>
 									</div>
-									<div class="com-selected-filters"></div>
+									<div class="com-selected-filters">
+										<c:forEach var="submittedLcl" items="${paramValues.jobLcls}">
+											<span class="com-selected-filter" data-group="jobLcls" data-value="${submittedLcl}">
+												직업 대분류 > ${jobLclCode[submittedLcl]}
+												<button type="button" class="com-remove-filter">×</button>
+											</span>
+										</c:forEach>
+
+										<c:forEach var="submittedSal" items="${paramValues.jobSals}">
+											<c:set var="salLabels" value="${{'sal1':'3000천만원 미만', 'sal2':'3천만원 이상 5천만원 미만', 'sal3':'5천만원 이상 1억원 미만', 'sal4':'1억원 이상'}}" />
+											<span class="com-selected-filter" data-group="jobSals" data-value="${submittedSal}">
+												연봉 > ${salLabels[submittedSal]}
+												<button type="button" class="com-remove-filter">×</button>
+											</span>
+										</c:forEach>
+									</div>
 								</div>
 								<button type="submit" class="com-submit-search-btn">검색</button>
 							</div>
@@ -102,77 +125,61 @@
 				</form>
 				<c:choose>
 					<c:when test="${empty articlePage.content || articlePage.content == null }">
-						<p class="no-content-message">현재 북마크가 없습니다.</p>
+						<p class="no-content-message">해당 직업 목록이 없습니다.</p>
 					</c:when>
 					<c:otherwise>
 						<div class="jobs-list">
 							<c:forEach var="jobs" items="${articlePage.content}">
-								<div class="jobs-item">
+								<div class="jobs-item" id="${jobs.jobCode}">
 									<div class="item-content job-info">
 										<div class="item-header">
 											<h3 class="item-title">
-												<a href="/pse/cr/crl/selectCareerDetail.do?jobCode=${jobs.jobCode}">
-													${jobs.jobName}
-												</a>
+												<a href="/pse/cr/crl/selectCareerDetail.do?jobCode=${jobs.jobCode}"> ${jobs.jobName} </a>
 											</h3>
 										</div>
-										<p class="item-snippet">
-											${jobs.jobMainDuty}
-										</p>
+										<p class="item-snippet">${jobs.jobMainDuty}</p>
 									</div>
 									<div class="item-content job-detail-wrapper">
 										<div class="job-detail">
 											<div class="job-img-wrapper">
-												<img src="/images/jobAverageImg.png" alt="연봉 이미지">						
+												<img src="/images/jobAverageImg.png" alt="연봉 이미지">
 											</div>
 											<div>
 												<div class="item-header">
-													<h2 class="item-title item-job-detail-title">
-														평균 연봉
-													</h2>
+													<h2 class="item-title item-job-detail-title">평균 연봉</h2>
 												</div>
-												<p class="item-snippet item-job-snippet">
-													${jobs.averageSal}
-												</p>
+												<p class="item-snippet item-job-snippet">${jobs.averageSal}</p>
 											</div>
 										</div>
 										<div class="job-detail">
 											<div class="job-img-wrapper">
-												<img src="/images/jobProspectImg.png" alt="연봉 이미지">										
+												<img src="/images/jobProspectImg.png" alt="전망 이미지">
 											</div>
 											<div>
 												<div class="item-header">
-													<h2 class="item-title item-job-detail-title">
-														미래 전망
-													</h2>
+													<h2 class="item-title item-job-detail-title">미래 전망</h2>
 												</div>
-												<p class="item-snippet item-job-snippet">
-													${jobs.prospect}
-												</p>
+												<p class="item-snippet item-job-snippet">${jobs.prospect}</p>
 											</div>
 										</div>
 										<div class="job-detail">
 											<div class="job-img-wrapper">
-												<img src="/images/jobSatisImg.png" alt="연봉 이미지">										
+												<img src="/images/jobSatisImg.png" alt="만족도 이미지">
 											</div>
 											<div>
 												<div class="item-header">
-													<h2 class="item-title item-job-detail-title">
-														만족도
-													</h2>
+													<h2 class="item-title item-job-detail-title">만족도</h2>
 												</div>
-												<p class="item-snippet item-job-snippet">
-													${jobs.jobSatis}
-												</p>
+												<p class="item-snippet item-job-snippet">${jobs.jobSatis}</p>
 											</div>
 										</div>
 									</div>
 									<div class="item-action">
-										<button class="bookmark-btn" data-category-id="<%-- ${bookmark.bmCategoryId} --%>" data-target-id="<%-- ${bookmark.bmTargetId} --%>">
+										<button class="bookmark-btn ${jobs.isBookmark == job.jobTargetId ? '' : 'active' }" data-category-id="G03004" data-target-id="${jobs.jobTargetId}">
 											<span class="icon-active">
 												<img src="/images/bookmark-btn-active.png" alt="활성 북마크" width="30" height="30">
 											</span>
-			
+
 											<span class="icon-inactive">
 												<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크" width="30" height="30">
 											</span>
@@ -192,26 +199,50 @@
 
 				<ul class="pagination">
 					<li>
-						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="
-							<c:if test='${articlePage.startPage < 6}'>
-								disabled
-							</c:if>"> ← Previous </a>
+						<c:url var="prevUrl" value="${articlePage.url}">
+							<c:param name="currentPage" value="${articlePage.startPage - 5}" />
+							<c:param name="keyword" value="${param.keyword}" />
+							<c:param name="status" value="${param.status}" />
+							<c:forEach var="lcl" items="${paramValues.jobLcls}">
+								<c:param name="jobLcls" value="${lcl}" />
+							</c:forEach>
+							<c:forEach var="sal" items="${paramValues.jobSals}">
+								<c:param name="jobSals" value="${sal}" />
+							</c:forEach>
+						</c:url>
+						<a href="${prevUrl}" class="${articlePage.startPage < 6 ? 'disabled' : ''}"> ← Previous </a>
 					</li>
 
 					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 						<li>
-							<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="page-num 
-								<c:if test='${pNo == articlePage.currentPage}'>
-									active
-								</c:if>"> ${pNo} </a>
+							<c:url var="pageUrl" value="${articlePage.url}">
+								<c:param name="currentPage" value="${pNo}" />
+								<c:param name="keyword" value="${param.keyword}" />
+								<c:param name="status" value="${param.status}" />
+								<c:forEach var="lcl" items="${paramValues.jobLcls}">
+									<c:param name="jobLcls" value="${lcl}" />
+								</c:forEach>
+								<c:forEach var="sal" items="${paramValues.jobSals}">
+									<c:param name="jobSals" value="${sal}" />
+								</c:forEach>
+							</c:url>
+							<a href="${pageUrl}" class="page-num ${pNo == articlePage.currentPage ? 'active' : ''}"> ${pNo} </a>
 						</li>
 					</c:forEach>
-					
+
 					<li>
-						<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="
-							<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
-								disabled
-							</c:if>"> Next → </a>
+						<c:url var="nextUrl" value="${articlePage.url}">
+							<c:param name="currentPage" value="${articlePage.startPage + 5}" />
+							<c:param name="keyword" value="${param.keyword}" />
+							<c:param name="status" value="${param.status}" />
+							<c:forEach var="lcl" items="${paramValues.jobLcls}">
+								<c:param name="jobLcls" value="${lcl}" />
+							</c:forEach>
+							<c:forEach var="sal" items="${paramValues.jobSals}">
+								<c:param name="jobSals" value="${sal}" />
+							</c:forEach>
+						</c:url>
+						<a href="${nextUrl}" class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : ''}"> Next → </a>
 					</li>
 				</ul>
 			</div>
