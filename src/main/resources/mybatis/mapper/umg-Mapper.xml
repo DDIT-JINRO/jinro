@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="kr.or.ddit.admin.umg.service.impl.UserManagementMapper">
+
+	<select id="getAlluserList"
+		parameterType="kr.or.ddit.main.service.MemberVO" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		<where>
+			MEM_ID IS NOT NULL
+			AND MEM_ROLE = #{memRole}
+			AND DEL_YN = 'N'
+			<if test="keyword != null and keyword != '' and status == 1">
+				AND (MEM_NAME LIKE '%' || #{keyword} || '%' OR
+				MEM_NICKNAME LIKE '%' || #{keyword} || '%' OR MEM_EMAIL LIKE '%' ||
+				#{keyword} || '%')
+			</if>
+			<if test="keyword != null and keyword != '' and status == 2">
+				AND MEM_NAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 3">
+				AND MEM_NICKNAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 4">
+				AND MEM_EMAIL LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+	</select>
+
+	<select id="getUserList"
+		resultType="kr.or.ddit.main.service.MemberVO"
+		parameterType="kr.or.ddit.main.service.MemberVO">
+		SELECT * FROM (
+		SELECT ROWNUM AS RNUM, B.*
+		FROM (
+		SELECT
+		MEM_ID
+		, MEM_EMAIL
+		, MEM_PASSWORD
+		, MEM_NICKNAME
+		, MEM_PHONE_NUMBER
+		, MEM_NAME
+		, MEM_GEN
+		,
+		MEM_BIRTH
+		, MEM_ALARM
+		, MEM_STUDENT
+		, MEM_ROLE
+		, MEM_POINT
+		, CREATED_AT
+		,
+		PW_UPDATED_AT
+		, DEL_YN
+		, FILE_BADGE
+		, FILE_PROFILE
+		, FILE_ETC
+		, LOGIN_TYPE
+		, MEM_TOKEN
+		, FILE_SUB
+		FROM
+		MEMBER
+		<where>
+			MEM_ID IS NOT NULL
+			AND MEM_ROLE = #{memRole}
+			AND DEL_YN = 'N'
+			<if test="keyword != null and keyword != '' and status == 1">
+				AND (MEM_NAME LIKE '%' || #{keyword} || '%' OR
+				MEM_NICKNAME LIKE '%' || #{keyword} || '%' OR MEM_EMAIL LIKE '%' ||
+				#{keyword} || '%')
+			</if>
+			<if test="keyword != null and keyword != '' and status == 2">
+				AND MEM_NAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 3">
+				AND MEM_NICKNAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 4">
+				AND MEM_EMAIL LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+		ORDER BY MEM_ID
+		) B
+		WHERE ROWNUM &lt;= #{endNo}
+		)
+		WHERE RNUM &gt;=
+		#{startNo}
+	</select>
+
+	<select id="getMemberVO" parameterType="String"
+		resultType="kr.or.ddit.main.service.MemberVO">
+		SELECT
+		MEM_ID
+		, MEM_EMAIL
+		, MEM_PASSWORD
+		, MEM_NICKNAME
+		,
+		MEM_PHONE_NUMBER
+		, MEM_NAME
+		, MEM_GEN
+		, MEM_BIRTH
+		, MEM_ALARM
+		, MEM_STUDENT
+		, MEM_ROLE
+		, MEM_POINT
+		, CREATED_AT
+		, PW_UPDATED_AT
+		, DEL_YN
+		, FILE_BADGE
+		,
+		FILE_PROFILE
+		, FILE_ETC
+		, LOGIN_TYPE
+		, MEM_TOKEN
+		, FILE_SUB
+		FROM
+		MEMBER
+		WHERE MEM_ID = #{id}
+	</select>
+
+	<select id="getMemberInterest" parameterType="String"
+		resultType="String">
+		SELECT CC.CC_NAME
+		FROM INTEREST_CN IC
+		JOIN COM_CODE CC ON IC.IC_CODE = CC.CC_ID
+		WHERE IC.MEM_ID = #{id}
+	</select>
+
+	<select id="selectPenaltyCountByMemberId" parameterType="String"
+		resultType="kr.or.ddit.admin.umg.service.MemberPenaltyCountVO">
+		SELECT
+		M.MEM_ID,
+		NVL(SUM(CASE WHEN MP.MP_TYPE = 'G14001' THEN
+		1 ELSE 0 END), 0) AS warn_count,
+		NVL(SUM(CASE WHEN MP.MP_TYPE =
+		'G14002' THEN 1 ELSE 0 END), 0) AS
+		ban_count
+		FROM
+		MEMBER M
+		LEFT JOIN
+		MEMBER_PENALTY MP ON M.MEM_ID = MP.MEM_ID
+		WHERE
+		M.MEM_ID = #{id}
+		GROUP BY
+		M.MEM_ID
+	</select>
+
+</mapper>

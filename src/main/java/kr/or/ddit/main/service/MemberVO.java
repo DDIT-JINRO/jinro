@@ -44,9 +44,25 @@ public class MemberVO {
 	private String profileFilePath;
 	private String badgeFilePath;
 	private String subFilePath;
-	
+
 	public String getSMemId() {
 		return memId + "";
+	}
+
+	private String keyword;	 
+	private String status;
+
+	private int currentPage;
+	private int size;
+	private int startNo;
+	private int endNo;
+
+	public int getStartNo() {
+		return (this.currentPage - 1) * size;
+	}
+
+	public int getEndNo() {
+		return this.currentPage * size;
 	}
 
 }

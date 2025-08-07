@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/css/admin/admSideBar.css">
 <link rel="shortcut icon" href="/images/crppvc.png">
 <link rel="stylesheet" href="/css/pagenation.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/js/include/admin/sidebar.js"></script>
 <script src="/js/axios.min.js"></script>
 <script src="/ckeditor5/ckeditor.js"></script>

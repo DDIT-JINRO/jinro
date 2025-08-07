@@ -1,0 +1,497 @@
+@charset "UTF-8";
+
+.flex {
+	display: flex;
+}
+
+.search-filter-bar {
+	display: flex;
+	padding: 0 10px;
+	gap: 10px;
+	justify-content: space-between;
+}
+
+/********************************************* 테이블 칸 지정 ***********************************/
+.body-id {
+	min-width: 30px;
+}
+
+.body-memName {
+	min-width: 90px;
+}
+
+.body-email {
+	min-width: 200px;
+}
+
+.body-nickname {
+	min-width: 90px;
+}
+
+.body-phone {
+	min-width: 100px;
+}
+
+.body-birth {
+	min-width: 100px;
+}
+
+.body-logType {
+	min-width: 70px;
+}
+
+.body-point {
+	min-width: 70px;
+}
+/*********************************************테이블 칸 지정 끝****************************************/
+.gap {
+	gap: 20px;
+}
+
+.listMember {
+	width: fit-content;
+	height: 450px;
+	margin-bottom: 20px;
+}
+
+.filter-box select, .filter-box input[type="text"] {
+	padding: 6px 10px;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	outline: none;
+	box-sizing: border-box;
+}
+
+.template-panel .btn-save {
+	height: 29px;
+	background: #07223D;
+	color: #fff;
+	margin-left: auto;
+	border-radius: 6px;
+}
+
+.ptag-list {
+	align-content: center;
+	padding: 0;
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.memberManagementLeft {
+	width: 100%;
+}
+
+.insertMember {
+	width: 450px;
+	height: 450px;
+}
+
+.listMemberBody {
+	padding: 10px;
+}
+
+.member-form input {
+	width: 100px;
+	height: 10px;
+}
+
+.managementMember {
+	margin-bottom: 20px;
+	height: 450px;
+	width: 530px;
+}
+
+.member-form {
+	display: flex;
+	font-size: 13px;
+}
+
+.member-form-left {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	flex: 1;
+}
+
+.member-form-right {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.member-form label {
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+
+.flex div {
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.flex input {
+	width: 150px;
+	height: 28px;
+	padding: 4px 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 13px;
+	box-sizing: border-box;
+	transition: border-color 0.2s ease;
+}
+
+.member-form input, .member-form select {
+	width: 150px;
+	height: 28px;
+	padding: 4px 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 13px;
+	box-sizing: border-box;
+	transition: border-color 0.2s ease;
+}
+
+.member-form input:focus, .member-form select:focus {
+	border-color: #007bff;
+	outline: none;
+}
+
+.profile-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.profile-wrapper img {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 1px solid #ccc;
+}
+
+.upload-icon {
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #007bff;
+	color: white;
+	border-radius: 50%;
+	cursor: pointer;
+	font-size: 18px;
+}
+
+#profileUpload {
+	display: none;
+}
+
+.add-btn {
+	margin-top: 20px;
+	width: 100%;
+	padding: 10px;
+	background-color: #07223D;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/*****************************************/
+table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+	background-color: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+th, td {
+	padding: 12px 16px;
+	text-align: center;
+	border-bottom: 1px solid #eee;
+}
+
+th {
+	background-color: #f4f6f8;
+	color: #333;
+	font-weight: 600;
+}
+
+td {
+	color: #555;
+	font-size: 12px;
+}
+
+tr:hover {
+	background-color: #f1f1f1;
+}
+
+table td:first-child {
+	color: #848efb;
+	font-weight: bold;
+}
+
+table th:first-child {
+	border-top-left-radius: 8px;
+}
+
+table th:last-child {
+	border-top-right-radius: 8px;
+}
+
+.search-filter-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+#searchInput {
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 220px;
+}
+
+#loginTypeFilter {
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+/* memberManagement.css 파일에 추가 또는 수정 */
+
+/* 회원 상세 상자 */
+#member-detail-box {
+	display: flex;
+	flex-direction: column; /* 세로 방향으로 정렬 */
+}
+
+/* 프로필 이미지와 기본 정보 영역 */
+.member-header-section {
+	display: flex;
+	align-items: flex-start;
+	gap: 30px;
+}
+
+/* 프로필 이미지 */
+.member-profile img {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 3px solid #dee2e6;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* 회원 정보 그리드 레이아웃 */
+.member-info-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr); /* 2열 그리드 */
+	gap: 20px;
+}
+
+/* 각 정보 필드 (이름, 닉네임 등) */
+.info-field {
+	display: flex;
+	flex-direction: column;
+}
+
+.info-field label {
+	font-weight: bold;
+	color: white;
+	margin-bottom: 3px;
+	background-color: #07223D; /* 배경색으로 강조 */
+	padding: 3px 5px;
+	border-radius: 8px;
+	font-size: 10px;
+}
+
+.info-field input {
+	width: 100%;
+	height: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 8px 12px;
+	box-sizing: border-box;
+}
+
+/* 경고/정지, 관심 분야 영역 */
+.member-penalty-section, .member-interests-section {
+	border-top: 1px solid #eee;
+	margin-top: 10px;
+}
+
+.marginBt {
+	margin-bottom: 20px;
+}
+
+/* 관심 키워드 스타일 */
+#mem-interests span {
+	background-color: #07223D;
+	color: white;
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 13px;
+	margin-right: 8px;
+	display: inline-block;
+}
+
+/* 버튼 그룹 */
+.button-group {
+	display: flex;
+	gap: 10px;
+	justify-content: flex-end; /* 오른쪽 정렬 */
+	padding-top: 20px;
+	border-top: 1px solid #eee;
+}
+
+/* 수정, 경고, 정지 버튼 스타일 */
+.btn-modify {
+	background-color: #07223D;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 20px;
+	font-weight: bold;
+}
+
+.btn-warn {
+	background-color: #FFD700;
+	color: #333;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 20px;
+	font-weight: bold;
+}
+
+.btn-ban {
+	background-color: #DC143C;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 20px;
+	font-weight: bold;
+}
+.chart-container {
+    width: 900px;  /* 원하는 너비로 설정 */
+    height: 500px; /* 원하는 높이로 설정 */
+    margin: 20px auto; /* 중앙 정렬 */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+/* 차트 제목 스타일 */
+.chart-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.userChart {
+	margin-bottom: 20px;
+	height: 380px;
+}
+
+/****************/
+.dashboard-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* 개별 위젯 (카드) 스타일 */
+.dashboard-widget {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.widget-header h4 {
+    font-size: 16px;
+    color: #555;
+    margin: 0;
+}
+
+.widget-icon {
+    background-color: #e6e6fa;
+    color: #6a5acd;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.widget-content h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.widget-trend {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.trend-positive {
+    color: #28a745;
+}
+
+.trend-negative {
+    color: #dc3545;
+}
+
+/* 그래프 위젯 스타일 */
+.chart-widget {
+    grid-column: span 2;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.chart-header h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.chart-options-icon {
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+}
+
+.chart-area {
+    /* 실제 차트 라이브러리가 렌더링될 공간 */
+    height: 300px;
+}
