@@ -1,23 +1,17 @@
 package kr.or.ddit.ertds.hgschl.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolDeptVO;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolService;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
-import kr.or.ddit.ertds.hgschl.service.KakaoGeocodingResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -48,31 +42,31 @@ public class HighSchoolServiceImpl implements HighSchoolService {
 		return highSchoolMapper.selectHighSchoolCount(highSchoolVO);
 	}
 
-	//지역 필터 옵션 목록 조회
+	// 지역 필터 옵션 목록 조회
 	@Override
 	public List<ComCodeVO> selectRegionList() {
 
 		return highSchoolMapper.selectRegionList();
 	}
 
-    //학교 유형 필터 옵션 목록 조회
+	// 학교 유형 필터 옵션 목록 조회
 	@Override
 	public List<ComCodeVO> selectSchoolTypeList() {
 
 		return highSchoolMapper.selectSchoolTypeList();
 	}
 
-    //공학 여부 필터 옵션 목록 조회
+	// 공학 여부 필터 옵션 목록 조회
 	@Override
 	public List<ComCodeVO> selectCoedTypeList() {
-	
+
 		return highSchoolMapper.selectCoedTypeList();
 	}
 
-	//특정 고등학교의 학과 목록 조회
+	// 특정 고등학교의 학과 목록 조회
 	@Override
 	public List<HighSchoolDeptVO> selectDeptsBySchoolId(int hsId) {
-		
+
 		return highSchoolMapper.selectDeptsBySchoolId(hsId);
 	}
 
@@ -87,93 +81,102 @@ public class HighSchoolServiceImpl implements HighSchoolService {
 
 		return highSchoolMapper.highSchoolDeptDelete(hsdId);
 	}
-	
-	 // 학교 객체 하나에 대한 좌표를 조회하고 설정하는 private 메소드
-    private void fetchAndSetCoordinates(HighSchoolVO school) {
-        String kakaoRestApiKey = "여기에_카카오_REST_API_키를_입력하세요";
-        String address = school.getHsAddr();
-        
-        if (address == null || address.trim().isEmpty()) {
-            log.warn("주소가 없어 좌표를 얻을 수 없습니다: {}", school.getHsName());
-            return;
-        }
 
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            ObjectMapper mapper = new ObjectMapper();
-            
-            String geocodingApiUrl = "https://dapi.kakao.com/v2/local/search/address.json?query=" + java.net.URLEncoder.encode(address, "UTF-8");
+	// 고등학교 정보 입력
+	@Override
+	@Transactional
+	public int highSchoolInsert(HighSchoolVO highSchoolVO) {
+		highSchoolVO.setHsRegionCode(getCommonCode(highSchoolVO.getHsRegion(), "G23"));
+		highSchoolVO.setHsJurisCode(highSchoolMapper.selectJurisCodeByRegionName(highSchoolVO.getHsRegion()));
+		highSchoolVO.setHsFoundTypeCode(getCommonCode(highSchoolVO.getHsFoundType(), "G21"));
+		highSchoolVO.setHsCoeduTypeCode(getCommonCode(highSchoolVO.getHsCoeduType(), "G24"));
+		highSchoolVO.setHsTypeNameCode(getCommonCode(highSchoolVO.getHsTypeName(), "G25"));
+		highSchoolVO.setHsGeneralTypeCode(getCommonCode(highSchoolVO.getHsGeneralType(), "G26"));
+		// TODO: hsJurisCode(관할 교육청)는 별도 로직 필요 (ComCodeVO의 ccEtc 필드 활용)
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "KakaoAK " + kakaoRestApiKey);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
+		// 2. 모든 정보가 채워진 VO를 Mapper로 전달하여 DB에 INSERT
+		return highSchoolMapper.highSchoolInsert(highSchoolVO);
+	}
 
-            ResponseEntity<String> responseEntity = restTemplate.exchange(geocodingApiUrl, HttpMethod.GET, entity, String.class);
-            
-            KakaoGeocodingResponse kakaoResponse = mapper.readValue(responseEntity.getBody(), KakaoGeocodingResponse.class);
+	// 고등학교 학과 입력
+	@Override
+	public int highSchoolDeptInsert(HighSchoolDeptVO highSchoolDeptVO) {
+		// 학과명(HSD_NAME) -> 코드(HSD_CODE) 변환
+		String hsdCode = getCommonCode(highSchoolDeptVO.getHsdName(), "G27");
+		highSchoolDeptVO.setHsdCode(hsdCode);
 
-            if (kakaoResponse != null && kakaoResponse.getDocuments() != null && !kakaoResponse.getDocuments().isEmpty()) {
-                KakaoGeocodingResponse.Document doc = kakaoResponse.getDocuments().get(0);
-                school.setHsLat(Double.parseDouble(doc.getY()));
-                school.setHsLot(Double.parseDouble(doc.getX()));
-                log.info("좌표 변환 성공: {}, 위도={}, 경도={}", school.getHsName(), school.getHsLat(), school.getHsLot());
-            } else {
-                log.warn("좌표를 찾을 수 없었습니다: {}", school.getHsName());
-            }
-        } catch (Exception e) {
-            log.error("좌표 변환 중 오류 발생 (학교: {}): {}", school.getHsName(), e.getMessage());
-        }
-    }
-    
-    // 이제 기존의 전체 업데이트 메소드는 이렇게 간단해집니다.
-    @Override
-    @Transactional
-    public void updateAllHighSchoolCoordinates() {
-        List<HighSchoolVO> allSchools = highSchoolMapper.selectAllHighSchoolsForCoords(); // (별도의 간단한 조회 쿼리 권장)
-        for (HighSchoolVO school : allSchools) {
-            if (school.getHsLat() == null || school.getHsLot() == null) {
-                fetchAndSetCoordinates(school); // 분리한 메소드 호출
-                highSchoolMapper.updateHighSchoolCoordinates(school);
-                try {
-                    Thread.sleep(50); // API 호출 제한 피하기
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
-    }
+		// 계열명(HSD_TRACK_NAME) -> 코드(HSD_TRACK_NAME) 변환
+		String hsdTrackCode = getCommonCode(highSchoolDeptVO.getHsdTrackName(), "G31");
+		highSchoolDeptVO.setHsdTrackName(hsdTrackCode);
 
-    // 고등학교 정보 입력 
-    @Override
-    @Transactional
-    public int highSchoolInsert(HighSchoolVO highSchoolVO) {
-        // 1. 전달받은 VO의 주소를 이용해 좌표 정보를 조회하고 VO에 채워넣음
-        fetchAndSetCoordinates(highSchoolVO);
-        
-        // 2. 모든 정보가 채워진 VO를 Mapper로 전달하여 DB에 INSERT
-        return highSchoolMapper.highSchoolInsert(highSchoolVO);
-    }
-    
-    //고등학교 학과 입력
-    @Override
-    public int highSchoolDeptInsert(HighSchoolDeptVO highSchoolDeptVO) {
-    	
-    	return highSchoolMapper.highSchoolDeptInsert(highSchoolDeptVO);
-    }
+		return highSchoolMapper.highSchoolDeptInsert(highSchoolDeptVO);
+	}
 
-    // 고등학교 정보 수정
-    @Override
-    public int highSchoolUpdate(HighSchoolVO highSchoolVO) {
-        // 주소가 변경되었을 경우에만 좌표를 다시 조회하도록 할 수 있음 (선택적)
-        // fetchAndSetCoordinates(highSchoolVO); 
-        return highSchoolMapper.highSchoolUpdate(highSchoolVO);
-    }
-	
-	//고등학교 학과 정보 수정
+	// 고등학교 정보 수정
+	@Override
+	public int highSchoolUpdate(HighSchoolVO highSchoolVO) {
+		// 한글 이름 필드가 null이 아닐 경우에만 코드로 변환하여 설정
+		if (highSchoolVO.getHsRegion() != null) {
+			highSchoolVO.setHsRegionCode(getCommonCode(highSchoolVO.getHsRegion(), "G23"));
+		}
+		if (highSchoolVO.getHsRegion() != null) {
+			highSchoolVO.setHsJurisCode(highSchoolMapper.selectJurisCodeByRegionName(highSchoolVO.getHsRegion()));
+		}
+		if (highSchoolVO.getHsFoundType() != null) {
+			highSchoolVO.setHsFoundTypeCode(getCommonCode(highSchoolVO.getHsFoundType(), "G21"));
+		}
+		if (highSchoolVO.getHsCoeduType() != null) {
+			highSchoolVO.setHsCoeduTypeCode(getCommonCode(highSchoolVO.getHsCoeduType(), "G24"));
+		}
+		if (highSchoolVO.getHsTypeName() != null) {
+			highSchoolVO.setHsTypeNameCode(getCommonCode(highSchoolVO.getHsTypeName(), "G25"));
+		}
+		if (highSchoolVO.getHsGeneralType() != null) {
+			highSchoolVO.setHsGeneralTypeCode(getCommonCode(highSchoolVO.getHsGeneralType(), "G26"));
+		}
+		// TODO: hsJurisCode(관할 교육청) 변환 로직 추가
+
+		// fetchAndSetCoordinates(highSchoolVO);
+		return highSchoolMapper.highSchoolUpdate(highSchoolVO);
+	}
+
+	// 고등학교 학과 정보 수정
 	@Override
 	public int highSchoolDeptUpdate(HighSchoolDeptVO highSchoolDeptVO) {
 
+		// 학과명(HSD_NAME)이 존재하면 코드(HSD_CODE)로 변환
+		if (highSchoolDeptVO.getHsdName() != null) {
+			String hsdCode = getCommonCode(highSchoolDeptVO.getHsdName(), "G27");
+			highSchoolDeptVO.setHsdCode(hsdCode);
+		}
+		// 계열명(HSD_TRACK_NAME)이 존재하면 코드로 변환
+		if (highSchoolDeptVO.getHsdTrackName() != null) {
+			String hsdTrackCode = getCommonCode(highSchoolDeptVO.getHsdTrackName(), "G31");
+			highSchoolDeptVO.setHsdTrackName(hsdTrackCode);
+		}
+
 		return highSchoolMapper.highSchoolDeptUpdate(highSchoolDeptVO);
+	}
+
+	// 공통 코드와 이름을 매핑하는 캐시 (성능 최적화)
+	private Map<String, String> commonCodeCache;
+
+	// 모든 공통 코드를 한 번에 메모리에 로딩 (애플리케이션 시작 시 로딩하면 더 효율적)
+	private void initializeCommonCodeCache() {
+		if (commonCodeCache == null) {
+			List<ComCodeVO> allCommonCodes = highSchoolMapper.selectAllCommonCodes();
+			commonCodeCache = allCommonCodes.stream()
+					.collect(Collectors.toMap(vo -> vo.getClCode() + "_" + vo.getCcName(), // 키: 'G23_대전광역시'
+							ComCodeVO::getCcId, (existing, replacement) -> existing));
+		}
+	}
+
+	// 한글 이름을 받아서 공통 코드로 변환하는 헬퍼 메서드
+	private String getCommonCode(String name, String clCode) {
+		if (commonCodeCache == null) {
+			initializeCommonCodeCache();
+		}
+		return commonCodeCache.get(clCode + "_" + name);
 	}
 
 }

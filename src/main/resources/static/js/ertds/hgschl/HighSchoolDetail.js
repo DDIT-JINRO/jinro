@@ -15,80 +15,73 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	const mapContainer = document.getElementById('map');
-	const schoolAddressElement = document.getElementById('schoolAddress');
 
-	// 2. 페이지 로드 시, 지도를 기본 위치(대전 시청)로 초기화
-	kakao.maps.load(() => {
-		const initialPosition = new kakao.maps.LatLng(36.3504, 127.3845);
-		const mapOption = {
-			center: initialPosition,
-			level: 7
-		};
-		map = new kakao.maps.Map(mapContainer, mapOption);
-	});
+	// 2. 페이지 로드 시, 지도를 기본 위치(학교 위치)로 초기화
+	if (mapContainer) {
+		kakao.maps.load(() => {
+			let initialPosition, initialLevel;
 
-	// 3. 주소에 '클릭' 이벤트 리스너 추가
-	if (schoolAddressElement) {
-		schoolAddressElement.addEventListener('click', () => {
+			// 위치 정보가 있으면 학교 위치로, 없으면 기본 위치(대전 시청)로 설정
 			if (highSchoolData.hsLat && highSchoolData.hsLot) {
-				showSchoolOnMap(highSchoolData);
+				initialPosition = new kakao.maps.LatLng(highSchoolData.hsLat, highSchoolData.hsLot);
+				initialLevel = 3; // 확대 레벨
 			} else {
-				alert('이 학교의 위치 정보가 없습니다.');
+				initialPosition = new kakao.maps.LatLng(36.3504, 127.3845);
+				initialLevel = 7; // 축소 레벨
+				mapContainer.innerHTML = '<div style="text-align:center; padding-top: 120px; color: #6c757d;">위치 정보가 없습니다.</div>';
+			}
+
+			const mapOption = {
+				center: initialPosition,
+				level: initialLevel
+			};
+			map = new kakao.maps.Map(mapContainer, mapOption);
+
+			// 위치 정보가 있을 때만 마커와 인포윈도우 표시
+			if (highSchoolData.hsLat && highSchoolData.hsLot) {
+				currentMarker = new kakao.maps.Marker({ position: initialPosition });
+				currentMarker.setMap(map);
+
+				const iwContent = `<div style="padding:5px; font-size:14px;"><b>${highSchoolData.hsName}</b></div>`;
+				currentInfoWindow = new kakao.maps.InfoWindow({ content: iwContent });
+				currentInfoWindow.open(map, currentMarker);
 			}
 		});
 	}
 
-	// 지도에 특정 학교를 표시하는 함수
-	function showSchoolOnMap(school) {
-		if (currentMarker) currentMarker.setMap(null);
-		if (currentInfoWindow) currentInfoWindow.close();
-
-		const schoolPosition = new kakao.maps.LatLng(school.hsLat, school.hsLot);
-		map.panTo(schoolPosition);
-
-		currentMarker = new kakao.maps.Marker({ position: schoolPosition });
-		currentMarker.setMap(map);
-
-		const iwContent = `<div style="padding:5px; font-size:14px;"><b>${school.hsName}</b></div>`;
-		currentInfoWindow = new kakao.maps.InfoWindow({ content: iwContent });
-		currentInfoWindow.open(map, currentMarker);
-
-		map.setLevel(3, { animate: true });
-	}
-
 	//PDF 기능
 	const previewBtn = document.getElementById('pdf-preview-btn');
-	    const downloadBtn = document.getElementById('pdf-download-btn');
+	const downloadBtn = document.getElementById('pdf-download-btn');
 
-	    // PDF 내용을 생성하는 함수
-	    function generatePdfContent() {
-	        // 현재 페이지의 데이터 가져오기
-	        const schoolName = document.querySelector('.school-summary-box h2').textContent;
-	        const summaryItems = document.querySelectorAll('.summary-info-list li');
-	        const detailRows = document.querySelectorAll('.details-table tr');
-	        const deptItems = document.querySelectorAll('.dept-list li');
-	        
-	        let summaryHtml = '';
-	        summaryItems.forEach(item => {
-	            summaryHtml += `<li>${item.innerHTML}</li>`;
-	        });
+	// PDF 내용을 생성하는 함수
+	function generatePdfContent() {
+		// 현재 페이지의 데이터 가져오기
+		const schoolName = document.querySelector('.school-summary-box h2').textContent;
+		const summaryItems = document.querySelectorAll('.summary-info-list li');
+		const detailRows = document.querySelectorAll('.details-table tr');
+		const deptItems = document.querySelectorAll('.dept-list li');
 
-	        let detailsHtml = '';
-	        detailRows.forEach(row => {
-	            // innerHTML을 사용하여 링크(<a>) 태그도 그대로 복사
-	            detailsHtml += `<tr><th>${row.cells[0].textContent}</th><td>${row.cells[1].innerHTML}</td></tr>`;
-	        });
-	        
-	        let deptsHtml = '';
-	        if(deptItems.length > 0) {
-	            deptsHtml += '<div class="section"><h2 class="section-title">학과 정보</h2><ul class="dept-list">';
-	            deptItems.forEach(item => {
-	                deptsHtml += `<li>${item.textContent}</li>`;
-	            });
-	            deptsHtml += '</ul></div>';
-	        }
+		let summaryHtml = '';
+		summaryItems.forEach(item => {
+			summaryHtml += `<li>${item.innerHTML}</li>`;
+		});
 
-	        const htmlContent = `
+		let detailsHtml = '';
+		detailRows.forEach(row => {
+			// innerHTML을 사용하여 링크(<a>) 태그도 그대로 복사
+			detailsHtml += `<tr><th>${row.cells[0].textContent}</th><td>${row.cells[1].innerHTML}</td></tr>`;
+		});
+
+		let deptsHtml = '';
+		if (deptItems.length > 0) {
+			deptsHtml += '<div class="section"><h2 class="section-title">학과 정보</h2><ul class="dept-list">';
+			deptItems.forEach(item => {
+				deptsHtml += `<li>${item.textContent}</li>`;
+			});
+			deptsHtml += '</ul></div>';
+		}
+
+		const htmlContent = `
 	            <div class="pdf-container">
 	                <h1 class="school-name">${schoolName}</h1>
 	                <div class="section">
@@ -103,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	            </div>
 	        `;
 
-	        const cssContent = `
+		const cssContent = `
 	            body { font-family: 'Malgun Gothic', sans-serif; }
 	            .pdf-container { padding: 40px; }
 	            .school-name { font-size: 28px; font-weight: bold; margin-bottom: 25px; color: #212529; }
@@ -118,54 +111,54 @@ document.addEventListener('DOMContentLoaded', () => {
 	            .dept-list { display: flex; flex-wrap: wrap; gap: 10px; }
 	            .dept-list li { background-color: #f1f3f5; padding: 5px 12px; border-radius: 15px; font-size: 13px; }
 	        `;
-	        
-	        return { htmlContent, cssContent };
-	    }
 
-	    // '미리보기' 버튼 클릭 이벤트
-	    if(previewBtn) {
-	        previewBtn.addEventListener('click', () => {
-	            const { htmlContent, cssContent } = generatePdfContent();
-	            const formData = new FormData();
-	            formData.append("htmlContent", htmlContent);
-	            formData.append("cssContent", cssContent);
+		return { htmlContent, cssContent };
+	}
 
-	            fetch("/pdf/preview", { method: "POST", body: formData })
-	            .then(response => {
-	                if (!response.ok) throw new Error("미리보기 요청 실패");
-	                return response.blob();
-	            })
-	            .then(blob => {
-	                const url = window.URL.createObjectURL(blob);
-	                window.open(url, '_blank');
-	            }).catch(error => console.error('PDF 미리보기 오류:', error));
-	        });
-	    }
+	// '미리보기' 버튼 클릭 이벤트
+	if (previewBtn) {
+		previewBtn.addEventListener('click', () => {
+			const { htmlContent, cssContent } = generatePdfContent();
+			const formData = new FormData();
+			formData.append("htmlContent", htmlContent);
+			formData.append("cssContent", cssContent);
 
-	    // '다운로드' 버튼 클릭 이벤트
-	    if(downloadBtn) {
-	        downloadBtn.addEventListener('click', () => {
-	            const { htmlContent, cssContent } = generatePdfContent();
-	            const form = document.createElement('form');
-	            form.method = 'POST';
-	            form.action = '/pdf/download';
-	            form.target = '_blank';
+			fetch("/pdf/preview", { method: "POST", body: formData })
+				.then(response => {
+					if (!response.ok) throw new Error("미리보기 요청 실패");
+					return response.blob();
+				})
+				.then(blob => {
+					const url = window.URL.createObjectURL(blob);
+					window.open(url, '_blank');
+				}).catch(error => console.error('PDF 미리보기 오류:', error));
+		});
+	}
 
-	            const htmlInput = document.createElement('input');
-	            htmlInput.type = 'hidden';
-	            htmlInput.name = 'htmlContent';
-	            htmlInput.value = htmlContent;
+	// '다운로드' 버튼 클릭 이벤트
+	if (downloadBtn) {
+		downloadBtn.addEventListener('click', () => {
+			const { htmlContent, cssContent } = generatePdfContent();
+			const form = document.createElement('form');
+			form.method = 'POST';
+			form.action = '/pdf/download';
+			form.target = '_blank';
 
-	            const cssInput = document.createElement('input');
-	            cssInput.type = 'hidden';
-	            cssInput.name = 'cssContent';
-	            cssInput.value = cssContent;
+			const htmlInput = document.createElement('input');
+			htmlInput.type = 'hidden';
+			htmlInput.name = 'htmlContent';
+			htmlInput.value = htmlContent;
 
-	            form.appendChild(htmlInput);
-	            form.appendChild(cssInput);
-	            document.body.appendChild(form);
-	            form.submit();
-	            document.body.removeChild(form);
-	        });
-	    }
-	});
+			const cssInput = document.createElement('input');
+			cssInput.type = 'hidden';
+			cssInput.name = 'cssContent';
+			cssInput.value = cssContent;
+
+			form.appendChild(htmlInput);
+			form.appendChild(cssInput);
+			document.body.appendChild(form);
+			form.submit();
+			document.body.removeChild(form);
+		});
+	}
+});

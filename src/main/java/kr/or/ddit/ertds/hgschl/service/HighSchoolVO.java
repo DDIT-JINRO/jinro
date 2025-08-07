@@ -25,24 +25,24 @@ public class HighSchoolVO {
 	private Double hsLot; // 경도
 
 	// --- 코드를 담는 필드 (INSERT/UPDATE/FILTER 시 사용) ---
-    private String hsRegionCode;    // 예: "G23001"
-    private String hsJurisCode;		 // 관할 교육청 코드
-    private String hsFoundTypeCode; // 예: "G21001"
-    private String hsCoeduTypeCode; // 예: "G24001"
-    private String hsTypeNameCode;  // 예: "G25001"
-    private String hsGeneralTypeCode;
+	private String hsRegionCode; // 예: "G23001"
+	private String hsJurisCode; // 관할 교육청 코드
+	private String hsFoundTypeCode; // 예: "G21001"
+	private String hsCoeduTypeCode; // 예: "G24001"
+	private String hsTypeNameCode; // 예: "G25001"
+	private String hsGeneralTypeCode;
 	// 필터조건
 	// 검색
-    private String keyword;
-    
-    // CEG-D02-004: 지역별 필터
-    private List<String> regionFilter;
-    
-    // CEG-D02-005: 학교 종류 필터
-    private List<String> schoolType;
-    
-    // CEG-D02-007: 남/녀/공학 필터
-    private List<String> coedTypeFilter;
+	private String keyword;
+
+	// CEG-D02-004: 지역별 필터
+	private List<String> regionFilter;
+
+	// CEG-D02-005: 학교 종류 필터
+	private List<String> schoolType;
+
+	// CEG-D02-007: 남/녀/공학 필터
+	private List<String> coedTypeFilter;
 
 	// 페이징
 	private int startRow;

@@ -133,30 +133,25 @@
 
 			<!-- 페이지레이션 -->
 			<div class="card-footer clearfix">
-			    <ul class="pagination">
-			        <li>
-			            <a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}<c:forEach var='region' items='${paramValues.regionFilter}'>&regionFilter=${region}</c:forEach><c:forEach var='sType' items='${paramValues.schoolType}'>&schoolType=${sType}</c:forEach><c:forEach var='cType' items='${paramValues.coedTypeFilter}'>&coedTypeFilter=${cType}</c:forEach>"
-			               class="${articlePage.startPage < 6 ? 'disabled' : ''}">
-			                ← Previous
-			            </a>
-			        </li>
-			
-			        <c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
-			            <li>
-			                <a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}<c:forEach var='region' items='${paramValues.regionFilter}'>&regionFilter=${region}</c:forEach><c:forEach var='sType' items='${paramValues.schoolType}'>&schoolType=${sType}</c:forEach><c:forEach var='cType' items='${paramValues.coedTypeFilter}'>&coedTypeFilter=${cType}</c:forEach>"
-			                   class="${pNo == articlePage.currentPage ? 'active' : ''}">
-			                    ${pNo}
-			                </a>
-			            </li>
-			        </c:forEach>
-			
-			        <li>
-			            <a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}<c:forEach var='region' items='${paramValues.regionFilter}'>&regionFilter=${region}</c:forEach><c:forEach var='sType' items='${paramValues.schoolType}'>&schoolType=${sType}</c:forEach><c:forEach var='cType' items='${paramValues.coedTypeFilter}'>&coedTypeFilter=${cType}</c:forEach>"
-			               class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : ''}">
-			                Next →
-			            </a>
-			        </li>
-			    </ul>
+				<ul class="pagination">
+					<li><a
+						href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}<c:forEach var='region' items='${paramValues.regionFilter}'>&regionFilter=${region}</c:forEach><c:forEach var='sType' items='${paramValues.schoolType}'>&schoolType=${sType}</c:forEach><c:forEach var='cType' items='${paramValues.coedTypeFilter}'>&coedTypeFilter=${cType}</c:forEach>"
+						class="${articlePage.startPage < 6 ? 'disabled' : ''}"> ←
+							Previous </a></li>
+
+					<c:forEach var="pNo" begin="${articlePage.startPage}"
+						end="${articlePage.endPage}">
+						<li><a
+							href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}<c:forEach var='region' items='${paramValues.regionFilter}'>&regionFilter=${region}</c:forEach><c:forEach var='sType' items='${paramValues.schoolType}'>&schoolType=${sType}</c:forEach><c:forEach var='cType' items='${paramValues.coedTypeFilter}'>&coedTypeFilter=${cType}</c:forEach>"
+							class="${pNo == articlePage.currentPage ? 'active' : ''}">
+								${pNo} </a></li>
+					</c:forEach>
+
+					<li><a
+						href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}<c:forEach var='region' items='${paramValues.regionFilter}'>&regionFilter=${region}</c:forEach><c:forEach var='sType' items='${paramValues.schoolType}'>&schoolType=${sType}</c:forEach><c:forEach var='cType' items='${paramValues.coedTypeFilter}'>&coedTypeFilter=${cType}</c:forEach>"
+						class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : ''}">
+							Next → </a></li>
+				</ul>
 			</div>
 
 		</div>

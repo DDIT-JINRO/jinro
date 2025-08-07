@@ -38,7 +38,7 @@
 			data-hs-addr="${highSchool.hsAddr}" data-hs-tel="${highSchool.hsTel}"
 			data-hs-lat="${empty highSchool.hsLat ? 0 : highSchool.hsLat}"
 			data-hs-lot="${empty highSchool.hsLot ? 0 : highSchool.hsLot}">
-			
+
 			<div class="detail-container">
 				<div class="school-summary-box">
 					<h2>${highSchool.hsName}</h2>
@@ -61,7 +61,7 @@
 						<tbody>
 							<tr>
 								<th>주소</th>
-								<td id="schoolAddress">${highSchool.hsAddr}</td>
+								<td>${highSchool.hsAddr}</td>
 							</tr>
 							<tr>
 								<th>연락처</th>
@@ -82,22 +82,24 @@
 						</tbody>
 					</table>
 				</div>
-				
-				
+
+
 				<c:if test="${!empty deptList}">
-				    <div class="detail-section">
-				        <h3 class="section-title">학과 정보</h3>
-				        <ul class="dept-list">
-				            <c:forEach var="dept" items="${deptList}">
-				                <li>${dept.hsdName}</li>
-				            </c:forEach>
-				        </ul>
-				    </div>
+					<div class="detail-section">
+						<h3 class="section-title">학과 정보</h3>
+						<ul class="dept-list">
+							<c:forEach var="dept" items="${deptList}">
+								<li>${dept.hsdName}</li>
+							</c:forEach>
+						</ul>
+					</div>
 				</c:if>
 
 				<div class="bottom-button-wrapper">
-					<button type="button" id="pdf-preview-btn" class="btn-pdf-preview">PDF 미리보기</button>
-				    <button type="button" id="pdf-download-btn" class="btn-pdf-download">PDF 다운로드</button>
+					<button type="button" id="pdf-preview-btn" class="btn-pdf-preview">PDF
+						미리보기</button>
+					<button type="button" id="pdf-download-btn"
+						class="btn-pdf-download">PDF 다운로드</button>
 					<a href="/ertds/hgschl/selectHgschList.do" class="btn-list-bottom">목록</a>
 				</div>
 
