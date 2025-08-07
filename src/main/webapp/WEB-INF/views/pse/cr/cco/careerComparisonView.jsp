@@ -42,7 +42,7 @@
 								</button>
 								<button class="close-btn">&times;</button>
 								<h4>${job.jobName}</h4>
-								<a href="#" class="btn-detail">직업 상세보기</a>
+								<a href="/pse/cr/crl/selectCareerDetail.do?jobCode=${job.jobCode}" class="btn-detail">직업 상세보기</a>
 							</div>
 						</th>
 					</c:forEach>

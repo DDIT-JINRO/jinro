@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     highlightBestValues();
+
+    document.querySelectorAll('.close-btn').forEach(button => {
+        button.addEventListener('click', handleRemoveJobColumn);
+    });
 });
 
 const handleBookmarkToggle = (button) => {
@@ -223,4 +227,35 @@ function highlightBestValues() {
              }
         });
     });
+}
+
+/**
+ * X 버튼 클릭 시 해당 직업의 열 전체를 삭제합니다.
+ * @param {Event} event - 클릭 이벤트 객체
+ */
+function handleRemoveJobColumn(event) {
+    // 1. 클릭된 버튼이 속한 헤더(th)를 찾습니다.
+    const headerCell = event.target.closest('th.job-card-header');
+    if (!headerCell) return;
+
+    // 2. 전체 직업 헤더 목록에서 현재 헤더의 인덱스(순서)를 찾습니다.
+    const allHeaderCells = Array.from(document.querySelectorAll('.comparison-table thead th.job-card-header'));
+    const columnIndex = allHeaderCells.indexOf(headerCell);
+    
+    if (columnIndex === -1) return;
+
+    // 3. 해당 인덱스의 헤더(th)를 삭제합니다.
+    headerCell.remove();
+
+    // 4. 본문의 모든 행(tr)을 순회하며 해당 인덱스의 데이터(td)를 삭제합니다.
+    const dataRows = document.querySelectorAll('.comparison-table tbody tr');
+    dataRows.forEach(row => {
+        const cellToRemove = row.querySelectorAll('td')[columnIndex];
+        if (cellToRemove) {
+            cellToRemove.remove();
+        }
+    });
+    
+    // 5. 중요: 열이 삭제되었으므로, 남은 데이터를 기준으로 최고 값 강조와 막대그래프를 다시 계산합니다.
+    highlightBestValues();
 }
