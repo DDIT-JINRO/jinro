@@ -41,7 +41,15 @@ public class CareerEncyclopediaController {
 	}
 	
 	@GetMapping("/cr/crl/selectCareerDetail.do")
-	public String selectCareerDetail () {
-		return "pse/cr/crl/selectCareerList";
+	public String selectCareerDetail (@ModelAttribute JobsVO jobs, Model model, RedirectAttributes redirectAttributes) {
+		try {
+			jobs = this.careerEncyclopediaService.selectCareerDetail(jobs);
+			model.addAttribute("jobs", jobs);
+		} catch (Exception e) {
+			log.error("에러 발생 : " + e.getMessage());
+			redirectAttributes.addAttribute("errorMessage", "직업 정보를 불러오는 중 에러가 발생했습니다.");
+		}
+		
+		return "pse/cr/crl/selectCareerDetail";
 	}
 }

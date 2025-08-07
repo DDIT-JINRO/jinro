@@ -1,0 +1,110 @@
+/* --- 새로운 통합 그리드 레이아웃 --- */
+.comparison-grid {
+    display: grid;
+    gap: 0 20px; /* 세로(행) 간격은 0, 가로(열) 간격은 20px */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.comparison-grid.columns-2 { grid-template-columns: 1fr repeat(2, 1.5fr); }
+.comparison-grid.columns-3 { grid-template-columns: 1fr repeat(3, 1.5fr); }
+.comparison-grid.columns-4 { grid-template-columns: 1fr repeat(4, 1.5fr); }
+.comparison-grid.columns-5 { grid-template-columns: 1fr repeat(5, 1.5fr); }
+
+/* 직업 카드와 비교 내용 사이의 공간을 만들기 위한 빈 요소 */
+.grid-placeholder {
+    /* 직업카드와 동일한 하단 마진을 주어 줄을 맞춥니다. */
+    margin-bottom: 30px;
+}
+
+
+/* --- 직업 카드 (수정됨) --- */
+.job-card {
+    /* flex:1 속성 제거. 너비는 부모 그리드가 제어합니다. */
+    background-color: #f8fcff;
+    border: 1px solid #cce7ff;
+    border-radius: 12px;
+    padding: 25px 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    margin-top: -1px; /* 상단 테두리와 겹치게 하여 디자인 개선 */
+    margin-bottom: 30px; /* 카드와 아래 내용 사이의 간격 */
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.job-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.job-card p {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    height: 65px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.btn-detail {
+    display: inline-block;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    color: #007bff;
+    background-color: #e7f3ff;
+    border: 1px solid #b3d7ff;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-detail:hover {
+    background-color: #d0e7ff;
+}
+
+/* --- 비교표 셀 (수정됨) --- */
+.table-cell {
+    padding: 20px 15px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #555;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.table-cell.header {
+    background-color: #f7f7f7;
+    font-weight: 600;
+    color: #333;
+}
+
+.comparison-grid.columns-2 > .table-cell:nth-last-child(-n+3) { border-bottom: none; }
+.comparison-grid.columns-3 > .table-cell:nth-last-child(-n+4) { border-bottom: none; }
+.comparison-grid.columns-4 > .table-cell:nth-last-child(-n+5) { border-bottom: none; }
+.comparison-grid.columns-5 > .table-cell:nth-last-child(-n+6) { border-bottom: none; }

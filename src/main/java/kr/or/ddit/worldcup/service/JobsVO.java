@@ -3,6 +3,7 @@ package kr.or.ddit.worldcup.service;
 import java.util.Date;
 import java.util.List;
 
+import kr.or.ddit.pse.cr.crl.service.JobsRelVO;
 import lombok.Data;
 
 @Data
@@ -36,6 +37,7 @@ public class JobsVO {
 	private List<String> jobSals;
 	private List<String> jobLcls;
 	private List<String> jobCodes;
+	private List<JobsRelVO> jobsRelVOList;
 
 	// 북마크 확인값
 	private String isBookmark;
@@ -44,6 +46,7 @@ public class JobsVO {
 	// 추가 출력값
 	private String prospect;
 	private String averageSal;
+	private String education;
 	
 	// 필터조건
 	private String keyword;
