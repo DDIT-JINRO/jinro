@@ -1,3 +1,5 @@
+const sortOrders = {};
+
 document.addEventListener('DOMContentLoaded', function() {
     // 모든 북마크 버튼
     const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
@@ -9,6 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
             handleBookmarkToggle(this);
         });
     });
+
+    const sortableHeaders = document.querySelectorAll('.sortable-header');
+    sortableHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const sortKey = header.dataset.sortKey;
+            sortTableByColumn(sortKey, header);
+        });
+    });
+
+    highlightBestValues();
 });
 
 const handleBookmarkToggle = (button) => {
@@ -56,5 +68,159 @@ const handleBookmarkToggle = (button) => {
         // 네트워크 오류나 서버 응답 실패 시
         console.error('북마크 처리 중 오류 발생:', error);
         alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    });
+}
+
+function sortTableByColumn(sortKey, clickedHeader) {
+    const table = document.querySelector('.comparison-table');
+    const thead = table.querySelector('thead');
+    const tbody = table.querySelector('tbody');
+    const headerRow = thead.querySelector('tr');
+    const dataRows = Array.from(tbody.querySelectorAll('tr'));
+
+    // 1. 정렬 순서 결정 (처음 클릭 시 내림차순, 이후 토글)
+    const currentOrder = sortOrders[sortKey] === 'desc' ? 'asc' : 'desc';
+    sortOrders[sortKey] = currentOrder;
+
+    // 2. 컬럼(열) 데이터를 추출하여 배열로 만듭니다.
+    const columns = [];
+    const jobHeaders = Array.from(headerRow.querySelectorAll('th:not(:first-child)'));
+
+    jobHeaders.forEach((jobHeader, index) => {
+        const columnData = {
+            headerElement: jobHeader,
+            cellElements: dataRows.map(row => row.querySelectorAll('td')[index]),
+        };
+        
+        const sortRow = tbody.querySelector(`[data-sort-key="${sortKey}"]`).closest('tr');
+        const sortCell = sortRow.querySelectorAll('td')[index];
+        columnData.sortValue = parseSortValue(sortCell.textContent.trim(), sortKey);
+        columns.push(columnData);
+    });
+
+    // 3. 데이터를 정렬합니다.
+    columns.sort((a, b) => {
+        if (currentOrder === 'asc') {
+            return a.sortValue - b.sortValue;
+        } else {
+            return b.sortValue - a.sortValue;
+        }
+    });
+
+    // 4. 정렬된 순서에 따라 DOM을 재배치합니다.
+    columns.forEach(column => {
+        // 헤더(직업 카드) 재배치
+        headerRow.appendChild(column.headerElement);
+        // 각 행의 데이터 셀 재배치
+        column.cellElements.forEach(cell => cell.parentElement.appendChild(cell));
+    });
+
+    // 5. 정렬 상태 시각적 표시 업데이트
+    updateSortIndicator(clickedHeader, currentOrder);
+}
+
+
+function parseSortValue(text, key) {
+    switch (key) {
+        case 'salary': // '억'과 '만원' 단위를 모두 처리하여 '만원' 단위로 통일합니다.
+            let salary = 0;
+            if (text.includes('억')) {
+                // "억"이 포함된 경우, 해당 숫자를 만원 단위로 변환 (1억 -> 10000)
+                const billions = text.match(/(\d+)억/);
+                if (billions) {
+                    salary += parseInt(billions[1], 10) * 10000;
+                }
+            }
+            if (text.includes('만원')) {
+                // "만원"이 포함된 경우, 해당 숫자를 더합니다.
+                const millions = text.match(/(\d+)만원/);
+                if (millions) {
+                    salary += parseInt(millions[1], 10);
+                }
+            }
+            // "1억" 처럼 만원 단위가 없을 경우를 대비해, salary가 0이면 그냥 숫자만 파싱
+            if (salary === 0) {
+                 return parseInt(text.replace(/[^0-9]/g, ''), 10) || 0;
+            }
+            return salary;
+
+        case 'satisfaction':
+            return parseInt(text.replace('%', ''), 10) || 0;
+
+        case 'prospect':
+            // 실제 데이터에 맞게 랭킹 시스템을 확장합니다.
+            const prospectRank = {
+                '증가': 5,
+                '다소 증가': 4,
+                '유지': 3,
+                '다소 감소': 2,
+                '감소': 1,
+            };
+            return prospectRank[text] || -1; // 순위가 없는 경우 맨 뒤로
+
+        case 'education':
+            // 학력 순서에 따라 숫자 값을 부여 (높을수록 좋음)
+            const eduRank = { '대학원졸이상': 5, '대학원졸': 4, '대졸': 3, '전문대졸': 2, '고졸이하': 1, '고졸': 1 };
+            return eduRank[text] || 0;
+            
+        default:
+            return 0;
+    }
+}
+
+/**
+ * 정렬된 헤더에 시각적 표시를 업데이트합니다.
+ * @param {HTMLElement} activeHeader - 현재 클릭된 헤더
+ * @param {string} order - 정렬 순서 ('asc' 또는 'desc')
+ */
+function updateSortIndicator(activeHeader, order) {
+    // 모든 헤더에서 활성 클래스와 아이콘 초기화
+    document.querySelectorAll('.sortable-header').forEach(header => {
+        header.classList.remove('sort-active');
+        header.textContent = header.textContent.replace(/ [↑↓]$/, ' ↕');
+    });
+
+    // 현재 클릭된 헤더에만 활성 클래스 추가
+    activeHeader.classList.add('sort-active');
+    
+    // 정렬 방향 아이콘 변경
+    const arrow = order === 'desc' ? ' ↓' : ' ↑';
+    activeHeader.textContent = activeHeader.textContent.replace(' ↕', '') + arrow;
+}
+
+/**
+ * 각 비교 항목(행)에서 가장 높은 값을 찾아 'highlight-best' 클래스를 적용합니다.
+ */
+function highlightBestValues() {
+    const tbody = document.querySelector('.comparison-table tbody');
+    // 정렬 가능한 행들만 대상으로 합니다.
+    const sortableRows = tbody.querySelectorAll('.sortable-header');
+
+    sortableRows.forEach(header => {
+        const sortKey = header.dataset.sortKey;
+        const row = header.parentElement;
+        const cells = Array.from(row.querySelectorAll('td'));
+
+        if (cells.length === 0) return;
+
+        let maxValue = -Infinity;
+        // 1. 최고 값 찾기
+        cells.forEach(cell => {
+            const value = parseSortValue(cell.textContent.trim(), sortKey);
+            if (value > maxValue) {
+                maxValue = value;
+            }
+        });
+
+        // 2. 최고 값과 일치하는 모든 셀에 클래스 추가
+        cells.forEach(cell => {
+             const value = parseSortValue(cell.textContent.trim(), sortKey);
+             if (value === maxValue) {
+                 cell.classList.add('highlight-best');
+             } else {
+                 // 다른 정렬을 위해 이전에 적용된 클래스가 있다면 제거
+                 cell.classList.remove('highlight-best');
+             }
+        });
     });
 }
