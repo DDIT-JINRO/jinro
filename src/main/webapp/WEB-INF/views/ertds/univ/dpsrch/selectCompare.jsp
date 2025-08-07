@@ -24,115 +24,67 @@
 		</div>
 	</div>
 </div>
-${compareList}
 <div>
 	<div class="public-wrapper">
-		<div class="comparison-grid">
-			<div class="grid-placeholder"></div>
-
-			<div class="job-card">
-				<button class="close-btn">&times;</button>
-				<h4>직업명</h4>
-				<p>직업 설명 직업 설명 직업 설명 직업 설명 직업 설명</p>
-				<a href="#" class="btn-detail">직업 상세보기</a>
-			</div>
-			<div class="job-card">
-				<button class="close-btn">&times;</button>
-				<h4>직업명</h4>
-				<p>직업 설명 직업 설명 직업 설명 직업 설명 직업 설명</p>
-				<a href="#" class="btn-detail">직업 상세보기</a>
-			</div>
-			<div class="job-card">
-				<button class="close-btn">&times;</button>
-				<h4>직업명</h4>
-				<p>직업 설명 직업 설명 직업 설명 직업 설명 직업 설명</p>
-				<a href="#" class="btn-detail">직업 상세보기</a>
-			</div>
-			<div class="job-card">
-				<button class="close-btn">&times;</button>
-				<h4>직업명</h4>
-				<p>직업 설명 직업 설명 직업 설명 직업 설명 직업 설명</p>
-				<a href="#" class="btn-detail">직업 상세보기</a>
-			</div>
-			<div class="job-card">
-				<button class="close-btn">&times;</button>
-				<h4>직업명</h4>
-				<p>직업 설명 직업 설명 직업 설명 직업 설명 직업 설명</p>
-				<a href="#" class="btn-detail">직업 상세보기</a>
-			</div>
-
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			
-			<div class="table-cell header">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-			<div class="table-cell">비교 내용</div>
-		</div>
+		<table class="comparison-table">
+			<thead>
+				<tr>
+					<%-- 비교 항목 헤더가 들어갈 첫 번째 열은 비워둡니다. --%>
+					<th></th>
+					<c:forEach var="dept" items="${compareList}">			
+						<th class="dept-card-header">
+							<div class="dept-card">
+								<button class="close-btn">&times;</button>
+								<h4>${dept.uddMClass}</h4>
+								<p>${dept.uddLClass}</p>
+								<a href="/ertds/univ/dpsrch/selectDetail.do?uddId=${dept.uddId}" class="btn-detail">학과 상세보기</a>
+							</div>
+						</th>
+					</c:forEach>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th class="row-header">입학 경쟁률</th>
+					<c:forEach var="dept" items="${compareList}">
+						<td class="align-left">${dept.admissionRate}</td>
+					</c:forEach>
+				</tr>
+				<tr>
+					<th class="row-header">첫 평균 급여</th>
+					<c:forEach var="dept" items="${compareList}">
+						<td class="align-left">${dept.avgSalary}만원</td>
+					</c:forEach>
+				</tr>
+				<tr>
+					<th class="row-header">평균 등록금</th>
+					<c:forEach var="dept" items="${compareList}">
+						<td class="align-left">${dept.avgTuitionFormatted}</td>
+					</c:forEach>
+				</tr>
+				<tr>
+					<th class="row-header">평균 장학금</th>
+					<c:forEach var="dept" items="${compareList}">
+						<td class="align-left">${dept.avgScholarFormatted}</td>
+					</c:forEach>
+				</tr>
+				<tr>
+					<th class="row-header">만족도</th>
+					<c:forEach var="dept" items="${compareList}">
+						<td class="align-left">${dept.satisfactionGrade} (${dept.satisfactionAvg})</td>
+					</c:forEach>
+				</tr>
+				<tr>
+					<th class="row-header">취업률</th>
+					<c:forEach var="dept" items="${compareList}">
+						<td class="align-left">${dept.empRate} %</td>
+					</c:forEach>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
+<script type="text/javascript" src="/js/ertds/univ/dpsrch/deptCompare.js"></script>

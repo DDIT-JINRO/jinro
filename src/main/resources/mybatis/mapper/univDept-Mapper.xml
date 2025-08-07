@@ -161,13 +161,18 @@
 	        CONCAT(ROUND(uds.UDS_EMPLOYMENT_RATE_TOTAL, 1), '') as empRate,
 	        
 	        -- 평균 급여 계산 (급여 구간별 중간값으로 추정)
-	        ROUND(
-	            (COALESCE(uds.UDS_SALARY_0_150_RATE, 0) * 75 +           -- 0-150만원 구간 중간값: 75
-	             COALESCE(uds.UDS_SALARY_151_200_RATE, 0) * 175 +        -- 151-200만원 구간 중간값: 175  
-	             COALESCE(uds.UDS_SALARY_201_250_RATE, 0) * 225 +        -- 201-250만원 구간 중간값: 225
-	             COALESCE(uds.UDS_SALARY_251_300_RATE, 0) * 275 +        -- 251-300만원 구간 중간값: 275
-	             COALESCE(uds.UDS_SALARY_301_PLUS_RATE, 0) * 350), 0     -- 301만원 이상 구간 추정값: 350
-	        ) as avgSalary,
+	        CASE
+	            WHEN (UDS.UDS_SALARY_0_150_RATE + UDS.UDS_SALARY_151_200_RATE + UDS.UDS_SALARY_201_250_RATE + UDS.UDS_SALARY_251_300_RATE + UDS.UDS_SALARY_301_PLUS_RATE) > 0
+	            THEN ROUND(
+	                (UDS.UDS_SALARY_0_150_RATE * 75 +
+	                 UDS.UDS_SALARY_151_200_RATE * 175 +
+	                 UDS.UDS_SALARY_201_250_RATE * 225 +
+	                 UDS.UDS_SALARY_251_300_RATE * 275 +
+	                 UDS.UDS_SALARY_301_PLUS_RATE * 350) /
+	                (UDS.UDS_SALARY_0_150_RATE + UDS.UDS_SALARY_151_200_RATE + UDS.UDS_SALARY_201_250_RATE + UDS.UDS_SALARY_251_300_RATE + UDS.UDS_SALARY_301_PLUS_RATE), 0
+	            )
+	            ELSE NULL
+	          END AS avgSalary,
 	        
 	        -- 전국 평균 등록금 계산
 	        (SELECT ROUND(AVG(dept.UD_TUITION), 0)
