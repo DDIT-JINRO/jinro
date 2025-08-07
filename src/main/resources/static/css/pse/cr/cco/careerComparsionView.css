@@ -18,31 +18,30 @@
 }
 
 
-/* --- 직업 카드 (수정됨) --- */
+/* --- 직업 카드 (수정 제안) --- */
 .job-card {
-    /* flex:1 속성 제거. 너비는 부모 그리드가 제어합니다. */
-    background-color: #f8fcff;
-    border: 1px solid #cce7ff;
-    border-radius: 12px;
-    padding: 25px 20px;
+    background-color: #fff; /* 배경을 흰색으로 변경 */
+    border: 1px solid #e9ecef; /* 기본 테두리를 연하게 */
+    border-radius: 8px; /* 곡률을 약간 줄여 차분하게 */
+    padding: 20px;
     text-align: center;
     position: relative;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    margin-top: -1px; /* 상단 테두리와 겹치게 하여 디자인 개선 */
-    margin-bottom: 30px; /* 카드와 아래 내용 사이의 간격 */
+    transition: all 0.2s ease-in-out; /* 모든 속성에 transition 적용 */
+    margin-top: 0; /* 상단 테두리와 겹치는 효과 제거 */
+    margin-bottom: 20px; /* 간격 미세 조정 */
 }
 
 .job-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.07); /* 그림자 효과 강화 */
+    border-color: #007bff; /* 호버 시 테두리 색상 강조 */
 }
 
 .job-card h4 {
-    font-size: 1.1rem;
+    font-size: 1.15rem; /* 제목을 좀 더 강조 */
     font-weight: 600;
-    color: #333;
-    margin-bottom: 10px;
+    color: #212529;
+    margin: 10px 0; /* 위아래 간격 추가 */
 }
 
 .job-card p {
@@ -72,39 +71,93 @@
 
 .btn-detail {
     display: inline-block;
-    padding: 8px 18px;
-    font-size: 0.85rem;
-    color: #007bff;
-    background-color: #e7f3ff;
-    border: 1px solid #b3d7ff;
-    border-radius: 20px;
-    text-decoration: none;
+    padding: 6px 16px;
+    font-size: 0.8rem;
     font-weight: 500;
-    transition: background-color 0.2s;
+    color: #007bff;
+    background-color: #e7f5ff; /* 배경색을 더 연하게 */
+    border: 1px solid transparent; /* 기본 테두리 제거 */
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.2s;
+    margin-top: 10px;
 }
-
 .btn-detail:hover {
-    background-color: #d0e7ff;
+    background-color: #007bff;
+    color: #fff;
 }
 
-/* --- 비교표 셀 (수정됨) --- */
+/* --- 비교표 셀 (수정 제안) --- */
 .table-cell {
-    padding: 20px 15px;
+    padding: 18px 15px; /* 패딩 미세 조정 */
     text-align: center;
-    font-size: 0.95rem;
+    font-size: 0.9rem; /* 폰트 크기 미세 조정 */
     color: #555;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e9ecef; /* 구분선 색을 더 연하게 */
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.table-cell.header {
-    background-color: #f7f7f7;
-    font-weight: 600;
-    color: #333;
+    line-height: 1.6; /* 줄 간격 추가 */
+    word-break: keep-all; /* 단어 단위로 줄바꿈하여 가독성 향상 */
 }
 
+/* 1. 비교 항목 헤더(첫 번째 열) 스타일 수정 */
+.table-cell.header {
+    background-color: #f8f9fa; /* 배경색을 더 밝고 부드럽게 */
+    font-weight: 500; /* 폰트 두께를 약간 줄여 부드럽게 */
+    color: #333;
+    text-align: left; /* 왼쪽 정렬! */
+    justify-content: flex-start; /* flex 시작점으로 정렬 */
+    border-right: 1px solid #e9ecef; /* 오른쪽 구분선 추가 */
+}
+
+/* 2. 내용이 긴 '하는 일' 데이터 셀을 위한 왼쪽 정렬 클래스 추가 */
+.table-cell.align-left {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+/* 마지막 행의 하단 테두리 제거 (기존과 동일) */
 .comparison-grid.columns-2 > .table-cell:nth-last-child(-n+3) { border-bottom: none; }
 .comparison-grid.columns-3 > .table-cell:nth-last-child(-n+4) { border-bottom: none; }
 .comparison-grid.columns-4 > .table-cell:nth-last-child(-n+5) { border-bottom: none; }
 .comparison-grid.columns-5 > .table-cell:nth-last-child(-n+6) { border-bottom: none; }
+
+.bookmark-btn {
+    display: flex;           
+    align-items: center;     
+    justify-content: center; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    
+    /* 버튼의 크기를 명시적으로 지정하여 정렬 기준을 잡아줍니다. */
+    width: 36px; 
+    height: 36px;
+}
+
+/* 활성 아이콘은 기본적으로 숨깁니다. */
+.bookmark-btn .icon-active {
+	display: none;
+}
+
+/* 비활성 아이콘은 기본적으로 보입니다. */
+.bookmark-btn .icon-inactive {
+    display: inline-block;
+}
+
+.bookmark-btn span img {
+    width: 30px;
+    height: 30px;
+    display: block;
+}
+
+/* .active 클래스가 없는 경우 (비활성화 상태) */
+.bookmark-btn.active .icon-active {
+	display: inline-block; /* 비활성 아이콘을 보여줍니다. */
+}
+
+.bookmark-btn.active .icon-inactive {
+	display: none; /* 활성 아이콘을 숨깁니다. */
+}

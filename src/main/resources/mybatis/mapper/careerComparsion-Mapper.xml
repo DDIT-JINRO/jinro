@@ -16,6 +16,7 @@
 		    , T2.JOB_LCL
 		    , T2.JOB_MCL
 		    , T2.EDUCATION
+		    , T2.JOB_TARGET_ID
 		FROM (
 		    SELECT
 		        T1.JOB_NAME                     AS JOB_NAME
@@ -60,6 +61,7 @@
 		            WHEN T1.EDUBG_MGRADU_UNDR   THEN '중졸 이하'
 		            ELSE '정보 없음'
 		        END                             AS EDUCATION
+		        , T1.JOB_TARGET_ID              AS JOB_TARGET_ID
 		    FROM
 		        JOBS T1
 		        LEFT JOIN COM_CODE L_CAT ON T1.JOB_LCL = L_CAT.CC_ID
