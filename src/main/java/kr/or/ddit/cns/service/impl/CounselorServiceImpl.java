@@ -141,7 +141,7 @@ public class CounselorServiceImpl implements CounselorService {
 
 		List<CounselingVO> counselingVOList = this.counselorMapper.selectMyDeterminedCounselList(requestor);
 		for(CounselingVO vo : counselingVOList) {
-			disabledDateStringList.add(getFormattedDateStrByJavaDate(vo.getCounselReqDate()));
+			disabledDateStringList.add(getFormattedDateStrByJavaDate(vo.getCounselReqDatetime()));
 		}
 
 		List<VacationVO> vacationVOList = this.counselorMapper.selectMyInProgressVacationList(requestor);

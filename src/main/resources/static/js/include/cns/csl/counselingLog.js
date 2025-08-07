@@ -124,7 +124,6 @@ function fetchCounselingLog(page = 1) {
 			}
 		})
 		.then(({ data }) => {
-			console.log(data);
 			const countEl = document.getElementById('notice-count');
 			let cnt = (page-1) * pageSize +1;
 			if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
@@ -135,7 +134,6 @@ function fetchCounselingLog(page = 1) {
 			if (data.content.length < 1 && keyword.trim() !== '') {
 				listEl.innerHTML = `<tr><td colspan='4' style="text-align: center;">등록되지 않은 정보입니다.</td></tr>`;
 			} else {
-				console.log(data);
 				const rows = data.content.map(item => `
 					<tr data-cns-id="${item.counselId}" onclick="showDetail(${item.counselId})">
 						<td>${cnt++}</td>
@@ -155,7 +153,6 @@ function fetchCounselingLog(page = 1) {
 
 function eventBinding(){
 	const tbody = document.getElementById('notice-list');
-	console.log(tbody);
 	tbody.addEventListener('click', function(){
 
 	})
@@ -231,7 +228,6 @@ function showDetail(counselId) {
 	axios.get('/api/cns/counselDetail.do', { params: { counselId } })
 		.then(response => {
 			const resp = response.data;
-			console.log(resp);
 
 			window.currentCounselId = counselId;
 			document.getElementById('counselLogId').value = resp.counselingLog.clIdx;
@@ -284,7 +280,6 @@ function showDetail(counselId) {
 			} else {
 				document.getElementById('fileGroupId').value = resp.counselingLog.fileDetailList[0].fileGroupId;
 				document.getElementById("file").style.display = "block";
-				console.log(isConfirmed(resp.counselingLog.clConfirm));
 				ul.innerHTML = resp.counselingLog.fileDetailList.map(f => `
 	          	<li>
 	            <div onclick="filedownload('${f.fileGroupId}', ${f.fileSeq})" target="_blank">${f.fileOrgName}</div>&nbsp;&nbsp;
@@ -322,10 +317,6 @@ function insertOrUpdate(action) {
 	// action 값에 따라서 cl_confirm
 	if(action == 'confirm'){
 		fd.append('clConfirm', 'S03001');
-	}
-
-	for (let [key, value] of fd.entries()) {
-	  console.log(`${key}: ${value}`);
 	}
 
 	axios.post('/api/cns/updateCnsLog.do', fd)

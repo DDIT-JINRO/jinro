@@ -10,8 +10,7 @@
 		<result property="counselTitle" column="COUNSEL_TITLE"/>
 		<result property="counselDescription" column="COUNSEL_DESCRIPTION"/>
 		<result property="counselStatus" column="COUNSEL_STATUS"/>
-		<result property="counselReqDate" column="COUNSEL_REQ_DATE"/>
-		<result property="counselReqTime" column="COUNSEL_REQ_TIME"/>
+		<result property="counselReqDatetime" column="COUNSEL_REQ_DATETIME"/>
 		<result property="counselUrlCou" column="COUNSEL_URL_COU"/>
 		<result property="counselReviewd" column="COUNSEL_REVIEWD"/>
 		<result property="counselCreatedAt" column="COUNSEL_CREATED_AT"/>
@@ -57,8 +56,7 @@
 		              , A.COUNSEL_TITLE
 		              , A.COUNSEL_DESCRIPTION
 		              , A.COUNSEL_STATUS
-		              , A.COUNSEL_REQ_DATE
-		              , A.COUNSEL_REQ_TIME
+		              , A.COUNSEL_REQ_DATETIME
 		              , A.COUNSEL_REVIEWD
 		              , A.COUNSEL_CREATED_AT
 		              , A.COUNSEL_UPDATED_AT
@@ -100,10 +98,10 @@
 		            	</choose>
 		            </if>
 		            <if test="year != null and year != ''">
-		            	AND EXTRACT(YEAR FROM COUNSEL_REQ_DATE) = #{year}
+		            	AND EXTRACT(YEAR FROM COUNSEL_REQ_DATETIME) = #{year}
 		            </if>
 		            ORDER BY
-		            	A.COUNSEL_REQ_DATE DESC
+		            	A.COUNSEL_REQ_DATETIME DESC
 		        ) D
 	</select>
 
@@ -122,8 +120,7 @@
 			, COUNSEL_TITLE
 			, COUNSEL_DESCRIPTION
 			, COUNSEL_STATUS
-			, COUNSEL_REQ_DATE
-			, COUNSEL_REQ_TIME
+			, COUNSEL_REQ_DATETIME
 			, COUNSEL_REVIEWD
 			, COUNSEL_CREATED_AT
 			, COUNSEL_UPDATED_AT
@@ -154,8 +151,7 @@
 		              , A.COUNSEL_TITLE
 		              , A.COUNSEL_DESCRIPTION
 		              , A.COUNSEL_STATUS
-		              , A.COUNSEL_REQ_DATE
-		              , A.COUNSEL_REQ_TIME
+		              , A.COUNSEL_REQ_DATETIME
 		              , A.COUNSEL_REVIEWD
 		              , A.COUNSEL_CREATED_AT
 		              , A.COUNSEL_UPDATED_AT
@@ -198,10 +194,10 @@
 		            	</choose>
 		            </if>
 		            <if test="year != null and year != ''">
-		            	AND EXTRACT(YEAR FROM COUNSEL_REQ_DATE) = #{year}
+		            	AND EXTRACT(YEAR FROM COUNSEL_REQ_DATETIME) = #{year}
 		            </if>
 		            ORDER BY
-		            	A.COUNSEL_REQ_DATE DESC
+		            	A.COUNSEL_REQ_DATETIME DESC
 		        ) D
 		)X
 		WHERE
@@ -225,8 +221,7 @@
 			 , A.COUNSEL_TITLE
 			 , A.COUNSEL_DESCRIPTION
 			 , A.COUNSEL_STATUS
-			 , A.COUNSEL_REQ_DATE
-			 , A.COUNSEL_REQ_TIME
+			 , A.COUNSEL_REQ_DATETIME
 			 , A.COUNSEL_REVIEWD
 			 , A.COUNSEL_CREATED_AT
 			 , A.COUNSEL_UPDATED_AT
@@ -294,8 +289,7 @@
 		     , COUNSEL_TITLE
 		     , COUNSEL_DESCRIPTION
 		     , COUNSEL_STATUS
-		     , COUNSEL_REQ_DATE
-		     , COUNSEL_REQ_TIME
+		     , COUNSEL_REQ_DATETIME
 		     , COUNSEL_URL_COU
 		     , COUNSEL_REVIEWD
 		     , COUNSEL_CREATED_AT
@@ -395,10 +389,10 @@
 
 	<select id="selectMyDeterminedCounselList" parameterType="int" resultType="kr.or.ddit.cns.service.CounselingVO">
 		SELECT
-		       COUNSEL_REQ_DATE
+		       COUNSEL_REQ_DATETIME
 		  FROM COUNSELING
 		 WHERE COUNSEL_STATUS = 'S04003'
-		   AND COUNSEL_REQ_DATE >= SYSDATE
+		   AND COUNSEL_REQ_DATETIME >= SYSDATE
 	</select>
 
 	<select id="selectMyInProgressVacationList" parameterType="int" resultType="kr.or.ddit.cns.service.VacationVO">
