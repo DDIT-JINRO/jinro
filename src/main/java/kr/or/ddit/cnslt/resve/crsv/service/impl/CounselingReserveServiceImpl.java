@@ -1,12 +1,10 @@
 package kr.or.ddit.cnslt.resve.crsv.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -24,69 +22,86 @@ import lombok.extern.slf4j.Slf4j;
 public class CounselingReserveServiceImpl implements CounselingReserveService {
 	
     // Redis 락을 위한 상수 정의
-    private static final String LOCK_KEY_PREFIX = "counsel_lock:";
-    private static final long LOCK_TIMEOUT_SECONDS = 300; // 5분 TTL
+    private static final String HOLD_KEY_PREFIX = "counsel_hold:";
+    private static final long LOCK_TIMEOUT_SECONDS = 600; // 5분 TTL
 
 	private final CounselingReserveMapper counselingReserveMapper;
 	private final RedisTemplate<String, Object> redisTemplate;
 
+	
+	
+
+	@Override
+	public boolean tryHoldCounsel(CounselingVO counselingVO) {
+		 String lockKey = CreateHoldKey(counselingVO);
+	        
+        // Redis SETNX(SET if Not eXists) 명령어로 락 획득 시도
+        // lockValue는 락을 획득한 사용자의 고유 ID로, 여기서는 memId를 사용합니다.
+        String lockValue = String.valueOf(counselingVO.getMemId()); 
+        
+        // Redis에 키가 존재하지 않으면(false) 키를 설정하고 true 반환
+        Boolean isLocked = redisTemplate.opsForValue().setIfAbsent(lockKey, lockValue, Duration.ofMinutes(10));
+        if(isLocked) {
+        	log.info("임시 락 성공!!");
+        }
+        
+        return isLocked != null && isLocked;
+	}
+
 	@Override
 	@Transactional
 	public boolean tryReserveCounsel(CounselingVO counselingVO) {
-		// Redis 락 키 생성: 상담사ID + 날짜 + 시간
-        String lockKey = LOCK_KEY_PREFIX + counselingVO.getCounsel() + ":" +
-                counselingVO.getCounselReqDate().getTime() + ":" + counselingVO.getCounselReqTime().getTime();
+		 String lockKey = CreateHoldKey(counselingVO);
+		 
+		 
+		 // Redis에서 락이 유효한지 확인
+		String holdValue = (String) redisTemplate.opsForValue().get(lockKey);
+		// 락이 존재하고, 락을 건 사용자와 현재 사용자가 동일한지 확인
+		String currentMemId = String.valueOf(counselingVO.getMemId());
+		
+		if (holdValue != null && holdValue.equals(currentMemId)) {
+		    // DB에 예약 정보 삽입
+		    int result = counselingReserveMapper.insertReservation(counselingVO);
+		    
+		    // 삽입 성공 시 임시 락 해제
+		    if (result > 0) {
+		        releaseCounselHold(counselingVO);
+		        return true;
+		    }
+		}
+		
+		// 락이 없거나, 다른 사용자가 건 락인 경우 실패
+		return false;
 
-        // 안전한 락 해제를 위한 고유 값 생성
-        String lockValue = UUID.randomUUID().toString();
-
-        try {
-            // Redis 분산 락 획득 시도 (동기 방식)
-            Boolean locked = redisTemplate.opsForValue().setIfAbsent(lockKey, lockValue, LOCK_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-
-            if (Boolean.FALSE.equals(locked)) {
-                // 락 획득 실패 -> 다른 사용자가 이미 예약 진행 중
-                return false;
-            }
-
-            // --- Redis 락 획득 성공! 이제부터 DB 검증 및 삽입 로직 진행 ---
-
-            // 1. 회원의 중복 예약 확인 (MyBatis)
-            // 반환된 카운트가 0보다 크면 중복 예약 존재
-            if (counselingReserveMapper.selectDuplicateCounselingByMemId(counselingVO) > 0) {
-                return false;
-            }
-            
-            // 2. 상담사의 휴가 기간 확인 (MyBatis)
-            // 해당 날짜가 휴가 기간에 포함되는지 확인
-            VacationVO vacationVO = new VacationVO();
-            vacationVO.setVaRequestor(counselingVO.getCounsel());
-            vacationVO.setVaStart(counselingVO.getCounselReqDate());
-
-            if (counselingReserveMapper.selectCounselorVacations(vacationVO) > 0) {
-                return false;
-            }
-
-            // 3. DB에 예약 정보 삽입 (MyBatis)
-            int result = counselingReserveMapper.insertReservation(counselingVO);
-
-            // DB 삽입 성공 시 true 반환, 실패 시 false 반환
-            return result > 0;
-            
-        } finally {
-            // 예외 발생 여부와 상관없이 락을 해제하는 것이 중요
-            if (lockValue.equals(redisTemplate.opsForValue().get(lockKey))) {
-                redisTemplate.delete(lockKey);
-            }
-        }
     }
 
+	//락키를 생성하는 메소드
+	private String CreateHoldKey(CounselingVO counselingVO) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		
+		Date reservationDatetime = counselingVO.getCounselReqDatetime();
+		
+		// Redis 락 키 생성: 상담사ID + 날짜 + 시간
+		return HOLD_KEY_PREFIX + counselingVO.getCounsel() + ":" +
+        dateFormat.format(reservationDatetime) + ":" +
+        timeFormat.format(reservationDatetime);
+	}
+	
+	//락키를 해제하는 메소드
 	@Override
-	public List<String> getAvailableTimes(int counselId, Date counselReqDate) {
+	public void releaseCounselHold(CounselingVO counselingVO) {
+
+		String lockKey = CreateHoldKey(counselingVO);
+        redisTemplate.delete(lockKey);
+	}
+	
+	@Override
+	public List<String> getAvailableTimes(int counselId, Date counselReqDatetime) {
 		// 1. 상담사가 해당 날짜에 휴가 중인지 확인
 	    VacationVO vacationVO = new VacationVO();
 	    vacationVO.setVaRequestor(counselId);
-	    vacationVO.setVaStart(counselReqDate);
+	    vacationVO.setVaStart(counselReqDatetime);
 	    
 	    int vacationCount = counselingReserveMapper.selectCounselorVacations(vacationVO);
 	    if (vacationCount > 0) {
@@ -96,9 +111,11 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 	    // 2. 예약된 시간 목록 조회
 	    CounselingVO counselingVO = new CounselingVO();
 	    counselingVO.setCounsel(counselId);
-	    counselingVO.setCounselReqDate(counselReqDate);
+	    counselingVO.setCounselReqDatetime(counselReqDatetime);
 	    
+	    //상담사 상담 날짜로 시간 가져오기
 	    List<Date> bookedTimes = counselingReserveMapper.selectBookedTimesByCounselorAndDate(counselingVO);
+	    log.info("bookedTimes"+bookedTimes);
 	    
 	    // 3. 예약된 시간 목록을 "HH:mm" 형식의 문자열로 변환
 	    List<String> bookedTimesFormatted = new ArrayList<>();

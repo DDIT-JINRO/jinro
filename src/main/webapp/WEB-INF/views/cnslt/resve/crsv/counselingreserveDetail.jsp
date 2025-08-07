@@ -25,23 +25,7 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			<h3>상담 예약 JSP</h3>
-  			<!-- db에서 불러와야함 -->
-			<div class="counselor-select-area">
-				<span>상담사 선택: </span> <select id="counselorSelect">
-					<option value="3">상담사 A</option>
-					<option value="3">상담사 B</option>
-				</select>
-			</div>
-
-			<div id='calendar'></div>
-
-			<div id="timeSlotsContainer">
-				<div id="selectedDateText"></div>
-				<div id="timeSlotButtons"></div>
-			</div>
-
-			<button id="nextBtn">다음</button>
+			디테일
 		</div>
 	</div>
 </div>

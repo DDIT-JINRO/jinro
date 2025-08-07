@@ -14,10 +14,9 @@
 		        counsel_title,
 		        counsel_description,
 		        counsel_status,
-		        counsel_req_date,
-		        counsel_req_time,
-		        counsel_url,
-		        counsel_reviewd,
+		        counsel_req_datetime,
+		        counsel_url_user,
+		        counsel_url_cou,
 		        counsel_created_at,
 		        counsel_updated_at
 		    )
@@ -28,57 +27,54 @@
 		        #{counselMethod},
 		        #{counselTitle},
 		        #{counselDescription},
-		        #'S04001',
-		        #{counselReqDate},
-		        #{counselReqTime},
-		        #{counselUrl},
-		        #{counselReviewd},
+		        'S04001',
+		        #{counselReqDatetime},
+		        #{counselUrlUser},
+		        #{counselUrlCou},
 		        sysdate,
 		        sysdate
 		        )
 	</insert>
 
 	<!-- 회원 상담중복 검사 -->
-    <select id="selectDuplicateCounselingByMemId" resultType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+    <select id="selectDuplicateCounselingByMemId" resultType="int" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
         SELECT count(*)
         FROM COUNSELING
         WHERE MEM_ID = #{memId}
-        AND COUNSEL_REQ_DATE = #{counselReqDate}
-        AND COUNSEL_REQ_TIME = #{counselReqTime}
+        AND COUNSEL_REQ_DATETIME = #{counselReqDatetime}
         AND COUNSEL_STATUS IN ('S04001', 'S04003')
     </select>
     
-    <!-- 상담사 예약  -->
-    <select id="selectReservationByCounselorAndTime" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+    <!-- 상담사 예약  확인 -->
+    <select id="selectReservationByCounselorAndTime" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO" resultType="int">
     SELECT count(*)
         FROM COUNSEL
-        WHERE COUNSELOR_ID = #{counselorId}
-        AND COUNSEL_REQ_DATE = #{counselReqDate}
-        AND COUNSEL_REQ_TIME = #{counselReqTime}
+        WHERE COUNSEL = #{counsel}
+        AND COUNSEL_REQ_DATETIME = #{counselReqDatetime}
         AND COUNSEL_STATUS IN ('S04001', 'S04003')
     </select>
     
     <!-- {vaRequestor} 상담사 id로 검색 -->
     <select id="selectCounselorVacations" resultType="int" parameterType="kr.or.ddit.cnslt.resve.crsv.service.VacationVO">
         SELECT count(*)
-        FROM VACATION_APPLICATION
+        FROM VACATION
         WHERE VA_REQUESTOR = #{vaRequestor}
         AND VA_CONFIRM = 'S03003'  AND #{vaStart} BETWEEN VA_START AND VA_END
     </select>
     
     <update id="updateReservationStatus" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
-        UPDATE COUNSEL
+        UPDATE COUNSELING
         SET COUNSEL_STATUS = #{counselStatus},
             COUNSEL_UPDATED_AT = SYSDATE
-        WHERE COUNSEL_ID = #{counselId}
+        WHERE COUNSEL_ID  = #{counselId}
     </update>
     
-       <select id="selectBookedTimesByCounselorAndDate" resultType="java.util.Date" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
-        SELECT COUNSEL_REQ_TIME
-        FROM COUNSEL
-        WHERE COUNSELOR_ID = #{counsel}
-        AND COUNSEL_REQ_DATE = #{counselReqDate}
-        AND COUNSEL_STATUS IN ('S04001', 'S04003')
+     <select id="selectBookedTimesByCounselorAndDate" resultType="java.util.Date" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+	    SELECT COUNSEL_REQ_DATETIME
+	    FROM COUNSELING
+	    WHERE COUNSEL = #{counsel}
+	    AND TRUNC(COUNSEL_REQ_DATETIME) = TRUNC(#{counselReqDatetime, jdbcType=DATE})
+	    AND COUNSEL_STATUS IN ('S04001', 'S04003')
     </select>
     
 </mapper>
