@@ -12,5 +12,7 @@ public interface CareerEncyclopediaService {
 	ArticlePage<JobsVO> selectCareerList(JobsVO jobs, String memId);
 
 	JobsVO selectCareerDetail(JobsVO jobs);
+
+	void insertCareer(JobsVO jobs);
 	
 }

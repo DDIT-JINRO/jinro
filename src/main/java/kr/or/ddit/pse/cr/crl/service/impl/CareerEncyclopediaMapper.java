@@ -18,4 +18,6 @@ public interface CareerEncyclopediaMapper {
 
 	JobsVO selectCareerDetail(JobsVO jobs);
 
+	void insertCareer(JobsVO jobs);
+
 }

@@ -1,14 +1,19 @@
 package kr.or.ddit.pse.cr.crl.service.impl;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.pse.cr.crl.service.CareerEncyclopediaService;
 import kr.or.ddit.util.ArticlePage;
+import kr.or.ddit.util.file.service.FileDetailVO;
+import kr.or.ddit.util.file.service.FileService;
 import kr.or.ddit.worldcup.service.JobsVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +23,9 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 	
 	@Autowired
 	CareerEncyclopediaMapper careerEncyclopediaMapper;
+	
+	@Autowired
+	FileService fileService;
 	
 	@Override
 	public Map<String, String> selectJobLclCode() {
@@ -75,6 +83,22 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 		}
 		
 		return result;
+	}
+
+	@Override
+	public void insertCareer(JobsVO jobs) {
+		List<MultipartFile> fileList = jobs.getFiles();
+		Long fileGroupNo = fileService.createFileGroup();
+		
+		try {
+			fileService.uploadFiles(fileGroupNo, fileList);
+		} catch (IOException e) {
+			log.info("직업 파일 업로드 중 에러 발생" + e.getMessage());
+		}
+		
+		jobs.setFileGroupNo(fileGroupNo);
+		
+		this.careerEncyclopediaMapper.insertCareer(jobs);
 	}
 
 }

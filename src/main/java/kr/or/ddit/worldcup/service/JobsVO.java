@@ -3,6 +3,8 @@ package kr.or.ddit.worldcup.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import kr.or.ddit.pse.cr.crl.service.JobsRelVO;
 import lombok.Data;
 
@@ -19,7 +21,7 @@ public class JobsVO {
 	private String jobRelatedCert;
 	private String jobMainDuty;
 	private Date jobCreatedAt;
-	private int fileGroupNo;
+	private Long fileGroupNo;
 	private int edubgMgraduUndr;
 	private int edubgHgradu;
 	private int edubgCgraduUndr;
@@ -38,6 +40,8 @@ public class JobsVO {
 	private List<String> jobLcls;
 	private List<String> jobCodes;
 	private List<JobsRelVO> jobsRelVOList;
+	
+	private List<MultipartFile> files;
 
 	// 북마크 확인값
 	private String isBookmark;

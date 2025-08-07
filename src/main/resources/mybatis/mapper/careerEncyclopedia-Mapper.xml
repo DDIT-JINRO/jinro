@@ -268,4 +268,58 @@
         WHERE
             A.JOB_CODE = #{jobCode}
     </select>
+    
+    <insert id="insertCareer" parameterType="kr.or.ddit.worldcup.service.JobsVO">
+    	INSERT INTO JOBS (
+		    JOB_CODE
+		    , JOB_NAME
+		    , JOB_LCL
+		    , JOB_MCL
+		    , JOB_SAL
+		    , JOB_SATIS
+		    , JOB_WAY
+		    , JOB_RELATED_MAJOR
+		    , JOB_RELATED_CERT
+		    , JOB_MAIN_DUTY
+		    , JOB_CREATED_AT
+		    , FILE_GROUP_NO
+		    , EDUBG_MGRADU_UNDR
+		    , EDUBG_HGRADU
+		    , EDUBG_CGRADU_UNDR
+		    , EDUBG_UGRADU
+		    , EDUBG_GGRADU
+		    , EDUBG_DGRADU
+		    , OUTLOOK_INCREASE
+		    , OUTLOOK_SLIGHT_INCREASE
+		    , OUTLOOK_STABLE
+		    , OUTLOOK_SLIGHT_DECREASE
+		    , OUTLOOK_DECREASE
+		    , JOB_TARGET_ID
+		) VALUES (
+		    #{jobCode}
+		  , #{jobName}
+		  , #{jobLcl}
+		  , #{jobMcl}
+		  , #{jobSal}
+		  , #{jobSatis}
+		  , #{jobWay}
+		  , #{jobRelatedMajor}
+		  , #{jobRelatedCert}
+		  , #{jobMainDuty}
+		  , SYSDATE
+		  , #{fileGroupNo}
+		  , #{edubgMgraduUndr}
+		  , #{edubgHgradu}
+		  , #{edubgCgraduUndr}
+		  , #{edubgUgradu}
+		  , #{edubgGgradu}
+		  , #{edubgDgradu}
+		  , #{outlookIncrease}
+		  , #{outlookSlightIncrease}
+		  , #{outlookStable}
+		  , #{outlookSlightDecrease}
+		  , #{outlookDecrease}
+		  , (SELECT NVL(MAX(JOB_CODE), 0)+1 FROM JOBS)
+		);
+    </insert>
 </mapper>
