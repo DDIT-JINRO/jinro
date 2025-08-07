@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import kr.or.ddit.cns.service.CounselingLogVO;
 import kr.or.ddit.cns.service.CounselingVO;
+import kr.or.ddit.cns.service.VacationVO;
 
 @Mapper
 public interface CounselorMapper {
@@ -45,5 +46,42 @@ public interface CounselorMapper {
 	 * @return
 	 */
 	public int updateCnsLog(CounselingLogVO counselingLogVO);
+
+	/**
+	 * 현재 상담사 회원 휴가내역 가져오기
+	 * @param vacationVO
+	 * @return
+	 */
+	public List<VacationVO> selectMyVationList(VacationVO vacationVO);
+
+	/**
+	 * 현재 상담사 회원 휴가내역 갯수. 페이징용
+	 * @param vacationVO
+	 * @return
+	 */
+	public int selectTotalMyVationList(VacationVO vacationVO);
+
+	/**
+	 * 휴가 신청.
+	 * @param vacationVO
+	 * @return
+	 */
+	public int insertVacation(VacationVO vacationVO);
+
+	/**
+	 * 휴가 날짜 제한용.<br/>
+	 * 현재 날짜 포함. 이후로 상담확정된 정보 받아오기
+	 * @param requestor
+	 * @return
+	 */
+	public List<CounselingVO> selectMyDeterminedCounselList(int requestor);
+
+	/**
+	 * 휴가 날짜 제한용<br/>
+	 * 현재 날짜 포함. 이후로 이미 신청 혹은 승인된 휴가 정보 받아오기
+	 * @param requestor
+	 * @return
+	 */
+	public List<VacationVO> selectMyInProgressVacationList(int requestor);
 
 }

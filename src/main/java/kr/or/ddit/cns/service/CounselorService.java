@@ -42,4 +42,26 @@ public interface CounselorService {
 	 */
 	public boolean deleteFile(Long fileGroupId, int seq);
 
+	/**
+	 * 상담사회원 휴가 신청내역 가져오기
+	 * @param vacationVO
+	 * @return
+	 */
+	public ArticlePage<VacationVO> myVacationList(VacationVO vacationVO);
+
+	/**
+	 * 휴가 신청
+	 * @param vacationVO
+	 * @return
+	 */
+	public boolean insertVacation(VacationVO vacationVO);
+
+	/**
+	 * 휴가신청 불가능한 날짜 목록 반환 String format(yyyy-MM-dd)<br/>
+	 * 상담확정날짜, 이미 휴가신청된 날짜
+	 * @param requestor
+	 * @return
+	 */
+	public List<String> disabledDateList(int requestor);
+
 }

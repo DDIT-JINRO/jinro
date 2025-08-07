@@ -16,11 +16,12 @@ public class CounselingVO {
 	private String counselStatus;
 	private Date counselReqDate;
 	private Date counselReqTime;
-	private String counselUrl;
+	private String counselUrlCou;
 	private String counselReviewd;
 	private Date counselCreatedAt;
 	private Date counselUpdatedAt;
 	private int counselId;
+	private String counselUrlUser;
 
 	private CounselingLogVO counselingLog;
 

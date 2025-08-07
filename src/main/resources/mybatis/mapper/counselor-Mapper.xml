@@ -12,11 +12,12 @@
 		<result property="counselStatus" column="COUNSEL_STATUS"/>
 		<result property="counselReqDate" column="COUNSEL_REQ_DATE"/>
 		<result property="counselReqTime" column="COUNSEL_REQ_TIME"/>
-		<result property="counselUrl" column="COUNSEL_URL"/>
+		<result property="counselUrlCou" column="COUNSEL_URL_COU"/>
 		<result property="counselReviewd" column="COUNSEL_REVIEWD"/>
 		<result property="counselCreatedAt" column="COUNSEL_CREATED_AT"/>
 		<result property="counselUpdatedAt" column="COUNSEL_UPDATED_AT"/>
 		<result property="counselId" column="COUNSEL_ID"/>
+		<result property="counselUrlUser" column="COUNSEL_URL_USER"/>
 
 		<result property="memName" column="MEM_NAME"/>
 		<result property="memEmail" column="MEM_EMAIL"/>
@@ -58,7 +59,6 @@
 		              , A.COUNSEL_STATUS
 		              , A.COUNSEL_REQ_DATE
 		              , A.COUNSEL_REQ_TIME
-		              , A.COUNSEL_URL
 		              , A.COUNSEL_REVIEWD
 		              , A.COUNSEL_CREATED_AT
 		              , A.COUNSEL_UPDATED_AT
@@ -124,7 +124,6 @@
 			, COUNSEL_STATUS
 			, COUNSEL_REQ_DATE
 			, COUNSEL_REQ_TIME
-			, COUNSEL_URL
 			, COUNSEL_REVIEWD
 			, COUNSEL_CREATED_AT
 			, COUNSEL_UPDATED_AT
@@ -157,7 +156,6 @@
 		              , A.COUNSEL_STATUS
 		              , A.COUNSEL_REQ_DATE
 		              , A.COUNSEL_REQ_TIME
-		              , A.COUNSEL_URL
 		              , A.COUNSEL_REVIEWD
 		              , A.COUNSEL_CREATED_AT
 		              , A.COUNSEL_UPDATED_AT
@@ -229,7 +227,6 @@
 			 , A.COUNSEL_STATUS
 			 , A.COUNSEL_REQ_DATE
 			 , A.COUNSEL_REQ_TIME
-			 , A.COUNSEL_URL
 			 , A.COUNSEL_REVIEWD
 			 , A.COUNSEL_CREATED_AT
 			 , A.COUNSEL_UPDATED_AT
@@ -288,6 +285,112 @@
 	</update>
 
 	<select id="selectCounselList" resultType="kr.or.ddit.cns.service.CounselingVO">
+	</select>
+
+	<select id="selectTotalMyVationList" resultType="int" parameterType="kr.or.ddit.cns.service.VacationVO">
+				SELECT COUNT(VA_ID)
+				  FROM VACATION
+				 WHERE VA_REQUESTOR = #{vaRequestor}
+				 <if test="filter!=null and filter!='' ">
+				   AND VA_CONFIRM = #{filter}
+				 </if>
+	</select>
+	<select id="selectMyVationList" resultType="kr.or.ddit.cns.service.VacationVO" parameterType="kr.or.ddit.cns.service.VacationVO">
+		SELECT
+			   VA_ID
+			 , VA_REQUESTOR
+			 , VA_APPROVER
+			 , VA_CONFIRM
+			 , VA_START
+			 , VA_END
+			 , VA_REASON
+			 , VA_ETC
+			 , FILE_GROUP_ID
+			 , REQUESTED_AT
+		  FROM
+			(
+			SELECT
+				   ROWNUM RN
+				 , A.*
+			FROM
+				(SELECT
+				       VA_ID
+				     , VA_REQUESTOR
+				     , VA_APPROVER
+				     , VA_CONFIRM
+				     , VA_START
+				     , VA_END
+				     , VA_REASON
+				     , VA_ETC
+				     , FILE_GROUP_ID
+				     , REQUESTED_AT
+				  FROM VACATION
+				 WHERE VA_REQUESTOR = #{vaRequestor}
+				 <if test="filter!=null and filter!='' ">
+				   AND VA_CONFIRM = #{filter}
+				 </if>
+			 	<if test="sortBy!=null and sortBy=='reqDesc' ">
+			 		ORDER BY REQUESTED_AT DESC
+			 	</if>
+			 	<if test="sortBy!=null and sortBy=='reqAsc' ">
+			 		ORDER BY REQUESTED_AT ASC
+			 	</if>
+			 	<if test="sortBy!=null and sortBy=='startDesc' ">
+			 		ORDER BY VA_START DESC
+			 	</if>
+			 	<if test="sortBy!=null and sortBy=='startAsc' ">
+			 		ORDER BY VA_START ASC
+			 	</if>
+				 ) A
+			 		) X
+  		  WHERE X.RN > #{startNo}
+		    AND X.RN <![CDATA[<=]]> #{endNo}
+	</select>
+
+	<insert id="insertVacation" parameterType="kr.or.ddit.cns.service.VacationVO">
+		<selectKey keyProperty="vaId" order="BEFORE" resultType="int">
+			SELECT NVL(MAX(VA_ID),0)+1 FROM VACATION
+		</selectKey>
+		INSERT INTO VACATION (
+		    VA_ID
+		    , VA_REQUESTOR
+		    , VA_CONFIRM
+		    , VA_START
+		    , VA_END
+		    , VA_REASON
+		    <if test="fileGroupId!=null and fileGroupId!=0L">
+		    , FILE_GROUP_ID
+		    </if>
+		    , REQUESTED_AT
+		) VALUES (
+			  #{vaId}
+			, #{vaRequestor}
+			, #{vaConfirm}
+			, #{vaStart}
+			, #{vaEnd}
+			, #{vaReason}
+			<if test="fileGroupId!=null and fileGroupId!=0L">
+			, #{fileGroupId}
+			</if>
+			, SYSDATE
+		)
+	</insert>
+
+	<select id="selectMyDeterminedCounselList" parameterType="int" resultType="kr.or.ddit.cns.service.CounselingVO">
+		SELECT
+		       COUNSEL_REQ_DATE
+		  FROM COUNSELING
+		 WHERE COUNSEL_STATUS = 'S04003'
+		   AND COUNSEL_REQ_DATE >= SYSDATE
+	</select>
+
+	<select id="selectMyInProgressVacationList" parameterType="int" resultType="kr.or.ddit.cns.service.VacationVO">
+		SELECT
+		       VA_START
+		     , VA_END
+		  FROM VACATION
+		 WHERE VA_CONFIRM != 'S03002'
+		   AND VA_END >= SYSDATE
 	</select>
 
 </mapper>

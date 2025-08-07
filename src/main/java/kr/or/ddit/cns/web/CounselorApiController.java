@@ -1,6 +1,7 @@
 package kr.or.ddit.cns.web;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.or.ddit.cns.service.CounselingLogVO;
 import kr.or.ddit.cns.service.CounselingVO;
 import kr.or.ddit.cns.service.CounselorService;
+import kr.or.ddit.cns.service.VacationVO;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,6 +69,25 @@ public class CounselorApiController {
 	@GetMapping("/counsel/deleteFile.do")
 	public ResponseEntity<Boolean> deleteFile(@RequestParam Long fileGroupId, @RequestParam int seq){
 		return ResponseEntity.ok(this.counselorService.deleteFile(fileGroupId, seq));
+	}
+
+	@GetMapping("/myVacationList.do")
+	public ResponseEntity<ArticlePage<VacationVO>> myVacationList(VacationVO vacationVO, @AuthenticationPrincipal String requestorStr){
+		vacationVO.setVaRequestor(Integer.parseInt(requestorStr));
+		ArticlePage<VacationVO> list = this.counselorService.myVacationList(vacationVO);
+		return ResponseEntity.ok(list);
+	}
+
+	@PostMapping(value = "/insertVacation.do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Boolean> insertVacation(@ModelAttribute VacationVO vacationVO, @AuthenticationPrincipal String requestorStr){
+		vacationVO.setVaRequestor(Integer.parseInt(requestorStr));
+		return ResponseEntity.ok(this.counselorService.insertVacation(vacationVO));
+	}
+
+	@GetMapping("/disabledDateList.do")
+	public ResponseEntity<List<String>> disabledDateList(@AuthenticationPrincipal String requestorStr){
+		List<String> disabledDateList = this.counselorService.disabledDateList(Integer.parseInt(requestorStr));
+		return ResponseEntity.ok(disabledDateList);
 	}
 
 }

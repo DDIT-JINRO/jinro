@@ -1,0 +1,215 @@
+@charset "UTF-8";
+.vac-approve-panel {
+	height: 50%;
+}
+
+.vac-approve-container {
+	display: flex;
+	flex-direction: row;
+	gap: 3%;
+}
+
+.vac-list-panel {
+	margin-top : 20px;
+	height: 35%;
+}
+
+.vac-approve-content-left{
+	width: 25%;
+	text-align: -webkit-center;
+}
+
+.vac-approve-content-right{
+	width: 70%;
+}
+/* ──────────────────────────────────────────────────────────
+   기본정보 테이블 (오른쪽 패널)
+──────────────────────────────────────────────────────────*/
+
+.panel-footer.button-group {
+	margin-top: auto;
+	display: flex;
+	justify-content: space-between;
+	border-top: 1px solid #e0e0e0;
+	padding-top: 16px;
+	padding-left: 20px;
+    padding-right: 20px;
+}
+
+.template-panel .btn-delete,
+.template-panel .btn-reset,
+.template-panel .btn-confirm,
+.template-panel .btn-save {
+	padding: 8px 16px;
+	font-size: 14px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	min-width: 85px;
+}
+
+.template-panel .btn-delete,
+.template-panel .btn-reset {
+	background: #C00003;
+	color: #fff;
+	margin-right: 8px;
+}
+
+.date-reset{
+	margin-top: 15px;
+}
+
+.template-panel .btn-delete:hover,
+.template-panel .btn-reset:hover {
+	background: #A00002;
+}
+
+.template-panel .btn-confirm {
+	background: #07223D;
+	color: #fff;
+	margin-left: 2%;
+}
+.template-panel .btn-save {
+	background: #07223D;
+	color: #fff;
+	margin-left: auto;
+}
+
+.template-panel .btn-confirm:hover,
+.template-panel .btn-save:hover {
+	background: #07223D;
+}
+
+/* 달력 중앙 맞추기용 */
+.flatpickr-input{
+	margin-top : 10px;
+}
+
+/* ck에디터 크기 맞추기용 */
+.ck-editor__editable[role="textbox"]{
+	height: 50%;
+}
+
+
+
+/* ──────────────────────────────────────────────────────────
+   리스트 테이블
+──────────────────────────────────────────────────────────*/
+.table-wrapper {
+	flex: 1;
+	overflow-y: auto;
+}
+
+.template-panel table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 8px;
+	font-size: 14px;
+}
+
+.template-panel th,
+.template-panel td {
+	padding: 10px;
+	text-align: left;
+}
+
+.template-panel thead th {
+	background: #fafafa;
+	font-weight: 600;
+	border-bottom: 2px solid #e0e0e0;
+}
+
+.template-panel tbody tr {
+	transition: background 0.2s;
+}
+
+.template-panel tbody tr:nth-child(odd) {
+	background: #fff;
+}
+
+.template-panel tbody tr:nth-child(even) {
+	background: #fcfcfc;
+}
+
+.template-panel tbody tr:hover {
+	background: #f0f8ff;
+}
+
+
+.filter-box {
+	height: 5%
+}
+
+.form-group {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.form-group h4{
+	margin: 0;
+}
+
+/* ──────────────────────────────────────────────────────────
+   기존 첨부파일 리스트 스타일
+──────────────────────────────────────────────────────────*/
+.existing-files {
+	height: 100px;
+	list-style: none;
+	padding: 0;
+	margin: 8px 0;
+}
+
+.existing-files li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 6px 10px;
+	margin-bottom: 4px;
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+	background-color: #fafafa;
+	transition: background-color 0.2s ease;
+}
+
+.existing-files li:hover {
+	cursor: pointer;
+	background-color: #f5f9ff;
+	transform: none;
+}
+
+.existing-files li a {
+	color: #007bff;
+	text-decoration: none;
+	flex-grow: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 14px;
+}
+
+.existing-files li a:hover {
+	color: #0056b3;
+	text-decoration: underline;
+}
+
+.existing-files li button {
+	background: #dc3545;
+	border: none;
+	color: #fff;
+	padding: 4px 12px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 12px;
+	transition: background-color 0.2s ease;
+}
+
+.existing-files li button:hover {
+	background: #c82333;
+	transform: none;
+	box-shadow: none;
+}
+
+.existing-files li div {
+	width: 100%;
+}
