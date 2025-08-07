@@ -35,7 +35,7 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 	@Override
 	public ArticlePage<JobsVO> selectCareerList(JobsVO jobs, String memIdStr) {
 		
-		if (!"".equals(memIdStr) || !"anonymousUser".equals(memIdStr)) {
+		if (!"".equals(memIdStr) && !"anonymousUser".equals(memIdStr)) {
 			jobs.setMemId(Integer.parseInt(memIdStr));
 		}
 		
@@ -49,6 +49,19 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 		
 		return articlePage;
 	}
+	
+	@Override
+	public JobsVO selectCareerDetail(JobsVO jobs) {
+		
+		JobsVO careerDetail = this.careerEncyclopediaMapper.selectCareerDetail(jobs);
+		
+		if (careerDetail == null) {
+			throw new RuntimeException();
+		}
+		
+		return careerDetail;
+	}
+
 	
 	public Map<String, String> parseMap (List<Map<String, String>> mapList) {
 		

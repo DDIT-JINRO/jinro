@@ -89,7 +89,6 @@
 		                        , TO_NUMBER(
 		                            TRIM(SUBSTR(JOB_SAL, INSTR(JOB_SAL, '평균(50%)') + 7, INSTR(JOB_SAL, '만원', INSTR(JOB_SAL, '평균(50%)')) - (INSTR(JOB_SAL, '평균(50%)') + 7)))
 		                        ) AS AVG_SALARY
-		                        , JOB_TARGET_ID
 		                    FROM JOBS
 		                ) A
 		                WHERE 1=1
@@ -203,11 +202,29 @@
     <resultMap id="careerDetailMap" type="kr.or.ddit.worldcup.service.JobsVO">
         <id property="jobCode" column="JOB_CODE"/>
         
-        <result property="jobName" column="JOB_NAME"/>
-        <result property="jobLcl" column="JOB_LCL"/>
-        <result property="jobMcl" column="JOB_MCL"/>
-        <result property="jobSal" column="JOB_SAL"/>
-        <result property="jobTargetId" column="JOB_TARGET_ID"/>
+		<result property="jobName" column="JOB_NAME"/>
+		<result property="jobLcl" column="JOB_LCL"/>
+		<result property="jobMcl" column="JOB_MCL"/>
+		<result property="jobSal" column="JOB_SAL"/>
+		<result property="jobSatis" column="JOB_SATIS"/>
+		<result property="jobWay" column="JOB_WAY"/>
+		<result property="jobRelatedMajor" column="JOB_RELATED_MAJOR"/>
+		<result property="jobRelatedCert" column="JOB_RELATED_CERT"/>
+		<result property="jobMainDuty" column="JOB_MAIN_DUTY"/>
+		<result property="jobCreatedAt" column="JOB_CREATED_AT"/>
+		<result property="fileGroupNo" column="FILE_GROUP_NO"/>
+		<result property="edubgMgraduUndr" column="EDUBG_MGRADU_UNDR"/>
+		<result property="edubgHgradu" column="EDUBG_HGRADU"/>
+		<result property="edubgCgraduUndr" column="EDUBG_CGRADU_UNDR"/>
+		<result property="edubgUgradu" column="EDUBG_UGRADU"/>
+		<result property="edubgGgradu" column="EDUBG_GGRADU"/>
+		<result property="edubgDgradu" column="EDUBG_DGRADU"/>
+		<result property="outlookIncrease" column="OUTLOOK_INCREASE"/>
+		<result property="outlookSlightIncrease" column="OUTLOOK_SLIGHT_INCREASE"/>
+		<result property="outlookStable" column="OUTLOOK_STABLE"/>
+		<result property="outlookSlightDecrease" column="OUTLOOK_SLIGHT_DECREASE"/>
+		<result property="outlookDecrease" column="OUTLOOK_DECREASE"/>
+		<result property="jobTargetId" column="JOB_TARGET_ID"/>
 
         <collection property="jobsRelVOList" ofType="kr.or.ddit.pse.cr.crl.service.JobsRelVO">
             <id property="jrCode" column="JR_CODE"/>
@@ -219,8 +236,8 @@
         SELECT
               A.JOB_CODE
             , A.JOB_NAME
-            , A.JOB_LCL
-            , A.JOB_MCL
+            , (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = A.JOB_LCL) AS JOB_LCL
+            , (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = A.JOB_MCL) AS JOB_MCL
             , A.JOB_SAL
             , A.JOB_SATIS
             , A.JOB_WAY

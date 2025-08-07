@@ -16,4 +16,6 @@ public interface CareerEncyclopediaMapper {
 
 	int selectCareerTotal(JobsVO jobs);
 
+	JobsVO selectCareerDetail(JobsVO jobs);
+
 }
