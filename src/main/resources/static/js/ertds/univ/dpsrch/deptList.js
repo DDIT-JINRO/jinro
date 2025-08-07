@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	document.querySelectorAll('.univDept-item').forEach(dept => {
 		dept.addEventListener('click', (e) => {
 			// 북마크 버튼 눌렀을 때에는 디테일 페이지로 넘어가지 않도록 방지
-			if (e.target.closest('.bookmark-btn')) {
+			if (e.target.closest('.bookmark-btn') || e.target.closest('.select-btn')) {
 				return;
 			}
 			location.href = '/ertds/univ/dpsrch/selectDetail.do?uddId=' + dept.dataset.univdeptId;
@@ -147,4 +147,200 @@ const handleBookmarkToggle = (button) => {
 			console.error('북마크 처리 중 오류 발생:', error);
 			alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
 		});
+}
+
+// 비교 팝업
+document.addEventListener('DOMContentLoaded', function() {
+    const popup = document.querySelector(".dept-compare-popup");
+    const compareListContainer = document.querySelector(".compare-list");
+    const closeBtn = document.querySelector(".btn-close-popup");
+    const resetBtn = document.querySelector(".btn-clear-all");
+    const submitBtn = document.querySelector(".btn-view-results");
+    const selectButtons = document.querySelectorAll(".select-btn input");
+
+    const floatBtnContainer = document.querySelector(".right-fixed-bar");
+
+    const popupOpenBtn = `
+        <button type="button" class="open-popup-btn">비교</button>
+    `;
+
+    floatBtnContainer.innerHTML += popupOpenBtn;
+
+    // 기존 데이터 가져오기
+    const initialCompareList = getCompareList();
+
+    // 다시 출력
+    if (Object.keys(initialCompareList).length > 0) {
+        compareListContainer.innerHTML = '';
+        for (const uddId in initialCompareList) {
+            const deptData = initialCompareList[uddId];
+            renderCompareItem(deptData, compareListContainer);
+            const checkbox = document.querySelector(`#compare-btn${uddId}`);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        }
+    }
+
+    // 비교 체크 박스 클릭
+    selectButtons.forEach(button => {
+        button.addEventListener('change', function(event) {
+			event.preventDefault();
+            if (event.target.checked) {
+                createCompareCard(this, compareListContainer);
+            } else {
+                deleteCompareCard(this.value);
+            }
+        });
+    })
+
+    // 팝업 닫기
+    closeBtn.addEventListener('click', function() {
+        popup.classList.remove('is-open');
+    });
+
+    // 직업 카드 삭제
+    compareListContainer.addEventListener('click', function(event) {
+        const target = event.target.closest(".btn-remove-item");
+        if (target) {
+            const uddId = target.dataset.removeItem;
+            deleteCompareCard(uddId);
+        }
+    })
+
+    // 초기화 버튼
+    resetBtn.addEventListener('click', function() {
+        const currentCompareList = getCompareList();
+        for (const uddId in currentCompareList)  {
+            const checkbox = document.querySelector(`#compare-btn${uddId}`);
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        }
+        compareListContainer.innerHTML = "";
+        sessionStorage.removeItem("compareList")
+        popup.classList.remove('is-open');
+    });
+
+    // 비교 페이지 이동
+    submitBtn.addEventListener('click', function() {
+        const currentCompareList = getCompareList();
+        const uddIds = Object.keys(currentCompareList);
+
+        if (uddIds.length < 2) {
+            alert("비교할 학과를 2개 이상 선택해주세요.");
+            return;
+        }
+
+        const queryString = uddIds.map(id => `uddIds=${id}`).join('&');
+
+        window.location.href = `/ertds/univ/dpsrch/selectCompare.do?${queryString}`;
+    });
+
+    // 팝업 열기 버튼
+    document.addEventListener('click', function(event) {
+        const target = event.target.closest(".open-popup-btn");
+
+        if (target) {
+            popup.classList.add('is-open');
+        }
+    })
+});
+
+// 세션에 비교 목록 가져오기
+const getCompareList = () => {
+    const compareList = sessionStorage.getItem('compareList');
+    return compareList ? JSON.parse(compareList) : {};
+}
+
+// 세션에 저장하기
+const saveCompareList = (compareList) => {
+    sessionStorage.setItem('compareList', JSON.stringify(compareList));
+    const test = getCompareList();
+}
+
+// 비교 카드 생성하기
+const createCompareCard = (button, compareListContainer) => {
+    const popup = document.querySelector(".dept-compare-popup");
+
+    const deptData = {
+        uddId: button.value,
+        deptName: button.dataset.deptName,
+        deptSalary: button.dataset.deptSal,
+        deptEmp: button.dataset.deptEmp,
+        deptAdmission: button.dataset.deptAdmission
+    }
+    
+    const compareList = getCompareList();
+
+    if (Object.keys(compareList).length >= 5) {
+        alert("직업 비교는 최대 5개 까지만 가능합니다.");
+        button.checked = false;
+        return;
+    }
+
+    compareList[deptData.uddId] = deptData;
+    saveCompareList(compareList);
+
+    renderCompareItem(deptData, compareListContainer);
+
+    if(!popup.classList.contains('is-open')) {
+        popup.classList.add('is-open');
+    }
+}
+
+const renderCompareItem = (deptData, container) => {
+    const compareItemHtml = `
+        <div class="compare-item-card" id="compare-card-${deptData.uddId}" data-job-code=${deptData.uddId}>
+            <div class="card-header">
+                <h3 class="card-title">${deptData.deptName}</h3>
+                <button type="button" class="btn-remove-item" aria-label="삭제" data-remove-item="${deptData.uddId}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                        <path d="M2.22 2.22a.75.75 0 0 1 1.06 0L8 6.94l4.72-4.72a.75.75 0 1 1 1.06 1.06L9.06 8l4.72 4.72a.75.75 0 1 1-1.06 1.06L8 9.06l-4.72 4.72a.75.75 0 0 1-1.06-1.06L6.94 8 2.22 3.28a.75.75 0 0 1 0-1.06Z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="card-metrics">
+                <div class="metric">
+                    <div class="metric-text">
+                        <span class="metric-label">입학경쟁률</span>
+                        <span class="metric-value">${deptData.deptAdmission}</span>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-text">
+                        <span class="metric-label">취업률</span>
+                        <span class="metric-value">${deptData.deptEmp}%</span>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-text">
+                        <span class="metric-label">첫월급 평균</span>
+                        <span class="metric-value">${deptData.deptSalary}만원</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.innerHTML += compareItemHtml;
+}
+
+const deleteCompareCard = (itemId) => {
+    const removeItem = document.querySelector(`#compare-card-${itemId}`);
+    if (removeItem) {
+        removeItem.remove();
+    }
+    
+    const removeItemCheckbox = document.querySelector(`#compare-btn${itemId}`);
+    if (removeItemCheckbox) {
+        removeItemCheckbox.checked = false;
+    }
+
+    const compareList = getCompareList();
+    delete compareList[itemId];
+    saveCompareList(compareList);
+
+    if (Object.keys(compareList).length === 0) {
+        document.querySelector(".dept-compare-popup").classList.remove('is-open');
+    };
 }
