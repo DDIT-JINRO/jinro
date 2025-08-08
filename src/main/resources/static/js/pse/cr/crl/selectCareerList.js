@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <button type="button" class="open-popup-btn">비교</button>
     `;
 
-    floatBtnContainer.innerHTML += popupOpenBtn;
+    floatBtnContainer.insertAdjacentHTML('beforeend', popupOpenBtn);
 
     // 기존 데이터 가져오기
     const initialCompareList = getCompareList();
