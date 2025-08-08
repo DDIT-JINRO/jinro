@@ -4,7 +4,7 @@
 
 // 전역 상태
 window.currentPage = 1;
-window.currentCounselId = null;
+window.currentVaId = null;
 window.editor = {};
 
 function isConfirmed(clConfirmCode){
@@ -165,7 +165,6 @@ function resetDetail() {
 	document.getElementById("file").style.display = "none";
 	document.getElementById("existing-files").innerHTML = "<tr><td colspan='9'>선택된 정보가 없습니다</td></tr>";
 	document.getElementById('info-table-tbody').innerHTML = '';
-	document.querySelector('input[name="clTitle"]').value = '';
 	window.editor[0]?.setData('');
 	window.editor[0].enableReadOnlyMode('clContent');
 	window.editor[1]?.setData('');
@@ -207,87 +206,79 @@ function filedownload(fileGroupId, fileSeq) {
 }
 
 // 단일 파일 삭제
-function deleteExistingFile(fileGroupId, seq, counselId) {
+function deleteExistingFile(fileGroupId, seq, vaId) {
 	axios.get('/api/cns/counsel/deleteFile.do', {
 			params: { fileGroupId, seq }
 		})
-		.then(() => showDetail(counselId))
+		.then(() => showDetail(vaId))
 		.catch(console.error);
 }
 
 // 상세 출력
-function showDetail(counselId) {
-	if (!counselId) return;
+function showDetail(vaId) {
+	if (!vaId) return;
 	resetDetail();
 	window.editor[0].disableReadOnlyMode('clContent');
 
-	axios.get('/api/cns/counselDetail.do', { params: { counselId } })
+	axios.get('/api/cnsld/vacationDetail.do', { params: { vaId } })
 		.then(response => {
 			const resp = response.data;
 			console.log(resp);
-
-			window.currentCounselId = counselId;
-			document.getElementById('counselLogId').value = resp.counselingLog.clIdx;
-			document.getElementById('counselId').value = resp.counselId;
-			document.getElementById('fileGroupId').value = resp.counselingLog.fileGroupId;
+			window.currentVaId = vaId;
+			document.getElementById('vaId').value = resp.vaId;
+			document.getElementById('fileGroupId').value = resp.fileGroupId;
 
 			//접수처리 제외하고 버튼 가리기
-			document.getElementById('btn-save').style.display = isConfirmed(resp.counselingLog.clConfirm) ? "inline-block" : "none";
-			document.getElementById('btn-confirm').style.display = isConfirmed(resp.counselingLog.clConfirm) ? "inline-block" : "none";
+			document.getElementById('btn-save').style.display = isConfirmed(resp.vaConfirm) ? "inline-block" : "none";
+			document.getElementById('btn-confirm').style.display = isConfirmed(resp.vaConfirm) ? "inline-block" : "none";
 
 			//접수처리 제외하고 비고란 입력 막기
-			isConfirmed(resp.counselingLog.clConfirm)
+			isConfirmed(resp.vaConfirm)
 					? window.editor[1].disableReadOnlyMode('etcContent')
 					: window.editor[1].enableReadOnlyMode('etcContent');
 
-			const infoTable = document.querySelector('.info-table');
-			infoTable.style.display = 'table';
-
-			const elForNum = document.querySelector(`#notice-list tr[data-cns-id='${counselId}']`);
+			const elForNum = document.querySelector(`#notice-list tr[data-va-id='${vaId}']`);
 			const num = elForNum.firstElementChild.textContent.trim();
 
 			document.getElementById("info-table-tbody").innerHTML = `
 	        <tr>
 	          <td>${num}</td>
 	          <td>${resp.memName}</td>
-	          <td>${getGenText(resp.memGen)}</td>
-	          <td>${calculateAge(new Date(resp.memBirth))}</td>
-	          <td>${getDifficultyText(resp.counselingLog.clDifficulty)}</td>
-	          <td>${resp.counselingLog.clContinue == 'Y'? '종결': '계속'}</td>
-	          <td>${resp.counselingLog.updatedAt ? formatDateMMDD(new Date(resp.counselingLog.updatedAt)) : '미작성'}</td>
-	          <td>${resp.counselName}</td>
-	          <td>${getApprovalStatusText(resp.counselingLog.clConfirm)}</td>
+	          <td>${resp.memPhoneNumber}</td>
+	          <td>${formatDateMMDD(new Date(resp.requestedAt))}</td>
+	          <td>${formatDateMMDD(new Date(resp.vaStart))}</td>
+	          <td>${formatDateMMDD(new Date(resp.vaEnd))}</td>
+	          <td>${getApprovalStatusText(resp.vaConfirm)}</td>
 	        </tr>`;
 
-			document.querySelector('input[name="clTitle"]').value = resp.counselTitle;
 
-			if(resp.counselingLog.clContent){
-				window.editor[0]?.setData(resp.counselingLog.clContent);
+			if(resp.vaReason){
+				window.editor[0]?.setData(resp.vaReason);
 			}
 			// 접수 상태와 상관없이 상담일지의 내용은 변경 불가하도록
 			window.editor[0].enableReadOnlyMode('clContent');
 
-			if(resp.counselingLog.clEtc){
-				window.editor[1]?.setData(resp.counselingLog.clEtc);
+			if(resp.vaEtc){
+				window.editor[1]?.setData(resp.vaEtc);
 			}
 
-			if(resp.counselingLog.clEtc){
-				window.editor[1]?.setData(resp.counselingLog.clEtc);
+			if(resp.vaEtc){
+				window.editor[1]?.setData(resp.vaEtc);
 			}
 
 			// 접수 상태면 비고란 활성화
-			if(resp.counselingLog.clConfirm == 'S03001'){
+			if(resp.vaConfirm == 'S03001'){
 				window.editor[1].disableReadOnlyMode('etcContent');
 			}
 
 			const ul = document.getElementById("existing-files");
-			if (!resp.counselingLog.fileDetailList || resp.counselingLog.fileDetailList.length === 0) {
+			if (!resp.fileDetailList || resp.fileDetailList.length === 0) {
 				ul.innerHTML = '<li>첨부된 파일이 없습니다.</li>';
 				document.getElementById("file").style.display = "block";
 			} else {
-				document.getElementById('fileGroupId').value = resp.counselingLog.fileDetailList[0].fileGroupId;
+				document.getElementById('fileGroupId').value = resp.fileDetailList[0].fileGroupId;
 				document.getElementById("file").style.display = "block";
-				ul.innerHTML = resp.counselingLog.fileDetailList.map(f => `
+				ul.innerHTML = resp.fileDetailList.map(f => `
 	          	<li>
 	            <div onclick="filedownload('${f.fileGroupId}', ${f.fileSeq})" target="_blank">${f.fileOrgName}</div>&nbsp;&nbsp;
 	          	</li>`
@@ -298,14 +289,15 @@ function showDetail(counselId) {
 }
 
 // 반려 혹은 승인처리 update
-function updateConfirmation(action) {
+async function updateConfirmation(action) {
+
 	const fd = new FormData();
 	let actionStr = '';
 
 	// 상담일지 기본키세팅
-	const clIdx = document.getElementById('counselLogId').value;
+	const vaId = document.getElementById('vaId').value;
 	const etc = window.editor[1].getData().trim();
-	fd.append('clIdx', clIdx);
+	fd.append('vaId', vaId);
 
 	// 반려버튼 클릭 시
 	if(action == 'reject'){
@@ -313,30 +305,54 @@ function updateConfirmation(action) {
 			alert('반려시 사유 입력은 필수입니다');
 		}
 		// 반려코드 세팅
-		fd.set('clConfirm', 'S03002');
+		fd.set('vaConfirm', 'S03002');
 		actionStr = '반려'
 	}
 
 	// 승인 버튼 클릭시 승인코드 세팅
 	if(action == 'confirm'){
-		fd.set('clConfirm', 'S03003')
+		fd.set('vaConfirm', 'S03003')
 		actionStr = '승인'
 	}
 
 	// 비고란 입력시 내용 세팅
 	if(etc){
-		fd.append('clEtc', etc);
+		fd.append('vaEtc', etc);
 	}
 
+	// 반려/승인 처리 전 확인
+	if(!confirm(`${actionStr} 처리 진행하시겠습니까?`)) return;
+	// 승인인 경우 이미 예약이 존재하는지 한번더 체크
+	if(action == 'confirm'){
+		const resp = await axios.get('/api/cnsld/checkCounselList.do?vaId='+vaId);
+		const counselList = resp.data;
+		console.log(counselList);
+		let alertStr = '';
+		if(counselList && counselList.length > 0){
+			alertStr += '해당 휴가 기간에 상담예약이 존재합니다.\n';
+			counselList.forEach(c =>{
+				const date = new Date(c.counselReqDatetime);
+				const dateStr = `${date.getFullYear()}. ${date.getMonth()+1}. ${date.getDate()}. ${date.getHours()}시${date.getMinutes()}분 상담`;
+				alertStr += `${c.memName}님 ${dateStr}\n`;
+			})
+			alertStr += '전체 예약 취소하고 승인 진행하시겠습니까?';
+		}
+		if(alertStr != ''){
+			const lastCheck = confirm(alertStr);
+			if(!lastCheck) return;
+		}
+	}
+
+
 	// 업데이트처리
-	axios.post('/api/cnsld/updateCounselLog.do',fd)
+	axios.post('/api/cnsld/updateVacation.do',fd)
 	.then(resp =>{
 		const result = resp.data;
 		if(result){
 			alert(`정상적으로 ${actionStr}되었습니다`);
 			fetchVacationList(window.currentPage);
-			const counselId = document.getElementById('counselId').value;
-			const targetTr = document.querySelector(`#notice-list tr[data-cns-id='${counselId}']`);
+			const vaId = document.getElementById('vaId').value;
+			const targetTr = document.querySelector(`#notice-list tr[data-va-id='${vaId}']`);
 			targetTr.click();
 		}else{
 			alert(`${actionStr}처리 도중 문제가 발생했습니다.\n다시 시도해주세요`);

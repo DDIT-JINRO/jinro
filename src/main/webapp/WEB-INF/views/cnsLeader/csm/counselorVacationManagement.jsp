@@ -73,18 +73,16 @@
 	<!-- 상세/작성 패널 -->
 	<div class="template-panel" style="flex: 1.5">
 		<div class="panel-header">신청내역 상세정보</div>
-		<h3>휴가신청정보</h3>
+		<h3>휴가 신청정보</h3>
 		<table class="info-table" style="">
 			<thead id="info-table-thead">
 				<tr>
-					<th>회원번호</th>
-					<th>회원명</th>
-					<th>성별</th>
-					<th>나이</th>
-					<th>상담 난이도</th>
-					<th>추가 상담여부</th>
-					<th>작성(수정)일</th>
-					<th>상담사</th>
+					<th>번호</th>
+					<th>상담사명</th>
+					<th>연락처</th>
+					<th>신청일</th>
+					<th>휴가시작일</th>
+					<th>휴가종료일</th>
 					<th>상태</th>
 				</tr>
 			</thead>
@@ -94,18 +92,12 @@
 		        </tr>
 			</tbody>
 		</table>
-		<h3>상담일지 작성</h3>
+		<h3>휴가 사유</h3>
 		<form class="noticeFormGroup" id="form-data" enctype="multipart/form-data">
-			<div>
-				<label>제 목</label>
-				<input type="text" name="clTitle" disabled>
-			</div>
-
 			<input type="hidden" name="fileGroupId" id="fileGroupId" />
-			<input type="hidden" name="clIdx" id="counselLogId" value="0" />
-			<input type="hidden" name="counselId" id="counselId" value="0" />
+			<input type="hidden" name="vaId" id="vaId" value="0" />
 			<div class="ck-row cl-content">
-			  <label>일 지</label>
+			  <label>사 유</label>
   			  <div class="ck-editor">
 			    <!-- CKEditor가 여기에 mount됨 -->
 			    <textarea name="clContent" id="clContent"></textarea>

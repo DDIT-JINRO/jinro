@@ -240,16 +240,64 @@
 	</select>
 
 	<select id="selectTotalVationList" resultType="int" parameterType="kr.or.ddit.cns.service.VacationVO">
-				SELECT COUNT(VA_ID)
-				  FROM VACATION V
-				  JOIN MEMBER M ON M.MEM_ID = V.VA_REQUESTOR
-				 WHERE 1=1
-				 <if test="status!=null and status!='' and status=='counselor'">
-				   AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
-				 </if>
-				 <if test="filter!=null and filter!='' ">
-				   AND VA_CONFIRM = #{filter}
-				 </if>
+		SELECT COUNT(VA_ID)
+		  FROM VACATION V
+		  JOIN MEMBER M ON M.MEM_ID = V.VA_REQUESTOR
+		 WHERE 1=1
+		 <if test="status!=null and status!='' and status=='counselor'">
+		   AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
+		 </if>
+		 <if test="filter!=null and filter!='' ">
+		   AND VA_CONFIRM = #{filter}
+		 </if>
+	</select>
+
+	<select id="vacationDetail" resultType="kr.or.ddit.cns.service.VacationVO" parameterType="int">
+		SELECT
+		       V.VA_ID
+		     , V.VA_REQUESTOR
+		     , V.VA_APPROVER
+		     , V.VA_CONFIRM
+		     , V.VA_START
+		     , V.VA_END
+		     , V.VA_REASON
+		     , V.VA_ETC
+		     , V.FILE_GROUP_ID
+		     , V.REQUESTED_AT
+		     , M.MEM_NAME
+		     , M.MEM_PHONE_NUMBER
+		  FROM VACATION V
+		  JOIN MEMBER M ON M.MEM_ID = V.VA_REQUESTOR
+		 WHERE VA_ID = #{vaId}
+	</select>
+
+	<update id="updateVacation" parameterType="kr.or.ddit.cns.service.VacationVO" >
+		UPDATE VACATION
+		   SET VA_CONFIRM = #{vaConfirm}
+		     , VA_APPROVER = #{vaApprover}
+		   <if test="vaEtc!=null and vaEtc!=''">
+		     , VA_ETC = #{vaEtc}
+		   </if>
+		 WHERE VA_ID = #{vaId}
+	</update>
+
+	<update id="rejectRequestedCounselForVacation" parameterType="kr.or.ddit.cns.service.VacationVO">
+		UPDATE COUNSELING
+		   SET COUNSEL_STATUS = 'S04002'
+		 WHERE COUNSEL_STATUS = 'S04001'
+		   AND COUNSEL_REQ_DATETIME BETWEEN #{vaStart} AND #{vaEnd}
+	</update>
+
+	<select id="selectRequestedCounselBetweenVacation" resultType="kr.or.ddit.cns.service.CounselingVO" parameterType="kr.or.ddit.cns.service.VacationVO">
+		SELECT
+			   C.COUNSEL_ID
+			 , C.MEM_ID
+			 , C.COUNSEL_REQ_DATETIME
+			 , M.MEM_NAME
+		  FROM COUNSELING C
+		  JOIN MEMBER M ON M.MEM_ID = C.MEM_ID
+		 WHERE COUNSEL_STATUS = 'S04001'
+		   AND COUNSEL_REQ_DATETIME BETWEEN #{vaStart} AND #{vaEnd}
 	</select>
 
 </mapper>

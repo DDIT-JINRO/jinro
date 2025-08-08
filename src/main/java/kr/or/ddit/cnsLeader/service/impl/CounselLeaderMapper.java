@@ -21,4 +21,12 @@ public interface CounselLeaderMapper {
 
 	int selectTotalVationList(VacationVO vacationVO);
 
+	VacationVO vacationDetail(int vaId);
+
+	int updateVacation(VacationVO vacationVO);
+
+	int rejectRequestedCounselForVacation(VacationVO vacationVO);
+
+	List<CounselingVO> selectRequestedCounselBetweenVacation(VacationVO vacationVO);
+
 }

@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.cns.service.CounselingLogVO;
 import kr.or.ddit.cns.service.CounselingVO;
 import kr.or.ddit.cns.service.VacationVO;
 import kr.or.ddit.cnsLeader.service.CounselLeaderService;
 import kr.or.ddit.util.ArticlePage;
+import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
 
 @Service
@@ -44,6 +46,32 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 
 		ArticlePage<VacationVO> articlePage = new ArticlePage<>(total, vacationVO.getCurrentPage(), vacationVO.getSize(), list, vacationVO.getKeyword());
 		return articlePage;
+	}
+
+	@Override
+	public VacationVO vacationDetail(int vaId) {
+		VacationVO vacationVO = this.counselLeaderMapper.vacationDetail(vaId);
+		Long fileGroupId = vacationVO.getFileGroupId();
+
+		List<FileDetailVO> fileList = fileService.getFileList(fileGroupId);
+		vacationVO.setFileDetailList(fileList);
+		return vacationVO;
+	}
+
+	@Override
+	@Transactional
+	public boolean updateVacation(VacationVO vacationVO) {
+		int result = this.counselLeaderMapper.updateVacation(vacationVO);
+		vacationVO = this.counselLeaderMapper.vacationDetail(vacationVO.getVaId());
+		this.counselLeaderMapper.rejectRequestedCounselForVacation(vacationVO);
+		return result > 0 ? true : false ;
+	}
+
+	@Override
+	public List<CounselingVO> selectRequestedCounselBetweenVacation(int vaId) {
+		VacationVO vacationVO = this.counselLeaderMapper.vacationDetail(vaId);
+		List<CounselingVO> list = this.counselLeaderMapper.selectRequestedCounselBetweenVacation(vacationVO);
+		return list;
 	}
 
 }

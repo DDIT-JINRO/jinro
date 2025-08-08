@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.or.ddit.util.file.service.FileDetailVO;
 import lombok.Data;
 
 @Data
@@ -29,6 +30,7 @@ public class VacationVO {
 	private String memPhoneNumber;
 
 	private List<MultipartFile> files;
+	private List<FileDetailVO> fileDetailList;
 
 	// 센터장측 상담사명 검색용
 	private String keyword;
