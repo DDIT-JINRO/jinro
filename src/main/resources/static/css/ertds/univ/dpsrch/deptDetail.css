@@ -1,0 +1,496 @@
+/* 학과 디테일 페이지 스타일 */
+.dept-detail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 50px;
+    position: relative;
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+/* 제목 섹션 */
+.dept-title-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 35px 40px;
+    gap: 20px;
+    width: 100%;
+    background: #FFFFFF;
+    border: 3px solid #848EFB;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.dept-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 20px;
+    width: 100%;
+    max-width: 1080px;
+}
+
+.dept-university-name {
+    flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    display: flex;
+    align-items: center;
+    color: #000000;
+}
+
+.dept-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.dept-detail-btn {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 10px;
+    width: 125px;
+    height: 43px;
+    background: #FFFFFF;
+    border: 2px solid #D8D8D8;
+    border-radius: 20px;
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 22px;
+    color: #000000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dept-detail-btn:hover {
+    background: #f5f5f5;
+}
+
+.bookmark-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* 비활성 아이콘은 기본적으로 숨깁니다. */
+.bookmark-btn .icon-inactive {
+    display: none;
+}
+
+/* 활성 아이콘은 기본적으로 보입니다. */
+.bookmark-btn .icon-active {
+    display: inline-block;
+}
+
+.bookmark-btn span img {
+    width: 30px;
+    height: 30px;
+}
+
+/* .active 클래스가 없는 경우 (비활성화 상태) */
+.bookmark-btn:not(.active) .icon-active {
+    display: none; /* 활성 아이콘을 숨깁니다. */
+}
+
+.bookmark-btn:not(.active) .icon-inactive {
+    display: inline-block; /* 비활성 아이콘을 보여줍니다. */
+}
+
+.dept-divider {
+    width: 100%;
+    max-width: 1080px;
+    height: 0px;
+    border: 1px dashed #D8D8D8;
+}
+
+.dept-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 10px;
+    width: 100%;
+    max-width: 1080px;
+}
+
+.dept-info-item {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #858E96;
+}
+
+/* 내용 섹션 */
+.dept-content-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    gap: 50px;
+    width: 100%;
+    background: #FFFFFF;
+    border: 2px solid #E8ECEF;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.dept-content-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 20px;
+    width: 100%;
+    max-width: 1080px;
+}
+
+.dept-content-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 10px;
+    width: 100%;
+}
+
+.dept-asterisk {
+    width: 35px;
+    height: 35px;
+    background-image: url('/images/asterisk.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.dept-content-title {
+    flex: 1;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    color: #000000;
+    margin: 0;
+    padding: 3px 0;
+}
+
+.dept-content-text {
+    width: 100%;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 30px;
+    color: #000000;
+    margin: 0;
+}
+
+/* 차트 컨테이너 */
+.dept-chart-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    min-height: 300px;
+    position: relative;
+}
+
+.dept-chart-container canvas {
+    max-width: 100%;
+    height: auto !important;
+}
+
+#salaryChart, #satisfactionChart {
+    min-height: 250px;
+}
+
+#employmentFieldChart {
+    min-height: 350px;
+}
+
+#genderEmploymentChart {
+    min-height: 300px;
+}
+
+/* 관련 섹션 */
+.dept-related-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 15px;
+    width: 100%;
+}
+
+.dept-section-subtitle {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;
+    margin: 0;
+}
+
+.dept-tag-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.dept-tag {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 10px;
+    background: #FFFFFF;
+    border: 2px solid #D8D8D8;
+    border-radius: 20px;
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 22px;
+    color: #000000;
+    white-space: nowrap;
+}
+
+.dept-text-content {
+    padding: 0px 30px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dept-text-content p {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #000000;
+    margin: 0;
+}
+
+/* 취업 분야 분포 */
+.dept-employment-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.dept-field-item {
+    padding: 10px 15px;
+    background: #ffffff;
+    border: 1px solid #e8ecef;
+    border-radius: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
+
+.dept-field-item:hover {
+    background: #f0f0f0;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* 관련직업 */
+.dept-related-jobs {
+    width: 100%;
+}
+
+.dept-job-tags {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px 35px;
+    gap: 30px;
+    width: 100%;
+    background: #FFFFFF;
+    border: 2px solid #E8ECEF;
+    border-radius: 10px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+
+.dept-job-tag {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 10px;
+    background: #FFFFFF;
+    border: 2px solid #D8D8D8;
+    border-radius: 20px;
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 22px;
+    color: #000000;
+    white-space: nowrap;
+}
+
+/* 검색 버튼 */
+.dept-search-section {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.dept-search-btn {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 14px;
+    gap: 10px;
+    width: 338px;
+    height: 59px;
+    background: #4E575E;
+    border: 1px solid #209EC9;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dept-search-btn:hover {
+    background: #3a4148;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
+    .dept-detail-container {
+        max-width: 95%;
+        margin-top: 30px;
+    }
+    
+    .dept-title-section,
+    .dept-content-section {
+        padding: 20px;
+    }
+    
+    .dept-content-section {
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dept-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .dept-university-name {
+        font-size: 20px;
+        line-height: 24px;
+        text-align: center;
+    }
+    
+    .dept-actions {
+        align-self: center;
+    }
+    
+    .dept-content-title {
+        font-size: 20px;
+        line-height: 24px;
+    }
+    
+    .dept-content-text {
+        font-size: 16px;
+        line-height: 20px;
+    }
+    
+    .dept-tag-container,
+    .dept-job-tags {
+        padding: 10px 15px;
+        gap: 10px;
+    }
+    
+    .dept-chart-container {
+        min-height: 250px;
+    }
+    
+    #employmentFieldChart {
+        min-height: 300px;
+    }
+    
+    #genderEmploymentChart {
+        min-height: 250px;
+    }
+    
+    .dept-search-btn {
+        width: 280px;
+        height: 50px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dept-detail-container {
+        gap: 30px;
+    }
+    
+    .dept-title-section,
+    .dept-content-section {
+        padding: 15px;
+    }
+    
+    .dept-content-section {
+        gap: 25px;
+    }
+    
+    .dept-content-item {
+        gap: 15px;
+    }
+    
+    .dept-tag-container,
+    .dept-job-tags {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

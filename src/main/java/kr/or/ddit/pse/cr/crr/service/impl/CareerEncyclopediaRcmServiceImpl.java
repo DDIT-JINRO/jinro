@@ -32,7 +32,7 @@ public class CareerEncyclopediaRcmServiceImpl implements CareerEncyclopediaRcmSe
 		
 		List<String> interestCn = this.careerEncyclopediaRcmMapper.selectInterestCnList(memId);
 		
-		if(interestCn == null || "없음".equals(interestCn.get(0))) {
+		if(interestCn.isEmpty() || "없음".equals(interestCn.get(0))) {
 			throw new CustomException(ErrorCode.NO_INTEREST_CN);
 		}
 		

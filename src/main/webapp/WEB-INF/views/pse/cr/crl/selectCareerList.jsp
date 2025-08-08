@@ -129,11 +129,11 @@
 					<c:otherwise>
 						<div class="jobs-list">
 							<c:forEach var="jobs" items="${articlePage.content}">
-								<div class="jobs-item" id="${jobs.jobCode}">
+								<div class="jobs-item" id="${jobs.jobCode}" data-job-id="${jobs.jobCode}">
 									<div class="item-content job-info">
 										<div class="item-header">
 											<h3 class="item-title">
-												<a href="/pse/cr/crl/selectCareerDetail.do?jobCode=${jobs.jobCode}"> ${jobs.jobName} </a>
+												${jobs.jobName}
 											</h3>
 										</div>
 										<p class="item-snippet">${jobs.jobMainDuty}</p>
