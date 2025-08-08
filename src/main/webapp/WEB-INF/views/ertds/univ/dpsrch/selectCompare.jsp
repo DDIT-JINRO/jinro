@@ -43,7 +43,7 @@
 								</c:forEach>
 
 								<button class="bookmark-btn ${isBookmarked ? 'active' : ''}"
-									data-category-id="G03005"
+									data-category-id="G03006"
 									data-target-id="${fn:escapeXml(dept.uddId)}">
 									<span class="icon-active"> <img
 										src="/images/bookmark-btn-active.png" alt="활성 북마크">

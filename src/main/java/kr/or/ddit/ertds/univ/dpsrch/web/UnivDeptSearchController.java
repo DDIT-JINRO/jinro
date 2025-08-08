@@ -57,7 +57,7 @@ public class UnivDeptSearchController {
 		if(principal!=null && !principal.getName().equals("anonymousUser")) { 
 			int	memId = Integer.parseInt(principal.getName()); BookMarkVO bookMarkVO = new
 			BookMarkVO(); bookMarkVO.setMemId(memId);
-			bookMarkVO.setBmCategoryId("G03005");
+			bookMarkVO.setBmCategoryId("G03006");
 			
 			bookMarkVOList = this.univDeptService.selectBookMarkVO(bookMarkVO);
 			log.info("bookMarkVOList"+bookMarkVOList); 
@@ -87,7 +87,7 @@ public class UnivDeptSearchController {
 	    		if(principal!=null && !principal.getName().equals("anonymousUser")) { 
 	    			int	memId = Integer.parseInt(principal.getName()); BookMarkVO bookMarkVO = new
 	    			BookMarkVO(); bookMarkVO.setMemId(memId);
-	    			bookMarkVO.setBmCategoryId("G03005");
+	    			bookMarkVO.setBmCategoryId("G03006");
 	    			
 	    			bookMarkVOList = this.univDeptService.selectBookMarkVO(bookMarkVO);
 	    			log.info("bookMarkVOList"+bookMarkVOList); 
@@ -117,7 +117,7 @@ public class UnivDeptSearchController {
 		if(principal!=null && !principal.getName().equals("anonymousUser")) { 
 			int	memId = Integer.parseInt(principal.getName()); BookMarkVO bookMarkVO = new
 			BookMarkVO(); bookMarkVO.setMemId(memId);
-			bookMarkVO.setBmCategoryId("G03005");
+			bookMarkVO.setBmCategoryId("G03006");
 			
 			bookMarkVOList = this.univDeptService.selectBookMarkVO(bookMarkVO);
 			log.info("bookMarkVOList"+bookMarkVOList); 
