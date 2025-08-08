@@ -84,6 +84,11 @@ public class ResumeBoardController {
 		Long fileGruopId = boardVO.getFileGroupId();
 
 		List<FileDetailVO> fileList = fileService.getFileList(fileGruopId);
+		
+		for(FileDetailVO f : fileList) {
+			String filePath = fileService.getSavePath(f);
+			f.setFilePath(filePath);
+		}
 
 		model.addAttribute("fileList", fileList);
 		model.addAttribute("memId", memId);

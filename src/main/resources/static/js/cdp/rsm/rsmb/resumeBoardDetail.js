@@ -5,53 +5,49 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 	document.addEventListener('click', function (event) {
-		const btn = event.target.closest('.liked'); // 클릭한 요소 또는 부모 중 .liked가 있는지 확인
+		const likeButton = event.target.closest('.like-button');
 
-		if (!btn) return; // .liked가 아니면 무시
+		if (!likeButton) {
+		    return; // 클릭된 것이 좋아요 버튼이 아니면 무시
+		}
 
-		const replyId = btn.dataset.replyId;
-		const boardId = btn.dataset.boardId;
+		const boardId = likeButton.dataset.boardId;
+		const replyId = likeButton.dataset.replyId;
 		const isReply = replyId !== undefined;
+		
+		const likeCountSpanId = isReply ? `reply-like-cnt-${replyId}` : `board-like-cnt-${boardId}`;
+		const likeCountSpan = document.getElementById(likeCountSpanId);
+
+		const originalLikeCount = parseInt(likeCountSpan.textContent);
+		const isCurrentlyLiked = likeButton.classList.contains('liked');
+		
+		likeButton.classList.toggle('liked');
+		likeCountSpan.textContent = isCurrentlyLiked ? originalLikeCount - 1 : originalLikeCount + 1;
 
 		const url = isReply ? '/cdp/rsm/rsmb/likeReply.do' : '/cdp/rsm/rsmb/likeBoard.do';
 		const params = new URLSearchParams();
 
+		params.append("boardId", boardId);
 		if (isReply) {
 			params.append("replyId", replyId);
-			params.append("boardId", boardId);
-		} else {
-			params.append("boardId", boardId);
 		}
 
 		axios.post(url, params)
-			.then(response => {
-				const result = response.data;
-
-				if (isReply) {
-					const likeCntSpan = document.querySelector(`#reply-like-cnt-${replyId}`);
-					const likeImg = document.querySelector(`img[data-reply-id="${replyId}"]`);
-
-					if (result.isLiked === 1) {
-						likeImg.src = '/images/likedFill.png';
-					} else {
-						likeImg.src = '/images/likedBean.png';
-					}
-					likeCntSpan.textContent = result.likeCnt;
-				} else {
-					const likeCntSpan = document.querySelector(`#board-like-cnt-${boardId}`);
-					const likeImg = document.querySelector(`img[data-board-id="${boardId}"]`);
-
-					if (result.isLiked === 1) {
-						likeImg.src = '/images/likedFill.png';
-					} else {
-						likeImg.src = '/images/likedBean.png';
-					}
-					likeCntSpan.textContent = result.likeCnt;
-				}
-			})
-			.catch(error => {
-				console.error('좋아요 처리 중 오류 발생:', error);
-			});
+		.then(response => {
+	        const serverResult = response.data;
+	        likeCountSpan.textContent = serverResult.likeCnt;
+	        
+	        const serverIsLiked = serverResult.isLiked === 1;
+	        if (likeButton.classList.contains('liked') !== serverIsLiked) {
+	            likeButton.classList.toggle('liked', serverIsLiked);
+		        }
+	    }).catch(error => {
+	        console.error('좋아요 처리 실패:', error);
+	        alert('오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+	        
+	        likeButton.classList.toggle('liked', isCurrentlyLiked);
+	        likeCountSpan.textContent = originalLikeCount;
+	    });
 	});
 
 	// 게시글 수정버튼 클릭 시 게시글 수정 페이지로 이동 이벤트
@@ -602,3 +598,46 @@ function modifyReplyCancel(e) {
 
 	contentArea.innerHTML = previousContent;
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    
+    const fileContainer = document.querySelector('.fileClass');
+
+    if (fileContainer) {
+        fileContainer.addEventListener('click', function(event) {
+            // 클릭된 요소가 미리보기 버튼인지 확인
+            if (event.target.classList.contains('btn-pdf-preview')) {
+                const button = event.target;
+                const pdfUrl = button.dataset.pdfUrl;
+                const targetId = button.dataset.targetId;
+                const previewContainer = document.getElementById(targetId);
+
+                // 컨테이너가 현재 보이지 않는 상태라면, 미리보기를 생성하고 보여줌
+                if (previewContainer.style.display !== 'block') {
+                    if (previewContainer.innerHTML === '') {
+                        const iframe = document.createElement('iframe');
+						
+						let cleanPdfUrl = pdfUrl.replace(/\\/g, '/'); // 모든 '\'를 '/'로 변경
+						if (!cleanPdfUrl.startsWith('/')) {
+						    cleanPdfUrl = '/' + cleanPdfUrl; // 경로가 '/'로 시작하지 않으면 추가
+						}
+                        
+                        const viewerURL = `/js/pdfjs/web/viewer.html?file=${encodeURIComponent(cleanPdfUrl)}#zoom=page-fit`;
+                        
+                        iframe.src = viewerURL;
+                        iframe.title = "PDF 미리보기";
+                        previewContainer.appendChild(iframe);
+                    }
+                    
+                    previewContainer.style.display = 'block';
+                    button.textContent = '미리보기 닫기';
+                
+                // 컨테이너가 이미 보이는 상태라면, 숨김
+                } else {
+                    previewContainer.style.display = 'none';
+                    button.textContent = '미리보기 보기';
+                }
+            }
+        });
+    }
+});

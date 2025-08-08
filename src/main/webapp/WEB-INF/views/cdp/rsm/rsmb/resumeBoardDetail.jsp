@@ -76,28 +76,39 @@
 						</span>
 						<span class="meta-item">조회수: ${boardVO.boardCnt}</span>
 						<span class="meta-item" id="like-board-wrapper-${boardVO.boardId}">
-							<c:choose>
-								<c:when test="${boardVO.boardIsLiked == 1}">
-									<img alt="" src="/images/likedFill.png" class="liked" data-board-id="${boardVO.boardId}">
-									<span class="like-cnt" id="board-like-cnt-${boardVO.boardId}">${boardVO.boardLikeCnt}</span>
-								</c:when>
-								<c:when test="${boardVO.boardIsLiked == 0}">
-									<img alt="" src="/images/likedBean.png" class="liked" data-board-id="${boardVO.boardId}">
-									<span class="like-cnt" id="board-like-cnt-${boardVO.boardId}">${boardVO.boardLikeCnt}</span>
-								</c:when>
-							</c:choose>
+							<button class="like-button ${boardVO.boardIsLiked == 1 ? 'liked' : ''}" data-board-id="${boardVO.boardId}" aria-label="좋아요 버튼">
+							    <svg class="heart-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+							    </svg>
+							    
+							    <svg class="heart-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+							    </svg>
+							</button>
+							<span class="like-cnt" id="board-like-cnt-${boardVO.boardId}">${boardVO.boardLikeCnt}</span>
 						</span>
 					</div>
 				</div>
-
 				<!-- 2) 핵심 정보 그리드 -->
 				<div class="detailMainContent">
 					<div class="detailContent">${boardVO.boardContent}</div>
 				</div>
 				<div class="fileClass">
-					<c:forEach var="file" items="${fileList}">
+					<c:forEach var="file" items="${fileList}" varStatus="status">
 						<div class="detailFile">
-							<a href="/files/download?fileGroupId=${file.fileGroupId }&seq=${file.fileSeq }">${file.fileOrgName }</a>
+							<c:set var="lowerCaseName" value="${fn:toLowerCase(file.fileOrgName)}" />
+							<span class="file-name">${file.fileOrgName}</span>
+							
+							<div class="file-btn-wrapper">
+								<c:if test="${fn:endsWith(lowerCaseName, '.pdf')}">
+									<button type="button" class="btn-pdf-preview" data-pdf-url="${file.filePath}" data-target-id="pdf-preview-${status.index}">미리보기 보기</button>
+								</c:if>
+								<a href="/files/download?fileGroupId=${file.fileGroupId}&seq=${file.fileSeq}" class="btn-pdf-download"> 다운로드 </a>
+							</div>
+							
+							<c:if test="${fn:endsWith(lowerCaseName, '.pdf')}">
+								<div class="pdf-preview-container" id="pdf-preview-${status.index}"></div>
+							</c:if>
 						</div>
 					</c:forEach>
 				</div>
@@ -153,16 +164,15 @@
 						<span class="child-count">
 							<c:if test="${reply.childCount > 0 }"> ${reply.childCount }</c:if>
 						</span>
-						<c:choose>
-							<c:when test="${reply.replyIsLiked == 1}">
-								<img alt="" src="/images/likedFill.png" class="liked" data-board-id="${boardVO.boardId }" data-reply-id="${reply.replyId}">
-								<span class="like-cnt" id="reply-like-cnt-${reply.replyId}">${reply.replyLikeCnt}</span>
-							</c:when>
-							<c:when test="${reply.replyIsLiked == 0}">
-								<img alt="" src="/images/likedBean.png" class="liked" data-board-id="${boardVO.boardId }" data-reply-id="${reply.replyId}">
-								<span class="like-cnt" id="reply-like-cnt-${reply.replyId}">${reply.replyLikeCnt}</span>
-							</c:when>
-						</c:choose>
+						<button class="like-button ${reply.replyIsLiked == 1 ? 'liked' : ''}" data-board-id="${boardVO.boardId}" data-reply-id="${reply.replyId}" aria-label="좋아요 버튼">
+							<svg class="heart-outline" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+					        </svg>
+							<svg class="heart-filled" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+					        </svg>
+						</button>
+						<span class="like-cnt" id="board-like-cnt-${boardVO.boardId}">${boardVO.boardLikeCnt}</span>
 					</div>
 				</div>
 				<div class="reply-child-container" data-parent-id="${reply.replyId }">
@@ -232,8 +242,7 @@
 			위반 항목과 상황을 간략히 작성해 주시면 처리에 도움이 됩니다.
 		</p>
 		<div class="modal-form">
-			<input type="hidden" id="report-target-id" />
-			<input type="hidden" id="report-target-type" />
+			<input type="hidden" id="report-target-id" /> <input type="hidden" id="report-target-type" />
 			<textarea id="report-content-input" placeholder="사유를 작성해주세요"></textarea>
 			<input type="file" id="report-file" />
 			<span class="modal-error-msg" id="modal-error-msg"></span>
