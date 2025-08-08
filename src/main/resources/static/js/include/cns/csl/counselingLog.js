@@ -124,6 +124,7 @@ function fetchCounselingLog(page = 1) {
 			}
 		})
 		.then(({ data }) => {
+			window.currentPage = page;
 			const countEl = document.getElementById('notice-count');
 			let cnt = (page-1) * pageSize +1;
 			if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();

@@ -2,7 +2,12 @@
 <!-- 사이드바 -->
 <link rel="stylesheet" href="/css/cnsLeader/cnsLeaderSideBar.css">
 <link rel="shortcut icon" href="/images/crppvc.png">
+<link rel="stylesheet" href="/css/pagenation.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="/js/include/cnsLeader/sidebar.js"></script>
+<script src="/js/axios.min.js"></script>
+<script src="/ckeditor5/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 	sidebar();
