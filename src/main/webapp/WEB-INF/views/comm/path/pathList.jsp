@@ -26,21 +26,20 @@
 		<p class="textmessage">해당 게시판은 진로/진학을 고민하고 논의하는 게시판입니다.</p>
 		<button id=btnWrite>글작성</button>
 		</div>
-			<form method="" action="/">
+			<form method="get" action="/comm/path/pathList.do">
 				<div class="com-default-search">
 					<div class="com-select-wrapper">
-						<select name="com-status" class="com-status-filter">
-							<option value="all">전체</option>
-							<option value="">제목</option>
-							<option value="">내용</option>
-							<option value="">작성자</option>
+						<select name="status" class="com-status-filter">
+							<option value="3">전체</option>
+							<option value="1">제목</option>
+							<option value="2">내용</option>
 						</select>
 						<svg class="com-select-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 			<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
             			</svg>
 					</div>
-					<input type="search" class="search-input" name="com-search-keyword" placeholder="진로/진학 게시판 내에서 검색">
-					<button class="com-search-btn" type="button">
+					<input type="search" class="search-input" name="keyword" placeholder="청소년 게시판 내에서 검색">
+					<button class="com-search-btn" type="submit">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                 			<path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
            				</svg>
@@ -75,17 +74,29 @@
 					</div>
 				</div>
 			</c:forEach>
+			<ul class="pagination">
+				<li>
+					<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="
+							<c:if test='${articlePage.startPage < 6}'>
+								disabled
+							</c:if>"> ← Previous </a>
+				</li>
+				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
+					<li>
+						<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="page-num
+								<c:if test='${pNo == articlePage.currentPage}'>
+									active
+								</c:if>"> ${pNo} </a>
+					</li>
+				</c:forEach>
 
-			<!--   			청소년 게시판 목록 페이지 -->
-			<!--   			<br/> -->
-			<!--   			<a href="/comm/peer/youth/youthDetail.do?boardId=1">청소년 1번 게시글</a> -->
-			<!--   			<br/> -->
-			<!--   			<a href="/comm/peer/youth/teenDetail.do?boardId=2">청소년 2번 게시글</a> -->
-			<!--   			<br/> -->
-			<!--   			<a href="/comm/peer/teen/teenDetail.do?boardId=3">청소년 3번 게시글</a> -->
-			<!--   			<br/><br/><br/><br/> -->
-			<!--   			<a href="/comm/peer/teen/teenInsert.do">청소년 게시글 작성</a> -->
-			<!-- 		</div> -->
+				<li>
+					<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="
+							<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
+								disabled
+							</c:if>"> Next → </a>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>
