@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.pse.cr.crr.service.impl.CareerEncyclopediaRcmMapper">
 
+	<select id="selectInterestCnList" parameterType="int" resultType="String">
+		SELECT
+			CC_NAME
+		FROM
+			COM_CODE
+		WHERE
+			CC_ID IN (SELECT IC_CODE
+				FROM
+					INTEREST_CN
+				WHERE
+					MEM_ID = #{memId}
+			)
+	</select>
+
 	<select id="selectCareerRcmList" parameterType="kr.or.ddit.worldcup.service.JobsVO" resultType="kr.or.ddit.worldcup.service.JobsVO">
 		WITH INTEREST_KEYWORD AS (
 			SELECT

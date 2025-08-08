@@ -2,9 +2,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	const channelSection = document.querySelector(".channel");
 	if (channelSection) {
 	    const errorMessage = channelSection.dataset.errorMessage;
+	    const serverError = channelSection.dataset.serverError;
 	    if (errorMessage) {
 			alert(errorMessage);
-			window.location.href="/"
+			history.back();
+		}
+		if (serverError) {
+			alert(serverError);
+			history.back();
 		}
 	}
 

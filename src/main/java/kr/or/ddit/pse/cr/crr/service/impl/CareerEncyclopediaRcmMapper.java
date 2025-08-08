@@ -13,4 +13,6 @@ public interface CareerEncyclopediaRcmMapper {
 
 	int selectCareerRcmTotal(JobsVO jobs);
 
+	List<String> selectInterestCnList(int memId);
+
 }

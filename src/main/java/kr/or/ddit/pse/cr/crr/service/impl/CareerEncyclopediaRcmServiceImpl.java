@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.ddit.exception.CustomException;
+import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.pse.cr.crr.service.CareerEncyclopediaRcmService;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.worldcup.service.JobsVO;
@@ -20,11 +22,19 @@ public class CareerEncyclopediaRcmServiceImpl implements CareerEncyclopediaRcmSe
 	@Override
 	public ArticlePage<JobsVO> selectCareerRcmList(JobsVO jobs, String memIdStr) {
 		
-		if ("".equals(memIdStr) && "anonymousUser".equals(memIdStr)) {
-			throw new RuntimeException();
+		if ("".equals(memIdStr) || "anonymousUser".equals(memIdStr)) {
+			throw new CustomException(ErrorCode.INVALID_USER);
 		}
 		
-		jobs.setMemId(Integer.parseInt(memIdStr));
+		int memId = Integer.parseInt(memIdStr);
+		
+		jobs.setMemId(memId);
+		
+		List<String> interestCn = this.careerEncyclopediaRcmMapper.selectInterestCnList(memId);
+		
+		if(interestCn == null || "없음".equals(interestCn.get(0))) {
+			throw new CustomException(ErrorCode.NO_INTEREST_CN);
+		}
 		
 		List<JobsVO> careerList = this.careerEncyclopediaRcmMapper.selectCareerRcmList(jobs);
 		
