@@ -37,6 +37,9 @@
 			<a class="tab active" href="/cdp/rsm/rsmb/resumeBoardList.do">이력서 템플릿 게시판</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
+		${board}
+		<hr>
+		${fileList}
 		<div class="public-wrapper-main">
 			<div class="public-wrapper-main">
 				<div class="titleSpace">
@@ -48,11 +51,42 @@
 					<div class="editor-container">
 						<div id="editor"></div>
 					</div>
-					<label for="fileInput" class="file-label">파일 첨부</label>
+
+					<div class="form-section">
+						<label class="file-label">기존 첨부 파일</label>
+						<div class="fileClass">
+							<c:if test="${empty fileList}">
+								<span class="no-files">첨부된 파일이 없습니다.</span>
+							</c:if>
+							<c:forEach var="file" items="${fileList}" varStatus="status">
+								<div class="detailFile">
+									<span class="file-name">${file.fileOrgName}</span>
+									<div class="file-actions">
+										<c:if test="${fn:endsWith(fn:toLowerCase(file.fileOrgName), '.pdf')}">
+											<button type="button" class="btn-pdf-preview" data-pdf-url="${file.filePath}" data-target-id="pdf-preview-existing-${status.index}">미리보기</button>
+										</c:if>
+										<a href="/files/download?fileGroupId=${file.fileGroupId}&seq=${file.fileSeq}" class="btn-pdf-download"> 다운로드 </a>
+									</div>
+
+									<c:if test="${fn:endsWith(fn:toLowerCase(file.fileOrgName), '.pdf')}">
+										<div class="pdf-preview-container" id="pdf-preview-existing-${status.index}"></div>
+									</c:if>
+								</div>
+							</c:forEach>
+						</div>
+					</div>
+
+					<div id="new-preview-section" style="display: none;">
+						<label class="file-label">새 파일 미리보기</label>
+						<div id="new-preview-list"></div>
+					</div>
+
+					<label for="fileInput" class="file-label">파일 첨부 (기존 파일은 삭제됩니다)</label>
 					<div class="file-upload-container">
 						<input type="file" id="fileInput" multiple>
 						<ul id="fileList" class="file-list"></ul>
 					</div>
+
 					<div class="button-group">
 						<button class="cancel-btn" id="backBtn">취소</button>
 						<button class="submit-btn" id="submitBtn">수정완료</button>

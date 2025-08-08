@@ -1,7 +1,6 @@
 package kr.or.ddit.cdp.rsm.rsmb.web;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,11 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.servlet.http.HttpServletRequest;
 import kr.or.ddit.comm.peer.teen.service.TeenCommService;
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
@@ -157,6 +154,17 @@ public class ResumeBoardController {
 	@PostMapping("/resumeBoardUpdateView.do")
 	public String resumeBoardUpdateView(@RequestParam int boardId, Model model) {
 		CommBoardVO board = teenCommService.selectTeenBoard(boardId);
+		
+		Long fileGruopId = board.getFileGroupId();
+
+		List<FileDetailVO> fileList = fileService.getFileList(fileGruopId);
+		
+		for(FileDetailVO f : fileList) {
+			String filePath = fileService.getSavePath(f);
+			f.setFilePath(filePath);
+		}
+
+		model.addAttribute("fileList", fileList);
 		model.addAttribute("board", board);
 		return "cdp/rsm/rsmb/resumeBoardUpdateView";
 	}
