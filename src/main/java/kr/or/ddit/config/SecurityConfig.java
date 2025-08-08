@@ -72,12 +72,7 @@ public class SecurityConfig {
 				.logout(logout -> logout
 					    .logoutUrl("/logout")
 					    .logoutSuccessHandler((request, response, authentication) -> {
-					    	String referer = request.getHeader("Referer");
-					        if (referer != null) {
-					            response.sendRedirect(referer);
-					        } else {
-					            response.sendRedirect("/");
-					        }
+					    	response.sendRedirect("/");
 					    })
 					    .invalidateHttpSession(true)
 					    .deleteCookies("JSESSIONID", "accessToken", "refreshToken")
