@@ -242,9 +242,15 @@ function handleRemoveJobColumn(event) {
     // 1. 클릭된 버튼이 속한 헤더(th)를 찾습니다.
     const headerCell = event.target.closest('th.job-card-header');
     if (!headerCell) return;
-
+	
     // 2. 전체 직업 헤더 목록에서 현재 헤더의 인덱스(순서)를 찾습니다.
     const allHeaderCells = Array.from(document.querySelectorAll('.comparison-table thead th.job-card-header'));
+	
+	if (allHeaderCells.length <= 2) {
+	    alert("비교를 위해 최소 2개의 직업이 필요합니다.");
+	    return;
+	}
+	
     const columnIndex = allHeaderCells.indexOf(headerCell);
     
     if (columnIndex === -1) return;
