@@ -22,7 +22,7 @@ public class ContestVO {
 	private Date contestCreatedAt;          // 게시일
 	private int contestRecruitCount;        // 조회수
 	private String contestUrl;              // 원본 URL
-	private String fileGroupId;             // 이미지 파일 그룹 ID
+	private Long fileGroupId;             // 이미지 파일 그룹 ID
 
 	// 필터조건
 	private String keyword;

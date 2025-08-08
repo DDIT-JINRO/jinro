@@ -1,10 +1,12 @@
 package kr.or.ddit.prg.ctt.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.prg.ctt.service.ContestService;
 import kr.or.ddit.prg.ctt.service.ContestVO;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,13 @@ public class ContestServiceImpl implements ContestService {
 	//공모전 총 개수 조회
 	@Override
 	public int selectCttCount(ContestVO contestVO) {
+		
+		if(contestVO.getContestGubunFilter() == null || contestVO.getContestGubunFilter().isEmpty()){
+			List<String> contestGubunFilter = new ArrayList<>();
+			contestGubunFilter.add("G32001");
+			contestVO.setContestGubunFilter(contestGubunFilter);
+        }
+		
 		int totalCount = contestMapper.selectCttCount(contestVO);
         log.info("selectCttCount 결과 (총 게시물 수): {}", totalCount);
 		return totalCount;
@@ -39,4 +48,16 @@ public class ContestServiceImpl implements ContestService {
         log.info("selectCttDetail 결과: {}", detail);
         return detail;
 	}
+	
+	//공모전분류 목록 조회
+    @Override
+    public List<ComCodeVO> getContestTypeList() {
+        return contestMapper.selectContestTypeList();
+    }
+
+    //모집 대상 목록 조회
+    @Override
+    public List<ComCodeVO> getContestTargetList() {
+        return contestMapper.selectContestTargetList();
+    }
 }

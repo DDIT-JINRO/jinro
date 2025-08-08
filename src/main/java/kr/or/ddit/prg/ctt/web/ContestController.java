@@ -38,20 +38,13 @@ public class ContestController {
 	        ContestVO contestVO = new ContestVO();
 	        contestVO.setKeyword(keyword);
 	        
-            // ⭐⭐⭐ [수정된 부분] ContestVO에 필터 리스트를 직접 설정합니다. ⭐⭐⭐
-            // HighSchoolController와 동일하게 List<String>을 직접 VO에 바인딩
-            // 공모전만 조회하므로 G32001 코드를 리스트에 담아 필터로 사용
-	        if(contestGubunFilter == null || contestGubunFilter.isEmpty()){
-                contestGubunFilter = new ArrayList<>();
-                contestGubunFilter.add("G32001");
-            }
 	        contestVO.setContestGubunFilter(contestGubunFilter);
 	        contestVO.setContestTargetFilter(contestTargetFilter);
 	        contestVO.setContestTypeFilter(contestTypeFilter);
 	        
-            // 페이징 정보 설정 (HighSchoolController와 동일한 방식)
-            int size = 9;
-            int startRow = (currentPage - 1) * size;
+            // 페이징 정보 설정 
+            int size = 6;
+            int startRow = (currentPage - 1) * size + 1;
             int endRow = currentPage * size;
             contestVO.setStartRow(startRow);
             contestVO.setEndRow(endRow);
@@ -64,7 +57,6 @@ public class ContestController {
             // ⭐⭐⭐ [수정된 부분] 컨트롤러에서 ArticlePage 객체를 생성합니다. ⭐⭐⭐
 	        ArticlePage<ContestVO> page = new ArticlePage<>(total, currentPage, size, contestList, keyword);
 	        page.setUrl("/prg/ctt/cttList.do"); // URL 설정
-	        
 	        model.addAttribute("articlePage", page);
 	        model.addAttribute("checkedFilters", contestVO); // 체크된 필터 상태 유지를 위해 전달
 	        
@@ -74,6 +66,7 @@ public class ContestController {
 	
 	@GetMapping("/cttDetail.do")
 	public String selectCttDetail(@RequestParam String cttId, Model model) {
+		
 		ContestVO cttDetail = contestService.selectCttDetail(cttId);
 		model.addAttribute("cttDetail", cttDetail);
 		

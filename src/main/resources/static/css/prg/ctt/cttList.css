@@ -4,9 +4,10 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
-/* 메인 제목 */
+/* 메인 컨텐츠 영역 */
 .public-wrapper-main {
     padding: 20px;
 }
@@ -14,11 +15,27 @@
 /* 필터 및 검색 섹션 */
 .filter-section {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 15px;
+}
+
+.filter-tab {
+    font-size: 1em;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.filter-tab:hover, .filter-tab.active {
+    color: #007bff;
 }
 
 .search-bar {
@@ -32,15 +49,17 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px 10px;
+    flex-grow: 1;
 }
 
 .main-search-input {
     border: none;
     outline: none;
+    width: 100%;
     padding: 5px;
 }
 
-.main-search-btn, .search-button {
+.main-search-btn {
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -49,25 +68,31 @@
     cursor: pointer;
 }
 
-.search-button:hover {
+.main-search-btn:hover {
     background-color: #0056b3;
 }
 
-/* 목록 컨테이너 (카드 그리드) */
+/* 목록 컨테이너 (2열 그리드로 변경) */
 .list-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    /* ⭐⭐⭐ [수정된 부분] 좌우 간격은 40px -> 80px, 위아래 간격은 30px -> 60px로 설정 ⭐⭐⭐ */
+   	gap: 40px; 
     margin-bottom: 30px;
 }
 
-/* 개별 카드 스타일 */
+/* 개별 카드 스타일 (좌우 배치) */
 .contest-card {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
+    background-color: white;
+    display: flex;
+    flex-direction: row-reverse; /* 이미지와 글의 위치를 반대로 */
+    /* ⭐⭐⭐ [수정된 부분] 카드의 높이를 300px로 증가 ⭐⭐⭐ */
+    height: 330px;
 }
 
 .contest-card:hover {
@@ -75,9 +100,12 @@
 }
 
 .card-image-box {
-    width: 100%;
-    height: 200px;
+    width: 45%; /* 이미지 박스 너비 조정 */
+    height: 100%;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .contest-image {
@@ -88,6 +116,10 @@
 
 .card-content {
     padding: 15px;
+    width: 55%; /* 글 내용 너비 조정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .contest-title {
@@ -108,11 +140,12 @@
 .contest-description {
     font-size: 0.9em;
     color: #666;
-    height: 60px; /* 고정 높이 */
+    /* ⭐⭐⭐ [수정된 부분] 높이와 줄 수를 늘려 더 많은 내용 표시 ⭐⭐⭐ */
+    flex-grow: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
 }
 

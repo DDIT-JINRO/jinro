@@ -26,7 +26,8 @@
     <div class="public-wrapper-main">
         <div class="filter-section">
             <form method="get" action="/prg/ctt/cttList.do">
-                <input type="hidden" name="activityGubunFilter" value="G32001" /> <div class="main-search-container">
+                <input type="hidden" name="contestGubunFilter" value="G32001" />
+                <div class="main-search-container">
                     <div class="main-search-input-wrapper">
                         <i class="icon-search"></i>
                         <input type="text" name="keyword" class="main-search-input"
@@ -42,25 +43,45 @@
 
                     <div class="filter-content" id="filter-content">
                         <div class="filter-row">
+						    <div class="filter-label-title">모집 상태</div>
+						    <div class="filter-controls">
+						        <label class="filter-item">
+						            <input type="checkbox" name="contestStatusFilter" value="proceeding" data-label="모집 상태" data-name="진행중"
+						                   <c:if test="${fn:contains(paramValues.contestStatusFilter, 'proceeding')}">checked</c:if> />
+						            <span>진행중</span>
+						        </label>
+						        <label class="filter-item">
+						            <input type="checkbox" name="contestStatusFilter" value="finished" data-label="모집 상태" data-name="마감"
+						                   <c:if test="${fn:contains(paramValues.contestStatusFilter, 'finished')}">checked</c:if> />
+						            <span>마감</span>
+						        </label>
+						    </div>
+						</div>
+
+                        <div class="filter-row">
                             <div class="filter-label-title">모집 분야</div>
                             <div class="filter-controls">
-                                <label class="filter-item">
-                                    <input type="checkbox" name="contestTypeFilter" value="G35001" data-label="모집 분야" data-name="건축"
-                                           <c:if test="${fn:contains(checkedFilters.contestTypeFilter, 'G35001')}">checked</c:if> />
-                                    <span>건축</span>
-                                </label>
-                                </div>
+                                <c:forEach var="cType" items="${contestTypeList}">
+                                    <label class="filter-item"> 
+                                        <input type="checkbox" name="contestTypeFilter" value="${cType.ccId}" data-label="모집 분야" data-name="${cType.ccName}"
+                                               <c:if test="${fn:contains(checkedFilters.contestTypeFilter, cType.ccId)}">checked</c:if> />
+                                        <span>${cType.ccName}</span>
+                                    </label>
+                                </c:forEach>
+                            </div>
                         </div>
 
                         <div class="filter-row">
                             <div class="filter-label-title">모집 대상</div>
                             <div class="filter-controls">
-                                <label class="filter-item">
-                                    <input type="checkbox" name="contestTargetFilter" value="G34001" data-label="모집 대상" data-name="전체"
-                                           <c:if test="${fn:contains(checkedFilters.contestTargetFilter, 'G34001')}">checked</c:if> />
-                                    <span>전체</span>
-                                </label>
-                                </div>
+                                <c:forEach var="cTarget" items="${contestTargetList}">
+                                    <label class="filter-item"> 
+                                        <input type="checkbox" name="contestTargetFilter" value="${cTarget.ccId}" data-label="모집 대상" data-name="${cTarget.ccName}"
+                                               <c:if test="${fn:contains(checkedFilters.contestTargetFilter, cTarget.ccId)}">checked</c:if> />
+                                        <span>${cTarget.ccName}</span>
+                                    </label>
+                                </c:forEach>
+                            </div>
                         </div>
 
                         <div class="filter-row">
@@ -71,41 +92,54 @@
                     </div>
                 </div>
             </form>
-
-            <div class="list-container">
-                <c:if test="${not empty articlePage.content}">
-                    <c:forEach var="contest" items="${articlePage.content}">
-                        <div class="contest-card">
-                            <div class="card-image-box">
-                                <img src="/files/download?fileGroupId=${contest.fileGroupId}&seq=1"
-                                     alt="포스터 이미지" class="contest-image">
-                            </div>
-                            <div class="card-content">
-                                <h3 class="contest-title">
-                                    <a href="/prg/ctt/cttDetail.do?cttId=${contest.contestId}">
-                                        ${contest.contestTitle}
-                                    </a>
-                                </h3>
-                                <p class="contest-description">${contest.contestDescription}</p>
-                                <div class="contest-meta">
-                                    <span class="meta-item">
-                                        ${contest.contestGubunName} | ${contest.contestTypeName} | ${contest.contestTargetName}
-                                    </span>
-                                    <br />
-                                    <span class="meta-item">조회수 ${contest.contestRecruitCount}</span>
-                                    <span class="meta-item">
-                                        <fmt:formatDate value="${contest.contestCreatedAt}" pattern="yyyy. MM. dd" />
-                                    </span>
-                                </div>
+        </div>
+        <div class="list-container">
+            <c:if test="${not empty articlePage.content}">
+                <c:forEach var="contest" items="${articlePage.content}">
+                    <a href="/prg/ctt/cttDetail.do?cttId=${contest.contestId}" class="contest-card">
+                        <div class="card-image-box">
+                            <img src="/files/download?fileGroupId=${contest.fileGroupId}&seq=1"
+                                 alt="포스터 이미지" class="contest-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="contest-title">${contest.contestTitle}</h3>
+                            <div class="contest-description">
+							    <c:set var="descItems" value="${fn:split(contest.contestDescription, '●')}" />
+							    <c:forEach var="item" items="${descItems}" begin="1" end="3">
+							        <c:if test="${not empty fn:trim(item)}">
+							            <c:set var="maxLength" value="60" />
+							            <span>● 
+							                <c:choose>
+							                    <c:when test="${fn:length(fn:trim(item)) > maxLength}">
+							                        <c:out value="${fn:substring(fn:trim(item), 0, maxLength)}..." />
+							                    </c:when>
+							                    <c:otherwise>
+							                        <c:out value="${fn:trim(item)}" />
+							                    </c:otherwise>
+							                </c:choose>
+							            </span><br>
+							        </c:if>
+							    </c:forEach>
+							</div>
+                            <div class="contest-meta">
+                                <span class="meta-item">
+                                    ${contest.contestGubunName} | ${contest.contestTypeName} | ${contest.contestTargetName}
+                                </span>
+                                <br />
+                                <span class="meta-item">조회수 ${contest.contestRecruitCount}</span>
+                                <span class="meta-item">
+                                    <fmt:formatDate value="${contest.contestCreatedAt}" pattern="yyyy. MM. dd" />
+                                </span>
                             </div>
                         </div>
-                    </c:forEach>
-                </c:if>
-                <c:if test="${empty articlePage.content}">
-                    <div style="text-align: center; padding: 50px;">검색 결과가 없습니다.</div>
-                </c:if>
-            </div>
+                    </a>
+                </c:forEach>
+            </c:if>
+            <c:if test="${empty articlePage.content}">
+                <div style="text-align: center; padding: 50px;">검색 결과가 없습니다.</div>
+            </c:if>
         </div>
+    </div>
 
         <div class="card-footer clearfix">
             <ul class="pagination">

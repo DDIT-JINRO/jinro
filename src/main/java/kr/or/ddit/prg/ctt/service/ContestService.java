@@ -2,6 +2,8 @@ package kr.or.ddit.prg.ctt.service;
 
 import java.util.List;
 
+import kr.or.ddit.com.ComCodeVO;
+
 public interface ContestService {
 	
 	//공모전 목록 조회
@@ -12,4 +14,10 @@ public interface ContestService {
 
     // 공모전 상세
     ContestVO selectCttDetail(String cttId);
+    
+    //공모전분류(모집 분야) 목록
+    List<ComCodeVO> getContestTypeList();
+    
+    //모집 대상 목록
+    List<ComCodeVO> getContestTargetList();
 }
