@@ -38,4 +38,6 @@ public interface CounselingReserveMapper {
     List<ComCodeVO> selectCounselCategoryList();
     // 9. 상담방법 가져오기
     List<ComCodeVO> selectCounselMethodList();
+
+	MemberVO counselingReserveMapper(MemberVO memberVO);
 }
