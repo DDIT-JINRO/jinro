@@ -213,7 +213,7 @@ public class ResumeBoardController {
 	
 	@PostMapping("/createResumeReply.do")
 	@ResponseBody
-	public ResponseEntity<CommReplyVO> createCommReply(@RequestBody CommReplyVO commReplyVO, @AuthenticationPrincipal String memIdStr) {
+	public ResponseEntity<CommReplyVO> createCommReply(CommReplyVO commReplyVO, @AuthenticationPrincipal String memIdStr) {
 		if (memIdStr == null || "anonymousUser".equals(memIdStr)) {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
