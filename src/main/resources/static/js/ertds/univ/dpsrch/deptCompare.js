@@ -123,48 +123,28 @@ function sortTableByColumn(sortKey, clickedHeader) {
 
 
 function parseSortValue(text, key) {
-    switch (key) {
-        case 'salary': // '억'과 '만원' 단위를 모두 처리하여 '만원' 단위로 통일합니다.
-            let salary = 0;
-            if (text.includes('억')) {
-                // "억"이 포함된 경우, 해당 숫자를 만원 단위로 변환 (1억 -> 10000)
-                const billions = text.match(/(\d+)억/);
-                if (billions) {
-                    salary += parseInt(billions[1], 10) * 10000;
-                }
-            }
-            if (text.includes('만원')) {
-                // "만원"이 포함된 경우, 해당 숫자를 더합니다.
-                const millions = text.match(/(\d+)만원/);
-                if (millions) {
-                    salary += parseInt(millions[1], 10);
-                }
-            }
-            // "1억" 처럼 만원 단위가 없을 경우를 대비해, salary가 0이면 그냥 숫자만 파싱
-            if (salary === 0) {
-                 return parseInt(text.replace(/[^0-9]/g, ''), 10) || 0;
-            }
-            return salary;
+	switch (key) {
+	        case 'admissionRate':
+	            // "5.9:1" 형식에서 경쟁률 숫자 부분만 추출
+	            const ratio = text.match(/(\d+\.?\d*):1/);
+	            return ratio ? parseFloat(ratio[1]) : 0;
 
-        case 'satisfaction':
-            return parseInt(text.replace('%', ''), 10) || 0;
+	        case 'avgSalary':
+	        case 'avgTuitionFormatted': 
+	        case 'avgScholarFormatted':
+	            // "181만원", "549만원" 형식에서 숫자 부분만 추출
+	            const amount = text.match(/(\d+)만원/);
+	            return amount ? parseInt(amount[1], 10) : 0;
 
-        case 'prospect':
-            // 실제 데이터에 맞게 랭킹 시스템을 확장합니다.
-            const prospectRank = {
-                '증가': 5,
-                '다소 증가': 4,
-                '유지': 3,
-                '다소 감소': 2,
-                '감소': 1,
-            };
-            return prospectRank[text] || -1; // 순위가 없는 경우 맨 뒤로
+	        case 'satisfactionAvg':
+	            // "B+ (3.8)" 형식에서 괄호 안의 숫자 추출
+	            const satisfaction = text.match(/\((\d+\.?\d*)\)/);
+	            return satisfaction ? parseFloat(satisfaction[1]) : 0;
 
-        case 'education':
-            // 학력 순서에 따라 숫자 값을 부여 (높을수록 좋음)
-            const eduRank = { '대학원졸이상': 5, '대학원졸': 4, '대졸': 3, '전문대졸': 2, '고졸이하': 1, '고졸': 1 };
-            return eduRank[text] || 0;
-            
+	        case 'empRate':
+	            // "48.3 %" 형식에서 숫자 부분만 추출
+	            return parseFloat(text.replace(/[^0-9.]/g, '')) || 0;
+        
         default:
             return 0;
     }
@@ -186,7 +166,7 @@ function updateSortIndicator(activeHeader, order) {
     activeHeader.classList.add('sort-active');
     
     // 정렬 방향 아이콘 변경
-    const arrow = order === 'desc' ? ' ↓' : ' ↑';
+    const arrow = order === 'desc' ? ' ↑' : ' ↓';
     activeHeader.textContent = activeHeader.textContent.replace(' ↕', '') + arrow;
 }
 

@@ -62,39 +62,39 @@
 			</thead>
 			<tbody>
 				<tr>
-					<th class="row-header">입학 경쟁률</th>
+					<th class="row-header sortable-header" data-sort-key="admissionRate">입학 경쟁률 ↕</th>
 					<c:forEach var="dept" items="${compareList}">
-						<td class="align-left">${dept.admissionRate}</td>
+						<td>${dept.admissionRate}</td>
 					</c:forEach>
 				</tr>
 				<tr>
-					<th class="row-header">첫 평균 급여</th>
+					<th class="row-header sortable-header" data-sort-key="avgSalary">첫 평균 급여 ↕</th>
 					<c:forEach var="dept" items="${compareList}">
-						<td class="align-left">${dept.avgSalary}만원</td>
+						<td>${dept.avgSalary}만원</td>
 					</c:forEach>
 				</tr>
 				<tr>
-					<th class="row-header">평균 등록금</th>
+					<th class="row-header sortable-header" data-sort-key="avgTuitionFormatted">평균 등록금 ↕</th>
 					<c:forEach var="dept" items="${compareList}">
-						<td class="align-left">${dept.avgTuitionFormatted}</td>
+						<td>${dept.avgTuitionFormatted}</td>
 					</c:forEach>
 				</tr>
 				<tr>
-					<th class="row-header">평균 장학금</th>
+					<th class="row-header sortable-header" data-sort-key="avgScholarFormatted">평균 장학금 ↕</th>
 					<c:forEach var="dept" items="${compareList}">
-						<td class="align-left">${dept.avgScholarFormatted}</td>
+						<td>${dept.avgScholarFormatted}</td>
 					</c:forEach>
 				</tr>
 				<tr>
-					<th class="row-header">만족도</th>
+					<th class="row-header sortable-header" data-sort-key="satisfactionAvg">만족도 ↕</th>
 					<c:forEach var="dept" items="${compareList}">
-						<td class="align-left">${dept.satisfactionGrade} (${dept.satisfactionAvg})</td>
+						<td>${dept.satisfactionGrade} (${dept.satisfactionAvg})</td>
 					</c:forEach>
 				</tr>
 				<tr>
-					<th class="row-header">취업률</th>
+					<th class="row-header sortable-header" data-sort-key="empRate">취업률 ↕</th>
 					<c:forEach var="dept" items="${compareList}">
-						<td class="align-left">${dept.empRate} %</td>
+						<td>${dept.empRate} %</td>
 					</c:forEach>
 				</tr>
 			</tbody>
