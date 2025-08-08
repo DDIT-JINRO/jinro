@@ -30,6 +30,8 @@ public class CounselingVO {
 	private String memBirth;
 	private String memGen;
 
+	private String counselName;
+
 	// 검색 키워드
 	private String keyword;
 	private String status;
