@@ -14,7 +14,7 @@
 		<!--   		</div> -->
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 			<h1 class="login-req-tag">로그인이 필요한 서비스입니다.</h1>
-		<div class="public-wrapper-main">
+		<div class="public-wrapper-main-login">
 			<div class="login-container">
 				<div class="login-container-imgBox">
 					<img alt="" src="/images/logo.png">

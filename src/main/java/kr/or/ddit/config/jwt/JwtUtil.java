@@ -79,7 +79,6 @@ public class JwtUtil {
 
 	public boolean validateToken(String token) {
 		
-		System.out.println("토큰벨리데이트 : " + token);
 		try {
 			if(token!=null && token!="") {
 				Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(token);

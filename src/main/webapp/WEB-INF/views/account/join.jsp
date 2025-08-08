@@ -30,7 +30,7 @@
 				<p id="timer" style="margin-top: 10px;"></p>
 			</div>
 		</div>
-		<div class="public-wrapper-main">
+		<div class="public-wrapper-main-join">
 			<div class="dpfx2">
 				<div class="signup-container2">
 					<div class="top-text">

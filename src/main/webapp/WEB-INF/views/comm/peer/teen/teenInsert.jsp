@@ -1,41 +1,49 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="">
+<link rel="stylesheet" href="/css/comm/peer/teen/teenInsert.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">커뮤니티</div> 
+		<div class="channel-title-text">커뮤니티</div>
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/comm/peer/teen/teenList.do">또래 게시판</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/comm/path/pathList.do">진로/진학 게시판</a></div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/comm/peer/teen/teenList.do">또래 게시판</a>
+		</div>
+		<!-- 중분류 -->
+		<div class="channel-sub-section-item">
+			<a href="/comm/path/pathList.do">진로/진학 게시판</a>
+		</div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
-		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
-<!-- 		<div class="tab-container" id="tabs"> -->
-<!-- 		    <div class="tab ">대학 검색</div> -->
-<!-- 		    <div class="tab active">학과 정보</div> -->
-<!-- 		    <div class="tab">입시 정보</div> -->
-<!-- 		    <div class="tab">입시 정보</div> -->
-<!--   		</div> -->
-		<!-- 여기부터 작성해 주시면 됩니다 -->
-  		<div class="public-wrapper-main">
-  			청소년 게시글 작성 페이지
-  			<br/>
-  			<br/><br/><br/><br/>
-  			<a href="/comm/peer/teen/teenList.do">청소년 목록</a>
-  		</div>
+		<div class="public-wrapper-main">
+			<div class="titleSpace">
+				<div class="insertTitle">제목</div>
+				<input class="Insert-title" id="title" type="text" placeholder="제목을 입력하세요.">
+			</div>
+			<div class="Insert-write">
+				<div class="editor-container">
+					<div id="editor"></div>
+				</div>
+				<label for="fileInput" class="file-label">파일 첨부</label>
+				<div class="file-upload-container">
+					<input type="file" id="fileInput" multiple>
+					<ul id="fileList" class="file-list"></ul>
+				</div>
+				<div class="button-group">
+					<button class="cancel-btn" id="backBtn">목록</button>
+					<button class="submit-btn" id="submitBtn">등록</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
+<script src="/js/comm/peer/teen/teenInsert.js"></script>
 </html>
-<script>
-	// 스크립트 작성 해주시면 됩니다.
-</script>

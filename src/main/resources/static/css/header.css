@@ -24,10 +24,16 @@ body {
 .public-wrapper {
 	width: 1160px; /* 메인 컨텐츠 너비 */
 	margin: 70px auto; /* 위/아래 0, 좌우 자동으로 여백 생성 => 가운데 정렬 */
+	
 }
 
 .public-wrapper-main {
-	margin-top: 20px;
+    margin-top: 20px;
+    margin: 20px auto 0 auto;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .public-topbar {
@@ -161,7 +167,7 @@ body {
 }
 
 .menu-box {
-	background: #ffffff26;
+	background: #0000004f;
 	border-radius: 12px;
 	padding: 20px;
 	height: 180px;
@@ -178,7 +184,7 @@ body {
 .menu-box-title {
 	font-size: 18px;
 	font-weight: bold;
-	color: #333333;
+	color: rgb(255, 255, 255);
 	margin-bottom: 14px;
 }
 
@@ -188,7 +194,7 @@ body {
 
 .menu-subitems span {
 	cursor: pointer;
-	color: #4f4f4f;
+	color: rgb(255, 255, 255);
 	font-size: 14px;
 	transition: color 0.2s;
 }
