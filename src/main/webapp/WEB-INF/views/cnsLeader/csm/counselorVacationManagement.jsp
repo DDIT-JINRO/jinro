@@ -9,24 +9,25 @@
 <div class="template-container">
 	<!-- 리스트 패널 -->
 	<div class="template-panel" style="flex: 1.2">
-		<div class="panel-header" id="noticeHeader" style="cursor: pointer; text-decoration: none">상담 리스트</div>
+		<div class="panel-header" id="noticeHeader" style="cursor: pointer; text-decoration: none">휴가신청내역</div>
 
 		<!-- 리스트 패널 상단: 필터 영역 -->
 		<div class="filter-box">
 			<form action="/csc/admin/noticeList.do" method="get">
-				<select name="year">
-				    <option value="">전체기간</option>
-				    <option value="2025">2025</option>
-				    <!-- … -->
-				 </select>
 				<select name="status">
-				    <option value="mem">회원명</option>
 				    <option value="counselor">상담사명</option>
 				    <!-- … -->
 				 </select>
-  		 		  <input type="text" name="keyword" placeholder="회원명을 입력하세요" />
- 				  <button type="button" class="btn-save" onclick="fetchCounselingLog(1)">조회</button>
+  		 		 <input type="text" name="keyword" placeholder="상담사명을 입력하세요" />
+ 				 <button type="button" class="btn-save" id="btn-search">조회</button>
 			</form>
+		</div>
+		<div class="filter-box">
+			<p>상태필터 : </p>
+			<input type="radio" name="filter" value="" checked />전체
+			<input type="radio" name="filter" value="S03001"/>접수
+			<input type="radio" name="filter" value="S03003"/>승인
+			<input type="radio" name="filter" value="S03002"/>반려
 		</div>
 		<p>
 			총 <span id="notice-count"></span>건
@@ -34,21 +35,23 @@
 		<div class="table-wrapper">
 			<table>
 				<colgroup>
-					<col style="width: 10%;">
+					<col style="width: 8%;">
+					<col style="width: 12%;">
+					<col style="width: 18%;">
 					<col style="width: 15%;">
-					<col style="width: 30%;">
 					<col style="width: 15%;">
-					<col style="width: 15%;">
-					<col style="width: 15%;">
+					<col style="width: 20%;">
+					<col style="width: 12%;">
 				</colgroup>
 				<thead>
 					<tr>
 						<th>번 호</th>
-						<th>회원명</th>
+						<th>상담사명</th>
 						<th>연락처</th>
-						<th>상담목적</th>
-						<th>상담사</th>
-						<th>상 태</th>
+						<th>신청일</th>
+						<th>시작일</th>
+						<th>종료일</th>
+						<th>상태</th>
 					</tr>
 				</thead>
 				<tbody id="notice-list">
@@ -68,9 +71,9 @@
 	</div>
 
 	<!-- 상세/작성 패널 -->
-	<div class="template-panel" style="flex: 1.7">
-		<div class="panel-header">상담 상세정보</div>
-		<h3>상담기본 정보</h3>
+	<div class="template-panel" style="flex: 1.5">
+		<div class="panel-header">신청내역 상세정보</div>
+		<h3>휴가신청정보</h3>
 		<table class="info-table" style="">
 			<thead id="info-table-thead">
 				<tr>
@@ -86,7 +89,9 @@
 				</tr>
 			</thead>
 			<tbody id="info-table-tbody">
-
+				<tr>
+		          <td colspan="9">선택된 정보가 없습니다</td>
+		        </tr>
 			</tbody>
 		</table>
 		<h3>상담일지 작성</h3>

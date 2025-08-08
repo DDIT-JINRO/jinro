@@ -2,6 +2,7 @@ package kr.or.ddit.cnsLeader.service;
 
 import kr.or.ddit.cns.service.CounselingLogVO;
 import kr.or.ddit.cns.service.CounselingVO;
+import kr.or.ddit.cns.service.VacationVO;
 import kr.or.ddit.util.ArticlePage;
 
 public interface CounselLeaderService {
@@ -19,5 +20,11 @@ public interface CounselLeaderService {
 	 * @return
 	 */
 	boolean updateCounselLog(CounselingLogVO counselingLogVO);
+
+	/**
+	 * 휴가 신청내역 조회
+	 * @return
+	 */
+	ArticlePage<VacationVO> selectVacationList(VacationVO vacationVO);
 
 }

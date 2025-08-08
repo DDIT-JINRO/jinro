@@ -190,4 +190,66 @@
 		 WHERE CL_IDX = #{clIdx}
 	</update>
 
+	<select id="selectVacationList" parameterType="kr.or.ddit.cns.service.VacationVO">
+		SELECT
+			   VA_ID
+			 , VA_REQUESTOR
+			 , VA_APPROVER
+			 , VA_CONFIRM
+			 , VA_START
+			 , VA_END
+			 , VA_REASON
+			 , VA_ETC
+			 , FILE_GROUP_ID
+			 , REQUESTED_AT
+			 , MEM_NAME
+		     , MEM_PHONE_NUMBER
+		  FROM
+			(
+			SELECT
+				   ROWNUM RN
+				 , A.*
+			FROM
+				(SELECT
+				       VA_ID
+				     , VA_REQUESTOR
+				     , VA_APPROVER
+				     , VA_CONFIRM
+				     , VA_START
+				     , VA_END
+				     , VA_REASON
+				     , VA_ETC
+				     , FILE_GROUP_ID
+				     , REQUESTED_AT
+
+				     , M.MEM_NAME
+				     , M.MEM_PHONE_NUMBER
+				  FROM VACATION V
+				  JOIN MEMBER M ON M.MEM_ID = V.VA_REQUESTOR
+				 WHERE 1=1
+				<if test="status!=null and status!='' and status=='counselor'">
+				   AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="filter!=null and filter!='' ">
+				   AND VA_CONFIRM = #{filter}
+				</if>
+				 ) A
+			 		) X
+  		  WHERE X.RN > #{startNo}
+		    AND X.RN <![CDATA[<=]]> #{endNo}
+	</select>
+
+	<select id="selectTotalVationList" resultType="int" parameterType="kr.or.ddit.cns.service.VacationVO">
+				SELECT COUNT(VA_ID)
+				  FROM VACATION V
+				  JOIN MEMBER M ON M.MEM_ID = V.VA_REQUESTOR
+				 WHERE 1=1
+				 <if test="status!=null and status!='' and status=='counselor'">
+				   AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
+				 </if>
+				 <if test="filter!=null and filter!='' ">
+				   AND VA_CONFIRM = #{filter}
+				 </if>
+	</select>
+
 </mapper>

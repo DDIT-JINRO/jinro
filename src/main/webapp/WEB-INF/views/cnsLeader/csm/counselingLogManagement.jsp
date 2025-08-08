@@ -9,7 +9,7 @@
 <div class="template-container">
 	<!-- 리스트 패널 -->
 	<div class="template-panel" style="flex: 1.2">
-		<div class="panel-header" id="noticeHeader" style="cursor: pointer; text-decoration: none">상담 리스트</div>
+		<div class="panel-header" id="noticeHeader" style="cursor: pointer; text-decoration: none">일지접수내역</div>
 
 		<!-- 리스트 패널 상단: 필터 영역 -->
 		<div class="filter-box">
@@ -69,7 +69,7 @@
 
 	<!-- 상세/작성 패널 -->
 	<div class="template-panel" style="flex: 1.7">
-		<div class="panel-header">상담 상세정보</div>
+		<div class="panel-header">상담일지 상세정보</div>
 		<h3>상담기본 정보</h3>
 		<table class="info-table" style="">
 			<thead id="info-table-thead">
@@ -78,6 +78,7 @@
 					<th>회원명</th>
 					<th>성별</th>
 					<th>나이</th>
+					<th>상담수단</th>
 					<th>상담 난이도</th>
 					<th>추가 상담여부</th>
 					<th>작성(수정)일</th>
@@ -86,7 +87,9 @@
 				</tr>
 			</thead>
 			<tbody id="info-table-tbody">
-
+				<tr>
+		          <td colspan="9">선택된 정보가 없습니다</td>
+		        </tr>
 			</tbody>
 		</table>
 		<h3>상담일지 작성</h3>

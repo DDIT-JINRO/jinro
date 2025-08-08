@@ -8,7 +8,7 @@ window.currentCounselId = null;
 window.editor = {};
 
 function getCounselMethodStr(methodCode){
-	switch (genCode){
+	switch (methodCode){
 		case "G08001":
 			return "대면"
 		case "G08002":
@@ -202,8 +202,7 @@ function resetDetail() {
 	document.getElementById('fileGroupId').value = '';
 	document.getElementById("file").style.display = "none";
 	document.getElementById("existing-files").innerHTML = "";
-	document.querySelector('.info-table').style.display = 'none';
-	document.getElementById('info-table-tbody').innerHTML = '';
+	document.getElementById('info-table-tbody').innerHTML = "<tr><td colspan='9'>선택된 정보가 없습니다</td></tr>";
 	document.querySelector('input[name="clTitle"]').value = '';
 	window.editor[0]?.setData('');
 	window.editor[0].enableReadOnlyMode('clContent');
@@ -291,6 +290,7 @@ function showDetail(counselId) {
 	          <td>${resp.memName}</td>
 	          <td>${getGenText(resp.memGen)}</td>
 	          <td>${calculateAge(new Date(resp.memBirth))}</td>
+	          <td>${getCounselMethodStr(resp.counselMethod)}</td>
 	          <td>${getDifficultyText(resp.counselingLog.clDifficulty)}</td>
 	          <td>${resp.counselingLog.clContinue == 'Y'? '종결': '계속'}</td>
 	          <td>${resp.counselingLog.updatedAt ? formatDateMMDD(new Date(resp.counselingLog.updatedAt)) : '미작성'}</td>

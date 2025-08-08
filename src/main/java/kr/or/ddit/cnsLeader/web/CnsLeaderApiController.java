@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.ddit.cns.service.CounselingLogVO;
 import kr.or.ddit.cns.service.CounselingVO;
+import kr.or.ddit.cns.service.VacationVO;
 import kr.or.ddit.cns.web.CounselorApiController;
 import kr.or.ddit.cnsLeader.service.CounselLeaderService;
 import kr.or.ddit.util.ArticlePage;
@@ -33,6 +34,13 @@ public class CnsLeaderApiController {
 	@PostMapping("/updateCounselLog.do")
 	public ResponseEntity<Boolean> updateCounselLog(CounselingLogVO counselingLogVO){
 		return ResponseEntity.ok(this.counselLeaderService.updateCounselLog(counselingLogVO));
+	}
+
+	@GetMapping("/vacationList.do")
+	public ResponseEntity<ArticlePage<VacationVO>> vacationList(VacationVO vacationVO){
+		log.info("@@@@@@@@@@@@@vacationList -> vacationVO : "+vacationVO);
+		ArticlePage<VacationVO> articlePage = this.counselLeaderService.selectVacationList(vacationVO);
+		return ResponseEntity.ok(articlePage);
 	}
 
 }

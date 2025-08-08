@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.or.ddit.cns.service.CounselingLogVO;
 import kr.or.ddit.cns.service.CounselingVO;
+import kr.or.ddit.cns.service.VacationVO;
 import kr.or.ddit.cnsLeader.service.CounselLeaderService;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileService;
@@ -34,6 +35,15 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 	public boolean updateCounselLog(CounselingLogVO counselingLogVO) {
 		int result = this.counselLeaderMapper.updateCounselLog(counselingLogVO);
 		return result > 0 ? true : false;
+	}
+
+	@Override
+	public ArticlePage<VacationVO> selectVacationList(VacationVO vacationVO) {
+		List<VacationVO> list = this.counselLeaderMapper.selectVacationList(vacationVO);
+		int total = this.counselLeaderMapper.selectTotalVationList(vacationVO);
+
+		ArticlePage<VacationVO> articlePage = new ArticlePage<>(total, vacationVO.getCurrentPage(), vacationVO.getSize(), list, vacationVO.getKeyword());
+		return articlePage;
 	}
 
 }
