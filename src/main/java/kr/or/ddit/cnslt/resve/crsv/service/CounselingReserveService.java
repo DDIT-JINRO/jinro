@@ -29,7 +29,7 @@ public interface CounselingReserveService {
     /**
      * 상담사 예약 가능 시간 가져오는 메소드
      */
-    List<String> getAvailableTimes(int counselId, Date counselReqDate);
+    List<String> getAvailableTimes(int counselId, Date counselReqDate, int memId);
     
     /**
      * 상담사 목록 가져오는 메소드
@@ -44,4 +44,8 @@ public interface CounselingReserveService {
      * 상담방법 가져오는 메소드
      */
     List<ComCodeVO> selectCounselMethodList();
+    /**
+     * 회원정보 가져오는 메소드
+     */
+	MemberVO selectMemberInfo(MemberVO memberVO);
 }

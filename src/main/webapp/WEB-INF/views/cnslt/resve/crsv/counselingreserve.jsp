@@ -24,47 +24,64 @@
 		    <a class="tab" href="/cnslt/resve/cnsh/counselingReserveHistory.do">상담 내역</a>
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-  		<div class="public-wrapper-main">
-  			<h3>상담 예약 JSP</h3>
-  			<!-- db에서 불러와야함 -->
-			<div class="counselor-select-area">
-				<span>상담사 선택: </span> 
-				<select id="counselorSelect">
-					<c:forEach var="counselor" items="${counselorList}">
-						<option value="${counselor.memId}">${counselor.memName}</option>
-					</c:forEach>
-				</select>
+		<div class="public-wrapper-main">
+			<div class="reserveHeader">
+				<div class="dept-asterisk"></div>
+				<h2>상담선택</h2>
 			</div>
+			<form id="reservationForm" action="/cnslt/resve/holdAndRedirect"
+				method="post">
 
-			<div class="counselor-select-area">
-				<span>상담방법 선택: </span> 
-				<select id="counselMethodSelect">
-					<c:forEach var="method" items="${counselMethodList}">
-						<option value="${method.ccId}">${method.ccName}</option>
-					</c:forEach>
-				</select>
+			<div class="couselCustom">
+				<div class="counselor-select-area">
+					<span>상담사 선택: </span> <select id="counselorSelect" name="counsel">
+						<c:forEach var="counselor" items="${counselorList}">
+							<option value="${counselor.memId}">${counselor.memName}</option>
+						</c:forEach>
+					</select>
+				</div>
+
+				<div class="counselor-select-area">
+					<span>상담방법 선택: </span> <select id="counselMethodSelect"
+						name="counselMethod">
+						<c:forEach var="method" items="${counselMethodList}">
+							<option value="${method.ccId}">${method.ccName}</option>
+						</c:forEach>
+					</select>
+				</div>
+
+				<div class="counselor-select-area">
+					<span>상담목적 선택: </span> <select id="counselCategorySelect"
+						name="counselCategory">
+						<c:forEach var="category" items="${counselCategoryList}">
+							<option value="${category.ccId}">${category.ccName}</option>
+						</c:forEach>
+					</select>
+				</div>
 			</div>
-
-			<div class="counselor-select-area">
-				<span>상담목적 선택: </span> 
-				<select id="counselCategorySelect">
-					<c:forEach var="category" items="${counselCategoryList}">
-						<option value="${category.ccId}">${category.ccName}</option>
-					</c:forEach>
-				</select>
+			
+			<div class="reserveDate">
+				<div class="dept-asterisk"></div>
+				<h2>일정 예약</h2>
 			</div>
+				<div id='calendar'></div>
+				<div id="timeSlotsContainer">
+					<div id="selectedDateText"></div>
+					<div id="timeSlotButtons"></div>
+				</div>
 
-			<div id='calendar'></div>
-
-			<div id="timeSlotsContainer">
-				<div id="selectedDateText"></div>
-				<div id="timeSlotButtons"></div>
-			</div>
-
-			<button id="nextBtn">다음</button>
+				<input type="hidden" id="counselReqDatetimeInput"
+					name="counselReqDatetime">
+				<button type="button" id="nextBtn">다음</button>
+			</form>
 		</div>
 	</div>
 </div>
+<c:if test="${not empty errorMessage}">
+    <script>
+        alert('${errorMessage}');
+    </script>
+</c:if>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
