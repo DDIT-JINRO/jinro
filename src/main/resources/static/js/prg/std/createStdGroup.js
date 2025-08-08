@@ -3,12 +3,12 @@
  */
 
 document.addEventListener('DOMContentLoaded', function(){
-	
+
 	// 취소 버튼 클릭 시 목록 페이지로 이동
 	document.getElementById('btnCancel').addEventListener('click', function(){
 		location.href = "/prg/std/stdGroupList.do";
 	})
-	
+
 	// 작성 완료 후 전송 버튼
 	document.getElementById('btnSubmit').addEventListener('click', function(){
 		clearErrors();                // 이전 에러 초기화
@@ -18,13 +18,14 @@ document.addEventListener('DOMContentLoaded', function(){
 				  { id: 'region',     name: '지역 선택'   },
 				  { id: 'capacity',   name: '인원 제한'   },
 				  { id: 'interest',   name: '관심 분야'   },
-				  { id: 'chat-title', name: '채팅방 제목'  },
+				  { id: 'chatTitle', name: '채팅방 제목'  },
 				  { id: 'description',name: '소개글'     },
 		];
 		let firstInvalid = null;
-		
+
 		fields.forEach(field => {
 		  const el = document.getElementById(field.id);
+		  console.log(el);
 		  if (!el.value.trim()) {
 		    const group = el.closest('.form-group');
 		    group.classList.add('error');
@@ -40,18 +41,18 @@ document.addEventListener('DOMContentLoaded', function(){
 		    if (!firstInvalid) firstInvalid = el;
 		  }
 		});
-		
+
 		if (firstInvalid) {
 		  firstInvalid.focus();
 		  return false;               // 유효성 에러 있으므로 제출 취소
 		}
-		
+
 		const postTitle = document.getElementById('post-title').value;	// 게시글 제목
 		const gender = document.getElementById('gender').value;	// 성별제한선택
 		const region = document.getElementById('region').value;	// 지역선택
 		const capacity = document.getElementById('capacity').value;	// 최대인원수 선택
 		const interest = document.getElementById('interest').value;	// 관심사 선택
-		const chatTitle = document.getElementById('chat-title').value;	// 채팅방 제목
+		const chatTitle = document.getElementById('chatTitle').value;	// 채팅방 제목
 		const description = document.getElementById('description').value;	// 소개글
 		// 서버의 VO와 맞춤
 		const boardContent = {
@@ -67,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		formData.append("memId", memId);
 		formData.append("ccId", "G09005");
 		formData.append("chatTitle", chatTitle);
-		
+
 		const formEl = document.createElement('form');
 		for(let [key, value] of formData.entries()){
 			console.log(key);
@@ -76,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			input.type = "hidden";
 			input.name = key;
 			input.value = value;
-			
+
 			formEl.appendChild(input);
 		}
 		formEl.method = "post";
@@ -84,18 +85,18 @@ document.addEventListener('DOMContentLoaded', function(){
 		document.body.appendChild(formEl);
 		formEl.submit();
 	})
-	
+
 	document.querySelectorAll('.custom-select').forEach(wrapper =>{
 		const label   = wrapper.querySelector('.custom-select__label');
 		const options = wrapper.querySelector('.custom-select__options');
 		const select  = wrapper.querySelector('select');
-		
+
 		// 레이블 클릭 -> 옵션 토글
 		label.addEventListener('click', () => {
 			console.log("asdfadsfadsf");
 		  	options.style.display = options.style.display === 'block' ? 'none' : 'block';
 		});
-		
+
 		// 옵션 클릭 -> 레이블/숨은 select 업데이트
 		options.querySelectorAll('li').forEach(li => {
 		  li.addEventListener('click', () => {
@@ -104,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		    options.style.display = 'none';
 		  });
 		});
-		
+
 		// 바깥 클릭 시 닫기
 		document.addEventListener('click', e => {
 		  if (!wrapper.contains(e.target)) options.style.display = 'none';
@@ -119,5 +120,5 @@ function clearErrors() {
     const msg = group.querySelector('.error-message');
     if (msg) group.removeChild(msg);
   });
-  
+
 }
