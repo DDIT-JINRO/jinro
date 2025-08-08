@@ -14,19 +14,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: 'ko',
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: ''
-        },
+		locale: 'ko',
+		       initialView: 'dayGridMonth',
+		       
+		       // 헤더 툴바의 버튼 위치 조정
+		       headerToolbar: {
+		           left: 'prev', // 이전 달 버튼을 왼쪽 끝으로
+		           center: 'title', // 제목(날짜)을 중앙으로
+		           right: 'next' // '오늘' 버튼과 다음 달 버튼을 오른쪽 끝으로
+		       },
+		       
+			validRange: {
+			    start: new Date()
+			},
         
         // 날짜를 클릭했을 때 호출되는 이벤트
         dateClick: function(info) {
-            selectedDate = info.dateStr;
-            document.getElementById('selectedDateText').textContent = selectedDate + "의 예약 가능한 시간";
-            fetchAvailableTimes(selectedCounselorId, selectedDate);
+			// 이전에 선택된 날짜의 시각적 효과 제거
+			const prevSelected = document.querySelector('.fc-day.selected');
+			if (prevSelected) {
+			    prevSelected.classList.remove('selected');
+			}
+			// 현재 클릭한 날짜에 시각적 효과 추가
+			info.dayEl.classList.add('selected');
+
+			selectedDate = info.dateStr;
+			document.getElementById('selectedDateText').textContent = selectedDate + "의 예약 가능한 시간";
+			fetchAvailableTimes(selectedCounselorId, selectedDate, memId);
         },
         
         // 월이 변경될 때마다 호출되는 이벤트
@@ -36,7 +50,25 @@ document.addEventListener('DOMContentLoaded', function() {
             let month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
             let day = currentDate.getDate().toString().padStart(2, '0');
             
-            fetchAvailableTimes(selectedCounselorId, `${year}-${month}-${day}`);
+			let todayStr = `${year}-${month}-${day}`;
+			            
+            // 캘린더가 렌더링될 때, 오늘 날짜로 예약 가능 시간을 바로 불러오도록 수정
+            // 선택된 날짜가 없을 경우에만 실행
+            if (!selectedDate) {
+                selectedDate = todayStr;
+				if(memId==null||memId=='anonymousUser'){
+					document.getElementById('selectedDateText').textContent = "로그인 시 예약시간을 확인할 수 있습니다.";
+				}else{
+	                document.getElementById('selectedDateText').textContent = selectedDate + "의 예약 가능한 시간";
+				}
+                fetchAvailableTimes(selectedCounselorId, selectedDate, memId);
+
+                // 캘린더 초기 로드 시 오늘 날짜에 시각적 효과 추가
+                const todayEl = document.querySelector(`.fc-day[data-date="${todayStr}"]`);
+                if (todayEl) {
+                    todayEl.classList.add('selected');
+                }
+            }
         }
     });
     calendar.render();
@@ -57,8 +89,53 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedTime = event.target.dataset.time;
         }
     });
+	const nextBtn = document.getElementById('nextBtn');
+	if (memId === 'null' || memId === 'anonymousUser') {
+	        nextBtn.id = 'loginBtn';
+	        nextBtn.textContent = '로그인 하러가기';
+	        
+	        // 클릭 이벤트도 로그인 페이지로 이동하도록 변경합니다.
+	        nextBtn.addEventListener('click', function(event) {
+	            event.preventDefault();
+	            alert('로그인이 필요한 서비스입니다.');
+	            window.location.href = '/login';
+	        });
+	}else{
+		
+	    nextBtn.addEventListener('click', function(event) {
+	        event.preventDefault(); // 기본 폼 제출 동작을 막음
 
-    // 이 코드를 DOMContentLoaded 안으로 옮겼습니다.
+	        const counsel = document.getElementById('counselorSelect').value; // 이전에 memId 변수를 사용했다면 counselorSelect의 값을 가져오도록 수정
+	        
+
+			if(!memId || memId === 'anonymousUser'){
+				alert('로그인 해주세요');
+	            return;
+			}
+			
+	        if (!selectedTime) {
+	            alert('모든 필수 정보를 선택해주세요.');
+	            return;
+	        }
+			
+			console.log("selectedTime"+selectedTime);
+			
+			
+	        const date = selectedDate
+	        const time = selectedTime
+	        const combinedDateTime = `${date} ${time}`;
+
+			console.log("date"+date);
+			console.log("time"+time);
+			console.log("combinedDateTime"+combinedDateTime);
+			
+	        // hidden input에 값 설정
+	        document.getElementById('counselReqDatetimeInput').value = combinedDateTime;
+	        // 모든 데이터가 채워진 폼 제출
+	        document.getElementById('reservationForm').submit();
+	    });
+	}
+	
     document.getElementById('nextBtn').addEventListener('click', function() {
         if (selectedDate && selectedTime) {
             alert("상담사 : "+selectedCounselorId+"선택된 날짜: " + selectedDate + ", 시간: " + selectedTime);
@@ -68,25 +145,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 기타 함수들도 필요에 따라 여기에 넣을 수 있습니다.
+
 });
 
 
 // 백엔드 API를 호출하여 예약 가능 시간 목록을 가져오는 함수
-function fetchAvailableTimes(counselId, date) {
-    axios.get('/cnslt/resve/availableTimes', {
-        params: {
-            counsel: counselId,
-            counselReqDatetime: date
-        }
-    })
-    .then(function (response) {
-        renderTimeSlots(response.data);
-    })
-    .catch(function (error) {
-        console.error("예약 가능 시간을 불러오는 데 실패했습니다.", error);
-        alert("예약 정보를 불러올 수 없습니다. 다시 시도해 주세요.");
-    });
+function fetchAvailableTimes(counselId, date, memId) {
+	if(memId !=null && memId !='anonymousUser'){
+	    axios.get('/cnslt/resve/availableTimes', {
+	        params: {
+	            counsel: counselId,
+	            counselReqDatetime: date,
+				memId: memId
+	        }
+	    })
+	    .then(function (response) {
+	        renderTimeSlots(response.data);
+	    })
+	    .catch(function (error) {
+	        console.error("예약 가능 시간을 불러오는 데 실패했습니다.", error);
+	        alert("예약 정보를 불러올 수 없습니다. 다시 시도해 주세요.");
+	    });
+	}
 }
 
 // 예약 가능한 시간 슬롯을 화면에 그리는 함수
@@ -99,6 +179,7 @@ function renderTimeSlots(availableTimes) {
         availableTimes.forEach(function(time) {
             const button = document.createElement('button');
             button.className = 'time-slot-btn available';
+			button.type = 'button';
             button.dataset.time = time;
             button.textContent = time;
             timeSlotButtonsContainer.appendChild(button);
@@ -108,107 +189,5 @@ function renderTimeSlots(availableTimes) {
     }
 }
 
-// counseling-reservation-page.js 파일
-// 임시 락
-// '다음' 버튼 클릭 시 호출될 함수 
-async function handleNextButtonClick(counsel,date,time) {
-
-    if (!memId|| memId== 'anonymousUser') {
-        alert('로그인해주세요.');
-        return;
-    }
-	
-    if (!date || !time || !counsel) {
-        alert('모든 필수 정보를 선택해주세요.');
-        return;
-    }
-	//상담방법
-	const counselMethodElement = document.getElementById('counselMethodSelect');
-	const counselMethodValue = counselMethodElement.value;
-	//상담목적
-	const counselCategoryElement = document.getElementById('counselCategorySelect');
-	const counselCategoryValue = counselCategoryElement.value;
-	
-
-    // 날짜와 시간을 합쳐서 ISO 8601 형식으로 만듭니다.
-    const combinedDateTime = `${date} ${time}`;
-	
-	
-    try {
-        const response = await axios.post('/cnslt/resve/holdAndRedirect', {
-            counsel: counsel,
-            counselReqDatetime: combinedDateTime,
-			counselCategory: counselCategoryValue,
-			counselMethod: counselMethodValue
-        });
-		
-		if (response.data && response.data.redirectUrl) {
-		    window.location.href = response.data.redirectUrl;
-		}
 
 
-    } catch (error) {
-		// 실패 시 로직
-        if (error.response) {
-            const data = error.response.data;
-            if (data.errorMessage) {
-                alert(data.errorMessage);
-            }
-            if (data.redirectUrl) {
-                window.location.href = data.redirectUrl;
-            }
-        } else {
-            console.error('락 획득 중 오류 발생:', error);
-            alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-        }
-    }
-}
-
-// 최종 예약 로직 (예시)
-// counseling-detail-form-page.js 파일 (다음 페이지)
-
-/*async function submitReservationForm() {
-    const form = document.getElementById('reservationForm');
-    const formData = new FormData(form);
-    
-    // 폼 데이터와 URL 파라미터에서 정보들을 취합합니다.
-    const counselorId = formData.get('counselorId');
-    const selectedDate = formData.get('counselReqDate');
-    const selectedTime = formData.get('counselReqTime');
-    const memId = formData.get('memId');
-
-    // 날짜와 시간을 합칩니다.
-    const combinedDateTime = `${selectedDate} ${selectedTime}`;
-
-    // VO 객체에 맞게 데이터 객체 생성
-    const counselingVO = {
-        counsel: counselorId,
-        counselReqDatetime: combinedDateTime,
-        memId: memId,
-        counselCategory: formData.get('counselCategory'),
-        counselMethod: formData.get('counselMethod'),
-        counselTitle: formData.get('counselTitle'),
-        counselDescription: formData.get('counselDescription'),
-        counselUrl: formData.get('counselUrl'),
-        counselReqReason: formData.get('counselReqReason')
-    };
-
-    try {
-        // [수정] 최종 /reserve API 호출
-        const response = await axios.post('/counseling/reservation/reserve', counselingVO);
-        
-        if (response.status === 200) {
-            alert('상담 예약이 완료되었습니다!');
-            window.location.href = '/counseling/reservation/success';
-        }
-
-    } catch (error) {
-        if (error.response && error.response.status === 410) {
-            // 락이 만료된 경우
-            alert('예약 시간이 초과되었습니다. 다시 예약해주세요.');
-        } else {
-            console.error('예약 처리 중 오류 발생:', error);
-            alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-        }
-    }
-}*/

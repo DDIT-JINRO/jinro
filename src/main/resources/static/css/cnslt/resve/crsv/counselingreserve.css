@@ -1,0 +1,226 @@
+/* FullCalendar 기본 스타일: 오늘 날짜의 노란색 하이라이트를 제거하거나 조정 */
+.fc-day-today {
+    background-color: transparent ; /* 기본 노란색 배경 제거 */
+    border: none; /* 기본 테두리 제거 */
+}
+
+/* 사용자 정의 스타일: 선택된 날짜에 대한 파란색 하이라이트 */
+.fc-day.selected {
+    background-color: #e0f7fa; /* 연한 하늘색 배경 */
+    border: 2px solid #00acc1; /* 테두리 강조 */
+}
+
+/* 오늘 날짜가 선택되었을 경우의 스타일 */
+.fc-day-today.selected {
+    background-color: #e0f7fa !important;  /* 선택된 날짜와 동일한 배경색 */
+    border: 2px solid #00acc1; /* 선택된 날짜와 동일한 테두리 */
+}
+
+/* ------------------ 상담사, 방법, 목적 선택 영역 스타일 수정 ------------------ */
+
+.dept-asterisk {
+    width: 35px;
+    height: 35px;
+    background-image: url('/images/asterisk.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.reserveHeader {
+	display: flex;
+	margin: 20px;
+	gap : 10px;
+}
+
+.reserveHeader h2{
+	margin: 0;
+}
+
+.reserveDate {
+	display: flex;
+	margin: 20px;
+	gap : 10px;
+}
+
+.reserveDate h2{
+	margin: 0;
+}
+
+/* 상단 선택 영역 컨테이너를 가로로 정렬하고 테두리를 추가 */
+.couselCustom {
+    display: flex;
+    justify-content: space-between; /* 요소들을 양 끝으로 벌리고 균등하게 배치 */
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px; 
+    border: 2px solid #848EFB;
+    border-radius: 8px;
+}
+
+/* 상담사/방법/목적 선택 영역 내부 아이템 스타일 */
+.counselor-select-area {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #444;
+}
+
+.counselor-select-area span {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.counselor-select-area select {
+    padding: 15px 25px;
+    border: 1px solid #848EFB;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+
+/* ------------------ FullCalendar 영역 스타일 수정 ------------------ */
+/* FullCalendar 컨테이너 스타일 */
+#calendar {
+    width: 100%; /* 화면 너비의 100%를 차지하도록 설정 */
+    max-width: none; /* 최대 너비 제한 해제 */
+    margin: 30px auto; /* 상하 여백 유지, 좌우는 자동 정렬 */
+    border: 1px solid #848EFB;
+    border-radius: 8px;
+    padding: 0; /* 내부 패딩을 0으로 설정 */
+}
+
+/* FullCalendar 헤더 툴바의 전체 컨테이너에 flexbox를 적용 */
+.fc-header-toolbar {
+    display: flex;
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center;
+
+}
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 10px; /* 1.5em 대신 1em로 줄임 */
+    border: 1px solid #848EFB;
+    border-radius: 8px;
+    background: #848EFB;
+    padding: 10px;
+    color:#FFFFFF;
+}
+
+.fc .fc-button-primary,.fc .fc-button-primary:disabled {
+	background: white;
+}
+.fc-icon-chevron-right:before, .fc-icon-chevron-left:before{
+	color : black;
+}
+
+/* 왼쪽, 중앙, 오른쪽 덩어리들의 기본 스타일 */
+.fc-toolbar-chunk {
+    display: flex;
+    align-items: center;
+}
+
+/* ------------------ 시간 슬롯 섹션 스타일 ------------------ */
+
+/* 시간 슬롯 컨테이너 */
+#timeSlotsContainer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 선택된 날짜 텍스트 스타일 */
+#selectedDateText {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 시간 버튼들의 부모 컨테이너 */
+#timeSlotButtons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* 시간 버튼 기본 스타일 */
+.time-slot-btn {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f7f7f7;
+    color: #555;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* 예약 가능한 시간 버튼 스타일 */
+.time-slot-btn.available {
+    border-color: #ccc;
+    background-color: #fff;
+}
+
+/* 예약된 시간 버튼 스타일 (선택 불가) */
+.time-slot-btn:not(.available) {
+    background-color: #f0f0f0;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* 선택된 시간 버튼 스타일 */
+.time-slot-btn.selected {
+    background-color: #6a82fb; /* 이미지와 유사한 파란색 배경 */
+    color: #fff;
+    border-color: #6a82fb;
+    font-weight: bold;
+}
+
+/* 호버 효과 */
+.time-slot-btn.available:hover {
+    background-color: #f0f0ff; /* 연한 파란색 호버 효과 */
+}
+
+
+/* ------------------ "다음" 버튼 스타일 ------------------ */
+
+#nextBtn {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 30px auto 0;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #6a82fb;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#nextBtn:hover {
+    background-color: #5a6cdb;
+}
+
+#loginBtn{
+	    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 30px auto 0;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #6a82fb;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#loginBtn:hover{
+	background-color: #5a6cdb;
+}

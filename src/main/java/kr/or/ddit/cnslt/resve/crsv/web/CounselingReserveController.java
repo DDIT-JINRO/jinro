@@ -3,9 +3,12 @@ package kr.or.ddit.cnslt.resve.crsv.web;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -59,13 +62,14 @@ public class CounselingReserveController {
     @ResponseBody
     public ResponseEntity<List<String>> getAvailableTimes(
     		@RequestParam int counsel,
-            @RequestParam String counselReqDatetime) {
+            @RequestParam String counselReqDatetime,
+            @RequestParam int memId) {
     	
         try {
         	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         	Date counselReqDate = dateFormat.parse(counselReqDatetime);
         	
-            List<String> availableTimes = counselingReserveService.getAvailableTimes(counsel, counselReqDate);
+            List<String> availableTimes = counselingReserveService.getAvailableTimes(counsel, counselReqDate,memId);
 
             return ResponseEntity.ok(availableTimes);
         } catch (Exception e) {
@@ -77,35 +81,28 @@ public class CounselingReserveController {
      * 상담 시간 임시 점유를 시도하고, 성공하면 상세 페이지로 리디렉션하는 API
      * @return 성공 시 상세 페이지 리디렉션, 실패 시 에러 응답
      */
-    @PostMapping("/holdAndRedirect") // 새로운 엔드포인트
-    public ResponseEntity<Map<String, String>> holdAndRedirect(@RequestBody CounselingVO counselingVO, Principal principal, RedirectAttributes redirectAttributes) {
+    @PostMapping("/holdAndRedirect")
+    public String holdAndRedirect(
+    		@ModelAttribute CounselingVO counselingVO,
+    		Principal principal,
+    		RedirectAttributes redirectAttributes) {
         
         if (principal != null && !principal.getName().equals("anonymousUser")) {
             String memIdString = principal.getName();
             counselingVO.setMemId(Integer.parseInt(memIdString));
             
             boolean isHeld = counselingReserveService.tryHoldCounsel(counselingVO);
-            log.info("counselingVO"+counselingVO);
+            log.info("counselingVO: {}", counselingVO);
             
             if (isHeld) {
-                // 날짜를 "yyyy-MM-dd HH:mm" 형식의 문자열로 변환하여 쿼리 파라미터에 추가
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                String formattedDate = dateFormat.format(counselingVO.getCounselReqDatetime());
-                String redirectUrl = String.format(
-                        "/cnslt/resve/crsv/reservationDetail.do?counsel=%d&counselReqDatetime=%s",
-                        counselingVO.getCounsel(),
-                        formattedDate
-                    );
+                // FlashAttribute에 VO 객체 전체를 담아 다음 요청으로 전달
+                redirectAttributes.addFlashAttribute("counselingVO", counselingVO);
                 
-                Map<String, String> response = new HashMap<>();
-                response.put("redirectUrl", redirectUrl);
-                
-                return ResponseEntity.ok(response);
+                // 리다이렉트할 경로만 반환
+                return "redirect:/cnslt/resve/crsv/reservationDetail.do";
             } else {
-                Map<String, String> errorResponse = new HashMap<>();
-                errorResponse.put("errorMessage", "이미 점유된 시간입니다. 다른 시간을 선택해주세요.");
-                errorResponse.put("redirectUrl", "/cnslt/resve/crsv/reservation.do");
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+                redirectAttributes.addFlashAttribute("errorMessage", "이미 점유된 시간입니다. 다른 시간을 선택해주세요.");
+                return "redirect:/cnslt/resve/crsv/reservation.do";
             }
         } else {
             throw new CustomException(ErrorCode.INVALID_USER);
@@ -116,15 +113,17 @@ public class CounselingReserveController {
      * 상담 예약을 최종적으로 확정하는 API
      */
     @PostMapping("/reserve")
-    @ResponseBody
-    public ResponseEntity<String> reserveCounsel(@RequestBody CounselingVO counselingVO) {
-        
+    public String reserveCounsel(
+    		@ModelAttribute CounselingVO counselingVO,
+    		RedirectAttributes redirectAttributes) {
+        log.info("reserveCounsel -> counselingVO"+counselingVO);
 		boolean isReserved = counselingReserveService.tryReserveCounsel(counselingVO);
 		        
 		if (isReserved) {
-		    return ResponseEntity.ok("상담 예약 성공!");
+		    return "redirect:/cnslt/resve/cnsh/counselingReserveHistory.do";
 		} else {
-		    return ResponseEntity.status(HttpStatus.GONE).body("예약 실패.");
+            redirectAttributes.addFlashAttribute("errorMessage", "예약 시간이 초과하였습니다.");
+            return "redirect:/cnslt/resve/crsv/reservation.do";
 		}
     }
     
@@ -132,7 +131,34 @@ public class CounselingReserveController {
      * 상세 페이지 뷰를 반환하는 메서드
      */
     @GetMapping("/crsv/reservationDetail.do")
-    public String reservationDetail(@ModelAttribute CounselingVO counselingVO) {
+    public String reservationDetail(
+    		@ModelAttribute CounselingVO counselingVO,
+    		Model model) {
+    	log.info("counselingVO"+counselingVO);
+    	 if (counselingVO == null || counselingVO.getCounsel() <= 0) {
+    	        // FlashAttribute가 없을 경우의 예외 처리
+    	        return "redirect:/cnslt/resve/crsv/reservation.do";
+    	    }
+         
+    	 MemberVO memberVO = new MemberVO();
+    	 memberVO.setMemId(counselingVO.getMemId());
+    	 memberVO = counselingReserveService.selectMemberInfo(memberVO);
+    	 // 3. 생년월일(memBirth)을 통해 나이 계산
+    	    if (memberVO != null && memberVO.getMemBirth() != null) {
+    	        Date birthDate = memberVO.getMemBirth();
+    	        LocalDate birthLocalDate = new java.sql.Date(birthDate.getTime()).toLocalDate();
+    	        LocalDate today = LocalDate.now();
+    	        
+    	        // java.time.Period를 사용하여 나이 계산
+    	        int age = Period.between(birthLocalDate, today).getYears();
+    	        
+    	        // 계산된 나이를 memberVO에 추가 (예: memAge 필드)
+    	        memberVO.setMemAge(age);
+    	    }
+    	 
+    	 model.addAttribute("memberVO", memberVO);
+    	 model.addAttribute("counselingVO"+counselingVO);
+    	 
         return "cnslt/resve/crsv/counselingreserveDetail";
     }
 }
