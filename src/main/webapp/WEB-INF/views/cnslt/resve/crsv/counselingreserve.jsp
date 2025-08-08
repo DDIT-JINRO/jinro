@@ -72,6 +72,7 @@
 
 				<input type="hidden" id="counselReqDatetimeInput"
 					name="counselReqDatetime">
+				<input type="hidden" id="payId" name="payId">
 				<button type="button" id="nextBtn">다음</button>
 			</form>
 		</div>

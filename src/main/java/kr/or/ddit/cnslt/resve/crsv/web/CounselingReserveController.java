@@ -30,6 +30,9 @@ import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
+import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
+import kr.or.ddit.mpg.pay.service.PaymentService;
+import kr.or.ddit.mpg.pay.service.PaymentVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CounselingReserveController {
 	
 	private final CounselingReserveService counselingReserveService;
+	private final PaymentService paymentService;
 	
 	@GetMapping("/crsv/reservation.do")
 	public String counselingReservation(Model model) {
@@ -84,6 +88,7 @@ public class CounselingReserveController {
     @PostMapping("/holdAndRedirect")
     public String holdAndRedirect(
     		@ModelAttribute CounselingVO counselingVO,
+    		@RequestParam int payId,
     		Principal principal,
     		RedirectAttributes redirectAttributes) {
         
@@ -92,12 +97,12 @@ public class CounselingReserveController {
             counselingVO.setMemId(Integer.parseInt(memIdString));
             
             boolean isHeld = counselingReserveService.tryHoldCounsel(counselingVO);
-            log.info("counselingVO: {}", counselingVO);
             
             if (isHeld) {
                 // FlashAttribute에 VO 객체 전체를 담아 다음 요청으로 전달
                 redirectAttributes.addFlashAttribute("counselingVO", counselingVO);
-                
+                redirectAttributes.addAttribute("payId",payId);
+                log.info("holdAndRedirect -> payId"+payId);
                 // 리다이렉트할 경로만 반환
                 return "redirect:/cnslt/resve/crsv/reservationDetail.do";
             } else {
@@ -115,12 +120,18 @@ public class CounselingReserveController {
     @PostMapping("/reserve")
     public String reserveCounsel(
     		@ModelAttribute CounselingVO counselingVO,
+    		@RequestParam int payId,
     		RedirectAttributes redirectAttributes) {
-        log.info("reserveCounsel -> counselingVO"+counselingVO);
 		boolean isReserved = counselingReserveService.tryReserveCounsel(counselingVO);
-		        
+		log.info("reserve -> payId"+payId);
 		if (isReserved) {
-		    return "redirect:/cnslt/resve/cnsh/counselingReserveHistory.do";
+			int cnt = counselingReserveService.minusPayConsultCnt(payId);
+			if(cnt>0) {
+				return "redirect:/cnslt/resve/cnsh/counselingReserveHistory.do";
+			}else {
+				redirectAttributes.addFlashAttribute("errorMessage", "남은 상담 횟수가 부족합니다");
+				return "redirect:/cnslt/resve/crsv/reservation.do";
+			}
 		} else {
             redirectAttributes.addFlashAttribute("errorMessage", "예약 시간이 초과하였습니다.");
             return "redirect:/cnslt/resve/crsv/reservation.do";
@@ -133,13 +144,13 @@ public class CounselingReserveController {
     @GetMapping("/crsv/reservationDetail.do")
     public String reservationDetail(
     		@ModelAttribute CounselingVO counselingVO,
+    		@RequestParam int payId,
     		Model model) {
-    	log.info("counselingVO"+counselingVO);
     	 if (counselingVO == null || counselingVO.getCounsel() <= 0) {
     	        // FlashAttribute가 없을 경우의 예외 처리
     	        return "redirect:/cnslt/resve/crsv/reservation.do";
     	    }
-         
+    	 log.info("reservationDetail -> payId"+payId);
     	 MemberVO memberVO = new MemberVO();
     	 memberVO.setMemId(counselingVO.getMemId());
     	 memberVO = counselingReserveService.selectMemberInfo(memberVO);
@@ -156,9 +167,26 @@ public class CounselingReserveController {
     	        memberVO.setMemAge(age);
     	    }
     	 
+    	 model.addAttribute("payId",payId);
     	 model.addAttribute("memberVO", memberVO);
     	 model.addAttribute("counselingVO"+counselingVO);
     	 
         return "cnslt/resve/crsv/counselingreserveDetail";
     }
+    
+    @GetMapping("/checkSbscription")
+    public ResponseEntity<PaymentVO> checkSbscription(@RequestParam int memId) {
+    	
+    	//회원 현재 구독 정보 가져오기
+    	MemberSubscriptionVO currentSub = paymentService.selectByMemberId(memId);
+    	if(currentSub == null) {
+    		PaymentVO paymentVO = new PaymentVO();
+            return ResponseEntity.ok(paymentVO);
+    	}
+    	
+    	//현재 구독 정보가 있으면 구독결제 최신 가져오기
+    	PaymentVO paymentVO = counselingReserveService.selectLastSubcription(currentSub);
+        return ResponseEntity.ok(paymentVO);
+    }
+    
 }

@@ -37,6 +37,7 @@
 				<input type="hidden" name="counselReqDatetime" 
 						value="<fmt:formatDate value='${counselingVO.counselReqDatetime}'
 						 pattern='yyyy-MM-dd HH:mm' />">
+				<input type="hidden" name="payId" id="payId" value="${payId}">
 
 				<div class="input-section">
 					<div class="input-group">

@@ -5,6 +5,8 @@ import java.util.List;
 
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.main.service.MemberVO;
+import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
+import kr.or.ddit.mpg.pay.service.PaymentVO;
 
 public interface CounselingReserveService {
 	
@@ -48,4 +50,12 @@ public interface CounselingReserveService {
      * 회원정보 가져오는 메소드
      */
 	MemberVO selectMemberInfo(MemberVO memberVO);
+    /**
+     * 현재 사용중인 마지막 구독결제 정보 가져오기 (상담횟수)
+     */
+	PaymentVO selectLastSubcription(MemberSubscriptionVO currentSub);
+	/**
+     * 예약확정 신청시 상담 예약 1개 차감
+     */
+	int minusPayConsultCnt(int payId);
 }

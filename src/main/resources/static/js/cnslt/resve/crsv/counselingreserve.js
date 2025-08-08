@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // 1. HTML 요소에 접근해서 변수에 할당
     let counselorSelect = document.getElementById('counselorSelect');
     selectedCounselorId = counselorSelect.value;
-
+	const selectedOption = counselorSelect.options[counselorSelect.selectedIndex];
+	const counselorName = selectedOption.text;
+	
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
 		locale: 'ko',
@@ -76,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 2. HTML 요소에 이벤트 리스너 추가
     counselorSelect.addEventListener('change', function() {
         selectedCounselorId = this.value;
+		
         calendar.today();
     });
 
@@ -104,8 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 	    nextBtn.addEventListener('click', function(event) {
 	        event.preventDefault(); // 기본 폼 제출 동작을 막음
+			
 
-	        const counsel = document.getElementById('counselorSelect').value; // 이전에 memId 변수를 사용했다면 counselorSelect의 값을 가져오도록 수정
+	        const counsel = document.getElementById('counselorSelect').value; 
 	        
 
 			if(!memId || memId === 'anonymousUser'){
@@ -118,34 +122,44 @@ document.addEventListener('DOMContentLoaded', function() {
 	            return;
 	        }
 			
-			console.log("selectedTime"+selectedTime);
+			if (selectedDate && selectedTime) {
+			            const isConfirmed = confirm("상담사: " + counselorName + "\n날짜: " + selectedDate + "\n시간: " + selectedTime + "\n\n이대로 예약하시겠습니까?");
+						if (isConfirmed) {
+							axios.get('/cnslt/resve/checkSbscription', {
+										       params: {
+										           memId: memId
+										       }
+										   })
+										   .then(response => {
+										       const payConsultCnt = response.data.payConsultCnt;
+											   const payId = response.data.payId;
+										       if (payConsultCnt > 0) {
+										           // 남은 횟수가 1 이상이면 폼 제출
+										           const date = selectedDate;
+										           const time = selectedTime;
+										           const combinedDateTime = `${date} ${time}`;
+										           document.getElementById('counselReqDatetimeInput').value = combinedDateTime;
+												   document.getElementById('payId').value = payId;
+										           document.getElementById('reservationForm').submit();
+										       } else {
+										           // 남은 횟수가 없으면 결제 페이지로 이동 안내
+										           alert('이용 가능한 상담 횟수가 없습니다. 구독 상품을 구매해주세요.');
+										           // 결제 페이지로 리다이렉션하는 로직 추가
+										           // window.location.href = '/payment-page';
+										       }
+										   })
+										   .catch(error => {
+										       console.error('구독 정보 확인 중 오류 발생:', error);
+										       alert('구독 정보를 불러오는 중 오류가 발생했습니다.');
+										   });
+						}
+	        } else {
+	            alert("날짜와 시간을 선택해주세요.");
+	        }
 			
-			
-	        const date = selectedDate
-	        const time = selectedTime
-	        const combinedDateTime = `${date} ${time}`;
-
-			console.log("date"+date);
-			console.log("time"+time);
-			console.log("combinedDateTime"+combinedDateTime);
-			
-	        // hidden input에 값 설정
-	        document.getElementById('counselReqDatetimeInput').value = combinedDateTime;
-	        // 모든 데이터가 채워진 폼 제출
-	        document.getElementById('reservationForm').submit();
 	    });
 	}
 	
-    document.getElementById('nextBtn').addEventListener('click', function() {
-        if (selectedDate && selectedTime) {
-            alert("상담사 : "+selectedCounselorId+"선택된 날짜: " + selectedDate + ", 시간: " + selectedTime);
-			handleNextButtonClick(selectedCounselorId,selectedDate,selectedTime);
-        } else {
-            alert("날짜와 시간을 선택해주세요.");
-        }
-    });
-
-
 });
 
 
