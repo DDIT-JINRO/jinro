@@ -1,27 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
+<link rel="stylesheet" href="/css/ertds/qlfexm/selectQlfexmList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
-<link rel="stylesheet" href="/css/csc/not/notice.css">
-
 <section class="channel">
-	<!-- 여기가 네비게이션 역할을 합니다.  -->
+	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">고객센터</div>
+		<div class="channel-title-text">진학 정보</div> 
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-itemIn">
-			<a href="/csc/not/noticeList.do">공지사항</a>
-		</div>
-		<!-- 중분류 -->
-		<div class="channel-sub-section-item">
-			<a href="/csc/faq/faqList.do">FAQ</a>
-		</div>
-		<div class="channel-sub-section-item">
-			<a href="/csc/inq/inqryList.do">1:1문의</a>
-		</div>
+		<div class="channel-sub-section-item"><a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a></div> <!-- 중분류 -->
+		<div class="channel-sub-section-item"><a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a></div>
+		<div class="channel-sub-section-itemIn"><a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a></div>
 	</div>
 </section>
 <div>
@@ -30,7 +22,7 @@
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
 			<!-- 검색 기능 -->
-			<form method="get" action="/csc/not/noticeList.do">
+			<form method="get" action="/ertds/qlfexm/selectQlfexmList.do">
 				<div class="com-default-search">
 					<input type="search" name="keyword" placeholder="공지사항 내에서 검색">
 					<button class="com-search-btn" type="submit">
@@ -40,31 +32,31 @@
 					</button>
 				</div>
 			</form>
-			<p id="getAllNotice">총 ${getAllNotice}건</p>
+			<p id="getAllNotice">총 ${getTotal}건</p>
 			<table>
 				<colgroup>
-					<col style="width: 10%;">
-					<col style="width: 40%;">
+					<col style="width: 18%;">
+					<col style="width: 42%;">
 					<col style="width: 20%;">
-					<col style="width: 30%;">
+					<col style="width: 20%;">
 				</colgroup>
 				<thead>
 					<tr>
 						<th>번호</th>
 						<th>제목</th>
-						<th>조회수</th>
+						<th>교육기관</th>
 						<!--  작성일 MM/DD/HH/MM/ 형식으로 -->
 						<th>작성일</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="notice" items="${getList}">
+					<c:forEach var="item" items="${getList}">
 						<tr>
-							<td><div class="notice-no"> ${notice.noticeId}</div></td>
+							<td><div class="notice-no"> ${item.examId}</div></td>
 							<td style="text-align: left;">
-								<a href="/csc/not/noticeDetail.do?noticeId=${notice.noticeId}">${notice.noticeTitle}</a></td>
-							<td>${notice.noticeCnt}</td>
-							<td><fmt:formatDate value="${notice.noticeCreatedAt}" pattern="MM.dd" /></td>
+								<a href="/ertds/qlfexm/selectQlfexmDetail.do?examId=${item.examId}">${item.examTitle}</a></td>
+							<td>${item.examAreaCode}</td>
+							<td><fmt:formatDate value="${item.examNotiDate}" pattern="yyyy.MM.dd" /></td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -95,8 +87,9 @@
 		</div>
 	</div>
 </div>
-<!-- js 파일 -->
-<script src="/js/csc/not/noticeList.js"></script>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
+<script>
+	// 스크립트 작성 해주시면 됩니다.
+</script>

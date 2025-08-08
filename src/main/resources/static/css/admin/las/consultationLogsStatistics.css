@@ -15,17 +15,21 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-	flex: 1.3; /* 가로 공간의 1배 차지 */
+	flex: 1; /* 가로 공간의 1:1 비율로 변경 */
 }
 
-/* 우측 패널: 더 넓은 공간을 차지하도록 설정 */
-.template-panel.right-panel {
-	flex: 1; /* 가로 공간의 1.5배 차지 */
+/* 우측 컬럼: 패널들을 수직으로 배치 */
+.right-column {
+    display: flex;
+    flex-direction: column; /* 패널을 세로로 쌓도록 지정 */
+    gap: 24px; /* 패널 사이의 세로 간격 */
+    flex: 1; /* 가로 공간의 1:1 비율로 변경 */
 }
 
-/* 좌측 컬럼 내부 패널: 수직 공간을 균등하게 분배 */
-.left-column .template-panel {
-	flex: 1;
+/* 좌측/우측 컬럼 내부의 패널: 수직 공간을 균등하게 분배 */
+.left-column .template-panel,
+.right-column .template-panel {
+    flex: 1;
 }
 
 .template-panel {
@@ -94,6 +98,8 @@
 .template-panel canvas {
     max-width: 100%;
     max-height: 90%;
+    width: 100% !important; /* 차트 크기를 강제로 100%로 설정 */
+    height: 100% !important;
 }
 
 #dailyUserInquiry, #monthUserInquiry {
@@ -153,7 +159,6 @@
 .filter-box .btn-save:hover {
 	background: #1a3a5a;
 }
-
 
 /* ──────────────────────────────────────────────────────────
    리스트 테이블

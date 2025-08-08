@@ -4,10 +4,12 @@
 <div class="template-container">
 	<div class="left-column">
 		<div class="template-panel">
-			<div class="panel-header" id="pannelHeader" style="cursor: pointer; text-decoration: none">
-				일/월 별 사용자 조회
-				<button onclick="dailyUserInquiry()">일별</button>
-				<button onclick="monthUserInquiry()">월별</button>
+			<div class="panel-header" id="pannelHeader" style="cursor: pointer; text-decoration: none; display: flex; justify-content: space-between; align-items: center;">
+			    일/월 별 사용자 조회
+			    <div>
+			        <button onclick="dailyUserInquiry()">일별</button>
+			        <button onclick="monthUserInquiry()">월별</button>
+			    </div>
 			</div>
 			<div class="chart">
 				<canvas id="dailyUserInquiry"></canvas>
@@ -46,16 +48,16 @@
 				<colgroup>
 					<col style="width: 15%;">
 					<col style="width: 25%;">
-					<col style="width: 25%;">
 					<col style="width: 15%;">
+					<col style="width: 25%;">
 					<col style="width: 20%;">
 				</colgroup>
 				<thead>
 					<tr>
 						<th>아이디</th>
 						<th>닉네임</th>
-						<th>로그인 구분</th>
 						<th>성 별</th>
+						<th>로그인 구분</th>
 						<th>학교 구분</th>
 					</tr>
 				</thead>
