@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         compareListContainer.innerHTML = "";
-        sessionStorage.removeItem("compareList")
+        sessionStorage.removeItem("jobCompareList")
         popup.classList.remove('is-open');
     });
 
@@ -274,14 +274,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 세션에 비교 목록 가져오기
 const getCompareList = () => {
-    const compareList = sessionStorage.getItem('compareList');
+    const compareList = sessionStorage.getItem('jobCompareList');
     return compareList ? JSON.parse(compareList) : {};
 }
 
 // 세션에 저장하기
 const saveCompareList = (compareList) => {
-    sessionStorage.setItem('compareList', JSON.stringify(compareList));
-    const test = getCompareList();
+    sessionStorage.setItem('jobCompareList', JSON.stringify(compareList));
 }
 
 // 비교 카드 생성하기
