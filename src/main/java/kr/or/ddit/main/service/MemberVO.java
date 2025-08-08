@@ -31,6 +31,8 @@ public class MemberVO {
 	private Long fileSub;
 	private Long fileBadge;
 	
+	private int memAge;
+	
 	private List<ComCodeVO> interests;
 	private String subName;
 	private int remainingDays;
