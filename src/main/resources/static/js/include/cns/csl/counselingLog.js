@@ -242,9 +242,12 @@ function showDetail(counselId) {
 			const infoTable = document.querySelector('.info-table');
 			infoTable.style.display = 'table';
 
+			const elForNum = document.querySelector(`#notice-list tr[data-cns-id='${counselId}']`);
+			const num = elForNum.firstElementChild.textContent.trim();
+
 			document.getElementById("info-table-tbody").innerHTML = `
 	        <tr>
-	          <td>${resp.memId}</td>
+	          <td>${num}</td>
 	          <td>${resp.memName}</td>
 	          <td>${getGenText(resp.memGen)}</td>
 	          <td>${calculateAge(new Date(resp.memBirth))}</td>
