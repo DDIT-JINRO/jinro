@@ -6,7 +6,7 @@ public enum AlarmType {
 	LIKE_TO_BOARD("G28003"),	// 게시글에 좋아요
 	LIKE_TO_REPLY("G28004"),	// 댓글에 좋아요
 	REPLY_TO_CONTACT("G28005"), // 문의사항 답변
-	DEADLINE_HIRE("G280006");	// 채용공고 마감
+	DEADLINE_HIRE("G28006");	// 채용공고 마감
 
 
 	

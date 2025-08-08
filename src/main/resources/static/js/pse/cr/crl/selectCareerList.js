@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         compareListContainer.innerHTML = "";
-        sessionStorage.removeItem("jobCompareList")
+        sessionStorage.removeItem("jobCompareList");
         popup.classList.remove('is-open');
     });
 
@@ -251,14 +251,21 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.addEventListener('click', function() {
         const currentCompareList = getCompareList();
         const jobCodes = Object.keys(currentCompareList);
-
-        if (jobCodes.length < 2) {
+        
+		if (jobCodes.length < 2) {
             alert("비교할 직업을 2개 이상 선택해주세요.");
             return;
         }
+		
+		for (const jobCode in currentCompareList)  {
+            const checkbox = document.querySelector(`#compare-btn${jobCode}`);
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        }
 
+		sessionStorage.removeItem("jobCompareList");
         const queryString = jobCodes.map(code => `jobCodes=${code}`).join('&');
-
         window.location.href = `/pse/cr/cco/careerComparisonView.do?${queryString}`;
     });
 
