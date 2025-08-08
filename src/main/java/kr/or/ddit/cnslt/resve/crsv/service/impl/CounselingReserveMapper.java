@@ -9,6 +9,8 @@ import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.cnslt.resve.crsv.service.VacationVO;
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.main.service.MemberVO;
+import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
+import kr.or.ddit.mpg.pay.service.PaymentVO;
 
 @Mapper
 public interface CounselingReserveMapper {
@@ -40,4 +42,8 @@ public interface CounselingReserveMapper {
     List<ComCodeVO> selectCounselMethodList();
 
 	MemberVO counselingReserveMapper(MemberVO memberVO);
+
+	PaymentVO selectLastSubcription(MemberSubscriptionVO currentSub);
+
+	int minusPayConsultCnt(int payId);
 }

@@ -17,6 +17,8 @@ import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.cnslt.resve.crsv.service.VacationVO;
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.main.service.MemberVO;
+import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
+import kr.or.ddit.mpg.pay.service.PaymentVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -216,6 +218,18 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 	public MemberVO selectMemberInfo(MemberVO memberVO) {
 		// TODO Auto-generated method stub
 		return counselingReserveMapper.counselingReserveMapper(memberVO);
+	}
+
+	@Override
+	public PaymentVO selectLastSubcription(MemberSubscriptionVO currentSub) {
+		// TODO Auto-generated method stub
+		return counselingReserveMapper.selectLastSubcription(currentSub);
+	}
+
+	@Override
+	public int minusPayConsultCnt(int payId) {
+		// TODO Auto-generated method stub
+		return counselingReserveMapper.minusPayConsultCnt(payId);
 	}
 	
 }

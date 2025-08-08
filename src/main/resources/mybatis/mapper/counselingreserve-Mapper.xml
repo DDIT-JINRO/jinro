@@ -110,4 +110,25 @@
 		WHERE
 		    mem_id = #{memId}
 	</select>
+	
+	<select id="selectLastSubcription" parameterType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO" resultType="kr.or.ddit.mpg.pay.service.PaymentVO">
+		SELECT
+		    pay_id,
+		    ms_id,
+		    pay_date,
+		    pay_consult_cnt
+		FROM
+		    payment
+		WHERE
+		    ms_id = #{msId}
+		ORDER BY
+		    pay_id DESC
+		FETCH FIRST 1 ROW ONLY
+	</select>
+	
+	<update id="minusPayConsultCnt" parameterType="int">
+		UPDATE PAYMENT
+			SET PAY_CONSULT_CNT = PAY_CONSULT_CNT - 1
+			WHERE PAY_ID = #{payId} AND PAY_CONSULT_CNT > 0
+	</update>
 </mapper>
