@@ -332,6 +332,47 @@
     display: inline-block; /* 비활성 아이콘을 보여줍니다. */
 }
 
+/* 비교 버튼*/
+.select-btn {
+	display: inline-flex;
+	cursor: pointer;
+}
+
+.select-btn span:hover {
+	background-color: #f0f0ff;
+}
+
+.select-btn input {
+	display: none;
+}
+
+.select-btn span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background-color: #f3f4f6; /* light-gray */
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.select-btn input:checked+span {
+	background-color: #eef2ff;
+	border-color: #818cf8;
+	color: #4338ca;
+	font-weight: 500;
+}
+
+.select-btn svg {
+    margin-top: 1px;
+}
+
 /* 펼치기/접기 아이콘 */
 .toggle-icon {
     font-size: 1.2rem;
