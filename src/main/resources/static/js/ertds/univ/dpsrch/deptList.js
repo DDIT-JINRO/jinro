@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         compareListContainer.innerHTML = "";
-        sessionStorage.removeItem("compareList")
+        sessionStorage.removeItem("compareList");
         popup.classList.remove('is-open');
     });
 
@@ -236,9 +236,16 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("비교할 학과를 2개 이상 선택해주세요.");
             return;
         }
-
+		
+		for (const uddId in currentCompareList)  {
+            const checkbox = document.querySelector(`#compare-btn${uddId}`);
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        }
+		
+		sessionStorage.removeItem("compareList");
         const queryString = uddIds.map(id => `uddIds=${id}`).join('&');
-
         window.location.href = `/ertds/univ/dpsrch/selectCompare.do?${queryString}`;
     });
 
