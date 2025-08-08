@@ -74,6 +74,7 @@ public class UnivDeptSearchController {
 	@GetMapping("/univ/dpsrch/selectCompare.do")
 	public String selectCompare(
 			@RequestParam(value = "uddIds", required = false) List<Integer> uddIdList,
+			Principal principal,
             Model model) {
         
 	    log.info("학과 비교 페이지 진입 - 학과 IDs: {}", uddIdList);
@@ -81,9 +82,21 @@ public class UnivDeptSearchController {
         // URL 파라미터로 학과 ID가 전달된 경우 미리 조회
 	    if (uddIdList != null && !uddIdList.isEmpty()) {
 	        try {
+	        	List<BookMarkVO> bookMarkVOList = new ArrayList<>();
+	    		
+	    		if(principal!=null && !principal.getName().equals("anonymousUser")) { 
+	    			int	memId = Integer.parseInt(principal.getName()); BookMarkVO bookMarkVO = new
+	    			BookMarkVO(); bookMarkVO.setMemId(memId);
+	    			bookMarkVO.setBmCategoryId("G03005");
+	    			
+	    			bookMarkVOList = this.univDeptService.selectBookMarkVO(bookMarkVO);
+	    			log.info("bookMarkVOList"+bookMarkVOList); 
+	    		}
+	    		
 	            List<UnivDeptCompareVO> compareList = univDeptService.getDeptCompareList(uddIdList);
 	            model.addAttribute("compareList", compareList);
-	            model.addAttribute("preloadedDepts", uddIdList);  // ✅ 변경
+	            model.addAttribute("bookMarkVOList", bookMarkVOList);
+	            model.addAttribute("preloadedDepts", uddIdList);
 
 	        } catch (Exception e) {
 	            log.error("학과 비교 데이터 조회 오류: {}", uddIdList, e);

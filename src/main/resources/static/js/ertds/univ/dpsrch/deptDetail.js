@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const handleBookmarkToggle = (button) => {
+	if (memId == "" || memId == "anonymousUser") {
+        alert("북마크는 로그인 후 이용 하실 수 있습니다.");
+        return;
+    }
+	
 	const bmCategoryId = button.dataset.categoryId;
 	const bmTargetId = button.dataset.targetId;
 

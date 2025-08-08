@@ -107,6 +107,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const handleBookmarkToggle = (button) => {
+	if (memId == "" || memId == "anonymousUser") {
+        alert("북마크는 로그인 후 이용 하실 수 있습니다.");
+        return;
+    }
+	
 	const bmCategoryId = button.dataset.categoryId;
 	const bmTargetId = button.dataset.targetId;
 
@@ -256,7 +261,6 @@ const getCompareList = () => {
 // 세션에 저장하기
 const saveCompareList = (compareList) => {
     sessionStorage.setItem('compareList', JSON.stringify(compareList));
-    const test = getCompareList();
 }
 
 // 비교 카드 생성하기
