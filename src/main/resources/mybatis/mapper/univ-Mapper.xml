@@ -217,5 +217,149 @@
 	    WHERE UD.UNIV_ID = #{univId}
 	    ORDER BY UD.UD_NAME
 	</select>
+	
+	<!-- 대학 추가/수정 (MERGE INTO 사용) -->
+	<insert id="mergeUniversity" parameterType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
+	    <selectKey keyProperty="univId" resultType="int" order="BEFORE">
+	        <if test="univId == null or univId == 0">
+	            SELECT NVL(MAX(UNIV_ID), 0) + 1 FROM UNIVERSITY
+	        </if>
+	        <if test="univId != null and univId != 0">
+	            SELECT #{univId} FROM DUAL
+	        </if>
+	    </selectKey>
+	    
+	    MERGE INTO UNIVERSITY U
+	    USING (
+	        SELECT 
+	            #{univId} AS UNIV_ID,
+	            #{univName} AS UNIV_NAME,
+	            #{univCampus} AS UNIV_CAMPUS,
+	            #{univType} AS UNIV_TYPE,
+	            #{univGubun} AS UNIV_GUBUN,
+	            #{univUrl} AS UNIV_URL,
+	            #{univRegion} AS UNIV_REGION,
+	            #{univAddr} AS UNIV_ADDR,
+	            #{univLat} AS UNIV_LAT,
+	            #{univLot} AS UNIV_LOT
+	        FROM DUAL
+	    ) S ON (U.UNIV_ID = S.UNIV_ID)
+	    WHEN MATCHED THEN
+	        UPDATE SET
+	            U.UNIV_NAME = S.UNIV_NAME,
+	            U.UNIV_CAMPUS = S.UNIV_CAMPUS,
+	            U.UNIV_TYPE = S.UNIV_TYPE,
+	            U.UNIV_GUBUN = S.UNIV_GUBUN,
+	            U.UNIV_URL = S.UNIV_URL,
+	            U.UNIV_REGION = S.UNIV_REGION,
+	            U.UNIV_ADDR = S.UNIV_ADDR,
+	            U.UNIV_LAT = S.UNIV_LAT,
+	            U.UNIV_LOT = S.UNIV_LOT
+	    WHEN NOT MATCHED THEN
+	        INSERT (
+	            UNIV_ID, UNIV_NAME, UNIV_CAMPUS, UNIV_TYPE, 
+	            UNIV_GUBUN, UNIV_URL, UNIV_REGION, UNIV_ADDR, 
+	            UNIV_LAT, UNIV_LOT
+	        )
+	        VALUES (
+	            S.UNIV_ID, S.UNIV_NAME, S.UNIV_CAMPUS, S.UNIV_TYPE,
+	            S.UNIV_GUBUN, S.UNIV_URL, S.UNIV_REGION, S.UNIV_ADDR,
+	            S.UNIV_LAT, S.UNIV_LOT
+	        )
+	</insert>
+	
+	<!-- 대학 삭제 -->
+	<delete id="deleteUniversity" parameterType="int">
+	    DELETE FROM UNIVERSITY 
+	    WHERE UNIV_ID = #{univId}
+	</delete>
+	
+	<!-- 대학 ID로 단일 조회 -->
+	<select id="selectUniversityById" parameterType="int" resultType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
+	    SELECT
+	        UNIV_ID,
+	        UNIV_NAME,
+	        UNIV_CAMPUS,
+	        UNIV_TYPE,
+	        UNIV_GUBUN,
+	        UNIV_URL,
+	        UNIV_REGION,
+	        UNIV_ADDR,
+	        UNIV_LAT,
+	        UNIV_LOT
+	    FROM UNIVERSITY
+	    WHERE UNIV_ID = #{univId}
+	</select>
+	
+	<!-- 학과 추가/수정 (MERGE INTO 사용) -->
+	<insert id="updateDepartment" parameterType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO$DeptInfo">
+		<selectKey keyProperty="udId" resultType="int" order="BEFORE">
+	        <if test="udId == null or udId == 0">
+	            SELECT NVL(MAX(UD_ID), 0) + 1 FROM UNIV_DEPT
+	        </if>
+	        <if test="udId != null and udId != 0">
+	            SELECT #{udId} FROM DUAL
+	        </if>
+	    </selectKey>
+	    
+	    MERGE INTO UNIV_DEPT UD
+	    USING (
+	        SELECT 
+	            #{udId} AS UD_ID,
+	            #{univId} AS UNIV_ID,
+	            #{uddId} AS UDD_ID,
+	            #{udName} AS UD_NAME,
+	            #{udTuition} AS UD_TUITION,
+	            #{udScholar} AS UD_SCHOLAR,
+	            #{udCompetition} AS UD_COMPETITION,
+	            #{udEmpRate} AS UD_EMP_RATE
+	        FROM DUAL
+	    ) S ON (UD.UD_ID = S.UD_ID)
+	    WHEN MATCHED THEN
+	        UPDATE SET
+	            UD.UNIV_ID = S.UNIV_ID,
+	            UD.UDD_ID = S.UDD_ID,
+	            UD.UD_NAME = S.UD_NAME,
+	            UD.UD_TUITION = S.UD_TUITION,
+	            UD.UD_SCHOLAR = S.UD_SCHOLAR,
+	            UD.UD_COMPETITION = S.UD_COMPETITION,
+	            UD.UD_EMP_RATE = S.UD_EMP_RATE
+	    WHEN NOT MATCHED THEN
+	        INSERT (
+	            UD_ID, UNIV_ID, UDD_ID, UD_NAME, 
+	            UD_TUITION, UD_SCHOLAR, UD_COMPETITION, UD_EMP_RATE
+	        )
+	        VALUES (
+	            S.UD_ID, S.UNIV_ID, S.UDD_ID, S.UD_NAME,
+	            S.UD_TUITION, S.UD_SCHOLAR, S.UD_COMPETITION, S.UD_EMP_RATE
+	        )
+	</insert>
+	
+	<!-- 학과 삭제 -->
+	<delete id="deleteDepartment" parameterType="int">
+	    DELETE FROM UNIV_DEPT 
+	    WHERE UD_ID = #{udId}
+	</delete>
+	
+	<!-- 특정 대학의 학과 삭제 -->
+	<delete id="deleteDepartmentsByUnivId" parameterType="int">
+	    DELETE FROM UNIV_DEPT 
+	    WHERE UNIV_ID = #{univId}
+	</delete>
+	
+	<!-- 학과 ID로 단일 조회 -->
+	<select id="selectDepartmentById" parameterType="int" resultType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO$DeptInfo">
+	    SELECT
+	        UD_ID,
+	        UNIV_ID,
+	        UDD_ID,
+	        UD_NAME,
+	        UD_TUITION,
+	        UD_SCHOLAR,
+	        UD_COMPETITION,
+	        UD_EMP_RATE
+	    FROM UNIV_DEPT
+	    WHERE UD_ID = #{udId}
+	</select>
 
 </mapper>
