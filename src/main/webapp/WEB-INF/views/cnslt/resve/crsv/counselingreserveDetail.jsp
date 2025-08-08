@@ -24,7 +24,11 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-			<h3>정보 입력</h3>
+			<div class="reserveHeader">
+				<div class="dept-asterisk"></div>
+				<h3>정보 입력</h3>
+			</div>
+			
 	        <form id="detailForm" action="/cnslt/resve/reserve" method="post">
 	            <input type="hidden" name="counsel" value="${counselingVO.counsel}">
 	            <input type="hidden" name="memId" value="${counselingVO.memId}">
