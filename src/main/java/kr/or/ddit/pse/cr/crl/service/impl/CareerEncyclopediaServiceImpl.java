@@ -95,7 +95,7 @@ public class CareerEncyclopediaServiceImpl implements CareerEncyclopediaService 
 		try {
 			fileService.uploadFiles(fileGroupNo, fileList);
 		} catch (IOException e) {
-			log.info("직업 파일 업로드 중 에러 발생" + e.getMessage());
+			log.error("직업 파일 업로드 중 에러 발생" + e.getMessage());
 		}
 		
 		jobs.setFileGroupNo(fileGroupNo);

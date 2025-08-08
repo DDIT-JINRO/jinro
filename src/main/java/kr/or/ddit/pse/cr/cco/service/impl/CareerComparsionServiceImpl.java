@@ -24,9 +24,7 @@ public class CareerComparsionServiceImpl implements CareerComparsionService {
 		}
 		
 		List<JobsVO> jobsVOList = this.careerComparsionMapper.selectCareerComparsionList(jobs);
-		
-		log.info("결과@@@@@@@@@@@@@@@@@@@@@@@@@@@ : " + jobsVOList);
-		
+				
 		return jobsVOList;
 	}
 	
