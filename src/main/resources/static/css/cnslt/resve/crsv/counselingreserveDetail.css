@@ -22,6 +22,38 @@ body {
     margin-bottom: 20px;
 }
 
+.dept-asterisk {
+    width: 35px;
+    height: 35px;
+    background-image: url('/images/asterisk.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex-shrink: 0;
+    margin-top: 25px;
+}
+
+.reserveHeader {
+	display: flex;
+	margin: 20px;
+	gap : 10px;
+}
+
+.reserveHeader h2{
+	margin: 0;
+}
+
+.reserveDate {
+	display: flex;
+	margin: 20px;
+	gap : 10px;
+}
+
+.reserveDate h2{
+	margin: 0;
+}
+
+
 /* 정보 입력 섹션 (흰색 배경 카드) */
 .input-section {
     background-color: #fff;
