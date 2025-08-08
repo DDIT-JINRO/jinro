@@ -34,25 +34,32 @@
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
 			<div class="public-wrapper-main">
-			<div class="titleSpace">
-				<div class="insertTitle">제목</div>
-				<input class="Insert-title" id="title" type="text" placeholder="제목을 입력하세요.">
+				<div class="titleSpace">
+					<div class="insertTitle">제목</div>
+					<input class="Insert-title" id="title" type="text" placeholder="제목을 입력하세요.">
+				</div>
+				<div class="Insert-write">
+					<div class="editor-container">
+						<div id="editor"></div>
+					</div>
+
+				    <div id="preview-container">
+				        <label class="file-label">PDF 미리보기</label>
+				        <div id="preview-list"></div>
+				    </div>
+
+					<label for="fileInput" class="file-label">파일 첨부</label>
+					<div class="file-upload-container">
+						<input type="file" id="file-input" multiple>
+						<ul id="fileList" class="file-list"></ul>
+					</div>
+
+					<div class="button-group">
+						<button class="cancel-btn" id="backBtn">목록</button>
+						<button class="submit-btn" id="submitBtn">등록</button>
+					</div>
+				</div>
 			</div>
-			<div class="Insert-write">
-				<div class="editor-container">
-					<div id="editor"></div>
-				</div>
-				<label for="fileInput" class="file-label">파일 첨부</label>
-				<div class="file-upload-container">
-					<input type="file" id="fileInput" multiple>
-					<ul id="fileList" class="file-list"></ul>
-				</div>
-				<div class="button-group">
-					<button class="cancel-btn" id="backBtn">목록</button>
-					<button class="submit-btn" id="submitBtn">등록</button>
-				</div>
-			</div>
-		</div>
 		</div>
 	</div>
 </div>

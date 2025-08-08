@@ -1,5 +1,32 @@
 @charset "UTF-8";
 
+#preview-container {
+	display: none;
+	margin: 16px 0;
+}
+ 
+ /* 동적으로 생성될 개별 PDF 미리보기 아이템 */
+.pdf-preview-item {
+    margin-bottom: 24px; /* 각 미리보기 사이의 간격 */
+}
+
+/* PDF 파일 이름 스타일 */
+.pdf-file-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* PDF 미리보기 iframe */
+.pdf-iframe {
+	width: 100%;
+	height: 700px;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+}
+ 
+ 
 .Insert-write {
 	background-color: #fff;
 	border: 2px solid #e5e7eb;
@@ -122,4 +149,98 @@
 	margin-bottom: 4px;
 	border-radius: 4px;
 	font-size: 14px;
+}
+
+.btn-pdf-preview, .btn-pdf-download {
+	padding: 4px 12px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	background-color: #f8f9fa;
+	cursor: pointer;
+	font-size: 13px;
+	text-decoration: none;
+	color: #333;
+	margin-right: 8px;
+}
+
+.btn-pdf-preview:hover, .btn-pdf-download:hover {
+	background-color: #e9ecef;
+}
+
+/* 다운로드 링크 기본 스타일 */
+.download-link {
+	color: #007bff;
+	text-decoration: none;
+}
+
+.download-link:hover {
+	text-decoration: underline;
+}
+
+/* PDF 미리보기가 표시될 컨테이너 */
+.pdf-preview-container {
+	display: none; /* 기본적으로 숨김 */
+	width: 100%;
+	margin-top: 12px;
+}
+
+.pdf-preview-container iframe {
+	width: 100%;
+	height: 800px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+}
+
+.fileClass {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 16px;
+    background-color: #f9fafb;
+}
+
+.no-files {
+    color: #6b7280;
+    padding: 10px 0;
+    display: block;
+}
+
+.detailFile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    flex-wrap: wrap; 
+    border-bottom: 1px solid #e5e7eb; 
+}
+.detailFile:last-child {
+    border-bottom: none;
+}
+
+.file-name {
+    margin-right: 16px;
+    color: #111827;
+}
+
+.file-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 버튼 사이의 간격 */
+    flex-shrink: 0; /* 창이 줄어들어도 버튼 영역이 줄어들지 않도록 함 */
+}
+
+.btn-pdf-preview, .btn-pdf-download {
+    padding: 4px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: none;
+    color: #374151;
+    white-space: nowrap; /* 버튼 글자 줄바꿈 방지 */
+    transition: background-color 0.2s;
+}
+
+.btn-pdf-preview:hover, .btn-pdf-download:hover {
+    background-color: #f3f4f6;
 }
