@@ -84,6 +84,7 @@
 					<div style="flex: 0.8;">취업률</div>
 					<div style="flex: 0.8;">첫월급 평균</div>
 					<div style="width: 80px;">북마크</div>
+					<div style="width: 80px;">비교</div>
 					<%-- 펼치기/접기 아이콘 자리 --%>
 				</div>
 
@@ -114,17 +115,19 @@
 											src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
 										</span>
 									</button>
-									<label class="select-btn">
-										<input type="checkbox" id="compare-btn${univDept.uddId}" name="jobLcls" value="${univDept.uddId}"
-											data-dept-name="${univDept.uddMClass}" data-dept-sal="${univDept.avgSalary}" data-dept-emp="${univDept.empRate}" data-dept-admission="${univDept.admissionRate}"/>
-										<span>
-											비교
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
-                               				<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.052-.143z" clip-rule="evenodd" />
-                           				</svg>
-										</span>
-									</label>
 								</div>
+							</div>
+							<div class="company-info-item" style="width: 80px;">
+								<label class="select-btn">
+									<input type="checkbox" id="compare-btn${univDept.uddId}" name="jobLcls" value="${univDept.uddId}"
+										data-dept-name="${univDept.uddMClass}" data-dept-sal="${univDept.avgSalary}" data-dept-emp="${univDept.empRate}" data-dept-admission="${univDept.admissionRate}"/>
+									<span>
+										비교
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+	                             				<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.052-.143z" clip-rule="evenodd" />
+	                         				</svg>
+									</span>
+								</label>
 							</div>
 						</div>
 					</div>
