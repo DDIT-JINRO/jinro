@@ -170,7 +170,7 @@
 <div class="dept-compare-popup">
     <header class="popup-header">
         <div class="popup-title-group">
-            <img src="" alt="직업 비교 아이콘" class="popup-logo">
+            <img src="/images/deptCompareImg.png" alt="대학 비교 아이콘" class="popup-logo">
             <h2 class="popup-title">학과 비교</h2>
         </div>
         <button type="button" class="btn-close-popup" aria-label="닫기">
