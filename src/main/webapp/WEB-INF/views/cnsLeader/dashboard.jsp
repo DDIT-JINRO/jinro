@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="/css/admin/admDashboard.css">
+<link rel="stylesheet" href="/css/cnsLeader/cnsLeaderDashboard.css">
 <title>상담사 메인</title>
 <script>
 
