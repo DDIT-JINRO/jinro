@@ -14,9 +14,8 @@ public class CounselingVO {
 	private String counselTitle;
 	private String counselDescription;
 	private String counselStatus;
-	private Date counselReqDate;
-	private Date counselReqTime;
-	private String counselUrl;
+	private Date counselReqDateTime;
+	private String counselUrlUser;
 	private String counselReviewd;
 	private Date counselCreatedAt;
 	private Date counselUpdatedAt;

@@ -1,9 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/pse/cr/crl/selectCareerList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
-<section class="channel" data-error-message="${errorMessage}" data-server-error="${serverError}">
+<section class="channel" data-error-message="${errorMessage}">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
@@ -23,13 +22,13 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-			<a class="tab" href="/pse/cr/crl/selectCareerList.do">직업 목록</a>
-			<a class="tab active" href="/pse/cr/crr/selectCareerRcmList.do">추천 직업</a>
+			<a class="tab active" href="/pse/cr/crl/selectCareerList.do">직업 목록</a>
+			<a class="tab" href="/pse/cr/crr/selectCareerRcmList.do">추천 직업</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
 			<div class="activity-container">
-				<form method="GET" action="/pse/cr/crr/selectCareerRcmList.do">
+				<form method="GET" action="/pse/cr/crl/selectCareerList.do">
 					<div class="com-default-search">
 						<div class="com-select-wrapper">
 							<select name="status" class="com-status-filter">
@@ -277,7 +276,8 @@
         <button type="button" class="btn-view-results">직업 비교하기</button>
     </footer>
 </div>
+
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
-<script src="/js/pse/cr/crl/selectCareerList.js"></script>
 </body>
+<script src="/js/pse/cr/crl/selectCareerList.js"></script>
 </html>

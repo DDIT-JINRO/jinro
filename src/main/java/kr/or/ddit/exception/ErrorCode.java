@@ -33,7 +33,10 @@ public enum ErrorCode {
 
 	// Withdrawal
 	USER_ALREADY_WITHDRAWN(HttpStatus.BAD_REQUEST, "USER_ALREADY_WITHDRAWN", "이미 탈퇴 처리된 회원입니다."),
-	WITHDRAWAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "WITHDRAWAL_FAILED", "회원 탈퇴 처리 중 오류가 발생했습니다.");
+	WITHDRAWAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "WITHDRAWAL_FAILED", "회원 탈퇴 처리 중 오류가 발생했습니다."),
+	
+	// interestCn
+	NO_INTEREST_CN(HttpStatus.NOT_FOUND, "NO_INTEREST_CN", "관심사 키워드가 없습니다.");
 
 	private final HttpStatus status;
 	private final String code;
