@@ -1,0 +1,125 @@
+@charset "UTF-8";
+
+.Insert-write {
+	background-color: #fff;
+	border: 2px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 32px;
+}
+
+.Insert-title {
+	border: 2px solid #e5e7eb;
+	border-radius: 10px;
+	width: 90%;
+	box-sizing: border-box;
+	height: 50px;
+	font-size: 15px;
+	padding-left: 10px;
+}
+
+.titleSpace {
+	display: flex;
+	gap: 20px;
+	padding-bottom: 30px;
+}
+
+.insertTitle {
+	text-align: center;
+	align-content: center;
+	width: 10%;
+	border: none;
+    border-radius: 10px;
+    background-color: #7881f5;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.container {
+	max-width: 900px;
+	margin: 20px auto;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+	border-radius: 10px;
+}
+
+
+
+.ck-editor__editable {
+	min-height: 300px;
+}
+
+.button-group {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+
+.submit-btn {
+	width: 80px;
+	border: none;
+	border-radius: 10px;
+	background-color: #7881f5;
+	color: white;
+	font-weight: 600;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	height: 40px;
+}
+
+.submit-btn:hover {
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cancel-btn {
+	width: 80px;
+	border: none;
+	border-radius: 10px;
+	background-color: #eee;
+	color: black;
+	font-weight: 600;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	height: 40px;
+}
+
+.cancel-btn:hover {
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.file-upload-container {
+	display: flex;
+	align-items: center;
+	border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 5px 32px;
+}
+
+.file-label {
+	display: inline-block;
+	font-weight: bold;
+	margin: 8px 0;
+}
+
+#fileInput {
+	display: block;
+}
+
+.file-list {
+	list-style: none;
+	padding: 0;
+}
+
+.file-list li {
+	background: #f1f1f1;
+	padding: 8px 12px;
+	margin-bottom: 4px;
+	border-radius: 4px;
+	font-size: 14px;
+}
