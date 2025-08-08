@@ -10,45 +10,45 @@ import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
 
 @Service
 public class UniversityManageServiceImpl implements UniversityManageService {
-	
+
 	@Autowired
 	UniversityMapper universityMapper;
 
 	@Override
-    public int updateUniversity(UniversityVO universityVO) {
-        return universityMapper.updateUniversity(universityVO);
-    }
+	public int updateUniversity(UniversityVO universityVO) {
+		return universityMapper.updateUniversity(universityVO);
+	}
 
-    @Override
+	@Override
 	@Transactional
-    public int deleteUniversity(int univId) {
-        universityMapper.deleteDepartmentsByUnivId(univId);
-        return universityMapper.deleteUniversity(univId);
-    }
+	public int deleteUniversity(int univId) {
+		universityMapper.deleteDepartmentsByUnivId(univId);
+		return universityMapper.deleteUniversity(univId);
+	}
 
-    @Override
-    public UniversityVO selectUniversityById(int univId) {
-        return universityMapper.selectUniversityById(univId);
-    }
+	@Override
+	public UniversityVO selectUniversityById(int univId) {
+		return universityMapper.selectUniversityById(univId);
+	}
 
-    @Override
-    public int updateDepartment(DeptInfo deptInfo) {
-        return universityMapper.updateDepartment(deptInfo);
-    }
+	@Override
+	public int updateDepartment(DeptInfo deptInfo) {
+		return universityMapper.updateDepartment(deptInfo);
+	}
 
-    @Override
-    public int deleteDepartment(int udId) {
-        return universityMapper.deleteDepartment(udId);
-    }
+	@Override
+	public int deleteDepartment(int udId) {
+		return universityMapper.deleteDepartment(udId);
+	}
 
-    @Override
-    public int deleteDepartmentsByUnivId(int univId) {
-        return universityMapper.deleteDepartmentsByUnivId(univId);
-    }
+	@Override
+	public int deleteDepartmentsByUnivId(int univId) {
+		return universityMapper.deleteDepartmentsByUnivId(univId);
+	}
 
-    @Override
-    public DeptInfo selectDepartmentById(int udId) {
-        return universityMapper.selectDepartmentById(udId);
-    }
+	@Override
+	public DeptInfo selectDepartmentById(int udId) {
+		return universityMapper.selectDepartmentById(udId);
+	}
 
 }

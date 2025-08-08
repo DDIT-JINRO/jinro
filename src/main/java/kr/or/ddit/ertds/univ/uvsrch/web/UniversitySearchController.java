@@ -36,6 +36,7 @@ public class UniversitySearchController {
 			UniversityVO universityVO, 
 			Model model, 
 			Principal principal) {
+		
 		if (universityVO != null && universityVO.getSize() == 0)
 			universityVO.setSize(size);
 		if (universityVO != null && universityVO.getCurrentPage() == 0)
@@ -67,17 +68,10 @@ public class UniversitySearchController {
 		return "ertds/univ/uvsrch/selectUnivList"; // /WEB-INF/views/erds/univ/list.jsp
 	}
 
-	// 대학비교
-	@GetMapping("/selectCompare.do")
-	public String selectCompare() {
-
-		return "ertds/univ/uvsrch/compare"; // /WEB-INF/views/erds/univ/compare.jsp
-	}
-
-	// 대학
+	// 대학 디테일
 	@GetMapping("/selectDetail.do")
 	public String selectDetail(
-			@RequestParam("univId") int univId,
+			@RequestParam("univId") int univId, 
 			Model model, 
 			Principal principal) {
 

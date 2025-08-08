@@ -12,40 +12,40 @@ import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
 
 @Mapper
 public interface UniversityMapper {
-	
+
 	// 기존 조회 관련 메서드
 	List<UniversityVO> selectUniversityList(UniversityVO universityVO);
-	
+
 	int selectUniversityTotalCount(UniversityVO universityVO);
-	
+
 	List<ComCodeVO> selectCodeVOUniversityTypeList();
-	
+
 	List<ComCodeVO> selectCodeVOUniversityGubunList();
-	
+
 	List<ComCodeVO> selectCodeVORegionList();
-	
+
 	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookMarkVO);
-	
+
 	int selectUnivDeptCount(int univId);
-	
+
 	UniversityDetailVO selectUniversityDetailInfo(int univId);
 
 	List<UniversityDetailVO.DeptInfo> selectUniversityDeptStats(int univId);
 
 	// CRUD 메서드
 	// 대학 관련
-    int updateUniversity(UniversityVO universityVO);
-    
-    int deleteUniversity(int univId);
-    
-    UniversityVO selectUniversityById(int univId);
-        
-    // 학과 관련
-    int updateDepartment(DeptInfo deptInfo);
-    
-    int deleteDepartment(int udId);
-    
-    int deleteDepartmentsByUnivId(int univId);
-    
-    DeptInfo selectDepartmentById(int udId);
+	int updateUniversity(UniversityVO universityVO);
+
+	int deleteUniversity(int univId);
+
+	UniversityVO selectUniversityById(int univId);
+
+	// 학과 관련
+	int updateDepartment(DeptInfo deptInfo);
+
+	int deleteDepartment(int udId);
+
+	int deleteDepartmentsByUnivId(int univId);
+
+	DeptInfo selectDepartmentById(int udId);
 }

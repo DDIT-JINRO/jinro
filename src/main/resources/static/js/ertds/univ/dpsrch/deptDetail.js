@@ -40,7 +40,6 @@ const handleBookmarkToggle = (button) => {
 
 	// 현재 버튼이 'active' 클래스를 가지고 있는지 확인
 	const isBookmarked = button.classList.contains('active');
-	console.log("bmTargetId : ", bmTargetId);
 	const data = {
 		bmCategoryId: bmCategoryId,
 		bmTargetId: bmTargetId
@@ -62,7 +61,6 @@ const handleBookmarkToggle = (button) => {
 			return response.json();
 		})
 		.then(data => {
-			console.log(data);
 			if (data.success) {
 				alert(data.message);
 				button.classList.toggle('active');

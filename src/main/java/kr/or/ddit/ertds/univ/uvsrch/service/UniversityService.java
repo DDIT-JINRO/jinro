@@ -10,14 +10,14 @@ public interface UniversityService {
 	List<UniversityVO> selectUniversityList(UniversityVO universityVO);
 
 	int selectUniversityTotalCount(UniversityVO universityVO);
-	
+
 	List<ComCodeVO> selectCodeVOUniversityTypeList();
-	
+
 	List<ComCodeVO> selectCodeVOUniversityGubunList();
-	
+
 	List<ComCodeVO> selectCodeVORegionList();
-	
+
 	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookmarkVO);
-	
+
 	UniversityDetailVO selectUniversityDetail(int univId);
 }

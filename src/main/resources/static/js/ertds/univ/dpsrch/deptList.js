@@ -139,7 +139,6 @@ const handleBookmarkToggle = (button) => {
 			return response.json();
 		})
 		.then(data => {
-			console.log(data);
 			if (data.success) {
 				alert(data.message);
 				button.classList.toggle('active');

@@ -81,24 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
             handleBookmarkToggle(this);
         });
     });
-
-    // 학과 링크 클릭 추적 (선택사항 - 분석용)
-    function initializeDeptLinkListeners() {
-        document.querySelectorAll('.dept-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                // 학과 클릭 추적 (구글 애널리틱스 등)
-                const deptName = this.textContent.trim();
-                const uddId = new URL(this.href).searchParams.get('uddId');
-                
-                console.log('학과 상세페이지 이동:', {
-                    deptName: deptName,
-                    uddId: uddId
-                });
-
-                // 필요시 추가 작업 (예: 분석 데이터 전송)
-            });
-        });
-    }
 	
 	// 학과 아이템 클릭 이벤트 (전체 행 클릭 가능)
 	document.querySelectorAll('.dept-item.clickable-item').forEach(item => {
@@ -107,16 +89,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         item.addEventListener('click', function(e) {
             const href = this.dataset.href;
-            const deptName = this.dataset.deptName;
             
             if (href) {
-                // 학과 클릭 추적 (구글 애널리틱스 등)
-                console.log('학과 상세페이지 이동:', {
-                    deptName: deptName,
-                    href: href
-                });
-                
-                // 페이지 이동
                 window.location.href = href;
             }
         });
@@ -172,7 +146,6 @@ const handleBookmarkToggle = (button) => {
         return response.json();
     })
     .then(data => {
-        console.log('북마크 응답:', data);
         if (data.success) {
 			alert(data.message);
             button.classList.toggle('active');

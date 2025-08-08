@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/ertds/univ/uvsrch/univList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
@@ -7,21 +6,27 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">진학 정보</div> 
+		<div class="channel-title-text">진학 정보</div>
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a></div>
-		<div class="channel-sub-section-item"><a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a></div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
+		</div>
+		<!-- 중분류 -->
+		<div class="channel-sub-section-item">
+			<a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a>
+		</div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <a class="tab active" href="/ertds/univ/uvsrch/selectUnivList.do">대학 검색</a>
-		    <a class="tab" href="/ertds/univ/dpsrch/selectDeptList.do">학과 정보</a>
+			<a class="tab active" href="/ertds/univ/uvsrch/selectUnivList.do">대학 검색</a> <a class="tab" href="/ertds/univ/dpsrch/selectDeptList.do">학과 정보</a>
 		</div>
 	</div>
 </div>
@@ -31,26 +36,19 @@
 			<form method="get" action="/ertds/univ/uvsrch/selectUnivList.do">
 				<div class="com-default-search">
 					<div class="com-select-wrapper">
-						<svg class="com-select-arrow" xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-								d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-								clip-rule="evenodd" />
+						<svg class="com-select-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
             </svg>
 					</div>
 					<input type="search" name="keyword" placeholder="대학명으로 검색">
 					<button class="com-search-btn" type="button">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-							fill="currentColor" width="20" height="20">
-                <path fill-rule="evenodd"
-								d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
-								clip-rule="evenodd" />
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
             </svg>
 					</button>
 				</div>
 				<div class="com-accordion-filter">
-					<button type="button" class="com-accordion-header"
-						id="com-accordion-toggle">
+					<button type="button" class="com-accordion-header" id="com-accordion-toggle">
 						<span>필터</span> <span class="com-arrow-icon">▲</span>
 					</button>
 					<div class="com-accordion-panel" id="com-accordion-panel">
@@ -58,27 +56,21 @@
 							<label class="com-filter-title">대학 지역</label>
 							<div class="com-filter-options">
 								<c:forEach var="region" items="${codeVORegionList}">
-									<label class="com-filter-item">
-										<input type="checkbox" name="regionIds" value="${region.ccId}">
-										<span>${region.ccEtc}</span>
+									<label class="com-filter-item"> <input type="checkbox" name="regionIds" value="${region.ccId}"> <span>${region.ccEtc}</span>
 									</label>
 								</c:forEach>
 							</div>
 							<label class="com-filter-title">대학 유형</label>
 							<div class="com-filter-options">
 								<c:forEach var="type" items="${codeVOUniversityTypeList}">
-									<label class="com-filter-item">
-										<input type="checkbox" name="typeIds" value="${type.ccId}">
-										<span>${type.ccName}</span>
+									<label class="com-filter-item"> <input type="checkbox" name="typeIds" value="${type.ccId}"> <span>${type.ccName}</span>
 									</label>
 								</c:forEach>
 							</div>
 							<label class="com-filter-title">설립 유형</label>
 							<div class="com-filter-options">
 								<c:forEach var="gubun" items="${codeVOUniversityGubunList}">
-									<label class="com-filter-item">
-										<input type="checkbox" name="gubunIds" value="${gubun.ccId}">
-										<span>${gubun.ccName}</span>
+									<label class="com-filter-item"> <input type="checkbox" name="gubunIds" value="${gubun.ccId}"> <span>${gubun.ccName}</span>
 									</label>
 								</c:forEach>
 							</div>
@@ -93,7 +85,7 @@
 						<button type="submit" class="com-submit-search-btn">검색</button>
 					</div>
 				</div>
-			</form>			
+			</form>
 
 			<div class="company-list">
 				<div class="accordion-header">
@@ -124,13 +116,9 @@
 										</c:if>
 									</c:forEach>
 
-									<button class="bookmark-btn ${isBookmarked ? 'active' : ''}"
-										data-category-id="G03001"
-										data-target-id="${fn:escapeXml(university.univId)}">
-										<span class="icon-active"> <img
-											src="/images/bookmark-btn-active.png" alt="활성 북마크">
-										</span> <span class="icon-inactive"> <img
-											src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+									<button class="bookmark-btn ${isBookmarked ? 'active' : ''}" data-category-id="G03001" data-target-id="${fn:escapeXml(university.univId)}">
+										<span class="icon-active"> <img src="/images/bookmark-btn-active.png" alt="활성 북마크">
+										</span> <span class="icon-inactive"> <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
 										</span>
 									</button>
 								</div>
@@ -144,37 +132,27 @@
 			<div class="card-footer clearfix">
 				<ul class="pagination">
 					<!-- Previous -->
-					<li><a
-						href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${articlePage.keyword}
+					<li><a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${articlePage.keyword}
 						<c:forEach var='regionIds' items='${paramValues.regionIds}'>&regionIds=${regionIds}</c:forEach>
 						<c:forEach var='typeIds' items='${paramValues.typeIds}'>&typeIds=${typeIds}</c:forEach>
 						<c:forEach var='gubunIds' items='${paramValues.gubunIds}'>&gubunIds=${gubunIds}</c:forEach>
-						&hiringStatus=${param.hiringStatus}"	
-						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
-							← Previous </a></li>
+						&hiringStatus=${param.hiringStatus}" class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>"> ← Previous </a></li>
 
 					<!-- Page Numbers -->
-					<c:forEach var="pNo" begin="${articlePage.startPage}"
-						end="${articlePage.endPage}">
-						<li><a
-							href="${articlePage.url}?currentPage=${pNo}&keyword=${articlePage.keyword}
+					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
+						<li><a href="${articlePage.url}?currentPage=${pNo}&keyword=${articlePage.keyword}
 							<c:forEach var='regionIds' items='${paramValues.regionIds}'>&regionIds=${regionIds}</c:forEach>
 							<c:forEach var='typeIds' items='${paramValues.typeIds}'>&typeIds=${typeIds}</c:forEach>
 							<c:forEach var='gubunIds' items='${paramValues.gubunIds}'>&gubunIds=${gubunIds}</c:forEach>
-							&hiringStatus=${param.hiringStatus}"
-							class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
-								${pNo} </a></li>
+							&hiringStatus=${param.hiringStatus}" class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>"> ${pNo} </a></li>
 					</c:forEach>
 
 					<!-- Next -->
-					<li><a
-						href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
+					<li><a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
 						<c:forEach var='regionIds' items='${paramValues.regionIds}'>&regionIds=${regionIds}</c:forEach>
 						<c:forEach var='typeIds' items='${paramValues.typeIds}'>&typeIds=${typeIds}</c:forEach>
 						<c:forEach var='gubunIds' items='${paramValues.gubunIds}'>&gubunIds=${gubunIds}</c:forEach>
-						&hiringStatus=${param.hiringStatus}"				
-						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
-							Next → </a></li>
+						&hiringStatus=${param.hiringStatus}" class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>"> Next → </a></li>
 				</ul>
 			</div>
 

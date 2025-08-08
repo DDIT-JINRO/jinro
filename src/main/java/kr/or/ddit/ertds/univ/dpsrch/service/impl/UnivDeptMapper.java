@@ -16,12 +16,12 @@ public interface UnivDeptMapper {
 	List<UnivDeptVO> selectUnivDeptList(UnivDeptVO univDeptVO);
 
 	int selectUniversityTotalCount(UnivDeptVO univDeptVO);
-	
+
 	List<ComCodeVO> selectCodeVOUnivDeptLClassList();
-	
+
 	List<BookMarkVO> selectBookMarkVO(BookMarkVO bookmarkVO);
-	
+
 	UnivDeptDetailVO selectDeptDetail(int uddId);
-	
-    List<UnivDeptCompareVO> selectDeptCompareList(List<Integer> uddIdList);
+
+	List<UnivDeptCompareVO> selectDeptCompareList(List<Integer> uddIdList);
 }
