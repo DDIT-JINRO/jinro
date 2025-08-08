@@ -62,9 +62,6 @@ public class NoticeController {
 			@RequestParam(value="keyword",required=false) String keyword,
 			//연도별 구분
 			@RequestParam(value="status",required = false)String status) {
-
-
-		log.info(""+currentPage,size,keyword,status);
 		
 		return noticeService.getAdminNoticePage(currentPage, size, keyword, status);
 	}

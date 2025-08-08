@@ -63,7 +63,6 @@ public class VideoServiceImpl implements VideoService {
 
 			// 응답 본문을 문자열로 읽음
 			String responseBody = response.body().string();
-			log.info("responseBody : {}", responseBody);
 
 			// 💡 GSON을 이용하여 JSON 파싱
 			JsonObject jsonObj = JsonParser.parseString(responseBody).getAsJsonObject();
@@ -91,8 +90,6 @@ public class VideoServiceImpl implements VideoService {
 		
 		RequestBody body1 = RequestBody.create(mediaType, payload1);
 		RequestBody body2 = RequestBody.create(mediaType, payload2);
-		String data1 = body1.toString();
-		String data2 = body2.toString();
 		
 		// 채팅방 URL 요청
 		Request request1 = new Request.Builder()
@@ -102,7 +99,6 @@ public class VideoServiceImpl implements VideoService {
 				.addHeader("content-type", "application/x-www-form-urlencoded")
 				.addHeader("X-GRM-AuthToken", "12056163501988613cf51b7b51cdd8140bb172761d02211a8b")
 				.build();
-		log.info("requst : " + request);
 
 		Request request2 = new Request.Builder()
 				.url("https://openapi.gooroomee.com/api/v1/room/user/otp/url")
@@ -131,7 +127,6 @@ public class VideoServiceImpl implements VideoService {
 			if(responseBodyUser!=null || responseBodyUser!="") {
 				Map<String,Object> map = (HashMap)this.jsonStringToObject(responseBodyUser, HashMap.class);				
 				Map<String,Object> dataMap = (HashMap)map.get("data");
-				log.info("room/enter(참가자)->JSON : " + dataMap.get("url"));				
 				userUrl = dataMap.get("url").toString();
 			}
 			

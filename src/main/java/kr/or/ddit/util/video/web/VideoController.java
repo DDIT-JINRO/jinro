@@ -21,7 +21,6 @@ public class VideoController {
 	public String videoHome(@RequestParam int counselId , Model model) throws Exception {
 		
 		int result = videoService.createVideoChatRoom(counselId);
-		log.info(result+"");
 		model.addAttribute("data", result);
 		
 		// 💡 "/WEB-INF/views/video/video.jsp"로 이동
