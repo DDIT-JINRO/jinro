@@ -269,6 +269,7 @@
     border: 2px solid #e8ecef;
     border-radius: 10px;
     transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
 }
 
 .group-card:hover {
