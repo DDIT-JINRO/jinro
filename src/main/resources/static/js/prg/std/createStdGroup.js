@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 		fields.forEach(field => {
 		  const el = document.getElementById(field.id);
-		  console.log(el);
 		  if (!el.value.trim()) {
 		    const group = el.closest('.form-group');
 		    group.classList.add('error');
