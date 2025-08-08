@@ -121,6 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 북마크 토글 함수
 const handleBookmarkToggle = (button) => {
+	if (memId == "" || memId == "anonymousUser") {
+        alert("북마크는 로그인 후 이용 하실 수 있습니다.");
+        return;
+    }
     const bmCategoryId = button.dataset.categoryId;
     const bmTargetId = button.dataset.targetId;
     const isBookmarked = button.classList.contains('active');
@@ -155,62 +159,9 @@ const handleBookmarkToggle = (button) => {
     })
     .catch(error => {
         console.error('북마크 처리 중 오류 발생:', error);
-        showToastMessage('오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error');
+		alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     });
 };
-
-// 토스트 메시지 표시 함수 (alert 대신 사용)
-function showToastMessage(message, type = 'info') {
-    // 기존 토스트 메시지 제거
-    const existingToast = document.querySelector('.toast-message');
-    if (existingToast) {
-        existingToast.remove();
-    }
-
-    // 토스트 메시지 생성
-    const toast = document.createElement('div');
-    toast.className = `toast-message toast-${type}`;
-    toast.textContent = message;
-    
-    // 스타일 적용
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background-color: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 10000;
-        font-size: 0.9rem;
-        font-weight: 500;
-        opacity: 0;
-        transform: translateX(100%);
-        transition: all 0.3s ease;
-        max-width: 300px;
-        word-wrap: break-word;
-    `;
-
-    document.body.appendChild(toast);
-
-    // 애니메이션으로 표시
-    setTimeout(() => {
-        toast.style.opacity = '1';
-        toast.style.transform = 'translateX(0)';
-    }, 100);
-
-    // 3초 후 제거
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.remove();
-            }
-        }, 300);
-    }, 3000);
-}
 
 // 경쟁률 비교 처리 함수
 function processCompetitionRates() {
