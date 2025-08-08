@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 			})
 			.catch(err => {
-				console.log(err);
+				console.error(err);
 				alert('삭제도중 문제가 발생했습니다.\n관리자측 문의바랍니다.');
 			})
 		})
@@ -202,7 +202,6 @@ function confirmReport() {
 
 	const formData = new FormData();
 	if (reportFileEl.files.length > 0) {
-		console.log(reportFileEl.files[0].size);
 		/*	if(reportFileEl.files[0].size > FILE_MAX_SIZE){
 				alert(`파일이 너무 큽니다 제한:${FILE_MAX_M}KB`);
 				reportFileEl.value = '';
@@ -281,8 +280,16 @@ function createParentReply(replyVO, e) {
 	  <div>
 	  	<button class="reply-child-btn" id="reply-${replyVO.replyId}">답글</button>
 	  	<span class="child-count"></span>
-		<img alt="" src="/images/likedBean.png" class="liked" data-board-id="${replyVO.boardId}" data-reply-id="${replyVO.replyId}">
-		    							<span class="like-cnt" id="reply-like-cnt-${replyVO.replyId}">0</span>
+		<button class="like-button ${replyVO.replyIsLiked == 1 ? 'liked' : ''}" data-board-id="${replyVO.boardId}" data-reply-id="${replyVO.replyId}" aria-label="좋아요 버튼">
+			<svg class="heart-outline" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+		    </svg>
+			<svg class="heart-filled" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+		    </svg>
+		</button>
+		
+		<span class="like-cnt" id="reply-like-cnt-${replyVO.replyId}">0</span>
 	  </div>
 	`;
 
@@ -407,6 +414,7 @@ function submitCreateReply(e) {
 	e.preventDefault();
 	if (!e.target.classList.contains('comment-form')) return false;
 	const formData = new FormData(e.target);
+	
 	fetch(e.target.action, {
 		method: "POST",
 		headers: {},
@@ -424,7 +432,7 @@ function submitCreateReply(e) {
 			}
 		})
 		.catch(err => {
-			console.log(err);
+			console.error(err);
 		})
 }
 
@@ -455,7 +463,6 @@ function eventEtcContainerClicked(e) {
 	if (!e.target.closest('.etc-container')) return;
 	const el = e.target;
 	if (!el.textContent.trim()) return;
-	console.log(el.textContent.trim());
 	if (el.classList.contains('reply-child-container')) return;
 	if (!e.target.classList.contains('etc-act-btn')) return;
 
@@ -500,7 +507,7 @@ function eventEtcContainerClicked(e) {
 				}
 			})
 			.catch(err => {
-				console.log(err);
+				console.error(err);
 			})
 	}
 
@@ -584,7 +591,7 @@ function modifyReplyAct(e) {
 			}
 		})
 		.catch(err => {
-			console.log(err);
+			console.error(err);
 		})
 }
 
