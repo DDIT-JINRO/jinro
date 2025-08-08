@@ -39,7 +39,7 @@
                 <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
             </svg>
 					</div>
-					<input type="search" name="keyword" placeholder="학과명으로 검색">
+					<input type="search" name="keyword" placeholder="학과명으로 검색" value="${param.keyword}">
 					<button class="com-search-btn" type="button">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                 <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
@@ -55,7 +55,17 @@
 							<label class="com-filter-title">계열</label>
 							<div class="com-filter-options">
 								<c:forEach var="lClass" items="${lClass}">
-									<label class="com-filter-item"> <input type="checkbox" name="lClassIds" value="${lClass.ccId}"> <span>${lClass.ccName}</span>
+									<c:set var="isLClassChecked" value="${false}" />
+									
+									<c:forEach var="submittedLClass" items="${paramValues.lClassIds}">
+										<c:if test="${lClass.ccId eq submittedLClass}">
+											<c:set var="isLClassChecked" value="${true}" />
+										</c:if>
+									</c:forEach>
+									
+									<label class="com-filter-item"> 
+										<input type="checkbox" name="lClassIds" value="${lClass.ccId}" ${isLClassChecked ? 'checked' : ''}> 
+										<span>${lClass.ccName}</span>
 									</label>
 								</c:forEach>
 							</div>
@@ -65,7 +75,19 @@
 								<label class="com-filter-title">선택된 필터</label>
 								<button type="button" class="com-filter-reset-btn">초기화</button>
 							</div>
-							<div class="com-selected-filters"></div>
+							<div class="com-selected-filters">
+								<!-- 선택된 계열 필터 표시 -->
+								<c:forEach var="submittedLClass" items="${paramValues.lClassIds}">
+									<c:forEach var="lClass" items="${lClass}">
+										<c:if test="${lClass.ccId eq submittedLClass}">
+											<span class="com-selected-filter" data-group="lClassCategory" data-value="${submittedLClass}">
+												계열 > ${lClass.ccName}
+												<button type="button" class="com-remove-filter">×</button>
+											</span>
+										</c:if>
+									</c:forEach>
+								</c:forEach>
+							</div>
 						</div>
 						<button type="submit" class="com-submit-search-btn">검색</button>
 					</div>

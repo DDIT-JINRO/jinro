@@ -40,7 +40,7 @@
                 <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
             </svg>
 					</div>
-					<input type="search" name="keyword" placeholder="대학명으로 검색">
+					<input type="search" name="keyword" placeholder="대학명으로 검색" value="${param.keyword}">
 					<button class="com-search-btn" type="button">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                 <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
@@ -56,21 +56,51 @@
 							<label class="com-filter-title">대학 지역</label>
 							<div class="com-filter-options">
 								<c:forEach var="region" items="${codeVORegionList}">
-									<label class="com-filter-item"> <input type="checkbox" name="regionIds" value="${region.ccId}"> <span>${region.ccEtc}</span>
+									<c:set var="isRegionChecked" value="${false}" />
+									
+									<c:forEach var="submittedRegion" items="${paramValues.regionIds}">
+										<c:if test="${region.ccId eq submittedRegion}">
+											<c:set var="isRegionChecked" value="${true}" />
+										</c:if>
+									</c:forEach>
+									
+									<label class="com-filter-item"> 
+										<input type="checkbox" name="regionIds" value="${region.ccId}" ${isRegionChecked ? 'checked' : ''}> 
+										<span>${region.ccEtc}</span>
 									</label>
 								</c:forEach>
 							</div>
 							<label class="com-filter-title">대학 유형</label>
 							<div class="com-filter-options">
 								<c:forEach var="type" items="${codeVOUniversityTypeList}">
-									<label class="com-filter-item"> <input type="checkbox" name="typeIds" value="${type.ccId}"> <span>${type.ccName}</span>
+									<c:set var="isTypeChecked" value="${false}" />
+									
+									<c:forEach var="submittedType" items="${paramValues.typeIds}">
+										<c:if test="${type.ccId eq submittedType}">
+											<c:set var="isTypeChecked" value="${true}" />
+										</c:if>
+									</c:forEach>
+									
+									<label class="com-filter-item"> 
+										<input type="checkbox" name="typeIds" value="${type.ccId}" ${isTypeChecked ? 'checked' : ''}> 
+										<span>${type.ccName}</span>
 									</label>
 								</c:forEach>
 							</div>
 							<label class="com-filter-title">설립 유형</label>
 							<div class="com-filter-options">
 								<c:forEach var="gubun" items="${codeVOUniversityGubunList}">
-									<label class="com-filter-item"> <input type="checkbox" name="gubunIds" value="${gubun.ccId}"> <span>${gubun.ccName}</span>
+									<c:set var="isGubunChecked" value="${false}" />
+									
+									<c:forEach var="submittedGubun" items="${paramValues.gubunIds}">
+										<c:if test="${gubun.ccId eq submittedGubun}">
+											<c:set var="isGubunChecked" value="${true}" />
+										</c:if>
+									</c:forEach>
+									
+									<label class="com-filter-item"> 
+										<input type="checkbox" name="gubunIds" value="${gubun.ccId}" ${isGubunChecked ? 'checked' : ''}> 
+										<span>${gubun.ccName}</span>
 									</label>
 								</c:forEach>
 							</div>
@@ -80,7 +110,43 @@
 								<label class="com-filter-title">선택된 필터</label>
 								<button type="button" class="com-filter-reset-btn">초기화</button>
 							</div>
-							<div class="com-selected-filters"></div>
+							<div class="com-selected-filters">
+								<!-- 선택된 지역 필터 표시 -->
+								<c:forEach var="submittedRegion" items="${paramValues.regionIds}">
+									<c:forEach var="region" items="${codeVORegionList}">
+										<c:if test="${region.ccId eq submittedRegion}">
+											<span class="com-selected-filter" data-group="regionCategory" data-value="${submittedRegion}">
+												대학 지역 > ${region.ccEtc}
+												<button type="button" class="com-remove-filter">×</button>
+											</span>
+										</c:if>
+									</c:forEach>
+								</c:forEach>
+								
+								<!-- 선택된 유형 필터 표시 -->
+								<c:forEach var="submittedType" items="${paramValues.typeIds}">
+									<c:forEach var="type" items="${codeVOUniversityTypeList}">
+										<c:if test="${type.ccId eq submittedType}">
+											<span class="com-selected-filter" data-group="typeCategory" data-value="${submittedType}">
+												대학 유형 > ${type.ccName}
+												<button type="button" class="com-remove-filter">×</button>
+											</span>
+										</c:if>
+									</c:forEach>
+								</c:forEach>
+								
+								<!-- 선택된 설립 유형 필터 표시 -->
+								<c:forEach var="submittedGubun" items="${paramValues.gubunIds}">
+									<c:forEach var="gubun" items="${codeVOUniversityGubunList}">
+										<c:if test="${gubun.ccId eq submittedGubun}">
+											<span class="com-selected-filter" data-group="gubunCategory" data-value="${submittedGubun}">
+												설립 유형 > ${gubun.ccName}
+												<button type="button" class="com-remove-filter">×</button>
+											</span>
+										</c:if>
+									</c:forEach>
+								</c:forEach>
+							</div>
 						</div>
 						<button type="submit" class="com-submit-search-btn">검색</button>
 					</div>
