@@ -111,6 +111,18 @@ document.addEventListener('DOMContentLoaded', function() {
 			selectedFiltersContainer.innerHTML = '';
 		});
 	}
+	
+	// 디테일 페이지로 이동
+	document.querySelectorAll('.jobs-item').forEach(jobs => {
+		console.log("click")
+		jobs.addEventListener('click', (e) => {
+			// 북마크 버튼 눌렀을 때에는 디테일 페이지로 넘어가지 않도록 방지
+			if (e.target.closest('.bookmark-btn') || e.target.closest('.select-btn')) {
+				return;
+			}
+			location.href = '/pse/cr/crl/selectCareerDetail.do?jobCode=' + jobs.dataset.jobId;
+		});
+	});
 });
 
 document.addEventListener('DOMContentLoaded', function() {
