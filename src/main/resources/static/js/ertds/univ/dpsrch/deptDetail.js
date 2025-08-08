@@ -502,20 +502,6 @@ function smoothScrollTo(element) {
     }
 }
 
-/**
- * 태그 클릭 이벤트 (관련 직업)
- */
-document.addEventListener('click', function(event) {
-    if (event.target.classList.contains('dept-job-tag')) {
-        
-        const tagText = event.target.textContent.trim();
-        
-        // 관련 검색 페이지로 이동
-        const searchUrl = `/ertds/univ/dpsrch/selectDeptList.do?keyword=${encodeURIComponent(tagText)}`;
-        window.location.href = searchUrl;
-    }
-});
-
 // CSS 애니메이션 정의 (동적 추가)
 const style = document.createElement('style');
 style.textContent = `
@@ -542,12 +528,6 @@ style.textContent = `
     }
     
     .dept-tag:hover,
-    .dept-job-tag:hover {
-        background: #f0f0f0;
-        cursor: pointer;
-        transform: translateY(-2px);
-        transition: all 0.2s ease;
-    }
     
     .dept-detail-btn:active,
     .dept-bookmark-btn:active {

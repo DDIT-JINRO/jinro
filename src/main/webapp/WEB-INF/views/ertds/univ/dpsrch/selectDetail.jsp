@@ -142,9 +142,11 @@
                         <div class="dept-asterisk"></div>
                         <h3 class="dept-content-title">관련 자격</h3>
                     </div>
-                    <div class="dept-related-section">
-                        <div class="dept-text-content">
-                            <p>${deptDetail.uddLiList}</p>
+                    <div class="dept-related-jobs">
+                        <div class="dept-job-tags">
+                            <c:forEach var="li" items="${deptDetail.uddLiList}">
+                                <span class="dept-job-tag">${li}</span>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>
