@@ -60,7 +60,7 @@
 				<div class="teenList-list">
 					<div class="group-card" data-tbd-id="${commBoardVO.boardId}">
 						<div class="group-info">
-							<div class="group-no">${stat.count }</div>
+							<div class="group-no">${commBoardVO.boardId}</div>
 							<div class="group-title-list">${commBoardVO.boardTitle}</div>
 						</div>
 						<div class="group-meta">
