@@ -73,18 +73,25 @@ const handleBookmarkToggle = (button) => {
 }
 
 
-function sortTableByColumn(sortKey, clickedHeader) {
+async function sortTableByColumn(sortKey, clickedHeader) {
     const table = document.querySelector('.comparison-table');
     const thead = table.querySelector('thead');
     const tbody = table.querySelector('tbody');
     const headerRow = thead.querySelector('tr');
     const dataRows = Array.from(tbody.querySelectorAll('tr'));
 
-    // 1. 정렬 순서 결정 (처음 클릭 시 내림차순, 이후 토글)
+    // 정렬 중임을 표시하고 중복 클릭 방지
+    if (table.classList.contains('sorting')) return;
+    table.classList.add('sorting');
+
+    // 1. 페이드 아웃 애니메이션 시작
+    await fadeOutTable(table);
+
+    // 2. 정렬 순서 결정
     const currentOrder = sortOrders[sortKey] === 'desc' ? 'asc' : 'desc';
     sortOrders[sortKey] = currentOrder;
 
-    // 2. 컬럼(열) 데이터를 추출하여 배열로 만듭니다.
+    // 3. 컬럼 데이터 추출 및 정렬
     const columns = [];
     const deptHeaders = Array.from(headerRow.querySelectorAll('th:not(:first-child)'));
 
@@ -100,7 +107,7 @@ function sortTableByColumn(sortKey, clickedHeader) {
         columns.push(columnData);
     });
 
-    // 3. 데이터를 정렬합니다.
+    // 4. 데이터 정렬
     columns.sort((a, b) => {
         if (currentOrder === 'asc') {
             return a.sortValue - b.sortValue;
@@ -109,16 +116,73 @@ function sortTableByColumn(sortKey, clickedHeader) {
         }
     });
 
-    // 4. 정렬된 순서에 따라 DOM을 재배치합니다.
+    // 5. DOM 재배치
     columns.forEach(column => {
-        // 헤더(직업 카드) 재배치
         headerRow.appendChild(column.headerElement);
-        // 각 행의 데이터 셀 재배치
         column.cellElements.forEach(cell => cell.parentElement.appendChild(cell));
     });
 
-    // 5. 정렬 상태 시각적 표시 업데이트
+    // 6. 정렬 상태 표시 업데이트
     updateSortIndicator(clickedHeader, currentOrder);
+    
+    // 7. 최고 값 강조 업데이트
+    highlightBestValues();
+
+    // 8. 페이드 인 애니메이션
+    await fadeInTable(table);
+
+    // 정렬 완료
+    table.classList.remove('sorting');
+}
+
+// 페이드 아웃 애니메이션
+function fadeOutTable(table) {
+    return new Promise(resolve => {
+        table.style.transition = 'opacity 0.3s ease-out';
+        table.style.opacity = '0.3';
+        
+        // 컬럼들에 개별 애니메이션 효과
+        const columns = table.querySelectorAll('th:not(:first-child), td');
+        columns.forEach((col, index) => {
+            setTimeout(() => {
+                col.style.transition = 'transform 0.2s ease-out, opacity 0.2s ease-out';
+                col.style.transform = 'translateY(-10px)';
+                col.style.opacity = '0.2';
+            }, index * 20); // 순차적으로 애니메이션
+        });
+
+        setTimeout(resolve, 200);
+    });
+}
+
+// 페이드 인 애니메이션
+function fadeInTable(table) {
+    return new Promise(resolve => {
+        const columns = table.querySelectorAll('th:not(:first-child), td');
+        
+        // 컬럼들 순차적으로 나타나기
+        columns.forEach((col, index) => {
+            setTimeout(() => {
+                col.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+                col.style.transform = 'translateY(0)';
+                col.style.opacity = '1';
+            }, index * 30);
+        });
+
+        // 전체 테이블 페이드 인
+        setTimeout(() => {
+            table.style.opacity = '1';
+            setTimeout(() => {
+                // 애니메이션 완료 후 스타일 정리
+                table.style.transition = '';
+                columns.forEach(col => {
+                    col.style.transition = '';
+                    col.style.transform = '';
+                });
+                resolve();
+            }, 200);
+        }, 300);
+    });
 }
 
 

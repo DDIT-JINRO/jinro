@@ -180,4 +180,63 @@
     color: #007bff;            /* 파란색 텍스트 */
 }
 
+/* 테이블 정렬 애니메이션 스타일 */
+.comparison-table {
+    transition: opacity 0.3s ease-out;
+}
 
+/* 정렬 중일 때 커서 변경 */
+.comparison-table.sorting {
+    pointer-events: none;
+    cursor: wait;
+}
+
+.comparison-table.sorting .sortable-header {
+    cursor: wait;
+}
+
+/* 헤더 호버 효과 강화 */
+.sortable-header {
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+}
+
+.sortable-header:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sortable-header.sort-active {
+    background-color: #e3f2fd;
+    font-weight: bold;
+}
+
+/* 셀 애니메이션을 위한 기본 스타일 */
+.comparison-table th:not(:first-child),
+.comparison-table td {
+    transition: all 0.3s ease-out;
+}
+
+/* 최고값 강조 애니메이션 */
+.highlight-best {
+    animation: highlightPulse 0.6s ease-out;
+    background-color: #e8f5e8 !important;
+    font-weight: bold;
+    position: relative;
+}
+
+@keyframes highlightPulse {
+    0% {
+        transform: scale(1);
+        background-color: #fff3cd;
+    }
+    50% {
+        transform: scale(1.05);
+        background-color: #ffeaa7;
+    }
+    100% {
+        transform: scale(1);
+        background-color: #e8f5e8;
+    }
+}
