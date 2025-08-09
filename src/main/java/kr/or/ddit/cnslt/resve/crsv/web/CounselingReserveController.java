@@ -102,7 +102,7 @@ public class CounselingReserveController {
                 // FlashAttribute에 VO 객체 전체를 담아 다음 요청으로 전달
                 redirectAttributes.addFlashAttribute("counselingVO", counselingVO);
                 redirectAttributes.addAttribute("payId",payId);
-                log.info("holdAndRedirect -> payId"+payId);
+                
                 // 리다이렉트할 경로만 반환
                 return "redirect:/cnslt/resve/crsv/reservationDetail.do";
             } else {
@@ -123,7 +123,7 @@ public class CounselingReserveController {
     		@RequestParam int payId,
     		RedirectAttributes redirectAttributes) {
 		boolean isReserved = counselingReserveService.tryReserveCounsel(counselingVO);
-		log.info("reserve -> payId"+payId);
+		
 		if (isReserved) {
 			int cnt = counselingReserveService.minusPayConsultCnt(payId);
 			if(cnt>0) {

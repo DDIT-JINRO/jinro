@@ -231,5 +231,4 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 		// TODO Auto-generated method stub
 		return counselingReserveMapper.minusPayConsultCnt(payId);
 	}
-	
 }
