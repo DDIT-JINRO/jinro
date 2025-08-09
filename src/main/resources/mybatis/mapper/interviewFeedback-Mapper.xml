@@ -18,8 +18,8 @@
 		FROM
 		    COMPANY
 		<if test="cpName != null and cpName != ''">
-			WHERE
-				CP_NAME = #{cpName}
+        WHERE
+            CP_NAME LIKE '%' || #{cpName} || '%'
 		</if>
 	</select>
 
