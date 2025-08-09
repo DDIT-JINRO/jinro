@@ -39,99 +39,96 @@
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			<div class="public-wrapper-main">
-				<form method="get" action="/cdp/sint/qestnlst/questionList.do">
-					<div class="search-wrapper">
-						<input type="text" name="keyword" value="${articlePage.keyword}"
-							placeholder="질문 검색" class="search-input" />
-						<!-- 기본 필터 -->
-						<div class="filter-section">
-							<div class="filter-title">직무 필터</div>
-							<div class="filter-options">
-								<c:forEach var="code" items="${codeVOList}">
-									<label class="filter-item"> <input type="checkbox"
-										class="filter-checkbox" name="siqJobFilter"
-										value="${code.ccId}" data-name="${code.ccName}"
-										data-id="${code.ccId}" /> <span class="filter-label">${code.ccName}</span>
-									</label>
-								</c:forEach>
+			<form method="get" action="/cdp/sint/qestnlst/questionList.do">
+				<div class="search-wrapper">
+					<input type="text" name="keyword" value="${articlePage.keyword}"
+						placeholder="질문 검색" class="search-input" />
+					<!-- 기본 필터 -->
+					<div class="filter-section">
+						<div class="filter-title">직무 필터</div>
+						<div class="filter-options">
+							<c:forEach var="code" items="${codeVOList}">
+								<label class="filter-item"> <input type="checkbox"
+									class="filter-checkbox" name="siqJobFilter"
+									value="${code.ccId}" data-name="${code.ccName}"
+									data-id="${code.ccId}" /> <span class="filter-label">${code.ccName}</span>
+								</label>
+							</c:forEach>
+						</div>
+					</div>
+
+					<!-- 선택된 필터 표시 영역 -->
+					<div class="filter-section selected-filters-wrapper">
+						<div class="filter-title">선택된 필터</div>
+						<div class="selected-filters" id="selected-filters">
+							<!-- 선택된 항목 JS로 표시 -->
+						</div>
+					</div>
+
+
+					<button type="submit" class="search-button">검색</button>
+				</div>
+			</form>
+
+
+			<form id="cartForm" method="post" action="/cdp/sint/qestnlst/cart">
+				<input type="hidden" id="questionIds" name="questionIds" />
+
+				<div class="question-list">
+					<c:forEach var="q" items="${articlePage.content}">
+						<div class="question">
+							<div class="question-left">
+								<div class="question-tag">${codeMap[q.siqJob]}</div>
+								<div class="question-text">${q.siqContent}</div>
+							</div>
+							<div class="question-right">
+								<input type="checkbox" data-id="${q.siqId}"
+									onchange="toggleQuestion(this, '${q.siqId}', '${q.siqContent}')" />
 							</div>
 						</div>
-
-						<!-- 선택된 필터 표시 영역 -->
-						<div class="filter-section selected-filters-wrapper">
-							<div class="filter-title">선택된 필터</div>
-							<div class="selected-filters" id="selected-filters">
-								<!-- 선택된 항목 JS로 표시 -->
-							</div>
-						</div>
-
-
-						<button type="submit" class="search-button">검색</button>
-					</div>
-				</form>
-
-
-				<form id="cartForm" method="post" action="/cdp/sint/qestnlst/cart">
-					<input type="hidden" id="questionIds" name="questionIds" />
-
-					<div class="question-list">
-						<c:forEach var="q" items="${articlePage.content}">
-							<div class="question">
-								<div class="question-left">
-									<div class="question-tag">${codeMap[q.siqJob]}</div>
-									<div class="question-text">${q.siqContent}</div>
-								</div>
-								<div class="question-right">
-									<input type="checkbox" data-id="${q.siqId}"
-										onchange="toggleQuestion(this, '${q.siqId}', '${q.siqContent}')" />
-								</div>
-							</div>
-						</c:forEach>
-					</div>
-
-					<!-- 오른쪽 패널 -->
-					<div class="cart-panel">
-						<div id="cartSidebar"></div>
-							<button type="button" class="submitCartForm" >자기소개서
-								작성</button>
-					</div>
-				</form>
-
-				<div class="card-footer clearfix">
-					<ul class="pagination">
-						<!-- Previous -->
-						<li><a
-							href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${articlePage.keyword}
-				<c:forEach var='filter' items='${paramValues.siqJobFilter}'>
-					&siqJobFilter=${filter}
-				</c:forEach>"
-							class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
-								← Previous </a></li>
-
-						<!-- Page Numbers -->
-						<c:forEach var="pNo" begin="${articlePage.startPage}"
-							end="${articlePage.endPage}">
-							<li><a
-								href="${articlePage.url}?currentPage=${pNo}&keyword=${articlePage.keyword}
-					<c:forEach var='filter' items='${paramValues.siqJobFilter}'>
-						&siqJobFilter=${filter}
-					</c:forEach>"
-								class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
-									${pNo} </a></li>
-						</c:forEach>
-
-						<!-- Next -->
-						<li><a
-							href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
-				<c:forEach var='filter' items='${paramValues.siqJobFilter}'>
-					&siqJobFilter=${filter}
-				</c:forEach>"
-							class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
-								Next → </a></li>
-					</ul>
+					</c:forEach>
 				</div>
 
+				<!-- 오른쪽 패널 -->
+				<div class="cart-panel">
+					<div id="cartSidebar"></div>
+						<button type="button" class="submitCartForm" >자기소개서
+							작성</button>
+				</div>
+			</form>
+
+			<div class="card-footer clearfix">
+				<ul class="pagination">
+					<!-- Previous -->
+					<li><a
+						href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${articlePage.keyword}
+			<c:forEach var='filter' items='${paramValues.siqJobFilter}'>
+				&siqJobFilter=${filter}
+			</c:forEach>"
+						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
+							← Previous </a></li>
+
+					<!-- Page Numbers -->
+					<c:forEach var="pNo" begin="${articlePage.startPage}"
+						end="${articlePage.endPage}">
+						<li><a
+							href="${articlePage.url}?currentPage=${pNo}&keyword=${articlePage.keyword}
+				<c:forEach var='filter' items='${paramValues.siqJobFilter}'>
+					&siqJobFilter=${filter}
+				</c:forEach>"
+							class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
+								${pNo} </a></li>
+					</c:forEach>
+
+					<!-- Next -->
+					<li><a
+						href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
+			<c:forEach var='filter' items='${paramValues.siqJobFilter}'>
+				&siqJobFilter=${filter}
+			</c:forEach>"
+						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
+							Next → </a></li>
+				</ul>
 			</div>
 		</div>
 	</div>

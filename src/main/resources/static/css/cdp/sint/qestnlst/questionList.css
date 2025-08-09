@@ -2,12 +2,6 @@ body {
 	font-family: 'Noto Sans KR', sans-serif;
 }
 
-.public-wrapper-main {
-	max-width: 1040px;
-	margin: 0 auto;
-	padding: 40px 0;
-}
-
 /* 질문 카드 */
 .question {
 	display: flex;

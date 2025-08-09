@@ -7,16 +7,6 @@ body, input, textarea {
 	font-family: 'NotoSansCJKkr', 'Malgun Gothic', 'Arial', sans-serif;
 }
 
-/* 전체 레이아웃 */
-.public-wrapper-main {
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 24px 60px;
-	background: #fff;
-	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
 /* 제목 섹션 */
 .section-title {
 	margin-bottom: 32px;
