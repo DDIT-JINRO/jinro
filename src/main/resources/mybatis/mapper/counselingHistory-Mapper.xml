@@ -55,7 +55,7 @@
 			, COUNSEL_UPDATED_AT
 		FROM (
 		    SELECT
-		        ROWNUM
+		        ROWNUM as RNUM
 		        , D.*
 		    FROM
 		        (
@@ -116,7 +116,7 @@
 		        ROWNUM <![CDATA[<=]]> #{endRow}
 		)
 		WHERE
-		    ROWNUM <![CDATA[>=]]> #{startRow}
+		    RNUM <![CDATA[>=]]> #{startRow}
 	</select>
 	
 	<select id="selectCounselingTotal" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO" resultType="int">
