@@ -23,4 +23,8 @@ public interface UserManagementMapper {
 
 	MemberPenaltyCountVO selectPenaltyCountByMemberId(String id);
 
+	int insertUserByAdmin(MemberVO member);
+
+	int updateMemberInfo(MemberVO memberVO);
+
 }

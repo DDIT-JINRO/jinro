@@ -12,4 +12,8 @@ public interface UserManagementService {
 
 	Map<String, Object> getMemberDetail(String id);
 
+	int insertUserByAdmin(MemberVO member);
+
+	int updateMemberInfo(MemberVO memberVO);
+
 }
