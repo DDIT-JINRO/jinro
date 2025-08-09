@@ -37,9 +37,6 @@
 			<a class="tab active" href="/cdp/rsm/rsmb/resumeBoardList.do">이력서 템플릿 게시판</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-		${board}
-		<hr>
-		${fileList}
 		<div class="public-wrapper-main">
 			<div class="public-wrapper-main">
 				<div class="titleSpace">
