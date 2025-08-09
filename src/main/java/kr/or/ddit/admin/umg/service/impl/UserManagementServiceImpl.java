@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
-import kr.or.ddit.com.ComCodeVO;
-import kr.or.ddit.csc.not.service.NoticeVO;
 import kr.or.ddit.main.service.MemberVO;
-import kr.or.ddit.mpg.mif.inq.service.InterestCnVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
@@ -26,6 +24,11 @@ public class UserManagementServiceImpl implements UserManagementService {
 	FileService fileService;
 	@Autowired
 	UserManagementMapper userManagementMapper;
+	private final BCryptPasswordEncoder passwordEncoder;
+	
+	public UserManagementServiceImpl(BCryptPasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	@Override
 	public ArticlePage<MemberVO> getMemberList(int currentPage, int size, String keyword, String status,
@@ -47,8 +50,6 @@ public class UserManagementServiceImpl implements UserManagementService {
 		int total = userManagementMapper.getAlluserList(map);
 		// 페이지 네이션
 		ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword);
-
-		log.info(articlePage + "@@@@@@@");
 
 		return articlePage;
 	}
@@ -81,6 +82,25 @@ public class UserManagementServiceImpl implements UserManagementService {
 		map.put("countVO", countVO);
 
 		return map;
+	}
+
+	@Override
+	public int insertUserByAdmin(MemberVO member) {
+		
+		String memberPw = member.getMemPassword();
+		member.setMemPassword(passwordEncoder.encode(memberPw)); 
+		
+		int res = userManagementMapper.insertUserByAdmin(member);
+		
+		return res;
+	}
+
+	@Override
+	public int updateMemberInfo(MemberVO memberVO) {
+		
+		int res = userManagementMapper.updateMemberInfo(memberVO);
+		
+		return res;
 	}
 
 }

@@ -122,7 +122,8 @@
 		resultType="String">
 		SELECT CC.CC_NAME
 		FROM INTEREST_CN IC
-		JOIN COM_CODE CC ON IC.IC_CODE = CC.CC_ID
+		JOIN COM_CODE CC ON
+		IC.IC_CODE = CC.CC_ID
 		WHERE IC.MEM_ID = #{id}
 	</select>
 
@@ -144,5 +145,60 @@
 		GROUP BY
 		M.MEM_ID
 	</select>
+
+	<insert id="insertUserByAdmin"
+		parameterType="kr.or.ddit.main.service.MemberVO">
+		INSERT INTO MEMBER (
+		MEM_ID
+		, MEM_EMAIL
+		, MEM_PASSWORD
+		, MEM_NICKNAME
+		, MEM_PHONE_NUMBER
+		, MEM_NAME
+		, MEM_GEN
+		, MEM_BIRTH
+		, MEM_ALARM
+		, MEM_STUDENT
+		, MEM_ROLE
+		, MEM_POINT
+		, CREATED_AT
+		, PW_UPDATED_AT
+		, DEL_YN
+		, FILE_PROFILE
+		, LOGIN_TYPE
+		, MEM_TOKEN
+		) VALUES (
+		(SELECT NVL(MAX(MEM_ID),0)+1 FROM MEMBER)
+		, #{memEmail}
+		, #{memPassword}
+		, #{memNickname}
+		, #{memPhoneNumber}
+		, #{memName}
+		, #{memGen}
+		, #{memBirth}
+		, 'G12001'
+		, 'N'
+		, #{memRole}
+		, 0
+		, SYSDATE
+		, SYSDATE
+		, 'N'
+		, #{fileProfile}
+		, 'G33001'
+		, NULL
+		)
+	</insert>
+
+	<update id="updateMemberInfo"
+		parameterType="kr.or.ddit.main.service.MemberVO">
+		UPDATE MEMBER
+		SET
+		MEM_NICKNAME = #{memNickname},
+		MEM_ROLE =
+		#{memRole},
+		MEM_NAME = #{memName}
+		WHERE
+		MEM_ID = #{memId}
+	</update>
 
 </mapper>
