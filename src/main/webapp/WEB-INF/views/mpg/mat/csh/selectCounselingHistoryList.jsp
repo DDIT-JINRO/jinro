@@ -157,8 +157,6 @@
 									<c:choose>
 										<c:when test="${content.counselMethod == 'G08004'}">
 										</c:when>
-										<c:when test="${content.counselMethod == 'G08004'}">
-										</c:when>
 										<c:when test="${content.counselReviewd == 'N'}">
 											<a href="#" class="btn btn-primary">후기 작성하러 가기</a>
 										</c:when>
