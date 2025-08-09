@@ -365,7 +365,7 @@ function startMockInterview() {
 function openMockInterviewPopup(interviewSettings) {
     try {
         // React 애플리케이션 URL 생성
-        let popupUrl = 'http://localhost:5173/mock-interview';
+        let popupUrl = 'http://43.201.107.69:5173/mock-interview';
         const params = new URLSearchParams({
             type: interviewSettings.type,
             totalCount: interviewSettings.totalCount

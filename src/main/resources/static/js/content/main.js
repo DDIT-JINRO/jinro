@@ -47,7 +47,7 @@ const roadmapPopup = () => {
 	const popupCookie = getCookie('popup');
 	
 	if(popupCookie != 'done') {
-		const roadmapUrl = 'http://localhost:5173/roadmap';
+		const roadmapUrl = 'http://43.201.107.69:5173/roadmap';
 	
 		const width  = 1084;
 		const height = 736;
