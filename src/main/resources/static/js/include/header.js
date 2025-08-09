@@ -24,7 +24,7 @@ function header(){
 						sessionStorage.setItem("redirectUrl", location.href);
 						location.href = "/login";
 					} else {
-						const roadmapUrl = 'http://localhost:5173/roadmap';
+						const roadmapUrl = 'http://43.201.107.69:5173/roadmap';
 						
 						const width  = 1084;
 						const height = 736;
@@ -42,7 +42,7 @@ function header(){
 			
 			window.addEventListener("message", (event) => {
 			    
-			    if (event.origin !== 'http://localhost:5173') {
+			    if (event.origin !== 'http://43.201.107.69:5173') {
 			        console.warn(`신뢰할 수 없는 출처(${event.origin})로부터의 메시지를 무시합니다.`);
 			        return;
 			    }
@@ -66,7 +66,7 @@ function header(){
 					location.href = "/login";
 				} else {
 					axios.post("/admin/las/worldCupVisitLog.do")
-					const worldcupUrl = 'http://localhost:5173/worldcup';
+					const worldcupUrl = 'http://43.201.107.69:5173/worldcup';
 					
 					const width  = 1200;
 					const height = 800;
