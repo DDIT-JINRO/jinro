@@ -55,6 +55,7 @@
 					<div id="writer">작성자</div>
 					<div id="writeAt">작성일</div>
 					<div id="cnt">조회수</div>
+					<div id="bookmark">북마크</div>
 				</div>
 			</div>
 			<c:forEach var="commBoardVO" varStatus="stat" items="${articlePage.content}">
@@ -71,6 +72,17 @@
 								<fmt:formatDate value="${commBoardVO.boardUpdatedAt}" pattern="yyyy. MM. dd" />
 							</div>
 							<div id="cnt">${commBoardVO.boardCnt}</div>
+							<div class="item-action">
+							    <button class="bookmark-btn ${commBoardVO.isBookmark == commBoardVO.boardId ? 'active' : ''}" data-category-id="${commBoardVO.ccId}" data-target-id="${commBoardVO.boardId}">
+							        <span class="icon-active">
+							            <img src="/images/bookmark-btn-active.png" alt="활성 북마크">
+							        </span>
+							        
+							        <span class="icon-inactive">
+							            <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+							        </span>
+							    </button>
+							</div>
 						</div>
 					</div>
 				</div>
