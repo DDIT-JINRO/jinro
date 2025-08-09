@@ -37,9 +37,9 @@ public class MemberVO {
 	private String subName;
 	private int remainingDays;
 	
-	private Date svCreatedAt;
-	private String svStatus;
-	private String svReason;
+	private Date veriCreatedAt;
+	private String veriStatus;
+	private String veriReason;
 	
 	private String profileFilePath;
 	private String badgeFilePath;
