@@ -1,0 +1,271 @@
+@charset "UTF-8";
+
+.Insert-write {
+	background-color: #fff;
+	border: 2px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 32px;
+}
+
+.Insert-title {
+	border: 2px solid #e5e7eb;
+	border-radius: 10px;
+	width: 90%;
+	box-sizing: border-box;
+	height: 50px;
+	font-size: 15px;
+	padding-left: 10px;
+}
+
+.titleSpace {
+	display: flex;
+	gap: 20px;
+	padding-bottom: 30px;
+}
+
+.insertTitle {
+	text-align: center;
+	align-content: center;
+	width: 10%;
+	border: none;
+	border-radius: 10px;
+	background-color: #7881f5;
+	color: white;
+	font-weight: 600;
+	font-size: 14px;
+	transition: all 0.3s ease;
+}
+
+.container {
+	max-width: 900px;
+	margin: 20px auto;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+	border-radius: 10px;
+}
+
+.ck-editor__editable {
+	min-height: 300px;
+}
+
+.button-group {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+
+.submit-btn {
+	width: 80px;
+	border: none;
+	border-radius: 10px;
+	background-color: #7881f5;
+	color: white;
+	font-weight: 600;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	height: 40px;
+}
+
+.submit-btn:hover {
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cancel-btn {
+	width: 80px;
+	border: none;
+	border-radius: 10px;
+	background-color: #eee;
+	color: black;
+	font-weight: 600;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	height: 40px;
+}
+
+.cancel-btn:hover {
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.file-upload-container {
+	display: flex;
+	align-items: center;
+	border: 2px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 5px 32px;
+}
+
+.file-label {
+	display: inline-block;
+	font-weight: bold;
+	margin: 8px 0;
+}
+
+#fileInput {
+	display: block;
+}
+
+.file-list {
+	list-style: none;
+	padding: 0;
+}
+
+.file-list li {
+	background: #f1f1f1;
+	padding: 8px 12px;
+	margin-bottom: 4px;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.interview-info-wrapper {
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 24px;
+	margin-bottom: 20px;
+	background-color: #f9f9f9;
+}
+
+.info-input-section h4 {
+	font-size: 1.1em;
+	margin-bottom: 15px;
+	font-weight: 600;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.required-info-text {
+	font-size: 0.8em;
+	font-weight: normal;
+	color: #666;
+}
+
+/* 테이블 스타일 */
+.info-input-table {
+	width: 100%;
+	border-collapse: collapse;
+	border-top: 2px solid #333;
+	margin-bottom: 30px;
+}
+
+.info-input-table th, .info-input-table td {
+	padding: 15px;
+	border-bottom: 1px solid #ddd;
+	vertical-align: middle;
+}
+
+.info-input-table th {
+	width: 180px;
+	background-color: #f7f7f7;
+	text-align: left;
+	font-weight: 600;
+}
+
+.info-input-table .input-group {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.info-input-table .required {
+	color: red;
+	margin-left: 4px;
+}
+
+/* 입력 필드 기본 스타일 */
+.info-input-table input[type="text"] {
+	padding: 0 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	height: 38px;
+	width: 220px;
+}
+
+/* ##### radio 버튼 스타일 추가 ##### */
+.info-input-table .input-group input[type="radio"] {
+	/* 실제 라디오 버튼은 숨김 */
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.info-input-table .input-group input[type="radio"]+label {
+	display: inline-block;
+	padding: 0 16px; /* 좌우 패딩 */
+	height: 38px; /* 다른 입력 필드와 높이 통일 */
+	line-height: 36px; /* 텍스트 수직 중앙 정렬 */
+	border: 1px solid #ccc;
+	background-color: #fff;
+	color: #555;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+}
+
+/* '신입' 버튼 스타일 (왼쪽 모서리 둥글게) */
+.info-input-table .input-group input[type="radio"]#newcomer+label {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+	border-right-width: 0.5px; /* 버튼 사이의 경계선 */
+}
+
+/* '경력' 버튼 스타일 (오른쪽 모서리 둥글게) */
+.info-input-table .input-group input[type="radio"]#experienced+label {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-left-width: 0.5px; /* 버튼 사이의 경계선 */
+}
+
+/* 선택되었을 때의 스타일 */
+.info-input-table .input-group input[type="radio"]:checked+label {
+	background-color: #7881f5; /* 선택 시 배경색 */
+	color: #fff; /* 선택 시 글자색 */
+	border-color: #fff; /* 선택 시 테두리색 */
+	font-weight: 600;
+}
+
+/* ##### select 태그 스타일 수정/추가 ##### */
+.info-input-table select.form-select {
+	/* 기본 브라우저 스타일 제거 */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	/* 텍스트 입력창과 스타일 통일 */
+	height: 38px;
+	padding: 0 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background-color: #fff;
+	/* 커스텀 화살표 추가 */
+	background-image:
+		url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+	background-repeat: no-repeat;
+	background-position: right 12px center;
+	background-size: 8px 8px;
+	/* 글자가 화살표를 덮지 않도록 오른쪽 패딩 추가 */
+	padding-right: 30px;
+}
+
+.btn-search {
+	padding: 8px 12px;
+	background-color: #fff;
+	border: 1px solid #555;
+	color: #333;
+	border-radius: 4px;
+	cursor: pointer;
+	height: 38px;
+	font-weight: 500;
+}
+
+/* 면접일자 안내 문구 */
+.form-note {
+	font-size: 0.8em;
+	color: #666;
+	margin: 0 0 10px 5px;
+}

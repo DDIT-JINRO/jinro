@@ -13,5 +13,9 @@ public class InterviewFeedbackController {
 		return "empt/ivfb/interviewFeedback";
 	}
 	
+	@GetMapping("/ivfb/insertInterViewFeedbackView.do")
+	public String insertInterViewFeedbackView() {
+		return "empt/ivfb/insertInterViewFeedbackView";
+	}
 	
 }
