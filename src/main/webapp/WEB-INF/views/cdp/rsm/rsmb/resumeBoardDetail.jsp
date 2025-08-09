@@ -87,6 +87,15 @@
 							</button>
 							<span class="like-cnt" id="board-like-cnt-${boardVO.boardId}">${boardVO.boardLikeCnt}</span>
 						</span>
+					    <button class="bookmark-btn ${boardVO.isBookmark == boardVO.boardId ? 'active' : ''}" data-category-id="G03005" data-target-id="${boardVO.boardId}">
+					        <span class="icon-active">
+					            <img src="/images/bookmark-btn-active.png" alt="활성 북마크">
+					        </span>
+					        
+					        <span class="icon-inactive">
+					            <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+					        </span>
+					    </button>
 					</div>
 				</div>
 				<!-- 2) 핵심 정보 그리드 -->

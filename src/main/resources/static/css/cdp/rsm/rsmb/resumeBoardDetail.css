@@ -844,3 +844,42 @@
 	vertical-align: middle; /* 버튼과 정렬을 맞춤 */
 	margin-left: 4px; /* 버튼과의 간격 */
 }
+
+.bookmark-btn {
+    display: flex;           
+    align-items: center;     
+    justify-content: center; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    
+    /* 버튼의 크기를 명시적으로 지정하여 정렬 기준을 잡아줍니다. */
+    width: 36px; 
+    height: 36px;
+}
+
+/* 활성 아이콘은 기본적으로 숨깁니다. */
+.bookmark-btn .icon-active {
+	display: none;
+}
+
+/* 비활성 아이콘은 기본적으로 보입니다. */
+.bookmark-btn .icon-inactive {
+    display: inline-block;
+}
+
+.bookmark-btn span img {
+    width: 30px;
+    height: 30px;
+    display: block;
+}
+
+/* .active 클래스가 없는 경우 (비활성화 상태) */
+.bookmark-btn.active .icon-active {
+	display: inline-block; /* 비활성 아이콘을 보여줍니다. */
+}
+
+.bookmark-btn.active .icon-inactive {
+	display: none; /* 활성 아이콘을 숨깁니다. */
+}
