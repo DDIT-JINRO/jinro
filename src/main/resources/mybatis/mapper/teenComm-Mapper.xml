@@ -93,6 +93,9 @@
 		B.BOARD_CREATED_AT DESC
 		) C
 		WHERE ROWNUM &lt;= #{endNo}
+					<if test="memId != null and memId != ''">
+					, (SELECT BM_TARGET_ID FROM BOOKMARK WHERE MEM_ID = #{memId} AND BM_TARGET_ID = B.BOARD_ID) AS IS_BOOKMARK
+					</if>
 		)
 		WHERE RNUM &gt;= #{startNo}
 	</select>

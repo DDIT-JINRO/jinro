@@ -52,9 +52,13 @@ public class ResumeBoardController {
 	AlarmService alarmService;
 	
 	@GetMapping("/resumeBoardList.do")
-	public String resumeBoardPage(@ModelAttribute CommBoardVO board, Model model) {
+	public String resumeBoardPage(@ModelAttribute CommBoardVO board, @AuthenticationPrincipal String memId, Model model) {
+		if(null != memId && !"anonymousUser".equals(memId)) {
+			board.setMemId(Integer.parseInt(memId));
+		}
 		
 		ArticlePage<CommBoardVO> articlePage = this.teenCommService.selectTeenList("G09004", board);
+		
 		articlePage.setUrl("/cdp/rsm/rsmb/resumeBoardList.do");
 		
 		model.addAttribute("articlePage", articlePage);

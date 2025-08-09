@@ -25,6 +25,7 @@ public class CommBoardVO {
 	
 	private String keyword;
 	private String status;
+	private String isBookmark;
 	
 	//페이징
 	private int currentPage = 1;
