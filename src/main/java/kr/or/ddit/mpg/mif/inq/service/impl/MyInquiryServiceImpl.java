@@ -160,7 +160,7 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		VerificationVO verification = new VerificationVO();
 		verification.setMemId(memId);
 		verification.setFileGroupId(fileGroupId);
-		verification.setVCategory(vCategory);
+		verification.setVeriCategory(vCategory);
 		
 		List<MultipartFile> files = new ArrayList<MultipartFile>();
 		files.add(authFile);
