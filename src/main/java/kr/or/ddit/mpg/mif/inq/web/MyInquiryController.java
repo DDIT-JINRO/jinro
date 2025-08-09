@@ -160,7 +160,7 @@ public class MyInquiryController {
 	public ResponseEntity<Map<String, Object>> insertStudentAuth(@AuthenticationPrincipal String memId, @RequestParam MultipartFile authFile) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			this.myInquiryService.insertStudentAuth(memId, authFile);
+			this.myInquiryService.insertVerification(memId, "G38001", authFile);
 			response.put("status", "success");
 			response.put("message", "학생 인증 신청이 성공적으로 변경되었습니다.");
 			return ResponseEntity.ok(response);
