@@ -149,6 +149,16 @@
 				THEN 1
 			ELSE 0
 			END AS BOARD_IS_LIKED
+			, (
+				SELECT
+					BM_TARGET_ID
+				FROM
+					BOOKMARK
+				WHERE
+					MEM_ID = #{memId}
+				AND
+					BM_TARGET_ID = B.BOARD_ID
+			) AS IS_BOOKMARK
 		FROM
 			BOARD B
 		WHERE
