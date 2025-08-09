@@ -48,7 +48,7 @@
 		        , B.BM_CATEGORY_ID
 		        , CC.CC_NAME          AS CATEGORY_NAME
 		        , H.HIRE_TITLE        AS TITLE <!-- 채용공고명 -->
-				, (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = H.HIRE_CLASS_DODE) AS CONTENT_1 <!-- 내용1 (직종명) -->
+				, (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = H.HIRE_CLASS_CODE) AS CONTENT_1 <!-- 내용1 (직종명) -->
 		        , '공고 기간: ' || TO_CHAR(H.HIRE_START_DATE, 'YYYY-MM-DD') || ' ~ ' || TO_CHAR(H.HIRE_END_DATE, 'YYYY-MM-DD') AS CONTENT_2 <!-- 내용2 (공고 기간) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT     AS BM_CREATED_AT
@@ -196,7 +196,7 @@
 		        , B.BM_CATEGORY_ID
 		        , CC.CC_NAME          AS CATEGORY_NAME
 		        , H.HIRE_TITLE        AS TITLE <!-- 채용공고명 -->
-				, (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = H.HIRE_CLASS_DODE) AS CONTENT_1 <!-- 내용1 (직종명) -->
+				, (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = H.HIRE_CLASS_CODE) AS CONTENT_1 <!-- 내용1 (직종명) -->
 		        , '공고 기간: ' || TO_CHAR(H.HIRE_START_DATE, 'YYYY-MM-DD') || ' ~ ' || TO_CHAR(H.HIRE_END_DATE, 'YYYY-MM-DD') AS CONTENT_2 <!-- 내용2 (공고 기간) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT     AS BM_CREATED_AT
