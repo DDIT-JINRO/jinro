@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.empt.ivfb.service.impl.InterviewFeedbackMapper">
+
+	<select id="selectCompanyList" resultType="kr.or.ddit.empt.enp.service.CompanyVO" parameterType="string"> 
+		SELECT
+		    CP_ID
+		    , CP_NAME
+		    , (
+		    	SELECT
+		    		CC_NAME
+		    	FROM
+		    		COM_CODE
+		    	WHERE
+		    		CC_ID = CP_SCALE
+		    ) AS CP_SCALE
+		    , SUBSTR(CP_REGION, 0, 2) AS CP_REGION
+		FROM
+		    COMPANY
+		<if test="cpName != null and cpName != ''">
+			WHERE
+				CP_NAME = #{cpName}
+		</if>
+	</select>
+
+</mapper>
