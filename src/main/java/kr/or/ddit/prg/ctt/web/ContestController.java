@@ -2,7 +2,6 @@ package kr.or.ddit.prg.ctt.web;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.or.ddit.prg.ctt.service.ContestService;
 import kr.or.ddit.prg.ctt.service.ContestVO;
 import kr.or.ddit.util.ArticlePage;
+import kr.or.ddit.com.ComCodeVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -25,40 +25,42 @@ public class ContestController {
 	ContestService contestService;
 	
 	@GetMapping("/cttList.do")
-	public String cttList(
+	public String cttList(Model model,
 	        @RequestParam(defaultValue = "1") int currentPage,
 	        @RequestParam(required = false) String keyword,
-            @RequestParam(value = "contestGubunFilter", required = false) List<String> contestGubunFilter, // 변수명 수정
+            @RequestParam(value = "contestGubunFilter", required = false) List<String> contestGubunFilter,
 	        @RequestParam(value = "contestTargetFilter", required = false) List<String> contestTargetFilter,
 	        @RequestParam(value = "contestTypeFilter", required = false) List<String> contestTypeFilter,
-	        Model model) {
+	        @RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter) {
 	        
-	        log.info("cttList : contestGubunFilter={}, contestTargetFilter={}, contestTypeFilter={}", contestGubunFilter, contestTargetFilter, contestTypeFilter);
+	        log.info("cttList : contestGubunFilter={}, contestTargetFilter={}, contestTypeFilter={}, contestStatusFilter={}", contestGubunFilter, contestTargetFilter, contestTypeFilter, contestStatusFilter);
 
 	        ContestVO contestVO = new ContestVO();
 	        contestVO.setKeyword(keyword);
-	        
+	        contestVO.setCurrentPage(currentPage);
+	        contestVO.setSize(6);
 	        contestVO.setContestGubunFilter(contestGubunFilter);
 	        contestVO.setContestTargetFilter(contestTargetFilter);
 	        contestVO.setContestTypeFilter(contestTypeFilter);
+	        contestVO.setContestStatusFilter(contestStatusFilter);
 	        
-            // 페이징 정보 설정 
-            int size = 6;
-            int startRow = (currentPage - 1) * size + 1;
-            int endRow = currentPage * size;
-            contestVO.setStartRow(startRow);
-            contestVO.setEndRow(endRow);
-
 	        int total = contestService.selectCttCount(contestVO);
             List<ContestVO> contestList = contestService.selectCttList(contestVO);
 	        
+            List<ComCodeVO> contestTypeList = contestService.getContestTypeList();
+            List<ComCodeVO> contestTargetList = contestService.getContestTargetList();
+            List<ComCodeVO> contestStatusList = new ArrayList<>();
+            
+            // JSP 필터에 사용될 데이터
+            model.addAttribute("contestTypeList", contestTypeList);
+            model.addAttribute("contestTargetList", contestTargetList);
+            
             log.info("조회된 공모전 목록: {}개", contestList.size());
 	        
-            // ⭐⭐⭐ [수정된 부분] 컨트롤러에서 ArticlePage 객체를 생성합니다. ⭐⭐⭐
-	        ArticlePage<ContestVO> page = new ArticlePage<>(total, currentPage, size, contestList, keyword);
-	        page.setUrl("/prg/ctt/cttList.do"); // URL 설정
+	        ArticlePage<ContestVO> page = new ArticlePage<>(total, currentPage, 6, contestList, keyword);
+	        page.setUrl("/prg/ctt/cttList.do");
 	        model.addAttribute("articlePage", page);
-	        model.addAttribute("checkedFilters", contestVO); // 체크된 필터 상태 유지를 위해 전달
+	        model.addAttribute("checkedFilters", contestVO);
 	        
             log.info("JSP로 전달할 articlePage: {}", page);
 	        return "prg/ctt/cttList";
@@ -66,7 +68,6 @@ public class ContestController {
 	
 	@GetMapping("/cttDetail.do")
 	public String selectCttDetail(@RequestParam String cttId, Model model) {
-		
 		ContestVO cttDetail = contestService.selectCttDetail(cttId);
 		model.addAttribute("cttDetail", cttDetail);
 		

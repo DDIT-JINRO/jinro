@@ -28,13 +28,22 @@ public class ContestVO {
 	private String keyword;
 
 	// HighSchoolVO의 필터 방식을 참고하여 List<String> 타입의 필터 변수 추가
+	private List<String> contestStatusFilter;
     private List<String> contestGubunFilter;
     private List<String> contestTargetFilter;
     private List<String> contestTypeFilter;
 
 	// 페이징
 	private int currentPage;
-	private int size;
+	private int size=6;
 	private int startRow;
 	private int endRow;
+
+	public int getStartNo() {
+		return (this.currentPage - 1) * size;
+	}
+
+	public int getEndNo() {
+		return this.currentPage * size;
+	}
 }

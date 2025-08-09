@@ -25,44 +25,33 @@
 <div class="public-wrapper">
     <div class="public-wrapper-main">
         <div class="filter-section">
-            <form method="get" action="/prg/ctt/cttList.do">
-                <input type="hidden" name="contestGubunFilter" value="G32001" />
-                <div class="main-search-container">
-                    <div class="main-search-input-wrapper">
-                        <i class="icon-search"></i>
-                        <input type="text" name="keyword" class="main-search-input"
-                               placeholder="검색어를 입력하세요." value="${articlePage.keyword}">
-                    </div>
-                    <button type="submit" class="main-search-btn">검색</button>
-                </div>
-
-                <div class="search-filter-box">
-                    <div class="filter-toggle-bar" id="filter-toggle-btn">
-                        <span>상세검색</span>
-                    </div>
-
-                    <div class="filter-content" id="filter-content">
-                        <div class="filter-row">
-						    <div class="filter-label-title">모집 상태</div>
-						    <div class="filter-controls">
-						        <label class="filter-item">
-						            <input type="checkbox" name="contestStatusFilter" value="proceeding" data-label="모집 상태" data-name="진행중"
-						                   <c:if test="${fn:contains(paramValues.contestStatusFilter, 'proceeding')}">checked</c:if> />
-						            <span>진행중</span>
-						        </label>
-						        <label class="filter-item">
-						            <input type="checkbox" name="contestStatusFilter" value="finished" data-label="모집 상태" data-name="마감"
-						                   <c:if test="${fn:contains(paramValues.contestStatusFilter, 'finished')}">checked</c:if> />
-						            <span>마감</span>
-						        </label>
-						    </div>
-						</div>
-
-                        <div class="filter-row">
-                            <div class="filter-label-title">모집 분야</div>
-                            <div class="filter-controls">
+	        <form method="get" action="/prg/ctt/cttList.do">
+			    <div class="com-default-search">
+			        <div class="com-select-wrapper">
+			            <svg class="com-select-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+			                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+			            </svg>
+			        </div>
+			        <input type="search" name="keyword" placeholder="검색어를 입력하세요">
+			        <button class="com-search-btn" type="button">
+			            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+			                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+			            </svg>
+			        </button>
+			    </div>
+			
+			    <div class="com-accordion-filter">
+			        <button type="button" class="com-accordion-header" id="com-accordion-toggle">
+			            <span>필터</span>
+			            <span class="com-arrow-icon">▲</span>
+			        </button>
+			        <div class="com-accordion-panel" id="com-accordion-panel">
+				        <div class="com-accordion-content">
+			            <div class="com-filter-section">
+			                <label class="com-filter-title">모집 분야</label>
+                            <div class="com-filter-options">
                                 <c:forEach var="cType" items="${contestTypeList}">
-                                    <label class="filter-item"> 
+                                    <label class="com-filter-item"> 
                                         <input type="checkbox" name="contestTypeFilter" value="${cType.ccId}" data-label="모집 분야" data-name="${cType.ccName}"
                                                <c:if test="${fn:contains(checkedFilters.contestTypeFilter, cType.ccId)}">checked</c:if> />
                                         <span>${cType.ccName}</span>
@@ -71,11 +60,27 @@
                             </div>
                         </div>
 
-                        <div class="filter-row">
-                            <div class="filter-label-title">모집 대상</div>
-                            <div class="filter-controls">
+			            <div class="com-filter-section">
+                            <label class="com-filter-title">모집 상태</label>
+                            <div class="com-filter-options">
+                                <label class="com-filter-item">
+                                    <input type="checkbox" name="contestStatusFilter" value="proceeding" data-label="모집 상태" data-name="진행중"
+                                           <c:if test="${fn:contains(checkedFilters.contestStatusFilter, 'proceeding')}">checked</c:if> />
+                                    <span>진행중</span>
+                                </label>
+                                <label class="com-filter-item">
+                                    <input type="checkbox" name="contestStatusFilter" value="finished" data-label="모집 상태" data-name="마감"
+                                           <c:if test="${fn:contains(checkedFilters.contestStatusFilter, 'finished')}">checked</c:if> />
+                                    <span>마감</span>
+                                </label>
+                            </div>
+                        </div>
+			            
+			            <div class="com-filter-section">
+                            <label class="com-filter-title">모집 대상</label>
+                            <div class="com-filter-options">
                                 <c:forEach var="cTarget" items="${contestTargetList}">
-                                    <label class="filter-item"> 
+                                    <label class="com-filter-item"> 
                                         <input type="checkbox" name="contestTargetFilter" value="${cTarget.ccId}" data-label="모집 대상" data-name="${cTarget.ccName}"
                                                <c:if test="${fn:contains(checkedFilters.contestTargetFilter, cTarget.ccId)}">checked</c:if> />
                                         <span>${cTarget.ccName}</span>
@@ -83,16 +88,22 @@
                                 </c:forEach>
                             </div>
                         </div>
-
-                        <div class="filter-row">
-                            <div class="filter-label-title selected-filter-label">필터 조건</div>
-                            <div class="selected-filters" id="selected-filters-container">
-                                </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+			            <div class="com-filter-section">
+			            	<div class="com-button-container">
+			                  <label class="com-filter-title">선택된 필터</label>
+			                <button type="button" class="com-filter-reset-btn">초기화</button>
+			            	</div>
+			                <div class="com-selected-filters">
+			                </div>
+			            </div>
+			            <button type="submit" class="com-submit-search-btn">검색</button>
+			          </div>
+			        </div>
+			    </div>
+			</form>
         </div>
+        <p>총 ${articlePage.total}건</p>
+        
         <div class="list-container">
             <c:if test="${not empty articlePage.content}">
                 <c:forEach var="contest" items="${articlePage.content}">
@@ -142,34 +153,58 @@
     </div>
 
         <div class="card-footer clearfix">
-            <ul class="pagination">
-                <li>
-                    <c:url value="${articlePage.url}" var="prevUrl">
-                        <c:param name="currentPage" value="${articlePage.startPage - 1}" />
-                    </c:url>
-                    <a href="${prevUrl}" class="${articlePage.startPage <= 1 ? 'disabled' : ''}">← Previous</a>
-                </li>
-                <c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
-                    <li>
-                        <c:url value="${articlePage.url}" var="pageUrl">
-                            <c:param name="currentPage" value="${pNo}" />
-                        </c:url>
-                        <a href="${pageUrl}" class="${pNo == articlePage.currentPage ? 'active' : ''}">${pNo}</a>
-                    </li>
-                </c:forEach>
-                <li>
-                    <c:url value="${articlePage.url}" var="nextUrl">
-                        <c:param name="currentPage" value="${articlePage.endPage + 1}" />
-                    </c:url>
-                    <a href="${nextUrl}" class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : ''}">Next →</a>
-                </li>
-            </ul>
-        </div>
+		    <ul class="pagination">
+		        <li>
+		            <%-- c:url 태그로 이전 페이지 링크 생성 --%>
+		            <c:url value="/prg/ctt/cttList.do" var="prevUrl">
+		                <c:param name="currentPage" value="${articlePage.startPage - 5}" />
+		                <c:param name="keyword" value="${checkedFilters.keyword}" />
+		                <%-- 현재 적용된 모든 필터 값들을 다시 파라미터로 추가 --%>
+		                <c:forEach var="filter" items="${checkedFilters.contestGubunFilter}"><c:param name="contestGubunFilter" value="${filter}" /></c:forEach>
+		                <c:forEach var="filter" items="${checkedFilters.contestTargetFilter}"><c:param name="contestTargetFilter" value="${filter}" /></c:forEach>
+		                <c:forEach var="filter" items="${checkedFilters.contestTypeFilter}"><c:param name="contestTypeFilter" value="${filter}" /></c:forEach>
+		                <c:forEach var="filter" items="${checkedFilters.contestStatusFilter}"><c:param name="contestStatusFilter" value="${filter}" /></c:forEach>
+		            </c:url>
+		            <a href="${prevUrl}" class="${articlePage.startPage < 6 ? 'disabled' : ''}">← Previous</a>
+		        </li>
+		
+		        <c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
+		            <li>
+		                <%-- c:url 태그로 각 페이지 번호 링크 생성 --%>
+		                <c:url value="/prg/ctt/cttList.do" var="pageUrl">
+		                    <c:param name="currentPage" value="${pNo}" />
+		                    <c:param name="keyword" value="${checkedFilters.keyword}" />
+		                    <%-- 현재 적용된 모든 필터 값들을 다시 파라미터로 추가 --%>
+			                <c:forEach var="filter" items="${checkedFilters.contestGubunFilter}"><c:param name="contestGubunFilter" value="${filter}" /></c:forEach>
+			                <c:forEach var="filter" items="${checkedFilters.contestTargetFilter}"><c:param name="contestTargetFilter" value="${filter}" /></c:forEach>
+			                <c:forEach var="filter" items="${checkedFilters.contestTypeFilter}"><c:param name="contestTypeFilter" value="${filter}" /></c:forEach>
+			                <c:forEach var="filter" items="${checkedFilters.contestStatusFilter}"><c:param name="contestStatusFilter" value="${filter}" /></c:forEach>
+		                </c:url>
+		                <a href="${pageUrl}" class="${pNo == articlePage.currentPage ? 'active' : ''}">${pNo}</a>
+		            </li>
+		        </c:forEach>
+		
+		        <li>
+		            <%-- c:url 태그로 다음 페이지 링크 생성 --%>
+		            <c:url value="/prg/ctt/cttList.do" var="nextUrl">
+		                <c:param name="currentPage" value="${articlePage.startPage + 5}" />
+		                <c:param name="keyword" value="${checkedFilters.keyword}" />
+		                <%-- 현재 적용된 모든 필터 값들을 다시 파라미터로 추가 --%>
+		                <c:forEach var="filter" items="${checkedFilters.contestGubunFilter}"><c:param name="contestGubunFilter" value="${filter}" /></c:forEach>
+		                <c:forEach var="filter" items="${checkedFilters.contestTargetFilter}"><c:param name="contestTargetFilter" value="${filter}" /></c:forEach>
+		                <c:forEach var="filter" items="${checkedFilters.contestTypeFilter}"><c:param name="contestTypeFilter" value="${filter}" /></c:forEach>
+		                <c:forEach var="filter" items="${checkedFilters.contestStatusFilter}"><c:param name="contestStatusFilter" value="${filter}" /></c:forEach>
+		            </c:url>
+		            <a href="${nextUrl}" class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : ''}">Next →</a>
+		        </li>
+		    </ul>
+		</div>
     </div>
 </div>
 
+
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 
-<script>
+<script src="/js/prg/ctt/cttList.js">
     // 필요한 스크립트 작성 영역
 </script>

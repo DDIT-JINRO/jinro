@@ -21,6 +21,16 @@ public class ContestServiceImpl implements ContestService {
 	//공모전 목록 조회
 	@Override
 	public List<ContestVO> selectCttList(ContestVO contestVO) {
+		
+		// 페이징 정보 계산 (startRow, endRow)
+        int size = contestVO.getSize();
+        int currentPage = contestVO.getCurrentPage();
+        
+        int startRow = (currentPage - 1) * size + 1;
+        int endRow = currentPage * size;
+        contestVO.setStartRow(startRow);
+        contestVO.setEndRow(endRow);
+        
 		List<ContestVO> cttList = contestMapper.selectCttList(contestVO);
         log.info("selectCttList 결과 (조회된 공모전 목록): {}개", cttList.size());
 		return cttList;

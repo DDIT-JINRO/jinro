@@ -31,6 +31,17 @@
                     #{item}
                 </foreach>
             </if>
+            <if test="contestStatusFilter != null and contestStatusFilter.size() > 0">
+            	AND
+                <foreach item="status" collection="contestStatusFilter" separator=" OR " open="(" close=")">
+                    <if test="status == 'proceeding'">
+                        CONTEST_END_DATE > SYSDATE
+                    </if>
+                    <if test="status == 'finished'">
+                        CONTEST_END_DATE &lt;= SYSDATE
+                    </if>
+                </foreach>
+            </if>
         </where>
     </select>
 
@@ -90,6 +101,17 @@
                         #{item}
                     </foreach>
                 </if>
+                <if test="contestStatusFilter != null and contestStatusFilter.size() > 0">
+                	AND
+	                <foreach item="status" collection="contestStatusFilter" separator=" OR " open="(" close=")">
+	                    <if test="status == 'proceeding'">
+	                        CONTEST_END_DATE > SYSDATE
+	                    </if>
+	                    <if test="status == 'finished'">
+	                        CONTEST_END_DATE &lt;= SYSDATE
+	                    </if>
+	                </foreach>
+	            </if>
             </where>
         )
         WHERE RNUM BETWEEN #{startRow} AND #{endRow}
