@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CounselingReserveHistoryController {
 	
-	CounselingHistoryService counselingHistoryService;
+	private final CounselingHistoryService counselingHistoryService;
 	
 	@GetMapping("/cnsh/counselingReserveHistory.do")
 	public String counselingHistory(
