@@ -51,51 +51,64 @@
 	<select id="selectTeenList"
 		resultType="kr.or.ddit.comm.vo.CommBoardVO"
 		parameterType="kr.or.ddit.comm.vo.CommBoardVO">
-		SELECT * FROM (
-		SELECT ROWNUM AS RNUM, C.*
+		SELECT
+			*
 		FROM (
-		SELECT
-		B.BOARD_ID
-		, B.MEM_ID
-		, M.MEM_NICKNAME
-		, B.CC_ID
-		, B.BOARD_TITLE
-		, B.BOARD_CONTENT
-		, B.BOARD_CREATED_AT
-		, B.BOARD_UPDATED_AT
-		, B.BOARD_CNT
-		, B.BOARD_DEL_YN
-		, B.FILEGROUP_ID
-		, (
-		SELECT
-		COUNT(*)
-		FROM
-		BOARD_LIKE
-		WHERE
-		BOARD_ID = B.BOARD_ID
-		) AS BOARD_LIKE_CNT
-		FROM
-		BOARD B
-		JOIN MEMBER M ON B.MEM_ID = M.MEM_ID
-		WHERE
-		B.CC_ID = #{ccId}
-		AND B.BOARD_DEL_YN = 'N'
-		<if test="status != null and status != '' and status == 3">
-			AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR B.BOARD_CONTENT LIKE '%'||#{keyword}||'%')
-		</if>
-		<if test="status != null and status != '' and status == 1">
-			AND B.BOARD_TITLE LIKE '%'||#{keyword}||'%'
-		</if>
-		<if test="status != null and status != '' and status == 2">
-			AND B.BOARD_CONTENT LIKE '%'||#{keyword}||'%'
-		</if>
-		ORDER BY
-		B.BOARD_CREATED_AT DESC
-		) C
-		WHERE ROWNUM &lt;= #{endNo}
+			SELECT
+				ROWNUM AS RNUM, C.*
+			FROM (
+				SELECT
+					B.BOARD_ID
+					, B.MEM_ID
+					, M.MEM_NICKNAME
+					, B.CC_ID
+					, B.BOARD_TITLE
+					, B.BOARD_CONTENT
+					, B.BOARD_CREATED_AT
+					, B.BOARD_UPDATED_AT
+					, B.BOARD_CNT
+					, B.BOARD_DEL_YN
+					, B.FILEGROUP_ID
+					, (
+						SELECT
+							COUNT(*)
+						FROM
+							BOARD_LIKE
+						WHERE
+							BOARD_ID = B.BOARD_ID
+					) AS BOARD_LIKE_CNT
 					<if test="memId != null and memId != ''">
-					, (SELECT BM_TARGET_ID FROM BOOKMARK WHERE MEM_ID = #{memId} AND BM_TARGET_ID = B.BOARD_ID) AS IS_BOOKMARK
+					, (
+						SELECT
+							BM_TARGET_ID
+						FROM
+							BOOKMARK
+						WHERE
+							MEM_ID = #{memId}
+						AND
+							BM_TARGET_ID = B.BOARD_ID
+					) AS IS_BOOKMARK
 					</if>
+				FROM
+					BOARD B
+					JOIN MEMBER M ON B.MEM_ID = M.MEM_ID
+				WHERE
+					B.CC_ID = #{ccId}
+				AND
+					B.BOARD_DEL_YN = 'N'
+				<if test="status != null and status != '' and status == 3">
+					AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR B.BOARD_CONTENT LIKE '%'||#{keyword}||'%')
+				</if>
+				<if test="status != null and status != '' and status == 1">
+					AND B.BOARD_TITLE LIKE '%'||#{keyword}||'%'
+				</if>
+				<if test="status != null and status != '' and status == 2">
+					AND B.BOARD_CONTENT LIKE '%'||#{keyword}||'%'
+				</if>
+				ORDER BY
+					B.BOARD_CREATED_AT DESC
+			) C
+			WHERE ROWNUM &lt;= #{endNo}
 		)
 		WHERE RNUM &gt;= #{startNo}
 	</select>
@@ -104,27 +117,42 @@
 		parameterType="kr.or.ddit.comm.vo.CommBoardVO"
 		resultType="kr.or.ddit.comm.vo.CommBoardVO">
 		SELECT
-		B.BOARD_ID, B.MEM_ID, B.CC_ID, B.BOARD_TITLE,
-		B.BOARD_CONTENT,
-		B.BOARD_CREATED_AT, B.BOARD_UPDATED_AT, B.BOARD_CNT,
-		B.BOARD_DEL_YN,
-		B.FILEGROUP_ID,
-		(SELECT COUNT(*)
-		FROM BOARD_LIKE
-		WHERE
-		BOARD_ID = B.BOARD_ID) AS BOARD_LIKE_CNT,
-		CASE
-		WHEN EXISTS (
-		SELECT 1
+			B.BOARD_ID
+			, B.MEM_ID
+			, B.CC_ID
+			, B.BOARD_TITLE
+			, B.BOARD_CONTENT
+			, B.BOARD_CREATED_AT
+			, B.BOARD_UPDATED_AT
+			, B.BOARD_CNT
+			, B.BOARD_DEL_YN
+			, B.FILEGROUP_ID
+			, (
+				SELECT
+					COUNT(*)
+				FROM
+					BOARD_LIKE
+				WHERE
+					BOARD_ID = B.BOARD_ID
+			) AS BOARD_LIKE_CNT
+			, CASE
+				WHEN EXISTS (
+					SELECT
+						1
+					FROM
+						BOARD_LIKE
+					WHERE
+						BOARD_ID = B.BOARD_ID
+					AND
+						MEM_ID = #{memId}
+					)
+				THEN 1
+			ELSE 0
+			END AS BOARD_IS_LIKED
 		FROM
-		BOARD_LIKE
-		WHERE BOARD_ID = B.BOARD_ID
-		AND MEM_ID = #{memId}
-		) THEN 1
-		ELSE 0
-		END AS BOARD_IS_LIKED
-		FROM BOARD B
-		WHERE B.BOARD_ID = #{boardId}
+			BOARD B
+		WHERE
+			B.BOARD_ID = #{boardId}
 	</select>
 
 	<select id="selectBoardReply"
