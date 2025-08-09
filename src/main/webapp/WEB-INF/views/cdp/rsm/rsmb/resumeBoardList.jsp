@@ -73,7 +73,7 @@
 							</div>
 							<div id="cnt">${commBoardVO.boardCnt}</div>
 							<div class="item-action">
-							    <button class="bookmark-btn ${commBoardVO.isBookmark == commBoardVO.boardId ? 'active' : ''}" data-category-id="${commBoardVO.ccId}" data-target-id="${commBoardVO.boardId}">
+							    <button class="bookmark-btn ${commBoardVO.isBookmark == commBoardVO.boardId ? 'active' : ''}" data-category-id="G03005" data-target-id="${commBoardVO.boardId}">
 							        <span class="icon-active">
 							            <img src="/images/bookmark-btn-active.png" alt="활성 북마크">
 							        </span>
