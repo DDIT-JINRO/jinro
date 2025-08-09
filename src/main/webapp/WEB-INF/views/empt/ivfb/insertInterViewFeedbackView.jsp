@@ -30,35 +30,37 @@
 		<div class="public-wrapper-main">
 			<div class="section-header">
 				<h2>면접 경험 등록</h2>
-				<p>등록된 이력서의 최근 3년 이내의 인사 경력을 불러옵니다. 작성해주신 면접 후기는 익명으로 등록됩니다.</p>
+				<p>작성해주신 면접 후기는 익명으로 등록됩니다.</p>
 			</div>
 			<div class="Insert-write">
 				<div class="info-input-section">
-					<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+					<div class="input-header">
 						<h3 class="file-label">기본정보 입력</h3>
 						<span class="required-info-text">※는 필수입력정보입니다</span>
 					</div>
 
 					<table class="info-input-table">
-						<colgroup>
-							<col style="width: 180px;">
-							<col>
-						</colgroup>
 						<tbody>
 							<tr>
 								<th>
-									<label for="companyName">기업명<span class="required">*</span></label>
+									<label for="companyName">
+										기업명
+										<span class="required">*</span>
+									</label>
 								</th>
 								<td>
 									<div class="input-group">
-										<input type="text" id="companyName" placeholder="기업명을 입력하세요.">
-										<button type="button" class="btn-search">입사지원 기업 검색</button>
+										<input type="text" id="companyName" data-cp-id="" placeholder="기업명을 입력하세요." readonly>
+										<button type="button" id="company-search" class="btn-search">입사지원 기업 검색</button>
 									</div>
 								</td>
 							</tr>
 							<tr>
 								<th>
-									<label for="job-position">직무직업<span class="required">*</span></label>
+									<label for="job-position">
+										직무직업
+										<span class="required">*</span>
+									</label>
 								</th>
 								<td>
 									<input type="text" id="job-position" placeholder="직무, 직업을 입력하세요.">
@@ -66,60 +68,12 @@
 							</tr>
 							<tr>
 								<th>
-									면접 당시 경력<span class="required">*</span>
-								</th>
-								<td>
-                                    <div class="input-group" style="gap: 0;"> <input type="radio" id="newcomer" name="experienceType" value="newcomer">
-										<label for="newcomer">신입</label>
-										<input type="radio" id="experienced" name="experienceType" value="experienced" checked>
-										<label for="experienced">경력</label>
-                                        
-                                        <div style="margin-left: 10px; display: flex; gap: 10px;">
-                                            <select name="jobLevel" class="form-select">
-                                                <option value="staff" selected>사원</option>
-                                                <option value="assistant_manager">대리</option>
-                                                <option value="manager">과장</option>
-                                                <option value="deputy_general_manager">차장</option>
-                                            </select>
-                                            <select name="experienceYears" class="form-select">
-                                                <option value="" disabled selected>연차 선택</option>
-                                                <option value="1">1년차</option>
-                                                <option value="2">2년차</option>
-                                                <option value="3">3년차</option>
-                                                <option value="4">4년차</option>
-                                                <option value="5">5년차 이상</option>
-                                            </select>
-                                        </div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<th>
-									면접 일자<span class="required">*</span>
+									면접 일자
+									<span class="required">*</span>
 								</th>
 								<td>
 									<div class="input-group">
-										<select name="interviewYear" class="form-select">
-											<option>2025년</option>
-											<option>2024년</option>
-											<option>2023년</option>
-											<option>2022년</option>
-										</select>
-										<select name="interviewMonth" class="form-select">
-											<option>01월</option>
-											<option>02월</option>
-											<option>03월</option>
-											<option>04월</option>
-											<option>05월</option>
-											<option>06월</option>
-											<option>07월</option>
-											<option>08월</option>
-											<option>09월</option>
-											<option>10월</option>
-											<option>11월</option>
-											<option>12월</option>
-										</select>
-										
+										<input type="date">
 									</div>
 								</td>
 							</tr>
@@ -143,6 +97,41 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- 기업 검색 모달 -->
+	<div class="modal-overlay" id="modal-overlay">
+		<div class="modal-content company-search-modal">
+			<button class="modal-close-btn" type="button">&times;</button>
+			<h3>입사지원 기업 검색</h3>
+			<p>입사에 지원하여 면접을 경험한 기업을 선택해주세요.</p>
+
+			<!-- 검색 입력창 -->
+			<div class="search-input-container">
+				<input type="text" id="company-search-input" placeholder="기업명을 입력하세요" autocomplete="off">
+				<button type="button" id="search-btn" class="btn btn-primary">검색</button>
+			</div>
+
+			<!-- 기업 목록 -->
+			<div class="company-list-container">
+				<ul id="company-list" class="company-list">
+					<!-- 기업 목록이 동적으로 추가됩니다 -->
+				</ul>
+			</div>
+
+			<!-- 페이징 -->
+			<div class="pagination-container">
+				<button type="button" id="prev-page" class="pagination-btn" disabled>이전</button>
+				<span id="page-info">1 / 1</span>
+				<button type="button" id="next-page" class="pagination-btn" disabled>다음</button>
+			</div>
+
+			<div class="modal-button-group">
+				<button class="btn btn-secondary" id="modal-cancel-btn">취소</button>
+				<button class="btn btn-primary" id="modal-confirm-btn" disabled>선택</button>
+			</div>
+		</div>
+	</div>
+
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
