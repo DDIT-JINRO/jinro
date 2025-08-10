@@ -38,7 +38,7 @@ public class InterviewFeedbackController {
 	
 	@GetMapping("/ivfb/insertInterViewFeedbackView.do")
 	public String insertInterViewFeedbackView() {
-		return "empt/ivfb/insertInterViewFeedbackView";
+		return "empt/ivfb/insertInterviewFeedbackView";
 	}
 	
 	@ResponseBody

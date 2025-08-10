@@ -63,5 +63,33 @@
 					, 'S06002'
 				)
 	</update>
+	
+	<update id="updateVerification" parameterType="kr.or.ddit.mpg.mif.inq.service.VerificationVO">
+		MERGE INTO
+			VERIFICATION A
+		USING DUAL
+		ON (VERI_ID = #{veriId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					A.FILE_GROUP_ID = #{fileGroupId}
+					, A.VERI_STATUS = #{veriStatus}
+					, A.VERI_REASON = #{veriReason}
+			WHEN NOT MATCHED THEN
+				INSERT(
+				    VERI_ID
+				    , MEM_ID
+				    , VERI_CREATED_AT
+				    , FILE_GROUP_ID
+				    , VERI_STATUS
+				    , VERI_CATEGORY
+				) VALUES (
+					(SELECT NVL(MAX(VERI_ID), 0) + 1 FROM VERIFICATION)
+					, #{memId}
+				    , SYSDATE
+				    , #{fileGroupId}
+				    , #{veriStatus}
+				    , #{veriCategory}
+				)
+	</update>
 
 </mapper>

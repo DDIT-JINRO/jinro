@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.empt.enp.service.CompanyVO;
 import kr.or.ddit.empt.enp.service.InterviewReviewVO;
+import kr.or.ddit.mpg.mif.inq.service.VerificationVO;
 
 @Mapper
 public interface InterviewFeedbackMapper {
@@ -13,4 +14,7 @@ public interface InterviewFeedbackMapper {
 	List<CompanyVO> selectCompanyList(String cpName);
 
 	void updateInterViewFeedback(InterviewReviewVO interviewReview);
+
+	void updateVerification(VerificationVO verification);
+
 }
