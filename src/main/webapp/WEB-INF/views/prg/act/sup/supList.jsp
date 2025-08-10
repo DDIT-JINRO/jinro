@@ -30,10 +30,9 @@
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
 			<a class="tab" href="/prg/act/vol/volList.do">봉사활동</a> <a class="tab"
-				href="/prg/act/cr/crList.do">직업체험</a> <a class="tab active"
+				href="/prg/act/cr/crList.do">인턴십</a> <a class="tab active"
 				href="/prg/act/sup/supList.do">서포터즈</a>
 		</div>
-
 
 		<div class="public-wrapper-main">
 			<div class="filter-section">
