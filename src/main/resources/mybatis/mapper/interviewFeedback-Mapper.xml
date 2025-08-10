@@ -8,6 +8,7 @@
 		FROM (
 			SELECT
 				A.IR_ID
+				, M.MEM_ID
 				, M.MEM_NICKNAME
 				, CASE
 					WHEN A.IR_TYPE = 'G02001' THEN U.UNIV_NAME
