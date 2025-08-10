@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/empt/ivfb/interviewFeedback.css">
 <!-- 스타일 여기 적어주시면 가능 -->
-<section class="channel">
+<section class="channel" data-error-message="${errorMessage}">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
@@ -135,104 +135,27 @@
                 </div>
             </div>
         </div>
-
-        <!-- 두 번째 카드 예시 -->
-        <div class="interview-card">
-			<div class="card-header" onclick="toggleCard(this)">
-			    <div class="card-header-left">
-			        <div class="company-name">삼성전자</div>
-			        <div class="card-meta">
-			            <div class="meta-item author">
-			                작성자 | 김철수
-			            </div>
-			            <div class="meta-item">
-			                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-			                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
-			                </svg>
-			                2024.01.15
-			            </div>
-			            <div class="rating">
-			                <span class="stars">★★★★☆</span>
-			                <span>4.0</span>
-			            </div>
-			        </div>
-			    </div>
-			    <div class="card-toggle">
-			        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-			            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-			        </svg>
-			    </div>
-			</div>
-            <div class="card-content">
-                <div class="card-body">
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <div class="detail-label">작성자</div>
-                            <div class="detail-value">박영희</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">면접 기업</div>
-                            <div class="detail-value">네이버</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">면접 대상 직무</div>
-                            <div class="detail-value">프론트엔드 개발자</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">면접일</div>
-                            <div class="detail-value">2024.01.08</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">작성일</div>
-                            <div class="detail-value">2024.01.12 10:15</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">수정일</div>
-                            <div class="detail-value">-</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">평점</div>
-                            <div class="detail-value">
-                                <span class="stars" style="color: #ffd700;">★★★★★</span>
-                                <span style="margin-left: 8px;">5.0/5.0</span>
-                            </div>
-                        </div>
-                        <div class="detail-item feedback-content">
-                            <div class="detail-label">후기 내용</div>
-                            <div class="feedback-text">매우 체계적이고 전문적인 면접이었습니다. 
-React, JavaScript 관련 깊이 있는 질문들과 함께 실무 상황을 가정한 문제 해결 능력을 평가하는 질문들이 인상적이었습니다.
-
-면접관분들이 매우 전문적이시고 지원자를 배려하는 분위기였습니다. 
-코딩 테스트도 실무와 밀접한 문제들로 구성되어 있어 좋았습니다.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
 			<ul class="pagination">
-				<li><a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}"
-						class="
-							<c:if test='${articlePage.startPage < 6}'>
-								disabled
-							</c:if>"
-					> ← Previous </a></li>
+				<li>
+					<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="${articlePage.startPage < 6 ? 'disabled' : ''}">
+						← Previous
+					</a>
+				</li>
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
-					<li><a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}"
-							class="page-num
-								<c:if test='${pNo == articlePage.currentPage}'>
-									active
-								</c:if>"
-						> ${pNo == 0 ? 1 : pNo} </a></li>
+					<li>
+						<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="page-num ${pNo == articlePage.currentPage ? 'active' : ''}">
+						${pNo}
+						</a>
+					</li>
 				</c:forEach>
 
-				<li><a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}"
-						class="
-							<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
-								disabled
-							</c:if>"
-					> Next → </a></li>
+				<li>
+					<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : '' }">
+						Next →
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
