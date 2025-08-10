@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/empt/ivfb/insertInterViewFeedbackView.css">
+<link rel="stylesheet" href="/css/empt/ivfb/insertInterviewFeedbackView.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -59,11 +59,10 @@
 								<th>
 									<label for="interview-position">
 										직무직업
-										<span class="required">*</span>
 									</label>
 								</th>
 								<td>
-									<input type="text" id="interview-position" placeholder="직무, 직업을 입력하세요." required="required">
+									<input type="text" id="interview-position" placeholder="직무, 직업을 입력하세요." maxlength="25">
 								</td>
 							</tr>
 							<tr>
@@ -76,6 +75,27 @@
 										<input type="date" id="interview-date" required="required">
 									</div>
 								</td>
+							</tr>
+							<tr>
+							    <th>
+							        기업 평가
+							        <span class="required">*</span>
+							    </th>
+							    <td>
+							        <div class="star-rating-container">
+							            <div class="star-rating" id="company-rating" data-rating="0">
+							                <span class="star" data-value="1">★</span>
+							                <span class="star" data-value="2">★</span>
+							                <span class="star" data-value="3">★</span>
+							                <span class="star" data-value="4">★</span>
+							                <span class="star" data-value="5">★</span>
+							            </div>
+							            <span class="rating-text" id="rating-text">평가해주세요</span>
+							        </div>
+							        <div class="rating-descriptions">
+							            면접 과정, 분위기, 기업 대응 등을 종합적으로 평가해주세요
+							        </div>
+							    </td>
 							</tr>
 							<tr>
 								<th>
@@ -159,5 +179,5 @@
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
-<script type="text/javascript" src="/js/empt/ivfb/insertInterViewFeedbackView.js"></script>
+<script type="text/javascript" src="/js/empt/ivfb/insertInterviewFeedbackView.js"></script>
 </html>

@@ -40,6 +40,86 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 });
 
+// 별점 평가 기능
+document.addEventListener('DOMContentLoaded', function() {
+    const starRating = document.getElementById('company-rating');
+    const ratingText = document.getElementById('rating-text');
+    const stars = starRating.querySelectorAll('.star');
+    
+    // 별점 설명 텍스트
+    const ratingTexts = {
+        0: '평가해주세요',
+        1: '매우 불만족',
+        2: '불만족',
+        3: '보통',
+        4: '만족',
+        5: '매우 만족'
+    };
+    
+    let currentRating = 0;
+    
+    // 별 클릭 이벤트
+    stars.forEach((star, index) => {
+        // 클릭 이벤트
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.dataset.value);
+            setRating(rating);
+        });
+        
+        // 마우스 호버 이벤트
+        star.addEventListener('mouseenter', function() {
+            const rating = parseInt(this.dataset.value);
+            highlightStars(rating, true);
+            updateRatingText(rating, true);
+        });
+    });
+    
+    // 별점 컨테이너에서 마우스가 나갔을 때
+    starRating.addEventListener('mouseleave', function() {
+        highlightStars(currentRating, false);
+        updateRatingText(currentRating, false);
+    });
+    
+    // 별점 설정 함수
+    function setRating(rating) {
+        currentRating = rating;
+        starRating.dataset.rating = rating;
+        highlightStars(rating, false);
+        updateRatingText(rating, false);
+    }
+    
+    // 별 하이라이트 함수
+    function highlightStars(rating, isHover) {
+        stars.forEach((star, index) => {
+            star.classList.remove('active', 'temp-active');
+            
+            if (index < rating) {
+                if (isHover) {
+                    star.classList.add('temp-active');
+                } else {
+                    star.classList.add('active');
+                }
+            }
+        });
+    }
+    
+    // 평가 텍스트 업데이트 함수
+    function updateRatingText(rating, isHover) {
+        ratingText.textContent = ratingTexts[rating];
+        
+        if (rating > 0) {
+            ratingText.classList.add('selected');
+        } else {
+            ratingText.classList.remove('selected');
+        }
+    }
+    
+    // 별점 값을 가져오는 함수 (폼 제출 시 사용)
+    window.getInterviewRating = function() {
+        return currentRating;
+    };
+});
+
 // textarea 글자수 카운터 기능
 document.addEventListener('DOMContentLoaded', function() {
     const textarea = document.getElementById('interview-detail');
