@@ -41,60 +41,198 @@
 							<option value="2">내용</option>
 						</select>
 						<svg class="com-select-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                			<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                			<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+								clip-rule="evenodd"
+							/>
             			</svg>
 					</div>
 					<input type="search" class="search-input" name="keyword" placeholder="면접 후기 게시판 내에서 검색">
 					<button class="com-search-btn" type="submit">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                			<path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+                			<path fill-rule="evenodd"
+								d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd"
+							/>
            				</svg>
 					</button>
 				</div>
 			</form>
-			<div class="group-card-top">
-				<div class="group-title">기업명</div>
-				<div class="group-meta-top">
-					<div id="writer">작성자</div>
-					<div id="writeAt">작성일</div>
-					<div id="rate">평점</div>
-				</div>
+			<div class="group-card-content">
+        <!-- 샘플 데이터 - 실제로는 JSTL forEach로 동적 생성 -->
+        <div class="interview-card">
+            <div class="card-header" onclick="toggleCard(this)">
+			    <div class="card-header-left">
+			        <div class="company-name">삼성전자</div>
+			        <div class="card-meta">
+			            <div class="meta-item author">
+			                작성자 | 김철수
+			            </div>
+			            <div class="meta-item">
+			                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+			                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+			                </svg>
+			                2024.01.15
+			            </div>
+			            <div class="rating">
+			                <span class="stars">★★★★☆</span>
+			                <span>4.0</span>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="card-toggle">
+			        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+			            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+			        </svg>
+			    </div>
 			</div>
-			<div class="teenList-list">
-				<div class="group-card" data-tbd-id="">
-					<div class="group-info">
-						<div class="group-title-list">기업명</div>
-					</div>
-					<div class="group-meta">
-						<div id="writer">작성자</div>
-						<div id="writeAt">0000. 00. 00.</div>
-						<div id="cnt">0</div>
-					</div>
-				</div>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">작성자</div>
+                            <div class="detail-value">김철수</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">면접 기업</div>
+                            <div class="detail-value">삼성전자</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">면접 대상 직무</div>
+                            <div class="detail-value">SW 개발자</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">면접일</div>
+                            <div class="detail-value">2024.01.10</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">작성일</div>
+                            <div class="detail-value">2024.01.15 14:30</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">수정일</div>
+                            <div class="detail-value">2024.01.15 14:30</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">평점</div>
+                            <div class="detail-value">
+                                <span class="stars" style="color: #ffd700;">★★★★☆</span>
+                                <span style="margin-left: 8px;">4.0/5.0</span>
+                            </div>
+                        </div>
+                        <div class="detail-item feedback-content">
+                            <div class="detail-label">후기 내용</div>
+                            <div class="feedback-text">전체적으로 분위기가 좋았고, 면접관분들이 친절하셨습니다. 
+기술적인 질문들이 주를 이뤘으며, 특히 자료구조와 알고리즘에 대한 깊이 있는 질문들이 많았습니다.
+
+면접 과정:
+1. 자기소개 (5분)
+2. 기술 질문 (20분)
+3. 프로젝트 경험 (15분)
+4. 역질문 (5분)
+
+준비하시는 분들은 기본적인 CS 지식과 본인의 프로젝트에 대해 상세히 설명할 수 있도록 준비하시길 바랍니다.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 두 번째 카드 예시 -->
+        <div class="interview-card">
+			<div class="card-header" onclick="toggleCard(this)">
+			    <div class="card-header-left">
+			        <div class="company-name">삼성전자</div>
+			        <div class="card-meta">
+			            <div class="meta-item author">
+			                작성자 | 김철수
+			            </div>
+			            <div class="meta-item">
+			                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+			                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+			                </svg>
+			                2024.01.15
+			            </div>
+			            <div class="rating">
+			                <span class="stars">★★★★☆</span>
+			                <span>4.0</span>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="card-toggle">
+			        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+			            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+			        </svg>
+			    </div>
 			</div>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">작성자</div>
+                            <div class="detail-value">박영희</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">면접 기업</div>
+                            <div class="detail-value">네이버</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">면접 대상 직무</div>
+                            <div class="detail-value">프론트엔드 개발자</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">면접일</div>
+                            <div class="detail-value">2024.01.08</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">작성일</div>
+                            <div class="detail-value">2024.01.12 10:15</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">수정일</div>
+                            <div class="detail-value">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">평점</div>
+                            <div class="detail-value">
+                                <span class="stars" style="color: #ffd700;">★★★★★</span>
+                                <span style="margin-left: 8px;">5.0/5.0</span>
+                            </div>
+                        </div>
+                        <div class="detail-item feedback-content">
+                            <div class="detail-label">후기 내용</div>
+                            <div class="feedback-text">매우 체계적이고 전문적인 면접이었습니다. 
+React, JavaScript 관련 깊이 있는 질문들과 함께 실무 상황을 가정한 문제 해결 능력을 평가하는 질문들이 인상적이었습니다.
+
+면접관분들이 매우 전문적이시고 지원자를 배려하는 분위기였습니다. 
+코딩 테스트도 실무와 밀접한 문제들로 구성되어 있어 좋았습니다.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 			<ul class="pagination">
-				<li>
-					<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="
+				<li><a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}"
+						class="
 							<c:if test='${articlePage.startPage < 6}'>
 								disabled
-							</c:if>"> ← Previous </a>
-				</li>
+							</c:if>"
+					> ← Previous </a></li>
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
-					<li>
-						<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="page-num
+					<li><a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}"
+							class="page-num
 								<c:if test='${pNo == articlePage.currentPage}'>
 									active
-								</c:if>"> ${pNo} </a>
-					</li>
+								</c:if>"
+						> ${pNo == 0 ? 1 : pNo} </a></li>
 				</c:forEach>
 
-				<li>
-					<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="
+				<li><a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}"
+						class="
 							<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
 								disabled
-							</c:if>"> Next → </a>
-				</li>
+							</c:if>"
+					> Next → </a></li>
 			</ul>
 		</div>
 	</div>
