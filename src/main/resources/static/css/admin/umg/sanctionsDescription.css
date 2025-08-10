@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+.scdMng-1 {
+	display: flex;
+	gap: 20px;
+}
+
+.scdMng-1-1 {
+	width: 100%;
+	height: 400px;
+}
+

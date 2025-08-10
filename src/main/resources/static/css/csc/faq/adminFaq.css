@@ -57,8 +57,8 @@
 	align-items: center;
 	gap: 8px;
 	justify-content: flex-end;
-	width: 100%;
 	margin-bottom: 12px;
+	margin-top: 10px;
 }
 
 .filter-box select,
@@ -258,6 +258,11 @@
 /* ──────────────────────────────────────────────────────────
    CKEditor 개선: label 포함 정렬 및 너비 고정
 ──────────────────────────────────────────────────────────*/
+
+.faqFormGroup {
+	margin-top: 10px;
+}
+
 .template-panel form .faqFormGroup,
 .template-panel form > div.ck-row {
 	display: flex;

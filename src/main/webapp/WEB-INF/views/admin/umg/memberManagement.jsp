@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="css/admin/umg/memberManagement.css">
-<body>
+<script src="/js/include/admin/umg/memberManagement.js"></script>
 	<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">회원 관리</h2>
 	<div class="flex">
 		<div class="management-left">
@@ -171,5 +171,4 @@
 			</div>
 		</div>
 	</div>
-</body>
-<script src="/js/include/admin/umg/memberManagement.js"></script>
+
