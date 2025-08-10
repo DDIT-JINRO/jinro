@@ -10,7 +10,11 @@ import kr.or.ddit.mpg.mif.inq.service.VerificationVO;
 
 @Mapper
 public interface InterviewFeedbackMapper {
+	
+	List<InterviewReviewVO> selectInterviewFeedbackList(InterviewReviewVO interviewReviewVO);
 
+	int selectInterviewReviewListTotal(InterviewReviewVO interviewReviewVO);
+	
 	List<CompanyVO> selectCompanyList(String cpName);
 
 	void updateInterViewFeedback(InterviewReviewVO interviewReview);

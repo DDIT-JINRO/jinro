@@ -6,8 +6,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.empt.enp.service.CompanyVO;
 import kr.or.ddit.empt.enp.service.InterviewReviewVO;
+import kr.or.ddit.util.ArticlePage;
 
 public interface InterviewFeedbackService {
+
+	ArticlePage<InterviewReviewVO> selectInterviewFeedbackList(InterviewReviewVO interviewReviewVO);
 
 	List<CompanyVO> selectCompanyList(String cpName);
 

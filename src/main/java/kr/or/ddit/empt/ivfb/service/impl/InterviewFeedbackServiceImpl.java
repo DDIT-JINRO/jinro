@@ -15,6 +15,7 @@ import kr.or.ddit.empt.ivfb.service.InterviewFeedbackService;
 import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.mpg.mif.inq.service.VerificationVO;
+import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileService;
 
 @Service
@@ -26,11 +27,22 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 	@Autowired
 	FileService fileService;
 	
+
+	@Override
+	public ArticlePage<InterviewReviewVO> selectInterviewFeedbackList(InterviewReviewVO interviewReviewVO) {
+		List<InterviewReviewVO> interviewReviewList = interviewFeedbackMapper.selectInterviewFeedbackList(interviewReviewVO);
+		
+		int interviewReviewListTotal = interviewFeedbackMapper.selectInterviewReviewListTotal(interviewReviewVO);
+		
+		ArticlePage<InterviewReviewVO> articlePage = new ArticlePage<>(interviewReviewListTotal, interviewReviewVO.getCurrentPage(), interviewReviewVO.getSize(), interviewReviewList, interviewReviewVO.getKeyword());
+		
+		return articlePage;
+	}
+	
 	@Override
 	public List<CompanyVO> selectCompanyList(String cpName) {
-		
 		List<CompanyVO> companyList = interviewFeedbackMapper.selectCompanyList(cpName);
-
+		
 		if(companyList == null || companyList.isEmpty()) {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}

@@ -2,6 +2,108 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.empt.ivfb.service.impl.InterviewFeedbackMapper">
 
+	<select id="selectInterviewFeedbackList" resultType="kr.or.ddit.empt.enp.service.InterviewReviewVO" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+		SELECT
+			*
+		FROM (
+			SELECT
+				A.IR_ID
+				, M.MEM_NICKNAME
+				, CASE
+					WHEN A.IR_TYPE = 'G02001' THEN U.UNIV_NAME
+					WHEN A.IR_TYPE = 'G02002' THEN C.CP_NAME
+					ELSE '알 수 없음'
+				END AS TARGET_NAME
+				, A.IR_CONTENT
+				, A.IR_CREATED_AT
+				, A.IR_MOD_AT
+				, A.IR_RATING
+				, A.IR_APPLICATION
+				, A.IR_INTERVIEW_AT
+				, A.IR_STATUS
+				, A.IR_TYPE
+			FROM
+				INTERVIEW_REVIEW A
+				LEFT JOIN MEMBER M ON A.MEM_ID = M.MEM_ID
+				LEFT JOIN UNIVERSITY U ON A.TARGET_ID = U.UNIV_ID
+				LEFT JOIN COMPANY C ON A.TARGET_ID = C.CP_ID
+		) T
+		WHERE
+			IR_STATUS = #{irStatus} AND
+			IR_TYPE = #{irType}
+			<if test="keyword != null and keyword != ''">
+				<choose>
+					<when test="status == 'targetName'">
+						AND TARGET_NAME LIKE '%' || #{keyword} || '%'
+					</when>
+					<when test="status == 'content'">
+						AND IR_CONTENT LIKE '%' || #{keyword} || '%'
+					</when>
+					<when test="status == 'writer'">
+						AND MEM_NICKNAME LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+						AND (
+						TARGET_NAME LIKE '%' || #{keyword} || '%'
+						OR IR_CONTENT LIKE '%' || #{keyword} || '%'
+						OR MEM_NICKNAME LIKE '%' || #{keyword} || '%'
+						)
+					</otherwise>
+				</choose>
+			</if>
+		ORDER BY
+			IR_MOD_AT DESC
+		OFFSET
+			#{startRow} - 1 ROWS
+		FETCH NEXT
+			#{endRow} - #{startRow} + 1 ROWS ONLY
+	</select>
+	
+	<select id="selectInterviewReviewListTotal" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO" resultType="int">
+	    SELECT
+	        COUNT(*)
+	    FROM
+	        INTERVIEW_REVIEW A
+	        LEFT JOIN MEMBER M ON A.MEM_ID = M.MEM_ID
+	        <if test="irType == 'G02001'">
+	            LEFT JOIN UNIVERSITY U ON A.TARGET_ID = U.UNIV_ID
+	        </if>
+	        <if test="irType == 'G02002'">
+	            LEFT JOIN COMPANY C ON A.TARGET_ID = C.CP_ID
+	        </if>
+	    WHERE
+	        IR_STATUS = #{irStatus} 
+	    AND
+	        IR_TYPE = #{irType}
+	    <if test="keyword != null and keyword != ''">
+	        <choose>
+	            <when test="status == 'targetName'">
+	                AND
+	                    CASE
+	                        WHEN A.IR_TYPE = 'G02001' THEN U.UNIV_NAME
+	                        WHEN A.IR_TYPE = 'G02002' THEN C.CP_NAME
+	                    END LIKE '%' || #{keyword} || '%'
+	            </when>
+	            <when test="status == 'content'">
+	                AND A.IR_CONTENT LIKE '%' || #{keyword} || '%'
+	            </when>
+	            <when test="status == 'writer'">
+	                AND M.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                AND (
+	                    CASE
+	                        WHEN A.IR_TYPE = 'G02001' THEN U.UNIV_NAME
+	                        WHEN A.IR_TYPE = 'G02002' THEN C.CP_NAME
+	                    END LIKE '%' || #{keyword} || '%'
+	                    OR A.IR_CONTENT LIKE '%' || #{keyword} || '%'
+	                    OR M.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
+	                )
+	            </otherwise>
+	        </choose>
+	    </if>
+	</select>
+
 	<select id="selectCompanyList" resultType="kr.or.ddit.empt.enp.service.CompanyVO" parameterType="string"> 
 		SELECT
 		    CP_ID
