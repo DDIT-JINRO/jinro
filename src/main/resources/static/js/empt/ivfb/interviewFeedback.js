@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				return;
 			}
 			
-			location.href = `/empt/ivfb/updateInterviewFeedbackView.do?id=${irId}` 
+			location.href = `/empt/ivfb/updateInterviewFeedbackView.do?irId=${irId}` 
 		})
 	})
 });
