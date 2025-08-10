@@ -203,4 +203,26 @@
 		WHERE
 			IR_ID = #{irId}
 	</update>
+	
+	<select id="selectInterviewFeedback" parameterType="int" resultType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+		SELECT
+		    A.IR_ID
+		    , M.MEM_ID
+		    , CASE
+		        WHEN A.IR_TYPE = 'G02001' THEN U.UNIV_NAME
+		        WHEN A.IR_TYPE = 'G02002' THEN C.CP_NAME
+		        ELSE '알 수 없음'
+		    END AS TARGET_NAME
+		    , A.IR_CONTENT
+		    , A.IR_RATING
+		    , A.IR_APPLICATION
+		    , A.IR_INTERVIEW_AT
+		FROM
+		    INTERVIEW_REVIEW A
+		    LEFT JOIN MEMBER M ON A.MEM_ID = M.MEM_ID
+		    LEFT JOIN UNIVERSITY U ON A.TARGET_ID = U.UNIV_ID
+		    LEFT JOIN COMPANY C ON A.TARGET_ID = C.CP_ID
+		WHERE
+		    IR_ID = #{irId}
+	</select>
 </mapper>

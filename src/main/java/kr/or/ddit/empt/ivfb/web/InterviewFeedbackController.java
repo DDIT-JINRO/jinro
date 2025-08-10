@@ -53,7 +53,7 @@ public class InterviewFeedbackController {
 	
 	@GetMapping("/ivfb/insertInterViewFeedbackView.do")
 	public String insertInterViewFeedbackView() {
-		return "empt/ivfb/insertInterviewFeedbackView";
+		return "empt/ivfb/insertInterViewFeedbackView";
 	}
 	
 	@ResponseBody
@@ -124,4 +124,21 @@ public class InterviewFeedbackController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 		}
 	}
+	
+	@GetMapping("/ivfb/updateInterviewFeedbackView.do")
+	public String updateInterviewFeedbackView(Model model, @AuthenticationPrincipal String memId, @RequestParam int irId) {
+		try {
+			InterviewReviewVO interviewReview = interviewFeedbackService.selectInterviewFeedback(memId, irId);
+			model.addAttribute("interviewReview", interviewReview);
+		} catch (CustomException e) {
+			log.error("면접 후기 조회 중 에러 발생 : {}", e.getMessage());
+			model.addAttribute("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			log.error("면접 후기 조회 중 에러 발생 : {}", e.getMessage());
+			model.addAttribute("errorMessage", "면접 후기 조회 중 에러가 발생했습니다.");
+		}
+		
+		return "empt/ivfb/updateInterViewFeedbackView";
+	}
+	
 }

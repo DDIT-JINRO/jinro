@@ -101,4 +101,24 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 		}
 	}
 
+	@Override
+	public InterviewReviewVO selectInterviewFeedback(String memIdStr, int irId) {
+		if (null == memIdStr || "anonymousUser".equals(memIdStr)) {
+			throw new CustomException(ErrorCode.INVALID_USER);
+		}
+		
+		try {
+			InterviewReviewVO interviewReview = interviewFeedbackMapper.selectInterviewFeedback(irId);
+			
+			if(interviewReview.getMemId() != Integer.parseInt(memIdStr)){
+				throw new CustomException(ErrorCode.INVALID_AUTHORIZE);
+			};
+			
+			return interviewReview;
+		} catch (Exception e) {
+			log.error(memIdStr);
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

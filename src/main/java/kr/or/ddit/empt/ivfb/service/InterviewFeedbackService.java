@@ -18,4 +18,6 @@ public interface InterviewFeedbackService {
 
 	void deleteInterviewFeedback(String memId, int irId);
 
+	InterviewReviewVO selectInterviewFeedback(String memId, int irId);
+
 }
