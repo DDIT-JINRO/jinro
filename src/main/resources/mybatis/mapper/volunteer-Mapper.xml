@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.or.ddit.prg.act.sup.service.impl.ActivitySupportersMapper">
+<mapper namespace="kr.or.ddit.prg.act.vol.service.impl.ActivityVolunteerMapper">
 
 	
 	 <!-- 
-	//서포터즈 총 개수 조회
-	int selectSupCount(ActivityVO activityVO)
+	//봉사활동 총 개수 조회
+	public int selectVolCount(ActivityVO activityVO)
 	 -->
-	<select id="selectSupCount" parameterType="kr.or.ddit.prg.act.service.ActivityVO">
+	<select id="selectVolCount" parameterType="kr.or.ddit.prg.act.service.ActivityVO">
         SELECT COUNT(*)
         FROM CONTEST T1
          <where>
@@ -41,10 +41,10 @@
     </select>
 
 	<!-- 
-	서포터즈 목록 조회
-	List<ActivityVO> selectSupList(ActivityVO activityVO)
+	//봉사활동 목록 조회
+	public List<ActivityVO> selectVolList(ActivityVO activityVO);
 	 -->
-    <select id="selectSupList" parameterType="kr.or.ddit.prg.act.service.ActivityVO" resultType="kr.or.ddit.prg.act.service.ActivityVO">
+    <select id="selectVolList" parameterType="kr.or.ddit.prg.act.service.ActivityVO" resultType="kr.or.ddit.prg.act.service.ActivityVO">
         SELECT *
         FROM (
             SELECT
@@ -117,8 +117,8 @@
     </select>
 
 	<!-- 
-	// 서포터즈 상세
-	ActivityVO selectSupDetail(String supId);
+	// 봉사활동 상세
+	public ActivityVO selectSupDetail(String volId);
 	 -->
     <select id="selectSupDetail" resultType="kr.or.ddit.prg.act.service.ActivityVO">
         SELECT 
@@ -149,17 +149,17 @@
         	ON T1.CONTEST_TYPE = TYPE.CC_ID AND TYPE.CL_CODE = 'G35'
         LEFT JOIN COM_CODE TARGET
             ON T1.CONTEST_TARGET = TARGET.CC_ID AND TARGET.CL_CODE = 'G34'
-        WHERE CONTEST_ID = #{supId}
+        WHERE CONTEST_ID = #{volId}
     </select>
     
     <!-- 
     //조회수 증가
-	public int updateSupViewCount(String supId);
+	public void updateVolViewCount(String volId);
      -->
-     <update id="updateSupViewCount">
+     <update id="updateVolViewCount">
         UPDATE CONTEST
         SET CONTEST_RECRUIT_COUNT = CONTEST_RECRUIT_COUNT + 1
-        WHERE CONTEST_ID = #{supId}
+        WHERE CONTEST_ID = #{volId}
     </update>
     
 </mapper>

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="">
+<link rel="stylesheet" href="/css/prg/act/vol/volDetail.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -26,11 +26,64 @@
 		    <a class="tab" href="/prg/act/sup/supList.do">서포터즈</a>
   		</div>
   		<div class="public-wrapper-main">
-  			봉사활동 상세
-  			${volId} 번 글
-  			<br/>
-			<a href="/prg/act/vol/volList.do">목록으로</a>
-  		</div>
+		    <div class="detail-container">
+		
+		        <%-- 1. 최상단 제목 --%>
+		        <div class="detail-title-wrapper">
+		            <h1>${volDetail.contestTitle}</h1>
+		            <div class="meta-info">
+		                <span>조회수: ${volDetail.contestRecruitCount}</span>
+		                <span class="divider">|</span>
+		                <span>게시일: <fmt:formatDate value="${volDetail.contestCreatedAt}" pattern="yyyy.MM.dd"/></span>
+		            </div>
+		        </div>
+		
+		        <%-- 2. 포스터(좌) 및 요약 정보(우) 섹션 --%>
+		        <div class="summary-layout">
+		            <div class="poster-wrapper">
+		                <img src="/files/download?fileGroupId=${volDetail.fileGroupId}&seq=1" alt="${cttDetail.contestTitle} 포스터" class="poster-image">
+		            </div>
+		            <div class="summary-wrapper">
+		                <table class="info-table">
+		                    <tbody>
+		                        <tr><th>주최</th><td>${volDetail.contestHost}</td></tr>
+		                        <tr><th>주관</th><td>${volDetail.contestOrganizer}</td></tr>
+		                        <tr><th>접수기간</th>
+		                            <td>
+		                                <fmt:formatDate value="${volDetail.contestStartDate}" pattern="yyyy.MM.dd"/> ~ 
+		                                <fmt:formatDate value="${volDetail.contestEndDate}" pattern="yyyy.MM.dd"/>
+		                            </td>
+		                        </tr>
+		                        <tr><th>참가자격</th><td>${volDetail.contestTargetName}</td></tr>
+		                        <tr><th>접수방법</th><td>${volDetail.applicationMethod}</td></tr>
+					            <tr><th>시상종류</th><td>${volDetail.awardType}</td></tr>
+					            <tr><th>홈페이지</th><td><a href="${volDetail.contestUrl}" target="_blank">바로가기</a></td></tr>
+		                    </tbody>
+		                </table>
+		            </div>
+		        </div>
+		
+		        <%-- 3. 상세 내용 섹션 --%>
+		        <div class="content-wrapper">
+		            <div class="tabs">
+		                <div class="tab-item active">공모요강</div>
+		            </div>
+		            <div class="tab-content">
+		                <c:forEach var="section" items="${volDetail.descriptionSections}">
+					        <div class="description-section">
+					            <p class="description-text">${section}</p>
+					        </div>
+					    </c:forEach>
+		            </div>
+		        </div>
+		        
+		        <%-- 4. 하단 목록 버튼 --%>
+		        <div class="bottom-button-wrapper">
+		            <a href="/prg/act/vol/volList.do" class="btn-list-bottom">목록</a>
+		        </div>
+		
+		    </div>
+		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>

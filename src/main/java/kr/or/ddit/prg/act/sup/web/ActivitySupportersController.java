@@ -1,6 +1,5 @@
 package kr.or.ddit.prg.act.sup.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,6 @@ public class ActivitySupportersController {
 	        @RequestParam(required = false) String keyword,
             @RequestParam(value = "contestGubunFilter", required = false) List<String> contestGubunFilter,
 	        @RequestParam(value = "contestTargetFilter", required = false) List<String> contestTargetFilter,
-	        @RequestParam(value = "contestTypeFilter", required = false) List<String> contestTypeFilter,
 	        @RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter) {
 		
 		ActivityVO activityVO = new ActivityVO();

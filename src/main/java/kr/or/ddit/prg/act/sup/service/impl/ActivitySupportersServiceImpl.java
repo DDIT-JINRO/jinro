@@ -16,7 +16,7 @@ public class ActivitySupportersServiceImpl implements ActivitySupportersService{
 	@Autowired
 	private ActivitySupportersMapper activitySupportersMapper;
 	
-	// 봉사활동 목록 조회
+	// 서포터즈 목록 조회
 	@Override
 	public List<ActivityVO> selectSupList(ActivityVO activityVO) {
 		// 페이징 정보 계산 (startRow, endRow)
@@ -31,7 +31,7 @@ public class ActivitySupportersServiceImpl implements ActivitySupportersService{
 		return activitySupportersMapper.selectSupList(activityVO);
 	}
 
-	//봉사활동 총 개수 조회
+	//서포터즈 총 개수 조회
 	@Override
 	public int selectSupCount(ActivityVO activityVO) {
 		if(activityVO.getContestGubunFilter() == null || activityVO.getContestGubunFilter().isEmpty()){
@@ -44,7 +44,7 @@ public class ActivitySupportersServiceImpl implements ActivitySupportersService{
 		return totalCount;
 	}
 
-	// 봉사활동 상세
+	// 서포터즈 상세
 	@Override
 	@Transactional
 	public ActivityVO selectSupDetail(String supId) {
