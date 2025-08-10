@@ -116,8 +116,6 @@ function fetchVacationList(page = 1) {
 			}
 		})
 		.then(({ data }) => {
-			console.log(data);
-
 			const countEl = document.getElementById('notice-count');
 			let cnt = (page-1) * pageSize +1;
 			if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
@@ -223,7 +221,6 @@ function showDetail(vaId) {
 	axios.get('/api/cnsld/vacationDetail.do', { params: { vaId } })
 		.then(response => {
 			const resp = response.data;
-			console.log(resp);
 			window.currentVaId = vaId;
 			document.getElementById('vaId').value = resp.vaId;
 			document.getElementById('fileGroupId').value = resp.fileGroupId;
@@ -326,7 +323,6 @@ async function updateConfirmation(action) {
 	if(action == 'confirm'){
 		const resp = await axios.get('/api/cnsld/checkCounselList.do?vaId='+vaId);
 		const counselList = resp.data;
-		console.log(counselList);
 		let alertStr = '';
 		if(counselList && counselList.length > 0){
 			alertStr += '해당 휴가 기간에 상담예약이 존재합니다.\n';
