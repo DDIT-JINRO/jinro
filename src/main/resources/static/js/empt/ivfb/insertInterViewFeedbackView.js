@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // textarea 글자수 카운터 기능
 document.addEventListener('DOMContentLoaded', function() {
     const textarea = document.getElementById('interview-detail');
-    const maxLength = 100; // 최대 글자수 설정
+    const maxLength = 300; // 최대 글자수 설정
     
     // 글자수 카운터 HTML 생성
     const counterHTML = `

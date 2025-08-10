@@ -107,7 +107,7 @@
 							            <textarea id="interview-detail" 
 							                      placeholder="서류 합격 후 어떤 전형과 면접을 경험하셨나요?&#13;&#10;(사실이 아닌 비방이나 개인적인 의견은 등록이 거절될 수 있습니다.)" 
 							                      rows="5"
-							                      maxlength="100"
+							                      maxlength="300"
 							                      required="required"></textarea>
 							        </div>
 							    </td>
