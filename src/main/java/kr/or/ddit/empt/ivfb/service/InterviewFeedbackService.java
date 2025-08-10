@@ -16,4 +16,6 @@ public interface InterviewFeedbackService {
 
 	void updateInterviewFeedback(String memId, InterviewReviewVO interviewReview, MultipartFile file, String veriCategory);
 
+	void deleteInterviewFeedback(String memId, int irId);
+
 }

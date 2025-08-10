@@ -21,4 +21,7 @@ public interface InterviewFeedbackMapper {
 
 	void updateVerification(VerificationVO verification);
 
+
+	void deleteInterviewFeedback(int irId);
+
 }

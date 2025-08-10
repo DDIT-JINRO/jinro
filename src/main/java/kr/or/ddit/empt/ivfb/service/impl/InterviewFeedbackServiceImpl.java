@@ -17,8 +17,10 @@ import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.mpg.mif.inq.service.VerificationVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileService;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 
 	@Autowired
@@ -80,6 +82,20 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 		} catch (Exception e) {
 			fileService.deleteFileGroup(fileGroupId);
 			throw e;
+		}
+	}
+
+	@Override
+	public void deleteInterviewFeedback(String memIdStr, int irId) {
+		if (null == memIdStr || "anonymousUser".equals(memIdStr)) {
+			throw new CustomException(ErrorCode.INVALID_AUTHORIZE);
+		}
+		
+		try {
+			interviewFeedbackMapper.deleteInterviewFeedback(irId);
+		} catch (CustomException e) {
+			log.error("면접 후기 요청 중 에러 발생 : {}", e.getMessage());
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 	}
 

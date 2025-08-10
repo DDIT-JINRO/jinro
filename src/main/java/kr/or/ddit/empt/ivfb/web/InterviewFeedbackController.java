@@ -103,5 +103,25 @@ public class InterviewFeedbackController {
 		}
 	}
 	
-	
+	@ResponseBody
+	@PostMapping("/ivfb/deleteInterviewFeedback.do")
+	public ResponseEntity<Map<String, Object>> deleteInterviewFeedback(@AuthenticationPrincipal String memId, @RequestParam int irId) {
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			interviewFeedbackService.deleteInterviewFeedback(memId, irId);
+			response.put("success", true);
+			return ResponseEntity.ok(response);
+		} catch(CustomException e) {
+			log.error("면접 후기 삭제 요청 중 에러 발생 : {}", e.getMessage());
+			response.put("success", false);
+			response.put("message", e.getMessage());
+			return ResponseEntity.status(e.getErrorCode().getStatus()).body(response);
+		} catch(Exception e) {
+			log.error("알 수 없는 에러 발생 : {}", e.getMessage());
+			response.put("success", false);
+			response.put("message", "알 수 없는 에러가 발생했습니다 : " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+		}
+	}
 }

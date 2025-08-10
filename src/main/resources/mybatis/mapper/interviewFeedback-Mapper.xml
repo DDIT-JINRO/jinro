@@ -194,5 +194,13 @@
 				    , #{veriCategory}
 				)
 	</update>
-
+	
+	<update id="deleteInterviewFeedback" parameterType="int">
+		UPDATE
+			INTERVIEW_REVIEW
+		SET
+			IR_STATUS = 'S06003'
+		WHERE
+			IR_ID = #{irId}
+	</update>
 </mapper>

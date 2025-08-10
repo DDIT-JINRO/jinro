@@ -74,7 +74,7 @@ function deleteInterviewFeedback(irId) {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: 'id=' + encodeURIComponent(irId)
+            body: 'irId=' + encodeURIComponent(irId)
         })
         .then(response => {
             if (response.ok) {
