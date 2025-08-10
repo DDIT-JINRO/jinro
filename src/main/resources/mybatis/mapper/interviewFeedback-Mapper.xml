@@ -22,5 +22,46 @@
             CP_NAME LIKE '%' || #{cpName} || '%'
 		</if>
 	</select>
+	
+	<update id="updateInterViewFeedback" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+		MERGE INTO
+			INTERVIEW_REVIEW A
+		USING DUAL
+		ON (IR_ID = #{irId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					A.IR_CONTENT = #{irContent}
+					, A.IR_RATING = #{irRating}
+					, A.IR_APPLICATION = #{irApplication}
+					, A.IR_INTERVIEW_AT = #{irInterviewAt}
+					, A.IR_MOD_AT = SYSDATE
+					, A.IR_STATUS = #{irStatus}
+			WHEN NOT MATCHED THEN
+				INSERT(
+				    IR_ID
+				    , MEM_ID
+				    , IR_TYPE
+				    , TARGET_ID
+				    , IR_CONTENT
+				    , IR_CREATED_AT
+				    , IR_MOD_AT
+				    , IR_RATING
+				    , IR_APPLICATION
+				    , IR_INTERVIEW_AT
+				    , IR_STATUS
+				) VALUES (
+					(SELECT NVL(MAX(IR_ID), 0) + 1 FROM INTERVIEW_REVIEW)
+					, #{memId}
+					, #{irType}
+					, #{targetId}
+					, #{irContent}
+					, SYSDATE
+					, SYSDATE
+					, #{irRating}
+					, #{irApplication}
+					, #{irInterviewAt}
+					, 'S06002'
+				)
+	</update>
 
 </mapper>

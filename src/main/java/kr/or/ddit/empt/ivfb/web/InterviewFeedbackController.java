@@ -7,13 +7,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.empt.enp.service.CompanyVO;
+import kr.or.ddit.empt.enp.service.InterviewReviewVO;
 import kr.or.ddit.empt.ivfb.service.InterviewFeedbackService;
 import kr.or.ddit.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
@@ -58,5 +63,30 @@ public class InterviewFeedbackController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 		}
 	}
+	
+	@ResponseBody
+	@PostMapping("/ivfb/insertInterViewFeedback.do")
+	public ResponseEntity<Map<String, Object>> insertInterviewFeedback(@AuthenticationPrincipal String memId, @ModelAttribute InterviewReviewVO interviewReview, @RequestParam MultipartFile file) {
+		Map<String, Object> response = new HashMap<>();
+		
+		String veriCategory = "G38003";
+		
+		try {
+			interviewFeedbackService.updateInterViewFeedback(memId, interviewReview, file, veriCategory);
+			response.put("success", true);
+			return ResponseEntity.ok(response);
+		} catch(CustomException e) {
+			log.error("면접 후기 요청 등록 중 에러 발생 : {}", e.getMessage());
+			response.put("success", false);
+			response.put("message", "면접 후기 요청 중 오류가 발생했습니다 : " + e.getMessage());
+			return ResponseEntity.status(e.getErrorCode().getStatus()).body(response);
+		} catch(Exception e) {
+			log.error("알 수 없는 에러 발생 : {}", e.getMessage());
+			response.put("success", false);
+			response.put("message", "알 수 없는 에러가 발생했습니다 : " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+		}
+	}
+	
 	
 }

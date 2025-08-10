@@ -14,6 +14,9 @@ public class InterviewReviewVO {
 	private Date irCreatedAt;
 	private Date irModAt;
 	private int irRating;
+	private String irApplication;
+	private Date irInterviewAt;
+	private String irStatus;
 
 	private String memNickname;
 }
