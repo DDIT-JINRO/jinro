@@ -63,7 +63,7 @@ p {
 
 .listMember {
 	width: 780px;
-	height: 750px;
+	height: 720px;
 	margin-bottom: 20px;
 }
 
@@ -81,9 +81,8 @@ p {
 }
 
 .template-panel .btn-save {
-	height: 29px;
-	background: rgb(220, 222, 252);
-	color: black;
+	background: #6973E3;
+	color: white;
 	margin-left: auto;
 	border-radius: 6px;
 	border: none;

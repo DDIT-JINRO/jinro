@@ -59,6 +59,46 @@ to {
 	margin: 0;
 	font-weight: 600;
 }
+
+.filter-box {
+ display: flex; /* Arrange elements in a row */
+ align-items: center; /* Vertically align items in the center */
+ padding: 10px; /* Add some padding around the box */
+ border-radius: 5px; /* Optional: Rounded corners */
+ border: 1px solid #ccc; /* Optional: Border for the box */
+ background-color: #f9f9f9; /* Optional: Background color */
+}
+
+.filter-box select {
+ padding: 8px;
+ border: 1px solid #ddd;
+ border-radius: 3px;
+ margin-right: 10px; /* Space between select and input */
+ font-size: 14px;
+}
+
+.filter-box input {
+ padding: 8px;
+ border: 1px solid #ddd;
+ border-radius: 3px;
+ margin-right: 10px; /* Space between input and button */
+ font-size: 14px;
+ flex-grow: 1; /* Allow input to take up remaining space */
+}
+
+.filter-box button.btn-save {
+ padding: 8px 15px;
+ border: none;
+ border-radius: 3px;
+ background-color: #6759ff; /* Example: Purple color like in the image */
+ color: white;
+ font-size: 14px;
+ cursor: pointer;
+}
+
+.filter-box button.btn-save:hover {
+ background-color: #5243cd; /* Darker shade on hover */
+}
 /**************** 공통 부분 끝 *******************/
 
 /**************** dashboard-1 시작 *******************/
