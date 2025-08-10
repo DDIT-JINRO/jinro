@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ContestServiceImpl implements ContestService {
 	
 	@Autowired
-	ContestMapper contestMapper;
+	private ContestMapper contestMapper;
 	
 	//공모전 목록 조회
 	@Override
@@ -54,9 +54,26 @@ public class ContestServiceImpl implements ContestService {
 	// 공모전 상세
 	@Override
 	public ContestVO selectCttDetail(String cttId) {
-        ContestVO detail = contestMapper.selectCttDetail(cttId);
-        log.info("selectCttDetail 결과: {}", detail);
-        return detail;
+		// 1. DB에서 상세 정보 조회
+	    ContestVO detail = contestMapper.selectCttDetail(cttId);
+	    
+	    if (detail != null && detail.getContestDescription() != null) {
+	        // 2. 상세 설명(contestDescription)을 '●' 기준으로 나누기
+	        String[] sections = detail.getContestDescription().split("●");
+	        
+	        // 3. 나눈 조각들을 List<String>으로 변환하여 새로운 필드에 저장
+	        List<String> sectionList = new ArrayList<>();
+	        for (String section : sections) {
+	            String trimmedSection = section.trim();
+	            if (!trimmedSection.isEmpty()) {
+	                sectionList.add(trimmedSection);
+	            }
+	        }
+	        detail.setDescriptionSections(sectionList);
+	    }
+	    
+	    log.info("selectCttDetail 결과: {}", detail);
+	    return detail;
 	}
 	
 	//공모전분류 목록 조회

@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ContestController {
 	
 	@Autowired
-	ContestService contestService;
+	private ContestService contestService;
 	
 	@GetMapping("/cttList.do")
 	public String cttList(Model model,

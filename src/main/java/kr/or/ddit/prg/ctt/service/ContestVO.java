@@ -23,6 +23,14 @@ public class ContestVO {
 	private int contestRecruitCount;        // 조회수
 	private String contestUrl;              // 원본 URL
 	private Long fileGroupId;             // 이미지 파일 그룹 ID
+	private String contestHost;      // 주최
+	private String contestOrganizer; // 주관
+	private String contestSponsor;   // 후원사
+	private String applicationMethod; // 접수방법
+	private String awardType;        // 시상종류
+	
+	//가공된 상세 설명을 담을 리스트
+    private List<String> descriptionSections;
 
 	// 필터조건
 	private String keyword;

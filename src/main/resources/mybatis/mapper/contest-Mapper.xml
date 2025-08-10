@@ -69,6 +69,11 @@
                 ,T1.CONTEST_RECRUIT_COUNT AS contestRecruitCount
                 ,T1.CONTEST_URL          AS contestUrl
                 ,T1.FILE_GROUP_ID        AS fileGroupId
+                ,T1.CONTEST_HOST         AS contestHost
+             	,T1.CONTEST_ORGANIZER    AS contestOrganizer
+             	,T1.CONTEST_SPONSOR      AS contestSponsor
+             	,T1.APPLICATION_METHOD   AS applicationMethod
+             	,T1.AWARD_TYPE           AS awardType
             FROM CONTEST T1
             LEFT JOIN COM_CODE GUBUN
                 ON T1.CONTEST_GUBUN = GUBUN.CC_ID 
@@ -138,6 +143,11 @@
             ,T1.CONTEST_RECRUIT_COUNT AS contestRecruitCount
             ,T1.CONTEST_URL          AS contestUrl
             ,T1.FILE_GROUP_ID        AS fileGroupId
+            ,T1.CONTEST_HOST         AS contestHost
+         	,T1.CONTEST_ORGANIZER    AS contestOrganizer
+         	,T1.CONTEST_SPONSOR      AS contestSponsor
+         	,T1.APPLICATION_METHOD   AS applicationMethod
+         	,T1.AWARD_TYPE           AS awardType
         FROM CONTEST T1
         LEFT JOIN COM_CODE GUBUN
             ON T1.CONTEST_GUBUN = GUBUN.CC_ID AND GUBUN.CL_CODE = 'G32'
