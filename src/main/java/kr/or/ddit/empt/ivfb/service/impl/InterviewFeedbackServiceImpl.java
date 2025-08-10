@@ -121,4 +121,20 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 		}
 	}
 
+	@Override
+	public void updateInterviewFeedback(String memIdStr, InterviewReviewVO interviewReview) {
+		if (null == memIdStr || "anonymousUser".equals(memIdStr)) {
+			throw new CustomException(ErrorCode.INVALID_USER);
+		}
+		int memId = Integer.parseInt(memIdStr);
+		interviewReview.setMemId(memId);
+		
+		try {
+			interviewFeedbackMapper.updateInterviewFeedback(interviewReview);
+		} catch (Exception e) {
+			log.error("면접 후기 요청 중 에러 발생 : {}", e.getMessage());
+			throw e;
+		}
+	}
+
 }

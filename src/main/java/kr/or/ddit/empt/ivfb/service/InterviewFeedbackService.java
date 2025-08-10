@@ -20,4 +20,6 @@ public interface InterviewFeedbackService {
 
 	InterviewReviewVO selectInterviewFeedback(String memId, int irId);
 
+	void updateInterviewFeedback(String memId, InterviewReviewVO interviewReview);
+
 }

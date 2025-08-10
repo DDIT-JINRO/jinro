@@ -135,10 +135,7 @@
 				UPDATE SET
 					A.IR_CONTENT = #{irContent}
 					, A.IR_RATING = #{irRating}
-					, A.IR_APPLICATION = #{irApplication}
-					, A.IR_INTERVIEW_AT = #{irInterviewAt}
 					, A.IR_MOD_AT = SYSDATE
-					, A.IR_STATUS = #{irStatus}
 			WHEN NOT MATCHED THEN
 				INSERT(
 				    IR_ID
