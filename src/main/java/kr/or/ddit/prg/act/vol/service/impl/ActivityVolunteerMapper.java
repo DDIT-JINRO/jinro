@@ -9,16 +9,16 @@ import kr.or.ddit.prg.act.service.ActivityVO;
 @Mapper
 public interface ActivityVolunteerMapper {
 
-	//봉사활동 총 개수 조회
+	// 봉사활동 총 개수 조회
 	public int selectVolCount(ActivityVO activityVO);
 
-	//봉사활동 목록 조회
+	// 봉사활동 목록 조회
 	public List<ActivityVO> selectVolList(ActivityVO activityVO);
 
 	// 봉사활동 상세
 	public ActivityVO selectSupDetail(String volId);
 
-	//조회수 증가
+	// 조회수 증가
 	public void updateVolViewCount(String volId);
 
 }
