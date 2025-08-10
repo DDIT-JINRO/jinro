@@ -1,38 +1,86 @@
 document.addEventListener("DOMContentLoaded", function() {
+	document.querySelector('#file-input').addEventListener('change', function(e) {
+		const fileName = e.target.files[0]?.name || '';
+		const fileNameDisplay = document.querySelector('.txt_filename b');
+		const fileNameContainer = document.querySelector('.txt_filename');
 
-	document.getElementById("submitBtn").addEventListener("click", async function() {
-		const title = document.getElementById("title").value.trim();
-		const content = editorInstance.getData();
+		if (fileName) {
+			fileNameDisplay.textContent = fileName;
+			fileNameContainer.classList.add('show');
+		} else {
+			fileNameContainer.classList.remove('show');
+		}
+	});
 
-		if (!title || !content) {
-			alert("제목과 내용을 모두 입력해 주세요.");
+	document.querySelector("#submit-btn").addEventListener("click", async function() {
+	    const cpNameInput = document.querySelector("#company-name");
+	    
+	    const cpId = cpNameInput.dataset.cpId;
+	    const interviewPosition = document.querySelector("#interview-position").value.trim();
+	    const interviewDate = document.querySelector("#interview-date").value.trim();
+	    const interviewDetail = document.querySelector("#interview-detail").value.trim();
+		const interviewRating = window.getInterviewRating();
+	    const files = document.querySelector("#file-input").files;
+	    
+	    if (!interviewDate) {
+	        alert("면접 일자를 입력해 주세요.");
+	        return;
+	    }
+		
+		if (interviewRating === 0) {
+			alert("기업 평가를 선택해 주세요.");
 			return;
 		}
-
-		const formData = new FormData();
-		formData.append('title', title);
-		formData.append('content', content);
-
-		const files = fileInput.files;
-		for (let i = 0; i < files.length; i++) {
-			formData.append('files', files[i]);
+	    
+	    if (!interviewDetail) {
+	        alert("면접 후기를 입력해 주세요.");
+	        return;
+	    }
+	    
+	    if (files.length === 0) {
+	        alert("증빙자료를 첨부해 주세요.");
+	        return;
+	    }
+		
+		if (files.length > 1) {
+		    alert("증빙자료는 1장만 첨부해 주세요.");
+		    return;
 		}
 
+	    // FormData 생성
+	    const formData = new FormData();
+		formData.append('irType', 'G02002')
+	    formData.append('targetId', cpId);
+	    formData.append('irContent', interviewDetail);
+		formData.append('irRating', interviewRating);
+	    formData.append('irApplication', interviewPosition);
+	    formData.append('irInterviewAt', Date(interviewDate));
 
-		try {
-			const response = await axios.post("/empt/ivfb/insertInterViewFeedbackView.do", formData, {
-				headers: {
-					"Content-Type": "multipart/form-data"
-				}
-			});
-			if (response.status === 200) {
-				alert("등록 성공");
-				window.location.href = "/empt/ivfb/interviewFeedback.do";
-			}
-		} catch (error) {
-			console.error("등록 중 오류:", error);
-			alert("등록에 실패했습니다.");
-		}
+	    // 파일 추가
+        formData.append('file', files[0]);
+
+	    try {
+	        const response = await fetch("/empt/ivfb/insertInterViewFeedback.do", {
+	            method: "POST",
+	            body: formData
+	        });
+
+	        if (response.ok) {
+	            const result = await response.json();
+	            
+	            if (result.success) {
+	                alert("후기 등록 요청이 완료되었습니다");
+	                window.location.href = "/empt/ivfb/interViewFeedback.do";
+	            } else {
+	                alert(result.message || "등록에 실패했습니다.");
+	            }
+	        } else {
+	            throw new Error(`서버 응답 오류: ${response.status}`);
+	        }
+	    } catch (error) {
+	        console.error("등록 중 오류:", error);
+	        alert("등록에 실패했습니다.");
+	    }
 	});
 
 	document.querySelector("#back-btn").addEventListener("click", function() {
@@ -181,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const prevPageBtn      = document.querySelector('#prev-page');
 	const nextPageBtn      = document.querySelector('#next-page');
 	const pageInfo         = document.querySelector('#page-info');
-	const companyNameInput = document.querySelector('#companyName');
+	const companyNameInput = document.querySelector('#company-name');
 
 	let currentPage = 1;
 	let totalPages = 1;
