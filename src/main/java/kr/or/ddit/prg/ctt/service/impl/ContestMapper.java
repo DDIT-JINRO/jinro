@@ -26,4 +26,10 @@ public interface ContestMapper {
 
     //공모전 조회수 증가 메소드
     public int updateCttViewCount(String cttId);
+    
+    // merge
+    public int updateContest(ContestVO contestVO);
+    
+    //delete
+    public int deleteContest(String contestId);
 }

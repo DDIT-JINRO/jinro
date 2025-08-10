@@ -10,6 +10,7 @@
         SELECT COUNT(*)
         FROM CONTEST T1
          <where>
+         	T1.CONTEST_DEL_YN = 'N'
             <if test="keyword != null and keyword != ''">
                 AND (CONTEST_TITLE LIKE '%' || #{keyword} || '%' OR CONTEST_DESCRIPTION LIKE '%' || #{keyword} || '%')
             </if>
@@ -90,6 +91,7 @@
                 ON T1.CONTEST_TARGET = TARGET.CC_ID 
                 AND TARGET.CL_CODE = 'G34'
             <where>
+            	T1.CONTEST_DEL_YN = 'N'
                 <if test="keyword != null and keyword != ''">
                     AND (T1.CONTEST_TITLE LIKE '%' || #{keyword} || '%' OR T1.CONTEST_DESCRIPTION LIKE '%' || #{keyword} || '%')
                 </if>
@@ -160,7 +162,7 @@
             ON T1.CONTEST_TYPE = TYPE.CC_ID AND TYPE.CL_CODE = 'G35'
         LEFT JOIN COM_CODE TARGET
             ON T1.CONTEST_TARGET = TARGET.CC_ID AND TARGET.CL_CODE = 'G34'
-        WHERE CONTEST_ID = #{cttId}
+        WHERE CONTEST_ID = #{cttId}  AND T1.CONTEST_DEL_YN = 'N'
     </select>
 	<!-- 
 	공모전분류 목록 조회
@@ -188,10 +190,86 @@
         ORDER BY CC_NAME
     </select>
     
-    
+    <!-- 
+    //공모전 조회수 증가 메소드
+    public int updateCttViewCount(String cttId);
+     -->
     <update id="updateCttViewCount">
     UPDATE CONTEST
 	    SET CONTEST_RECRUIT_COUNT = CONTEST_RECRUIT_COUNT + 1
 	    WHERE CONTEST_ID = #{cttId}
 	</update>
+	
+	<!-- 
+	 // MERGE 
+    public int updateContest(ContestVO contestVO);
+	 -->
+	<update id="updateContest" parameterType="kr.or.ddit.prg.ctt.service.ContestVO">
+	    MERGE INTO CONTEST A
+	    USING (
+	        SELECT
+	            #{contestId, jdbcType=VARCHAR} AS CONTEST_ID
+	        FROM DUAL
+	    ) B
+	    ON (A.CONTEST_ID = B.CONTEST_ID)
+	    WHEN MATCHED THEN
+	        UPDATE SET
+	              A.CONTEST_TITLE      = #{contestTitle}
+	            , A.CONTEST_GUBUN      = #{contestGubunCode}
+	            , A.CONTEST_DESCRIPTION = #{contestDescription}
+	            , A.CONTEST_TYPE       = #{contestType}
+	            , A.CONTEST_TARGET     = #{contestTarget}
+	            , A.CONTEST_START_DATE = #{contestStartDate}
+	            , A.CONTEST_END_DATE   = #{contestEndDate}
+	            , A.CONTEST_HOST       = #{contestHost}
+	            , A.CONTEST_ORGANIZER  = #{contestOrganizer}
+	            , A.CONTEST_SPONSOR    = #{contestSponsor}
+	            , A.APPLICATION_METHOD = #{applicationMethod}
+	            , A.AWARD_TYPE         = #{awardType}
+	            , A.CONTEST_URL        = #{contestUrl}
+	            , A.FILE_GROUP_ID      = #{fileGroupId}
+	    WHEN NOT MATCHED THEN
+	        INSERT (
+	              CONTEST_ID, CONTEST_TITLE
+	            , CONTEST_GUBUN
+	            , CONTEST_DESCRIPTION
+	            , CONTEST_TYPE
+	            , CONTEST_TARGET
+	            , CONTEST_START_DATE
+	            , CONTEST_END_DATE
+	            , CONTEST_HOST
+	            , CONTEST_ORGANIZER
+	            , CONTEST_SPONSOR
+	            , APPLICATION_METHOD
+	            , AWARD_TYPE
+	            , CONTEST_URL
+	            , FILE_GROUP_ID
+	        ) VALUES (
+	            CONTEST_SEQ.NEXTVAL
+	            , #{contestTitle}
+	            , #{contestGubunCode}
+	            , #{contestDescription}
+	            , #{contestType}
+	            , #{contestTarget}
+	            , #{contestStartDate}
+	            , #{contestEndDate}
+	            , #{contestHost}
+	            , #{contestOrganizer}
+	            , #{contestSponsor}
+	            , #{applicationMethod}
+	            , #{awardType}
+	            , #{contestUrl}
+	            , #{fileGroupId}
+	        )
+	</update>
+	
+	<!-- 
+	 //delete
+    public int deleteContest(String contestId);
+     -->
+    <update id="deleteContest">
+        UPDATE CONTEST
+        SET CONTEST_DEL_YN = 'Y'
+        WHERE CONTEST_ID = #{contestId}
+    </update> 
 </mapper>

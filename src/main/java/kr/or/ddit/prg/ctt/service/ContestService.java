@@ -20,4 +20,10 @@ public interface ContestService {
     
     //모집 대상 목록
     List<ComCodeVO> getContestTargetList();
+    
+    // merge
+    public int updateContest(ContestVO contestVO);
+    
+    //delete
+    public int deleteContest(String contestId);
 }

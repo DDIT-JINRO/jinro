@@ -3,11 +3,16 @@ package kr.or.ddit.prg.ctt.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.prg.ctt.service.ContestService;
 import kr.or.ddit.prg.ctt.service.ContestVO;
@@ -72,4 +77,24 @@ public class ContestController {
 		log.info("JSP로 전달할 상세 정보: {}", cttDetail);
 		return "prg/ctt/cttDetail";
 	}
+	
+	@PostMapping("/contestUpdate.do")
+    @ResponseBody
+    public ResponseEntity<String> saveContest(@RequestBody ContestVO contestVO) {
+        int result = contestService.updateContest(contestVO);
+        if (result > 0) {
+            return ResponseEntity.ok("성공적으로 저장되었습니다.");
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("저장에 실패했습니다.");
+    }
+	
+	@PostMapping("/contestDelete.do")
+    @ResponseBody
+    public ResponseEntity<String> deleteContest(@RequestBody ContestVO contestVO) {
+        int result = contestService.deleteContest(contestVO.getContestId());
+        if (result > 0) {
+            return ResponseEntity.ok("성공적으로 삭제되었습니다.");
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제에 실패했습니다.");
+    }
 }

@@ -11,6 +11,7 @@
         SELECT COUNT(*)
         FROM CONTEST T1
          <where>
+         	T1.CONTEST_DEL_YN = 'N'
             <if test="keyword != null and keyword != ''">
                 AND (CONTEST_TITLE LIKE '%' || #{keyword} || '%' OR CONTEST_DESCRIPTION LIKE '%' || #{keyword} || '%')
             </if>
@@ -85,6 +86,7 @@
                 ON T1.CONTEST_TARGET = TARGET.CC_ID 
                 AND TARGET.CL_CODE = 'G34'
             <where>
+            	AND T1.CONTEST_DEL_YN = 'N'
                 <if test="keyword != null and keyword != ''">
                     AND (T1.CONTEST_TITLE LIKE '%' || #{keyword} || '%' OR T1.CONTEST_DESCRIPTION LIKE '%' || #{keyword} || '%')
                 </if>
@@ -149,7 +151,7 @@
         	ON T1.CONTEST_TYPE = TYPE.CC_ID AND TYPE.CL_CODE = 'G35'
         LEFT JOIN COM_CODE TARGET
             ON T1.CONTEST_TARGET = TARGET.CC_ID AND TARGET.CL_CODE = 'G34'
-        WHERE CONTEST_ID = #{crId}
+        WHERE CONTEST_ID = #{crId} AND T1.CONTEST_DEL_YN = 'N'
     </select>
     
     <!-- 

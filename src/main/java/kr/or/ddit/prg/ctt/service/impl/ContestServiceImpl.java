@@ -92,4 +92,16 @@ public class ContestServiceImpl implements ContestService {
     public List<ComCodeVO> getContestTargetList() {
         return contestMapper.selectContestTargetList();
     }
+
+    //merge
+	@Override
+	public int updateContest(ContestVO contestVO) {
+		return contestMapper.updateContest(contestVO);
+	}
+
+	//delete
+	@Override
+	public int deleteContest(String contestId) {
+		return contestMapper.deleteContest(contestId);
+	}
 }
