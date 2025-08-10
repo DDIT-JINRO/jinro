@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.or.ddit.prg.ctt.service.impl.ContestMapper">
+<mapper namespace="kr.or.ddit.prg.act.sup.service.impl.ActivitySupportersMapper">
 
-	<!-- 
-	// 검색 조건에 맞는 공모전 총 개수 조회 (페이징 처리를 위함)
-    int selectCttCount(ContestVO contestVO);
+	
+	 <!-- 
+	//봉사활동 총 개수 조회
+	int selectSupCount(ActivityVO activityVO)
 	 -->
-	<select id="selectCttCount" parameterType="kr.or.ddit.prg.ctt.service.ContestVO">
+	<select id="selectSupCount" parameterType="kr.or.ddit.prg.act.service.ActivityVO">
         SELECT COUNT(*)
         FROM CONTEST T1
          <where>
@@ -25,12 +26,6 @@
                     #{item}
                 </foreach>
             </if>
-            <if test="contestTypeFilter != null and contestTypeFilter.size() > 0">
-                AND T1.CONTEST_TYPE IN
-                <foreach item="item" collection="contestTypeFilter" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>
-            </if>
             <if test="contestStatusFilter != null and contestStatusFilter.size() > 0">
             	AND
                 <foreach item="status" collection="contestStatusFilter" separator=" OR " open="(" close=")">
@@ -46,10 +41,10 @@
     </select>
 
 	<!-- 
-	// 검색 조건 및 페이징에 맞는 공모전 목록 조회
-    List<ContestVO> selectCttList(ContestVO contestVO);
+	봉사활동 목록 조회
+	List<ActivityVO> selectSupList(ActivityVO activityVO)
 	 -->
-    <select id="selectCttList" parameterType="kr.or.ddit.prg.ctt.service.ContestVO" resultType="kr.or.ddit.prg.ctt.service.ContestVO">
+    <select id="selectSupList" parameterType="kr.or.ddit.prg.act.service.ActivityVO" resultType="kr.or.ddit.prg.act.service.ActivityVO">
         SELECT *
         FROM (
             SELECT
@@ -105,12 +100,6 @@
                         #{item}
                     </foreach>
                 </if>
-                <if test="contestTypeFilter != null and contestTypeFilter.size() > 0">
-                    AND T1.CONTEST_TYPE IN
-                    <foreach item="item" collection="contestTypeFilter" open="(" close=")" separator=",">
-                        #{item}
-                    </foreach>
-                </if>
                 <if test="contestStatusFilter != null and contestStatusFilter.size() > 0">
                 	AND
 	                <foreach item="status" collection="contestStatusFilter" separator=" OR " open="(" close=")">
@@ -128,10 +117,10 @@
     </select>
 
 	<!-- 
-	// 공모전 상세 정보를 조회하는 메서드
-    ContestVO selectCttDetail(String cttId);
+	// 봉사활동 상세
+	ActivityVO selectSupDetail(String supId);
 	 -->
-    <select id="selectCttDetail" resultType="kr.or.ddit.prg.ctt.service.ContestVO">
+    <select id="selectSupDetail" resultType="kr.or.ddit.prg.act.service.ActivityVO">
         SELECT 
              T1.CONTEST_ID           AS contestId
             ,T1.CONTEST_TITLE        AS contestTitle
@@ -156,42 +145,21 @@
         FROM CONTEST T1
         LEFT JOIN COM_CODE GUBUN
             ON T1.CONTEST_GUBUN = GUBUN.CC_ID AND GUBUN.CL_CODE = 'G32'
-        LEFT JOIN COM_CODE TYPE
-            ON T1.CONTEST_TYPE = TYPE.CC_ID AND TYPE.CL_CODE = 'G35'
+        LEFT JOIN COM_CODE TYPE 
+        	ON T1.CONTEST_TYPE = TYPE.CC_ID AND TYPE.CL_CODE = 'G35'
         LEFT JOIN COM_CODE TARGET
             ON T1.CONTEST_TARGET = TARGET.CC_ID AND TARGET.CL_CODE = 'G34'
-        WHERE CONTEST_ID = #{cttId}
-    </select>
-	<!-- 
-	공모전분류 목록 조회
-    public List<ComCodeVO> selectContestTypeList()
-	 -->
-	<select id="selectContestTypeList" resultType="kr.or.ddit.com.ComCodeVO">
-        SELECT
-        	 CC_ID
-        	,CC_NAME 
-        FROM COM_CODE 
-        WHERE CL_CODE = 'G35' 
-        ORDER BY CC_NAME
+        WHERE CONTEST_ID = #{supId}
     </select>
     
     <!-- 
-    모집 대상 목록 조회
-    public List<ComCodeVO> selectContestTargetList()
+    //조회수 증가
+	public int updateSupViewCount(String supId);
      -->
-    <select id="selectContestTargetList" resultType="kr.or.ddit.com.ComCodeVO">
-        SELECT 
-        	 CC_ID
-        	,CC_NAME 
-        FROM COM_CODE 
-        WHERE CL_CODE = 'G34' 
-        ORDER BY CC_NAME
-    </select>
+     <update id="updateSupViewCount">
+        UPDATE CONTEST
+        SET CONTEST_RECRUIT_COUNT = CONTEST_RECRUIT_COUNT + 1
+        WHERE CONTEST_ID = #{supId}
+    </update>
     
-    
-    <update id="updateCttViewCount">
-    UPDATE CONTEST
-	    SET CONTEST_RECRUIT_COUNT = CONTEST_RECRUIT_COUNT + 1
-	    WHERE CONTEST_ID = #{cttId}
-	</update>
 </mapper>

@@ -1,6 +1,5 @@
 package kr.or.ddit.prg.ctt.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,6 @@ public class ContestController {
 	        
             List<ComCodeVO> contestTypeList = contestService.getContestTypeList();
             List<ComCodeVO> contestTargetList = contestService.getContestTargetList();
-            List<ComCodeVO> contestStatusList = new ArrayList<>();
             
             // JSP 필터에 사용될 데이터
             model.addAttribute("contestTypeList", contestTypeList);
