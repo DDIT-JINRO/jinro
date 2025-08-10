@@ -78,8 +78,10 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 			fileService.uploadFiles(fileGroupId, files);
 			interviewFeedbackMapper.updateVerification(verification);
 		} catch (IOException e) {
+			log.error("면접 후기 요청 중 에러 발생 : {}", e.getMessage());
 			throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
 		} catch (Exception e) {
+			log.error("면접 후기 요청 중 에러 발생 : {}", e.getMessage());
 			fileService.deleteFileGroup(fileGroupId);
 			throw e;
 		}
