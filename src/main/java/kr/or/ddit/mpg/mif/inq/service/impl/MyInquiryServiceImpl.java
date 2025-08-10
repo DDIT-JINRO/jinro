@@ -158,10 +158,11 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		}
 		Long fileGroupId = fileService.createFileGroup();
 
-		VerificationVO verification = new VerificationVO();
-		verification.setMemId(memId);
-		verification.setFileGroupId(fileGroupId);
-		verification.setVeriCategory(vCategory);
+		VerificationVO verification = VerificationVO.builder()
+												.memId(memId)
+												.fileGroupId(fileGroupId)
+												.veriCategory(vCategory)
+												.build();
 		
 		List<MultipartFile> files = new ArrayList<MultipartFile>();
 		files.add(authFile);
