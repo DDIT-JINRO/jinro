@@ -56,7 +56,7 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 	@Transactional
 	public void updateInterviewFeedback(String memIdStr, InterviewReviewVO interviewReview, MultipartFile file, String veriCategory) {
 		if (null == memIdStr || "anonymousUser".equals(memIdStr)) {
-			throw new CustomException(ErrorCode.INVALID_AUTHORIZE);
+			throw new CustomException(ErrorCode.INVALID_USER);
 		}
 		int memId = Integer.parseInt(memIdStr);
 		interviewReview.setMemId(memId);
@@ -90,12 +90,12 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 	@Override
 	public void deleteInterviewFeedback(String memIdStr, int irId) {
 		if (null == memIdStr || "anonymousUser".equals(memIdStr)) {
-			throw new CustomException(ErrorCode.INVALID_AUTHORIZE);
+			throw new CustomException(ErrorCode.INVALID_USER);
 		}
 		
 		try {
 			interviewFeedbackMapper.deleteInterviewFeedback(irId);
-		} catch (CustomException e) {
+		} catch (Exception e) {
 			log.error("면접 후기 요청 중 에러 발생 : {}", e.getMessage());
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
