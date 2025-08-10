@@ -2,7 +2,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	const channelSection = document.querySelector(".channel");
 	if (channelSection) {
 	    const errorMessage = channelSection.dataset.errorMessage;
-	    if (errorMessage) alert(errorMessage);
+	    if (errorMessage) {
+			alert(errorMessage);
+			history.back();
+		}
 	}
 
 	document.querySelector("#submit-btn").addEventListener("click", async function() {

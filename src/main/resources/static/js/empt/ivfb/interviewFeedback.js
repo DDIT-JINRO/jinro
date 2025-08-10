@@ -3,6 +3,14 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+	const channelSection = document.querySelector(".channel");
+	if (channelSection) {
+	    const errorMessage = channelSection.dataset.errorMessage;
+	    if (errorMessage) {
+			alert(errorMessage);
+			history.back();
+		}
+	}
 	
 	document.getElementById('btnWrite').addEventListener('click', function() {
 		if (!memId || memId == 'anonymousUser') {
