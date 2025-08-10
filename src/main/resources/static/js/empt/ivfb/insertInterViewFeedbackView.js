@@ -1,15 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-	let editorInstance;
-	const fileInput = document.getElementById('fileInput');
-
-	ClassicEditor
-		.create(document.querySelector('#editor'))
-		.then(editor => {
-			editorInstance = editor;
-		})
-		.catch(error => {
-			console.error(error);
-		});
 
 	document.getElementById("submitBtn").addEventListener("click", async function() {
 		const title = document.getElementById("title").value.trim();
@@ -46,9 +35,55 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 
-	document.getElementById("backBtn").addEventListener("click", function() {
-		window.history.back();
+	document.querySelector("#back-btn").addEventListener("click", function() {
+		window.location.href = "/empt/ivfb/interviewFeedback.do";
 	});
+});
+
+// textarea 글자수 카운터 기능
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('interview-detail');
+    const maxLength = 100; // 최대 글자수 설정
+    
+    // 글자수 카운터 HTML 생성
+    const counterHTML = `
+        <div class="char-counter">
+            <span class="current-count">0</span><span class="unit">자</span>
+            <span class="separator">/</span>
+            <span>최대&nbsp;</span><span class="max-count">${maxLength}</span><span class="unit">자</span>
+        </div>
+    `;
+    
+    // textarea 부모 요소에 textarea-container 클래스 추가
+    const parentDiv = textarea.closest('.input-group');
+    if (parentDiv) {
+        parentDiv.classList.add('textarea-container');
+        // 카운터를 textarea 다음에 추가
+        parentDiv.insertAdjacentHTML('beforeend', counterHTML);
+    }
+    
+    // 글자수 카운터 요소들 선택
+    const counter = parentDiv.querySelector('.char-counter');
+    const currentCount = counter.querySelector('.current-count');
+    
+    // 글자수 업데이트 함수
+    function updateCounter() {
+        const currentLength = textarea.value.length;
+        currentCount.textContent = currentLength;
+        
+        // 글자수에 따른 스타일 변경
+        counter.classList.remove('warning', 'error');
+    }
+    
+    // 이벤트 리스너 등록
+    textarea.addEventListener('input', updateCounter);
+    textarea.addEventListener('paste', function() {
+        // paste 이벤트는 약간의 지연 후 실행
+        setTimeout(updateCounter, 10);
+    });
+    
+    // 초기 글자수 설정
+    updateCounter();
 });
 
 // 기업 검색 모달 관련 JavaScript

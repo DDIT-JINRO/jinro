@@ -50,20 +50,20 @@
 								</th>
 								<td>
 									<div class="input-group">
-										<input type="text" id="companyName" data-cp-id="" placeholder="기업명을 입력하세요." readonly>
+										<input type="text" id="company-name" data-cp-id="" placeholder="기업명을 입력하세요." readonly required="required">
 										<button type="button" id="company-search" class="btn-search">입사지원 기업 검색</button>
 									</div>
 								</td>
 							</tr>
 							<tr>
 								<th>
-									<label for="job-position">
+									<label for="interview-position">
 										직무직업
 										<span class="required">*</span>
 									</label>
 								</th>
 								<td>
-									<input type="text" id="job-position" placeholder="직무, 직업을 입력하세요.">
+									<input type="text" id="interview-position" placeholder="직무, 직업을 입력하세요." required="required">
 								</td>
 							</tr>
 							<tr>
@@ -73,26 +73,50 @@
 								</th>
 								<td>
 									<div class="input-group">
-										<input type="date">
+										<input type="date" id="interview-date" required="required">
 									</div>
+								</td>
+							</tr>
+							<tr>
+								<th>
+									면접 후기
+									<span class="required">*</span>
+								</th>
+							    <td>
+							        <div class="input-group textarea-container">
+							            <textarea id="interview-detail" 
+							                      placeholder="서류 합격 후 어떤 전형과 면접을 경험하셨나요?&#13;&#10;(사실이 아닌 비방이나 개인적인 의견은 등록이 거절될 수 있습니다.)" 
+							                      rows="5"
+							                      maxlength="100"
+							                      required="required"></textarea>
+							        </div>
+							    </td>
+							</tr>
+							<tr>
+								<th>
+									증빙자료 첨부
+									<span class="required">*</span>
+								</th>
+								<td>
+	                                <p class="file-notice">
+	                                	기업명이 포함된 증빙 사진 또는 캡쳐를 첨부해주세요
+	                                	<span class="ex">(O)면접 안내 문자, 이메일, 명함 등 (X)회사 건물, 본인 사진 등</span>
+	                                </p>
+	                                <div class="wrap_attached">
+	                                    <div class="btn_attach">
+	                                        <input type="file" name="file-input" id="file-input" accept="image/*" required="required">
+	                                        <label for="file-input">첨부하기</label>
+	                                    </div>
+	                                    <p class="txt_filename" style="display: none;">선택 파일 : <b></b></p>
+	                                </div>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-
-				<div class="editor-container">
-					<div id="editor"></div>
-				</div>
-				<label for="fileInput" class="file-label">증빙자료 첨부</label>
-				<p class="form-note">기업명이 포함된 증빙 사진 또는 캡쳐를 첨부해주세요(O)면접 안내 문자, 이메일, 명함 등 (X)회사 건물, 본인 사진 등</p>
-				<div class="file-upload-container">
-					<input type="file" id="fileInput" multiple>
-					<ul id="fileList" class="file-list"></ul>
-				</div>
 				<div class="button-group">
-					<button class="cancel-btn" id="backBtn">목록</button>
-					<button class="submit-btn" id="submitBtn">등록</button>
+					<button class="cancel-btn" id="back-btn">목록</button>
+					<button class="submit-btn" id="submit-btn">등록</button>
 				</div>
 			</div>
 		</div>
