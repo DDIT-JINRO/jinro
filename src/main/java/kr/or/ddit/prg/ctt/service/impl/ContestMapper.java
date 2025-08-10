@@ -23,4 +23,7 @@ public interface ContestMapper {
 
     //모집 대상 목록 조회
     public List<ComCodeVO> selectContestTargetList();
+
+    //공모전 조회수 증가 메소드
+    public int updateCttViewCount(String cttId);
 }

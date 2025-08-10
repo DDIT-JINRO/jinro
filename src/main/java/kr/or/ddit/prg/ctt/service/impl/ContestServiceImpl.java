@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.prg.ctt.service.ContestService;
@@ -53,7 +54,11 @@ public class ContestServiceImpl implements ContestService {
 	
 	// 공모전 상세
 	@Override
+	@Transactional
 	public ContestVO selectCttDetail(String cttId) {
+		// 0. [추가] 조회수를 먼저 1 증가시킵니다.
+        contestMapper.updateCttViewCount(cttId);
+        
 		// 1. DB에서 상세 정보 조회
 	    ContestVO detail = contestMapper.selectCttDetail(cttId);
 	    

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<jsp:useBean id="now" class="java.util.Date" />
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/prg/ctt/cttList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
@@ -115,22 +116,41 @@
                         <div class="card-content">
                             <h3 class="contest-title">${contest.contestTitle}</h3>
                             <div class="contest-description">
-							    <c:set var="descItems" value="${fn:split(contest.contestDescription, '●')}" />
-							    <c:forEach var="item" items="${descItems}" begin="1" end="3">
-							        <c:if test="${not empty fn:trim(item)}">
-							            <c:set var="maxLength" value="60" />
-							            <span>● 
+							    <ul class="card-info-list">
+							        <li>
+							            <span class="info-label">주최</span>
+							            <span class="info-value">${contest.contestHost}</span>
+							        </li>
+							        <li>
+							            <span class="info-label">접수기간</span>
+							            <span class="info-value">
+							                <fmt:formatDate value="${contest.contestStartDate}" pattern="yyyy.MM.dd"/> ~ 
+							                <fmt:formatDate value="${contest.contestEndDate}" pattern="yyyy.MM.dd"/>
+							            </span>
+							        </li>
+							       <li class="d-day-item" data-end-date="<fmt:formatDate value='${contest.contestEndDate}' pattern='yyyy-MM-dd' />">
+							            <span class="info-label">마감까지</span>
+							            <span class="info-value d-day-text">
+							                <%-- JavaScript가 여기에 D-Day를 채웁니다. --%>
+							            </span>
+							        </li>
+							        <li>
+							            <span class="info-label">모집상태</span>
+							            <span class="info-value">
+							                <%-- 현재 날짜와 마감 날짜를 비교하여 진행/마감 표시 --%>
+							                <fmt:formatDate value="${contest.contestEndDate}" pattern="yyyyMMdd" var="endDay" />
+							                <fmt:formatDate value="${now}" pattern="yyyyMMdd" var="today" />
 							                <c:choose>
-							                    <c:when test="${fn:length(fn:trim(item)) > maxLength}">
-							                        <c:out value="${fn:substring(fn:trim(item), 0, maxLength)}..." />
+							                    <c:when test="${endDay < today}">
+							                        <span class="status-tag finished">마감</span>
 							                    </c:when>
 							                    <c:otherwise>
-							                        <c:out value="${fn:trim(item)}" />
+							                        <span class="status-tag proceeding">진행중</span>
 							                    </c:otherwise>
 							                </c:choose>
-							            </span><br>
-							        </c:if>
-							    </c:forEach>
+							            </span>
+							        </li>
+							    </ul>
 							</div>
                             <div class="contest-meta">
                                 <span class="meta-item">

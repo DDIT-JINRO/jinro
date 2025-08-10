@@ -253,7 +253,7 @@
 .list-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-   	gap: 40px; 
+   	gap: 60px; 
     margin-bottom: 30px;
 }
 
@@ -267,7 +267,7 @@
     background-color: white;
     display: flex;
     flex-direction: row-reverse;
-    height: 330px;
+    min-height: 300px;
 }
 
 .contest-card:hover {
@@ -329,4 +329,66 @@ a {
 .meta-item {
     display: inline-block;
     margin-right: 10px;
+}
+
+/* ========================================= */
+/* 카드 내 상세 정보 리스트 스타일 추가       */
+/* ========================================= */
+
+.card-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 내용을 세로 중앙에 배치 */
+}
+
+.card-info-list li {
+    margin-bottom: 12px;
+    display: flex;
+}
+
+.card-info-list li:last-child {
+    margin-bottom: 0;
+}
+
+.info-label {
+    flex-shrink: 0;
+    width: 65px; /* 라벨 너비 고정 */
+    font-weight: 500;
+    color: #888;
+}
+
+.info-value {
+    font-weight: 500;
+    color: #333;
+}
+
+.status-tag {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.status-tag.proceeding {
+    background-color: #4f46e5; /* 진행중 태그 색상 */
+}
+
+.status-tag.finished {
+    background-color: #6c757d; /* 마감 태그 색상 */
+}
+
+.d-day-text {
+    font-weight: 700; /* 굵게 표시 */
+    color: #e63946;   /* D-Day 강조 색상 (빨간색 계열) */
+}
+
+.d-day-text.finished {
+    color: #6c757d;   /* 마감 시 회색으로 */
 }

@@ -53,7 +53,12 @@
         SELECT *
         FROM (
             SELECT
-                 ROW_NUMBER() OVER(ORDER BY T1.CONTEST_ID DESC) AS RNUM
+                 ROW_NUMBER() OVER(
+	                 ORDER BY 
+	                     CASE WHEN T1.CONTEST_END_DATE >= SYSDATE THEN 1 ELSE 2 END, -- 1. 진행중인 공모전 먼저
+	                     T1.CONTEST_END_DATE ASC,  -- 2. 마감일이 임박한 순서로
+	                     T1.CONTEST_CREATED_AT DESC -- 3. 마감일이 같다면 최신 등록 순으로
+	             ) AS RNUM
                 ,T1.CONTEST_ID           AS contestId
                 ,T1.CONTEST_TITLE        AS contestTitle
                 ,T1.CONTEST_GUBUN        AS contestGubunCode
@@ -182,4 +187,11 @@
         WHERE CL_CODE = 'G34' 
         ORDER BY CC_NAME
     </select>
+    
+    
+    <update id="updateCttViewCount">
+    UPDATE CONTEST
+	    SET CONTEST_RECRUIT_COUNT = CONTEST_RECRUIT_COUNT + 1
+	    WHERE CONTEST_ID = #{cttId}
+	</update>
 </mapper>
