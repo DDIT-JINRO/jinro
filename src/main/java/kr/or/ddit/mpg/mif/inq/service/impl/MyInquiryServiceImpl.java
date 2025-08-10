@@ -16,6 +16,7 @@ import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
+import kr.or.ddit.mpg.mif.inq.service.VerificationVO;
 import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;

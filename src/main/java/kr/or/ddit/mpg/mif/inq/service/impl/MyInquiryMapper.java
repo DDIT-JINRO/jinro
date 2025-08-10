@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.main.service.MemberVO;
+import kr.or.ddit.mpg.mif.inq.service.VerificationVO;
 
 @Mapper
 public interface MyInquiryMapper {

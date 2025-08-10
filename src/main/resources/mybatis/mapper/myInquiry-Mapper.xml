@@ -165,7 +165,7 @@
 		)
 	</insert>
 	
-	<insert id="insertVerification" parameterType="kr.or.ddit.mpg.mif.inq.service.impl.VerificationVO">
+	<insert id="insertVerification" parameterType="kr.or.ddit.mpg.mif.inq.service.VerificationVO">
 		INSERT INTO VERIFICATION (
 		    VERI_ID
 		    , MEM_ID

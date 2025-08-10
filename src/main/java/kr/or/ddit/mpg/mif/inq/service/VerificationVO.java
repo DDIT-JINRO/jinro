@@ -1,4 +1,4 @@
-package kr.or.ddit.mpg.mif.inq.service.impl;
+package kr.or.ddit.mpg.mif.inq.service;
 
 import java.util.Date;
 
