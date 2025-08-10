@@ -87,7 +87,7 @@ public class InterviewFeedbackController {
 		String veriCategory = "G38003";
 		
 		try {
-			interviewFeedbackService.updateInterViewFeedback(memId, interviewReview, file, veriCategory);
+			interviewFeedbackService.updateInterviewFeedback(memId, interviewReview, file, veriCategory);
 			response.put("success", true);
 			return ResponseEntity.ok(response);
 		} catch(CustomException e) {

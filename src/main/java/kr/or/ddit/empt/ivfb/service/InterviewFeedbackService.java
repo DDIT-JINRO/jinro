@@ -14,6 +14,6 @@ public interface InterviewFeedbackService {
 
 	List<CompanyVO> selectCompanyList(String cpName);
 
-	void updateInterViewFeedback(String memId, InterviewReviewVO interviewReview, MultipartFile file, String veriCategory);
+	void updateInterviewFeedback(String memId, InterviewReviewVO interviewReview, MultipartFile file, String veriCategory);
 
 }

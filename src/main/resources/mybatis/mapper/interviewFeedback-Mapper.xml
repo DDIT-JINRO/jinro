@@ -126,7 +126,7 @@
 		</if>
 	</select>
 	
-	<update id="updateInterViewFeedback" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+	<update id="updateInterviewFeedback" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
 		MERGE INTO
 			INTERVIEW_REVIEW A
 		USING DUAL

@@ -52,7 +52,7 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 
 	@Override
 	@Transactional
-	public void updateInterViewFeedback(String memIdStr, InterviewReviewVO interviewReview, MultipartFile file, String veriCategory) {
+	public void updateInterviewFeedback(String memIdStr, InterviewReviewVO interviewReview, MultipartFile file, String veriCategory) {
 		if (null == memIdStr || "anonymousUser".equals(memIdStr)) {
 			throw new CustomException(ErrorCode.INVALID_AUTHORIZE);
 		}
@@ -72,7 +72,7 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 		files.add(file);
 		
 		try {
-			interviewFeedbackMapper.updateInterViewFeedback(interviewReview);
+			interviewFeedbackMapper.updateInterviewFeedback(interviewReview);
 			fileService.uploadFiles(fileGroupId, files);
 			interviewFeedbackMapper.updateVerification(verification);
 		} catch (IOException e) {

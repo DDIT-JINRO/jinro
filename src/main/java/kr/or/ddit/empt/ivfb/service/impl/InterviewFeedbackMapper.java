@@ -17,7 +17,7 @@ public interface InterviewFeedbackMapper {
 	
 	List<CompanyVO> selectCompanyList(String cpName);
 
-	void updateInterViewFeedback(InterviewReviewVO interviewReview);
+	void updateInterviewFeedback(InterviewReviewVO interviewReview);
 
 	void updateVerification(VerificationVO verification);
 
