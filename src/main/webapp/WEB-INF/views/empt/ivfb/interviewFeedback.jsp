@@ -30,7 +30,7 @@
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
 			<div class="teenListTop">
-				<button id=btnWrite>글작성</button>
+				<button id=btnWrite>면접 후기 공유하기</button>
 			</div>
 			<form method="get" action="${articlePage.url}">
 				<div class="com-default-search">
