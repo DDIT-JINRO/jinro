@@ -150,7 +150,7 @@
 										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy. MM. dd"/> </span>
 										<span class="divider">·</span>
 										<span>예약일</span>
-										<span><fmt:formatDate value="${content.counselReqDateTime}" pattern="yyyy. MM. dd (HH시)"/></span>
+										<span><fmt:formatDate value="${content.counselReqDatetime}" pattern="yyyy. MM. dd (HH시)"/></span>
 									</div>
 								</div>
 								<div class="item-content">
