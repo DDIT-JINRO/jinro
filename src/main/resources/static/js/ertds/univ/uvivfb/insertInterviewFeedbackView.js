@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	document.querySelector("#back-btn").addEventListener("click", function() {
-		window.location.href = "/ertds/univ/uvivfb/interViewFeedback.do";
+		window.location.href = "/ertds/univ/uvivfb/selectInterviewList.do";
 	});
 });
 
