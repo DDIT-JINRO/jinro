@@ -40,6 +40,7 @@
 .poster-wrapper {
 	flex: 0 0 40%; /* 너비 비율 고정 */
 	max-width: 400px;
+	height: 500px;
 	border-radius: 8px;
 	overflow: hidden;
 	border: 1px solid #e9ecef;
@@ -157,3 +158,4 @@ a {
 	border: none;
 	cursor: pointer;
 }
+

@@ -246,5 +246,5 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script src="/js/prg/act/sup/supList.js">
+<script src="/js/prg/act/cr/crList.js">
 </script>

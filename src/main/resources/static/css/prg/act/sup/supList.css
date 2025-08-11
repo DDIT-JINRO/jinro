@@ -267,7 +267,7 @@
     background-color: white;
     display: flex;
     flex-direction: row-reverse;
-    min-height: 300px;
+    height: 300px;
 }
 
 .contest-card:hover {
