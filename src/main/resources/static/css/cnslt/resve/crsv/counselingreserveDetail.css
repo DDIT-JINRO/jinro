@@ -160,37 +160,3 @@ body {
     background-color: #6c78eb;
 }
 
-/* 헤더 및 탭 메뉴 스타일 (기존 코드와 통일) */
-.channel-title-text, .tab.active {
-    color: #848EFB;
-}
-
-.channel-sub-section-itemIn a {
-    color: #848EFB;
-}
-
-.tab-container {
-    display: flex;
-    justify-content: flex-start;
-    border-bottom: 1px solid #e0e0e0;
-    margin-bottom: 20px;
-}
-.tab {
-    padding: 10px 15px;
-    text-decoration: none;
-    color: #6c757d;
-    font-weight: 500;
-}
-.tab.active {
-    border-bottom: 2px solid #848EFB;
-    margin-bottom: -1px;
-}
-.channel-sub-sections {
-    display: flex;
-    justify-content: flex-start;
-    border-bottom: 1px solid #e0e0e0;
-    margin-bottom: 20px;
-}
-.channel-sub-section-itemIn, .channel-sub-section-item {
-    padding: 10px 15px;
-}

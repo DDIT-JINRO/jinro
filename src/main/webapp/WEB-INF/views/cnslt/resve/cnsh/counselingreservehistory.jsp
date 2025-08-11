@@ -155,6 +155,9 @@
 										     <span class="btn btn-danger">취소됨</span>
 									 	</c:when>
 										<c:when test="${content.counselStatus == 'S04003'}">
+											<span class="btn btn-primary">확정</span>
+										</c:when>
+										<c:when test="${content.counselStatus == 'S04005'}">
 											<a href="#" onclick="openCounselingPopup('${content.counselUrlUser}'); return false;" class="btn btn-primary counselStart">상담시작</a>
 										</c:when>
 										<c:when test="${content.counselReviewd == 'N' && content.counselStatus == 'S04004'}">
