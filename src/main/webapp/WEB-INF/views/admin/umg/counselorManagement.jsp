@@ -46,7 +46,7 @@
 					<option value="3">닉네임</option>
 					<option value="4">이메일</option>
 				</select> <input type="text" name="keyword" placeholder="검색어를 입력하세요" />
-				<button type="button" class="btn-save">조회</button>
+				<button type="button" class="btn-save searchCnsBtn">조회</button>
 			</div>
 			<div class="search-filter-bar">
 				<p class="ptag-list">
@@ -127,20 +127,20 @@
 
 				<div class="member-penalty-section">
 					<p>
-						<strong class="member-penalty-title">경고 수:</strong>
+						<strong class="member-penalty-title">상담 횟수:</strong>
 						<span id="mem-warn-count"></span>
 					</p>
 					<p>
-						<strong class="member-penalty-title">정지 수:</strong>
+						<strong class="member-penalty-title">휴가 횟수:</strong>
 						<span id="mem-ban-count"></span>
+					</p>
+					<p>
+						<strong class="member-penalty-title">상담 평점:</strong>
+						<span id="mem-avg-count"></span>
 					</p>
 				</div>
 
 				<div class="member-interests-section">
-					<p>
-						<strong class="member-penalty-title">관심 키워드:</strong>
-						<span id="mem-interests"></span>
-					</p>
 				</div>
 
 				<div class="button-group">

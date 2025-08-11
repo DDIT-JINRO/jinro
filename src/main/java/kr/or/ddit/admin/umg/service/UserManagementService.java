@@ -1,8 +1,9 @@
 package kr.or.ddit.admin.umg.service;
 
-import java.util.List;
 import java.util.Map;
 
+import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
+import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 
@@ -15,5 +16,15 @@ public interface UserManagementService {
 	int insertUserByAdmin(MemberVO member);
 
 	int updateMemberInfo(MemberVO memberVO);
+
+	ArticlePage<ReportVO> getReportList(int currentPage, int size, String keyword, String status);
+
+	Map<String, Object> getReportDetail(String id);
+
+	ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status);
+
+	int submitPenalty(MemberPenaltyVO memberPenaltyVO);
+
+	Map<String, Object> getPenaltyDetail(String id);
 
 }

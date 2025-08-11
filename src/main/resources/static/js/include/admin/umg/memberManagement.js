@@ -9,6 +9,7 @@ warnButton = document.getElementById('userWarn');
 banButton = document.getElementById('userBan');
 emailDoubleCheckBtn = document.getElementById('emailDoubleCheck');
 nicknameDoubleCheckBtn = document.getElementById('nicknameDoubleCheck');
+
 profileUpload.addEventListener('change', function(event) {
 
 	const file = event.target.files[0];
@@ -18,14 +19,11 @@ profileUpload.addEventListener('change', function(event) {
 		return;
 	}
 
-
 	if (!file) {
 		return;
 	}
 
-
 	const reader = new FileReader();
-
 
 	reader.onload = function(e) {
 
@@ -69,8 +67,8 @@ function fetchUserList(page = 1) {
 			           
 			          </tr>`).join('');
 				listEl.innerHTML = rows;
-				renderPagination(data);
 			}
+				renderPagination(data);
 		})
 		.catch(err => console.error('유저 목록 조회 중 에러:', err));
 }
@@ -89,20 +87,25 @@ function renderPagination({ startPage, endPage, currentPage, totalPages }) {
 	if (footer) footer.innerHTML = html;
 }
 
-if (!window._paginationDelegated) {
-	window._paginationDelegated = true;
+userListPaginationContainer = document.querySelector('.panel-footer.pagination');
+if (userListPaginationContainer) {
+    userListPaginationContainer.addEventListener('click', e => {
+        
+        const link = e.target.closest('a[data-page]');
+        
+        if (!link || link.parentElement.classList.contains('disabled')) {
+            e.preventDefault();
+            return;
+        }
 
-	document.addEventListener('click', e => {
-		const a = e.target.closest('.pagination a[data-page]');
-		if (!a) return;
+        e.preventDefault();
+        const page = parseInt(link.dataset.page, 10);
 
-		e.preventDefault();
-		const page = parseInt(a.dataset.page, 10);
-		if (isNaN(page) || page < 1) return;
-
-		window.currentPage = page;
-		fetchUserList(page);
-	});
+        
+        if (!isNaN(page) && page > 0) {
+            fetchUserList(page);
+        }
+    });
 }
 
 function formatDateMMDD(iso) {
@@ -163,8 +166,6 @@ function userDetail(formData) {
 	axios.post('/admin/umg/getMemberDetail.do', formData)
 		.then(res => {
 			const { memberDetail, filePath, countVO, interestCn } = res.data;
-
-			console.log(memberDetail)
 
 			const profileImgEl = document.getElementById('member-profile-img');
 			profileImgEl.src = filePath ? filePath : '/images/defaultProfileImg.png';

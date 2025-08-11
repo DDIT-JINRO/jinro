@@ -20,5 +20,30 @@ public class ReportVO {
 	private int memId;
 	private Long fileGroupNo;
 
+	// 신고당한사람의 id 조회를 위한 필드 추가
+	private int reportedMemId;
+	
+	// 신고자명
+	private String reporterName;
+	// 신고대상명
+	private String reportedName;
+	
+	
 	private List<MultipartFile> reportFile;
+
+	private String keyword;
+	private String status;
+
+	private int currentPage;
+	private int size;
+	private int startNo;
+	private int endNo;
+
+	public int getStartNo() {
+		return (this.currentPage - 1) * size;
+	}
+
+	public int getEndNo() {
+		return this.currentPage * size;
+	}
 }

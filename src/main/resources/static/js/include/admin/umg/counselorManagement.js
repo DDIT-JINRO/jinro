@@ -2,6 +2,7 @@
  * 
  */
 ctxCnsMngMonthChart = document.getElementById('sparklineChart');
+modifyButton = document.getElementById('userModify');
 
 new Chart(ctxCnsMngMonthChart, {
 	type: 'bar',
@@ -34,7 +35,7 @@ new Chart(ctxCnsMngMonthChart, {
 	}
 });
 
-function fetchUserList(page = 1) {
+function fetchCnsList(page = 1) {
 	const pageSize = 10;
 	const keyword = document.querySelector('input[name="keyword"]').value;
 	const status = document.querySelector('select[name="status"]').value;
@@ -67,8 +68,8 @@ function fetchUserList(page = 1) {
 			           
 			          </tr>`).join('');
 				listEl.innerHTML = rows;
-				renderPagination(data);
 			}
+				renderPagination(data);
 		})
 		.catch(err => console.error('유저 목록 조회 중 에러:', err));
 }
@@ -87,20 +88,25 @@ function renderPagination({ startPage, endPage, currentPage, totalPages }) {
 	if (footer) footer.innerHTML = html;
 }
 
-if (!window._paginationDelegated) {
-	window._paginationDelegated = true;
+cnsListPaginationContainer = document.querySelector('.panel-footer.pagination');
+if (cnsListPaginationContainer) {
+    cnsListPaginationContainer.addEventListener('click', e => {
+        
+        const link = e.target.closest('a[data-page]');
+        
+        if (!link || link.parentElement.classList.contains('disabled')) {
+            e.preventDefault();
+            return;
+        }
 
-	document.addEventListener('click', e => {
-		const a = e.target.closest('.pagination a[data-page]');
-		if (!a) return;
+        e.preventDefault();
+        const page = parseInt(link.dataset.page, 10);
 
-		e.preventDefault();
-		const page = parseInt(a.dataset.page, 10);
-		if (isNaN(page) || page < 1) return;
-
-		window.currentPage = page;
-		fetchUserList(page);
-	});
+        
+        if (!isNaN(page) && page > 0) {
+            fetchCnsList(page);
+        }
+    });
 }
 
 function formatDateMMDD(iso) {
@@ -151,10 +157,7 @@ document.getElementById("userList").addEventListener("click", function(e) {
 function userDetail(formData) {
 	axios.post('/admin/umg/getMemberDetail.do', formData)
 		.then(res => {
-			const { memberDetail, filePath, countVO, interestCn } = res.data;
-
-			console.log(memberDetail)
-
+			const { memberDetail, filePath, countVO, interestCn, vacByCns, counseling, avgRate } = res.data;
 			const profileImgEl = document.getElementById('member-profile-img');
 			profileImgEl.src = filePath ? filePath : '/images/defaultProfileImg.png';
 
@@ -167,8 +170,7 @@ function userDetail(formData) {
 			document.getElementById('mem-gen').value = memberGender(memberDetail.memGen) || '-';
 			document.getElementById('mem-birth').value = formatDate(memberDetail.memBirth) || '-';
 			document.getElementById('mem-logType').value = convertLoginType(memberDetail.loginType) || '-';
-
-
+			
 			const selectElement = document.getElementById("mem-role");
 
 			for (let i = 0; i < selectElement.options.length; i++) {
@@ -179,12 +181,9 @@ function userDetail(formData) {
 			}
 
 
-			document.getElementById('mem-warn-count').textContent = `${countVO.warnCount}회`;
-			document.getElementById('mem-ban-count').textContent = `${countVO.banCount}회`;
-
-
-			const interests = interestCn && interestCn.length > 0 ? interestCn.join(', ') : '없음';
-			document.getElementById('mem-interests').textContent = interests;
+			document.getElementById('mem-warn-count').textContent = `${counseling}회`;
+			document.getElementById('mem-ban-count').textContent = `${vacByCns}회`;
+			document.getElementById('mem-avg-count').textContent = `${avgRate == 0 ? "후기없음" : avgRate+"점"}`;
 
 		})
 		.catch(error => {
@@ -192,4 +191,52 @@ function userDetail(formData) {
 		});
 }
 
-fetchUserList();
+searchCnsBtn = document.querySelector(".searchCnsBtn");
+if (searchCnsBtn) {
+	searchCnsBtn.addEventListener("click", function() {
+		window.currentPage = 1;
+		fetchCnsList(1);
+	});
+}
+
+modifyButton.addEventListener('click', function() {
+
+	if (confirm('정말로 수정하시겠습니까?')) {
+		const memId = document.getElementById('mem-id').value;
+
+		if (memId == null || memId == "") {
+			alert('수정할 대상이 없습니다.');
+			return;
+		}
+
+
+		const memName = document.getElementById('mem-name').value;
+		const memNickname = document.getElementById('mem-nickname').value;
+		const memEmail = document.getElementById('mem-email').value;
+		const memPhone = document.getElementById('mem-phone').value;
+		const memRole = document.getElementById('mem-role').value;
+
+		let formData = new FormData();
+		formData.set("memId", memId);
+		formData.set("memName", memName);
+		formData.set("memNickname", memNickname);
+		formData.set("memRole", memRole);
+
+		axios.post('/admin/umg/updateMemberInfo.do', formData)
+			.then(res => {
+				if (res.data != 1) {
+					alert('수정 실패')
+					return;
+				} else {
+					let formId = new FormData();
+					formId.set("id", memId);
+					userDetail(formId);
+					fetchCnsList();
+				}
+			})
+		alert('수정 완료');
+	}
+
+})
+
+fetchCnsList();

@@ -1,6 +1,5 @@
 const ctxUser = document.getElementById('lineChart');
 const ctxPayment = document.getElementById('revenueChart').getContext('2d');
-
 /************************ 월별 사용자 통계 *******************************/
 
 if (ctxUser) {
@@ -18,7 +17,7 @@ if (ctxUser) {
 				backgroundColor: function(context) {
 					const chart = context.chart;
 					const { ctx, chartArea } = chart;
-					
+
 					if (!chartArea) {
 						return null;
 					}

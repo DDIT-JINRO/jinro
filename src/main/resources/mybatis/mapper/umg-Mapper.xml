@@ -152,12 +152,14 @@
 		MEM_ID
 		, MEM_EMAIL
 		, MEM_PASSWORD
-		, MEM_NICKNAME
+		,
+		MEM_NICKNAME
 		, MEM_PHONE_NUMBER
 		, MEM_NAME
 		, MEM_GEN
 		, MEM_BIRTH
-		, MEM_ALARM
+		,
+		MEM_ALARM
 		, MEM_STUDENT
 		, MEM_ROLE
 		, MEM_POINT
@@ -168,10 +170,12 @@
 		, LOGIN_TYPE
 		, MEM_TOKEN
 		) VALUES (
-		(SELECT NVL(MAX(MEM_ID),0)+1 FROM MEMBER)
+		(SELECT
+		NVL(MAX(MEM_ID),0)+1 FROM MEMBER)
 		, #{memEmail}
 		, #{memPassword}
-		, #{memNickname}
+		,
+		#{memNickname}
 		, #{memPhoneNumber}
 		, #{memName}
 		, #{memGen}
@@ -201,4 +205,317 @@
 		MEM_ID = #{memId}
 	</update>
 
+	<select id="selectVacByCns" parameterType="String"
+		resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		VACATION
+		WHERE VA_REQUESTOR = #{memId} AND
+		VA_CONFIRM = 'S03003'
+	</select>
+
+	<select id="selectCounseling" parameterType="String"
+		resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		COUNSELING
+		WHERE COUNSEL = #{memId}
+		AND
+		COUNSEL_STATUS = 'S04004'
+	</select>
+
+	<select id="selectAvgRate" parameterType="String"
+		resultType="double">
+		SELECT NVL(AVG(R.CR_RATE),0) AS avg_rate
+		FROM
+		COUNSELING_REVIEW R
+		WHERE R.CR_ID IN (
+		SELECT C.COUNSEL_ID
+		FROM
+		COUNSELING C
+		WHERE C.COUNSEL = #{memId}
+		AND C.COUNSEL_REVIEWD = 'Y'
+		)
+	</select>
+
+	<select id="getReportList"
+		parameterType="kr.or.ddit.com.report.service.ReportVO"
+		resultType="kr.or.ddit.com.report.service.ReportVO">
+		SELECT * FROM (
+		SELECT ROWNUM AS RNUM, B.*
+		FROM (SELECT
+		R.REPORT_ID
+		,
+		R.TARGET_TYPE
+		, R.TARGET_ID
+		, R.REPORT_REASON
+		, R.REPORT_STATUS
+		,
+		R.REPORT_CREATED_AT
+		, R.REPORT_COMPLETE_AT
+		, R.REPORT_COMPLETE_ID
+		,
+		R.MEM_ID
+		, M1.MEM_NAME AS REPORTER_NAME
+		, R.FILE_GROUP_NO
+		, CASE
+		WHEN
+		R.TARGET_TYPE = 'G10001' THEN B.MEM_ID
+		WHEN R.TARGET_TYPE = 'G10002'
+		THEN RP.MEM_ID
+		END AS REPORTED_MEM_ID
+		, M2.MEM_NAME AS REPORTED_NAME
+		FROM REPORT R
+		LEFT JOIN BOARD B
+		ON R.TARGET_TYPE = 'G10001'
+		AND
+		R.TARGET_ID = B.BOARD_ID
+		LEFT JOIN REPLY RP
+		ON R.TARGET_TYPE = 'G10002'
+		AND R.TARGET_ID = RP.REPLY_ID
+		LEFT JOIN MEMBER M1
+		ON R.MEM_ID =
+		M1.MEM_ID
+		LEFT JOIN MEMBER M2
+		ON (CASE
+		WHEN R.TARGET_TYPE = 'G10001' THEN
+		B.MEM_ID
+		WHEN R.TARGET_TYPE = 'G10002' THEN RP.MEM_ID
+		END) = M2.MEM_ID
+		<where>
+			R.REPORT_ID IS NOT NULL
+			<if test="keyword != null and keyword != '' and status == 1">
+				AND (M1.MEM_NAME LIKE '%' || #{keyword} || '%' OR
+				M2.MEM_NAME LIKE '%' || #{keyword} || '%' OR R.REPORT_REASON LIKE
+				'%' ||
+				#{keyword} || '%')
+			</if>
+			<if test="keyword != null and keyword != '' and status == 2">
+				AND M1.MEM_NAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 3">
+				AND M2.MEM_NAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 4">
+				AND R.REPORT_REASON LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+		ORDER BY R.REPORT_CREATED_AT DESC) B
+		WHERE ROWNUM &lt;= #{endNo}
+		)
+		WHERE
+		RNUM &gt;=
+		#{startNo}
+	</select>
+
+	<select id="getAllReportList"
+		parameterType="kr.or.ddit.com.report.service.ReportVO"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM REPORT R
+		LEFT JOIN BOARD B
+		ON R.TARGET_TYPE =
+		'G10001'
+		AND R.TARGET_ID = B.BOARD_ID
+		LEFT JOIN REPLY RP
+		ON R.TARGET_TYPE
+		= 'G10002'
+		AND R.TARGET_ID = RP.REPLY_ID
+		LEFT JOIN MEMBER M1
+		ON R.MEM_ID
+		= M1.MEM_ID
+		LEFT JOIN MEMBER M2
+		ON (CASE
+		WHEN R.TARGET_TYPE = 'G10001'
+		THEN B.MEM_ID
+		WHEN R.TARGET_TYPE = 'G10002' THEN RP.MEM_ID
+		END) =
+		M2.MEM_ID
+		<where>
+			R.REPORT_ID IS NOT NULL
+			<if test="keyword != null and keyword != '' and status == 1">
+				AND (M1.MEM_NAME LIKE '%' || #{keyword} || '%'
+				OR
+				M2.MEM_NAME LIKE '%' || #{keyword} || '%'
+				OR R.REPORT_REASON LIKE '%'
+				|| #{keyword} || '%')
+			</if>
+			<if test="keyword != null and keyword != '' and status == 2">
+				AND M1.MEM_NAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 3">
+				AND M2.MEM_NAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 4">
+				AND R.REPORT_REASON LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+	</select>
+
+	<select id="getReportVO" parameterType="String"
+		resultType="kr.or.ddit.com.report.service.ReportVO">
+		SELECT
+		R.REPORT_ID
+		, R.TARGET_TYPE
+		, R.TARGET_ID
+		,
+		R.REPORT_REASON
+		, R.REPORT_STATUS
+		, R.REPORT_CREATED_AT
+		,
+		R.REPORT_COMPLETE_AT
+		, R.REPORT_COMPLETE_ID
+		, R.MEM_ID
+		, M1.MEM_NAME AS
+		REPORTER_NAME
+		, R.FILE_GROUP_NO
+		, CASE
+		WHEN R.TARGET_TYPE = 'G10001' THEN
+		B.MEM_ID
+		WHEN R.TARGET_TYPE = 'G10002' THEN RP.MEM_ID
+		END AS
+		REPORTED_MEM_ID
+		, M2.MEM_NAME AS REPORTED_NAME
+		FROM REPORT R
+		LEFT JOIN
+		BOARD B
+		ON R.TARGET_TYPE = 'G10001'
+		AND R.TARGET_ID = B.BOARD_ID
+		LEFT
+		JOIN REPLY RP
+		ON R.TARGET_TYPE = 'G10002'
+		AND R.TARGET_ID = RP.REPLY_ID
+		LEFT JOIN MEMBER M1
+		ON R.MEM_ID = M1.MEM_ID
+		LEFT JOIN MEMBER M2
+		ON (CASE
+		WHEN R.TARGET_TYPE = 'G10001' THEN B.MEM_ID
+		WHEN R.TARGET_TYPE =
+		'G10002' THEN RP.MEM_ID
+		END) = M2.MEM_ID
+		WHERE REPORT_ID = #{reportId}
+	</select>
+
+	<select id="getPenaltyList"
+		resultType="kr.or.ddit.account.lgn.service.MemberPenaltyVO"
+		parameterType="kr.or.ddit.account.lgn.service.MemberPenaltyVO">
+		SELECT * FROM (
+		SELECT ROWNUM AS RNUM, B.*
+		FROM (
+		SELECT
+		MP.MP_ID
+		,
+		MP.REPORT_ID
+		, MP.MP_WARN_REASON
+		,
+		MP.MP_WARN_DATE
+		, MP.MEM_ID
+		, M.MEM_NAME
+		, MP.MP_TYPE
+		, MP.MP_STARTED_AT
+		,
+		MP.MP_COMPLETE_AT
+		, MP.FILE_GROUP_NO
+		FROM
+		MEMBER_PENALTY MP
+		JOIN MEMBER M
+		ON MP.MEM_ID = M.MEM_ID
+		<where>
+			MP.MP_ID IS NOT NULL
+			<if test="keyword != null and keyword != '' and status == 1">
+				AND (M.MEM_NAME LIKE '%' || #{keyword} || '%' OR
+				MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%')
+			</if>
+			<if test="keyword != null and keyword != '' and status == 2">
+				AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 3">
+				AND MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+		ORDER BY MP.MP_WARN_DATE DESC) B
+		WHERE ROWNUM &lt;= #{endNo}
+		)
+		WHERE
+		RNUM
+		&gt;= #{startNo}
+	</select>
+
+	<select id="getAllMemberPenaltyList" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		MEMBER_PENALTY MP
+		JOIN MEMBER M ON MP.MEM_ID =
+		M.MEM_ID
+		<where>
+			MP.MP_ID IS NOT NULL
+			<if test="keyword != null and keyword != '' and status == 1">
+				AND (M.MEM_NAME LIKE '%' || #{keyword} || '%' OR
+				MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%')
+			</if>
+			<if test="keyword != null and keyword != '' and status == 2">
+				AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != null and keyword != '' and status == 3">
+				AND MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+	</select>
+
+	<select id="getMemIdByReport" parameterType="int"
+		resultType="int">
+		SELECT MEM_ID FROM REPORT WHERE REPORT_ID = #{reportId}
+	</select>
+
+	<insert id="submitPenalty"
+		parameterType="kr.or.ddit.account.lgn.service.MemberPenaltyVO">
+		INSERT INTO MEMBER_PENALTY (
+		MP_ID,
+		REPORT_ID,
+		MP_WARN_REASON,
+		MP_WARN_DATE,
+		MEM_ID,
+		MP_TYPE,
+		MP_STARTED_AT,
+		MP_COMPLETE_AT,
+		FILE_GROUP_NO
+		) VALUES (
+		(SELECT NVL(MAX(MP_ID),0) + 1
+		FROM MEMBER_PENALTY),
+		#{reportId},
+		#{mpWarnReason},
+		SYSDATE,
+		#{memId},
+		#{mpType},
+		CASE WHEN #{mpType} = 'G14002' THEN SYSDATE ELSE NULL END,
+		CASE WHEN #{mpType} = 'G14002' THEN SYSDATE + 7 ELSE NULL END,
+		#{fileGroupNo}
+		)
+	</insert>
+
+	<select id="getPenaltyDetail" parameterType="String"
+		resultType="kr.or.ddit.account.lgn.service.MemberPenaltyVO">
+		SELECT
+		MP.MP_ID,
+		MP.REPORT_ID,
+		MP.MP_WARN_REASON,
+		MP.MP_WARN_DATE,
+		MP.MEM_ID,
+		M.MEM_NAME, -- 멤버 이름
+		MP.MP_TYPE,
+		MP.MP_STARTED_AT,
+		MP.MP_COMPLETE_AT,
+		MP.FILE_GROUP_NO
+		FROM
+		MEMBER_PENALTY MP
+		JOIN
+		MEMBER M
+		ON MP.MEM_ID = M.MEM_ID
+		WHERE MP_ID = #{mpId}
+		ORDER BY
+		MP.MP_WARN_DATE DESC
+	</select>
 </mapper>

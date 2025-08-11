@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
+import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileDetailVO;
@@ -25,7 +27,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Autowired
 	UserManagementMapper userManagementMapper;
 	private final BCryptPasswordEncoder passwordEncoder;
-	
+
 	public UserManagementServiceImpl(BCryptPasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -49,7 +51,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		// 건수
 		int total = userManagementMapper.getAlluserList(map);
 		// 페이지 네이션
-		ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword);
+		ArticlePage<MemberVO> articlePage = new ArticlePage<MemberVO>(total, currentPage, size, list, keyword);
 
 		return articlePage;
 	}
@@ -69,12 +71,19 @@ public class UserManagementServiceImpl implements UserManagementService {
 			filePath = fileService.getSavePath(file);
 		}
 
-		// 포르필 경로
-
 		// 정지 경고 횟수 이력
 		MemberPenaltyCountVO countVO = userManagementMapper.selectPenaltyCountByMemberId(id);
-
 		Map<String, Object> map = new HashMap<String, Object>();
+
+		if ("R01003".equals(memberDetail.getMemRole())) {
+			int vacByCns = userManagementMapper.selectVacByCns(id);
+			int counseling = userManagementMapper.selectCounseling(id);
+			double avgRate = userManagementMapper.selectAvgRate(id);
+
+			map.put("vacByCns", vacByCns);
+			map.put("counseling", counseling);
+			map.put("avgRate", avgRate);
+		}
 
 		map.put("memberDetail", memberDetail);
 		map.put("interestCn", interestCn);
@@ -86,21 +95,126 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Override
 	public int insertUserByAdmin(MemberVO member) {
-		
+
 		String memberPw = member.getMemPassword();
-		member.setMemPassword(passwordEncoder.encode(memberPw)); 
-		
+		member.setMemPassword(passwordEncoder.encode(memberPw));
+
 		int res = userManagementMapper.insertUserByAdmin(member);
-		
+
 		return res;
 	}
 
 	@Override
 	public int updateMemberInfo(MemberVO memberVO) {
-		
+
 		int res = userManagementMapper.updateMemberInfo(memberVO);
+
+		return res;
+	}
+
+	@Override
+	public ArticlePage<ReportVO> getReportList(int currentPage, int size, String keyword, String status) {
+
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("keyword", keyword);
+		map.put("status", status);
+		map.put("currentPage", currentPage);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+
+		// 리스트 불러오기
+		List<ReportVO> list = userManagementMapper.getReportList(map);
+
+		// 건수
+		int total = userManagementMapper.getAllReportList(map);
+//		// 페이지 네이션
+		ArticlePage<ReportVO> articlePage = new ArticlePage<ReportVO>(total, currentPage, size, list, keyword);
+
+		return articlePage;
+	}
+
+	@Override
+	public Map<String, Object> getReportDetail(String id) {
+
+		ReportVO reportVO = userManagementMapper.getReportVO(id);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		String filePath = "";
+		if (reportVO.getFileGroupNo() != null) {
+			FileDetailVO file = fileService.getFileDetail(reportVO.getFileGroupNo(), 1);
+			filePath = fileService.getSavePath(file);
+			map.put("filePath", filePath);
+			map.put("fileOrgName", file.getFileOrgName());
+		}
+
+		map.put("reportVO", reportVO);
+
+		return map;
+	}
+
+	@Override
+	public ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status) {
+
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("keyword", keyword);
+		map.put("status", status);
+		map.put("currentPage", currentPage);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		
+		
+		List<MemberPenaltyVO> penaltyVOList = userManagementMapper.getPenaltyList(map);
+
+		// 건수
+		int total = userManagementMapper.getAllMemberPenaltyList(map);
+		// 페이지 네이션
+		ArticlePage<MemberPenaltyVO> articlePage = new ArticlePage<MemberPenaltyVO>(total, currentPage, size,
+				penaltyVOList, keyword);
+
+		return articlePage;
+	}
+
+	@Override
+	public int submitPenalty(MemberPenaltyVO memberPenaltyVO) {
+		
+		int reportedId = memberPenaltyVO.getReportId();
+		
+		int memId = userManagementMapper.getMemIdByReport(reportedId);
+		
+		memberPenaltyVO.setMemId(memId);
+		
+		int res = userManagementMapper.submitPenalty(memberPenaltyVO);
 		
 		return res;
+	}
+
+	@Override
+	public Map<String, Object> getPenaltyDetail(String id) {
+		
+		MemberPenaltyVO memberPenaltyVO = userManagementMapper.getPenaltyDetail(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		String filePath = "";
+		if (memberPenaltyVO.getFileGroupNo() != null) {
+			FileDetailVO file = fileService.getFileDetail(memberPenaltyVO.getFileGroupNo(), 1);
+			filePath = fileService.getSavePath(file);
+			map.put("filePath", filePath);
+			map.put("fileOrgName", file.getFileOrgName());
+		}
+		
+		log.info("map + @@@@@" + map);
+		
+		map.put("penaltyVO", memberPenaltyVO);
+		
+		return map;
 	}
 
 }

@@ -2,7 +2,6 @@ package kr.or.ddit.admin.umg.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.account.join.service.MemberJoinService;
+import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
+import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.alarm.service.impl.AlarmEmitterManager;
@@ -66,6 +67,7 @@ public class UserManagementController {
 
 		if (profileImage != null) {
 			List<MultipartFile> profileImages = new ArrayList<MultipartFile>();
+			profileImages.add(profileImage);
 			fileGroupId = fileService.createFileGroup();
 			try {
 				fileService.uploadFiles(fileGroupId, profileImages);
@@ -76,8 +78,8 @@ public class UserManagementController {
 		}
 
 		memberVO.setFileProfile(fileGroupId);
-		return userManagementService.insertUserByAdmin(memberVO) == 1 ? "success" : "failed"; 
-		
+		return userManagementService.insertUserByAdmin(memberVO) == 1 ? "success" : "failed";
+
 	}
 
 	@PostMapping("/updateMemberInfo.do")
@@ -110,4 +112,64 @@ public class UserManagementController {
 			return "사용 가능한 닉네임입니다.";
 	}
 
+	@GetMapping("/getReportList.do")
+	public ArticlePage<ReportVO> getReportList(
+			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+			@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+			@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "status", required = false) String status) {
+
+		return userManagementService.getReportList(currentPage, size, keyword, status);
+
+	}
+
+	@PostMapping("/getReportDetail.do")
+	public Map<String, Object> getReportDetail(@RequestParam("id") String id) {
+
+		return userManagementService.getReportDetail(id);
+	}
+
+	@GetMapping("/getPenaltyList.do")
+	public ArticlePage<MemberPenaltyVO> getPenaltyList(
+			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+			@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+			@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "status", required = false) String status) {
+
+		return userManagementService.getPenaltyList(currentPage, size, keyword, status);
+	}
+
+	@PostMapping("/submitPenalty.do")
+	public String submitPenalty(MemberPenaltyVO memberPenaltyVO, @RequestParam(required = false) MultipartFile[] evidenceFiles) {
+		
+		Long fileGroupId = null;
+
+		if (evidenceFiles != null) {
+			List<MultipartFile> evidenceFilesList = new ArrayList<MultipartFile>();
+			for(MultipartFile file : evidenceFiles) {
+				evidenceFilesList.add(file);
+			}
+			fileGroupId = fileService.createFileGroup();
+			try {
+				fileService.uploadFiles(fileGroupId, evidenceFilesList);
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+		}
+		
+		memberPenaltyVO.setFileGroupNo(fileGroupId);
+		
+		int res = userManagementService.submitPenalty(memberPenaltyVO);
+		
+		return res == 1 ? "success" : "failed";
+		
+	}
+	
+	@PostMapping("/getPenaltyDetail.do")
+	public Map<String, Object> getPenaltyDetail(@RequestParam("id") String id) {
+		
+		return userManagementService.getPenaltyDetail(id);
+	}
+	
 }
