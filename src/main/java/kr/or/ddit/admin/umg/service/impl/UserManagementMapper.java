@@ -51,4 +51,8 @@ public interface UserManagementMapper {
 
 	MemberPenaltyVO getPenaltyDetail(String id);
 
+	void updateReport(int reportedId);
+
+	int reportModify(ReportVO reportVO);
+
 }

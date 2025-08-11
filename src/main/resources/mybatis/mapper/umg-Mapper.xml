@@ -510,7 +510,8 @@
 		MP.MP_COMPLETE_AT,
 		MP.FILE_GROUP_NO
 		FROM
-		MEMBER_PENALTY MP
+		MEMBER_PENALTY
+		MP
 		JOIN
 		MEMBER M
 		ON MP.MEM_ID = M.MEM_ID
@@ -518,4 +519,21 @@
 		ORDER BY
 		MP.MP_WARN_DATE DESC
 	</select>
+
+	<update id="updateReport" parameterType="int">
+		UPDATE REPORT
+		SET
+		REPORT_STATUS = 'S03003'
+		WHERE
+		REPORT_ID = #{reportId}
+	</update>
+
+	<update id="reportModify"
+		parameterType="kr.or.ddit.com.report.service.ReportVO">
+		UPDATE REPORT
+		SET
+		REPORT_STATUS = #{reportStatus}
+		WHERE
+		REPORT_ID = #{reportId}
+	</update>
 </mapper>

@@ -82,6 +82,15 @@
 					<span id="report-detail-targetName">-</span>
 				</div>
 				<div class="detail-item">
+					<span class="detail-label">신고 상태:</span>
+					<select id="report-detail-status">
+						<option value="">-</option>
+						<option value="S03001">접수</option>
+						<option value="S03002">반려</option>
+						<option value="S03003">승인</option>
+					</select>
+				</div>
+				<div class="detail-item">
 					<span class="detail-label">신고 사유:</span>
 					<span id="report-detail-reason">-</span>
 				</div>
@@ -93,6 +102,7 @@
 					<span class="detail-label">신고 증빙자료:</span>
 					<span id="report-detail-file">-</span>
 				</div>
+				<button class="btn-save" id="reportModify">수정</button>
 			</div>
 		</div>
 	</div>

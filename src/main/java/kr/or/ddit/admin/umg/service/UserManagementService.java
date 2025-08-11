@@ -27,4 +27,6 @@ public interface UserManagementService {
 
 	Map<String, Object> getPenaltyDetail(String id);
 
+	int reportModify(ReportVO reportVO);
+
 }

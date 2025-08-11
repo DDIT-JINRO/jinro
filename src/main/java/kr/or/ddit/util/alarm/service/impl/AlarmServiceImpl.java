@@ -14,7 +14,7 @@ import kr.or.ddit.util.alarm.service.AlarmType;
 import kr.or.ddit.util.alarm.service.AlarmVO;
 
 @Service
-public class AlarmServiceImpl implements AlarmService{
+public class AlarmServiceImpl implements AlarmService {
 
 	@Autowired
 	AlarmMapper alarmMapper;
@@ -30,7 +30,7 @@ public class AlarmServiceImpl implements AlarmService{
 	@Override
 	public List<AlarmVO> selectAllByMember(int memId) {
 		List<AlarmVO> list = this.alarmMapper.selectAllByMember(memId);
-		for(AlarmVO vo : list) {
+		for (AlarmVO vo : list) {
 			String str = getAlarmCreateTimeGapStr(vo.getAlarmCreatedAt());
 			vo.setDisplayTime(str);
 		}
@@ -109,8 +109,10 @@ public class AlarmServiceImpl implements AlarmService{
 			return "문의에 대한 답변이 도착했습니다.";
 		case DEADLINE_HIRE:
 			return "채용공고 마감 임박!!";
+		case REPLY_TO_PENALTY:
+			return "정책 위반에 대한 경고를 받았습니다.";
 		default:
-			throw new IllegalArgumentException("정의되지 않은 알림 유형 : "+type);
+			throw new IllegalArgumentException("정의되지 않은 알림 유형 : " + type);
 		}
 	}
 
@@ -118,10 +120,10 @@ public class AlarmServiceImpl implements AlarmService{
 	public int getTargetMemId(AlarmVO alarmVO) {
 		AlarmType type = alarmVO.getAlarmTargetType();
 
-		// 타입이 REPLY_TO_BOARD  REPLY테이블, BOARD테이블, 조인해서 BOARD테이블의 memId 챙겨오기
-		// 타입이 REPLY_TO_REPLY	REPLY테이블에서 부모REPLY의 memId 챙겨오기
-		// 타입이 LIKE_TO_BOARD	BOARD_LIKE테이블과 BOARD테이블 JOIN해서 BOARD테이블의 memId 챙겨오기
-		// 타입이 LIKE_TO_REPLY	REPLY_LIKE테이블과 REPLY테이블 JOIN해서 REPLY테이블의 memId 챙겨오기
+		// 타입이 REPLY_TO_BOARD REPLY테이블, BOARD테이블, 조인해서 BOARD테이블의 memId 챙겨오기
+		// 타입이 REPLY_TO_REPLY REPLY테이블에서 부모REPLY의 memId 챙겨오기
+		// 타입이 LIKE_TO_BOARD BOARD_LIKE테이블과 BOARD테이블 JOIN해서 BOARD테이블의 memId 챙겨오기
+		// 타입이 LIKE_TO_REPLY REPLY_LIKE테이블과 REPLY테이블 JOIN해서 REPLY테이블의 memId 챙겨오기
 		switch (type) {
 		case REPLY_TO_BOARD:
 			return this.alarmMapper.getReplyToBoardTargetMemId(alarmVO);
@@ -132,7 +134,7 @@ public class AlarmServiceImpl implements AlarmService{
 		case LIKE_TO_REPLY:
 			return this.alarmMapper.getLikeToReplyTargetMemId(alarmVO);
 		default:
-			throw new IllegalArgumentException("정의되지 않은 알림 유형 : "+type);
+			throw new IllegalArgumentException("정의되지 않은 알림 유형 : " + type);
 		}
 	}
 
@@ -149,13 +151,13 @@ public class AlarmServiceImpl implements AlarmService{
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-		if(gapOfDay > 0) {
+		if (gapOfDay > 0) {
 			return sdf.format(alarmCreatedAt);
-		}else if(gapOfHour > 0){
+		} else if (gapOfHour > 0) {
 			return gapOfHour + "시간 전";
-		}else if(gapOfMin > 0) {
+		} else if (gapOfMin > 0) {
 			return gapOfMin + "분 전";
-		}else {
+		} else {
 			return "방금 전";
 		}
 	}

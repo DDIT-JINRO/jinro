@@ -6,6 +6,7 @@ penaltyModal = document.getElementById('penaltyModal');
 confirmBtn = document.getElementById('confirmBtn');
 reportListCache = [];
 fileListContainer = document.getElementById('file-list');
+reportModifyBtn = document.getElementById('reportModify');
 
 confirmBtn.addEventListener('click', function() {
 	const selectedReportId = document.getElementById('modalMemId').value;
@@ -68,6 +69,7 @@ function penaltySubmit(formData) {
 		.then(res => {
 			alert('제재가 정상 처리되었습니다.');
 			closeModal();
+			fetchReportList(1);
 			fetchPenaltyList(1);
 		})
 		.catch(err => {
@@ -102,10 +104,12 @@ function openModal() {
 	select.innerHTML = '<option value="">-- 선택하세요 --</option>';
 
 	reportListCache.forEach((report) => {
-		const option = document.createElement('option');
-		option.value = report.reportId;
-		option.textContent = `신고대상자 : ${report.reportedName} (신고ID : ${report.reportId})`;
-		select.appendChild(option);
+		if (report.reportStatus == 'S03001') {
+			const option = document.createElement('option');
+			option.value = report.reportId;
+			option.textContent = `신고대상자 : ${report.reportedName} (신고ID : ${report.reportId})`;
+			select.appendChild(option);
+		}
 
 	});
 
@@ -299,6 +303,14 @@ function reportDetail(formData) {
 			document.getElementById('report-detail-targetName').innerHTML = reportVO.reportedName || '-';
 			document.getElementById('report-detail-reason').innerHTML = reportVO.reportReason || '-';
 			document.getElementById('report-detail-warnDate').innerHTML = formatDateMMDD(reportVO.reportCreatedAt) || '-';
+			const selectElement = document.getElementById("report-detail-status");
+
+			for (let i = 0; i < selectElement.options.length; i++) {
+				if (selectElement.options[i].value === reportVO.reportStatus) {
+					selectElement.options[i].selected = true;
+					break;
+				}
+			}
 			fileContainer.innerHTML = '-';
 
 			if (filePath != null || filePath != undefined) {
@@ -310,15 +322,13 @@ function reportDetail(formData) {
 
 			}
 
-
-
-
-
 		})
 		.catch(error => {
 			console.error('회원 정보 불러오기 실패', error);
 		});
 }
+
+
 
 function reportType(stat) {
 
@@ -451,6 +461,32 @@ function penaltyDetail(formData) {
 			console.error('회원 정보 불러오기 실패', error);
 		});
 }
+
+reportModifyBtn.addEventListener('click', function() {
+
+	const mpId = document.getElementById('report-detail-mpId').innerText;
+	const mpStat = document.getElementById('report-detail-status').value;
+
+	let form = new FormData();
+	form.set("reportId", mpId);
+	form.set("reportStatus", mpStat);
+
+	if (mpStat === 'S03003') {
+		alert('승인은 직접 변경할 수 없습니다. 제재등록 바랍니다.')
+		return;
+	}
+
+	axios.post('/admin/umg/reportModify.do', form)
+		.then(res => {
+			if (res.data == 1) {
+				alert('수정완료');
+				fetchReportList(1);
+			} else {
+				alert('수정 오류 발생');
+			}
+
+		})
+})
 
 fetchReportList();
 fetchPenaltyList();

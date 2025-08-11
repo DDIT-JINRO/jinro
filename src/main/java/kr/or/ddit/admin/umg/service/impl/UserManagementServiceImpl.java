@@ -191,6 +191,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		memberPenaltyVO.setMemId(memId);
 		
 		int res = userManagementMapper.submitPenalty(memberPenaltyVO);
+		userManagementMapper.updateReport(reportedId);
 		
 		return res;
 	}
@@ -215,6 +216,14 @@ public class UserManagementServiceImpl implements UserManagementService {
 		map.put("penaltyVO", memberPenaltyVO);
 		
 		return map;
+	}
+
+	@Override
+	public int reportModify(ReportVO reportVO) {
+		
+		int res = userManagementMapper.reportModify(reportVO);
+		
+		return res;
 	}
 
 }

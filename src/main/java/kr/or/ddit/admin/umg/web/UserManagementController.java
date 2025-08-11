@@ -19,7 +19,9 @@ import kr.or.ddit.admin.umg.service.UserManagementService;
 import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
-import kr.or.ddit.util.alarm.service.impl.AlarmEmitterManager;
+import kr.or.ddit.util.alarm.service.AlarmService;
+import kr.or.ddit.util.alarm.service.AlarmType;
+import kr.or.ddit.util.alarm.service.AlarmVO;
 import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,18 +30,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserManagementController {
 
-	private final AlarmEmitterManager alarmEmitterManager;
-
 	@Autowired
 	UserManagementService userManagementService;
 	@Autowired
 	MemberJoinService memberJoinService;
 	@Autowired
 	FileService fileService;
-
-	UserManagementController(AlarmEmitterManager alarmEmitterManager) {
-		this.alarmEmitterManager = alarmEmitterManager;
-	}
+	@Autowired
+	AlarmService alarmService;
 
 	@GetMapping("/getMemberList.do")
 	public ArticlePage<MemberVO> getMemberList(
@@ -140,13 +138,14 @@ public class UserManagementController {
 	}
 
 	@PostMapping("/submitPenalty.do")
-	public String submitPenalty(MemberPenaltyVO memberPenaltyVO, @RequestParam(required = false) MultipartFile[] evidenceFiles) {
-		
+	public String submitPenalty(MemberPenaltyVO memberPenaltyVO,
+			@RequestParam(required = false) MultipartFile[] evidenceFiles) {
+
 		Long fileGroupId = null;
 
 		if (evidenceFiles != null) {
 			List<MultipartFile> evidenceFilesList = new ArrayList<MultipartFile>();
-			for(MultipartFile file : evidenceFiles) {
+			for (MultipartFile file : evidenceFiles) {
 				evidenceFilesList.add(file);
 			}
 			fileGroupId = fileService.createFileGroup();
@@ -156,20 +155,34 @@ public class UserManagementController {
 
 				e.printStackTrace();
 			}
+
 		}
-		
+
 		memberPenaltyVO.setFileGroupNo(fileGroupId);
-		
+
 		int res = userManagementService.submitPenalty(memberPenaltyVO);
-		
+
+		AlarmVO alarmVO = new AlarmVO();
+
+		alarmVO.setAlarmTargetType(AlarmType.REPLY_TO_PENALTY);
+		alarmVO.setMemId(memberPenaltyVO.getMemId());
+		alarmVO.setAlarmTargetUrl("#");
+		this.alarmService.sendEvent(alarmVO);
+
 		return res == 1 ? "success" : "failed";
-		
+
 	}
-	
+
 	@PostMapping("/getPenaltyDetail.do")
 	public Map<String, Object> getPenaltyDetail(@RequestParam("id") String id) {
-		
+
 		return userManagementService.getPenaltyDetail(id);
+	}
+	
+	@PostMapping("/reportModify.do")
+	public int reportModify(ReportVO reportVO) {
+		
+		return userManagementService.reportModify(reportVO);
 	}
 	
 }
