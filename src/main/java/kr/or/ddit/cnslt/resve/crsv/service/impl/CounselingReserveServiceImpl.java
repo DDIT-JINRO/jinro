@@ -76,7 +76,7 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 			List<ComCodeVO> counselCategoryList = selectCounselCategoryList();
 			for(ComCodeVO category : counselCategoryList) {
 				if(category.getCcId().equals(counselingVO.getCounselCategory())) {
-					counselingVO.setCounselTitle(category.getCcName()+"상담 요청합니다.");
+					counselingVO.setCounselTitle(category.getCcName()+" 상담 요청합니다.");
 				}
 			}
 			int result = counselingReserveMapper.insertReservation(counselingVO);
