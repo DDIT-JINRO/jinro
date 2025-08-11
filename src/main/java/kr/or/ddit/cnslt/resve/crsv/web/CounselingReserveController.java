@@ -96,7 +96,7 @@ public class CounselingReserveController {
 				// 리다이렉트할 경로만 반환
 				return "redirect:/cnslt/resve/crsv/reservationDetail.do";
 			} else {
-				redirectAttributes.addFlashAttribute("errorMessage", "이미 점유된 시간입니다. 다른 시간을 선택해주세요.");
+				redirectAttributes.addFlashAttribute("errorMessage", "다른 사람이 방금 예약했습니다. 다른 시간을 선택해주세요.");
 				return "redirect:/cnslt/resve/crsv/reservation.do";
 			}
 		} else {
