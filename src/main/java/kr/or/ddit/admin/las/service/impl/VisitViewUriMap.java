@@ -34,12 +34,8 @@ public class VisitViewUriMap {
 		uriNameMap.put("/cdp/imtintrvw/aiimtintrvw/aiImitationInterview.do", "모의면접 - AI 모의 면접");
 		uriNameMap.put("/cdp/aifdbck/rsm/aiFeedbackResumeList.do", "AI 피드백 - 이력서");
 		uriNameMap.put("/cdp/aifdbck/sint/aiFeedbackSelfIntroList.do", "AI 피드백 - 자기소개서");
-		uriNameMap.put("/cnslt/off/offlineReservation.do", "오프라인 상담 - 상담예약");
-		uriNameMap.put("/cnslt/off/offlineReservationHistory.do", "오프라인 상담 - 상담내역");
-		uriNameMap.put("/cnslt/vid/videoReservation.do", "화상 상담 - 상담예약");
-		uriNameMap.put("/cnslt/vid/videoReservationHistory.do", "화상 상담 - 상담내역");
-		uriNameMap.put("/cnslt/cht/chattingReservation.do", "채팅 상담 - 상담예약");
-		uriNameMap.put("/cnslt/cht/chattingReservationHistory.do", "채팅 상담 - 상담내역");
+		uriNameMap.put("/cnslt/resve/crsv/reservation.do", "상담 예약");
+		uriNameMap.put("/cnslt/resve/cnsh/counselingReserveHistory.do", "상담 내역");
 		uriNameMap.put("/cnslt/rvw/cnsReview.do", "상담 후기");
 		uriNameMap.put("/prg/ctt/cttList.do", "공모전");
 		uriNameMap.put("/prg/act/vol/volList.do", "대외활동 - 봉사활동");
