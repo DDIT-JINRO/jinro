@@ -29,6 +29,10 @@ if (typeof FullCalendar !== 'undefined') {
 			},
 			height: '90%',
 	        dateClick: function (info) {
+				const prevSelected = document.querySelector('.fc-day.selected');
+				if (prevSelected) {
+					prevSelected.classList.remove('selected');
+				}
 				info.dayEl.classList.add('selected');
 				
 	            let selectedDate = info.dateStr;

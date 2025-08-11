@@ -34,6 +34,34 @@
     flex-direction: column; /* 자식 요소들을 세로로 정렬 */
 }
 
+/* ------------------ FullCalendar 영역 스타일 수정 ------------------ */
+/* FullCalendar 기본 스타일: 오늘 날짜의 노란색 하이라이트를 제거하거나 조정 */
+.fc-day-today {
+    background-color: transparent ; /* 기본 노란색 배경 제거 */
+    border: none; /* 기본 테두리 제거 */
+}
+
+/* 사용자 정의 스타일: 선택된 날짜에 대한 파란색 하이라이트 */
+.fc-day.selected {
+    background-color: #e0f7fa; /* 연한 하늘색 배경 */
+    border: 2px solid #00acc1; /* 테두리 강조 */
+}
+
+/* 오늘 날짜가 선택되었을 경우의 스타일 */
+.fc-day-today.selected {
+    background-color: #e0f7fa !important;  /* 선택된 날짜와 동일한 배경색 */
+    border: 2px solid #00acc1; /* 선택된 날짜와 동일한 테두리 */
+}
+/* FullCalendar 컨테이너 스타일 */
+#calendar {
+	height: 90%;
+    width: 100%; /* 화면 너비의 100%를 차지하도록 설정 */
+    max-width: none; /* 최대 너비 제한 해제 */
+    margin: 0px auto;
+    margin-bottom : 20px;
+    padding: 0; /* 내부 패딩을 0으로 설정 */
+}
+
 .fc .fc-toolbar.fc-header-toolbar{
 	margin: 0;
 }
@@ -349,7 +377,7 @@ li {
 /* 상담 정보 요약 부분 스타일 */
 .counsel-info-summary {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ccc;
