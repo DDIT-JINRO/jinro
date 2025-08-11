@@ -1,0 +1,253 @@
+@charset "UTF-8";
+
+/* ──────────────────────────────────────────────────────────
+   컨테이너 & 패널 공통
+──────────────────────────────────────────────────────────*/
+.template-container {
+	display: flex;
+	gap: 24px;
+	height: 90vh; /* 화면 높이에 맞춰 컨테이너 높이 설정 */
+	box-sizing: border-box;
+}
+
+/* 좌측 컬럼: 두 개의 패널을 수직으로 쌓기 위한 컨테이너 */
+.left-column {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	flex: 1; /* 가로 공간의 1:1 비율로 변경 */
+}
+
+/* 우측 컬럼: 패널들을 수직으로 배치 */
+.right-column {
+    display: flex;
+    flex-direction: column; /* 패널을 세로로 쌓도록 지정 */
+    gap: 24px; /* 패널 사이의 세로 간격 */
+    flex: 1; /* 가로 공간의 1:1 비율로 변경 */
+}
+
+/* 좌측/우측 컬럼 내부의 패널: 수직 공간을 균등하게 분배 */
+.left-column .template-panel,
+.right-column .template-panel {
+    flex: 1;
+}
+
+.template-panel {
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	min-width: 0;
+}
+
+/* ──────────────────────────────────────────────────────────
+   패널 헤더
+──────────────────────────────────────────────────────────*/
+.panel-header {
+	background: #07223D;
+	color: #fff;
+	font-size: 18px;
+	font-weight: 600;
+	padding: 12px 16px;
+	border-radius: 8px 8px 0 0;
+	margin: -20px -20px 16px;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.panel-header button {
+	background: #fff;
+	color: #07223D;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+	transition: background 0.2s, color 0.2s;
+}
+
+.panel-header button:hover {
+	background: #f0f0f0;
+}
+
+.panel-header #memberCount {
+	margin-left: 5px;
+	font-weight: 700;
+}
+
+/* ──────────────────────────────────────────────────────────
+   차트 스타일
+──────────────────────────────────────────────────────────*/
+.chart {
+	flex: 1; /* 남은 공간을 모두 차지하도록 설정 */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+}
+
+/* 차트 캔버스가 패널 높이에 맞게 조절되도록 설정 */
+.template-panel canvas {
+    max-width: 100%;
+    max-height: 90%;
+    width: 100% !important; /* 차트 크기를 강제로 100%로 설정 */
+    height: 100% !important;
+}
+
+#dailyUserInquiry, #monthUserInquiry {
+    display: none; /* Initial state handled by JS */
+}
+
+/* ──────────────────────────────────────────────────────────
+   필터박스 (오른쪽 정렬)
+──────────────────────────────────────────────────────────*/
+.filter-box {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	justify-content: flex-end;
+	width: 100%;
+	margin-bottom: 12px;
+}
+
+.filter-box form {
+	display: flex;
+	gap: 8px;
+	width: 100%;
+	align-items: center;
+}
+
+.filter-box select,
+.filter-box input[type="text"] {
+	padding: 6px 10px;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	outline: none;
+	box-sizing: border-box;
+}
+
+.filter-box select {
+	flex: none;
+	width: 120px;
+}
+
+.filter-box input[type="text"] {
+	flex: 1;
+	min-width: 150px;
+}
+
+.filter-box .btn-save {
+	padding: 6px 14px;
+	background: #07223D;
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	margin-left: auto;
+}
+
+.filter-box .btn-save:hover {
+	background: #1a3a5a;
+}
+
+/* ──────────────────────────────────────────────────────────
+   리스트 테이블
+──────────────────────────────────────────────────────────*/
+.table-wrapper {
+	flex: 1;
+	overflow-y: auto; /* 테이블 내용만 스크롤되도록 설정 */
+	margin-top: 8px;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+}
+
+.template-panel table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.template-panel th,
+.template-panel td {
+	padding: 12px;
+	text-align: left;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.template-panel thead th {
+	background: #fafafa;
+	font-weight: 600;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+
+.template-panel tbody tr {
+	transition: background 0.2s;
+}
+
+.template-panel tbody tr:hover {
+	background: #f0f8ff;
+}
+
+.template-panel tbody tr:nth-child(odd) {
+	background: #fff;
+}
+
+.template-panel tbody tr:nth-child(even) {
+	background: #fcfcfc;
+}
+
+.template-panel tbody td {
+	word-break: break-all;
+}
+
+/* ──────────────────────────────────────────────────────────
+   하단 페이지네이션 고정
+──────────────────────────────────────────────────────────*/
+.card-footer {
+	margin-top: auto;
+}
+
+.panel-footer.pagination {
+	display: flex;
+	flex-wrap: nowrap;
+	list-style: none;
+	gap: 0.5rem;
+	justify-content: center;
+	align-items: center;
+	padding: 1rem 0;
+}
+
+.panel-footer.pagination a {
+	padding: 0.4rem 0.75rem;
+	border-radius: 5px;
+	text-decoration: none;
+	color: black;
+	font-weight: 500;
+}
+
+.panel-footer.pagination a:hover {
+	background-color: #f0f0f0;
+}
+
+.panel-footer.pagination .active {
+	background-color: #2C2C2C;
+	color: white;
+	pointer-events: none;
+}
+
+.panel-footer.pagination .disabled {
+	color: #757575;
+	pointer-events: none;
+}
