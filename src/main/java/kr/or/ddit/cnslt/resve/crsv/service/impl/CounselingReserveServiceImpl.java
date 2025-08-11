@@ -45,15 +45,21 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 		Boolean isLocked = redisTemplate.opsForValue().setIfAbsent(lockKey, lockValue,
 				Duration.ofSeconds(LOCK_TIMEOUT_SECONDS));
 
-		if (Boolean.TRUE.equals(isLocked)) {
-			// 성공적으로 락을 획득
-			return true;
-		} else {
-			// 락 키가 이미 존재하는 경우 (같은 사용자가 락을 건 경우)
-			// 만료 시간만 갱신
-			redisTemplate.expire(lockKey, Duration.ofSeconds(LOCK_TIMEOUT_SECONDS));
-			return true; // 락이 유지되므로 성공으로 처리
-		}
+	    if (Boolean.TRUE.equals(isLocked)) {
+	        // 성공적으로 락을 획득
+	        return true;
+	    } else {
+	        // 락 키가 이미 존재하는 경우, 락을 건 사용자가 본인인지 확인
+	        String holdValue = (String) redisTemplate.opsForValue().get(lockKey);
+	        if (holdValue != null && holdValue.equals(lockValue)) {
+	            // 본인이 락을 걸었다면, 만료 시간만 갱신하고 true 반환
+	            redisTemplate.expire(lockKey, Duration.ofSeconds(LOCK_TIMEOUT_SECONDS));
+	            return true;
+	        } else {
+	            // 다른 사용자가 락을 걸었다면 실패
+	            return false;
+	        }
+	    }
 	}
 
 	@Override
@@ -91,7 +97,7 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 
 		// Redis 락 키 생성: 상담사ID + 날짜 + 시간
 		return HOLD_KEY_PREFIX + counselingVO.getCounsel() + ":" + dateFormat.format(reservationDatetime) + ":"
-				+ timeFormat.format(reservationDatetime) + ":" + counselingVO.getMemId();
+				+ timeFormat.format(reservationDatetime);
 	}
 
 	// 락키를 해제하는 메소드
@@ -162,27 +168,13 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 					e.printStackTrace();
 				}
 			}
-			String lockKeyPattern = HOLD_KEY_PREFIX + counselId + ":" + requestedDateStr + ":" + possibleTime + ":*";
-			java.util.Set<String> lockKeys = redisTemplate.keys(lockKeyPattern);
+	        String lockKey = HOLD_KEY_PREFIX + counselId + ":" + requestedDateStr + ":" + possibleTime;
+	        String holdValue = (String) redisTemplate.opsForValue().get(lockKey);
 
-			boolean isLockedByOthers = false;
-			if (lockKeys != null && !lockKeys.isEmpty()) {
-				for (String lockKey : lockKeys) {
-					// 키에서 memId를 추출
-					String[] parts = lockKey.split(":");
-					String lockedMemId = parts[parts.length - 1];
-
-					// 락을 건 사용자가 본인이 아니라면
-					if (!lockedMemId.equals(String.valueOf(memId))) {
-						isLockedByOthers = true;
-						break;
-					}
-				}
-			}
-
-			if (isLockedByOthers) {
-				continue; // 다른 사용자가 락을 걸었으므로 건너뛰기
-			}
+	        // 락이 존재하고, 락을 건 사용자가 본인이 아니라면 건너뜀
+	        if (holdValue != null && !holdValue.equals(String.valueOf(memId))) {
+	            continue;
+	        }
 
 			// 위의 조건들을 모두 통과한 시간만 리스트에 추가
 			availableTimes.add(possibleTime);
