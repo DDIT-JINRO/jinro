@@ -143,13 +143,15 @@ document.addEventListener('DOMContentLoaded', function() {
 								document.getElementById('reservationForm').submit();
 							} else {
 								// 남은 횟수가 없으면 결제 페이지로 이동 안내
-								alert('이용 가능한 상담 횟수가 없습니다. 구독 상품을 구매해주세요.');
-								// 결제 페이지로 리다이렉션하는 로직 추가
-								// window.location.href = '/payment-page';
+								const userConfirmed  = confirm('이용 가능한 상담 횟수가 없습니다. 구독 상품을 구매해주세요.');
+								//결제 페이지로 리다이렉션하는 로직
+								if(userConfirmed){
+									window.location.href = '/mpg/pay/selectPaymentView.do';
+								}
 							}
 						})
 						.catch(error => {
-							console.error('구독 정보 확인 중 오류 발생:', error);
+							console.error('구독 정보 확인 중 오류 발생:', error.message);
 							alert('구독 정보를 불러오는 중 오류가 발생했습니다.');
 						});
 				}
