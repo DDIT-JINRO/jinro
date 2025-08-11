@@ -24,11 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 
 	@Autowired
-	InterviewFeedbackMapper interviewFeedbackMapper;
+	private InterviewFeedbackMapper interviewFeedbackMapper;
 	
 	@Autowired
-	FileService fileService;
-	
+	private FileService fileService;
 
 	@Override
 	public ArticlePage<InterviewReviewVO> selectInterviewFeedbackList(InterviewReviewVO interviewReviewVO) {

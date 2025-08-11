@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class InterviewFeedbackController {
 
 	@Autowired
-	InterviewFeedbackService interviewFeedbackService;
+	private InterviewFeedbackService interviewFeedbackService;
 	
 	@GetMapping("/ivfb/interViewFeedback.do")
 	public String interViewFeedbackList(InterviewReviewVO interviewReviewVO, Model model) {
