@@ -17,6 +17,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -191,4 +192,12 @@ public class ChatController {
 		}
 	}
 
+	@GetMapping("/counselChat/{crId}")
+	public String counselChat(@PathVariable int crId) {
+		// 현재 채팅방 주소 crId 받아오기 -> 해당 채팅방에 입장된 멤버 조회, 현재 요청중인 회원 정보 받아오기.
+		// 엑세스 확인 후 페이지로 포워딩, 포워딩된 페이지에서 실시간 채팅을 위해 구독상태 만들어주기.
+		//
+
+		return "cns/counselChat";
+	}
 }
