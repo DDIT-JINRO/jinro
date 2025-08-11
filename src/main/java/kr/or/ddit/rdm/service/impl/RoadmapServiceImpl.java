@@ -239,7 +239,9 @@ public class RoadmapServiceImpl implements RoadmapService {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
 		
-		return result;
+		String jsonContent = result.substring(result.indexOf('{'), result.lastIndexOf('}') + 1);
+		
+		return jsonContent;
 	}
 	
 	@Override
@@ -259,6 +261,7 @@ public class RoadmapServiceImpl implements RoadmapService {
     	
     	prompt.append("당신은 15년 경력의 진로 상담사입니다.")
     		  .append("청소년과 청년들을 대상으로 상담 결과를 제출할 예정입니다.\n")
+    		  .append("상담을 받은 대상의 이름은 " + roadmapResultRequest.getMemName() + "입니다.\n")
     		  .append("상담을 받은 대상의 연령대는 " + roadmapResultRequest.getMemAge() + "세 입니다. \n\n")
     		  .append("상담 데이터의 분류에는 총 6가지의 분류가 있습니다. \n")
     		  .append("======== 상담 대상의 상담 결과 도출을 위한 데이터 시작 ======= \n")
@@ -287,6 +290,7 @@ public class RoadmapServiceImpl implements RoadmapService {
     		  .append("청소년/청년 대상이므로 격려와 성장 중심의 건설적 피드백을 부탁드립니다:\n\n")
     		  .append("```json\n")
     		  .append("{ \n")
+    		  .append("  \"memName\" : \"상담 대상 이름\",  \n")
     		  .append("  \"interest\" : {  \n")
     		  .append("    \"interestKeyword\" : [\"관심분야1\", \"관심분야2\"],  \n")
     		  .append("    \"interestDataType\" : \"데이터 분류\"  \n")

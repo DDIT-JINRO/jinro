@@ -213,7 +213,15 @@
 	
 	<select id="selectResultData" parameterType="int" resultType="kr.or.ddit.rdm.service.RoadmapResultRequestVO">
 		SELECT
-		    (
+			(
+				SELECT
+					MEM_NAME
+				FROM
+					MEMBER
+				WHERE
+					MEM_ID = #{memId}
+			) AS MEM_NAME
+		  , (
 		        SELECT
 		            TRUNC((SYSDATE - MEM_BIRTH) / 365) + 1
 		        FROM
@@ -360,6 +368,6 @@
 		            ROWNUM <![CDATA[<=]]> 3
 		    ) AS RECOMMEND_KEYWORD
 		FROM
-		    DUAL;
+		    DUAL
 	</select>
 </mapper>
