@@ -25,8 +25,8 @@
 			<div class="panel-header" id="pannelHeader" style="cursor: pointer; text-decoration: none; display: flex; justify-content: space-between; align-items: center;">
 				페이지별 방문자 수 조회 상위 10
 				<div>
-					<button onclick="dailyPageVisitCount()">일일</button>
-					<button onclick="monthPageVisitCount()">월별</button>
+					<button onclick="dailyPageVisitCount()">당일</button>
+					<button onclick="monthPageVisitCount()">당월</button>
 					<button onclick="getPageVisitCountCalendar()" id="getPageCalendar">달력</button>
 				</div>
 			</div>
