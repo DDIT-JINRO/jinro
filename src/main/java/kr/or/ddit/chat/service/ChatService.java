@@ -2,6 +2,10 @@ package kr.or.ddit.chat.service;
 
 import java.util.List;
 import java.util.Map;
+
+import kr.or.ddit.cns.service.CounselingVO;
+import kr.or.ddit.main.service.MemberVO;
+
 import java.util.Map;
 
 public interface ChatService {
@@ -119,5 +123,42 @@ public interface ChatService {
 	 * @return
 	 */
 	ChatMessageVO selectChatMessage(int msgId);
+
+	/**
+	 * 채팅상담 채팅방에 회원입장되어있는지 체크.
+	 * @param crId
+	 * @param memIdStr
+	 * @return
+	 */
+	boolean validateCounselChatRoom(int crId, String memIdStr);
+
+	/**
+	 * 채팅상담 채팅방에 회원, 상담사 정보 챙겨오기
+	 * @param crId
+	 * @return
+	 */
+	Map<String, MemberVO> getMemberAndCounselorInfo(int crId);
+
+	/**
+	 * 채팅상담용 상담정보 불러오기
+	 * @param crId
+	 * @return
+	 */
+	CounselingVO selectCounselInfoByCrId(int crId);
+
+	/**
+	 * 상담 정보로 상담채팅방 개설
+	 * @param counselingVO
+	 * @return String url.해당 채팅방 입장 URL 반환
+	 */
+	String createCounselingChatRoom(CounselingVO counselingVO);
+
+	/**
+	 * 채팅메시지 테이블에 삽입.
+	 * chat_receiver테이블에 삽입되면 안읽은 메시지 추적해서 모달에 띄우도록됨
+	 * 해당 현상 해결하기 위해 상담용으로 분리
+	 * @param chatMessageVO
+	 */
+	void saveChatMessageWithoutReceiver(ChatMessageVO chatMessageVO);
 
 }

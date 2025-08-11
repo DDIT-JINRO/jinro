@@ -16,7 +16,9 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,8 +30,10 @@ import kr.or.ddit.chat.service.ChatReceiverVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
 import kr.or.ddit.chat.service.impl.ChatRoomSessionManager;
+import kr.or.ddit.cns.service.CounselingVO;
 import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
+import kr.or.ddit.main.service.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -191,4 +195,47 @@ public class ChatController {
 		}
 	}
 
+	@GetMapping("/counselChat/{crId}")
+	public String counselChat(@PathVariable int crId, @AuthenticationPrincipal String memIdStr, Model model) {
+		// 현재 채팅방 주소 crId 받아오기 -> 해당 채팅방에 입장된 멤버 조회, 현재 요청중인 회원 정보 받아오기.
+		boolean validateCounselChat = this.chatService.validateCounselChatRoom(crId, memIdStr);
+		// 엑세스 확인 후 페이지로 포워딩, 포워딩된 페이지에서 실시간 채팅을 위해 구독상태 만들어주기.
+		if(validateCounselChat) {
+			// 상담사, 회원정보 챙겨오기 conselor, member
+			Map<String, MemberVO> memberInfos = this.chatService.getMemberAndCounselorInfo(crId);
+			MemberVO counselor = memberInfos.get("counselor");
+			MemberVO member = memberInfos.get("member");
+			// 기존 채팅메시지 있으면 챙겨오기
+			ChatMemberVO chatMemberVO = new ChatMemberVO();
+			chatMemberVO.setMemId(Integer.parseInt(memIdStr));
+			List<ChatMessageVO> messages = this.chatService.selectChatMsgByChatRoomIdAndMemId(chatMemberVO);
+
+			CounselingVO counselInfo = this.chatService.selectCounselInfoByCrId(crId);
+
+			model.addAttribute("memberInfos", memberInfos);
+			model.addAttribute("messages", messages);
+			model.addAttribute("counselInfo", counselInfo);
+			model.addAttribute("crId", crId);
+			model.addAttribute("memId", memIdStr);
+
+			model.addAttribute("memRole", (member.getMemId()+"").equals(memIdStr) ? "member" : "counselor" );
+
+		}else {
+			model.addAttribute("errorMessage", "잘못된 접근입니다");
+		}
+		return "cns/counselChat";
+	}
+
+	// 메시지 매핑 어노테이션 하나, 상담채팅용 구독 연결해줄 메소드 하나 추가하기
+	@MessageMapping("/chat/counsel")
+	public void counselChatMessage(ChatMessageVO chatMessageVO, Principal principal) {
+		// 채팅메시지 테이블에 채팅 삽입 및 채팅 수신테이블에 삽입
+		this.chatService.saveChatMessageWithoutReceiver(chatMessageVO);
+
+		// 회원 정보까지 풀 정보 다시 받아오기 위해서 단건 조회
+		chatMessageVO = this.chatService.selectChatMessage(chatMessageVO.getMsgId());
+
+		// 같은 채팅방번호에 구독중인 멤버에게 채팅메시지 전송
+		this.messagingTemplate.convertAndSend("/sub/chat/counsel/"+chatMessageVO.getCrId(), chatMessageVO);
+	}
 }

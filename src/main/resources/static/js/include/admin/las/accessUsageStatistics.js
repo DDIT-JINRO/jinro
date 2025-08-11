@@ -168,6 +168,11 @@ function dailyUserInquiry() {
 					}
 				}
 			};
+			
+			const existingChart = Chart.getChart(document.getElementById('dailyUserInquiry'));
+			if (existingChart) {
+			    existingChart.destroy();
+			}
 
 			const ctx = document.getElementById('dailyUserInquiry').getContext('2d');
 			new Chart(ctx, config);
@@ -257,7 +262,12 @@ function monthUserInquiry() {
 					}
 				}
 			};
-
+			
+			const existingChart = Chart.getChart(document.getElementById('monthUserInquiry'));
+			if (existingChart) {
+			    existingChart.destroy();
+			}
+			
 			const ctx = document.getElementById('monthUserInquiry').getContext('2d');
 			new Chart(ctx, config);
 		})
@@ -458,6 +468,11 @@ function dailyPageVisitCount() {
 				}
 			};
 
+			const existingChart = Chart.getChart(document.getElementById('dailyPageVisitCount'));
+			if (existingChart) {
+			    existingChart.destroy();
+			}
+			
 			const ctx = document.getElementById('dailyPageVisitCount').getContext('2d');
 			new Chart(ctx, config);
 		})
@@ -551,6 +566,11 @@ function monthPageVisitCount(){
 				}
 			};
 
+			const existingChart = Chart.getChart(document.getElementById('monthlyPageVisitCount'));
+			if (existingChart) {
+			    existingChart.destroy();
+			}
+			
 			const ctx = document.getElementById('monthlyPageVisitCount').getContext('2d');
 			new Chart(ctx, config);
 		})

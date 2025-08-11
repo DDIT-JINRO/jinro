@@ -9,6 +9,8 @@ import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatMessageVO;
 import kr.or.ddit.chat.service.ChatReceiverVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
+import kr.or.ddit.cns.service.CounselingVO;
+import kr.or.ddit.main.service.MemberVO;
 
 
 @Mapper
@@ -141,5 +143,20 @@ public interface ChatMapper {
 	 * @return
 	 */
 	ChatRoomVO selectCrDetail(int crId);
+
+	/**
+	 * 채팅상담용 회원 기본정보 불러오기
+	 * MEM_ID, MEM_EMAIL, MEM_PHONE_NUMBER, MEM_NAME, MEM_ROLE, FILE_PROFILE
+	 * @param memId
+	 * @return
+	 */
+	MemberVO selectMemInfoForCounsel(int memId);
+
+	/**
+	 * 채팅상담용 상담정보 불러오기
+	 * @param crId
+	 * @return
+	 */
+	CounselingVO selectCounselInfoByCrId(int crId);
 
 }
