@@ -38,4 +38,9 @@ public class UniversityInterviewFeedbackController {
 		
 		return "ertds/univ/uvivfb/selectInterviewList";
 	}
+	
+	@GetMapping("/univ/uvivfb/insertInterviewFeedbackView.do")
+	public String insertInterViewFeedbackView() {
+		return "ertds/univ/uvivfb/insertInterviewFeedbackView";
+	}
 }
