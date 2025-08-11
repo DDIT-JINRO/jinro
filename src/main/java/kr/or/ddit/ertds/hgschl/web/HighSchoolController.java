@@ -36,14 +36,17 @@ public class HighSchoolController {
 			@RequestParam(required = false) String keyword,
 			@RequestParam(value = "regionFilter", required = false) List<String> regionFilter,
 			@RequestParam(value = "schoolType", required = false) List<String> schoolType,
-			@RequestParam(value = "coedTypeFilter", required = false) List<String> coedTypeFilter, Model model) {
+			@RequestParam(value = "coedTypeFilter", required = false) List<String> coedTypeFilter,
+	        @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+	        Model model) {
 		log.info("regionFilter : " + regionFilter);
 		log.info("schoolType : " + schoolType);
 		log.info("coedTypeFilter : " + coedTypeFilter);
 
-		int size = 5; // 한 페이지에 5개
-		int startRow = (currentPage - 1) * size;
-		int endRow = currentPage * size;
+		/*
+		 * int size = 5; // 한 페이지에 5개 int startRow = (currentPage - 1) * size; int
+		 * endRow = currentPage * size;
+		 */
 
 		if (regionFilter == null) {
 			regionFilter = new ArrayList<>();
@@ -51,29 +54,30 @@ public class HighSchoolController {
 
 		HighSchoolVO highSchoolVO = new HighSchoolVO();
 		highSchoolVO.setKeyword(keyword);
+		highSchoolVO.setCurrentPage(size);
+		highSchoolVO.setSize(currentPage);
 		highSchoolVO.setRegionFilter(regionFilter);
 		highSchoolVO.setSchoolType(schoolType);
 		highSchoolVO.setCoedTypeFilter(coedTypeFilter);
-		highSchoolVO.setStartRow(startRow);
-		highSchoolVO.setEndRow(endRow);
+
+		int total = highSchoolService.selectHighSchoolCount(highSchoolVO);
+		List<HighSchoolVO> schoolList = highSchoolService.highSchoolList(highSchoolVO);
 
 		List<ComCodeVO> regionList = highSchoolService.selectRegionList();
 		List<ComCodeVO> schoolTypeList = highSchoolService.selectSchoolTypeList();
 		List<ComCodeVO> coedTypeList = highSchoolService.selectCoedTypeList();
 
+		// JSP 필터에 사용될 데이터
 		model.addAttribute("regionList", regionList);
 		model.addAttribute("schoolTypeList", schoolTypeList);
 		model.addAttribute("coedTypeList", coedTypeList);
 
-		int total = highSchoolService.selectHighSchoolCount(highSchoolVO);
-		List<HighSchoolVO> schoolList = highSchoolService.highSchoolList(highSchoolVO);
-		log.info("schoolList", schoolList);
 
 		ArticlePage<HighSchoolVO> page = new ArticlePage<>(total, currentPage, size, schoolList, keyword);
 		page.setUrl("/ertds/hgschl/selectHgschList.do");
 
 		model.addAttribute("articlePage", page);
-		model.addAttribute("checkedRegionFilter", highSchoolVO);
+		model.addAttribute("checkedFilters", highSchoolVO);
 
 		return "ertds/hgschl/HighSchoolList"; // /WEB-INF/views/erds/hgschl/list.jsp
 	}

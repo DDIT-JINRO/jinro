@@ -21,7 +21,17 @@ public class HighSchoolServiceImpl implements HighSchoolService {
 	// 모든 고등학교 리스트
 	@Override
 	public List<HighSchoolVO> highSchoolList(HighSchoolVO highSchoolVO) {
+		
+		// 페이징 정보 계산 (startRow, endRow)
+				int size = highSchoolVO.getSize();
+				int currentPage = highSchoolVO.getCurrentPage();
 
+				int startRow = (currentPage - 1) * size + 1;
+				int endRow = currentPage * size;
+				highSchoolVO.setStartRow(startRow);
+				highSchoolVO.setEndRow(endRow);
+				
+		
 		return highSchoolMapper.highSchoolList(highSchoolVO);
 	}
 
