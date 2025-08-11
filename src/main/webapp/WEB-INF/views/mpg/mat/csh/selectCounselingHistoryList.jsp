@@ -155,14 +155,21 @@
 								</div>
 								<div class="item-content">
 									<c:choose>
-										<c:when test="${content.counselMethod == 'G08004'}">
+										<c:when test="${content.counselStatus == 'S04001'}">
+										     <span class="btn btn-primary">대기중</span>
+									 	</c:when>
+								    	<c:when test="${content.counselStatus == 'S04002'}">
+										     <span class="btn btn-danger">취소됨</span>
+									 	</c:when>
+										<c:when test="${content.counselStatus == 'S04003'}">
+											<span class="btn btn-primary">확정</span>
 										</c:when>
-										<c:when test="${content.counselReviewd == 'N'}">
-											<a href="#" class="btn btn-primary">후기 작성하러 가기</a>
+										<c:when test="${content.counselStatus == 'S04005'}">
+											<a href="#" onclick="openCounselingPopup('${content.counselUrlUser}'); return false;" class="btn btn-primary counselStart">상담시작</a>
 										</c:when>
-										<c:otherwise>
-											<a href="/mpg/mat/csh/counselHistory.do?counselId=${content.counselId}&counselMethod=${content.counselMethod}" class="btn btn-primary">상세보기</a>
-										</c:otherwise>
+										<c:when test="${content.counselReviewd == 'N' && content.counselStatus == 'S04004'}">
+											<a href="/cnslt/rvw/cnsReview.do" class="btn btn-primary">후기 작성하기</a>
+										</c:when>
 									</c:choose>
 								</div>
 							</div>
