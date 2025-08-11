@@ -73,6 +73,12 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 
 		if (holdValue != null && holdValue.equals(currentMemId)) {
 			// DB에 예약 정보 삽입
+			List<ComCodeVO> counselCategoryList = selectCounselCategoryList();
+			for(ComCodeVO category : counselCategoryList) {
+				if(category.getCcId().equals(counselingVO.getCounselCategory())) {
+					counselingVO.setCounselTitle(category.getCcName()+"상담 요청합니다.");
+				}
+			}
 			int result = counselingReserveMapper.insertReservation(counselingVO);
 
 			// 삽입 성공 시 임시 락 해제
