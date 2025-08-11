@@ -35,8 +35,8 @@
 			<p id="getAllNotice">총 ${getTotal}건</p>
 			<table>
 				<colgroup>
-					<col style="width: 18%;">
-					<col style="width: 42%;">
+					<col style="width: 15%;">
+					<col style="width: 45%;">
 					<col style="width: 20%;">
 					<col style="width: 20%;">
 				</colgroup>
