@@ -63,7 +63,6 @@ public class CounselingReserveServiceImpl implements CounselingReserveService {
 	}
 
 	@Override
-	@Transactional
 	public boolean tryReserveCounsel(CounselingVO counselingVO) {
 		String lockKey = createHoldKey(counselingVO);
 
