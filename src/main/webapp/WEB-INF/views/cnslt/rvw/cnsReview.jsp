@@ -106,7 +106,7 @@
 						            </div>
 
 									<div class="meta-item">
-										<span>공개</span>
+										<span>${content.crPublic == 'Y' ? '공개' : '비공개'}</span>
 									</div>
 
 									<div class="card-toggle">
@@ -122,7 +122,12 @@
 			                    <div class="detail-grid">
 			                        <div class="detail-item feedback-content">
 			                            <div class="detail-label">후기 내용</div>
-			                            <div class="feedback-text">${content.crContent}</div>
+			                            <c:if test="${content.crPublic == 'Y'}">
+				                            <div class="feedback-text">${content.crContent}</div>
+			                            </c:if>
+			                            <c:if test="${content.crPublic == 'N'}">
+				                            <div class="feedback-text">비공개 후기내용입니다.</div>
+			                            </c:if>
 			                        </div>
 			                    </div>
 				                <c:if test="${pageContext.request.userPrincipal.principal == content.memId}">
@@ -147,7 +152,7 @@
 			        </div>
 				</c:forEach>
 				<c:if test="${empty articlePage.content}">
-					<p class="no-content-message">면접 후기가 없습니다.</p>
+					<p class="no-content-message">상담 후기가 없습니다.</p>
 				</c:if>
 		    </div>
 		    

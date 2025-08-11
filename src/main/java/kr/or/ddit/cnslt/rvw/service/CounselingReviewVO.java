@@ -20,6 +20,7 @@ public class CounselingReviewVO {
 	
 	private String counselCategory;
 	private String counselMethod;
+	private String crPublic;
 	
 	// 필터조건
 	private String keyword;
