@@ -3,18 +3,11 @@ function initDashboard() {
 	dailyUserInquiry();
 	loadLiveUserList();
 	dailyPageVisitCount();
-	resetCustomChart();
+
 }
-let customChart = null;
-let PageVisitCountCalendar = null;
-function resetCustomChart(){
-	if(customChart != null){
-		customChart = null;
-	}
-	if(PageVisitCountCalendar != null){
-		PageVisitCountCalendar = null;
-	}
-}
+
+
+
 
 
 // 실시간 사용자 조회
@@ -273,65 +266,50 @@ function monthUserInquiry() {
 		});
 }
 
-// 달력 사용자 조회
 function getCalendar() {
-
-	// 달력을 보여줄 input 요소를 가져옴
 	const calendarInput = document.getElementById('getCalendar');
+	const canvas = document.getElementById('customUserInquiry');
 
-	// flatpickr 인스턴스를 생성하여 달력을 초기화
+	// flatpickr 중복 초기화 방지 (필요시)
+	if (calendarInput._flatpickr) {
+		calendarInput._flatpickr.destroy();
+	}
+
 	flatpickr(calendarInput, {
-		mode: "range", // 날짜 범위 선택 모드
-		onOpen: function() {
-			// 달력이 열릴 때 추가 작업이 필요하다면 여기에 작성
-		},
-		maxDate: "today", // 오늘 이후 날짜는 선택 불가
-		disable: [
-			function(date) {
-				return date > new Date(); // 오늘 이후 날짜는 비활성화
-			}
-		],
+		mode: "range",
+		maxDate: "today",
+		disable: [date => date > new Date()],
 		onChange: function(selectedDates) {
-			// 두 개의 날짜가 선택되었을 때
 			if (selectedDates.length === 2) {
-				const startDate = selectedDates[0]; // 시작 날짜
-				const endDate = selectedDates[1];   // 종료 날짜
+				const startDate = selectedDates[0];
+				const endDate = selectedDates[1];
 
-				// 날짜를 'YYYY-MM-DD' 형식으로 변환
 				const formattedStartDate = startDate.toISOString().split('T')[0];
 				const formattedEndDate = endDate.toISOString().split('T')[0];
 
-				// axios를 사용해 서버로 날짜 범위 전송
 				axios.post('/admin/las/customUserInquiry.do', null, {
-					params: {
-						startDate: formattedStartDate,
-						endDate: formattedEndDate
-					}
+					params: { startDate: formattedStartDate, endDate: formattedEndDate }
 				})
 					.then(response => {
-						
 						document.getElementById("dailyUserInquiry").style.display = "none";
 						document.getElementById("monthUserInquiry").style.display = "none";
 						document.getElementById("customUserInquiry").style.display = "block";
-						
+
 						const serverData = response.data;
 
 						const labels = serverData.map(vo => {
 							const date = new Date(vo.loginDate);
-							mm = String(date.getMonth() + 1).padStart(2, '0');
-							const dd = String(date.getDate()).padStart(2, '0');
-							return `${dd}`;
+							return String(date.getDate()).padStart(2, '0');
 						});
-
 						const dataPoints = serverData.map(vo => vo.userCount);
 
 						const data = {
-							labels: labels,
+							labels,
 							datasets: [{
 								label: '해당 기간 접속자 수',
 								data: dataPoints,
-								borderColor: 'rgba(255, 99, 132, 1)',       
-								backgroundColor: 'rgba(255, 99, 132, 0.2)', 
+								borderColor: 'rgba(255, 99, 132, 1)',
+								backgroundColor: 'rgba(255, 99, 132, 0.2)',
 								tension: 0.4,
 								pointRadius: 3,
 								pointHoverRadius: 6,
@@ -341,45 +319,32 @@ function getCalendar() {
 
 						const config = {
 							type: 'line',
-							data: data,
+							data,
 							options: {
 								responsive: true,
-								interaction: {
-									mode: 'index',
-									intersect: false
-								},
+								interaction: { mode: 'index', intersect: false },
 								plugins: {
-									legend: {
-										position: 'top'
-									},
+									legend: { position: 'top' },
 									title: {
 										display: true,
 										text: [
-										    formattedStartDate + ' ~ ' + formattedEndDate+ ' 기간',
-										    '일별 사용자 접속 통계'
+											`${formattedStartDate} ~ ${formattedEndDate} 기간`,
+											'일별 사용자 접속 통계'
 										]
 									},
 									tooltip: {
 										callbacks: {
-											label: function(ctx) {
-												return ` ${ctx.parsed.y}명`;
-											}
-										},
-									},
+											label: ctx => ` ${ctx.parsed.y}명`
+										}
+									}
 								},
 								scales: {
-									x: {
-										grid: {
-											display: false
-										}
-									},
+									x: { grid: { display: false } },
 									y: {
 										beginAtZero: true,
 										ticks: {
 											stepSize: 1,
-											callback: function(value) {
-												return value + '명';
-											}
+											callback: value => value + '명'
 										},
 										grid: {
 											borderDash: [3],
@@ -390,29 +355,23 @@ function getCalendar() {
 							}
 						};
 
-						const ctx = document.getElementById('customUserInquiry').getContext('2d');
-
 						// 기존 차트가 있으면 삭제
-						if (customChart) {
-						  customChart.destroy();
+						if (canvas.chartInstance) {
+							canvas.chartInstance.destroy();
 						}
 
-						// 새 차트 생성 후 저장
-						customChart = new Chart(ctx, config);
+						// 새 차트 생성 및 캔버스에 저장
+						canvas.chartInstance = new Chart(canvas.getContext('2d'), config);
 					})
-					.catch(error => {
-						console.error('서버 오류:', error);
-					});
+					.catch(error => console.error('서버 오류:', error));
 			}
 		}
 	});
-	// 달력을 열기
+
 	calendarInput._flatpickr.open();
-	
-	// 초기화
 	calendarInput._flatpickr.clear();
-		
 }
+
 // 일일 페이지 방문
 function dailyPageVisitCount() {
 	axios.get('admin/las/pageVisitCount.do')
@@ -599,136 +558,117 @@ function monthPageVisitCount(){
 			console.error("데이터 가져오기 실패:", error);
 		});
 }
-// 원하는 기간별
-function getPageVisitCountCalendar(){
-
-	// 달력을 보여줄 input 요소를 가져옴
+function getPageVisitCountCalendar() {
 	const calendarVisitInput = document.getElementById('getPageCalendar');
+	const canvas = document.getElementById('customPageVisitCount');
 
-	// flatpickr 인스턴스를 생성하여 달력을 초기화
+	// flatpickr 중복 초기화 방지
+	if (calendarVisitInput._flatpickr) {
+		calendarVisitInput._flatpickr.destroy();
+	}
+
 	flatpickr(calendarVisitInput, {
-		mode: "range", // 날짜 범위 선택 모드
-		onOpen: function() {
-			// 달력이 열릴 때 추가 작업이 필요하다면 여기에 작성
-		},
-		maxDate: "today", // 오늘 이후 날짜는 선택 불가
-		disable: [
-			function(date) {
-				return date > new Date(); // 오늘 이후 날짜는 비활성화
-			}
-		],
+		mode: "range",
+		maxDate: "today",
+		disable: [date => date > new Date()],
 		onChange: function(selectedDates) {
-			// 두 개의 날짜가 선택되었을 때
 			if (selectedDates.length === 2) {
-				const startDate = selectedDates[0]; // 시작 날짜
-				const endDate = selectedDates[1];   // 종료 날짜
+				const startDate = selectedDates[0];
+				const endDate = selectedDates[1];
 
-				// 날짜를 'YYYY-MM-DD' 형식으로 변환
 				const formattedStartDate = startDate.toISOString().split('T')[0];
 				const formattedEndDate = endDate.toISOString().split('T')[0];
 
-				// axios를 사용해 서버로 날짜 범위 전송
 				axios.post('/admin/las/getPageCalendar.do', null, {
-					params: {
-						startDate: formattedStartDate,
-						endDate: formattedEndDate
-					}
+					params: { startDate: formattedStartDate, endDate: formattedEndDate }
 				})
 					.then(response => {
 						document.getElementById("dailyPageVisitCount").style.display = "none";
 						document.getElementById("monthlyPageVisitCount").style.display = "none";
 						document.getElementById("customPageVisitCount").style.display = "block";
-						
-						const serverData = response.data;
 
-						const labels = serverData.map(vo=> vo.plTitle);
+						const serverData = response.data;
+						const labels = serverData.map(vo => vo.plTitle);
 						const dataPoints = serverData.map(vo => vo.count);
 
 						const config = {
-									type: 'bar', // 차트 유형: 막대 그래프
-									data: {
-										labels: labels,
-										datasets: [{
-											label: '해당 기간 페이지 방문자 수 Top 10',
-											data: dataPoints,
-											backgroundColor: [
-												'rgba(255, 99, 132, 0.2)',
-												'rgba(255, 159, 64, 0.2)',
-												'rgba(255, 205, 86, 0.2)',
-												'rgba(75, 192, 192, 0.2)',
-												'rgba(54, 162, 235, 0.2)',
-												'rgba(153, 102, 255, 0.2)',
-												'rgba(201, 203, 207, 0.2)',
-												'rgba(54, 162, 235, 0.2)',
-												'rgba(255, 99, 132, 0.2)',
-												'rgba(255, 159, 64, 0.2)'
-											],
-											borderColor: [
-												'rgb(255, 99, 132)',
-												'rgb(255, 159, 64)',
-												'rgb(255, 205, 86)',
-												'rgb(75, 192, 192)',
-												'rgb(54, 162, 235)',
-												'rgb(153, 102, 255)',
-												'rgb(201, 203, 207)',
-												'rgb(54, 162, 235)',
-												'rgb(255, 99, 132)',
-												'rgb(255, 159, 64)'
-											],
-											borderWidth: 1
-										}]
-									},
-									options: {
-										responsive: true,
-										plugins: {
-											legend: {
-												display: false
-											},
-											title: {
-												display: true,
-												text: [
-													formattedStartDate + ' ~ ' + formattedEndDate + ' 기간',
-													'페이지 방문자 수 Top 10'
-												]
-											}
-										},
-										scales: {
-											x: {
-												ticks: {
-													callback: function(value) {
-														const label = this.getLabelForValue(value);
-														if (label.includes(" - ")) {
-															return label.split(" - "); // 2줄로 나눔
-														} else if (label.length > 6) {
-															const words = label.split(' ');
-															if (words.length > 1) {
-																return words;
-															}
-														}
-														return label;
-													},
-													font: {
-														size: 10 // 원하는 글꼴 크기로 변경 가능
+							type: 'bar',
+							data: {
+								labels: labels,
+								datasets: [{
+									label: '해당 기간 페이지 방문자 수 Top 10',
+									data: dataPoints,
+									backgroundColor: [
+										'rgba(255, 99, 132, 0.2)',
+										'rgba(255, 159, 64, 0.2)',
+										'rgba(255, 205, 86, 0.2)',
+										'rgba(75, 192, 192, 0.2)',
+										'rgba(54, 162, 235, 0.2)',
+										'rgba(153, 102, 255, 0.2)',
+										'rgba(201, 203, 207, 0.2)',
+										'rgba(54, 162, 235, 0.2)',
+										'rgba(255, 99, 132, 0.2)',
+										'rgba(255, 159, 64, 0.2)'
+									],
+									borderColor: [
+										'rgb(255, 99, 132)',
+										'rgb(255, 159, 64)',
+										'rgb(255, 205, 86)',
+										'rgb(75, 192, 192)',
+										'rgb(54, 162, 235)',
+										'rgb(153, 102, 255)',
+										'rgb(201, 203, 207)',
+										'rgb(54, 162, 235)',
+										'rgb(255, 99, 132)',
+										'rgb(255, 159, 64)'
+									],
+									borderWidth: 1
+								}]
+							},
+							options: {
+								responsive: true,
+								plugins: {
+									legend: { display: false },
+									title: {
+										display: true,
+										text: [
+											formattedStartDate + ' ~ ' + formattedEndDate + ' 기간',
+											'페이지 방문자 수 Top 10'
+										]
+									}
+								},
+								scales: {
+									x: {
+										ticks: {
+											callback: function(value) {
+												const label = this.getLabelForValue(value);
+												if (label.includes(" - ")) {
+													return label.split(" - "); // 2줄로 나눔
+												} else if (label.length > 6) {
+													const words = label.split(' ');
+													if (words.length > 1) {
+														return words;
 													}
 												}
+												return label;
 											},
-											y: {
-												beginAtZero: true,
-												ticks: { precision: 0 }
-											}
+											font: { size: 10 }
 										}
-									}
-								};
+									},
+									y: { beginAtZero: true, ticks: { precision: 0 } }
+								}
+							}
+						};
 
-						const ctx = document.getElementById('customPageVisitCount').getContext('2d');
+						const ctx = canvas.getContext('2d');
 
 						// 기존 차트가 있으면 삭제
-						if (PageVisitCountCalendar) {
-						  PageVisitCountCalendar.destroy();
+						if (canvas.chartInstance) {
+							canvas.chartInstance.destroy();
 						}
 
-						// 새 차트 생성 후 저장
-						PageVisitCountCalendar = new Chart(ctx, config);
+						// 새 차트 생성 및 캔버스에 저장
+						canvas.chartInstance = new Chart(ctx, config);
 					})
 					.catch(error => {
 						console.error('서버 오류:', error);
@@ -736,12 +676,11 @@ function getPageVisitCountCalendar(){
 			}
 		}
 	});
-	// 달력을 열기
-	calendarVisitInput._flatpickr.open();
 
-	// 초기화
+	calendarVisitInput._flatpickr.open();
 	calendarVisitInput._flatpickr.clear();
 }
+
 // 이벤트 위임을 사용하여 동적으로 생성된 요소의 이벤트 처리
 document.addEventListener('click', (e) => {
 	// 검색 버튼 클릭 처리
