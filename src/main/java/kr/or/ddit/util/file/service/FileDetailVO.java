@@ -14,5 +14,7 @@ public class FileDetailVO {
     private String fileExt;
     private String fileMime;
     private LocalDateTime fileSaveDate;
-    private int fileSeq;   
+    private int fileSeq;
+    
+    private String filePath;
 }
