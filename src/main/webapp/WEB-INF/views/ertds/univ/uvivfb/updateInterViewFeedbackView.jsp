@@ -36,7 +36,7 @@
 	<div class="public-wrapper">
 		<div class="public-wrapper-main">
 			<div class="section-header">
-				<h2>면접 경험 등록</h2>
+				<h2>면접 후기 수정</h2>
 				<p>작성해주신 면접 후기는 익명으로 등록됩니다.</p>
 			</div>
 			<div class="Insert-write">
