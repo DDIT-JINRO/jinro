@@ -25,11 +25,11 @@
         <div class="peer">
           <!-- 이미지 없으니 이니셜로 대체 -->
 		  <div class="profile-wrapper chat-mem-profile">
-		  	<img class="profile-img" src="${memberInfos.counsel.memId == memId ? memberInfos.counsel.profileFilePath : memberInfos.member.profileFilePath}">
+		  	<img class="profile-img" src="${memberInfos.counselor.memId == memId ? memberInfos.member.profileFilePath : memberInfos.counselor.profileFilePath}">
 		  </div>
           <div class="peer-meta">
-            <div class="peer-name" id="peerName">${memberInfos.counsel.memId == memId ? memberInfos.counsel.memName : memberInfos.member.memName}</div>
-            <div class="peer-sub" id="peerMeta">${memberInfos.counsel.memId == memId ? '상담사' : '회원'}</div>
+            <div class="peer-name" id="peerName">${memberInfos.counselor.memId == memId ? memberInfos.member.memName : memberInfos.counselor.memName}</div>
+            <div class="peer-sub" id="peerMeta">${memberInfos.counselor.memId == memId ? '회원' : '상담사'}</div>
           </div>
         </div>
         <div class="header-actions">
