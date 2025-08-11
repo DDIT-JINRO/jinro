@@ -30,8 +30,9 @@ public class CounselingReviewController {
 		return "cnslt/rvw/cnsReview";
 	}
 	
-	@GetMapping("/cnslt/rvw/insertCnsReviewView.do")
-	public String insertCnsReviewView() {
-		return "cnslt/rvw/insertCnsReviewView.do";
+	@GetMapping("/insertCnsReviewView.do")
+	public String insertCnsReviewView(@AuthenticationPrincipal String memId, Model model) {
+		return "cnslt/rvw/insertCnsReviewView";
+	}
 	}
 }
