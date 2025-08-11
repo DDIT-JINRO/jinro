@@ -28,7 +28,7 @@
 		<div class="tab-container" id="tabs">
 			<a class="tab active" href="/ertds/univ/uvsrch/selectUnivList.do">대학 검색</a>
 			<a class="tab" href="/ertds/univ/dpsrch/selectDeptList.do">학과 정보</a>
-			<a class="tab" href="/ertds/univ/ubivfb/selectInterviewList.do">면접 후기</a>
+			<a class="tab" href="/ertds/univ/uvivfb/selectInterviewList.do">면접 후기</a>
 		</div>
 	</div>
 </div>
