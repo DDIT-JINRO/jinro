@@ -1,6 +1,42 @@
 @charset "UTF-8";
 
 /* ──────────────────────────────────────────────────────────
+   달력
+──────────────────────────────────────────────────────────*/
+#calendarWrapper {
+  position: relative;
+  display: inline-block;
+  z-index: 1; /* 달력과 차트가 겹치지 않도록 z-index를 추가 */
+}
+
+#calendarInput {
+  position: absolute;
+  top: 40px;
+  left: 0; /* 왼쪽 정렬 */
+  z-index: 9999; /* 달력을 최상단에 표시 */
+  display: none; /* 초기 상태에서는 숨기기 */
+}
+
+.flatpickr-calendar {
+	position: absolute;
+}
+
+#getCalendar {
+	
+  margin-bottom: 10px;
+  position: relative; /* relative로 위치 고정 */
+  z-index: 2; /* 버튼이 달력 위로 표시되지 않도록 */
+}
+
+.chart {
+  position: relative; /* 차트 영역이 고정되도록 */
+  z-index: 1; /* 차트가 달력에 가리지 않도록 */
+}
+
+#dailyUserInquiry {
+  display: block; /* JavaScript로 처리되는 부분 */
+}
+/* ──────────────────────────────────────────────────────────
    컨테이너 & 패널 공통
 ──────────────────────────────────────────────────────────*/
 .template-container {
@@ -96,7 +132,8 @@
     max-height: 90%;
 }
 
-#dailyUserInquiry, #monthUserInquiry {
+#dailyUserInquiry, #monthUserInquiry,#customUserInquiry,
+#dailyPageVisitCount,#monthlyPageVisitCount,#customPageVisitCount {
     display: none; /* Initial state handled by JS */
 }
 

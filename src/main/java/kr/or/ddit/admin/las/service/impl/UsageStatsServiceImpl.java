@@ -1,6 +1,5 @@
 package kr.or.ddit.admin.las.service.impl;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
 import kr.or.ddit.admin.las.service.UsageStatsService;
 import kr.or.ddit.admin.las.service.UsageStatsVO;
 import kr.or.ddit.admin.las.service.VisitVO;
-import kr.or.ddit.csc.faq.service.FaqVO;
+
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
@@ -65,11 +64,29 @@ public class UsageStatsServiceImpl implements UsageStatsService{
 	// 일별 페이지 방문자 수 top10
 	@Override
 	public List<VisitVO> pageVisitCount() {
-		return usageStatsMapper.pageVisitCount();
+		return this.usageStatsMapper.pageVisitCount();
+	}
+
+	// 해당월 페이지 방문자 수 top10
+	@Override
+	public List<VisitVO> monthPageVisitCount() {
+		return this.usageStatsMapper.monthPageVisitCount();
 	}
 
 	
-
+	// 원하는 기간별 방문자 수
+	@Override
+	public List<UsageStatsVO> customUserInquiry(String startDate, String endDate) {
+		
+		return this.usageStatsMapper.customUserInquiry(startDate,endDate);
+	}
+	
+	// 원하는 기간별 페이지 방문자 수
+	@Override
+	public List<VisitVO> getPageCalendar(String startDate, String endDate) {
+		
+		return this.usageStatsMapper.getPageCalendar(startDate,endDate);
+	}
 
 	
 }

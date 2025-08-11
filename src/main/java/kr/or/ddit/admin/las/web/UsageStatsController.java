@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.ddit.admin.las.service.UsageStatsService;
@@ -62,5 +64,30 @@ public class UsageStatsController {
 		return usageStatsService.pageVisitCount();
 	}
 	
+	// 월별 페이지 별 방문자 수 
+	@GetMapping("/monthPageVisitCount.do")
+	public List<VisitVO> monthPageVisitCount(){
+		
+		return usageStatsService.monthPageVisitCount();
+	}
+
+	// 원하는 기간별 페이지 방문자 수 
+	@ResponseBody
+	@PostMapping("/getPageCalendar.do")
+	public List<VisitVO> getPageCalendar(String startDate, String endDate){
+		
+		return usageStatsService.getPageCalendar(startDate,endDate);
+	}
 	
+	// 원하는 기간별 방문자 수
+	@ResponseBody
+	@PostMapping("/customUserInquiry.do")
+	public List<UsageStatsVO> customUserInquiry( String startDate, String endDate){
+		log.info(startDate);
+		log.info(endDate);
+		List<UsageStatsVO> list=usageStatsService.customUserInquiry(startDate,endDate);
+		
+		log.info(list.toString());
+		return list;
+	}
 }

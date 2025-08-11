@@ -5,22 +5,34 @@
 	<div class="left-column">
 		<div class="template-panel">
 			<div class="panel-header" id="pannelHeader" style="cursor: pointer; text-decoration: none; display: flex; justify-content: space-between; align-items: center;">
-			    일/월 별 사용자 조회
+			    일/월별 사용자 조회
 			    <div>
 			        <button onclick="dailyUserInquiry()">일별</button>
 			        <button onclick="monthUserInquiry()">월별</button>
+			        <button onclick="getCalendar()" id="getCalendar">달력</button>
 			    </div>
 			</div>
 			<div class="chart">
+				<!-- 일주일간의 일별 -->
 				<canvas id="dailyUserInquiry"></canvas>
+				<!-- 월별 -->
 				<canvas id="monthUserInquiry"></canvas>
+				<!-- 원하는 일정만큼  -->
+				<canvas id="customUserInquiry"></canvas>
 			</div>
 		</div>
 		<div class="template-panel">
-			<div class="panel-header" id="faqHeader" style="cursor: pointer; text-decoration: none">
+			<div class="panel-header" id="pannelHeader" style="cursor: pointer; text-decoration: none; display: flex; justify-content: space-between; align-items: center;">
 				페이지별 방문자 수 조회 상위 10
+				<div>
+					<button onclick="dailyPageVisitCount()">일일</button>
+					<button onclick="monthPageVisitCount()">월별</button>
+					<button onclick="getPageVisitCountCalendar()" id="getPageCalendar">달력</button>
+				</div>
 			</div>
-			<canvas id="pageVisitCount"></canvas>
+			<canvas id="dailyPageVisitCount"></canvas>
+			<canvas id="monthlyPageVisitCount"></canvas>
+			<canvas id="customPageVisitCount"></canvas>
 		</div>
 	</div>
 

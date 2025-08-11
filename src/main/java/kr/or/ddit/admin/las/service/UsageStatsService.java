@@ -18,5 +18,14 @@ public interface UsageStatsService {
 
 	// 일별 페이지 방문자 수 top10
 	public List<VisitVO> pageVisitCount();
+	
+	// 해달월 페이지 방문자 수 top10
+	public List<VisitVO> monthPageVisitCount();
+	
+	// 원하는 기간별 방문자 수
+	public List<UsageStatsVO> customUserInquiry(String startDate, String endDate);
+
+	// 원하는 기간별 페이지 방문자 수
+	public List<VisitVO> getPageCalendar(String startDate, String endDate);
 
 }
