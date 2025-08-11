@@ -308,6 +308,7 @@
 			  , HS_FOUND_TYPE
 			  , HS_ZIPCODE					
 			  , HS_ADDR								
+			  , HS_ADDR_DETAIL								
 			  , HS_TEL				
 			  , HS_HOMEPAGE								
 			  , HS_COEDU_TYPE				
@@ -317,7 +318,7 @@
 			  , HS_ANNIV_AT
 			  , HS_LAT
 			  , HS_LOT	
-	) VALUES (
+		) VALUES (
 	            HIGH_SCHOOL_SEQ.NEXTVAL
 	          , #{hsCode, jdbcType=VARCHAR}
 	          , #{hsName}
@@ -326,6 +327,7 @@
 	          , #{hsFoundTypeCode}
 	          , #{hsZipcode}
 	          , #{hsAddr}
+	          , #{hsAddrDetail, jdbcType=VARCHAR}
 	          , #{hsTel, jdbcType=VARCHAR}
 	          , #{hsHomepage, jdbcType=VARCHAR}
 	          , #{hsCoeduTypeCode}
@@ -335,7 +337,7 @@
 	          , #{hsAnnivAt, jdbcType=DATE}
 	          , #{hsLat, jdbcType=DOUBLE}
 	          , #{hsLot, jdbcType=DOUBLE}
-	)
+		)
 	</insert>
 	
 	<!-- 
@@ -343,15 +345,20 @@
     public int highSchoolDeptInsert(HighSchoolDeptVO highSchoolDeptVO);
      -->
 	 <insert id="highSchoolDeptInsert" parameterType="kr.or.ddit.ertds.hgschl.service.HighSchoolDeptVO">
-        INSERT INTO HIGH_SCHOOL_DEPT (HSD_ID, HS_ID, HSD_NAME)
-        VALUES (HIGH_SCHOOL_DEPT_SEQ.NEXTVAL, #{hsId}, #{hsdName})
+        INSERT INTO HIGH_SCHOOL_DEPT  (
+	            HSD_ID					
+			  , HS_ID			
+			  , HSD_CODE			
+			  , HSD_NAME	
+			  , HSD_TRACK_NAME
+		) VALUES (
+	            HIGH_SCHOOL_DEPT_SEQ.NEXTVAL
+	          , #{hsId}
+	          , #{hsdCode}
+	          , #{hsdName}
+	          , #{hsdTrackName}
+		)
     </insert>
-    
-    <select id="selectAllHighSchoolsForCoords" resultType="kr.or.ddit.ertds.hgschl.service.HighSchoolVO">
-        SELECT HS_ID, HS_NAME, HS_ADDR, HS_LAT, HS_LOT
-        FROM HIGH_SCHOOL
-        WHERE HS_DEL_YN = 'N' AND HS_ADDR IS NOT NULL AND (HS_LAT IS NULL OR HS_LOT IS NULL)
-    </select>
     
 	<!-- 
 	// 고등학교 정보 수정
@@ -360,56 +367,33 @@
 	<update id="highSchoolUpdate" parameterType="kr.or.ddit.ertds.hgschl.service.HighSchoolVO">
 	    UPDATE HIGH_SCHOOL
 	    <set>
-	         <if test="hsCode != null">, HS_CODE = #{hsCode}</if>
-             <if test="hsName != null">, HS_NAME = #{hsName}</if>
-             <if test="hsRegionCode != null">, HS_REGION_CODE = #{hsRegionCode}</if>
-             <if test="hsJurisCode != null">, HS_JURIS_CODE = #{hsJurisCode}</if>
-             <if test="hsFoundTypeCode != null">, HS_FOUND_TYPE = #{hsFoundTypeCode}</if>
-             <if test="hsZipcode != null">, HS_ZIPCODE = #{hsZipcode}</if>
-             <if test="hsAddr != null">, HS_ADDR = #{hsAddr}</if>
-             <if test="hsAddrDetail != null">, HS_ADDR_DETAIL = #{hsAddrDetail}</if>
-             <if test="hsTel != null">, HS_TEL = #{hsTel}</if>
-             <if test="hsHomepage != null">, HS_HOMEPAGE = #{hsHomepage}</if>
-             <if test="hsCoeduTypeCode != null">, HSselectAllCommonCodes_COEDU_TYPE = #{hsCoeduTypeCode}</if>
-             <if test="hsTypeNameCode != null">, HS_TYPE_NAME = #{hsTypeNameCode}</if>
-             <if test="hsGeneralTypeCode != null">, HS_GENERAL_TYPE = #{hsGeneralTypeCode}</if>
-             <if test="hsFoundDate != null">, HS_FOUND_DATE = #{hsFoundDate, jdbcType=DATE}</if>
-             <if test="hsAnnivAt != null">, HS_ANNIV_AT = #{hsAnnivAt, jdbcType=DATE}</if>
-             <if test="hsLat != null">, HS_LAT = #{hsLat, jdbcType=DOUBLE}</if>
-             <if test="hsLot != null">, HS_LOT = #{hsLot, jdbcType=DOUBLE}</if>
-	        </set>
+	          <if test="hsCode != null"> HS_CODE = #{hsCode}, </if>
+	          <if test="hsName != null"> HS_NAME = #{hsName}, </if>
+	          <if test="hsRegionCode != null"> HS_REGION_CODE = #{hsRegionCode}, </if>
+	          <if test="hsJurisCode != null"> HS_JURIS_CODE = #{hsJurisCode}, </if>
+	          <if test="hsFoundTypeCode != null"> HS_FOUND_TYPE = #{hsFoundTypeCode}, </if>
+	          <if test="hsZipcode != null"> HS_ZIPCODE = #{hsZipcode}, </if>
+	          <if test="hsAddr != null"> HS_ADDR = #{hsAddr}, </if>
+	          <if test="hsAddrDetail != null"> HS_ADDR_DETAIL = #{hsAddrDetail}, </if>
+	          <if test="hsTel != null"> HS_TEL = #{hsTel}, </if>
+	          <if test="hsHomepage != null"> HS_HOMEPAGE = #{hsHomepage}, </if>
+	          <if test="hsCoeduTypeCode != null"> HS_COEDU_TYPE = #{hsCoeduTypeCode}, </if>
+	          <if test="hsTypeNameCode != null"> HS_TYPE_NAME = #{hsTypeNameCode}, </if>
+	          <if test="hsGeneralTypeCode != null"> HS_GENERAL_TYPE = #{hsGeneralTypeCode}, </if>
+	          <if test="hsFoundDate != null"> HS_FOUND_DATE = #{hsFoundDate, jdbcType=DATE}, </if>
+	          <if test="hsAnnivAt != null"> HS_ANNIV_AT = #{hsAnnivAt, jdbcType=DATE}, </if>
+	          <if test="hsLat != null"> HS_LAT = #{hsLat, jdbcType=DOUBLE}, </if>
+	          <if test="hsLot != null"> HS_LOT = #{hsLot, jdbcType=DOUBLE}, </if>
+	    </set>
 	    WHERE HS_ID = #{hsId}
 	</update>
 	
-	<!-- 
-	// 모든 공통 코드를 조회 (캐싱 로직에 필요)
-	public List<ComCodeVO> selectAllCommonCodes();
-	 -->
-	<select id="selectAllCommonCodes" resultType="kr.or.ddit.com.ComCodeVO">
-        SELECT 
-            CC_ID AS ccId, 
-            CL_CODE AS clCode, 
-            CC_NAME AS ccName, 
-            CC_ETC AS ccEtc 
-        FROM COM_CODE
-        WHERE USE_YN = 'Y'
-    </select>
-    
-    <!-- 
-    // 공통 코드를 이름과 분류코드로 조회
-	public ComCodeVO selectCommonCodeByCcNameAndClCode(@Param("ccName") String ccName, @Param("clCode") String clCode);
-     -->
-    <select id="selectCommonCodeByCcNameAndClCode" resultType="kr.or.ddit.com.ComCodeVO">
-        SELECT CC_ID
-        FROM COM_CODE
-        WHERE CC_NAME = #{ccName} AND CL_CODE = #{clCode} AND USE_YN = 'Y'
-    </select>
 
 	<!-- 
 	//고등학교 학과 수정
     public int highSchoolDeptUpdate(HighSchoolDeptVO highSchoolDeptVO);
      -->
-     <update id="highSchoolDeptUpdate" parameterType="int">
+     <update id="highSchoolDeptUpdate" parameterType="kr.or.ddit.ertds.hgschl.service.HighSchoolDeptVO">
         UPDATE HIGH_SCHOOL_DEPT
         <set>
             <if test="hsdName != null"> HSD_NAME = #{hsdName}, </if>
@@ -418,13 +402,4 @@
         WHERE HSD_ID = #{hsdId}
     </update>
     
-    <!-- 
-    // 관할 교육청 코드를 이름으로 조회
-	String selectJurisCodeByRegionName(@Param("regionName") String regionName); 
-	-->
-	<select id="selectJurisCodeByRegionName" parameterType="string" resultType="string">
-	    SELECT CC_ID
-	    FROM COM_CODE
-	    WHERE CC_NAME = #{regionName} AND CL_CODE = 'G23' AND USE_YN = 'Y'
-	</select>
 </mapper>
