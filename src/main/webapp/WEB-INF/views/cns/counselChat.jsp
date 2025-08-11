@@ -11,16 +11,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>상담 채팅 (하드코딩 테스트)</title>
+  <link rel="stylesheet" href="/css/user-profile.css"/>
   <link rel="stylesheet" href="/css/cns/counselChat.css"/>
-  <style>
-    /* 아바타 이미지가 없어도 이니셜로 보이게 하는 보완 스타일 */
-    .avatar-fallback, .avatar-lg-fallback{
-      display:inline-flex;align-items:center;justify-content:center;
-      background:#dfe6f3;color:#3b4a66;font-weight:800;user-select:none;
-    }
-    .avatar-fallback{width:36px;height:36px;border-radius:50%}
-    .avatar-lg-fallback{width:48px;height:48px;border-radius:50%}
-  </style>
 </head>
 <body class="counsel-chat-body"
       data-cr-id="${crId }" data-counsel-id="${counselInfo.counselId }" data-my-id="${memId }" data-my-role="${memRole }">
@@ -31,15 +23,15 @@
       <header class="chat-header">
         <div class="peer">
           <!-- 이미지 없으니 이니셜로 대체 -->
-          <div class="avatar-fallback">KY</div>
+		  <div class="profile-wrapper chat-mem-profile">
+		  	<img class="profile-img" src="${memberInfos.counsel.memId == memId ? memberInfos.counsel.profileFilePath : memberInfos.member.profileFilePath}">
+		  </div>
           <div class="peer-meta">
-            <div class="peer-name" id="peerName">김상담</div>
-            <div class="peer-sub" id="peerMeta">상담사 · 커리어코칭팀</div>
+            <div class="peer-name" id="peerName">${memberInfos.counsel.memId == memId ? memberInfos.counsel.memName : memberInfos.member.memName}</div>
+            <div class="peer-sub" id="peerMeta">${memberInfos.counsel.memId == memId ? '상담사' : '회원'}</div>
           </div>
         </div>
         <div class="header-actions">
-          <button type="button" class="icon-btn" id="btnRoleToggle" title="역할 전환">역할</button>
-          <button type="button" class="icon-btn" title="팝업 닫기" onclick="window.close()"><span>✖</span></button>
         </div>
       </header>
 	  <sec:authorize access="isAuthenticated()">
@@ -48,10 +40,6 @@
 	  </sec:authorize>
       <main id="chatScroll" class="chat-scroll">
         <div class="sys-msg">상담 채팅방이 열렸습니다. 원활한 상담을 위해 예의를 지켜주세요.</div>
-    <p>${memberInfos.counselor }</p>
-    <p>${memberInfos.member }</p>
-    <p>${messages }</p>
-    <p>${counselInfo }</p>
         <!-- 하드코딩 메시지 샘플 -->
         <div class="msg-row other">
           <div class="bubble-avatar" style="display:none"></div>
@@ -106,7 +94,11 @@
 <!-- ----------------------------------------------- -->
 	      <!-- 공통 상단 프로필 카드 -->
 	      <div class="profile-card">
-	        <div class="avatar-lg-fallback">프로필</div>
+	        <div class="avatar-lg-fallback">
+	        	<div class="profile-wrapper chat-mem-profile">
+				  	<img class="profile-img" src="${memberInfos.member.profileFilePath}">
+				</div>
+	        </div>
 	        <div class="p-meta">
 	          <div class="p-name" id="cardName">${memberInfos.member.memName }</div>
 	          <div class="p-sub" id="cardSub">회원</div>
@@ -128,7 +120,9 @@
 
 	      <!-- 공통 상단 프로필 카드 -->
 	      <div class="profile-card">
-	        <div class="avatar-lg-fallback">프로필</div>
+	        <div class="profile-wrapper chat-mem-profile">
+			  	<img class="profile-img" src="${memberInfos.counselor.profileFilePath}">
+			</div>
 	        <div class="p-meta">
 	          <div class="p-name" id="cardName">${memberInfos.counselor.memName }</div>
 	          <div class="p-sub" id="cardSub">상담사</div>

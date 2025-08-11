@@ -22,4 +22,6 @@ public class ChatMessageVO {
 	private String fileBadgeStr;
 	private String fileSubStr;
 	private String memNickname;
+
+	private String memName;
 }

@@ -93,6 +93,7 @@
 		       , M.FILE_BADGE
 		       , M.FILE_SUB
 		       , M.MEM_NICKNAME
+		       , M.MEM_NAME
 		  FROM CHAT_MESSAGE CM
 		  JOIN MEMBER M ON CM.MEM_ID = M.MEM_ID
 		 WHERE CM.CR_ID = #{crId}
@@ -250,6 +251,7 @@
 		       , M.FILE_BADGE
 		       , M.FILE_SUB
 		       , M.MEM_NICKNAME
+		       , M.MEM_NAME
 		  FROM CHAT_MESSAGE CM
 		  JOIN MEMBER M ON CM.MEM_ID = M.MEM_ID
 		 WHERE CM.MSG_ID = #{msgId}
