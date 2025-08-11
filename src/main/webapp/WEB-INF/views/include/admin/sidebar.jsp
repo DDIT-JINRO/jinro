@@ -7,6 +7,8 @@
 <script src="/js/include/admin/sidebar.js"></script>
 <script src="/js/axios.min.js"></script>
 <script src="/ckeditor5/ckeditor.js"></script>
+<script src="/js/chart/chart.umd.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 	sidebar();
