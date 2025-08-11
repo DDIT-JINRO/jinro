@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.or.ddit.empt.enp.service.CompanyVO;
 import kr.or.ddit.empt.enp.service.InterviewReviewVO;
 import kr.or.ddit.empt.ivfb.service.InterviewFeedbackService;
+import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
 import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.mpg.mif.inq.service.VerificationVO;
@@ -134,6 +135,17 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 			log.error("면접 후기 요청 중 에러 발생 : {}", e.getMessage());
 			throw e;
 		}
+	}
+
+	@Override
+	public List<UniversityVO> selectUniversityList(String univName) {
+		List<UniversityVO> universityList = interviewFeedbackMapper.selectUniversityList(univName);
+		
+		if(universityList == null || universityList.isEmpty()) {
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+		}
+		
+		return universityList;
 	}
 
 }

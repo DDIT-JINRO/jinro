@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.empt.enp.service.CompanyVO;
 import kr.or.ddit.empt.enp.service.InterviewReviewVO;
+import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
 import kr.or.ddit.util.ArticlePage;
 
 public interface InterviewFeedbackService {
@@ -21,5 +22,7 @@ public interface InterviewFeedbackService {
 	InterviewReviewVO selectInterviewFeedback(String memId, int irId);
 
 	void updateInterviewFeedback(String memId, InterviewReviewVO interviewReview);
+
+	List<UniversityVO> selectUniversityList(String univName);
 
 }

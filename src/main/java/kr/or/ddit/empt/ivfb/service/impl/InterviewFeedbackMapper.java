@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.empt.enp.service.CompanyVO;
 import kr.or.ddit.empt.enp.service.InterviewReviewVO;
+import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
 import kr.or.ddit.mpg.mif.inq.service.VerificationVO;
 
 @Mapper
@@ -24,5 +25,7 @@ public interface InterviewFeedbackMapper {
 	void deleteInterviewFeedback(int irId);
 
 	InterviewReviewVO selectInterviewFeedback(int irId);
+
+	List<UniversityVO> selectUniversityList(String univName);
 
 }

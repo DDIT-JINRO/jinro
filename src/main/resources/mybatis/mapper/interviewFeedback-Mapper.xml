@@ -122,6 +122,20 @@
 		</if>
 	</select>
 	
+	<select id="selectUniversityList" parameterType="string" resultType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
+		SELECT
+		    UNIV_ID
+		    , UNIV_NAME
+		    , UNIV_CAMPUS
+		    , UNIV_REGION
+		FROM
+		    UNIVERSITY
+  		<if test="univName != null and univName != ''">
+        WHERE
+            UNIV_NAME LIKE '%' || #{univName} || '%'
+		</if>
+	</select>
+	
 	<update id="updateInterviewFeedback" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
 		MERGE INTO
 			INTERVIEW_REVIEW A
