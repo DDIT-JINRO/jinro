@@ -45,7 +45,7 @@
 		    </if>
 		ORDER BY
 			CR_CREATED_AT DESC
-		OFFSET #{startRow} ROWS FETCH NEXT #{endRow} ROWS ONLY
+		OFFSET #{startRow} - 1 ROWS FETCH NEXT #{endRow} - #{startRow} + 1 ROWS ONLY
 	</select>
 	
 	<select id="selectCounselingReviewTotal" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO" resultType="int">
