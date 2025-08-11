@@ -285,7 +285,8 @@
 		UPDATE COUNSELING
 		   SET COUNSEL_STATUS = 'S04002'
 		 WHERE COUNSEL_STATUS = 'S04001'
-		   AND COUNSEL_REQ_DATETIME BETWEEN #{vaStart} AND #{vaEnd}
+		   AND COUNSEL_REQ_DATETIME >= TRUNC(#{vaStart})
+           AND COUNSEL_REQ_DATETIME <![CDATA[<]]>  TRUNC(#{vaEnd}) + 1
 	</update>
 
 	<select id="selectRequestedCounselBetweenVacation" resultType="kr.or.ddit.cns.service.CounselingVO" parameterType="kr.or.ddit.cns.service.VacationVO">
@@ -297,7 +298,8 @@
 		  FROM COUNSELING C
 		  JOIN MEMBER M ON M.MEM_ID = C.MEM_ID
 		 WHERE COUNSEL_STATUS = 'S04001'
-		   AND COUNSEL_REQ_DATETIME BETWEEN #{vaStart} AND #{vaEnd}
+		   AND COUNSEL_REQ_DATETIME >= TRUNC(#{vaStart})
+           AND COUNSEL_REQ_DATETIME <![CDATA[<]]>  TRUNC(#{vaEnd}) + 1
 	</select>
 
 </mapper>
