@@ -168,4 +168,10 @@ public class CounselorServiceImpl implements CounselorService {
 		return sdf.format(date);
 	}
 
+	@Override
+	public List<CounselingVO> selectCounselingSchedules(CounselingVO counselingVO) {
+		// TODO Auto-generated method stub
+		return this.counselorMapper.selectCounselingSchedules(counselingVO);
+	}
+
 }

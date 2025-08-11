@@ -83,5 +83,13 @@ public interface CounselorMapper {
 	 * @return
 	 */
 	public List<VacationVO> selectMyInProgressVacationList(int requestor);
+	
+	/**
+	 * 상담 에약 확인<br/>
+	 * 상담사 Id, 요청 날짜 포함 상담 정보 받아오기
+	 * @param counselingVO
+	 * @return
+	 */
+	public List<CounselingVO> selectCounselingSchedules(CounselingVO counselingVO);
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -89,4 +90,23 @@ public class CounselorApiController {
 		return ResponseEntity.ok(disabledDateList);
 	}
 
+	@GetMapping("/bookedScheduleList.do")
+	public ResponseEntity<List<CounselingVO>> bookedScheduleList(
+			@RequestParam("counselReqDatetime") @DateTimeFormat(pattern = "yyyy-MM-dd") Date counselReqDatetime,
+			Principal principal){
+		
+	      if(principal!=null && !principal.getName().equals("anonymousUser")) {
+	    	  CounselingVO counselingVO = new CounselingVO();
+	          String counselorStr = principal.getName();
+	          int counselor = Integer.parseInt(counselorStr);
+	          
+	          counselingVO.setCounsel(counselor);
+	    	  counselingVO.setCounselReqDatetime(counselReqDatetime);
+	    	  
+	    	  List<CounselingVO> counselingVOList = this.counselorService.selectCounselingSchedules(counselingVO);
+	    	  return  ResponseEntity.ok(counselingVOList);
+	       }else {
+	    	   return null;
+	       }
+	}
 }
