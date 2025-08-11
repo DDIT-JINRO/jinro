@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	    formData.append('irContent', interviewDetail);
 		formData.append('irRating', interviewRating);
 	    formData.append('irApplication', interviewPosition);
-	    formData.append('irInterviewAt', Date(interviewDate));
+	    formData.append('irInterviewAt', new Date(interviewDate));
 
 	    // 파일 추가
         formData.append('file', files[0]);
