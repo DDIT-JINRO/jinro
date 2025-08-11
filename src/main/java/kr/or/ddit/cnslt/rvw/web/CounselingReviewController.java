@@ -29,4 +29,9 @@ public class CounselingReviewController {
 		
 		return "cnslt/rvw/cnsReview";
 	}
+	
+	@GetMapping("/cnslt/rvw/insertCnsReviewView.do")
+	public String insertCnsReviewView() {
+		return "cnslt/rvw/insertCnsReviewView.do";
+	}
 }
