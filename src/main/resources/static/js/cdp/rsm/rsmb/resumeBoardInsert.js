@@ -28,10 +28,14 @@ document.addEventListener("DOMContentLoaded", function() {
 		formData.append('content', content);
 		
 		const files = fileInput.files;
+		if(files.length == 0) {
+			alert("템플릿 파일을 등록해주세요.")
+			return;			
+		}
+
 		for (let i = 0; i < files.length; i++) {
 			formData.append('files', files[i]);
 		}
-
 
 		try {
 			const response = await axios.post("/cdp/rsm/rsmb/resumeBoardInsert.do", formData, {
