@@ -1,7 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <script src="/js/com/sockjs.min.js"></script>
+  <script src="/js/com/stomp.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>상담 채팅 (하드코딩 테스트)</title>
@@ -17,9 +23,10 @@
   </style>
 </head>
 <body class="counsel-chat-body"
-      data-cr-id="999" data-counsel-id="777" data-my-id="123" data-my-role="USER">
-  <div class="counsel-chat-app">
+      data-cr-id="${crId }" data-counsel-id="${counselInfo.counselId }" data-my-id="${memId }" data-my-role="${memRole }">
+  <div class="counsel-chat-app" data-error-message="">
     <!-- 좌측: 채팅 -->
+
     <section class="chat-pane">
       <header class="chat-header">
         <div class="peer">
@@ -32,15 +39,19 @@
         </div>
         <div class="header-actions">
           <button type="button" class="icon-btn" id="btnRoleToggle" title="역할 전환">역할</button>
-          <button type="button" class="icon-btn" title="파일 전송" id="btnFile"><span>📎</span></button>
-          <button type="button" class="icon-btn" title="이모지" id="btnEmoji"><span>😊</span></button>
-          <button type="button" class="icon-btn" title="팝업 닫기" onclick="window.close();"><span>✖</span></button>
+          <button type="button" class="icon-btn" title="팝업 닫기" onclick="window.close()"><span>✖</span></button>
         </div>
       </header>
-
+	  <sec:authorize access="isAuthenticated()">
+		  <!-- principal이 String(memId)라면 name도 동일하게 나옵니다 -->
+		  <sec:authentication property="name" var="loginIdStr"/>
+	  </sec:authorize>
       <main id="chatScroll" class="chat-scroll">
         <div class="sys-msg">상담 채팅방이 열렸습니다. 원활한 상담을 위해 예의를 지켜주세요.</div>
-
+    <p>${memberInfos.counselor }</p>
+    <p>${memberInfos.member }</p>
+    <p>${messages }</p>
+    <p>${counselInfo }</p>
         <!-- 하드코딩 메시지 샘플 -->
         <div class="msg-row other">
           <div class="bubble-avatar" style="display:none"></div>
@@ -87,62 +98,58 @@
         </div>
       </footer>
     </section>
-
+<!-- ----------------------------------------------- -->
     <!-- 우측: 정보 패널 (하드코딩 데이터) -->
     <aside class="side-pane" id="sidePane">
-      <!-- 공통 상단 프로필 카드 -->
-      <div class="profile-card">
-        <div class="avatar-lg-fallback">KY</div>
-        <div class="p-meta">
-          <div class="p-name" id="cardName">김상담</div>
-          <div class="p-sub" id="cardSub">커리어코칭팀</div>
-        </div>
-      </div>
 
-      <!-- 회원 화면(기본): 상담사 정보 -->
-      <section class="info-block" data-view="user">
-        <div class="blk-title">상담사 정보</div>
-        <dl class="kv">
-          <dt>아이디</dt><dd>counselor01</dd>
-          <dt>전화</dt><dd>010-1234-5678</dd>
-          <dt>이메일</dt><dd>counselor@example.com</dd>
-          <dt>전문분야</dt><dd>진로 설계, 이직 코칭, 면접</dd>
-          <dt>지역</dt><dd>서울</dd>
-        </dl>
-      </section>
+<!-- ----------------------------------------------- -->
+<!-- ----------------------------------------------- -->
+	      <!-- 공통 상단 프로필 카드 -->
+	      <div class="profile-card">
+	        <div class="avatar-lg-fallback">프로필</div>
+	        <div class="p-meta">
+	          <div class="p-name" id="cardName">${memberInfos.member.memName }</div>
+	          <div class="p-sub" id="cardSub">회원</div>
+	        </div>
+	      </div>
+	   	  <!-- 상담사 화면: 회원 기본정보 + 상담 요청 요약 + 시스템 정보 -->
+	      <section class="info-block" data-view="counselor">
+	      <div class="blk-title">회원 기본정보</div>
+	        <dl class="kv">
+	          <dt>이메일</dt><dd>${memberInfos.member.memEmail }</dd>
+	          <dt>전화</dt><dd>${memberInfos.member.memPhoneNumber }</dd>
+	        </dl>
+	      </section>
 
-      <!-- 상담사 화면: 회원 기본정보 + 상담 요청 요약 + 시스템 정보 -->
-      <section class="info-block" data-view="counselor" style="display:none">
-        <div class="blk-title">회원 기본정보</div>
-        <dl class="kv">
-          <dt>아이디</dt><dd>kyung_92</dd>
-          <dt>이름</dt><dd>경*</dd>
-          <dt>전화</dt><dd>010-9876-5432</dd>
-          <dt>이메일</dt><dd>kyung@example.com</dd>
-          <dt>지역</dt><dd>대전</dd>
-        </dl>
-      </section>
+    	<section class="info-block" data-view="counselor">
+	        <div class="blk-title">상담 요청 요약</div>
+	        <div class="desc-box">${counselInfo.counselDescription }</div>
+	    </section>
 
-      <section class="info-block" data-view="counselor" style="display:none">
-        <div class="blk-title">상담 요청 요약</div>
-        <div class="desc-box">
-제품 선택과 커리어 방향성에 대한 조언이 필요합니다.
-현재 직무에 대한 불확실성과 인터뷰 대비 전략을 상담받고 싶어요.
-        </div>
-      </section>
+	      <!-- 공통 상단 프로필 카드 -->
+	      <div class="profile-card">
+	        <div class="avatar-lg-fallback">프로필</div>
+	        <div class="p-meta">
+	          <div class="p-name" id="cardName">${memberInfos.counselor.memName }</div>
+	          <div class="p-sub" id="cardSub">상담사</div>
+	        </div>
+	      </div>
 
-      <section class="info-block" data-view="counselor" style="display:none">
-        <div class="blk-title">시스템 정보</div>
-        <dl class="kv">
-          <dt>OS</dt><dd>Windows 10</dd>
-          <dt>브라우저</dt><dd>Chrome 138</dd>
-          <dt>언어</dt><dd>ko-KR</dd>
-          <dt>위치</dt><dd>KR</dd>
-        </dl>
-      </section>
+	      <!-- 회원 화면(기본): 상담사 정보 -->
+	      <section class="info-block" data-view="user">
+	        <div class="blk-title">상담사 정보</div>
+	        <dl class="kv">
+	          <dt>이메일</dt><dd>${memberInfos.counselor.memEmail }</dd>
+	          <dt>전화</dt><dd>${memberInfos.counselor.memPhoneNumber }</dd>
+	        </dl>
+	      </section>
     </aside>
   </div>
+<!-- ----------------------------------------------- -->
 
-  <script src="/js/include/cns/counselChat.js"></script>
+<script type="text/javascript">
+const memId = '<sec:authentication property="name" />';
+</script>
+<script src="/js/include/cns/counselChat.js"></script>
 </body>
 </html>

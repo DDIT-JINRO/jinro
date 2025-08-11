@@ -2,6 +2,10 @@ package kr.or.ddit.chat.service;
 
 import java.util.List;
 import java.util.Map;
+
+import kr.or.ddit.cns.service.CounselingVO;
+import kr.or.ddit.main.service.MemberVO;
+
 import java.util.Map;
 
 public interface ChatService {
@@ -119,5 +123,27 @@ public interface ChatService {
 	 * @return
 	 */
 	ChatMessageVO selectChatMessage(int msgId);
+
+	/**
+	 * 채팅상담 채팅방에 회원입장되어있는지 체크.
+	 * @param crId
+	 * @param memIdStr
+	 * @return
+	 */
+	boolean validateCounselChatRoom(int crId, String memIdStr);
+
+	/**
+	 * 채팅상담 채팅방에 회원, 상담사 정보 챙겨오기
+	 * @param crId
+	 * @return
+	 */
+	Map<String, MemberVO> getMemberAndCounselorInfo(int crId);
+
+	/**
+	 * 채팅상담용 상담정보 불러오기
+	 * @param crId
+	 * @return
+	 */
+	CounselingVO selectCounselInfoByCrId(int crId);
 
 }

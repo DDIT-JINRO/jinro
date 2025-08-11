@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +23,9 @@ import kr.or.ddit.chat.service.ChatMessageVO;
 import kr.or.ddit.chat.service.ChatReceiverVO;
 import kr.or.ddit.chat.service.ChatRoomVO;
 import kr.or.ddit.chat.service.ChatService;
+import kr.or.ddit.cns.service.CounselingVO;
+import kr.or.ddit.main.service.MemberVO;
+import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
 import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +43,9 @@ public class ChatServiceImpl implements ChatService {
 
 	@Autowired
 	FileService fileService;
+
+	@Autowired
+	MyInquiryService myInquiryService;
 
 	@Override
 	public List<ChatRoomVO> findRoomsByMemId(String memId) {
@@ -193,6 +200,48 @@ public class ChatServiceImpl implements ChatService {
 		if(fileSubDetail != null) {
 			chatMessageVO.setFileSubStr(this.fileService.getSavePath(fileSubDetail));
 		}
+	}
+
+	@Override
+	public boolean validateCounselChatRoom(int crId, String memIdStr) {
+		try {
+			ChatRoomVO chatRoomVO = selectChatRoom(crId);
+			if(!"G04002".equals(chatRoomVO.getCcId())) return false;	// 채팅방 정보 조회 후 상담목적 채팅방이 아니면 false
+
+			ChatMemberVO chatMemberVO = new ChatMemberVO();
+			chatMemberVO.setCrId(crId);
+			chatMemberVO.setMemId(Integer.parseInt(memIdStr));
+			ChatMemberVO target = this.chatMapper.selectChatMember(chatMemberVO); // 해당 채팅방에 현재 요청한 회원이 없으면 false
+			if(target!=null) {
+				return true;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return false;
+		}
+		return false;
+	}
+
+	@Override
+	public Map<String, MemberVO> getMemberAndCounselorInfo(int crId) {
+		List<Integer> members = this.chatMapper.findChatMemberIdsByCrId(crId);
+		Map<String, MemberVO> counselMembers = new HashMap<>();
+		for(int memId : members) {
+			MemberVO memberVO = this.chatMapper.selectMemInfoForCounsel(memId);
+			myInquiryService.getProfileFile(memberVO);
+			String role = memberVO.getMemRole();
+			if("R01003".equals(role)) {
+				counselMembers.put("counselor", memberVO);
+			}else {
+				counselMembers.put("member", memberVO);
+			}
+		}
+		return counselMembers;
+	}
+
+	@Override
+	public CounselingVO selectCounselInfoByCrId(int crId) {
+		return this.chatMapper.selectCounselInfoByCrId(crId);
 	}
 
 }

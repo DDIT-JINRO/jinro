@@ -255,4 +255,36 @@
 		 WHERE CM.MSG_ID = #{msgId}
 	</select>
 
+	<select id="selectMemInfoForCounsel" resultType="kr.or.ddit.main.service.MemberVO" parameterType="int">
+		SELECT
+		       MEM_PHONE_NUMBER
+		     , MEM_NAME
+		     , MEM_ID
+		     , MEM_ROLE
+		     , MEM_EMAIL
+		     , FILE_PROFILE
+		  FROM MEMBER
+		 WHERE MEM_ID = #{memId}
+	</select>
+
+	<select id="selectCounselInfoByCrId" resultType="kr.or.ddit.cns.service.CounselingVO" parameterType="int">
+		SELECT
+		       COUNSEL_ID
+		     , MEM_ID
+		     , COUNSEL
+		     , COUNSEL_CATEGORY
+		     , COUNSEL_METHOD
+		     , COUNSEL_TITLE
+		     , COUNSEL_DESCRIPTION
+		     , COUNSEL_STATUS
+		     , COUNSEL_REQ_DATETIME
+		     , COUNSEL_URL_COU
+		     , COUNSEL_REVIEWD
+		     , COUNSEL_CREATED_AT
+		     , COUNSEL_UPDATED_AT
+		     , COUNSEL_URL_USER
+		FROM COUNSELING C
+		JOIN CHAT_ROOM CR ON CR.TARGET_ID = C.COUNSEL_ID
+		WHERE CR.CC_ID = 'G04002'
+	</select>
 </mapper>
