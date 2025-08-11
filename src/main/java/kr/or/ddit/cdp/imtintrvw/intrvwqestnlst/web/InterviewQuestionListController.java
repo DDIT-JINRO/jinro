@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import kr.or.ddit.cdp.imtintrvw.intrvwqestnmn.service.InterviewQuestionMangementService;
+import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO;
+import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroService;
 import kr.or.ddit.cdp.sint.service.SelfIntroVO;
@@ -34,12 +37,13 @@ public class InterviewQuestionListController {
 
 	private final SelfIntroService selfIntroService;
 
+	private final InterviewQuestionMangementService interviewQuestionMangementService;
+
 	@GetMapping("/intrvwQuestionList.do")
-	public String intrvwQuestionList(@RequestParam(required = false) String keyword, 
+	public String intrvwQuestionList(@RequestParam(required = false) String keyword,
 			@RequestParam(value = "siqJobFilter", required = false) List<String> siqJobFilter,
 			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
-			@RequestParam(value = "size", required = false, defaultValue = "5") int size, 
-			Principal principal, 
+			@RequestParam(value = "size", required = false, defaultValue = "5") int size, Principal principal,
 			Model model) {
 
 		if (siqJobFilter == null || (siqJobFilter.size() == 1 && siqJobFilter.get(0).isEmpty())) {
@@ -69,7 +73,8 @@ public class InterviewQuestionListController {
 		ArticlePage<SelfIntroQVO> page = new ArticlePage<>(total, currentPage, size, selfIntroQVOList, keyword);
 		page.setUrl("/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do");
 
-		model.addAttribute("memId", principal.getName());
+		String memIdStr = (principal != null && !"anonymousUser".equals(principal.getName())) ? principal.getName()	: "";
+		model.addAttribute("memId", memIdStr);
 		model.addAttribute("codeMap", codeMap);
 		model.addAttribute("codeVOList", codeVOList);
 		model.addAttribute("articlePage", page);
@@ -79,21 +84,45 @@ public class InterviewQuestionListController {
 	}
 
 	@PostMapping("/cart")
-	public String saveCart(
-			@RequestParam("questionIds") String questionIds, 
-			HttpSession session, 
-			@AuthenticationPrincipal String memId, 
-			HttpServletRequest requset) {
-		int id = Integer.parseInt(memId);
-		List<Integer> questionIdList = Arrays.stream(questionIds.split(",")).filter(s -> !s.isBlank()).map(Integer::valueOf).collect(Collectors.toList());
+	public String saveCart(@RequestParam("questionIds") String questionIds,
+				            Principal principal,
+				            HttpServletRequest request) {
+		if (principal == null || "anonymousUser".equals(principal.getName())) {
+	        return "redirect:/login";
+	    }
+		int id = Integer.parseInt(principal.getName());
+		// 선택 질문 파싱
+		List<Integer> iqIdList = Arrays.stream(questionIds.split(",")).filter(s -> !s.isBlank()).map(Integer::valueOf)
+				.collect(Collectors.toList());
 
-		SelfIntroVO selfIntroVO = new SelfIntroVO();
-		selfIntroVO.setMemId(id);
+		if (iqIdList.isEmpty()) {
+			// 선택 없으면 리스트로 돌려보내기(경고 플래그 등 필요시 추가)
+			return "redirect:/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do";
+		}
 
-		int siId = selfIntroService.insertIntroToQList(selfIntroVO, questionIdList);
+		List<Integer> commonIqIds = interviewQuestionMangementService.selectCommonQuestions().stream()
+				.map(InterviewQuestionVO::getIqId) // 자동 박싱됨 (int -> Integer)
+				.collect(Collectors.toList());
 
-		requset.setAttribute("siId", siId);
-		return "redirect:/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do?siId=" + siId;
+		List<Integer> allIqIds = new ArrayList<>(commonIqIds.size() + iqIdList.size());
+		allIqIds.addAll(commonIqIds);
+		allIqIds.addAll(iqIdList);
+
+		// 1) 헤더 생성 (상태는 작성중, 제목은 기본값)
+		InterviewDetailListVO header = new InterviewDetailListVO();
+		header.setMemId(id);
+		header.setIdlTitle("새 면접 질문"); // DB가 NULL 허용이면 생략 가능
+		header.setIdlStatus("작성중");
+
+		int newIdlId = interviewQuestionMangementService.insertInterviewQuestionId(header);
+
+		// 2) 디테일 생성 (답변은 빈 문자열로 초기화)
+		List<String> idAnswerList = iqIdList.stream().map(x -> "").collect(Collectors.toList());
+		interviewQuestionMangementService.insertInterviewDetails(newIdlId, allIqIds, idAnswerList);
+
+		// 3) 작성 페이지로 이동
+		request.setAttribute("idlId", newIdlId);
+		return "redirect:/cdp/imtintrvw/intrvwqestnmn/detail.do?idlId=" + newIdlId;
 	}
 
 }

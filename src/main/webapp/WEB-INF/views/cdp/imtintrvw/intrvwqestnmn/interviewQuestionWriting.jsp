@@ -28,87 +28,80 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		
-  		<div class="public-wrapper-main">
+   <div class="public-wrapper-main">
+      <section class="selfintro-write-form">
+        <form action="/cdp/imtintrvw/intrvwqestnmn/save" method="post">
+          <!-- 제목 -->
+          <div class="section-title">
+            <input type="text" name="idlTitle" value="${interviewDetailListVO.idlTitle}"
+                   placeholder="제목을 입력하세요." class="title-input" required="required" />
+            <input type="hidden" name="idlId" value="${empty interviewDetailListVO.idlId ? 0 : interviewDetailListVO.idlId}" />
+            <input type="hidden" name="memId" value="${interviewDetailListVO.memId}" />
+            <input type="hidden" name="idlStatus" id="idlStatus" value="완료" />
+          </div>
 
-			<section class="selfintro-write-form">
-				<form action="/cdp/imtintrvw/intrvwqestnmn/save" method="post">
-					<!-- 제목 -->
-					<div class="section-title">
-						<input type="text" name="idlTitle" value="${interviewDetailListVO.idlTitle}"
-							placeholder="제목을 입력하세요." class="title-input" required="required" />
-						<input type="hidden" name="idlId" value="${interviewDetailListVO.idlId}" /> <input
-							type="hidden" name="memId" value="${interviewDetailListVO.memId}" /> <input
-							type="hidden" name="idlStatus" id="idlStatus" value="완료" />
-					</div>
+          <div id="questionContainer">
+            <!-- 신규 작성: 공통 질문 렌더링 -->
+            <c:if test="${empty interviewQuestionVOList}">
+              <c:forEach var="q" items="${commonQList}" varStatus="st">
+                <div class="qa-block">
+                  <div class="question-block">
+                    <span class="question-number">${st.index + 1}.</span>
+                    <span class="question-text">${q.iqContent}</span>
+                    <input type="hidden" name="iqIdList" value="${q.iqId}" />
+                  </div>
+                  <div class="answer-block">
+                    <textarea name="idAnswerList" placeholder="답변을 작성해주세요."
+                              rows="7" maxlength="2000"
+                              oninput="countChars(this, ${st.index})"></textarea>
+                    <div class="char-count">글자 수: <span id="charCount-${st.index}">0</span> / 2000</div>
+                  </div>
+                </div>
+              </c:forEach>
+            </c:if>
 
+            <!-- 수정 모드: 저장된 질문/답변 렌더링 -->
+            <c:if test="${not empty interviewQuestionVOList}">
+              <c:forEach var="q" items="${interviewQuestionVOList}" varStatus="st">
+                <div class="qa-block">
+                  <div class="question-block">
+                    <span class="question-number">${st.index + 1}.</span>
+                    <span class="question-text">${q.iqContent}</span>
+                    <input type="hidden" name="iqIdList" value="${q.iqId}" />
+                  </div>
+                  <div class="answer-block">
+                    <textarea name="idAnswerList" placeholder="답변을 작성해주세요."
+                              rows="7" maxlength="2000"
+                              oninput="countChars(this, ${st.index})">${interviewDetailVOList[st.index].idAnswer}</textarea>
+                    <div class="char-count">글자 수: <span id="charCount-${st.index}">0</span> / 2000</div>
+                  </div>
+                </div>
+              </c:forEach>
+            </c:if>
+          </div>
 
-					<!--  ➤ 질문·답변 블록이 들어갈 컨테이너 -->
-					<div id="questionContainer">
-						<!-- 1) 공통 질문 -->
-						<c:forEach var="q" items="${commonQList}" varStatus="st">
-							<div class="qa-block">
-								<div class="question-block">
-									<span class="question-number">${st.index + 1}.</span> <span
-										class="question-text">${q.iqContent}</span> <input
-										type="hidden" name="iqIdList" value="${q.iqId}" />
-								</div>
-								<div class="answer-block">
-									<textarea name="idAnswerList" placeholder="답변을 작성해주세요."
-										rows="7" maxlength="2000"
-										oninput="countChars(this, ${st.index})"></textarea>
-									<div class="char-count">
-										글자 수: <span id="charCount-${st.index}">0</span> / 2000
-									</div>
-								</div>
-							</div>
-						</c:forEach>
+          <!-- 버튼 그룹 -->
+          <div class="btn-group">
+            <div class="btn-left-group">
+              <c:if test="${not empty interviewDetailListVO.idlId}">
+                <button type="button" class="btn-delete" id="btnDelete">삭제하기</button>
+              </c:if>
+            </div>
+            <div class="btn-right-group">
+              <button type="button" class="btn-temp-save" id="btnTemp">임시저장</button>
+              <button type="button" class="btn-preview">미리보기</button>
+              <button type="submit" class="btn-submit">작성완료</button>
+            </div>
+          </div>
+        </form>
 
-						<!-- 2) 선택된 질문(수정 모드) -->
-						<c:if test="${not empty interviewQuestionVOList}">
-							<c:forEach var="q" items="${interviewQuestionVOList}" varStatus="st">
-								<div class="qa-block">
-									<div class="question-block">
-										<span class="question-number">${globalIndex + 1}.</span> <span
-											class="question-text">${q.iqContent}</span> <input
-											type="hidden" name="iqIdList" value="${q.iqId}" />
-									</div>
-									<div class="answer-block">
-										<textarea name="idAnswerList" placeholder="답변을 작성해주세요."
-											rows="7" maxlength="2000"
-											oninput="countChars(this, ${globalIndex})">${interviewDetailVOList[st.index].idAnswer}</textarea>
-										<div class="char-count">
-											글자 수: <span id="charCount-${globalIndex}">0</span> / 2000
-										</div>
-									</div>
-								</div>
-							</c:forEach>
-
-						</c:if>
-					</div>
-
-
-					<!--  ➤ 버튼 그룹 -->
-					<div class="btn-group">
-						<!-- 왼쪽: 삭제 버튼 -->
-						<div class="btn-left-group">
-							<c:if
-								test="${interviewDetailListVO.idlId  != 0 && not empty interviewDetailListVO.idlId }">
-								<button type="button" class="btn-delete">삭제하기</button>
-							</c:if>
-						</div>
-
-						<!-- 오른쪽: 임시저장/미리보기/작성완료 -->
-						<div class="btn-right-group">
-							<button type="button" class="btn-temp-save">임시저장</button>
-							<button type="button" class="btn-preview">미리보기</button>
-							<button type="submit" class="btn-submit">작성완료</button>
-						</div>
-					</div>
-				</form>
-			</section>
-		</div>
-  		
-	</div>
+        <!-- 삭제 전송용 폼 -->
+        <form id="deleteForm" action="/cdp/imtintrvw/intrvwqestnmn/delete.do" method="post" style="display:none;">
+          <input type="hidden" name="idlId" value="${interviewDetailListVO.idlId}" />
+        </form>
+      </section>
+    </div>
+  </div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>

@@ -3,6 +3,7 @@ package kr.or.ddit.cdp.imtintrvw.intrvwqestnmn.web;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO;
 import kr.or.ddit.cdp.imtintrvw.intrvwqestnmn.service.InterviewQuestionMangementService;
 import kr.or.ddit.cdp.sint.service.SelfIntroContentVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
+import kr.or.ddit.cdp.sint.service.SelfIntroService;
+import kr.or.ddit.cdp.sint.service.SelfIntroVO;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +32,9 @@ public class InterviewQuestionMangementController {
 	
 	@Autowired
 	private InterviewQuestionMangementService interviewQuestionMangementService;
+	
+	@Autowired
+	private SelfIntroService selfIntroService;
 	
 	@GetMapping("/interviewQuestionMangementList.do")
 	public String interviewQuestionMangement(Principal principal, Model model, @RequestParam(required = false) String keyword,
@@ -79,6 +85,7 @@ public class InterviewQuestionMangementController {
 		interviewDetailListVO.setMemId(Integer.parseInt(memId));
 		// 2) 이미 저장된 면접질문(idlId)가 있으면, 그에 딸린 질문·답변
 		List<InterviewQuestionVO> interviewQuestionVOlist = Collections.emptyList();
+		
 		List<InterviewDetailVO> interviewDetailVOList = Collections.emptyList();
 		
 		if (idlId != null) {
@@ -96,9 +103,36 @@ public class InterviewQuestionMangementController {
 			List<InterviewDetailVO> contentList = interviewQuestionMangementService.selectByInterviewQuestionContentIdList(interviewDetailListVO);
 
 			// contentList 기반으로 질문 VO 리스트
-			List<InterviewQuestionVO> qList = contentList.stream().map(c -> interviewQuestionMangementService.selectByInterviewQuestionQId(c))
-					.collect(Collectors.toList());
+//			List<InterviewQuestionVO> qList = contentList.stream().map(c -> interviewQuestionMangementService.selectByInterviewQuestionQId(c))
+//					.collect(Collectors.toList());
 
+			List<InterviewQuestionVO> qList = contentList.stream().map(c -> {
+			    // 1. 우리가 가진 ID는 사실 자기소개서 질문 ID(siqId)입니다.
+			    int siqId = c.getIqId();
+
+			    // 2. 자기소개서 서비스에 물어보기 위해 임시 객체를 만듭니다.
+			    SelfIntroContentVO tempVO = new SelfIntroContentVO();
+			    tempVO.setSiqId(siqId);
+
+			    // 3. '자기소개서 서비스'를 통해 질문 내용을 찾아옵니다.
+			    SelfIntroQVO selfIntroQ = selfIntroService.selectBySelfIntroQId(tempVO);
+
+			    // 4. 만약 질문을 찾았다면, JSP가 알아볼 수 있는 InterviewQuestionVO 형태로 변환해줍니다.
+			    if (selfIntroQ != null) {
+			        InterviewQuestionVO interviewQ = new InterviewQuestionVO();
+			        interviewQ.setIqId(selfIntroQ.getSiqId());
+			        interviewQ.setIqGubun(selfIntroQ.getSiqJob());
+			        interviewQ.setIqContent(selfIntroQ.getSiqContent());
+			        return interviewQ;
+			    }
+
+			    // 못 찾았다면 null을 반환합니다.
+			    return null;
+
+			}).filter(vo -> vo != null) // 혹시 null이 있으면 리스트에서 최종 제거합니다.
+			  .collect(Collectors.toList());
+			
+			log.info("생성된 질문 리스트 qList: {}", qList);
 			model.addAttribute("interviewDetailListVO", interviewDetailListVO);
 			model.addAttribute("interviewDetailVOList", contentList);
 			model.addAttribute("interviewQuestionVOList", qList);
@@ -132,10 +166,35 @@ public class InterviewQuestionMangementController {
 		if(idlId == 0) {
 			//신규저장
 			int newIdlId = interviewQuestionMangementService.insertInterviewQuestionId(interviewDetailListVO);
-			
-		}
+			interviewQuestionMangementService.insertInterviewDetails(newIdlId, iqIdList, idAnswerList);
+		}else {
+			 // 기존 글 업데이트
+			interviewDetailListVO.setIdlId(idlId);
+	        interviewQuestionMangementService.updateInterview(interviewDetailListVO);
+
+	        // 1) 기존 DETAIL 리스트 조회
+	        List<InterviewDetailVO> existing = interviewQuestionMangementService
+	                .selectByInterviewQuestionContentIdList(
+	                        new InterviewDetailListVO() {{ setIdlId(idlId); }});
+
+	        // 2) Map<iqId, idId> 생성
+	        Map<Integer, Integer> qToIdId = existing.stream()
+	                .collect(Collectors.toMap(InterviewDetailVO::getIqId, InterviewDetailVO::getIdId));
+
+	        // 3) 전달받은 iqIdList, idAnswerList 순회하며 업데이트
+	        interviewQuestionMangementService.updateInterviewDetails(iqIdList, qToIdId, idAnswerList);
+	    }
 		
-		
+		return "redirect:/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do";
+	}
+	
+	@PostMapping("/delete.do")
+	public String selfIntroDelete(@RequestParam(required = true) String idlId) {
+		InterviewDetailListVO interviewDetailListVO = new InterviewDetailListVO();
+		interviewDetailListVO.setIdlId(Integer.parseInt(idlId));
+
+		// 면접 전체 삭제
+		interviewQuestionMangementService.deleteInterviewQuestion(interviewDetailListVO);
 
 		return "redirect:/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do";
 	}

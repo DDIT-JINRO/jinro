@@ -1,9 +1,11 @@
 package kr.or.ddit.cdp.imtintrvw.intrvwqestnmn.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.cdp.imtintrvw.intrvwqestnmn.service.InterviewQuestionMangementService;
 import kr.or.ddit.exception.CustomException;
@@ -40,12 +42,12 @@ public class InterviewQuestionMangementServiceImpl implements InterviewQuestionM
 	// 면접질문 정보 가져오기
 	@Override
 	public InterviewDetailListVO selectByInterviewQuestionId(InterviewDetailListVO interviewDetailListVO) {
-		interviewDetailListVO = interviewQuestionMangementMapper.selectBySelfIntroId(interviewDetailListVO);
+		interviewDetailListVO = interviewQuestionMangementMapper.selectByInterviewQuestionId(interviewDetailListVO);
 		
 		if(interviewDetailListVO == null) {
 			throw new CustomException(ErrorCode.INVALID_INPUT);
 		}
-		return interviewQuestionMangementMapper.selectBySelfIntroId(interviewDetailListVO);
+		return interviewDetailListVO;
 	}
 	// 본인 면접질문인지 확인
 	@Override
@@ -89,6 +91,46 @@ public class InterviewQuestionMangementServiceImpl implements InterviewQuestionM
 		interviewQuestionMangementMapper.insertInterviewQuestion(interviewDetailListVO);
 		
 		return idlId;
+	}
+
+	@Override
+	@Transactional
+	public void insertInterviewDetails(int idlId, List<Integer> iqIdList, List<String> idAnswerList) {
+	    for (int i = 0; i < iqIdList.size(); i++) {
+	        int newIdId = interviewQuestionMangementMapper.selectMaxInterviewDetailId();
+	        InterviewDetailVO interviewDetailListVO = new InterviewDetailVO();
+	        interviewDetailListVO.setIdId(newIdId);
+	        interviewDetailListVO.setIdlId(idlId);
+	        interviewDetailListVO.setIqId(iqIdList.get(i));
+	        interviewDetailListVO.setIdAnswer(idAnswerList.get(i));
+	        interviewDetailListVO.setIdOrder(i + 1);
+	        interviewQuestionMangementMapper.insertInterviewDetail(interviewDetailListVO);
+	    }
+	}
+
+	@Override
+	public void updateInterview(InterviewDetailListVO interviewDetailListVO) {
+		 interviewQuestionMangementMapper.updateInterview(interviewDetailListVO);
+	}
+
+	@Override 
+	@Transactional
+	public void updateInterviewDetails(List<Integer> iqIdList, Map<Integer,Integer> qToIdId, List<String> idAnswerList) {
+	    for (int i = 0; i < iqIdList.size(); i++) {
+	        int iqId = iqIdList.get(i);
+	        int idId = qToIdId.get(iqId);          // 기존 행 식별자
+	        String answer = idAnswerList.get(i);
+	        int order = i + 1;
+	        interviewQuestionMangementMapper.updateInterviewDetail(idId, iqId, answer, order);
+	    }
+	}
+
+	// 면접 전체 삭제
+	@Override
+	@Transactional
+	public void deleteInterviewQuestion(InterviewDetailListVO interviewDetailListVO) {
+		interviewQuestionMangementMapper.deleteInterviewQuestionContent(interviewDetailListVO);
+		interviewQuestionMangementMapper.deleteInterviewQuestion(interviewDetailListVO);
 	}
 
 }

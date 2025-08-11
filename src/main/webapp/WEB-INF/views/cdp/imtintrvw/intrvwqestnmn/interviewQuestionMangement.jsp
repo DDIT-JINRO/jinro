@@ -50,16 +50,16 @@
 					<div class="intro-list-header">총 ${articlePage.total}건</div>
 				</sec:authorize>
 
-				<c:forEach var="qustion" items="${articlePage.content}">
+				<c:forEach var="question" items="${articlePage.content}">
 					<div class="intro-card">
 						<div class="intro-title-section">
-							<div class="intro-title">${qustion.idlTitle}</div>
+							<div class="intro-title">${question.idlTitle}</div>
 							<div class="intro-meta">
 								<span class="intro-date"> 수정일 : <fmt:formatDate
-										value="${qustion.idlUpdatedAt}" pattern="yyyy. MM. dd (E) HH:mm" />
+										value="${question.idlUpdatedAt}" pattern="yyyy. MM. dd (E) HH:mm" />
 								</span> <span class="intro-status"> 상태 : <c:choose>
-										<c:when test="${qustion.idlStatus eq '완료'}">완료</c:when>
-										<c:when test="${qustion.idlStatus eq '작성중'}">임시 저장</c:when>
+										<c:when test="${question.idlStatus eq '완료'}">완료</c:when>
+										<c:when test="${question.idlStatus eq '작성중'}">임시 저장</c:when>
 										<c:otherwise>미지정</c:otherwise>
 									</c:choose>
 								</span>

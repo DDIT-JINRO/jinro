@@ -1,6 +1,7 @@
 package kr.or.ddit.cdp.imtintrvw.intrvwqestnmn.service;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailVO;
@@ -31,5 +32,15 @@ public interface InterviewQuestionMangementService {
 
 	//신규 면접 정보 등록
 	public int insertInterviewQuestionId(InterviewDetailListVO interviewDetailListVO);
+
+	public void insertInterviewDetails(int newIdlId, List<Integer> iqIdList, List<String> idAnswerList);
+
+	public void updateInterview(InterviewDetailListVO interviewDetailListVO);
+
+	public void updateInterviewDetails(List<Integer> iqIdList, Map<Integer, Integer> qToIdId,
+			List<String> idAnswerList);
+
+	// 면접 전체 삭제
+	public void deleteInterviewQuestion(InterviewDetailListVO interviewDetailListVO);
 
 }

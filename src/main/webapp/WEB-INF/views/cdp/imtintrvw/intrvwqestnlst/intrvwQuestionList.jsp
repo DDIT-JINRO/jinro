@@ -28,7 +28,7 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-			<form method="get" action="/cdp/sint/qestnlst/questionList.do">
+			<form method="get" action="/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do">
 				<div class="search-wrapper">
 					<input type="text" name="keyword" value="${articlePage.keyword}"
 						placeholder="질문 검색" class="search-input" />
@@ -60,7 +60,8 @@
 			</form>
 
 
-			<form id="cartForm" method="post" action="/cdp/sint/qestnlst/cart">
+			<form id="cartForm" method="post" action="/cdp/imtintrvw/intrvwqestnlst/cart">
+				<sec:csrfInput/>
 				<input type="hidden" id="questionIds" name="questionIds" />
 
 				<div class="question-list">
@@ -81,8 +82,7 @@
 				<!-- 오른쪽 패널 -->
 				<div class="cart-panel">
 					<div id="cartSidebar"></div>
-						<button type="button" class="submitCartForm" >면접 질문
-							작성</button>
+						<button type="submit" class="submitCartForm" >면접 질문 작성</button>
 				</div>
 			</form>
 
@@ -125,6 +125,11 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
+<script type="text/javascript">
+	// Spring Controller의 Model에 담긴 'memId' 값을
+	// JavaScript 전역 변수인 'window.currentMemId'에 설정해줍니다.
+	window.currentMemId = "${memId}";
+</script>
 <script type="text/javascript"
 	src="/js/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.js">
 </script>
