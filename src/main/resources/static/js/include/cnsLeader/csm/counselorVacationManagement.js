@@ -1,28 +1,20 @@
+/**
+ *
+ */
+
 // 전역 상태
 window.currentPage = 1;
-window.currentCounselId = null;
-
-function getDifficultyText(difCode){
-	switch (genCode){
-		case "G13001":
-			return "상"
-		case "G13002":
-			return "중"
-		case "G13003":
-			return "하"
-		default:
-			return "-";
-	}
-}
+window.currentVaId = null;
+window.editor = {};
 
 function isConfirmed(clConfirmCode){
 	switch (clConfirmCode) {
 	  case null:
 	  case undefined:
 	  case "S03002":
+	  case "S03003":
 	    return false;
 	  case "S03001":
-	  case "S03003":
 	    return true;
 	  default:
 	    return false;  // 그 외 예상치 못한 코드
@@ -98,7 +90,7 @@ function renderPagination({ startPage, endPage, currentPage, totalPages }) {
 	let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 
 	for (let p = startPage; p <= endPage; p++) {
-		html += `<a href="#" onclick="fetchCounselingLog(${p})" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
+		html += `<a href="#" onclick="fetchVacationList(${p})" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
 	}
 
 	html += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
@@ -108,23 +100,22 @@ function renderPagination({ startPage, endPage, currentPage, totalPages }) {
 }
 
 // 실제 데이터 + 페이징 조회
-function fetchCounselingLog(page = 1) {
+function fetchVacationList(page = 1) {
 	const pageSize = 10;
 	const keyword = document.querySelector('input[name="keyword"]').value;
 	const status = document.querySelector('select[name="status"]').value;
-	const year = document.querySelector('select[name="year"]').value;
+	const filter = document.querySelector('input[name="filter"]:checked').value;
 
-	axios.get('/api/cns/counselList.do', {
+	axios.get('/api/cnsld/vacationList.do', {
 			params: {
 				currentPage: page,
 				size: pageSize,
 				keyword: keyword,
 				status: status,
-				year: year,
+				filter: filter,
 			}
 		})
 		.then(({ data }) => {
-			window.currentPage = page;
 			const countEl = document.getElementById('notice-count');
 			let cnt = (page-1) * pageSize +1;
 			if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
@@ -133,19 +124,21 @@ function fetchCounselingLog(page = 1) {
 			if (!listEl) return;
 
 			if (data.content.length < 1 && keyword.trim() !== '') {
-				listEl.innerHTML = `<tr><td colspan='4' style="text-align: center;">등록되지 않은 정보입니다.</td></tr>`;
+				listEl.innerHTML = `<tr><td colspan='6' style="text-align: center;">등록되지 않은 정보입니다.</td></tr>`;
 			} else {
 				const rows = data.content.map(item => `
-					<tr data-cns-id="${item.counselId}" onclick="showDetail(${item.counselId})">
+					<tr data-va-id="${item.vaId}" onclick="showDetail(${item.vaId})">
 						<td>${cnt++}</td>
 						<td>${item.memName}</td>
-						<td>${calculateAge(new Date(item.memBirth))}</td>
-						<td>${item.memEmail}</td>
 						<td>${item.memPhoneNumber}</td>
-						<td>${getApprovalStatusText(item.counselingLog.clConfirm)}</td>
+						<td>${formatDateMMDD(new Date(item.requestedAt))}</td>
+						<td>${formatDateMMDD(new Date(item.vaStart))}</td>
+						<td>${formatDateMMDD(new Date(item.vaEnd))}</td>
+						<td>${getApprovalStatusText(item.vaConfirm)}</td>
 					</tr>
 					`).join('');
 				listEl.innerHTML = rows;
+				window.currentPage = page;
 				renderPagination(data);
 			}
 		})
@@ -168,13 +161,12 @@ function resetAfterConfirm(){
 function resetDetail() {
 	document.getElementById('fileGroupId').value = '';
 	document.getElementById("file").style.display = "none";
-	document.getElementById("existing-files").innerHTML = "";
-	document.querySelector('.info-table').style.display = 'none';
+	document.getElementById("existing-files").innerHTML = "<tr><td colspan='9'>선택된 정보가 없습니다</td></tr>";
 	document.getElementById('info-table-tbody').innerHTML = '';
-	document.querySelector('input[name="clTitle"]').value = '';
-	window.editor?.setData('');
-	document.getElementById('noticeFileInput').value = '';
-	window.editor.enableReadOnlyMode('clContent');
+	window.editor[0]?.setData('');
+	window.editor[0].enableReadOnlyMode('clContent');
+	window.editor[1]?.setData('');
+	window.editor[1].enableReadOnlyMode('etcContent');
 }
 
 // 파일 다운로드를 위해서 헤더에서 기존 이름 + 확장자 처리된것 복구 시키기
@@ -212,82 +204,80 @@ function filedownload(fileGroupId, fileSeq) {
 }
 
 // 단일 파일 삭제
-function deleteExistingFile(fileGroupId, seq, counselId) {
+function deleteExistingFile(fileGroupId, seq, vaId) {
 	axios.get('/api/cns/counsel/deleteFile.do', {
 			params: { fileGroupId, seq }
 		})
-		.then(() => showDetail(counselId))
+		.then(() => showDetail(vaId))
 		.catch(console.error);
 }
 
 // 상세 출력
-function showDetail(counselId) {
-	if (!counselId) return;
+function showDetail(vaId) {
+	if (!vaId) return;
 	resetDetail();
-	window.editor.disableReadOnlyMode('clContent');
+	window.editor[0].disableReadOnlyMode('clContent');
 
-	axios.get('/api/cns/counselDetail.do', { params: { counselId } })
+	axios.get('/api/cnsld/vacationDetail.do', { params: { vaId } })
 		.then(response => {
 			const resp = response.data;
+			window.currentVaId = vaId;
+			document.getElementById('vaId').value = resp.vaId;
+			document.getElementById('fileGroupId').value = resp.fileGroupId;
 
-			window.currentCounselId = counselId;
-			document.getElementById('counselLogId').value = resp.counselingLog.clIdx;
-			document.getElementById('counselId').value = resp.counselId;
-			document.getElementById('fileGroupId').value = resp.counselingLog.fileGroupId;
-			document.getElementById('btn-save').style.display = isConfirmed(resp.counselingLog.clConfirm) ? 'none' : 'inline-block';
-			document.getElementById('btn-confirm').style.display = isConfirmed(resp.counselingLog.clConfirm) ? 'none' : 'inline-block';
-			document.getElementById('noticeFileInput').disabled = isConfirmed(resp.counselingLog.clConfirm) ? true : false;
+			//접수처리 제외하고 버튼 가리기
+			document.getElementById('btn-save').style.display = isConfirmed(resp.vaConfirm) ? "inline-block" : "none";
+			document.getElementById('btn-confirm').style.display = isConfirmed(resp.vaConfirm) ? "inline-block" : "none";
 
+			//접수처리 제외하고 비고란 입력 막기
+			isConfirmed(resp.vaConfirm)
+					? window.editor[1].disableReadOnlyMode('etcContent')
+					: window.editor[1].enableReadOnlyMode('etcContent');
 
-			const infoTable = document.querySelector('.info-table');
-			infoTable.style.display = 'table';
-
-			const elForNum = document.querySelector(`#notice-list tr[data-cns-id='${counselId}']`);
+			const elForNum = document.querySelector(`#notice-list tr[data-va-id='${vaId}']`);
 			const num = elForNum.firstElementChild.textContent.trim();
 
 			document.getElementById("info-table-tbody").innerHTML = `
 	        <tr>
 	          <td>${num}</td>
 	          <td>${resp.memName}</td>
-	          <td>${getGenText(resp.memGen)}</td>
-	          <td>${calculateAge(new Date(resp.memBirth))}</td>
-	          <td>
-			  	<select name="clDifficulty" id="clDifficulty" ${isConfirmed(resp.counselingLog.clConfirm) ? 'disabled':''}>
-					<option value="">선택</option>
-					<option value="G13001" ${resp.counselingLog.clDifficulty == 'G13001'? 'selected': ''}>상</option>
-					<option value="G13002" ${resp.counselingLog.clDifficulty == 'G13002'? 'selected': ''}>중</option>
-					<option value="G13003" ${resp.counselingLog.clDifficulty == 'G13003'? 'selected': ''}>하</option>
-				</select>
-			  </td>
-	          <td>
-			  	<input type="radio" name="clContinue" value="Y" ${resp.counselingLog.clContinue == 'Y'? 'checked': ''}  ${isConfirmed(resp.counselingLog.clConfirm) ? 'disabled':''}/>종결
-			  	<input type="radio" name="clContinue" value="N" ${resp.counselingLog.clContinue == 'N'? 'checked': ''}  ${isConfirmed(resp.counselingLog.clConfirm) ? 'disabled':''}/>계속
-			  </td>
-	          <td>${resp.counselingLog.updatedAt ? formatDateMMDD(new Date(resp.counselingLog.updatedAt)) : '미작성'}</td>
-	          <td>${getApprovalStatusText(resp.counselingLog.clConfirm)}</td>
+	          <td>${resp.memPhoneNumber}</td>
+	          <td>${formatDateMMDD(new Date(resp.requestedAt))}</td>
+	          <td>${formatDateMMDD(new Date(resp.vaStart))}</td>
+	          <td>${formatDateMMDD(new Date(resp.vaEnd))}</td>
+	          <td>${getApprovalStatusText(resp.vaConfirm)}</td>
 	        </tr>`;
 
-			document.querySelector('input[name="clTitle"]').value = resp.counselTitle;
 
-			if(resp.counselingLog.clContent){
-				window.editor?.setData(resp.counselingLog.clContent);
+			if(resp.vaReason){
+				window.editor[0]?.setData(resp.vaReason);
+			}
+			// 접수 상태와 상관없이 상담일지의 내용은 변경 불가하도록
+			window.editor[0].enableReadOnlyMode('clContent');
+
+			if(resp.vaEtc){
+				window.editor[1]?.setData(resp.vaEtc);
 			}
 
-			if(resp.counselingLog.clConfirm == 'S03001' || resp.counselingLog.clConfirm == 'S03003'){
-				window.editor.enableReadOnlyMode('clContent');
+			if(resp.vaEtc){
+				window.editor[1]?.setData(resp.vaEtc);
+			}
+
+			// 접수 상태면 비고란 활성화
+			if(resp.vaConfirm == 'S03001'){
+				window.editor[1].disableReadOnlyMode('etcContent');
 			}
 
 			const ul = document.getElementById("existing-files");
-			if (!resp.counselingLog.fileDetailList || resp.counselingLog.fileDetailList.length === 0) {
+			if (!resp.fileDetailList || resp.fileDetailList.length === 0) {
 				ul.innerHTML = '<li>첨부된 파일이 없습니다.</li>';
 				document.getElementById("file").style.display = "block";
 			} else {
-				document.getElementById('fileGroupId').value = resp.counselingLog.fileDetailList[0].fileGroupId;
+				document.getElementById('fileGroupId').value = resp.fileDetailList[0].fileGroupId;
 				document.getElementById("file").style.display = "block";
-				ul.innerHTML = resp.counselingLog.fileDetailList.map(f => `
+				ul.innerHTML = resp.fileDetailList.map(f => `
 	          	<li>
 	            <div onclick="filedownload('${f.fileGroupId}', ${f.fileSeq})" target="_blank">${f.fileOrgName}</div>&nbsp;&nbsp;
-	            ${isConfirmed(resp.counselingLog.clConfirm)? '': `<button type="button" onclick="deleteExistingFile('${f.fileGroupId}', '${f.fileSeq}', ${counselId})">삭제</button>`}
 	          	</li>`
 				).join('');
 			}
@@ -295,53 +285,104 @@ function showDetail(counselId) {
 		.catch(console.error);
 }
 
-function insertOrUpdate(action) {
-	const form = document.getElementById('form-data');
-	const fd = new FormData(form);
+// 반려 혹은 승인처리 update
+async function updateConfirmation(action) {
 
-	const clDifficultySelectEl = document.getElementById('clDifficulty');
-	if(clDifficultySelectEl.value == null || clDifficultySelectEl.value == '' ){
-		alert('상담난이도를 선택해주세요');
-		clDifficultySelectEl.focus();
-		return;
+	const fd = new FormData();
+	let actionStr = '';
+
+	// 상담일지 기본키세팅
+	const vaId = document.getElementById('vaId').value;
+	const etc = window.editor[1].getData().trim();
+	fd.append('vaId', vaId);
+
+	// 반려버튼 클릭 시
+	if(action == 'reject'){
+		if(!etc){
+			alert('반려시 사유 입력은 필수입니다');
+		}
+		// 반려코드 세팅
+		fd.set('vaConfirm', 'S03002');
+		actionStr = '반려'
 	}
 
-	const clContinueRadioEl = document.querySelector('input[name="clContinue"]:checked');
-	if(!clContinueRadioEl){
-		alert('추가상담여부를 선택해주세요');
-		return;
-	}
-
-	fd.set('clContent', window.editor?.getData() || '');
-	// 계속 종결 여부,
-	fd.append('clDifficulty', clDifficultySelectEl.value);
-	// 난이도 체크
-	fd.append('clContinue', clContinueRadioEl.value);
-
-	// action 값에 따라서 cl_confirm
+	// 승인 버튼 클릭시 승인코드 세팅
 	if(action == 'confirm'){
-		fd.append('clConfirm', 'S03001');
+		fd.set('vaConfirm', 'S03003')
+		actionStr = '승인'
 	}
 
-	axios.post('/api/cns/updateCnsLog.do', fd)
-		.then(resp => {
-			const data = resp.data;
-			alert(data);
-			showDetail(document.getElementById('counselId').value);
-			// 제출하고나면 상태값 변경되므로 목록에도 반영하기 위해 다시 호출
-			if(action=='confirm'){
-				fetchCounselingLog(window.currentPage);
-			}
-		})
-		.catch(err => console.error('등록 실패:', err.response || err));
+	// 비고란 입력시 내용 세팅
+	if(etc){
+		fd.append('vaEtc', etc);
+	}
+
+	// 반려/승인 처리 전 확인
+	if(!confirm(`${actionStr} 처리 진행하시겠습니까?`)) return;
+	// 승인인 경우 이미 예약이 존재하는지 한번더 체크
+	if(action == 'confirm'){
+		const resp = await axios.get('/api/cnsld/checkCounselList.do?vaId='+vaId);
+		const counselList = resp.data;
+		let alertStr = '';
+		if(counselList && counselList.length > 0){
+			alertStr += '해당 휴가 기간에 상담예약이 존재합니다.\n';
+			counselList.forEach(c =>{
+				const date = new Date(c.counselReqDatetime);
+				const dateStr = `${date.getFullYear()}. ${date.getMonth()+1}. ${date.getDate()}. ${date.getHours()}시${date.getMinutes()}분 상담`;
+				alertStr += `${c.memName}님 ${dateStr}\n`;
+			})
+			alertStr += '전체 예약 취소하고 승인 진행하시겠습니까?';
+		}
+		if(alertStr != ''){
+			const lastCheck = confirm(alertStr);
+			if(!lastCheck) return;
+		}
+	}
+
+
+	// 업데이트처리
+	axios.post('/api/cnsld/updateVacation.do',fd)
+	.then(resp =>{
+		const result = resp.data;
+		if(result){
+			alert(`정상적으로 ${actionStr}되었습니다`);
+			fetchVacationList(window.currentPage);
+			const vaId = document.getElementById('vaId').value;
+			const targetTr = document.querySelector(`#notice-list tr[data-va-id='${vaId}']`);
+			targetTr.click();
+		}else{
+			alert(`${actionStr}처리 도중 문제가 발생했습니다.\n다시 시도해주세요`);
+		}
+	})
+	.catch(err =>{
+		console.error('err : ',err);
+	})
 }
 
 function waitForInit() {
 	const checkReady = () => {
 		const keywordInput = document.querySelector('input[name="keyword"]');
 		const editorTarget = document.getElementById("clContent");
+		const searchBtn = document.getElementById('btn-search');
+		const filterRadios = document.querySelectorAll('input[name="filter"]');
 
-		if (keywordInput && editorTarget) {
+		filterRadios.forEach(r =>{
+			r.addEventListener('click',()=>{fetchVacationList(1)})
+		})
+
+		keywordInput.addEventListener('keydown',function(e){
+			if(e.code=='Enter'){
+				e.preventDefault();
+				fetchVacationList(1);
+			}
+		})
+		searchBtn.addEventListener('click',function(){
+			fetchVacationList(window.currentPage);
+		})
+
+		const etcEditorTarget = document.getElementById("etcContent");
+
+		if (keywordInput && editorTarget && etcEditorTarget) {
 			ClassicEditor
 				.create(editorTarget, {
 					ckfinder: { uploadUrl: "/image/upload" },
@@ -354,13 +395,31 @@ function waitForInit() {
 						} else {
 							toolbarElement.style.display = 'flex';
 						}
-					} );
+					});
 					editor.enableReadOnlyMode('clContent');
 
-					window.editor = editor;
-					fetchCounselingLog(1);      // 불러오기
+					window.editor[0] = editor;
+					fetchVacationList(1);      // 불러오기
 					eventBinding();   // 이벤트 바인딩
 
+				})
+				.catch(err => console.error("에디터 생성 실패:", err));
+			// 반려사유 작성용 에디터 추가
+			ClassicEditor
+				.create(etcEditorTarget, {
+					ckfinder: { uploadUrl: "/image/upload" },
+				})
+				.then(editor =>{
+					const toolbarElement = editor.ui.view.toolbar.element;
+					editor.on( 'change:isReadOnly', ( evt, propertyName, isReadOnly ) => {
+						if ( isReadOnly ) {
+							toolbarElement.style.display = 'none';
+						} else {
+							toolbarElement.style.display = 'flex';
+						}
+					});
+					editor.enableReadOnlyMode('etcContent');
+					window.editor[1] = editor;
 				})
 				.catch(err => console.error("에디터 생성 실패:", err));
 		} else {

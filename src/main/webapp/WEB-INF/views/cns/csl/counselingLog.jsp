@@ -73,7 +73,7 @@
 		<table class="info-table" style="display: none;">
 			<thead id="info-table-thead">
 				<tr>
-					<th>회원번호</th>
+					<th>번호</th>
 					<th>회원명</th>
 					<th>성별</th>
 					<th>나이</th>

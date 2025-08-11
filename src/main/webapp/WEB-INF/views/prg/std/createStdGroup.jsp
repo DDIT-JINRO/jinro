@@ -131,7 +131,7 @@
 						</div>
 					</div>
 					<label for="chat-title">채팅방 제목</label>
-					<input type="text" placeholder="채팅방 제목을 입력하세요"	class="chat-title-input" id="chat-title"/>
+					<input type="text" placeholder="채팅방 제목을 입력하세요"	class="chat-title-input" id="chatTitle"/>
 					<label for="description">스터디 소개글</label>
 					<textarea class="desc-textarea" placeholder="스터디 소개글을 작성하세요" id="description"></textarea>
 				</div>
