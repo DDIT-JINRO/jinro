@@ -297,10 +297,6 @@
 	width: 85%;
 }
 
-.counsel-item:last-child {
-	border-bottom: none;
-}
-
 .item-content {
 	display: flex;
 	flex-direction: column;
