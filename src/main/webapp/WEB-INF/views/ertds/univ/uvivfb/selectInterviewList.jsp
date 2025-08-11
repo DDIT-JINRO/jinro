@@ -44,7 +44,7 @@
 					<div class="com-select-wrapper">
 						<select name="status" class="com-status-filter">
 							<option value="all">전체</option>
-							<option value="targetName">기업명</option>
+							<option value="targetName">대학명</option>
 							<option value="content">후기 내용</option>
 							<option value="writer">작성자</option>
 						</select>
