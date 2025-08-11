@@ -395,6 +395,7 @@
 		  FROM COUNSELING
 		 WHERE COUNSEL_STATUS = 'S04003'
 		   AND COUNSEL_REQ_DATETIME >= SYSDATE
+		   AND COUNSEL = #{counsel}
 	</select>
 
 	<select id="selectMyInProgressVacationList" parameterType="int" resultType="kr.or.ddit.cns.service.VacationVO">
@@ -404,6 +405,7 @@
 		  FROM VACATION
 		 WHERE VA_CONFIRM != 'S03002'
 		   AND VA_END >= SYSDATE
+		   AND VA_REQUESTOR = #{vaRequestor}
 	</select>
 
 </mapper>

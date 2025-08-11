@@ -279,7 +279,7 @@ function fetchVacationInfo(page = 1) {
 			const listEl = document.getElementById('notice-list');
 			if (!listEl) return;
 
-			if (data.content.length < 1 && keyword.trim() !== '') {
+			if (data.content.length < 1) {
 				listEl.innerHTML = `<tr><td colspan='4' style="text-align: center;">등록되지 않은 정보입니다.</td></tr>`;
 			} else {
 				const rows = data.content.map(item => `
