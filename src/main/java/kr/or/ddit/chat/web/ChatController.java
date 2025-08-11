@@ -197,7 +197,6 @@ public class ChatController {
 
 	@GetMapping("/counselChat/{crId}")
 	public String counselChat(@PathVariable int crId, @AuthenticationPrincipal String memIdStr, Model model) {
-		System.out.println("crId : "+crId);
 		// 현재 채팅방 주소 crId 받아오기 -> 해당 채팅방에 입장된 멤버 조회, 현재 요청중인 회원 정보 받아오기.
 		boolean validateCounselChat = this.chatService.validateCounselChatRoom(crId, memIdStr);
 		// 엑세스 확인 후 페이지로 포워딩, 포워딩된 페이지에서 실시간 채팅을 위해 구독상태 만들어주기.
@@ -230,12 +229,8 @@ public class ChatController {
 	// 메시지 매핑 어노테이션 하나, 상담채팅용 구독 연결해줄 메소드 하나 추가하기
 	@MessageMapping("/chat/counsel")
 	public void counselChatMessage(ChatMessageVO chatMessageVO, Principal principal) {
-		System.out.println("@@@@@@@@@@@@@@@@");
-		System.out.println(chatMessageVO);
-		System.out.println("@@@@@@@@@@@@@@@@");
-
 		// 채팅메시지 테이블에 채팅 삽입 및 채팅 수신테이블에 삽입
-		this.chatService.saveChatMessage(chatMessageVO);
+		this.chatService.saveChatMessageWithoutReceiver(chatMessageVO);
 
 		// 회원 정보까지 풀 정보 다시 받아오기 위해서 단건 조회
 		chatMessageVO = this.chatService.selectChatMessage(chatMessageVO.getMsgId());

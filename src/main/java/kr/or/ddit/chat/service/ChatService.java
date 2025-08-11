@@ -146,4 +146,19 @@ public interface ChatService {
 	 */
 	CounselingVO selectCounselInfoByCrId(int crId);
 
+	/**
+	 * 상담 정보로 상담채팅방 개설
+	 * @param counselingVO
+	 * @return String url.해당 채팅방 입장 URL 반환
+	 */
+	String createCounselingChatRoom(CounselingVO counselingVO);
+
+	/**
+	 * 채팅메시지 테이블에 삽입.
+	 * chat_receiver테이블에 삽입되면 안읽은 메시지 추적해서 모달에 띄우도록됨
+	 * 해당 현상 해결하기 위해 상담용으로 분리
+	 * @param chatMessageVO
+	 */
+	void saveChatMessageWithoutReceiver(ChatMessageVO chatMessageVO);
+
 }

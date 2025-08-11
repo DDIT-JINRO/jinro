@@ -244,4 +244,44 @@ public class ChatServiceImpl implements ChatService {
 		return this.chatMapper.selectCounselInfoByCrId(crId);
 	}
 
+	@Override
+	@Transactional
+	public String createCounselingChatRoom(CounselingVO counselingVO) {
+		String returningURL = "";
+
+		int counselorId = counselingVO.getCounsel();
+		int memId = counselingVO.getMemId();
+
+		// 상담 채팅방 개설
+		ChatRoomVO chatRoomVO = new ChatRoomVO();
+		chatRoomVO.setCcId("G04002");
+		chatRoomVO.setTargetId(counselingVO.getCounselId());
+		chatRoomVO.setCrMaxCnt(2);
+		int result1 = this.chatMapper.insertChatRoom(chatRoomVO);
+
+		// 상담사 및 회원 입장처리
+		ChatMemberVO chatMemCounselor = new ChatMemberVO();
+		chatMemCounselor.setCrId(chatRoomVO.getCrId());
+		chatMemCounselor.setMemId(counselorId);
+		ChatMemberVO chatMemMember = new ChatMemberVO();
+		chatMemMember.setCrId(chatRoomVO.getCrId());
+		chatMemMember.setMemId(memId);
+		int result2 = this.chatMapper.insertAndUpdateChatMember(chatMemCounselor);
+		int result3 = this.chatMapper.insertAndUpdateChatMember(chatMemMember);
+
+		if(result1 > 0 && result2 > 0 && result3 > 0) {
+			returningURL = "/counselChat/"+chatRoomVO.getCrId();
+		}
+
+		return returningURL;
+	}
+
+	@Override
+	public void saveChatMessageWithoutReceiver(ChatMessageVO chatMessageVO) {
+		if(chatMessageVO.getMessageType()==null) {
+			chatMessageVO.setMessageType("TEXT");
+		}
+		this.chatMapper.insertChatMessage(chatMessageVO);
+	}
+
 }

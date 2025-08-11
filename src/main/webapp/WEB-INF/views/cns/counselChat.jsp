@@ -10,12 +10,13 @@
   <script src="/js/com/stomp.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>상담 채팅 (하드코딩 테스트)</title>
+  <title>상담 채팅</title>
   <link rel="stylesheet" href="/css/user-profile.css"/>
   <link rel="stylesheet" href="/css/cns/counselChat.css"/>
 </head>
 <body class="counsel-chat-body"
-      data-cr-id="${crId }" data-counsel-id="${counselInfo.counselId }" data-my-id="${memId }" data-my-role="${memRole }">
+      data-cr-id="${crId }" data-counsel-id="${counselInfo.counselId }" data-my-id="${memId }" data-my-role="${memRole }"
+      data-error-message="${errorMessage}">
   <div class="counsel-chat-app" data-error-message="">
     <!-- 좌측: 채팅 -->
 
@@ -40,37 +41,7 @@
 	  </sec:authorize>
       <main id="chatScroll" class="chat-scroll">
         <div class="sys-msg">상담 채팅방이 열렸습니다. 원활한 상담을 위해 예의를 지켜주세요.</div>
-        <!-- 하드코딩 메시지 샘플 -->
-        <div class="msg-row other">
-          <div class="bubble-avatar" style="display:none"></div>
-          <div class="bubble">
-            <div class="bubble-name">Kyung</div>
-            <div class="bubble-text">안녕하세요!</div>
-            <div class="bubble-meta"><span class="time">10:02</span></div>
-          </div>
-        </div>
 
-        <div class="msg-row mine">
-          <div class="bubble">
-            <div class="bubble-text">안녕하세요 상담사 Kim입니다. 😊</div>
-            <div class="bubble-meta"><span class="time">10:03</span></div>
-          </div>
-        </div>
-
-        <div class="msg-row mine">
-          <div class="bubble">
-            <div class="bubble-text">무엇을 도와드릴까요?</div>
-            <div class="bubble-meta"><span class="time">10:03</span></div>
-          </div>
-        </div>
-
-        <div class="msg-row other">
-          <div class="bubble">
-            <div class="bubble-name">Kyung</div>
-            <div class="bubble-text">제품 문의드리려 합니다.</div>
-            <div class="bubble-meta"><span class="time">10:04</span></div>
-          </div>
-        </div>
       </main>
 
       <footer class="chat-input">
@@ -87,7 +58,7 @@
       </footer>
     </section>
 <!-- ----------------------------------------------- -->
-    <!-- 우측: 정보 패널 (하드코딩 데이터) -->
+    <!-- 우측: 정보 패널 -->
     <aside class="side-pane" id="sidePane">
 
 <!-- ----------------------------------------------- -->

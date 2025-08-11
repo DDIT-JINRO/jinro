@@ -5,6 +5,8 @@ const crId = document.body.dataset.crId;
 let stompClient = null;
 
 document.addEventListener('DOMContentLoaded', function(){
+	checkValidMember();
+
 	if(memId && memId !='anonymousUser'){
 		const msgInputBox = document.getElementById('chatMessage');
 		const sendBtn 	  = document.getElementById('btnSend');
@@ -14,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 		sendBtn.addEventListener("click", function(){
 			const msg = msgInputBox.value.trim();
-			if(msg==null && msg==''){
+			if(msg==null || msg==''){
 				alert('메시지를 입력해주세요');
 				return;
 			}
@@ -22,6 +24,18 @@ document.addEventListener('DOMContentLoaded', function(){
 			sendMessage(crId, msg);
 		})
 
+		let composing = false;
+		msgInputBox.addEventListener('compositionstart', ()=> composing = true);
+		msgInputBox.addEventListener('compositionend',   ()=> composing = false);
+
+		// Enter 전송은 keyup에서 처리(조합 종료 이후)
+		msgInputBox.addEventListener('keyup', function(e){
+		  if (e.key === 'Enter' && !e.shiftKey && !composing && !e.isComposing) {
+		    e.preventDefault();
+		    const msg = msgInputBox.value.trim();
+		    if (msg) sendMessage(crId, msg);
+		  }
+		});
 	}
 })
 
@@ -30,7 +44,7 @@ function connectSocket() {
     const socket = new SockJS('/ws-stomp');
     stompClient = Stomp.over(socket);
 
-	//stompClient.debug = () => {};	// 콘솔 출력안되게 덮어쓰기
+	stompClient.debug = () => {};	// 콘솔 출력안되게 덮어쓰기
     stompClient.connect({}, (frame) => {
 		// 소켓연결 완료후 기존 메시지 있으면 불러와서 APPEND
 		fetch('/api/chat/message/list?crId='+crId)
@@ -105,4 +119,12 @@ function appendMsg(msgVO){
 function clearInput(){
 	document.getElementById('chatMessage').value = '';
 	document.getElementById('chatFile').value = '';
+}
+
+function checkValidMember(){
+	const errMsg = document.body.dataset.errorMessage;
+	if(errMsg && errMsg!=''){
+		alert(errMsg);
+		location.href='/'
+	}
 }
