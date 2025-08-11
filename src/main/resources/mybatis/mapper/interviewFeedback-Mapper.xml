@@ -66,12 +66,8 @@
 	    FROM
 	        INTERVIEW_REVIEW A
 	        LEFT JOIN MEMBER M ON A.MEM_ID = M.MEM_ID
-	        <if test="irType == 'G02001'">
-	            LEFT JOIN UNIVERSITY U ON A.TARGET_ID = U.UNIV_ID
-	        </if>
-	        <if test="irType == 'G02002'">
-	            LEFT JOIN COMPANY C ON A.TARGET_ID = C.CP_ID
-	        </if>
+            LEFT JOIN UNIVERSITY U ON A.TARGET_ID = U.UNIV_ID
+            LEFT JOIN COMPANY C ON A.TARGET_ID = C.CP_ID
 	    WHERE
 	        IR_STATUS = #{irStatus} 
 	    AND
