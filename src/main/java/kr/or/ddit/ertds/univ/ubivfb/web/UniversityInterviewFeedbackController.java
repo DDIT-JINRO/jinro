@@ -142,4 +142,25 @@ public class UniversityInterviewFeedbackController {
 		return "ertds/univ/uvivfb/updateInterViewFeedbackView";
 	}
 	
+	@ResponseBody
+	@PostMapping("/univ/uvivfb/updateInterViewFeedback.do")
+	public ResponseEntity<Map<String, Object>> updateInterViewFeedback(@AuthenticationPrincipal String memId, @ModelAttribute InterviewReviewVO interviewReview) {
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			interviewFeedbackService.updateInterviewFeedback(memId, interviewReview);
+			response.put("success", true);
+			return ResponseEntity.ok(response);
+		} catch(CustomException e) {
+			log.error("면접 후기 수정 중 에러 발생 : {}", e.getMessage());
+			response.put("success", false);
+			response.put("message", "면접 후기 수정 중 오류가 발생했습니다 : " + e.getMessage());
+			return ResponseEntity.status(e.getErrorCode().getStatus()).body(response);
+		} catch(Exception e) {
+			log.error("알 수 없는 에러 발생 : {}", e.getMessage());
+			response.put("success", false);
+			response.put("message", "알 수 없는 에러가 발생했습니다 : " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+		}
+	}
 }
