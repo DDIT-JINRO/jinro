@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class RoadmapResultRequestVO {
 	
+	private String memName;
 	private int memAge;
 	private String interestCn;
 	private String siqJob;
