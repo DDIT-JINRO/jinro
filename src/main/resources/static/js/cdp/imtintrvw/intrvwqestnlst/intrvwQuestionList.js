@@ -1,212 +1,116 @@
-// 1) 페이지 로드 시 sessionStorage에서 복원
-let selectedQuestions = [];
-
-document.addEventListener('DOMContentLoaded', () => {
-	const currentRaw = window.currentMemId || '';   // JSP에서 넘어온 문자열
-	// Spring Security 익명 사용자는 "anonymousUser"로 찍힐 수 있으므로
-	const currentMemId = (currentRaw === 'anonymousUser') ? '' : currentRaw;
-	let storedRaw = sessionStorage.getItem('memId');
-	const storedMemId = (storedRaw === 'anonymousUser') ? '' : (storedRaw || null);
-
-	// 1) 첫 방문: storedMemId === null
-	if (storedMemId === null) {
-		sessionStorage.setItem('memId', currentMemId);
-	}
-	// 2) 로그인 → 로그아웃: storedMemId non-empty && currentMemId empty
-	else if (storedMemId !== '' && currentMemId === '') {
-		sessionStorage.clear();
-		sessionStorage.setItem('memId', '');
-	}
-	// 3) 익명 → 로그인: storedMemId empty && currentMemId non-empty
-	else if (storedMemId === '' && currentMemId !== '') {
-		sessionStorage.setItem('memId', currentMemId);
-	}
-	// 4) 그 외 (익명→익명, 로그인→동일 사용자) → 아무 동작 없음
-
-	// --- 이제 선택 질문 복원 로직 실행 ---
-	const saved = sessionStorage.getItem('selectedQuestions');
-	if (saved) {
-		selectedQuestions = JSON.parse(saved);
-		selectedQuestions.forEach(q => {
-			const chk = document.querySelector(
-				`input[type="checkbox"][data-id="${q.id}"]`
-			);
-			if (chk) chk.checked = true;
-		});
-	}
-	updateCartSidebar();
-	updateQuestionIdsInput();
-
-	const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
-	const selectedFiltersContainer = document.getElementById('selected-filters');
-
-	restoreFiltersFromUrl();
-
-
-	// 체크박스를 클릭할 때마다 필터 조건을 업데이트
-	filterCheckboxes.forEach(function(checkbox) {
-		checkbox.addEventListener('change', function() {
-			const filterName = this.getAttribute('data-name');
-			const filterId = this.getAttribute('data-id');
-
-			if (this.checked) {
-				addFilterToConditions(filterName, filterId);
-			} else {
-				removeFilter(filterId);
-			}
-		});
-
+document.addEventListener('DOMContentLoaded', function() {
+	document.querySelector('.btn-temp-save').addEventListener('click', function() {
+		document.getElementById('siStatus').value = '작성중';
+		const form = document.querySelector('.selfintro-write-form form');
+		form.submit();
 	});
 
-	// 필터를 선택했을 때, 필터 조건에 추가
-	function addFilterToConditions(name, id) {
-		const filterItem = document.createElement('span');
-		filterItem.classList.add('selected-filter');
-		filterItem.setAttribute('data-id', id);
-		filterItem.innerHTML = `${name} <span class="remove-filter" onclick="removeFilter('${id}')">×</span>`;
-		selectedFiltersContainer.appendChild(filterItem);
-		
-		// ✅ 해당하는 체크박스의 부모 .filter-item에 'checked' 클래스 추가
-        const checkbox = document.querySelector(`.filter-checkbox[data-id="${id}"]`);
-        if (checkbox) {
-            const parent = checkbox.closest('.filter-item');
-            if (parent) {
-                parent.classList.add('checked');
-            }
-        }
-	}
+	document.querySelector(".btn-delete")?.addEventListener("click", () => {
+		const form = document.querySelector('.selfintro-write-form form');
+		if (confirm("정말 삭제하시겠습니까?")) {
+			form.action = "/cdp/sint/sintwrt/delete.do";
+			form.submit();
+		}
+	});
 
-	// 필터를 제거할 때, 필터 조건에서 삭제
-	window.removeFilter = function(id) {
-		const filterItem = document.querySelector(`.selected-filter[data-id="${id}"]`);
-		if (filterItem) {
-			filterItem.remove();
 
-			const checkbox = document.querySelector(`.filter-checkbox[data-id="${id}"]`);
-			if (checkbox) {
-				checkbox.checked = false; // 체크박스 해제
+/*--미리보기*/
+	document.querySelector(".btn-preview").addEventListener("click", () => {
+		// 1. form 요소 클론
+		const originalForm = document.querySelector("form");
+		const clonedForm = originalForm.cloneNode(true); // 깊은 복사
 
-				// ✅ 상단 필터에서 .checked 클래스 제거
-				const parent = checkbox.closest('.filter-item');
-				if (parent) {
-					parent.classList.remove('checked');
-				}
+		const originalInputs = originalForm.querySelectorAll("input, textarea");
+		const clonedInputs = clonedForm.querySelectorAll("input, textarea");
+
+		clonedInputs.forEach((clonedEl, i) => {
+			const originalEl = originalInputs[i];
+			if (clonedEl.tagName === "TEXTAREA") {
+				clonedEl.innerHTML = originalEl.value; // textarea는 innerHTML에 입력된 내용 반영
+			} else if (clonedEl.type === "checkbox" || clonedEl.type === "radio") {
+				clonedEl.checked = originalEl.checked;
+			} else {
+				clonedEl.setAttribute("value", originalEl.value);
 			}
+		});
+
+
+		const title = clonedForm.querySelector(".section-title");
+		if (title) {
+			title.remove();
 		}
-	}
-	
-	function restoreFiltersFromUrl() {
-	        const urlParams = new URLSearchParams(window.location.search);
-	        const selectedJobFilters = urlParams.getAll('siqJobFilter');
 
-	        const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
+		// 2. 버튼 그룹 제거
+		const btnGroup = clonedForm.querySelector(".btn-group");
+		if (btnGroup) {
+			btnGroup.remove();
+		}
 
-	        if (selectedJobFilters.length > 0) {
-	            filterCheckboxes.forEach(checkbox => {
-	                // URL 파라미터에 현재 체크박스의 value 값 (id)이 포함되어 있다면
-	                if (selectedJobFilters.includes(checkbox.value)) {
-	                    checkbox.checked = true; // 실제 체크박스 상태를 'checked'로 만듦
+		//글자수 제거
+		clonedForm.querySelectorAll(".char-count")?.forEach(e => e.remove());
 
-	                    // '선택된 필터' 영역에 태그를 추가하고 상단 필터에 'checked' 클래스를 적용
-	                    // addFilterToConditions 함수가 이 두 가지 작업을 모두 수행하도록 수정했으므로 호출합니다.
-	                    addFilterToConditions(checkbox.dataset.name, checkbox.dataset.id);
-	                }
-	            });
-	        }
-	    }
-	
-	const submitCart = document.querySelector(".submitCartForm");
-	
-	if(!memId || memId =='anonymousUser'){
-		if (submitCart) { // 버튼이 존재하는지 확인 (에러 방지)
-		    submitCart.textContent = '로그인 하러 가기';
-			submitCart.addEventListener('click', function(){
-				window.location.href = '/login';
+
+		const xhtmlContent = sanitizeHtmlToXHTML(clonedForm.outerHTML);
+		// 3. 스타일 가져오기 (예: /css/cdp/sint/sintwrt/selfIntroWriting.css)
+		fetch("/css/cdp/sint/sintwrt/selfIntroWriting.css")
+			.then(res => res.text())
+			.then(cssContent => {
+				// 4. FormData 구성
+				const formData = new FormData();
+				formData.append("htmlContent", xhtmlContent);  // HTML
+				formData.append("cssContent", cssContent);              // CSS
+
+				// 5. 미리보기 요청
+				return fetch("/pdf/preview", {
+					method: "POST",
+					body: formData
+				});
+			})
+			.then(response => {
+				if (!response.ok) throw new Error("미리보기 요청 실패");
+				return response.blob();
+			})
+			.then(blob => {
+				const url = URL.createObjectURL(blob);
+				const pdfUrlWithZoom = url + "#zoom=75";
+
+				const windowWidth = 900;
+				const windowHeight = 700;
+				const left = (screen.width - windowWidth) / 2;
+				const top = (screen.height - windowHeight) / 2;
+				const windowFeatures = `width=${windowWidth},height=${windowHeight},left=${left},top=${top},scrollbars=yes,resizable=yes,toolbar=no,location=no,status=no`;
+
+				const previewWindow = window.open(pdfUrlWithZoom, "pdfPreview", windowFeatures);
+				if (!previewWindow) window.open(pdfUrlWithZoom, "_blank");
+			})
+			.catch(err => {
+				console.error("미리보기 오류:", err);
+				alert("PDF 미리보기 중 오류가 발생했습니다: " + err.message);
 			});
-		  }
-	}else
-	
-	// 6) 폼 제출
-	submitCart.addEventListener("click",function(){
-		
-		if (selectedQuestions.length === 0) {
-			alert('자기소개서 작성을 위해 질문을 선택해주세요.');
-			return;
-		}
-		// 필요하다면 여기서 sessionStorage.removeItem('selectedQuestions');
-		document.getElementById('cartForm').submit();
-		sessionStorage.clear();
-	}) 
+	});
+
 });
 
-// 2) 선택 토글 함수
-function toggleQuestion(checkbox, id, content) {
-	const existing = selectedQuestions.find(q => q.id === id);
-	if (checkbox.checked) {
-		if (!existing) selectedQuestions.push({ id, content });
-	} else {
-		selectedQuestions = selectedQuestions.filter(q => q.id !== id);
-	}
-	updateCartSidebar();
-	updateQuestionIdsInput();
-	// 변경된 목록 저장
-	sessionStorage.setItem(
-		'selectedQuestions',
-		JSON.stringify(selectedQuestions)
-	);
+function sanitizeHtmlToXHTML(html) {
+	return html
+		.replace(/<input([^>]*?)(?<!\/)>/gi, '<input$1 />')
+		.replace(/<br([^>]*?)(?<!\/)>/gi, '<br$1 />')
+		.replace(/<hr([^>]*?)(?<!\/)>/gi, '<hr$1 />')
+		.replace(/<img([^>]*?)(?<!\/)>/gi, '<img$1 />');
 }
 
-// 3) 사이드바 렌더링
-function updateCartSidebar() {
-	const cartSidebar = document.getElementById('cartSidebar');
-	cartSidebar.innerHTML = '';
-
-	if (selectedQuestions.length === 0) {
-		cartSidebar.innerHTML =
-			'<div class="empty-cart-message">선택된 질문이 없습니다.</div>';
-		return;
+function countChars(textarea, index) {
+	const length = textarea.value.length;
+	const counter = document.getElementById("charCount-" + index);
+	if (counter) {
+		counter.textContent = length;
 	}
+}
 
-	selectedQuestions.forEach(q => {
-		const item = document.createElement('div');
-		item.className = 'question-panel-item';
-		item.setAttribute('data-id', q.id);
-
-		const contentDiv = document.createElement('div');
-		contentDiv.className = 'question-panel-content';
-		contentDiv.textContent = q.content;
-
-		const btn = document.createElement('button');
-		btn.type = 'button';
-		btn.className = 'remove-question-btn';
-		btn.innerHTML = '&times;';
-		btn.addEventListener('click', () => removeQuestionFromCart(q.id));
-
-		item.append(contentDiv, btn);
-		cartSidebar.appendChild(item);
+// 초기 렌더링 시 기존 값에 대한 글자 수 세기
+window.addEventListener("DOMContentLoaded", () => {
+	const textareas = document.querySelectorAll("textarea[name='sicContentList']");
+	textareas.forEach((ta, i) => {
+		countChars(ta, i);
 	});
-}
-
-// 4) × 버튼 클릭 시 제거
-function removeQuestionFromCart(id) {
-	selectedQuestions = selectedQuestions.filter(q => q.id !== id);
-	const chk = document.querySelector(
-		`input[type="checkbox"][data-id="${id}"]`
-	);
-	if (chk) chk.checked = false;
-	updateCartSidebar();
-	updateQuestionIdsInput();
-	sessionStorage.setItem(
-		'selectedQuestions',
-		JSON.stringify(selectedQuestions)
-	);
-}
-
-// 5) 숨겨진 input 갱신
-function updateQuestionIdsInput() {
-	document.getElementById('questionIds').value =
-		selectedQuestions.map(q => q.id).join(',');
-}
-
-
-
+});

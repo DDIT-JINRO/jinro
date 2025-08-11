@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.ddit.cdp.imtintrvw.intrvwqestnmn.service.impl.InterviewQuestionMangementMapper">
+
+   <!-- 
+    // 사용자 면접질문 갯수
+	public int selectInterviewQuestionTotalBymemId(InterviewDetailListVO interviewDetailListVO);
+    -->
+    <select id="selectInterviewQuestionTotalBymemId" parameterType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO" resultType="int">
+		SELECT COUNT(*)
+		FROM INTERVIEW_DETAIL_LIST
+		WHERE MEM_ID = #{memId}
+	</select>
+	
+	<!-- 
+	// 사용자 면접질문 리스트
+	public List<InterviewDetailListVO> selectInterviewQuestionBymemId(InterviewDetailListVO interviewDetailListVO);
+	 -->
+	 <select id="selectInterviewQuestionBymemId" parameterType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO">
+	SELECT * FROM (
+		SELECT ROWNUM AS RNUM, B.*
+		FROM (
+			SELECT
+				IDL_ID,
+				IDL_TITLE,
+				IDL_STATUS,
+				IDL_UPDATED_AT
+			FROM
+				INTERVIEW_DETAIL_LIST
+			WHERE
+				MEM_ID = #{memId}
+				<if test="keyword != null and keyword != ''">
+					AND IDL_TITLE LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="status != null and status != ''">
+					AND IDL_STATUS = #{status}
+				</if>
+			ORDER BY IDL_UPDATED_AT DESC
+			) B
+		WHERE ROWNUM <![CDATA[<=]]> #{endNo}
+	)
+	WHERE RNUM<![CDATA[>]]> #{startNo}
+  </select>
+  
+  <!-- 
+  // 면접질문 정보 가져오기
+	public InterviewDetailListVO selectBySelfIntroId(InterviewDetailListVO interviewDetailListVO);
+	 -->
+	<select id="selectBySelfIntroId" parameterType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO">
+		SELECT IDL_ID, MEM_ID, IDL_TITLE, IDL_STATUS
+		FROM INTERVIEW_DETAIL_LIST
+		WHERE IDL_ID= #{idlId}
+	</select>
+	
+	<!-- 
+	// 항목별 질문내용가져오기
+	public List<InterviewDetailVO> selectByInterviewQuestionContentIdList(InterviewDetailListVO interviewDetailListVO);
+	 -->
+	<select id="selectByInterviewQuestionContentIdList" parameterType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailVO">
+		SELECT ID_ID      AS idId
+			 , IDL_ID     AS idlId
+			 , IQ_ID      AS iqId
+			 , ID_CUSTUM  AS idCustum
+			 , ID_ANSWER  AS idAnswer
+			 , ID_ORDER   AS idOrder
+		FROM   INTERVIEW_DETAIL
+		WHERE  IDL_ID = #{idlId}
+		ORDER BY ID_ORDER
+	</select>
+
+	<!-- 
+	// 공통질문 가져오기
+	public List<InterviewQuestionVO> selectCommonQuestions();
+	 -->
+	<select id="selectCommonQuestions" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO">
+	  SELECT IQ_ID
+	  	   , IQ_GUBUN
+	  	   , IQ_CONTENT
+	  	   , IQ_SUGGEST
+	  FROM 	 INTERVIEW_QUESTION
+	  WHERE  IQ_GUBUN IS NULL
+	  ORDER BY IQ_ID
+	</select> 
+	
+	<!-- 
+	//질문 가져오기
+	public InterviewQuestionVO selectByInterviewQuestionQId(InterviewDetailVO interviewDetailVO);
+	 -->
+	<select id="selectByInterviewQuestionQId" parameterType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailVO" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO">
+		SELECT IQ_ID
+			 , IQ_GUBUN
+			 , IQ_CONTENT
+			 , IQ_SUGGEST
+		FROM   INTERVIEW_QUESTION
+		WHERE  IQ_ID = #{iqId}
+	</select> 
+	
+	<!-- 
+	public int selectMaxInterviewQuestionId();
+	 -->
+	<select id="selectMaxInterviewQuestionId" resultType="int">
+		SELECT	NVL(MAX(IDL_ID),0)+1 
+		FROM	INTERVIEW_DETAIL_LIST
+	</select>
+	
+	<!-- 
+	//카트 선택한 질문들 저장 
+	public void insertInterviewQuestion(InterviewDetailListVO interviewDetailListVO);
+	 -->
+	 <insert id="insertIntro" parameterType="kr.or.ddit.cdp.sint.service.SelfIntroVO">
+	  INSERT INTO INTERVIEW_DETAIL_LIST (
+	      IDL_ID
+		 ,MEM_ID
+		 ,IDL_TITLE
+		 ,IDL_STATUS
+	  ) VALUES (
+	      #{idlId},
+	      #{memId},
+	      #{idlTitle,jdbcType=VARCHAR},
+	      <choose>
+	        <when test="idlStatus != null and idlStatus != ''">
+	          #{idlStatus}
+	        </when>
+	        <otherwise>
+	          '작성중'
+	        </otherwise>
+	      </choose>
+	  )
+	</insert>
+</mapper>

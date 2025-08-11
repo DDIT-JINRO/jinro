@@ -10,4 +10,6 @@ public class InterviewDetailVO {
 	private String idCustum;
 	private String idAnswer;
 	private int idOrder;
+	// 조회용 편의 필드
+	private String  questionText; // NVL(iq_content, id_custom)
 }
