@@ -47,7 +47,7 @@
 							/>
             			</svg>
 					</div>
-					<input type="search" class="search-input" name="keyword" placeholder="면접 후기 게시판 내에서 검색">
+					<input type="search" class="search-input" name="keyword" placeholder="면접 후기 게시판 내에서 검색" value="${param.keyword}">
 					<button class="com-search-btn" type="submit">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                 			<path fill-rule="evenodd"
@@ -58,7 +58,18 @@
 				</div>
 			</form>
 			<div class="group-card-content">
-		        <!-- 샘플 데이터 - 실제로는 JSTL forEach로 동적 생성 -->
+				<div class="content-header">
+					<div class="card-header-left">
+						<div class="company-name">기업명</div>
+						<div class="card-meta">
+							<div class="meta-item author">작성자</div>
+							<div class="meta-item">작성일</div>
+							<div class="rating-header">평점</div>
+							<div class="card-toggle"></div>
+						</div>
+					</div>
+				</div>
+				<!-- 샘플 데이터 - 실제로는 JSTL forEach로 동적 생성 -->
 		        <c:forEach var="content" items="${articlePage.content}">
 			        <div class="interview-card">
 			            <div class="card-header">
@@ -73,7 +84,7 @@
 						                        <span class="my-post-badge">내 글</span>
 						                    </c:when>
 											<c:otherwise>
-							                 작성자 | ${content.memNickname}
+							                 	${content.memNickname}
 											</c:otherwise>						            
 						            	</c:choose>
 						            </div>
@@ -169,6 +180,9 @@
 			            </div>
 			        </div>
 				</c:forEach>
+				<c:if test="${empty articlePage.content}">
+					<p class="no-content-message">면접 후기가 없습니다.</p>
+				</c:if>
 		    </div>
 			<ul class="pagination">
 				<li>
