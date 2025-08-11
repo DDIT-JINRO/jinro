@@ -7,7 +7,7 @@
 		<div class="channel-title-text">진학 정보</div>
 	</div>
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-item">
+		<div class="channel-sub-section-itemIn">
 			<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
 		</div>
 		<div class="channel-sub-section-item">
@@ -229,6 +229,34 @@
 						<div class="legend-item">
 							<span class="legend-text">'데이터 없음'은 해당 정보가 제공되지 않는 학과입니다</span>
 						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="interview-list-section">
+				<!-- 대학 면접 후기 -->
+				<div class="interview-review-list-section">
+					<h2>대학 면접 후기</h2>
+					<!-- 학과 목록 헤더 -->
+					<div class="interview-review-list">
+						<c:forEach var="interviewReview" items="${interviewReviewList}">
+							<div class="review-item">
+								<div class="review-meta">
+									<span>
+										<strong> ${interviewReview.memNickname}</strong>
+									</span>
+									<div class="rating-and-date">
+										<span>
+											<strong class="review-rating-icon">★</strong> ${interviewReview.irRating}
+										</span>
+									</div>
+								</div>
+								<p class="review-content">${interviewReview.irContent}</p>
+								<p class="review-date">
+									<fmt:formatDate value="${interviewReview.irCreatedAt}" pattern="yyyy. MM. dd" />
+								</p>
+							</div>
+						</c:forEach>
 					</div>
 				</div>
 			</div>
