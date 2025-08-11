@@ -11,9 +11,7 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/cnslt/off/crsv/offlineReservation.do">오프라인 상담</a></div>
-		<div class="channel-sub-section-item"><a href="/cnslt/vid/crsv/videoReservation.do">화상 상담</a></div>
-		<div class="channel-sub-section-item"><a href="/cnslt/cht/crsv/chattingReservation.do">채팅상담</a></div>
+		<div class="channel-sub-section-item"><a href="/cnslt/resve/crsv/reservation.do">상담 예약</a></div>
 		<div class="channel-sub-section-itemIn"><a href="/cnslt/rvw/cnsReview.do">상담 후기</a></div>		
 	</div>
 </section>

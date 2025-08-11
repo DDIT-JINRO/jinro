@@ -1,38 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/mpg/mat/csh/selectCounselingHistoryList.css">
+<!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">마이페이지</div>
+		<div class="channel-title-text">상담</div> 
 	</div>
-	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-item">
-			<a href="/mpg/mif/inq/selectMyInquiryView.do">내 정보</a>
-		</div>
-		<div class="channel-sub-section-itemIn">
-			<a href="/mpg/mat/bmk/selectBookMarkList.do">나의 활동</a>
-		</div>
-		<div class="channel-sub-section-item">
-			<a href="/mpg/pay/selectPaymentView.do">결제 구독내역</a>
-		</div>
+		<!-- 중분류 -->
+		<div class="channel-sub-section-itemIn"><a href="/cnslt/resve/crsv/reservation.do">상담 예약</a></div>
+		<div class="channel-sub-section-item"><a href="/cnslt/rvw/cnsReview.do">상담 후기</a></div>		
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-			<a class="tab" href="/mpg/mat/bmk/selectBookMarkList.do">북마크</a>
-			<a class="tab active" href="/mpg/mat/csh/selectCounselingHistoryList.do">상담 내역</a>
-			<a class="tab" href="/mpg/mat/reh/selectResumeHistoryList.do">이력서</a>
-			<a class="tab" href="/mpg/mat/sih/selectSelfIntroHistoryList.do">자기소개서</a>
-		</div>
+		    <a class="tab " href="/cnslt/resve/crsv/reservation.do">상담 예약</a>
+		    <a class="tab active" href="/cnslt/resve/cnsh/counselingReserveHistory.do">상담 내역</a>
+  		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-		<div class="public-wrapper-main">
-			<div class="activity-container">
-				<form method="GET" action="${articlePage.url }">
+  		<div class="public-wrapper-main">
+  						<div class="activity-container">
+				<form method="GET" action="${articlePage.url}">
 					<div class="com-default-search">
 						<div class="com-select-wrapper">
 							<select name="status" class="com-status-filter">
@@ -150,12 +143,12 @@
 										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy. MM. dd"/> </span>
 										<span class="divider">·</span>
 										<span>예약일</span>
-										<span><fmt:formatDate value="${content.counselReqDatetime}" pattern="yyyy. MM. dd (HH시)"/></span>
+										<span><fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy. MM. dd"/><fmt:formatDate value="${content.counselReqDatetime}" pattern=" (HH시)"/></span>
 									</div>
 								</div>
 								<div class="item-content">
 									<c:choose>
-										<c:when test="${content.counselStatus == 'S04001'}">
+								    	<c:when test="${content.counselStatus == 'S04001'}">
 										     <span class="btn btn-primary">대기중</span>
 									 	</c:when>
 								    	<c:when test="${content.counselStatus == 'S04002'}">
@@ -206,10 +199,14 @@
 					</li>
 				</ul>
 			</div>
-		</div>
+  		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
-<script src="/js/mpg/mat/csh/selectCounselingHistoryList.js"></script>
 </html>
+<script src="/js/mpg/mat/csh/selectCounselingHistoryList.js"></script>
+<script src="/js/cnslt/resve/cnsh/counselingreservehistory.js"></script>
+<script>
+	// 스크립트 작성 해주시면 됩니다.
+</script>

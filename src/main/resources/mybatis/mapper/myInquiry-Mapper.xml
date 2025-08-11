@@ -46,9 +46,9 @@
 		  , A.MEM_POINT
 		  , S.SUB_NAME
 		  , TRUNC(MS.SUB_END_DT) - TRUNC(SYSDATE) AS REMAINING_DAYS
-		  , B.SV_CREATED_AT
-		  , B.SV_STATUS
-		  , B.SV_REASON
+		  , B.VERI_CREATED_AT
+		  , B.VERI_STATUS
+		  , B.VERI_REASON
 		FROM
 		    MEMBER A
         LEFT JOIN
@@ -63,7 +63,7 @@
                     MS_INNER.MEM_ID = A.MEM_ID
             )
         LEFT JOIN SUBSCRIBE S ON MS.SUB_ID = S.SUB_ID
-        LEFT JOIN STUDENT_VERIFICATION B ON A.MEM_ID = B.MEM_ID
+        LEFT JOIN VERIFICATION B ON A.MEM_ID = B.MEM_ID
         WHERE
             A.MEM_ID = #{memId}
 	</select>
@@ -161,14 +161,14 @@
 	</insert>
 	
 	<insert id="insertStudentVerification" parameterType="kr.or.ddit.mpg.mif.inq.service.impl.StudentVerificationVO">
-		INSERT INTO STUDENT_VERIFICATION (
-		    SV_ID
+		INSERT INTO VERIFICATION (
+		    VERI_ID
 		    , MEM_ID
-		    , SV_CREATED_AT
+		    , VERI_CREATED_AT
 		    , FILE_GROUP_ID
-		    , SV_STATUS
+		    , VERI_STATUS
 		) VALUES (
-			  (SELECT NVL(MAX(SV_ID), 0) + 1 FROM STUDENT_VERIFICATION)
+			  (SELECT NVL(MAX(VERI_ID), 0) + 1 FROM VERIFICATION)
 			, #{memId}
 			, SYSDATE
 			, #{fileGroupId}

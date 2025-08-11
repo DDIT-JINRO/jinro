@@ -38,7 +38,7 @@
 			CC_ID
 	</select>
 	
-	<select id="selectCounselingList" resultType="kr.or.ddit.mpg.mat.csh.service.CounselingVO" parameterType="kr.or.ddit.mpg.mat.csh.service.CounselingVO">
+	<select id="selectCounselingList" resultType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
 		SELECT
 			MEM_NAME
 			, COUNSEL_ID
@@ -55,7 +55,7 @@
 			, COUNSEL_UPDATED_AT
 		FROM (
 		    SELECT
-		        ROWNUM
+		        ROWNUM as RNUM
 		        , D.*
 		    FROM
 		        (
@@ -116,10 +116,10 @@
 		        ROWNUM <![CDATA[<=]]> #{endRow}
 		)
 		WHERE
-		    ROWNUM <![CDATA[>=]]> #{startRow}
+		    RNUM <![CDATA[>=]]> #{startRow}
 	</select>
 	
-	<select id="selectCounselingTotal" parameterType="kr.or.ddit.mpg.mat.csh.service.CounselingVO" resultType="int">
+	<select id="selectCounselingTotal" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM

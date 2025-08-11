@@ -53,7 +53,7 @@ const memId = '<sec:authentication property="name" />'
 					<a href="/cdp/rsm/rsm/resumeList.do">경력관리</a>
 				</li>
 				<li>
-					<a href="/cnslt/off/crsv/offlineReservation.do">상담</a>
+					<a href="/cnslt/resve/crsv/reservation.do">상담</a>
 				</li>
 				<li>
 					<a href="/prg/ctt/cttList.do">프로그램</a>
