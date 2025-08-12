@@ -26,7 +26,7 @@
 					<option value="1">전체</option>
 					<option value="2">신고자명</option>
 					<option value="3">신고대상명</option>
-					<option value="4">제재사유</option>
+					<option value="4">신고사유</option>
 				</select>
 				<input type="text" name="keywordReport" placeholder="검색어를 입력하세요" />
 				<button type="button" class="btn-save searchReportBtn">조회</button>
@@ -84,10 +84,8 @@
 				<div class="detail-item">
 					<span class="detail-label">신고 상태:</span>
 					<select id="report-detail-status">
-						<option value="">-</option>
 						<option value="S03001">접수</option>
 						<option value="S03002">반려</option>
-						<option value="S03003">승인</option>
 					</select>
 				</div>
 				<div class="detail-item">
@@ -185,7 +183,7 @@
 		</div>
 	</div>
 
-	<div id="penaltyModal" class="penalty-modal-overlay">
+	<div id="penaltyModal" class="penalty-modal-overlay" style="visibility: hidden;">
 		<div class="penalty-modal-content">
 			<h3 style="margin-top: 0;">신규 제재 등록</h3>
 			<!-- 모달 내용은 이전 버전과 유사하게 구성 -->
@@ -225,5 +223,6 @@
 				</div>
 			</div>
 		</div>
+	</div>
 </body>
 

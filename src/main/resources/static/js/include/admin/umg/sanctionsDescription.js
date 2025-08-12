@@ -114,6 +114,7 @@ function openModal() {
 	});
 
 	if (penaltyModal) {
+		penaltyModal.style = "";
 		penaltyModal.classList.add('visible');
 	}
 }
