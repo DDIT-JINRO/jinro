@@ -1,12 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/cdp/sint/qestnlst/questionList.css">
-
-
+<link rel="stylesheet"
+	href="/css/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.css">
 <!-- 스타일 여기 적어주시면 가능 -->
-<style>
-</style>
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
@@ -18,10 +15,10 @@
 		<div class="channel-sub-section-item">
 			<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
 		</div>
-		<div class="channel-sub-section-itemIn">
+		<div class="channel-sub-section-item">
 			<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
 		</div>
-		<div class="channel-sub-section-item">
+		<div class="channel-sub-section-itemIn">
 			<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a>
 		</div>
 		<div class="channel-sub-section-item">
@@ -33,13 +30,19 @@
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-			<a class="tab active" href="/cdp/sint/qestnlst/questionList.do">질문 리스트</a> 
-			<a class="tab" href="/cdp/sint/sintlst/selfIntroList.do">자기소개서 리스트</a> 
-			<a class="tab" href="/cdp/sint/sintwrt/selfIntroWriting.do">자기소개서 작성</a>
+			<a class="tab" href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">면접의
+				기본</a> <a class="tab active"
+				href="/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do">면접 질문
+				리스트</a> <a class="tab"
+				href="/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do">면접
+				질문 관리</a> <a class="tab"
+				href="/cdp/imtintrvw/aiimtintrvw/aiImitationInterview.do">AI 모의
+				면접</a>
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			<form method="get" action="/cdp/sint/qestnlst/questionList.do">
+			<form method="get"
+				action="/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do">
 				<div class="search-wrapper">
 					<input type="text" name="keyword" value="${articlePage.keyword}"
 						placeholder="질문 검색" class="search-input" />
@@ -71,7 +74,9 @@
 			</form>
 
 
-			<form id="cartForm" method="post" action="/cdp/sint/qestnlst/cart">
+			<form id="cartForm" method="post"
+				action="/cdp/imtintrvw/intrvwqestnlst/cart">
+				<sec:csrfInput />
 				<input type="hidden" id="questionIds" name="questionIds" />
 
 				<div class="question-list">
@@ -92,8 +97,7 @@
 				<!-- 오른쪽 패널 -->
 				<div class="cart-panel">
 					<div id="cartSidebar"></div>
-						<button type="button" class="submitCartForm" >자기소개서
-							작성</button>
+					<button type="submit" class="submitCartForm">면접 질문 작성</button>
 				</div>
 			</form>
 
@@ -136,8 +140,12 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script type="text/javascript"
-	src="/js/cdp/sint/qestnlst/questionList.js">
+<script type="text/javascript">
+	// Spring Controller의 Model에 담긴 'memId' 값을
+	// JavaScript 전역 변수인 'window.currentMemId'에 설정해줍니다.
+	window.currentMemId = "${memId}";
 </script>
-
-
+<script type="text/javascript"
+	src="/js/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.js">
+	
+</script>
