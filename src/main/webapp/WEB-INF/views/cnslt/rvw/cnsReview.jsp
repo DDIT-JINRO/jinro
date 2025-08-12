@@ -226,18 +226,51 @@
 					<p class="no-content-message">상담 후기가 없습니다.</p>
 				</c:if>
 			</div>
-
 			<ul class="pagination">
+			
 				<li>
-					<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="${articlePage.startPage < 6 ? 'disabled' : ''}"> ← Previous </a>
+					<c:url var="prevUrl" value="${articlePage.url}">
+						<c:param name="currentPage" value="${articlePage.startPage - 5}" />
+						<c:param name="keyword" value="${param.keyword}" />
+						<c:param name="status" value="${param.status}" />
+						<c:forEach var="filterParam" items="${paramValues.counselMethods}">
+							<c:param name="counselMethods" value="${filterParam}" />
+						</c:forEach>
+						<c:forEach var="filterParam" items="${paramValues.counselCategorys}">
+							<c:param name="counselCategorys" value="${filterParam}" />
+						</c:forEach>
+					</c:url>
+					<a href="${nextUrl}" class="${articlePage.startPage < 6 ? 'disabled' : ''}"> ← Previous </a>
 				</li>
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 					<li>
-						<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="page-num ${pNo == articlePage.currentPage ? 'active' : ''}"> ${pNo} </a>
+						<c:url var="pageUrl" value="${articlePage.url}">
+							<c:param name="currentPage" value="${pNo}" />
+							<c:param name="keyword" value="${param.keyword}" />
+							<c:param name="status" value="${param.status}" />
+							<c:forEach var="filterParam" items="${paramValues.counselMethods}">
+								<c:param name="counselMethods" value="${filterParam}" />
+							</c:forEach>
+							<c:forEach var="filterParam" items="${paramValues.counselCategorys}">
+								<c:param name="counselCategorys" value="${filterParam}" />
+							</c:forEach>
+						</c:url>
+						<a href="${pageUrl}" class="page-num ${pNo == articlePage.currentPage ? 'active' : ''}"> ${pNo} </a>
 					</li>
 				</c:forEach>
 				<li>
-					<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : '' }"> Next → </a>
+					<c:url var="nextUrl" value="${articlePage.url}">
+						<c:param name="currentPage" value="${articlePage.startPage + 5}" />
+						<c:param name="keyword" value="${param.keyword}" />
+						<c:param name="status" value="${param.status}" />
+						<c:forEach var="filterParam" items="${paramValues.counselMethods}">
+							<c:param name="counselMethods" value="${filterParam}" />
+						</c:forEach>
+						<c:forEach var="filterParam" items="${paramValues.counselCategorys}">
+							<c:param name="counselCategorys" value="${filterParam}" />
+						</c:forEach>
+					</c:url>
+					<a href="${nextUrl}" class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : ''}"> Next → </a>
 				</li>
 			</ul>
 		</div>
