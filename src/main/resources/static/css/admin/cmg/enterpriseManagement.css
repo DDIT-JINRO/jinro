@@ -27,7 +27,6 @@ table {
 	border-collapse: collapse;
 	font-size: 14px;
 	background-color: #fff;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	border-radius: 8px;
 	overflow: hidden;
 }
@@ -74,4 +73,128 @@ table th:last-child {
 
 .entListPage {
 	margin-top: auto;
+}
+
+.ent-profile-container {
+    display: flex;
+    gap: 20px;
+}
+
+/* 왼쪽 프로필 카드 */
+.ent-profile-left {
+    width: 280px;
+}
+.profile-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    padding: 20px;
+    text-align: center;
+}
+.profile-logo {
+    width: 150px;
+    height: 50px;
+    object-fit: cover;
+}
+.profile-name {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 10px 0 5px;
+    color: #07223D;
+}
+.profile-role {
+    color: gray;
+    font-size: 14px;
+}
+.profile-actions {
+	font-size: 14px;
+    margin: 15px 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.btn-follow {
+    background: #16A085;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+.btn-message {
+    background: #E74C3C;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+.profile-about {
+    text-align: left;
+    margin-top: 20px;
+}
+.profile-about h4 {
+    color: #7C7CF5;
+    margin-bottom: 5px;
+}
+.profile-info {
+    margin-top: 15px;
+    text-align: left;
+    font-size: 14px;
+}
+.profile-social {
+    margin-top: 15px;
+}
+.profile-social a {
+    margin: 0 5px;
+    color: #7C7CF5;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+/* 오른쪽 상세 */
+.ent-profile-right {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    padding: 20px;
+    height: 135px;
+}
+
+/* 탭 메뉴 */
+.tab-menu {
+    display: flex;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 15px;
+}
+.tab-btn {
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: gray;
+}
+.tab-btn.active {
+    color: #7C7CF5;
+    border-bottom: 2px solid #7C7CF5;
+}
+
+/* 탭 콘텐츠 */
+.tab-content {
+    display: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.tab-content h4 {
+	color: gray;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.tab-content.active {
+    display: block;
 }
