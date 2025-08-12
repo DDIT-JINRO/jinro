@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	            const result = await response.json();
 	            
 	            if (result.success) {
-	                alert("후기 등록 요청이 완료되었습니다");
+	                alert("후기 등록이 완료되었습니다");
 	                window.location.href = "/cnslt/rvw/cnsReview.do";
 	            } else {
 	                alert(result.message || "등록에 실패했습니다.");

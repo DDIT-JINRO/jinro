@@ -13,4 +13,6 @@ public interface CounselingReviewService {
 
 	List<CounselingVO> selectCounselingHistory(String memId, String counselName);
 
+	void updateCnsReview(CounselingReviewVO counselingReview);
+
 }

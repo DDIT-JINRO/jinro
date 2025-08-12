@@ -5,19 +5,24 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.cnslt.rvw.service.CounselingReviewService;
 import kr.or.ddit.cnslt.rvw.service.CounselingReviewVO;
+import kr.or.ddit.empt.enp.service.InterviewReviewVO;
+import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -69,6 +74,22 @@ public class CounselingReviewController {
 		response.put("success", true);
 		response.put("counselingList", counselingList);
 		
+		return ResponseEntity.ok(response);
+	}
+	
+	@ResponseBody
+	@PostMapping("/insertCnsReview.do")
+	public ResponseEntity<Map<String, Object>> insertCnsReview(@AuthenticationPrincipal String memId, @ModelAttribute CounselingReviewVO counselingReview) {
+		Map<String, Object> response = new HashMap<>();
+		
+		if (memId == null || "anonymousUser".equals(memId)) {
+			response.put("success", false);
+			response.put("message", "로그인 후 이용해주세요.");
+			return ResponseEntity.ok(response);
+		}
+		
+		counselingReviewService.updateCnsReview(counselingReview);
+		response.put("success", true);
 		return ResponseEntity.ok(response);
 	}
 }

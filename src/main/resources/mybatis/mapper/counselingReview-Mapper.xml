@@ -127,5 +127,39 @@
 			AND COUNSEL.MEM_NAME LIKE '%' || #{counselName} || '%'
 	    </if>
 	</select>
+	
+	<update id="updateCnsReview" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO">
+		MERGE INTO
+			COUNSELING_REVIEW A
+		USING DUAL
+		ON (CR_ID = #{crId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					A.CR_RATE      = #{crRate}
+					, A.CR_CONTENT = #{crContent}
+					, A.CR_PUBLIC  = #{crPublic}
+			WHEN NOT MATCHED THEN
+				INSERT(
+					CR_ID
+					, CR_RATE
+					, CR_CONTENT
+					, CR_CREATED_AT
+					, CR_PUBLIC
+				) VALUES (
+					#{crId}
+					, #{crRate}
+					, #{crContent}
+					, SYSDATE
+					, #{crPublic}
+				)
+	</update>
+	
+	<update id="updateCounselReviewd">
+		UPDATE COUNSELING
+		SET
+		    COUNSEL_REVIEWD = #{counselReviewd}
+		WHERE
+		    COUNSEL_ID = #{crId}
+	</update>
 
 </mapper>
