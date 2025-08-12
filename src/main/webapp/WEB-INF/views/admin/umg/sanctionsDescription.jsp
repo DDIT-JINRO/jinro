@@ -1,8 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="css/admin/umg/sanctionsDescription.css">
 <script src="/js/include/admin/umg/sanctionsDescription.js"></script>
 
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">제재 내역</h2>
+<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">제재
+	내역</h2>
 <body>
 	<div class="scdMng-1">
 		<div class="template-panel scdMng-1-1">
@@ -27,8 +29,7 @@
 					<option value="2">신고자명</option>
 					<option value="3">신고대상명</option>
 					<option value="4">신고사유</option>
-				</select>
-				<input type="text" name="keywordReport" placeholder="검색어를 입력하세요" />
+				</select> <input type="text" name="keywordReport" placeholder="검색어를 입력하세요" />
 				<button type="button" class="btn-save searchReportBtn">조회</button>
 			</div>
 			<p class="ptag-list">
@@ -112,10 +113,11 @@
 					<option value="1">전체</option>
 					<option value="2">회원명</option>
 					<option value="3">제재사유</option>
-				</select>
-				<input type="text" name="keywordPenalty" placeholder="검색어를 입력하세요" />
+				</select> <input type="text" name="keywordPenalty" placeholder="검색어를 입력하세요" />
 				<button type="button" class="btn-save searchPenaltyBtn">조회</button>
-				<button type="button" id="openNewPenaltyModalBtn" class="btn-save" style="margin-left: auto; background-color: #dc3545;">신규 제재 등록</button>
+				<button type="button" id="openNewPenaltyModalBtn" class="btn-save"
+					style="margin-left: auto; background-color: #dc3545;">신규
+					제재 등록</button>
 			</div>
 			<p class="ptag-list">
 				총
@@ -183,13 +185,14 @@
 		</div>
 	</div>
 
-	<div id="penaltyModal" class="penalty-modal-overlay" style="visibility: hidden;">
+	<div id="penaltyModal" class="penalty-modal-overlay"
+		style="visibility: hidden;">
 		<div class="penalty-modal-content">
 			<h3 style="margin-top: 0;">신규 제재 등록</h3>
 			<!-- 모달 내용은 이전 버전과 유사하게 구성 -->
 			<div style="margin-bottom: 1rem;">
-				<label>대상 신고 ID</label>
-				<select type="text" id="modalMemId" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+				<label>대상 신고 ID</label> <select type="text" id="modalMemId"
+					style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
 
 				</select>
 			</div>
@@ -200,26 +203,49 @@
 					<span class="penalty-type-label" data-type="G14002">기간정지(7일)</span>
 				</div>
 			</div>
-			<div id="suspensionFields" style="display: none; margin-bottom: 1rem;">
-				<label>정지 기간</label>
-				<input type="datetime-local" id="modalStartDate">
-				~
-				<input type="datetime-local" id="modalEndDate">
+			<div id="suspensionFields"
+				style="display: none; margin-bottom: 1rem;">
+				<label>정지 기간</label> <input type="datetime-local"
+					id="modalStartDate"> ~ <input type="datetime-local"
+					id="modalEndDate">
 			</div>
 			<div style="margin-bottom: 1rem;">
 				<label>제재 사유</label>
-				<input type="text" id="modalReason" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+				<select id="modalReason"
+					style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+					<option value="부적절한 게시물" selected>부적절한 게시물</option>
+					<option value="욕설 및 비방">욕설 및 비방</option>
+					<option value="음란물 및 불건전한 내용">음란물 및 불건전한 내용</option>
+					<option value="개인정보 침해">개인정보 침해</option>
+					<option value="혐오 및 차별적 표현">혐오 및 차별적 표현</option>
+					<option value="폭력적, 위협적 내용">폭력적, 위협적 내용</option>
+					<option value="저작권 침해">저작권 침해</option>
+					<option value="허위 사실 유포">허위 사실 유포</option>
+					<option value="스팸 및 광고">스팸 및 광고</option>
+					<option value="도배 및 반복 게시">도배 및 반복 게시</option>
+					<option value="불법적 홍보">불법적 홍보</option>
+					<option value="운영 방해">운영 방해</option>
+					<option value="타인에게 불쾌감을 주는 행위">타인에게 불쾌감을 주는 행위</option>
+					<option value="커뮤니티 이용 방해">커뮤니티 이용 방해</option>
+					<option value="비매너 행위">비매너 행위</option>
+					<option value="분쟁 유발">분쟁 유발</option>
+					<option value="기타 운영 정책 위반">기타 운영 정책 위반</option>
+				</select>
 			</div>
 			<div class="modal-form-group">
-				<label>증빙 자료</label>
-				<input type="file" id="evidenceFile" multiple style="display: none;">
-				<button type="button" class="file-attach-btn" onclick="document.getElementById('evidenceFile').click();">파일 선택</button>
+				<label>증빙 자료</label> <input type="file" id="evidenceFile" multiple
+					style="display: none;">
+				<button type="button" class="file-attach-btn"
+					onclick="document.getElementById('evidenceFile').click();">파일
+					선택</button>
 				<div id="file-list"></div>
 			</div>
-			<div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid #eee; text-align: right;">
+			<div
+				style="margin-top: auto; padding-top: 1rem; border-top: 1px solid #eee; text-align: right;">
 				<div>
 					<button id="confirmBtn" class="btn-save">확인</button>
-					<button id="cancelBtn" class="btn-save" style="background-color: #6c757d;">취소</button>
+					<button id="cancelBtn" class="btn-save"
+						style="background-color: #6c757d;">취소</button>
 				</div>
 			</div>
 		</div>
