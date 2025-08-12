@@ -122,10 +122,10 @@
 			                    <div class="detail-grid">
 			                        <div class="detail-item feedback-content">
 			                            <div class="detail-label">후기 내용</div>
-			                            <c:if test="${content.crPublic == 'Y'}">
+			                            <c:if test="${content.crPublic == 'Y' || pageContext.request.userPrincipal.principal == content.memId}">
 				                            <div class="feedback-text">${content.crContent}</div>
 			                            </c:if>
-			                            <c:if test="${content.crPublic == 'N'}">
+			                            <c:if test="${content.crPublic == 'N' && pageContext.request.userPrincipal.principal != content.memId}">
 				                            <div class="feedback-text">비공개 후기내용입니다.</div>
 			                            </c:if>
 			                        </div>
