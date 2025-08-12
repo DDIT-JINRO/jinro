@@ -192,7 +192,6 @@ function renderCounselDetail(counselData) {
 }
 
 function statusBtn(status,id,method,date,url){
-		console.log("status",url);
 		const datetime = new Date(date);
 		const subBtn = document.querySelector('.btn.btn-save');
 	    const cancelBtn = document.querySelector('.btn.btn-cancel');
@@ -220,8 +219,8 @@ function statusBtn(status,id,method,date,url){
 					 }
 			       })
 				   .then(response => {
+						document.getElementById("counselStatus").textContent="확정";
 						selectCounselingSchedules(datetime);
-						counselDetail(id);
 						statusBtn('S04003',id,method,date)
 						updatedCancelBtn.style.display = 'none';
 				   })
@@ -236,8 +235,8 @@ function statusBtn(status,id,method,date,url){
 					 }
 			       })
 				   .then(response => {
+					document.getElementById("counselStatus").textContent="취소"
 				   		selectCounselingSchedules(datetime);
-						counselDetail(id);
 						statusBtn('S04002',id,method,date);
 						updatedCancelBtn.style.display = 'none';
 				   });
@@ -259,8 +258,8 @@ function statusBtn(status,id,method,date,url){
 					 }
 			       })
 				   .then(response => {
-					console.log("response : ",response.data);
 					   	if(response.data){
+							document.getElementById("counselStatus").textContent="개설"
 					   		selectCounselingSchedules(datetime);
 							let url = response.data;
 							statusBtn('S04005',id,method,date,url);
@@ -269,8 +268,8 @@ function statusBtn(status,id,method,date,url){
 								openCounselingPopup(url);
 							});
 					   	}else{
+							document.getElementById("counselStatus").textContent="개설"
 							selectCounselingSchedules(datetime);
-							counselDetail(id);
 							statusBtn('S04005',id,method,date);
 						}
 				   });
@@ -301,9 +300,8 @@ function statusBtn(status,id,method,date,url){
 					 }
 			       })
 				   .then(response => {
-
+						document.getElementById("counselStatus").textContent="완료"
 				   		selectCounselingSchedules(datetime);
-						counselDetail(id);
 						statusBtn('S04004',id,method,date);
 				   });
 		})
@@ -323,7 +321,6 @@ function counselDetail(counselId) {
 }
 
 function openCounselingPopup(url) {
-	console.log("openCounselingPopup",url);
     // 팝업 창의 크기와 위치를 설정합니다.
     const width = 1200;
     const height = 800;
