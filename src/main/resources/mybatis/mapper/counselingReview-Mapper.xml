@@ -24,26 +24,26 @@
 		    LEFT JOIN COM_CODE          METHOD_CODE ON B.COUNSEL_METHOD = METHOD_CODE.CC_ID
 		WHERE
 			1 = 1
-		    <if test = "keyword != null and keyword != ''">
-			    <choose>
-			        <when test = "status == 'counselName'">
-						AND COUNSEL_NAME LIKE '%' || #{keyword} || '%'
-			        </when>
-			        <when test = "status == 'content'">
-						AND CR_CONTENT LIKE '%' || #{keyword} || '%'
-			        </when>
-			        <when test = "status == 'writer'">
-						AND MEM_NAME LIKE '%' || #{keyword} || '%'
-			        </when>
-			        <otherwise>
-						AND (
-							COUNSEL_NAME LIKE '%' || #{keyword} || '%'
-							OR CR_CONTENT LIKE '%' || #{keyword} || '%'
-							OR MEM_NAME LIKE '%' || #{keyword} || '%'
-						)
-			        </otherwise>
-			    </choose>
-		    </if>
+	        <if test = "keyword != null and keyword != ''">
+	            <choose>
+	                <when test = "status == 'counselName'">
+	                    AND COUNSEL.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                </when>
+	                <when test = "status == 'content'">
+	                    AND A.CR_CONTENT LIKE '%' || #{keyword} || '%'
+	                </when>
+	                <when test = "status == 'writer'">
+	                    AND MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                </when>
+	                <otherwise>
+	                    AND (
+	                        COUNSEL.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                        OR A.CR_CONTENT LIKE '%' || #{keyword} || '%'
+	                        OR MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                    )
+	                </otherwise>
+	            </choose>
+	        </if>
 		ORDER BY
 			CR_CREATED_AT DESC
 		OFFSET #{startRow} - 1 ROWS FETCH NEXT #{endRow} - #{startRow} + 1 ROWS ONLY
