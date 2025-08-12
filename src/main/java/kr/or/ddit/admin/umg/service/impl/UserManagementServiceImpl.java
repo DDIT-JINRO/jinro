@@ -192,6 +192,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		
 		int res = userManagementMapper.submitPenalty(memberPenaltyVO);
 		userManagementMapper.updateReport(reportedId);
+		userManagementMapper.updateMemDelYn(memId);
 		
 		return res;
 	}

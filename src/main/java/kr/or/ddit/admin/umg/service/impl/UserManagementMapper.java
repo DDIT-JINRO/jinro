@@ -55,4 +55,6 @@ public interface UserManagementMapper {
 
 	int reportModify(ReportVO reportVO);
 
+	void updateMemDelYn(int memId);
+
 }

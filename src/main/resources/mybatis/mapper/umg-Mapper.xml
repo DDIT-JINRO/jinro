@@ -536,4 +536,12 @@
 		WHERE
 		REPORT_ID = #{reportId}
 	</update>
+
+	<update id="updateMemDelYn" parameterType="int">
+		UPDATE MEMBER
+		SET
+		DEL_YN = 'Y'
+		WHERE
+		MEM_ID = #{memId}
+	</update>
 </mapper>
