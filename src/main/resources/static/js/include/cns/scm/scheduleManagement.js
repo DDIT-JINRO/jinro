@@ -176,22 +176,9 @@ function renderCounselDetail(counselData) {
 
     // 상태 정보 채우기
     document.getElementById('counselStatus').textContent = counselData.counselStatusStr || '';
-    //document.getElementById('counselStatusSelect').value = counselData.counselStatus;
     
-	const subBtn = document.querySelector('.btn.btn-save');
-	console.log("subBtn : ",subBtn);
-	console.log("counselStatus : "+counselData.counselStatus);
-	if(counselData.counselStatus == 'S04001'){
-		subBtn.textContent='확정하기'
-		subBtn.addEventListener("click",function(){
-			axios.get('/api/cns/updateCounselStatus.do', {
-					params : {
-			         counselId : counselData.counselId,
-					 counselStatus : "S04003"			
-					 }		 
-			       })
-		})
-	}
+	statusBtn(counselData.counselStatus,counselData.counselId,counselData.counselMethod,counselData.counselReqDatetime);
+
 	
     // 신청 동기 채우기
     document.getElementById('counselDescription').value = counselData.counselDescription || '';
@@ -203,6 +190,109 @@ function renderCounselDetail(counselData) {
     document.getElementById('memPhoneNumber').textContent = counselData.memPhoneNumber || '';
 }
 
+function statusBtn(status,id,method,date){
+		const datetime = new Date(date);
+		const subBtn = document.querySelector('.btn.btn-save');
+	    const cancelBtn = document.querySelector('.btn.btn-cancel');
+
+	    // 1. 기존 버튼을 복제하여 새로운 버튼 생성 (이전 이벤트 리스너 제거)
+	    const newSubBtn = subBtn.cloneNode(true);
+	    const newCancelBtn = cancelBtn.cloneNode(true);
+
+	    // 2. 기존 버튼을 새로운 버튼으로 교체
+	    subBtn.parentNode.replaceChild(newSubBtn, subBtn);
+	    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+
+	    // 3. 변수 이름을 새 버튼으로 업데이트
+	    const updatedSubBtn = newSubBtn;
+	    const updatedCancelBtn = newCancelBtn;
+
+	if(status == 'S04001'){
+		updatedSubBtn.textContent='상담확정'
+		updatedSubBtn.style.display = 'block'; 
+		updatedSubBtn.addEventListener("click",function(){
+			axios.get('/api/cns/updateCounselStatus.do', {
+					params : {
+			         counselId : id,
+					 counselStatus : "S04003"			
+					 }		 
+			       })
+				   .then(response => {
+						if(response.data>0){
+							selectCounselingSchedules(datetime);
+							statusBtn('S04003',id,method,date)
+						}
+						updatedCancelBtn.style.display = 'none';
+				   })
+		});
+		
+		updatedCancelBtn.style.display = 'block';
+		updatedCancelBtn.addEventListener("click",function(){
+			axios.get('/api/cns/updateCounselStatus.do', {
+					params : {
+			         counselId : id,
+					 counselStatus : "S04002"			
+					 }		 
+			       })
+				   .then(response => {
+					   	if(response.data>0){
+					   		selectCounselingSchedules(datetime);
+							statusBtn('S04002',id,method,date);
+					   	}
+						updatedCancelBtn.style.display = 'none';
+				   });
+			updatedCancelBtn.style.display = 'none';
+		})
+	}else if(status == 'S04002'){
+		updatedSubBtn.style.display = 'none'; 
+		updatedCancelBtn.style.display = 'none ';
+	}else if(status == 'S04003'){
+		updatedCancelBtn.style.display = 'none';
+		updatedSubBtn.textContent='상담개설'
+		updatedSubBtn.style.display = 'block'; 
+		updatedSubBtn.addEventListener("click",function(){
+			axios.get('/api/cns/updateCounselStatus.do', {
+					params : {
+			         counselId : id,
+					 counselStatus : "S04005",
+					 counselMethod : method
+					 }		 
+			       })
+				   .then(response => {
+					   	if(response.data>0){
+					   		selectCounselingSchedules(datetime);
+							statusBtn('S04005',id,method,date);
+					   	}
+				   });
+		});
+	}else if(status == 'S04004'){
+		updatedCancelBtn.style.display = 'none';
+		updatedSubBtn.textContent='일지작성'
+		updatedSubBtn.style.display = 'block'; 
+		updatedSubBtn.addEventListener("click",function(){
+			const pageBtn = document.querySelector('a[data-page="/cns/cnsMoveController.do?target=csl/counselingLog"]');
+			pageBtn.click();
+		});
+	}else if(status == 'S04005'){
+		updatedCancelBtn.style.display = 'none';
+		updatedSubBtn.textContent='상담완료'
+		updatedSubBtn.style.display = 'block'; 
+		updatedSubBtn.addEventListener("click",function(){
+			axios.get('/api/cns/updateCounselStatus.do', {
+					params : {
+			         counselId : id,
+					 counselStatus : "S04004",
+					 }		 
+			       })
+				   .then(response => {
+					   	if(response.data>0){
+					   		selectCounselingSchedules(datetime);
+							statusBtn('S04004',id,method,date);
+					   	}
+				   });
+		})
+	}
+}
 
 function counselDetail(counselId) {
     // ID를 이용해 데이터 배열에서 해당 객체를 찾음

@@ -113,7 +113,8 @@
 					</div>
 				</div>
 				<div class="button-group">
-					<button class="btn btn-save">저장</button>
+					<button class="btn btn-save" hidden></button>
+					<button class="btn btn-cancel" hidden>상담취소</button>
 				</div>
 			</div>
 		</div>
@@ -124,6 +125,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script
 	src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+	
 <script
 	src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ko.js'></script>
 	

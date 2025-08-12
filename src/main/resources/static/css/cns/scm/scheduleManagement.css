@@ -163,7 +163,8 @@
 .template-panel .btn-delete,
 .template-panel .btn-reset,
 .template-panel .btn-confirm,
-.template-panel .btn-save {
+.template-panel .btn-save,
+.btn-cancel{
 	padding: 8px 16px;
 	font-size: 14px;
 	border: none;
@@ -210,6 +211,11 @@
 	background: #07223D;
 }
 
+.btn-cancel {
+	background: #A00002;
+	color: #fff;
+	margin-left: auto;
+}
 /* ──────────────────────────────────────────────────────────
    하단 페이지네이션 고정
 ──────────────────────────────────────────────────────────*/
