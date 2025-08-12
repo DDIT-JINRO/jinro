@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	changePhotoInput.addEventListener("change", handleImgFileSelect)
 })
 
+
+
 const handleImgFileSelect = (event) => {
 	const files = event.target.files;
     const profileImg = document.querySelector(".profile-img");

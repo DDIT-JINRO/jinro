@@ -53,11 +53,11 @@
    필터박스 (오른쪽 정렬)
 ──────────────────────────────────────────────────────────*/
 .filter-box {
+	margin-top: 10px;
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	justify-content: flex-end;
-	width: 100%;
 	margin-bottom: 12px;
 }
 

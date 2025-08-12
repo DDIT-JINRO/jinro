@@ -13,8 +13,27 @@ public class MemberPenaltyVO {
 	private Date mpWarnDate;
 	private int memId;
 	private String mpType;
-	private Date mpStartdeAt;
+	private Date mpStartedAt;
 	private Date mpCompleteAt;
-	private int fileGroupNo;
+	private Long fileGroupNo;
+	
+	// 신고대상자 이름 조회
+	private String memName;
+	
+	private String keyword;	 
+	private String status;
+
+	private int currentPage;
+	private int size;
+	private int startNo;
+	private int endNo;
+
+	public int getStartNo() {
+		return (this.currentPage - 1) * size;
+	}
+
+	public int getEndNo() {
+		return this.currentPage * size;
+	}
 	
 }

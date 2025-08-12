@@ -3,6 +3,8 @@ package kr.or.ddit.main.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import kr.or.ddit.com.ComCodeVO;
 import lombok.Data;
 
@@ -16,6 +18,7 @@ public class MemberVO {
 	private String memPhoneNumber;
 	private String memName;
 	private String memGen;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date memBirth;
 	private String memAlarm;
 	private String memStudent;
@@ -44,9 +47,25 @@ public class MemberVO {
 	private String profileFilePath;
 	private String badgeFilePath;
 	private String subFilePath;
-	
+
 	public String getSMemId() {
 		return memId + "";
+	}
+
+	private String keyword;	 
+	private String status;
+
+	private int currentPage;
+	private int size;
+	private int startNo;
+	private int endNo;
+
+	public int getStartNo() {
+		return (this.currentPage - 1) * size;
+	}
+
+	public int getEndNo() {
+		return this.currentPage * size;
 	}
 
 }

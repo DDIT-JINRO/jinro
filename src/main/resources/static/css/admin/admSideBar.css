@@ -2,14 +2,14 @@
 
 .admin-side-sidebar {
 	width: 260px;
-	background-color: #07223D;
+	background-color: #313A46;
 	color: white;
 	height: 100vh;
 	padding: 0;
 	float: left;
 	transform: translateX(-100%);
 	transition: transform 0.5s ease;
-	position: relative;
+	position: fixed;
 	z-index: 999;
 }
 

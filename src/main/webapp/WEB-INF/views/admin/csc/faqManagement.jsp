@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" href="/css/csc/faq/adminFaq.css">
-<h3>고객센터 > FAQ</h3>
+<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">고객센터 > FAQ</h2>
 <div class="template-container">
 	<!-- 리스트 패널 -->
 	<div class="template-panel" style="flex: 1.2">
-		<div class="panel-header" id="faqHeader" style="cursor: pointer; text-decoration: none">FAQ</div>
+		<div class="middleTitle" id="faqHeader" style="cursor: pointer; text-decoration: none">FAQ</div>
 
 		<!-- 리스트 패널 상단: 필터 영역 -->
 		<div class="filter-box">
@@ -56,8 +56,7 @@
 
 	<!-- 상세/작성 패널 -->
 	<div class="template-panel" style="flex: 1.5">
-		<div class="panel-header">FAQ 등록 / 수정</div>
-		<h3>FAQ사항 기본정보</h3>
+		<div class="middleTitle">FAQ 등록 / 수정</div>
 		<table class="info-table" style="display: none;">
 			<thead id="info-table-thead">
 				<tr>

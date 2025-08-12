@@ -1,0 +1,455 @@
+@charset "UTF-8";
+
+p {
+	margin: 5px 0;
+}
+
+.flex {
+	display: flex;
+}
+
+.search-filter-bar {
+	margin-top: 20px;
+	display: flex;
+	padding: 0 10px;
+	gap: 10px;
+	justify-content: space-between;
+}
+
+#mem-interests {
+	font-size: 12px;
+}
+
+/********************************************* 테이블 칸 지정 ***********************************/
+.body-id {
+	min-width: 30px;
+}
+
+.body-memName {
+	min-width: 90px;
+}
+
+.body-email {
+	min-width: 200px;
+}
+
+.body-nickname {
+	min-width: 90px;
+}
+
+.body-phone {
+	min-width: 100px;
+}
+
+.body-birth {
+	min-width: 100px;
+}
+
+.body-logType {
+	min-width: 70px;
+}
+
+.management-left {
+	padding-right: 20px;
+}
+
+.body-point {
+	min-width: 70px;
+}
+/*********************************************테이블 칸 지정 끝****************************************/
+.gap {
+	gap: 20px;
+}
+
+.listMember {
+	width: 780px;
+	height: 720px;
+	margin-bottom: 20px;
+}
+
+.filter-box select, .filter-box input[type="text"] {
+	padding: 6px 10px;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	outline: none;
+	box-sizing: border-box;
+}
+
+.filter-box input[type="text"]{
+	width: 500px;	
+}
+
+.template-panel .btn-save {
+	background: #6973E3;
+	color: white;
+	margin-left: auto;
+	border-radius: 6px;
+	border: none;
+	font-weight: 500;
+}
+
+.ptag-list {
+	align-content: center;
+	padding: 0;
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+/* 추가ㅏ된*/
+.member-form-left, .member-form-right, .member-form-extra {
+    display: flex;
+    flex-direction: column;
+    gap: 6.5px; /*간격 조절 라벨,인풋사이*/
+}
+
+.memberManagementLeft {
+	width: 100%;
+}
+
+.insertMember {
+	width: 800px;
+	height: 412px;
+}
+
+.listMemberBody {
+	padding: 10px;
+}
+
+.member-form input {
+	width: 100px;
+	height: 10px;
+}
+
+.managementMember {
+	margin-bottom: 20px;
+	height: 410px;
+	width: 800px;
+}
+
+.member-form {
+	margin-top: 10px;
+	padding-bottom: 20px;
+	display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3개의 열을 동일한 너비로 설정 */
+    gap: 30px;
+    box-sizing: border-box;
+}
+
+.card-footer {
+	margin-top: auto;
+}
+
+.member-form-left {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.btn-temp {
+	padding: 10px;
+    background-color: #DCDEFC;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.member-form-right {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.member-form label {
+	font-size: 12px;
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+
+.flex input {
+	width: 150px;
+	height: 28px;
+	padding: 4px 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 13px;
+	box-sizing: border-box;
+	transition: border-color 0.2s ease;
+}
+
+.member-form input, .member-form select {
+	width: 100%;
+	height: 28px;
+	padding: 4px 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 13px;
+	box-sizing: border-box;
+	transition: border-color 0.2s ease;
+}
+
+.member-form input:focus, .member-form select:focus {
+	border-color: #007bff;
+	outline: none;
+}
+
+.profile-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	margin-bottom: 0px;
+}
+
+.profile-wrapper img {
+	width: 80px;
+	height: 80px;
+	margin-bottom: 8px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 1px solid #ccc;
+}
+
+.upload-icon {
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #7C7CF5;
+	color: white;
+	border-radius: 50%;
+	cursor: pointer;
+	font-size: 18px;
+}
+
+#profileUpload {
+	display: none;
+}
+
+.add-btn {
+	grid-column: 1 / 4; /* 첫 번째 열부터 네 번째 열의 시작점까지 차지 */
+    padding: 12px;
+    background-color: #DCDEFC;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+/*****************************************/
+table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+	background-color: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+th, td {
+	padding: 12px 16px;
+	text-align: center;
+	border-bottom: 1px solid #eee;
+}
+
+th {
+	background-color: #f4f6f8;
+	color: #333;
+	font-weight: 600;
+}
+
+td {
+	color: #555;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+tr:hover {
+	background-color: #f1f1f1;
+}
+
+table td:first-child {
+	color: #848efb;
+	font-weight: bold;
+}
+
+table th:first-child {
+	border-top-left-radius: 8px;
+}
+
+table th:last-child {
+	border-top-right-radius: 8px;
+}
+
+.search-filter-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+#searchInput {
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 220px;
+}
+
+#loginTypeFilter {
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+/* memberManagement.css 파일에 추가 또는 수정 */
+
+/* 회원 상세 상자 */
+#member-detail-box {
+	display: flex;
+	flex-direction: column; /* 세로 방향으로 정렬 */
+}
+
+/* 프로필 이미지와 기본 정보 영역 */
+.member-header-section {
+	margin-top: 20px;
+	display: flex;
+	align-items: flex-start;
+	gap: 30px;
+}
+
+.member-penalty-title {
+	font-size: 12px;
+}
+
+/* 프로필 이미지 */
+.member-profile img {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 3px solid #dee2e6;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* 회원 정보 그리드 레이아웃 */
+.member-info-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr); /* 2열 그리드 */
+	gap: 20px;
+}
+
+/* 각 정보 필드 (이름, 닉네임 등) */
+.info-field {
+	display: flex;
+	flex-direction: column;
+}
+
+.info-field label {
+	font-weight: bold;
+	color: black;
+	margin-bottom: 3px;
+	background-color: #DCDEFC; /* 배경색으로 강조 */
+	padding: 3px 5px;
+	border-radius: 8px;
+	font-size: 10px;
+}
+
+.info-field input {
+	width: 100%;
+	height: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 8px 12px;
+	box-sizing: border-box;
+}
+
+/* 경고/정지, 관심 분야 영역 */
+.member-penalty-section, .member-interests-section {
+	border-top: 1px solid #eee;
+	margin-top: 10px;
+}
+
+.marginBt {
+	margin-bottom: 20px;
+}
+
+/* 관심 키워드 스타일 */
+#mem-interests span {
+	background-color: #07223D;
+	color: white;
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 13px;
+	margin-right: 8px;
+	display: inline-block;
+}
+
+/* 버튼 그룹 */
+.button-group {
+	display: flex;
+	gap: 10px;
+	justify-content: flex-end; /* 오른쪽 정렬 */
+	padding-top: 5px;
+	border-top: 1px solid #eee;
+}
+
+/* 수정, 경고, 정지 버튼 스타일 */
+.btn-modify {
+	background-color: rgb(220, 222, 252);;
+	color: black;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 20px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.onlineUser {
+	width: 300px;
+	height: 300px;
+}
+.onlineUser2 {
+	width: 1000px;
+	height: 300px;
+}
+
+.btn-warn {
+	background-color: #FFD700;
+	color: #333;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 20px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.btn-ban {
+	background-color: #DC143C;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 20px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+
+
+.searchBox {
+	width: 780px;
+	margin-bottom: 20px;
+}
+
+/****************/
+
+
+

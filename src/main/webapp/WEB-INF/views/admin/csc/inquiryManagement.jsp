@@ -2,10 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" href="/css/csc/inq/adminInq.css">
-<h3>고객센터 > 1:1 문의</h3>
+<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">고객센터 > 1:1 문의</h2>
 <div class="template-container">
 	<div class="template-panel" style="flex: 1.2">
-		<div class="panel-header" id="inqHeader" style="cursor: pointer; text-decoration: none">1:1문의</div>
+		<div class="middleTitle" id="inqHeader" style="cursor: pointer; text-decoration: none">1:1문의</div>
 
 		<div class="filter-box">
 			<form action="/csc/inq/admin/inqList.do" method="get">
@@ -54,7 +54,7 @@
 	</div>
 
 	<div class="template-panel" style="flex: 1.5">
-		<div class="panel-header">1:1문의 답변</div>
+		<div class="middleTitle">1:1문의 답변</div>
 		<h3>1:1문의 기본정보</h3>
 		<table class="info-table" style="display: none;">
 			<thead id="info-table-thead">
