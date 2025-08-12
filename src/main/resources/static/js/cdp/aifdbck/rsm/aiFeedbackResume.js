@@ -107,6 +107,8 @@ function requestAiFeedback() {
 			return response.text();
 		})
 		.then(aiResponseText => {
+			axios.post("/admin/las/aiResumeVisitLog.do");
+
 			const cleanedText = cleanAiResponse(aiResponseText);
 
 			aiFeedbackData = {

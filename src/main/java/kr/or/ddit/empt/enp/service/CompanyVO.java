@@ -24,6 +24,7 @@ public class CompanyVO {
 
 //	필터링할 값
 	private String keyword; // 기업이름
+	private String status;
 	private List<String> scaleId; // 기업 규모 선택
 	private List<String> regionId; // 기업 위치 선택
 	private List<String> hiringStatus; // 채용 상태 선택

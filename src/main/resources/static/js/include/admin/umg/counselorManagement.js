@@ -1,39 +1,40 @@
 /**
  * 
  */
-ctxCnsMngMonthChart = document.getElementById('sparklineChart');
-modifyButton = document.getElementById('userModify');
+function cnsMngChart() {
+	const ctxCnsMngMonthChart = document.getElementById('sparklineChart');
 
-new Chart(ctxCnsMngMonthChart, {
-	type: 'bar',
-	data: {
-		labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-		datasets: [{
-			data: [15, 20, 5, 65, 55, 22, 68, 95, 85, 25, 20],
-			backgroundColor: 'rgba(139, 148, 242, 0.8)',
-			borderRadius: 2,
-		}]
-	},
-	options: {
-		maintainAspectRatio: false,
-		scales: {
-			x: {
-				display: false
-			},
-			y: {
-				display: false
-			}
+	new Chart(ctxCnsMngMonthChart, {
+		type: 'bar',
+		data: {
+			labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+			datasets: [{
+				data: [15, 20, 5, 65, 55, 22, 68, 95, 85, 25, 20],
+				backgroundColor: 'rgba(139, 148, 242, 0.8)',
+				borderRadius: 2,
+			}]
 		},
-		plugins: {
-			legend: {
-				display: false
+		options: {
+			maintainAspectRatio: false,
+			scales: {
+				x: {
+					display: false
+				},
+				y: {
+					display: false
+				}
 			},
-			tooltip: {
-				enabled: false
+			plugins: {
+				legend: {
+					display: false
+				},
+				tooltip: {
+					enabled: false
+				}
 			}
 		}
-	}
-});
+	});
+}
 
 function fetchCnsList(page = 1) {
 	const pageSize = 10;
@@ -69,7 +70,7 @@ function fetchCnsList(page = 1) {
 			          </tr>`).join('');
 				listEl.innerHTML = rows;
 			}
-				renderPagination(data);
+			renderPagination(data);
 		})
 		.catch(err => console.error('유저 목록 조회 중 에러:', err));
 }
@@ -88,26 +89,30 @@ function renderPagination({ startPage, endPage, currentPage, totalPages }) {
 	if (footer) footer.innerHTML = html;
 }
 
-cnsListPaginationContainer = document.querySelector('.panel-footer.pagination');
-if (cnsListPaginationContainer) {
-    cnsListPaginationContainer.addEventListener('click', e => {
-        
-        const link = e.target.closest('a[data-page]');
-        
-        if (!link || link.parentElement.classList.contains('disabled')) {
-            e.preventDefault();
-            return;
-        }
+function cnsListPangingFn() {
+	const cnsListPaginationContainer = document.querySelector('.panel-footer.pagination');
+	if (cnsListPaginationContainer) {
+		cnsListPaginationContainer.addEventListener('click', e => {
 
-        e.preventDefault();
-        const page = parseInt(link.dataset.page, 10);
+			const link = e.target.closest('a[data-page]');
 
-        
-        if (!isNaN(page) && page > 0) {
-            fetchCnsList(page);
-        }
-    });
+			if (!link || link.parentElement.classList.contains('disabled')) {
+				e.preventDefault();
+				return;
+			}
+
+			e.preventDefault();
+			const page = parseInt(link.dataset.page, 10);
+
+
+			if (!isNaN(page) && page > 0) {
+				fetchCnsList(page);
+			}
+		});
+	}
 }
+
+
 
 function formatDateMMDD(iso) {
 	const d = new Date(iso);
@@ -170,7 +175,7 @@ function userDetail(formData) {
 			document.getElementById('mem-gen').value = memberGender(memberDetail.memGen) || '-';
 			document.getElementById('mem-birth').value = formatDate(memberDetail.memBirth) || '-';
 			document.getElementById('mem-logType').value = convertLoginType(memberDetail.loginType) || '-';
-			
+
 			const selectElement = document.getElementById("mem-role");
 
 			for (let i = 0; i < selectElement.options.length; i++) {
@@ -183,7 +188,7 @@ function userDetail(formData) {
 
 			document.getElementById('mem-warn-count').textContent = `${counseling}회`;
 			document.getElementById('mem-ban-count').textContent = `${vacByCns}회`;
-			document.getElementById('mem-avg-count').textContent = `${avgRate == 0 ? "후기없음" : avgRate+"점"}`;
+			document.getElementById('mem-avg-count').textContent = `${avgRate == 0 ? "후기없음" : avgRate + "점"}`;
 
 		})
 		.catch(error => {
@@ -191,52 +196,64 @@ function userDetail(formData) {
 		});
 }
 
-searchCnsBtn = document.querySelector(".searchCnsBtn");
-if (searchCnsBtn) {
-	searchCnsBtn.addEventListener("click", function() {
-		window.currentPage = 1;
-		fetchCnsList(1);
-	});
+function searchCnsFn() {
+	const searchCnsBtn = document.querySelector(".searchCnsBtn");
+	if (searchCnsBtn) {
+		searchCnsBtn.addEventListener("click", function() {
+			window.currentPage = 1;
+			fetchCnsList(1);
+		});
+	}
 }
 
-modifyButton.addEventListener('click', function() {
 
-	if (confirm('정말로 수정하시겠습니까?')) {
-		const memId = document.getElementById('mem-id').value;
 
-		if (memId == null || memId == "") {
-			alert('수정할 대상이 없습니다.');
-			return;
+function modifyBtn() {
+	const modifyButton = document.getElementById('userModify');
+
+	modifyButton.addEventListener('click', function() {
+
+		if (confirm('정말로 수정하시겠습니까?')) {
+			const memId = document.getElementById('mem-id').value;
+
+			if (memId == null || memId == "") {
+				alert('수정할 대상이 없습니다.');
+				return;
+			}
+
+
+			const memName = document.getElementById('mem-name').value;
+			const memNickname = document.getElementById('mem-nickname').value;
+			const memEmail = document.getElementById('mem-email').value;
+			const memPhone = document.getElementById('mem-phone').value;
+			const memRole = document.getElementById('mem-role').value;
+
+			let formData = new FormData();
+			formData.set("memId", memId);
+			formData.set("memName", memName);
+			formData.set("memNickname", memNickname);
+			formData.set("memRole", memRole);
+
+			axios.post('/admin/umg/updateMemberInfo.do', formData)
+				.then(res => {
+					if (res.data != 1) {
+						alert('수정 실패')
+						return;
+					} else {
+						let formId = new FormData();
+						formId.set("id", memId);
+						userDetail(formId);
+						fetchCnsList();
+					}
+				})
+			alert('수정 완료');
 		}
 
+	})
+}
 
-		const memName = document.getElementById('mem-name').value;
-		const memNickname = document.getElementById('mem-nickname').value;
-		const memEmail = document.getElementById('mem-email').value;
-		const memPhone = document.getElementById('mem-phone').value;
-		const memRole = document.getElementById('mem-role').value;
-
-		let formData = new FormData();
-		formData.set("memId", memId);
-		formData.set("memName", memName);
-		formData.set("memNickname", memNickname);
-		formData.set("memRole", memRole);
-
-		axios.post('/admin/umg/updateMemberInfo.do', formData)
-			.then(res => {
-				if (res.data != 1) {
-					alert('수정 실패')
-					return;
-				} else {
-					let formId = new FormData();
-					formId.set("id", memId);
-					userDetail(formId);
-					fetchCnsList();
-				}
-			})
-		alert('수정 완료');
-	}
-
-})
-
+searchCnsFn();
+cnsListPangingFn();
+modifyBtn();
+cnsMngChart();
 fetchCnsList();

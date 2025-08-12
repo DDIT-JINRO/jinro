@@ -115,6 +115,8 @@ function requestAiFeedback() {
 			return response.text();
 		})
 		.then(aiResponseText => {
+			axios.post("/admin/las/aiSelfIntroVisitLog.do");
+			
 			// AI 응답 텍스트를 정리하고 파싱
 			const cleanedText = cleanAiResponse(aiResponseText);
 
