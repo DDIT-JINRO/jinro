@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.empt.cte.service.impl.CareerTechnicalEducationMapper">
+
+	<select id="getTotal" parameterType="kr.or.ddit.empt.cte.service.CareerTechnicalEducationVO" resultType="int">
+		SELECT COUNT(JT_ID)
+		FROM JOB_TRAINING
+		<where>
+			JT_ID IS NOT NULL
+			<if test="keyword != null and keyword != ''">
+				AND (
+				JT_SCHOOL LIKE '%' || #{keyword} || '%'
+				OR JT_NAME LIKE '%' || #{keyword} || '%'
+				)
+			</if>
+			<if test="region != null and region != ''">
+				AND JT_ADDRESS LIKE '%' || #{region} || '%'
+			</if>
+		</where>
+		<choose>
+			<when
+				test="status != null and (status == '마감느린순' or status == '')">
+				ORDER BY JT_START_DATE DESC
+			</when>
+			<when test="status == '마감빠른순'">
+				ORDER BY JT_START_DATE ASC
+			</when>
+			<otherwise>
+				<!-- 기본 정렬 없거나 필요시 추가 -->
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getList" parameterType="kr.or.ddit.empt.cte.service.CareerTechnicalEducationVO" resultType="kr.or.ddit.empt.cte.service.CareerTechnicalEducationVO">
+	
+		SELECT JT_ID, JT_SCHOOL, JT_ADDRESS, JT_NAME, JT_FEE, JT_SCORE, JT_URL,
+		JT_START_DATE, JT_END_DATE, JT_TARGET, JT_QUOTA
+		FROM JOB_TRAINING
+		<where>
+			JT_ID IS NOT NULL
+			<if test="keyword != null and keyword != ''">
+				AND (
+				JT_SCHOOL LIKE '%' || #{keyword} || '%'
+				OR JT_NAME LIKE '%' || #{keyword} || '%'
+				)
+			</if>
+			<if test="region != null and region != ''">
+				AND JT_ADDRESS LIKE '%' || #{region} || '%'
+			</if>
+		</where>
+		<choose>
+			<when
+				test="status != null and (status == '마감느린순' or status == '')">
+				ORDER BY JT_START_DATE DESC
+			</when>
+			<when test="status == '마감빠른순'">
+				ORDER BY JT_START_DATE ASC
+			</when>
+			<otherwise>
+				<!-- 기본 정렬 없거나 필요시 추가 -->
+			</otherwise>
+		</choose>
+	</select>
+
+</mapper>
