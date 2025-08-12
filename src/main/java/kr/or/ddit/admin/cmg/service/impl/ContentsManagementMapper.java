@@ -13,4 +13,6 @@ public interface ContentsManagementMapper {
 
 	int getAllEntList(CompanyVO companyVO);
 
+	CompanyVO entDetail(String id);
+
 }

@@ -59,4 +59,26 @@
 		</where>
 	</select>
 	
+	<select id="entDetail" parameterType="String" resultType="kr.or.ddit.empt.enp.service.CompanyVO">
+		SELECT
+		    A.CP_ID,
+		    A.CP_NAME,
+		    A.CP_SCALE,
+		    B.CC_NAME,
+		    A.CP_LOCATION_X,
+		    A.CP_LOCATION_Y,
+		    A.CP_DESCRIPTION,
+		    A.CP_WEBSITE,
+		    A.CP_BUSINO,
+		    A.CP_IMG_URL,
+		    A.FILE_GROUP_ID,
+		    A.CP_REGION
+		FROM
+		    COMPANY A
+		JOIN
+		    COM_CODE B ON A.CP_SCALE = B.CC_ID
+		WHERE
+		    A.CP_ID = #{cpId}
+	</select>
+	
 </mapper>

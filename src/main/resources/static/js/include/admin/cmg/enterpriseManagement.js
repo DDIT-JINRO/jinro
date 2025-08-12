@@ -98,7 +98,7 @@ document.getElementById("entList").addEventListener("click", function(e) {
 
 
 function entDetail(formData) {
-	axios.post('/admin/cmg/getEntDetail.do', formData)
+	axios.get('/admin/cmg/entDetail.do', formData)
 		.then(res => {
 			const { memberDetail, filePath, countVO, interestCn, vacByCns, counseling, avgRate } = res.data;
 			const profileImgEl = document.getElementById('member-profile-img');
@@ -133,22 +133,22 @@ function entSearchFn() {
 
 	const searchBtn = document.getElementById('btnSearch');
 	if (searchBtn) {
-			searchBtn.addEventListener("click", function() {
-				window.currentPage = 1;
-				fetchEntList(1);
-			});
-		}
+		searchBtn.addEventListener("click", function() {
+			window.currentPage = 1;
+			fetchEntList(1);
+		});
+	}
 
 }
 
 document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-        
-        btn.classList.add("active");
-        document.getElementById(btn.dataset.tab).classList.add("active");
-    });
+	btn.addEventListener("click", () => {
+		document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+		document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+		btn.classList.add("active");
+		document.getElementById(btn.dataset.tab).classList.add("active");
+	});
 });
 
 entSearchFn();

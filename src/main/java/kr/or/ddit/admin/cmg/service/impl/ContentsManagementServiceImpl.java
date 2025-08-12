@@ -1,6 +1,7 @@
 package kr.or.ddit.admin.cmg.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,14 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 
 		return new ArticlePage<CompanyVO>(total, companyVO.getCurrentPage(), companyVO.getSize(), companyList,
 				companyVO.getKeyword());
+	}
+
+	@Override
+	public Map<String, Object> entDetail(String id) {
+		
+		CompanyVO companyVO = contentsManagementMapper.entDetail(id);
+		
+		return null;
 	}
 
 }
