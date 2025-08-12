@@ -277,7 +277,7 @@ addButton.addEventListener('click', function() {
 	}
 
 	axios.post('/admin/umg/insertUserByAdmin.do', formData).then(res => {
-		if(res.data == 1){
+		if(res.data == 'success'){
 			alert('유저 등록 성공');
 		}else {
 			alert('등록 중 오류 발생');

@@ -102,7 +102,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	public int insertUserByAdmin(MemberVO member, MultipartFile profileImage) {
 
 		Long fileGroupId = null;
-
+		
 		if (profileImage != null) {
 			List<MultipartFile> profileImages = new ArrayList<MultipartFile>();
 			profileImages.add(profileImage);
