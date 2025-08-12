@@ -86,4 +86,20 @@ public class CounselingReviewController {
 		response.put("success", true);
 		return ResponseEntity.ok(response);
 	}
+	
+	@ResponseBody
+	@PostMapping("/updateCnsReview.do")
+	public ResponseEntity<Map<String, Object>> updateCnsReview(@AuthenticationPrincipal String memId, @ModelAttribute CounselingReviewVO counselingReview) {
+		Map<String, Object> response = new HashMap<>();
+		
+		if (memId == null || "anonymousUser".equals(memId)) {
+			response.put("success", false);
+			response.put("message", "로그인 후 이용해주세요.");
+			return ResponseEntity.ok(response);
+		}
+		
+		counselingReviewService.updateCnsReview(counselingReview);
+		response.put("success", true);
+		return ResponseEntity.ok(response);
+	}
 }
