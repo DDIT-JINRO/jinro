@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.cnslt.rvw.service.impl.CounselingReviewMapper">
+
+	<select id="selectCounselingReviewList" resultType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO"> 
+		SELECT
+			A.CR_ID
+			, A.CR_RATE
+			, A.CR_CONTENT
+			, A.CR_CREATED_AT
+			, B.MEM_ID
+			, MEM.MEM_NICKNAME      AS MEM_NICKNAME
+			, B.COUNSEL             AS COUNSEL
+			, COUNSEL.MEM_NAME      AS COUNSEL_NAME
+			, CATEGORY_CODE.CC_NAME AS COUNSEL_CATEGORY
+			, METHOD_CODE.CC_NAME   AS COUNSEL_METHOD
+			, A.CR_PUBLIC
+		FROM
+		    COUNSELING_REVIEW A
+		    LEFT JOIN COUNSELING        B ON A.CR_ID = B.COUNSEL_ID
+		    LEFT JOIN MEMBER            MEM ON B.MEM_ID = MEM.MEM_ID
+		    LEFT JOIN MEMBER            COUNSEL ON B.COUNSEL = COUNSEL.MEM_ID
+		    LEFT JOIN COM_CODE          CATEGORY_CODE ON B.COUNSEL_CATEGORY = CATEGORY_CODE.CC_ID
+		    LEFT JOIN COM_CODE          METHOD_CODE ON B.COUNSEL_METHOD = METHOD_CODE.CC_ID
+		WHERE
+			1 = 1
+		    <if test = "keyword != null and keyword != ''">
+			    <choose>
+			        <when test = "status == 'counselName'">
+						AND COUNSEL_NAME LIKE '%' || #{keyword} || '%'
+			        </when>
+			        <when test = "status == 'content'">
+						AND CR_CONTENT LIKE '%' || #{keyword} || '%'
+			        </when>
+			        <when test = "status == 'writer'">
+						AND MEM_NAME LIKE '%' || #{keyword} || '%'
+			        </when>
+			        <otherwise>
+						AND (
+							COUNSEL_NAME LIKE '%' || #{keyword} || '%'
+							OR CR_CONTENT LIKE '%' || #{keyword} || '%'
+							OR MEM_NAME LIKE '%' || #{keyword} || '%'
+						)
+			        </otherwise>
+			    </choose>
+		    </if>
+		ORDER BY
+			CR_CREATED_AT DESC
+		OFFSET #{startRow} - 1 ROWS FETCH NEXT #{endRow} - #{startRow} + 1 ROWS ONLY
+	</select>
+	
+	<select id="selectCounselingReviewTotal" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO" resultType="int">
+	    SELECT
+	        COUNT(*)
+	    FROM
+	        COUNSELING_REVIEW A
+	        LEFT JOIN COUNSELING        B ON A.CR_ID = B.COUNSEL_ID
+	        LEFT JOIN MEMBER            MEM ON B.MEM_ID = MEM.MEM_ID
+	        LEFT JOIN MEMBER            COUNSEL ON B.COUNSEL = COUNSEL.MEM_ID
+        WHERE
+	        1 = 1
+	        <if test = "keyword != null and keyword != ''">
+	            <choose>
+	                <when test = "status == 'counselName'">
+	                    AND COUNSEL.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                </when>
+	                <when test = "status == 'content'">
+	                    AND A.CR_CONTENT LIKE '%' || #{keyword} || '%'
+	                </when>
+	                <when test = "status == 'writer'">
+	                    AND MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                </when>
+	                <otherwise>
+	                    AND (
+	                        COUNSEL.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                        OR A.CR_CONTENT LIKE '%' || #{keyword} || '%'
+	                        OR MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                    )
+	                </otherwise>
+	            </choose>
+	        </if>
+	</select>
+	
+	<select id="selectCounselingReview" parameterType="int" resultType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO">
+		SELECT
+			A.CR_ID
+			, A.CR_RATE
+			, A.CR_CONTENT
+			, B.MEM_ID
+			, COUNSEL.MEM_NAME      AS COUNSEL_NAME
+			, CATEGORY_CODE.CC_NAME AS COUNSEL_CATEGORY
+			, METHOD_CODE.CC_NAME   AS COUNSEL_METHOD
+			, A.CR_PUBLIC
+			, B.COUNSEL_REQ_DATETIME
+		FROM
+		    COUNSELING_REVIEW A
+		    LEFT JOIN COUNSELING        B ON A.CR_ID = B.COUNSEL_ID
+		    LEFT JOIN MEMBER            COUNSEL ON B.COUNSEL = COUNSEL.MEM_ID
+		    LEFT JOIN COM_CODE          CATEGORY_CODE ON B.COUNSEL_CATEGORY = CATEGORY_CODE.CC_ID
+		    LEFT JOIN COM_CODE          METHOD_CODE ON B.COUNSEL_METHOD = METHOD_CODE.CC_ID
+		WHERE
+			CR_ID = #{crId}
+	</select>
+
+</mapper>
