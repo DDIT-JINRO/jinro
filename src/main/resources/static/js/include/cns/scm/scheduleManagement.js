@@ -3,7 +3,7 @@ if (typeof FullCalendar !== 'undefined') {
 
 	let calendarInstance = null; // 전역 변수로 선언
 	let selectedDate = null;
-	
+
 	function initCalendar() {
 	    var calendarEl = document.getElementById('calendar');
 	    if (!calendarEl) {
@@ -34,7 +34,7 @@ if (typeof FullCalendar !== 'undefined') {
 					prevSelected.classList.remove('selected');
 				}
 				info.dayEl.classList.add('selected');
-				
+
 	            let selectedDate = info.dateStr;
 	            document.getElementById("selectedDateText").textContent =
 	                `${selectedDate} 상담 리스트`;
@@ -53,9 +53,9 @@ if (typeof FullCalendar !== 'undefined') {
 				// 선택된 날짜가 없을 경우에만 실행
 				if (!selectedDate) {
 					selectedDate = todayStr;
-					
+
 					document.getElementById('selectedDateText').textContent = selectedDate + "의 상담리스트";
-					
+
 					selectCounselingSchedules(selectedDate);
 
 					// 캘린더 초기 로드 시 오늘 날짜에 시각적 효과 추가
@@ -76,7 +76,7 @@ if (typeof FullCalendar !== 'undefined') {
         })
         .then(function (response) {
             let data = response.data;
-			counselingData = data; 
+			counselingData = data;
             let container = document.getElementById('bookedSchedulesContainer');
             container.innerHTML = '';
 
@@ -160,13 +160,14 @@ function renderCounselDetail(counselData) {
     // 상담 정보 채우기
     document.getElementById('counselCategory').textContent = counselData.counselCategoryStr || '';
     document.getElementById('counselMethod').textContent = counselData.counselMethodStr || '';
-    
+	document.querySelector('.counsel-info-summary').dataset.csId = counselData.counselId || '';
+
     // 날짜 및 시간 처리
     if (counselData.counselReqDatetime) {
         const datetime = new Date(counselData.counselReqDatetime);
         const dateStr = datetime.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '-').slice(0, -1);
         const timeStr = datetime.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-        
+
         document.getElementById('counselReqDate').textContent = dateStr;
         document.getElementById('counselReqTime').textContent = timeStr;
     } else {
@@ -176,10 +177,10 @@ function renderCounselDetail(counselData) {
 
     // 상태 정보 채우기
     document.getElementById('counselStatus').textContent = counselData.counselStatusStr || '';
-    
+
 	statusBtn(counselData.counselStatus,counselData.counselId,counselData.counselMethod,counselData.counselReqDatetime);
 
-	
+
     // 신청 동기 채우기
     document.getElementById('counselDescription').value = counselData.counselDescription || '';
 
@@ -209,13 +210,13 @@ function statusBtn(status,id,method,date){
 
 	if(status == 'S04001'){
 		updatedSubBtn.textContent='상담확정'
-		updatedSubBtn.style.display = 'block'; 
+		updatedSubBtn.style.display = 'block';
 		updatedSubBtn.addEventListener("click",function(){
 			axios.get('/api/cns/updateCounselStatus.do', {
 					params : {
 			         counselId : id,
-					 counselStatus : "S04003"			
-					 }		 
+					 counselStatus : "S04003"
+					 }
 			       })
 				   .then(response => {
 						if(response.data>0){
@@ -225,14 +226,14 @@ function statusBtn(status,id,method,date){
 						updatedCancelBtn.style.display = 'none';
 				   })
 		});
-		
+
 		updatedCancelBtn.style.display = 'block';
 		updatedCancelBtn.addEventListener("click",function(){
 			axios.get('/api/cns/updateCounselStatus.do', {
 					params : {
 			         counselId : id,
-					 counselStatus : "S04002"			
-					 }		 
+					 counselStatus : "S04002"
+					 }
 			       })
 				   .then(response => {
 					   	if(response.data>0){
@@ -244,19 +245,19 @@ function statusBtn(status,id,method,date){
 			updatedCancelBtn.style.display = 'none';
 		})
 	}else if(status == 'S04002'){
-		updatedSubBtn.style.display = 'none'; 
+		updatedSubBtn.style.display = 'none';
 		updatedCancelBtn.style.display = 'none ';
 	}else if(status == 'S04003'){
 		updatedCancelBtn.style.display = 'none';
 		updatedSubBtn.textContent='상담개설'
-		updatedSubBtn.style.display = 'block'; 
+		updatedSubBtn.style.display = 'block';
 		updatedSubBtn.addEventListener("click",function(){
 			axios.get('/api/cns/updateCounselStatus.do', {
 					params : {
 			         counselId : id,
 					 counselStatus : "S04005",
 					 counselMethod : method
-					 }		 
+					 }
 			       })
 				   .then(response => {
 					   	if(response.data>0){
@@ -268,21 +269,23 @@ function statusBtn(status,id,method,date){
 	}else if(status == 'S04004'){
 		updatedCancelBtn.style.display = 'none';
 		updatedSubBtn.textContent='일지작성'
-		updatedSubBtn.style.display = 'block'; 
+		updatedSubBtn.style.display = 'block';
 		updatedSubBtn.addEventListener("click",function(){
 			const pageBtn = document.querySelector('a[data-page="/cns/cnsMoveController.do?target=csl/counselingLog"]');
+			const counselId = document.querySelector('.counsel-info-summary').dataset.csId;
+			sessionStorage.setItem('cnsIdForLog', counselId);
 			pageBtn.click();
 		});
 	}else if(status == 'S04005'){
 		updatedCancelBtn.style.display = 'none';
 		updatedSubBtn.textContent='상담완료'
-		updatedSubBtn.style.display = 'block'; 
+		updatedSubBtn.style.display = 'block';
 		updatedSubBtn.addEventListener("click",function(){
 			axios.get('/api/cns/updateCounselStatus.do', {
 					params : {
 			         counselId : id,
 					 counselStatus : "S04004",
-					 }		 
+					 }
 			       })
 				   .then(response => {
 					   	if(response.data>0){

@@ -148,6 +148,13 @@ function fetchCounselingLog(page = 1) {
 				listEl.innerHTML = rows;
 				renderPagination(data);
 			}
+
+			const cnsIdBySchedulePage = sessionStorage.getItem('cnsIdForLog');
+			if(cnsIdBySchedulePage){
+				const target = listEl.querySelector(`tr[data-cns-id="${cnsIdBySchedulePage}"]`);
+				sessionStorage.removeItem('cnsIdBySchedulePage');
+				if(target) target.click();
+			}
 		})
 		.catch(err => console.error('상담완료이력 조회 중 에러:', err));
 }
