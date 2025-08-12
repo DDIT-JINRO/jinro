@@ -9,7 +9,7 @@ public interface CounselingReviewService {
 
 	ArticlePage<CounselingReviewVO> selectCounselingReviewList(CounselingReviewVO counselingReview);
 
-	CounselingReviewVO selectCounselingReview(String crId);
+	CounselingReviewVO selectCounselingReview(int crId);
 
 	List<CounselingVO> selectCounselingHistory(String memId, String counselName);
 

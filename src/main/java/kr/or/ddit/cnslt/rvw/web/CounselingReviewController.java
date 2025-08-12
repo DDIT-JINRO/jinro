@@ -45,7 +45,7 @@ public class CounselingReviewController {
 	}
 
 	@GetMapping("/updateCnsReviewView.do")
-	public String updateCnsReviewView(@RequestParam String crId, Model model) {
+	public String updateCnsReviewView(@RequestParam int crId, Model model) {
 		CounselingReviewVO counselingReview = counselingReviewService.selectCounselingReview(crId);
 
 		model.addAttribute("counselingReview", counselingReview);

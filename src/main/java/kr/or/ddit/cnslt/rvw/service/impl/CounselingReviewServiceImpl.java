@@ -32,9 +32,9 @@ public class CounselingReviewServiceImpl implements CounselingReviewService {
 	}
 
 	@Override
-	public CounselingReviewVO selectCounselingReview(String crId) {
+	public CounselingReviewVO selectCounselingReview(int crId) {
 		
-		CounselingReviewVO counselingReview = counselingReviewMapper.selectCounselingReview(Integer.parseInt(crId));
+		CounselingReviewVO counselingReview = counselingReviewMapper.selectCounselingReview(crId);
 		
 		return counselingReview;
 	}
