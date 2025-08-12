@@ -4,22 +4,22 @@ document.addEventListener("DOMContentLoaded", function() {
 	    const crRate = window.getCounselReviewRating();
 	    const crContent = document.querySelector("#cr-content").value.trim();
 		const crPublic = document.querySelector("input[name='cr-public']:checked").value.trim();
-		
+
 		if (!crId) {
 			alert("과거상담내역을 선택해 주세요.");
 			return;
 		}
-		
+
 		if (crRate === 0) {
 			alert("상담 평가를 선택해 주세요.");
 			return;
 		}
-	    
+
 	    if (!crContent) {
 	        alert("상담 후기를 입력해 주세요.");
 	        return;
 	    }
-		
+
 	    // FormData 생성
 	    const formData = new FormData();
 		formData.append('crId', crId)
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	        if (response.ok) {
 	            const result = await response.json();
-	            
+
 	            if (result.success) {
 	                alert("후기 등록이 완료되었습니다");
 	                window.location.href = "/cnslt/rvw/cnsReview.do";
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const starRating = document.getElementById('cr-rate');
     const ratingText = document.getElementById('rating-text');
     const stars = starRating.querySelectorAll('.star');
-    
+
     // 별점 설명 텍스트
     const ratingTexts = {
         0: '평가해주세요',
@@ -71,9 +71,9 @@ document.addEventListener('DOMContentLoaded', function() {
         4: '만족',
         5: '매우 만족'
     };
-    
+
     let currentRating = 0;
-    
+
     // 별 클릭 이벤트
     stars.forEach((star, index) => {
         // 클릭 이벤트
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const rating = parseInt(this.dataset.value);
             setRating(rating);
         });
-        
+
         // 마우스 호버 이벤트
         star.addEventListener('mouseenter', function() {
             const rating = parseInt(this.dataset.value);
@@ -89,13 +89,13 @@ document.addEventListener('DOMContentLoaded', function() {
             updateRatingText(rating, true);
         });
     });
-    
+
     // 별점 컨테이너에서 마우스가 나갔을 때
     starRating.addEventListener('mouseleave', function() {
         highlightStars(currentRating, false);
         updateRatingText(currentRating, false);
     });
-    
+
     // 별점 설정 함수
     function setRating(rating) {
         currentRating = rating;
@@ -103,12 +103,12 @@ document.addEventListener('DOMContentLoaded', function() {
         highlightStars(rating, false);
         updateRatingText(rating, false);
     }
-    
+
     // 별 하이라이트 함수
     function highlightStars(rating, isHover) {
         stars.forEach((star, index) => {
             star.classList.remove('active', 'temp-active');
-            
+
             if (index < rating) {
                 if (isHover) {
                     star.classList.add('temp-active');
@@ -118,18 +118,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // 평가 텍스트 업데이트 함수
     function updateRatingText(rating, isHover) {
         ratingText.textContent = ratingTexts[rating];
-        
+
         if (rating > 0) {
             ratingText.classList.add('selected');
         } else {
             ratingText.classList.remove('selected');
         }
     }
-    
+
     // 별점 값을 가져오는 함수 (폼 제출 시 사용)
     window.getCounselReviewRating = function() {
         return currentRating;
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const textarea = document.getElementById('cr-content');
     const maxLength = 300; // 최대 글자수 설정
-    
+
     // 글자수 카운터 HTML 생성
     const counterHTML = `
         <div class="char-counter">
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <span>최대&nbsp;</span><span class="max-count">${maxLength}</span><span class="unit">자</span>
         </div>
     `;
-    
+
     // textarea 부모 요소에 textarea-container 클래스 추가
     const parentDiv = textarea.closest('.input-group');
     if (parentDiv) {
@@ -157,27 +157,27 @@ document.addEventListener('DOMContentLoaded', function() {
         // 카운터를 textarea 다음에 추가
         parentDiv.insertAdjacentHTML('beforeend', counterHTML);
     }
-    
+
     // 글자수 카운터 요소들 선택
     const counter = parentDiv.querySelector('.char-counter');
     const currentCount = counter.querySelector('.current-count');
-    
+
     // 글자수 업데이트 함수
     function updateCounter() {
         const currentLength = textarea.value.length;
         currentCount.textContent = currentLength;
-        
+
         // 글자수에 따른 스타일 변경
         counter.classList.remove('warning', 'error');
     }
-    
+
     // 이벤트 리스너 등록
     textarea.addEventListener('input', updateCounter);
     textarea.addEventListener('paste', function() {
         // paste 이벤트는 약간의 지연 후 실행
         setTimeout(updateCounter, 10);
     });
-    
+
     // 초기 글자수 설정
     updateCounter();
 });
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // 상담 내역 검색 모달 관련 JavaScript
 document.addEventListener('DOMContentLoaded', function() {
 	const url = "/cnslt/rvw/selectCounselingHistory.do";
-	
+
 	const modal                   = document.querySelector('#modal-overlay');
 	const searchBtn               = document.querySelector('#counsel-search');
 	const closeBtn                = document.querySelector('.modal-close-btn');
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 
 			const result = await response.json();
-			
+
 			if (result.success && Array.isArray(result.counselingList)) {
 				return result.counselingList;
 			} else {
@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		counselList.innerHTML = '<li class="loading-message">검색 중...</li>';
 
 		counselings = await searchCounselings(keyword);
-		
+
 		totalPages = Math.ceil(counselings.length / itemsPerPage);
 		if (totalPages === 0) totalPages = 1;
 
@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			counselList.innerHTML = '<li class="empty-message">검색 결과가 없습니다.</li>';
 			return;
 		}
-		
+
 		counselList.innerHTML = pageCounselings.map(counsel => `
             <li class="counsel-list-item"
 				data-counsel-id="${counsel.counselId}"
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			item.addEventListener('click', function() {
 				// 이전 선택 제거
 				document.querySelectorAll('.counsel-list-item').forEach(i => i.classList.remove('selected'));
-				
+
 				// 현재 항목 선택
 				this.classList.add('selected');
 				selectedCounsel = {
@@ -360,9 +360,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// 확인 버튼
 	confirmBtn.addEventListener('click', function() {
-		
-		console.log(selectedCounsel);
-		
+
 		if (selectedCounsel) {
 			counselNameInput.value        = selectedCounsel.counselName;
 			counselNameInput.dataset.crId = selectedCounsel.counselId;
