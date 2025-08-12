@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,13 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.cnslt.rvw.service.CounselingReviewService;
 import kr.or.ddit.cnslt.rvw.service.CounselingReviewVO;
-import kr.or.ddit.empt.enp.service.InterviewReviewVO;
-import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,64 +26,62 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/cnslt/rvw")
 public class CounselingReviewController {
-	
+
 	@Autowired
 	private CounselingReviewService counselingReviewService;
-	
+
 	@GetMapping("/cnsReview.do")
 	public String cnsReview(@ModelAttribute CounselingReviewVO counselingReview, Model model) {
-		
 		ArticlePage<CounselingReviewVO> articlePage = counselingReviewService.selectCounselingReviewList(counselingReview);
-		
+
 		model.addAttribute("articlePage", articlePage);
-		
+
 		return "cnslt/rvw/cnsReview";
 	}
-	
+
 	@GetMapping("/insertCnsReviewView.do")
 	public String insertCnsReviewView(@AuthenticationPrincipal String memId, Model model) {
 		return "cnslt/rvw/insertCnsReviewView";
 	}
-	
+
 	@GetMapping("/updateCnsReviewView.do")
 	public String updateCnsReviewView(@RequestParam String crId, Model model) {
-		
-		CounselingReviewVO counselingReview = counselingReviewService.selectCounselingReview(crId) ;
-		
+		CounselingReviewVO counselingReview = counselingReviewService.selectCounselingReview(crId);
+
 		model.addAttribute("counselingReview", counselingReview);
-		
+
 		return "cnslt/rvw/updateCnsReviewView";
 	}
-	
+
 	@ResponseBody
 	@GetMapping("/selectCounselingHistory.do")
 	public ResponseEntity<Map<String, Object>> selectCounselingHistory(@AuthenticationPrincipal String memId, String counselName) {
 		Map<String, Object> response = new HashMap<String, Object>();
-		
+
 		if (memId == null || "anonymousUser".equals(memId)) {
 			response.put("success", false);
 			response.put("message", "로그인 후 이용해주세요.");
 			return ResponseEntity.ok(response);
 		}
-		
+
 		List<CounselingVO> counselingList = counselingReviewService.selectCounselingHistory(memId, counselName);
 		response.put("success", true);
 		response.put("counselingList", counselingList);
-		
+
 		return ResponseEntity.ok(response);
 	}
-	
+
 	@ResponseBody
 	@PostMapping("/insertCnsReview.do")
 	public ResponseEntity<Map<String, Object>> insertCnsReview(@AuthenticationPrincipal String memId, @ModelAttribute CounselingReviewVO counselingReview) {
 		Map<String, Object> response = new HashMap<>();
-		
+
 		if (memId == null || "anonymousUser".equals(memId)) {
 			response.put("success", false);
 			response.put("message", "로그인 후 이용해주세요.");
 			return ResponseEntity.ok(response);
 		}
-		
+
 		counselingReviewService.updateCnsReview(counselingReview);
 		response.put("success", true);
 		return ResponseEntity.ok(response);
