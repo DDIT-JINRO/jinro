@@ -27,27 +27,20 @@
 						<h3 class="file-label">상담정보 입력</h3>
 						<span class="required-info-text">※는 필수입력정보입니다</span>
 					</div>
-					<input type="text" value="" hidden="hidden" id="cr-id">
+					<input type="text" value="${counselingReview.crId}" hidden="hidden" id="cr-id">
 					<table class="info-input-table">
 						<tbody>
 							<tr>
 								<th>
-									<label for="companyName">
-										상담사
-										<span class="required">*</span>
-									</label>
+									상담사
 								</th>
 								<td>
-									<div class="input-group">
-										<span>${counselingReview.counselName}</span>
-									</div>
+									<span>${counselingReview.counselName}</span>
 								</td>
 							</tr>
 							<tr>
 								<th>
-									<label for="interview-position">
-										상담분야
-									</label>
+									상담분야
 								</th>
 								<td>
 									<span>${counselingReview.counselCategory}</span>
@@ -55,9 +48,7 @@
 							</tr>
 							<tr>
 								<th>
-									<label for="interview-position">
-										상담방법
-									</label>
+									상담방법
 								</th>
 								<td>
 									<span>${counselingReview.counselMethod}</span>
@@ -66,7 +57,6 @@
 							<tr>
 								<th>
 									상담 일자
-									<span class="required">*</span>
 								</th>
 								<td>
 									<span><fmt:formatDate value="${counselingReview.counselReqDatetime}" pattern="yyyy.MM.dd HH시 mm분"/></span>
@@ -75,11 +65,10 @@
 							<tr>
 							    <th>
 							        상담 평가
-							        <span class="required">*</span>
 							    </th>
 							    <td>
 									<div class="star-rating-container">
-							            <div class="star-rating" id="company-rating" data-rating="${counselingReview.crRate}">
+							            <div class="star-rating" id="cr-rate" data-rating="${counselingReview.crRate}">
 							                <span class="star" data-value="1">★</span>
 							                <span class="star" data-value="2">★</span>
 							                <span class="star" data-value="3">★</span>
@@ -100,7 +89,7 @@
 								</th>
 							    <td>
 							        <div class="input-group textarea-container">
-							            <textarea id="interview-detail" 
+							            <textarea id="cr-content" 
 							                      placeholder="상담 이후 어떤 경험을 하셧나요?&#13;&#10;(사실이 아닌 비방이나 개인적인 의견은 등록이 거절될 수 있습니다.)" 
 							                      rows="5"
 							                      maxlength="300"
@@ -114,9 +103,9 @@
 									<span>공개여부</span>
 								</th>
 								<td>
-									<input type="radio" value="Y" ${counselingReview.crPublic == 'Y' ? 'checked' : ''}>
+									<input type="radio" name="cr-public" value="Y" ${counselingReview.crPublic == 'Y' ? 'checked' : ''}>
 									<label>Y</label>
-									<input type="radio" value="N" ${counselingReview.crPublic == 'N' ? 'checked' : ''}>
+									<input type="radio" name="cr-public" value="N" ${counselingReview.crPublic == 'N' ? 'checked' : ''}>
 									<label>N</label>
 								</td>
 							</tr>
