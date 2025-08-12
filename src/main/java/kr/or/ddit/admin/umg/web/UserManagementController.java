@@ -61,22 +61,7 @@ public class UserManagementController {
 	@PostMapping("/insertUserByAdmin.do")
 	public String insertUserByAdmin(MemberVO memberVO, @RequestParam(required = false) MultipartFile profileImage) {
 
-		Long fileGroupId = null;
-
-		if (profileImage != null) {
-			List<MultipartFile> profileImages = new ArrayList<MultipartFile>();
-			profileImages.add(profileImage);
-			fileGroupId = fileService.createFileGroup();
-			try {
-				fileService.uploadFiles(fileGroupId, profileImages);
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
-		}
-
-		memberVO.setFileProfile(fileGroupId);
-		return userManagementService.insertUserByAdmin(memberVO) == 1 ? "success" : "failed";
+		return userManagementService.insertUserByAdmin(memberVO, profileImage) == 1 ? "success" : "failed";
 
 	}
 
@@ -141,26 +126,7 @@ public class UserManagementController {
 	public String submitPenalty(MemberPenaltyVO memberPenaltyVO,
 			@RequestParam(required = false) MultipartFile[] evidenceFiles) {
 
-		Long fileGroupId = null;
-
-		if (evidenceFiles != null) {
-			List<MultipartFile> evidenceFilesList = new ArrayList<MultipartFile>();
-			for (MultipartFile file : evidenceFiles) {
-				evidenceFilesList.add(file);
-			}
-			fileGroupId = fileService.createFileGroup();
-			try {
-				fileService.uploadFiles(fileGroupId, evidenceFilesList);
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
-
-		}
-
-		memberPenaltyVO.setFileGroupNo(fileGroupId);
-
-		int res = userManagementService.submitPenalty(memberPenaltyVO);
+		int res = userManagementService.submitPenalty(memberPenaltyVO, evidenceFiles);
 
 		AlarmVO alarmVO = new AlarmVO();
 
@@ -178,11 +144,11 @@ public class UserManagementController {
 
 		return userManagementService.getPenaltyDetail(id);
 	}
-	
+
 	@PostMapping("/reportModify.do")
 	public int reportModify(ReportVO reportVO) {
-		
+
 		return userManagementService.reportModify(reportVO);
 	}
-	
+
 }

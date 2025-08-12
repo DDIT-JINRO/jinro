@@ -1,5 +1,7 @@
 package kr.or.ddit.admin.umg.service.impl;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +9,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
@@ -94,7 +98,24 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 
 	@Override
-	public int insertUserByAdmin(MemberVO member) {
+	@Transactional
+	public int insertUserByAdmin(MemberVO member, MultipartFile profileImage) {
+
+		Long fileGroupId = null;
+
+		if (profileImage != null) {
+			List<MultipartFile> profileImages = new ArrayList<MultipartFile>();
+			profileImages.add(profileImage);
+			fileGroupId = fileService.createFileGroup();
+			try {
+				fileService.uploadFiles(fileGroupId, profileImages);
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+		}
+
+		member.setFileProfile(fileGroupId);
 
 		String memberPw = member.getMemPassword();
 		member.setMemPassword(passwordEncoder.encode(memberPw));
@@ -168,8 +189,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		map.put("currentPage", currentPage);
 		map.put("startNo", startNo);
 		map.put("endNo", endNo);
-		
-		
+
 		List<MemberPenaltyVO> penaltyVOList = userManagementMapper.getPenaltyList(map);
 
 		// 건수
@@ -182,28 +202,48 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 
 	@Override
-	public int submitPenalty(MemberPenaltyVO memberPenaltyVO) {
-		
+	@Transactional
+	public int submitPenalty(MemberPenaltyVO memberPenaltyVO, MultipartFile[] evidenceFiles) {
+
+		Long fileGroupId = null;
+
+		if (evidenceFiles != null) {
+			List<MultipartFile> evidenceFilesList = new ArrayList<MultipartFile>();
+			for (MultipartFile file : evidenceFiles) {
+				evidenceFilesList.add(file);
+			}
+			fileGroupId = fileService.createFileGroup();
+			try {
+				fileService.uploadFiles(fileGroupId, evidenceFilesList);
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+
+		}
+
+		memberPenaltyVO.setFileGroupNo(fileGroupId);
+
 		int reportedId = memberPenaltyVO.getReportId();
-		
+
 		int memId = userManagementMapper.getMemIdByReport(reportedId);
-		
+
 		memberPenaltyVO.setMemId(memId);
-		
+
 		int res = userManagementMapper.submitPenalty(memberPenaltyVO);
 		userManagementMapper.updateReport(reportedId);
 		userManagementMapper.updateMemDelYn(memId);
-		
+
 		return res;
 	}
 
 	@Override
 	public Map<String, Object> getPenaltyDetail(String id) {
-		
+
 		MemberPenaltyVO memberPenaltyVO = userManagementMapper.getPenaltyDetail(id);
-		
+
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+
 		String filePath = "";
 		if (memberPenaltyVO.getFileGroupNo() != null) {
 			FileDetailVO file = fileService.getFileDetail(memberPenaltyVO.getFileGroupNo(), 1);
@@ -211,19 +251,19 @@ public class UserManagementServiceImpl implements UserManagementService {
 			map.put("filePath", filePath);
 			map.put("fileOrgName", file.getFileOrgName());
 		}
-		
+
 		log.info("map + @@@@@" + map);
-		
+
 		map.put("penaltyVO", memberPenaltyVO);
-		
+
 		return map;
 	}
 
 	@Override
 	public int reportModify(ReportVO reportVO) {
-		
+
 		int res = userManagementMapper.reportModify(reportVO);
-		
+
 		return res;
 	}
 

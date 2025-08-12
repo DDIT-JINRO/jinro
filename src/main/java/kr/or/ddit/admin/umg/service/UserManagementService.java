@@ -2,6 +2,8 @@ package kr.or.ddit.admin.umg.service;
 
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.main.service.MemberVO;
@@ -13,8 +15,6 @@ public interface UserManagementService {
 
 	Map<String, Object> getMemberDetail(String id);
 
-	int insertUserByAdmin(MemberVO member);
-
 	int updateMemberInfo(MemberVO memberVO);
 
 	ArticlePage<ReportVO> getReportList(int currentPage, int size, String keyword, String status);
@@ -23,10 +23,12 @@ public interface UserManagementService {
 
 	ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status);
 
-	int submitPenalty(MemberPenaltyVO memberPenaltyVO);
-
 	Map<String, Object> getPenaltyDetail(String id);
 
 	int reportModify(ReportVO reportVO);
+
+	int submitPenalty(MemberPenaltyVO memberPenaltyVO, MultipartFile[] evidenceFiles);
+
+	int insertUserByAdmin(MemberVO memberVO, MultipartFile profileImage);
 
 }
