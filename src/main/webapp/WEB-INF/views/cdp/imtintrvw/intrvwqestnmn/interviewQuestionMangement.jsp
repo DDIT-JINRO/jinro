@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangement.css">
+<link rel="stylesheet"
+	href="/css/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangement.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -11,24 +12,38 @@
 	</div>
 	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-item"><a href="/cdp/rsm/rsm/resumeList.do">이력서</a></div>
-		<div class="channel-sub-section-item"><a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a></div>
-		<div class="channel-sub-section-item"><a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a></div>
+		<div class="channel-sub-section-item">
+			<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
+		</div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>
+		</div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <a class="tab" href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">면접의 기본</a>
-		    <a class="tab" href="/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do">면접 질문 리스트</a>
-		    <a class="tab active" href="/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do">면접 질문 관리</a>
-		    <a class="tab" href="/cdp/imtintrvw/aiimtintrvw/aiImitationInterview.do">AI 모의 면접</a>
-  		</div>
+			<a class="tab" href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">면접의
+				기본</a> <a class="tab"
+				href="/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do">면접 질문
+				리스트</a> <a class="tab active"
+				href="/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do">면접
+				질문 관리</a> <a class="tab"
+				href="/cdp/imtintrvw/aiimtintrvw/aiImitationInterview.do">AI 모의
+				면접</a>
+		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-  		<div class="public-wrapper-main">
-			<form method="get" action="/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do" class="intro-search-filter">
+		<div class="public-wrapper-main">
+			<form method="get"
+				action="/cdp/imtintrvw/intrvwqestnmn/interviewQuestionMangementList.do"
+				class="intro-search-filter">
 				<!-- 검색어 입력 -->
 				<input type="text" name="keyword" value="${param.keyword}"
 					placeholder="면접질문 제목 검색" class="intro-search-input" />
@@ -56,7 +71,8 @@
 							<div class="intro-title">${question.idlTitle}</div>
 							<div class="intro-meta">
 								<span class="intro-date"> 수정일 : <fmt:formatDate
-										value="${question.idlUpdatedAt}" pattern="yyyy. MM. dd (E) HH:mm" />
+										value="${question.idlUpdatedAt}"
+										pattern="yyyy. MM. dd (E) HH:mm" />
 								</span> <span class="intro-status"> 상태 : <c:choose>
 										<c:when test="${question.idlStatus eq '완료'}">완료</c:when>
 										<c:when test="${question.idlStatus eq '작성중'}">임시 저장</c:when>
@@ -65,9 +81,9 @@
 								</span>
 							</div>
 						</div>
-						<a href="/cdp/imtintrvw/intrvwqestnmn/detail.do?idlId=${question.idlId}">
-						    면접질문 수정하러 가기
-					  	</a>
+						<a
+							href="/cdp/imtintrvw/intrvwqestnmn/detail.do?idlId=${question.idlId}">
+							면접질문 수정하러 가기 </a>
 					</div>
 				</c:forEach>
 			</div>

@@ -13,7 +13,7 @@ public class InterviewDetailListVO {
 	private String idlDelYN;
 
 	private int questionCount;
-	
+
 	private String idlStatus;
 	private Date idlUpdatedAt;
 

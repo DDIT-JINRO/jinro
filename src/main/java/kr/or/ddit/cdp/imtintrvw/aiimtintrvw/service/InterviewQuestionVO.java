@@ -11,7 +11,7 @@ public class InterviewQuestionVO {
 	private String iqContent;
 
 	private String industryName;
-	
+
 	// 조회용 필드 추가
 	private String keyword;
 	private List<String> iqGubunFilter;

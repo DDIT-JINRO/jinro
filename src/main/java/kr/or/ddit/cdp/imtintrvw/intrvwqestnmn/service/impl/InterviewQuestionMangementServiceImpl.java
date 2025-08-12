@@ -20,10 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class InterviewQuestionMangementServiceImpl implements InterviewQuestionMangementService {
-	
+
 	@Autowired
 	private InterviewQuestionMangementMapper interviewQuestionMangementMapper;
-	
+
 	// 사용자 면접질문 갯수
 	@Override
 	public int selectInterviewQuestionTotalBymemId(InterviewDetailListVO interviewDetailListVO) {
@@ -43,22 +43,23 @@ public class InterviewQuestionMangementServiceImpl implements InterviewQuestionM
 	@Override
 	public InterviewDetailListVO selectByInterviewQuestionId(InterviewDetailListVO interviewDetailListVO) {
 		interviewDetailListVO = interviewQuestionMangementMapper.selectByInterviewQuestionId(interviewDetailListVO);
-		
-		if(interviewDetailListVO == null) {
+
+		if (interviewDetailListVO == null) {
 			throw new CustomException(ErrorCode.INVALID_INPUT);
 		}
 		return interviewDetailListVO;
 	}
+
 	// 본인 면접질문인지 확인
 	@Override
 	public void cheakInterviewQuestionbyMemId(InterviewDetailListVO interviewDetailListVO, String memId) {
 		int idlMemId = interviewDetailListVO.getMemId();
 		int loginMemId = Integer.valueOf(memId);
-		
+
 		// 2) 면접질문이 없거나 작성자 정보가 없거나, 작성자가 아니면 모두 403
-				if (!(idlMemId == loginMemId)) {
-					throw new CustomException(ErrorCode.ACCESS_DENIED);
-				}
+		if (!(idlMemId == loginMemId)) {
+			throw new CustomException(ErrorCode.ACCESS_DENIED);
+		}
 	}
 
 	// 항목별 자소서내용가져오기
@@ -68,7 +69,6 @@ public class InterviewQuestionMangementServiceImpl implements InterviewQuestionM
 		return interviewQuestionMangementMapper.selectByInterviewQuestionContentIdList(interviewDetailListVO);
 	}
 
-
 	// 공통질문 가져오기
 	@Override
 	public List<InterviewQuestionVO> selectCommonQuestions() {
@@ -76,53 +76,54 @@ public class InterviewQuestionMangementServiceImpl implements InterviewQuestionM
 		return interviewQuestionMangementMapper.selectCommonQuestions();
 	}
 
-	//질문 가져오기
+	// 질문 가져오기
 	@Override
 	public InterviewQuestionVO selectByInterviewQuestionQId(InterviewDetailVO interviewDetailVO) {
 		// TODO Auto-generated method stub
 		return interviewQuestionMangementMapper.selectByInterviewQuestionQId(interviewDetailVO);
 	}
 
-	//신규 면접 정보 등록
+	// 신규 면접 정보 등록
 	@Override
 	public int insertInterviewQuestionId(InterviewDetailListVO interviewDetailListVO) {
 		int idlId = interviewQuestionMangementMapper.selectMaxInterviewQuestionId();
 		interviewDetailListVO.setIdlId(idlId);
 		interviewQuestionMangementMapper.insertInterviewQuestion(interviewDetailListVO);
-		
+
 		return idlId;
 	}
 
 	@Override
 	@Transactional
 	public void insertInterviewDetails(int idlId, List<Integer> iqIdList, List<String> idAnswerList) {
-	    for (int i = 0; i < iqIdList.size(); i++) {
-	        int newIdId = interviewQuestionMangementMapper.selectMaxInterviewDetailId();
-	        InterviewDetailVO interviewDetailListVO = new InterviewDetailVO();
-	        interviewDetailListVO.setIdId(newIdId);
-	        interviewDetailListVO.setIdlId(idlId);
-	        interviewDetailListVO.setIqId(iqIdList.get(i));
-	        interviewDetailListVO.setIdAnswer(idAnswerList.get(i));
-	        interviewDetailListVO.setIdOrder(i + 1);
-	        interviewQuestionMangementMapper.insertInterviewDetail(interviewDetailListVO);
-	    }
+		for (int i = 0; i < iqIdList.size(); i++) {
+			int newIdId = interviewQuestionMangementMapper.selectMaxInterviewDetailId();
+			InterviewDetailVO interviewDetailListVO = new InterviewDetailVO();
+			interviewDetailListVO.setIdId(newIdId);
+			interviewDetailListVO.setIdlId(idlId);
+			interviewDetailListVO.setIqId(iqIdList.get(i));
+			interviewDetailListVO.setIdAnswer(idAnswerList.get(i));
+			interviewDetailListVO.setIdOrder(i + 1);
+			interviewQuestionMangementMapper.insertInterviewDetail(interviewDetailListVO);
+		}
 	}
 
 	@Override
 	public void updateInterview(InterviewDetailListVO interviewDetailListVO) {
-		 interviewQuestionMangementMapper.updateInterview(interviewDetailListVO);
+		interviewQuestionMangementMapper.updateInterview(interviewDetailListVO);
 	}
 
-	@Override 
+	@Override
 	@Transactional
-	public void updateInterviewDetails(List<Integer> iqIdList, Map<Integer,Integer> qToIdId, List<String> idAnswerList) {
-	    for (int i = 0; i < iqIdList.size(); i++) {
-	        int iqId = iqIdList.get(i);
-	        int idId = qToIdId.get(iqId);          // 기존 행 식별자
-	        String answer = idAnswerList.get(i);
-	        int order = i + 1;
-	        interviewQuestionMangementMapper.updateInterviewDetail(idId, iqId, answer, order);
-	    }
+	public void updateInterviewDetails(List<Integer> iqIdList, Map<Integer, Integer> qToIdId,
+			List<String> idAnswerList) {
+		for (int i = 0; i < iqIdList.size(); i++) {
+			int iqId = iqIdList.get(i);
+			int idId = qToIdId.get(iqId); // 기존 행 식별자
+			String answer = idAnswerList.get(i);
+			int order = i + 1;
+			interviewQuestionMangementMapper.updateInterviewDetail(idId, iqId, answer, order);
+		}
 	}
 
 	// 면접 전체 삭제

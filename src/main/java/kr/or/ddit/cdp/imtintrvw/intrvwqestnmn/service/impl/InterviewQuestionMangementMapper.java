@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailVO;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO;
+
 @Mapper
 public interface InterviewQuestionMangementMapper {
 
@@ -26,12 +27,12 @@ public interface InterviewQuestionMangementMapper {
 	// 공통질문 가져오기
 	public List<InterviewQuestionVO> selectCommonQuestions();
 
-	//질문 가져오기
+	// 질문 가져오기
 	public InterviewQuestionVO selectByInterviewQuestionQId(InterviewDetailVO interviewDetailVO);
 
 	public int selectMaxInterviewQuestionId();
 
-	//카트 선택한 질문들 저장 
+	// 카트 선택한 질문들 저장
 	public void insertInterviewQuestion(InterviewDetailListVO interviewDetailListVO);
 
 	public int selectMaxInterviewDetailId();
@@ -40,17 +41,13 @@ public interface InterviewQuestionMangementMapper {
 
 	public void updateInterview(InterviewDetailListVO interviewDetailListVO);
 
-	public void updateInterviewDetail(@Param("idId") int idId,
-						              @Param("iqId") int iqId,
-						              @Param("idAnswer") String idAnswer,
-						              @Param("idOrder") int idOrder);
+	public void updateInterviewDetail(@Param("idId") int idId, @Param("iqId") int iqId,
+			@Param("idAnswer") String idAnswer, @Param("idOrder") int idOrder);
 
-	//상세삭제
+	// 상세삭제
 	public void deleteInterviewQuestionContent(InterviewDetailListVO interviewDetailListVO);
 
-	//삭제
+	// 삭제
 	public void deleteInterviewQuestion(InterviewDetailListVO interviewDetailListVO);
-
-
 
 }

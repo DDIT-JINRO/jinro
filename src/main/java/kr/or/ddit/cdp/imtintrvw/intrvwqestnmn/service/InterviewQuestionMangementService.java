@@ -7,7 +7,6 @@ import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailVO;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO;
 
-
 public interface InterviewQuestionMangementService {
 
 	// 사용자 면접질문 갯수
@@ -27,10 +26,10 @@ public interface InterviewQuestionMangementService {
 	// 공통질문 가져오기
 	public List<InterviewQuestionVO> selectCommonQuestions();
 
-	//질문 가져오기
+	// 질문 가져오기
 	public InterviewQuestionVO selectByInterviewQuestionQId(InterviewDetailVO interviewDetailVO);
 
-	//신규 면접 정보 등록
+	// 신규 면접 정보 등록
 	public int insertInterviewQuestionId(InterviewDetailListVO interviewDetailListVO);
 
 	public void insertInterviewDetails(int newIdlId, List<Integer> iqIdList, List<String> idAnswerList);

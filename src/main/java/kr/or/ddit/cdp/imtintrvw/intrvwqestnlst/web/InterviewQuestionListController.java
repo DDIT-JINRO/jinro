@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import kr.or.ddit.cdp.imtintrvw.intrvwqestnmn.service.InterviewQuestionMangementService;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewDetailListVO;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroService;
-import kr.or.ddit.cdp.sint.service.SelfIntroVO;
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.util.ArticlePage;
 import lombok.RequiredArgsConstructor;
@@ -73,7 +70,8 @@ public class InterviewQuestionListController {
 		ArticlePage<SelfIntroQVO> page = new ArticlePage<>(total, currentPage, size, selfIntroQVOList, keyword);
 		page.setUrl("/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.do");
 
-		String memIdStr = (principal != null && !"anonymousUser".equals(principal.getName())) ? principal.getName()	: "";
+		String memIdStr = (principal != null && !"anonymousUser".equals(principal.getName())) ? principal.getName()
+				: "";
 		model.addAttribute("memId", memIdStr);
 		model.addAttribute("codeMap", codeMap);
 		model.addAttribute("codeVOList", codeVOList);
@@ -84,12 +82,11 @@ public class InterviewQuestionListController {
 	}
 
 	@PostMapping("/cart")
-	public String saveCart(@RequestParam("questionIds") String questionIds,
-				            Principal principal,
-				            HttpServletRequest request) {
+	public String saveCart(@RequestParam("questionIds") String questionIds, Principal principal,
+			HttpServletRequest request) {
 		if (principal == null || "anonymousUser".equals(principal.getName())) {
-	        return "redirect:/login";
-	    }
+			return "redirect:/login";
+		}
 		int id = Integer.parseInt(principal.getName());
 		// 선택 질문 파싱
 		List<Integer> iqIdList = Arrays.stream(questionIds.split(",")).filter(s -> !s.isBlank()).map(Integer::valueOf)
