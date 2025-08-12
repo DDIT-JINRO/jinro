@@ -178,7 +178,7 @@ function renderCounselDetail(counselData) {
     // 상태 정보 채우기
     document.getElementById('counselStatus').textContent = counselData.counselStatusStr || '';
 
-	statusBtn(counselData.counselStatus,counselData.counselId,counselData.counselMethod,counselData.counselReqDatetime);
+	statusBtn(counselData.counselStatus,counselData.counselId,counselData.counselMethod,counselData.counselReqDatetime,counselData.counselUrlCou);
 
 
     // 신청 동기 채우기
@@ -191,7 +191,8 @@ function renderCounselDetail(counselData) {
     document.getElementById('memPhoneNumber').textContent = counselData.memPhoneNumber || '';
 }
 
-function statusBtn(status,id,method,date){
+function statusBtn(status,id,method,date,url){
+		console.log("status",url);
 		const datetime = new Date(date);
 		const subBtn = document.querySelector('.btn.btn-save');
 	    const cancelBtn = document.querySelector('.btn.btn-cancel');
@@ -219,10 +220,9 @@ function statusBtn(status,id,method,date){
 					 }
 			       })
 				   .then(response => {
-						if(response.data>0){
-							selectCounselingSchedules(datetime);
-							statusBtn('S04003',id,method,date)
-						}
+						selectCounselingSchedules(datetime);
+						counselDetail(id);
+						statusBtn('S04003',id,method,date)
 						updatedCancelBtn.style.display = 'none';
 				   })
 		});
@@ -236,10 +236,9 @@ function statusBtn(status,id,method,date){
 					 }
 			       })
 				   .then(response => {
-					   	if(response.data>0){
-					   		selectCounselingSchedules(datetime);
-							statusBtn('S04002',id,method,date);
-					   	}
+				   		selectCounselingSchedules(datetime);
+						counselDetail(id);
+						statusBtn('S04002',id,method,date);
 						updatedCancelBtn.style.display = 'none';
 				   });
 			updatedCancelBtn.style.display = 'none';
@@ -260,10 +259,20 @@ function statusBtn(status,id,method,date){
 					 }
 			       })
 				   .then(response => {
-					   	if(response.data>0){
+					console.log("response : ",response.data);
+					   	if(response.data){
 					   		selectCounselingSchedules(datetime);
+							let url = response.data;
+							statusBtn('S04005',id,method,date,url);
+							updatedCancelBtn.style.display = 'block';
+							updatedCancelBtn.addEventListener("click",function(){
+								openCounselingPopup(url);
+							});
+					   	}else{
+							selectCounselingSchedules(datetime);
+							counselDetail(id);
 							statusBtn('S04005',id,method,date);
-					   	}
+						}
 				   });
 		});
 	}else if(status == 'S04004'){
@@ -277,7 +286,11 @@ function statusBtn(status,id,method,date){
 			pageBtn.click();
 		});
 	}else if(status == 'S04005'){
-		updatedCancelBtn.style.display = 'none';
+		updatedCancelBtn.textContent = '상담시작'
+		updatedCancelBtn.style.display = 'block';
+		updatedCancelBtn.addEventListener("click",function(){
+			openCounselingPopup(url);
+		})
 		updatedSubBtn.textContent='상담완료'
 		updatedSubBtn.style.display = 'block';
 		updatedSubBtn.addEventListener("click",function(){
@@ -288,10 +301,10 @@ function statusBtn(status,id,method,date){
 					 }
 			       })
 				   .then(response => {
-					   	if(response.data>0){
-					   		selectCounselingSchedules(datetime);
-							statusBtn('S04004',id,method,date);
-					   	}
+
+				   		selectCounselingSchedules(datetime);
+						counselDetail(id);
+						statusBtn('S04004',id,method,date);
 				   });
 		})
 	}
@@ -307,4 +320,16 @@ function counselDetail(counselId) {
 		// 데이터가 없을 경우 상세 패널 초기화
 		renderCounselDetail(null);
 	}
+}
+
+function openCounselingPopup(url) {
+	console.log("openCounselingPopup",url);
+    // 팝업 창의 크기와 위치를 설정합니다.
+    const width = 1200;
+    const height = 800;
+    const left = (screen.width / 2) - (width / 2);
+    const top = (screen.height / 2) - (height / 2);
+
+    // 새 팝업 창을 엽니다.
+    window.open(url, 'counselingPopup', `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`);
 }

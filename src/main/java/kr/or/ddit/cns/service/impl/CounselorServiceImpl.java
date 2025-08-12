@@ -181,7 +181,7 @@ public class CounselorServiceImpl implements CounselorService {
 
 	@Override
 	@Transactional
-	public int updateCounselStatus(CounselingVO counselingVO) {
+	public String updateCounselStatus(CounselingVO counselingVO) {
 		// TODO Auto-generated method stub
 		String counselUrl ="";
 		String userUrl ="";
@@ -201,9 +201,11 @@ public class CounselorServiceImpl implements CounselorService {
 			}
 		}
 		
+		this.counselorMapper.updateCounselStatus(counselingVO);
+		counselingVO = this.counselorMapper.selectCounselDetail(counselingVO.getCounselId());
 		
 		
-		return this.counselorMapper.updateCounselStatus(counselingVO);
+		return counselingVO.getCounselUrlCou();
 	}
 
 }

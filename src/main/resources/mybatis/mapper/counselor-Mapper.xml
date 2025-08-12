@@ -228,6 +228,7 @@
 			 , A.COUNSEL_CREATED_AT
 			 , A.COUNSEL_UPDATED_AT
 			 , A.COUNSEL
+			 , A.COUNSEL_URL_COU
 
 			 , CL.CL_IDX
              , CL.CL_CONTENT

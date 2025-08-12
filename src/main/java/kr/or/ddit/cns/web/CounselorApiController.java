@@ -111,9 +111,9 @@ public class CounselorApiController {
 	}
 	
 	@GetMapping("/updateCounselStatus.do")
-	public ResponseEntity<Integer> updateCounselStatus(
+	public ResponseEntity<String> updateCounselStatus(
 			@ModelAttribute CounselingVO counselingVO){
-		int result = this.counselorService.updateCounselStatus(counselingVO);
+		String result = this.counselorService.updateCounselStatus(counselingVO);
 		return ResponseEntity.ok(result);
 	}
 }
