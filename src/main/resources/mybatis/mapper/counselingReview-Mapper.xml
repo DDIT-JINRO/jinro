@@ -101,5 +101,31 @@
 		WHERE
 			CR_ID = #{crId}
 	</select>
+	
+	<select id="selectCounselingHistory" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO" resultType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+		SELECT
+		    A.COUNSEL_ID
+		    , A.MEM_ID
+		    , A.COUNSEL
+		    , COUNSEL.MEM_NAME      AS COUNSEL_NAME
+		    , CATEGORY_CODE.CC_NAME AS COUNSEL_CATEGORY
+		    , METHOD_CODE.CC_NAME   AS COUNSEL_METHOD
+		    , A.COUNSEL_REQ_DATETIME
+		    , A.COUNSEL_REVIEWD
+		FROM
+		    COUNSELING A
+		    LEFT JOIN MEMBER            COUNSEL ON A.COUNSEL = COUNSEL.MEM_ID
+		    LEFT JOIN COM_CODE          CATEGORY_CODE ON A.COUNSEL_CATEGORY = CATEGORY_CODE.CC_ID
+		    LEFT JOIN COM_CODE          METHOD_CODE ON A.COUNSEL_METHOD = METHOD_CODE.CC_ID
+		WHERE
+		    A.COUNSEL_STATUS = 'S04004'
+		AND
+		    A.MEM_ID = #{memId}
+		AND
+		    A.COUNSEL_REVIEWD = 'N'
+	    <if test = "counselName != null and counselName != ''">
+			AND COUNSEL.MEM_NAME LIKE '%' || #{counselName} || '%'
+	    </if>
+	</select>
 
 </mapper>
