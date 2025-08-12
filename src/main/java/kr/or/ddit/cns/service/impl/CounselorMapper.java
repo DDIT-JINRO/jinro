@@ -92,4 +92,6 @@ public interface CounselorMapper {
 	 */
 	public List<CounselingVO> selectCounselingSchedules(CounselingVO counselingVO);
 
+	public int updateCounselStatus(CounselingVO counselingVO);
+
 }

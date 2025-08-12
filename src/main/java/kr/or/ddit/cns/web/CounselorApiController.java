@@ -111,9 +111,9 @@ public class CounselorApiController {
 	}
 	
 	@GetMapping("/updateCounselStatus.do")
-	public ResponseEntity<Boolean> updateCounselStatus(
+	public ResponseEntity<Integer> updateCounselStatus(
 			@ModelAttribute CounselingVO counselingVO){
-		log.info("counselingVO : "+counselingVO);
-		return null;
+		int result = this.counselorService.updateCounselStatus(counselingVO);
+		return ResponseEntity.ok(result);
 	}
 }

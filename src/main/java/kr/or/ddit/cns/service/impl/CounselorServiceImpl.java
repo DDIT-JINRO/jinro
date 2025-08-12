@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.or.ddit.chat.service.ChatService;
 import kr.or.ddit.cns.service.CounselingLogVO;
 import kr.or.ddit.cns.service.CounselingVO;
 import kr.or.ddit.cns.service.CounselorService;
@@ -19,6 +20,7 @@ import kr.or.ddit.cns.service.VacationVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
+import kr.or.ddit.video.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -26,8 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 public class CounselorServiceImpl implements CounselorService {
 
 	@Autowired
-	CounselorMapper counselorMapper;
-
+	private CounselorMapper counselorMapper;
+	@Autowired
+	private ChatService chatService;
+	@Autowired
+	private VideoService videoService;
 	@Autowired
 	FileService fileService;
 
@@ -172,6 +177,33 @@ public class CounselorServiceImpl implements CounselorService {
 	public List<CounselingVO> selectCounselingSchedules(CounselingVO counselingVO) {
 		// TODO Auto-generated method stub
 		return this.counselorMapper.selectCounselingSchedules(counselingVO);
+	}
+
+	@Override
+	@Transactional
+	public int updateCounselStatus(CounselingVO counselingVO) {
+		// TODO Auto-generated method stub
+		String counselUrl ="";
+		String userUrl ="";
+		if(counselingVO.getCounselMethod()!=null &&!counselingVO.getCounselMethod().isEmpty()) {
+			
+			if(counselingVO.getCounselStatus().equals("S04005")&&counselingVO.getCounselMethod().equals("G08002")) {
+				
+				CounselingVO chatCounselVO = this.counselorMapper.selectCounselDetail(counselingVO.getCounselId());
+				
+				counselUrl = chatService.createCounselingChatRoom(chatCounselVO);
+				userUrl = counselUrl;
+				
+				counselingVO.setCounselUrlCou(counselUrl);
+				counselingVO.setCounselUrlUser(userUrl);
+			}else if(counselingVO.getCounselStatus().equals("S04005")&&counselingVO.getCounselMethod().equals("G08003")) {
+				videoService.createVideoChatRoom(counselingVO.getCounselId());
+			}
+		}
+		
+		
+		
+		return this.counselorMapper.updateCounselStatus(counselingVO);
 	}
 
 }

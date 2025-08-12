@@ -227,6 +227,7 @@
 			 , A.COUNSEL_REVIEWD
 			 , A.COUNSEL_CREATED_AT
 			 , A.COUNSEL_UPDATED_AT
+			 , A.COUNSEL
 
 			 , CL.CL_IDX
              , CL.CL_CONTENT
@@ -443,5 +444,21 @@
 		    AND trunc(counsel_req_datetime) = trunc(#{counselReqDatetime})
 		order by a.counsel_req_datetime 
     </select>
+    
+	<update id="updateCounselStatus" parameterType="kr.or.ddit.cns.service.CounselingVO">
+	  UPDATE COUNSELING
+	  <set>
+	    <if test="counselStatus != null">
+	      COUNSEL_STATUS = #{counselStatus},
+	    </if>
+	    <if test="counselUrlCou != null">
+	      COUNSEL_URL_COU = #{counselUrlCou},
+	    </if>
+	    <if test="counselUrlUser != null">
+	      COUNSEL_URL_USER = #{counselUrlUser},
+	    </if>
+	  </set>
+	  WHERE counsel_id = #{counselId}
+	</update>
 
 </mapper>
