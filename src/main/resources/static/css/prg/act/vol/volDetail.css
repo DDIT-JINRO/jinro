@@ -54,6 +54,10 @@
 	display: block;
 }
 
+.poster-image:hover {
+  cursor: zoom-in;
+}
+
 .summary-wrapper {
 	flex: 1 1 60%; /* 남은 공간 모두 차지 */
 	display: flex;
