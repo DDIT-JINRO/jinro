@@ -23,4 +23,6 @@ public interface CounselingReviewMapper {
 
 	void updateCounselReviewd(@Param(value = "crId") int crId, @Param(value = "counselReviewd") String counselReviewd);
 
+	void deleteCnsReview(int crId);
+
 }

@@ -15,4 +15,6 @@ public interface CounselingReviewService {
 
 	void updateCnsReview(CounselingReviewVO counselingReview);
 
+	void deleteCnsReview(int crId);
+
 }

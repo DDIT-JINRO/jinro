@@ -102,4 +102,20 @@ public class CounselingReviewController {
 		response.put("success", true);
 		return ResponseEntity.ok(response);
 	}
+	
+	@ResponseBody
+	@PostMapping("/deleteCnsReview.do")
+	public ResponseEntity<Map<String, Object>> deleteCnsReview(@AuthenticationPrincipal String memId, @RequestParam int crId) {
+		Map<String, Object> response = new HashMap<>();
+		
+		if (memId == null || "anonymousUser".equals(memId)) {
+			response.put("success", false);
+			response.put("message", "로그인 후 이용해주세요.");
+			return ResponseEntity.ok(response);
+		}
+		
+		counselingReviewService.deleteCnsReview(crId);
+		response.put("success", true);
+		return ResponseEntity.ok(response);
+	}
 }

@@ -56,5 +56,10 @@ public class CounselingReviewServiceImpl implements CounselingReviewService {
 		counselingReviewMapper.updateCnsReview(counselingReview);
 		counselingReviewMapper.updateCounselReviewd(counselingReview.getCrId(), "Y");
 	}
+
+	@Override
+	public void deleteCnsReview(int crId) {
+		counselingReviewMapper.deleteCnsReview(crId);
+	}
 	
 }

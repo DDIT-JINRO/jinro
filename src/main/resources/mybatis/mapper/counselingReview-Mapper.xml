@@ -161,5 +161,12 @@
 		WHERE
 		    COUNSEL_ID = #{crId}
 	</update>
+	
+	<delete id="deleteCnsReview" parameterType="int">
+	DELETE FROM
+		COUNSELING_REVIEW
+	WHERE
+        CR_ID = #{crId}
+	</delete>
 
 </mapper>
