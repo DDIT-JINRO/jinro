@@ -263,10 +263,12 @@ function statusBtn(status,id,method,date,url){
 					   		selectCounselingSchedules(datetime);
 							let url = response.data;
 							statusBtn('S04005',id,method,date,url);
-							updatedCancelBtn.style.display = 'block';
-							updatedCancelBtn.addEventListener("click",function(){
-								openCounselingPopup(url);
-							});
+							if(method!='G08001'){
+								updatedCancelBtn.style.display = 'block';
+								updatedCancelBtn.addEventListener("click",function(){
+									openCounselingPopup(url);
+								});
+							}
 					   	}else{
 							document.getElementById("counselStatus").textContent="개설"
 							selectCounselingSchedules(datetime);
@@ -285,11 +287,14 @@ function statusBtn(status,id,method,date,url){
 			pageBtn.click();
 		});
 	}else if(status == 'S04005'){
-		updatedCancelBtn.textContent = '상담시작'
-		updatedCancelBtn.style.display = 'block';
-		updatedCancelBtn.addEventListener("click",function(){
-			openCounselingPopup(url);
-		})
+		if(method!='G08001'){
+			
+			updatedCancelBtn.textContent = '상담시작'
+			updatedCancelBtn.style.display = 'block';
+			updatedCancelBtn.addEventListener("click",function(){
+				openCounselingPopup(url);
+			})
+		}
 		updatedSubBtn.textContent='상담완료'
 		updatedSubBtn.style.display = 'block';
 		updatedSubBtn.addEventListener("click",function(){
