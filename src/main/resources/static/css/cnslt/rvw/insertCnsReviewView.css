@@ -111,7 +111,7 @@
 	pointer-events: none;
 }
 
-.info-input-table input[type="date"] {
+.info-input-table input[type="datetime-local"] {
 	font-family: inherit;
 	position: relative;
 	height: 38px;
@@ -131,14 +131,8 @@
 	appearance: none;
 }
 
-/* 포커스 되었을 때 스타일 (다른 입력창과 통일) */
-.info-input-table input[type="date"]:focus {
-	border-color: #7881f5;
-	box-shadow: 0 0 0 2px rgba(120, 129, 245, 0.2);
-}
-
 /* 브라우저 기본 달력 아이콘 숨기기 */
-.info-input-table input[type="date"]::-webkit-calendar-picker-indicator {
+.info-input-table input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -150,7 +144,7 @@
 }
 
 /* 커스텀 달력 아이콘 추가 */
-.info-input-table input[type="date"] {
+.info-input-table input[type="datetime-local"] {
 	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
 	background-repeat: no-repeat;
 	background-position: right 12px center;
@@ -158,16 +152,16 @@
 }
 
 /* 날짜가 선택되지 않았을 때의 placeholder 스타일 */
-.info-input-table input[type="date"]::-webkit-datetime-edit {
+.info-input-table input[type="datetime-local"]::-webkit-datetime-edit {
     color: #999; /* placeholder 텍스트 색상 */
 }
 
 /* 날짜가 선택되었을 때의 텍스트 스타일 */
-.info-input-table input[type="date"]:valid::-webkit-datetime-edit {
+.info-input-table input[type="datetime-local"]:valid::-webkit-datetime-edit {
     color: #333; /* 실제 날짜 텍스트 색상 */
 }
 
-#interview-detail {
+#cr-content {
     width: 100%;
     min-height: 120px;
     padding: 12px;
@@ -180,7 +174,7 @@
     box-sizing: border-box;
 }
 
-#interview-detail:focus {
+#cr-content:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
@@ -433,7 +427,7 @@
 }
 
 /* 기업 검색 모달 전용 스타일 */
-.company-search-modal {
+.counsel-search-modal {
 	max-width: 600px;
 	max-height: 80vh;
 	overflow: hidden;
@@ -477,7 +471,7 @@
 	align-items: center;
 }
 
-#company-search-input {
+#counsel-search-input {
 	flex: 1;
 	padding: 12px;
 	border: 1px solid #ccc;
@@ -486,13 +480,13 @@
 	outline: none;
 }
 
-#company-search-input:focus {
+#counsel-search-input:focus {
 	border-color: #7881f5;
 	box-shadow: 0 0 0 2px rgba(120, 129, 245, 0.2);
 }
 
 /* 기업 목록 컨테이너 */
-.company-list-container {
+.counsel-list-container {
 	flex: 1;
 	overflow-y: auto;
 	margin-bottom: 20px;
@@ -501,13 +495,13 @@
 	border-radius: 8px;
 }
 
-.company-list {
+.counsel-list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-.company-list-item {
+.counsel-list-item {
 	padding: 15px 20px;
 	border-bottom: 1px solid #eee;
 	cursor: pointer;
@@ -515,31 +509,31 @@
 	transition: background-color 0.2s ease;
 }
 
-.company-list-item:last-child {
+.counsel-list-item:last-child {
 	border-bottom: none;
 }
 
-.company-list-item:hover {
+.counsel-list-item:hover {
 	background-color: #f8f9ff;
 }
 
-.company-list-item.selected {
+.counsel-list-item.selected {
 	background-color: #7881f5;
 	color: white;
 }
 
-.company-name {
+.counsel-name {
 	font-weight: 600;
 	margin-bottom: 4px;
 	font-size: 1rem;
 }
 
-.company-info {
+.counsel-info {
 	font-size: 0.85rem;
 	color: #666;
 }
 
-.company-list-item.selected .company-info {
+.counsel-list-item.selected .counsel-info {
 	color: rgba(255, 255, 255, 0.8);
 }
 
@@ -650,7 +644,7 @@
 
 /* 반응형 스타일 */
 @media ( max-width : 768px) {
-	.company-search-modal {
+	.counsel-search-modal {
 		max-width: 90vw;
 		margin: 20px;
 		max-height: 90vh;
