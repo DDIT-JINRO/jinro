@@ -288,5 +288,6 @@
 		FROM COUNSELING C
 		JOIN CHAT_ROOM CR ON CR.TARGET_ID = C.COUNSEL_ID
 		WHERE CR.CC_ID = 'G04002'
+		AND   CR.CR_ID = #{crId}
 	</select>
 </mapper>

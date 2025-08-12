@@ -257,6 +257,7 @@ public class ChatServiceImpl implements ChatService {
 		chatRoomVO.setCcId("G04002");
 		chatRoomVO.setTargetId(counselingVO.getCounselId());
 		chatRoomVO.setCrMaxCnt(2);
+		chatRoomVO.setCrTitle(counselingVO.getCounselTitle());
 		int result1 = this.chatMapper.insertChatRoom(chatRoomVO);
 
 		// 상담사 및 회원 입장처리
