@@ -14,7 +14,7 @@ public class CareerTechnicalEducationVO {
 	private String jtName;
 	private int jtQuota;
 	private String jtSchool;
-	private int jtScore;
+	private double jtScore;
 	private Date jtStartDate;
 	private String jtTarget;
 	private String jtUrl;

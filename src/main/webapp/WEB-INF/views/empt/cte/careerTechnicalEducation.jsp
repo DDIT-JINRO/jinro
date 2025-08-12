@@ -130,7 +130,7 @@
 			        <div style="flex: 1;">교육기관명</div>
 			        <div style="flex: 2.4;">교육 과정명</div>
 			        <div style="flex: 0.7;">마감일</div>
-			        <div style="width: 80px;">만족도</div>
+			        <div style="width: 85px;">만족도</div>
 			        <div style="width: 80px;">정원</div>
 			        <div style="width: 20px;"></div>
 			    </div>
