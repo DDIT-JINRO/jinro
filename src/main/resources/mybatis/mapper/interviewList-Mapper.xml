@@ -23,10 +23,10 @@
     <!-- 업종별 질문 리스트 조회 (IQ_GUBUN과 ComCodeVO 조인) -->
     <select id="getIndustryList" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO">
         SELECT DISTINCT
-            IQ.IQ_GUBUN as iqGubun,
+            SIQ.SIQ_JOB as iqGubun,
             CC.CC_NAME as industryName
-        FROM INTERVIEW_QUESTION IQ
-        INNER JOIN COM_CODE CC ON IQ.IQ_GUBUN = CC.CC_ID
+        FROM SELF_INTRO_Q SIQ
+        INNER JOIN COM_CODE CC ON SIQ.SIQ_JOB = CC.CC_ID
         WHERE CC.USE_YN = 'Y'
         ORDER BY CC.CC_NAME
     </select>
@@ -37,7 +37,6 @@
             IQ.IQ_ID as iqId,
             IQ.IQ_GUBUN as iqGubun,
             IQ.IQ_CONTENT as iqContent,
-            IQ.IQ_SUGGEST as iqSuggest,
             ID.ID_ORDER as idOrder
         FROM INTERVIEW_DETAIL ID
         INNER JOIN INTERVIEW_QUESTION IQ ON ID.IQ_ID = IQ.IQ_ID
@@ -48,12 +47,11 @@
     <!-- 업종별 랜덤 질문 조회 -->
     <select id="getRandomQuestionsByIndustry" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO">
         SELECT 
-            IQ_ID as iqId,
-            IQ_GUBUN as iqGubun,
-            IQ_CONTENT as iqContent,
-            IQ_SUGGEST as iqSuggest
-        FROM INTERVIEW_QUESTION
-        WHERE IQ_GUBUN = #{industryCode}
+            SIQ_ID as iqId,
+            SIQ_JOB as iqGubun,
+            SIQ_CONTENT as iqContent
+        FROM SELF_INTRO_Q SIQ
+        WHERE SIQ_JOB = #{industryCode}
         FETCH FIRST #{questionCount} ROWS ONLY
     </select>
 
