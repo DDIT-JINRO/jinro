@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.cnslt.rvw.service.CounselingReviewService;
 import kr.or.ddit.cnslt.rvw.service.CounselingReviewVO;
+import kr.or.ddit.mpg.mat.csh.service.CounselingHistoryService;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,12 +30,19 @@ public class CounselingReviewController {
 
 	@Autowired
 	private CounselingReviewService counselingReviewService;
+	
+	@Autowired
+	private CounselingHistoryService counselingHistoryService;
 
 	@GetMapping("/cnsReview.do")
 	public String cnsReview(@ModelAttribute CounselingReviewVO counselingReview, Model model) {
 		ArticlePage<CounselingReviewVO> articlePage = counselingReviewService.selectCounselingReviewList(counselingReview);
+		Map<String, String> counselCategoryList = counselingHistoryService.selectCounselCategoryList();
+		Map<String, String> counselMethodList = counselingHistoryService.selectCounselMethodList();
 
 		model.addAttribute("articlePage", articlePage);
+		model.addAttribute("counselCategory", counselCategoryList);
+		model.addAttribute("counselMethod", counselMethodList);
 
 		return "cnslt/rvw/cnsReview";
 	}

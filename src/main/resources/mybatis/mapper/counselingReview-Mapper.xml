@@ -44,6 +44,18 @@
 	                </otherwise>
 	            </choose>
 	        </if>
+            <if test="counselMethods != null and !counselMethods.isEmpty()">
+                AND B.COUNSEL_METHOD IN
+                <foreach collection="counselMethods" item="counselMethod" open="(" close=")" separator=",">
+                    #{counselMethod}
+                </foreach>
+            </if>
+            <if test="counselCategorys != null and !counselCategorys.isEmpty()">
+                AND B.COUNSEL_CATEGORY IN
+                <foreach collection="counselCategorys" item="counselCategory" open="(" close=")" separator=",">
+                    #{counselCategory}
+                </foreach>
+            </if>
 		ORDER BY
 			CR_CREATED_AT DESC
 		OFFSET #{startRow} - 1 ROWS FETCH NEXT #{endRow} - #{startRow} + 1 ROWS ONLY

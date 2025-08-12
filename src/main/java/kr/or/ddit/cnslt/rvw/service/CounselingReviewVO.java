@@ -1,6 +1,7 @@
 package kr.or.ddit.cnslt.rvw.service;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -31,6 +32,9 @@ public class CounselingReviewVO {
 	private int currentPage = 1;
 	private int size = 5;
 	private int rum;
+	
+	private List<String> counselMethods;
+	private List<String> counselCategorys;
 	
 	public int getStartRow() {
 		return (this.currentPage - 1) * this.size + 1;
