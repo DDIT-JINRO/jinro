@@ -2,7 +2,6 @@ package kr.or.ddit.cdp.aifdbck.sint.web;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +35,10 @@ public class AiFeedbackSelfIntroController {
 
 	@Autowired
 	private SelfIntroService selfIntroService;
-	
+
 	@Autowired
 	private AiFeedbackSelfIntroService aiFeedbackSelfIntroService;
-	
+
 	@Autowired
 	private PaymentService paymentService;
 
@@ -102,40 +101,39 @@ public class AiFeedbackSelfIntroController {
 
 		return dto; // JSON 형태로 변환되어 클라이언트로 전송됨
 	}
-	
 
-	//사용자의 구독 상태와 이력서 첨삭 횟수를 확인
+	// 사용자의 구독 상태와 이력서 첨삭 횟수를 확인
 	@GetMapping("/checkSubscriptionPI.do")
 	@ResponseBody
-	public ResponseEntity<PaymentVO> checkUserSubscription(Principal principal){
-		if(principal == null) {
+	public ResponseEntity<PaymentVO> checkUserSubscription(Principal principal) {
+		if (principal == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		
+
 		int memId = Integer.parseInt(principal.getName());
-		
-		//1. 회원 현재 구독정보 가져오기
+
+		// 1. 회원 현재 구독정보 가져오기
 		MemberSubscriptionVO currentSub = paymentService.selectByMemberId(memId);
 		if (currentSub == null) {
 			PaymentVO paymentVO = new PaymentVO();
 			return ResponseEntity.ok(paymentVO);
 		}
 
-		//2. 현재 구독정보가 잇으면 최신 결제 정보(남은 횟수 포함) 가져오기
+		// 2. 현재 구독정보가 잇으면 최신 결제 정보(남은 횟수 포함) 가져오기
 		PaymentVO paymentVO = aiFeedbackSelfIntroService.selectLastPaymentInfo(currentSub);
 		return ResponseEntity.ok(paymentVO);
 	}
 
-	//횟수 차감 및 AI 피드백을 요청
+	// 횟수 차감 및 AI 피드백을 요청
 	@PostMapping("/requestFeedbackPI.do")
 	@ResponseBody
 	public ResponseEntity<String> requestFeedback(@RequestBody SelfIntroFeedbackRequestDto body) {
-		
+
 		// DTO를 사용하므로 더 이상 수동으로 값을 꺼내거나 형변환할 필요가 없습니다
-		if(body.getPayId() == null || body.getSections() == null || body.getSections().isEmpty()) {
+		if (body.getPayId() == null || body.getSections() == null || body.getSections().isEmpty()) {
 			return ResponseEntity.badRequest().body("필수 파라미터가 누락되었습니다");
 		}
-		
+
 		String feedback = aiFeedbackSelfIntroService.deductAndGetFeedback(body.getPayId(), body.getSections());
 		return ResponseEntity.ok(feedback);
 	}

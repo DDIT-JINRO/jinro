@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class SelfIntroFeedbackRequestDto {
-    private Integer payId;
-    private List<Map<String, String>> sections;
+	private Integer payId;
+	private List<Map<String, String>> sections;
 }

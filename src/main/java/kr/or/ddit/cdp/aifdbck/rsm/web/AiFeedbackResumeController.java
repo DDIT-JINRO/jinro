@@ -31,10 +31,10 @@ public class AiFeedbackResumeController {
 
 	@Autowired
 	private ResumeService resumeService;
-	
+
 	@Autowired
 	private AiFeedbackResumeService aiFeedbackResumeService;
-	
+
 	@Autowired
 	private PaymentService paymentService;
 
@@ -85,44 +85,44 @@ public class AiFeedbackResumeController {
 
 		return detailVO;
 	}
-	
-	//사용자의 구독 상태와 이력서 첨삭 횟수를 확인
+
+	// 사용자의 구독 상태와 이력서 첨삭 횟수를 확인
 	@GetMapping("/checkSubscription.do")
 	@ResponseBody
-	public ResponseEntity<PaymentVO> checkUserSubscription(Principal principal){
-		if(principal == null) {
+	public ResponseEntity<PaymentVO> checkUserSubscription(Principal principal) {
+		if (principal == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		
+
 		int memId = Integer.parseInt(principal.getName());
-		
-		//1. 회원 현재 구독정보 가져오기
+
+		// 1. 회원 현재 구독정보 가져오기
 		MemberSubscriptionVO currentSub = paymentService.selectByMemberId(memId);
 		if (currentSub == null) {
 			PaymentVO paymentVO = new PaymentVO();
 			return ResponseEntity.ok(paymentVO);
 		}
-		
-		//2. 현재 구독정보가 잇으면 최신 결제 정보(남은 횟수 포함) 가져오기
+
+		// 2. 현재 구독정보가 잇으면 최신 결제 정보(남은 횟수 포함) 가져오기
 		PaymentVO paymentVO = aiFeedbackResumeService.selectLastPaymentInfo(currentSub);
 		return ResponseEntity.ok(paymentVO);
-		
+
 	}
-	
-	//횟수 차감 및 AI 피드백을 요청
+
+	// 횟수 차감 및 AI 피드백을 요청
 	@PostMapping("/requestFeedback.do")
 	@ResponseBody
-	public ResponseEntity<String> requestFeedback(@RequestBody  Map<String, Object> body){
-		
-		String html = (String)body.get("html");
+	public ResponseEntity<String> requestFeedback(@RequestBody Map<String, Object> body) {
+
+		String html = (String) body.get("html");
 		Integer payId = (Integer) body.get("payId");
-		
-		if(html == null || html.isBlank() || payId == null) {
+
+		if (html == null || html.isBlank() || payId == null) {
 			return ResponseEntity.badRequest().body("필수 파리미터가 누락되었습니다");
 		}
-		
+
 		String feedback = aiFeedbackResumeService.deductAndGetFeedback(payId, html);
-		
+
 		return ResponseEntity.ok(feedback);
 	}
 }
