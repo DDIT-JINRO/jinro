@@ -52,8 +52,15 @@
                  ROW_NUMBER() OVER(
 	                 ORDER BY 
 	                     CASE WHEN T1.CONTEST_END_DATE >= TRUNC(SYSDATE) THEN 1 ELSE 2 END, -- 1. 진행중인 공모전 먼저
-	                     T1.CONTEST_END_DATE ASC,  -- 2. 마감일이 임박한 순서로
-	                     T1.CONTEST_CREATED_AT DESC -- 3. 마감일이 같다면 최신 등록 순으로
+	                     <choose>
+						 	<when test="sortOrder == 'latest'">
+		                    	T1.CONTEST_END_DATE DESC -- '최신순' 선택 시: 등록일 내림차순
+						 	</when>
+						 	<otherwise>
+	                     		T1.CONTEST_END_DATE ASC,  -- '마감일순' 선택 시: 마감일 오름차순
+              					T1.CONTEST_CREATED_AT DESC  -- (2차 정렬) 마감일이 같으면 최신 등록순
+						 	</otherwise>
+						 </choose>
 	             ) AS RNUM
                 ,T1.CONTEST_ID           AS contestId
                 ,T1.CONTEST_TITLE        AS contestTitle

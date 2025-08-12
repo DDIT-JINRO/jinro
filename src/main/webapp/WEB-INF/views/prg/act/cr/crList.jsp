@@ -8,13 +8,20 @@
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
-		<div class="channel-title-text">프로그램</div> 
+		<div class="channel-title-text">프로그램</div>
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/prg/ctt/cttList.do">공모전</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-itemIn"><a href="/prg/act/vol/volList.do">대외활동</a></div>
-		<div class="channel-sub-section-item"><a href="/prg/std/stdGroupList.do">스터디그룹</a></div>
+		<div class="channel-sub-section-item">
+			<a href="/prg/ctt/cttList.do">공모전</a>
+		</div>
+		<!-- 중분류 -->
+		<div class="channel-sub-section-itemIn">
+			<a href="/prg/act/vol/volList.do">대외활동</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/prg/std/stdGroupList.do">스터디그룹</a>
+		</div>
 	</div>
 </section>
 <div>
@@ -22,12 +29,12 @@
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
-		    <a class="tab" href="/prg/act/vol/volList.do">봉사활동</a>
-		    <a class="tab active" href="/prg/act/cr/crList.do">인턴십</a>
-		    <a class="tab" href="/prg/act/sup/supList.do">서포터즈</a>
-  		</div>
-  		
-  		<div class="public-wrapper-main">
+			<a class="tab" href="/prg/act/vol/volList.do">봉사활동</a> <a
+				class="tab active" href="/prg/act/cr/crList.do">인턴십</a> <a
+				class="tab" href="/prg/act/sup/supList.do">서포터즈</a>
+		</div>
+
+		<div class="public-wrapper-main">
 			<div class="filter-section">
 				<form method="get" action="/prg/act/cr/crList.do">
 					<div class="com-default-search">
@@ -89,6 +96,22 @@
 										</c:forEach>
 									</div>
 								</div>
+
+								<div class="com-filter-section">
+									<label class="com-filter-title">정렬 순서</label>
+									<div class="com-filter-options">
+										<label class="com-filter-item"> <input type="radio"
+											name="sortOrder" value="deadline"
+											${checkedFilters.sortOrder == 'deadlin' or empty checkedFilters.sortOrder ? 'checked' : ''} />
+											<span>마감일 임박순</span>
+										</label> <label class="com-filter-item"> <input type="radio"
+											name="sortOrder" value="latest"
+											${checkedFilters.sortOrder == 'latest' ? 'checked' : ''} />
+											<span>최신 등록순</span>
+										</label>
+									</div>
+								</div>
+
 								<div class="com-filter-section">
 									<div class="com-button-container">
 										<label class="com-filter-title">선택된 필터</label>
@@ -169,10 +192,11 @@
 		<div class="card-footer clearfix">
 			<ul class="pagination">
 				<li>
-					<%-- c:url 태그로 이전 페이지 링크 생성 --%> <c:url value="/prg/act/sup/supList.do"
-						var="prevUrl">
+					<%-- c:url 태그로 이전 페이지 링크 생성 --%> <c:url
+						value="/prg/act/sup/supList.do" var="prevUrl">
 						<c:param name="currentPage" value="${articlePage.startPage - 5}" />
 						<c:param name="keyword" value="${checkedFilters.keyword}" />
+						<c:param name="sortOrder" value="${checkedFilters.sortOrder}" />
 						<%-- 현재 적용된 모든 필터 값들을 다시 파라미터로 추가 --%>
 						<c:forEach var="filter"
 							items="${checkedFilters.contestGubunFilter}">
@@ -198,6 +222,7 @@
 							value="/prg/act/cr/crList.do" var="pageUrl">
 							<c:param name="currentPage" value="${pNo}" />
 							<c:param name="keyword" value="${checkedFilters.keyword}" />
+							<c:param name="sortOrder" value="${checkedFilters.sortOrder}" />
 							<%-- 현재 적용된 모든 필터 값들을 다시 파라미터로 추가 --%>
 							<c:forEach var="filter"
 								items="${checkedFilters.contestGubunFilter}">
@@ -217,10 +242,11 @@
 				</c:forEach>
 
 				<li>
-					<%-- c:url 태그로 다음 페이지 링크 생성 --%> <c:url value="/prg/act/cr/crList.do"
-						var="nextUrl">
+					<%-- c:url 태그로 다음 페이지 링크 생성 --%> <c:url
+						value="/prg/act/cr/crList.do" var="nextUrl">
 						<c:param name="currentPage" value="${articlePage.startPage + 5}" />
 						<c:param name="keyword" value="${checkedFilters.keyword}" />
+						<c:param name="sortOrder" value="${checkedFilters.sortOrder}" />
 						<%-- 현재 적용된 모든 필터 값들을 다시 파라미터로 추가 --%>
 						<c:forEach var="filter"
 							items="${checkedFilters.contestGubunFilter}">
@@ -240,11 +266,12 @@
 				</li>
 			</ul>
 		</div>
-  		
+
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
 <script src="/js/prg/act/cr/crList.js">
+	
 </script>

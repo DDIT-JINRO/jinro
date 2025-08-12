@@ -36,8 +36,14 @@
 		        <%-- 2. 포스터(좌) 및 요약 정보(우) 섹션 --%>
 		        <div class="summary-layout">
 		            <div class="poster-wrapper">
-		                <img src="/files/download?fileGroupId=${cttDetail.fileGroupId}&seq=1" alt="${cttDetail.contestTitle} 포스터" class="poster-image">
+		                <img src="/files/download?fileGroupId=${cttDetail.fileGroupId}&seq=1" alt="${cttDetail.contestTitle} 포스터" class="poster-image" id="poster-modal-trigger">
 		            </div>
+		            <!-- 이미지 모달 -->
+		            <div id="poster-modal" class="modal">
+					    <span class="close-button">&times;</span>
+					    <img class="modal-content" id="modal-image">
+					</div>
+		            
 		            <div class="summary-wrapper">
 		                <table class="info-table">
 		                    <tbody>
@@ -86,6 +92,6 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script>
+<script src="/js/prg/ctt/cttDetail.js">
 
 </script>
