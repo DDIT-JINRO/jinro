@@ -28,11 +28,7 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-  			면접의 기본
-  			</br></br></br></br>
-  			</br></br></br></br>
-  			</br></br></br></br>
-  			</br></br></br></br>
+    		<img alt="인터뷰" src="/images/interview.png" style="max-width: 100%; height: auto;">
   		</div>
 	</div>
 </div>
