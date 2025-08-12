@@ -58,18 +58,20 @@
 								<label class="com-filter-title">상담 방법</label>
 								<div class="com-filter-options">
 									<c:forEach var="method" items="${counselMethod}">
-										<c:set var="isChecked" value="${false}" />
-
-										<c:forEach var="filterParams" items="${paramValues.counselMethod}">
-											<c:if test="${method.key eq filterParams}">
-												<c:set var="isChecked" value="${true}" />
-											</c:if>
-										</c:forEach>
-
-										<label class="com-filter-item">
-											<input id="${method.key}" type="checkbox" name="counselMethod" value="${method.key}" ${isChecked ? 'checked' : ''} />
-											<span>${method.value}</span>
-										</label>
+										<c:if test="${method.key ne 'G08004'}">
+											<c:set var="isChecked" value="${false}" />
+	
+											<c:forEach var="filterParams" items="${paramValues.counselMethods}">
+												<c:if test="${method.key eq filterParams}">
+													<c:set var="isChecked" value="${true}" />
+												</c:if>
+											</c:forEach>
+	
+											<label class="com-filter-item">
+												<input id="${method.key}" type="checkbox" name="counselMethods" value="${method.key}" ${isChecked ? 'checked' : ''} />
+												<span>${method.value}</span>
+											</label>
+										</c:if>
 									</c:forEach>
 								</div>
 							</div>
@@ -79,14 +81,14 @@
 									<c:forEach var="category" items="${counselCategory}">
 										<c:set var="isChecked" value="${false}" />
 
-										<c:forEach var="filterParams" items="${paramValues.counselCategory}">
+										<c:forEach var="filterParams" items="${paramValues.counselCategorys}">
 											<c:if test="${category.key eq filterParams}">
 												<c:set var="isChecked" value="${true}" />
 											</c:if>
 										</c:forEach>
 
 										<label class="com-filter-item">
-											<input id="${category.key}" type="checkbox" name="counselCategory" value="${category.key}" ${isChecked ? 'checked' : ''} />
+											<input id="${category.key}" type="checkbox" name="counselCategorys" value="${category.key}" ${isChecked ? 'checked' : ''} />
 											<span>${category.value}</span>
 										</label>
 									</c:forEach>
@@ -98,14 +100,14 @@
 									<button type="button" class="com-filter-reset-btn">초기화</button>
 								</div>
 								<div class="com-selected-filters">
-									<c:forEach var="filterParams" items="${paramValues.counselMethod}">
+									<c:forEach var="filterParams" items="${paramValues.counselMethods}">
 										<span class="com-selected-filter" data-group="jobLcls" data-value="${param}">
 											상담 방법 > ${counselMethod[filterParams]}
 											<button type="button" class="com-remove-filter">×</button>
 										</span>
 									</c:forEach>
 
-									<c:forEach var="filterParams" items="${paramValues.counselCategory}">
+									<c:forEach var="filterParams" items="${paramValues.counselCategorys}">
 										<span class="com-selected-filter" data-group="jobSals" data-value="${param}">
 											상담 분야 > ${counselCategory[filterParams]}
 											<button type="button" class="com-remove-filter">×</button>

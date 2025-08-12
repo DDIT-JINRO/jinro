@@ -129,8 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// 필터 키워드
 	const allCheckboxGroups = {
-	    counselCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="counselCategory"]'),
-	    counselMethod: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="counselMethod"]'),
+	    counselCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="counselCategorys"]'),
+	    counselMethod: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="counselMethods"]'),
 	};
 	
 	// 선택 필터 영역
