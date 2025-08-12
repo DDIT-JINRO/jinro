@@ -76,7 +76,8 @@ function toggleCard(header) {
 
 // 면접 후기 삭제 기능
 function deleteCounselingReview(crId) {
-    if (confirm('정말로 이 상담 후기를 삭제하시겠습니까?\n삭제된 후기는 복구할 수 없습니다.')) {
+    if (confirm('정말로 이 상담 후기를 삭제하시겠습니까?\n삭제된 후기는 복구할 수 없습니다.\n또한 해당 상담에 대하여 후기를 다시 작성 할 수 없습니다.')) {
+		
         fetch('/cnslt/rvw/deleteCnsReview.do', {
             method: 'POST',
             headers: {
