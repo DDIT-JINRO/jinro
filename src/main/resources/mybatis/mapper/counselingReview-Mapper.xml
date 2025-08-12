@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.cnslt.rvw.service.impl.CounselingReviewMapper">
 
-	<select id="selectCounselingReviewList" resultType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO"> 
+	<select id="selectCounselingReviewList" resultType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO">
 		SELECT
 			A.CR_ID
 			, A.CR_RATE
@@ -33,13 +33,13 @@
 	                    AND A.CR_CONTENT LIKE '%' || #{keyword} || '%'
 	                </when>
 	                <when test = "status == 'writer'">
-	                    AND MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                    AND MEM.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
 	                </when>
 	                <otherwise>
 	                    AND (
 	                        COUNSEL.MEM_NAME LIKE '%' || #{keyword} || '%'
 	                        OR A.CR_CONTENT LIKE '%' || #{keyword} || '%'
-	                        OR MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                        OR MEM.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
 	                    )
 	                </otherwise>
 	            </choose>
@@ -52,7 +52,7 @@
 		                    #{counselMethod}
 		                </foreach>
 		            </if>
-		            
+
 		            <if test="counselCategorys != null and !counselCategorys.isEmpty()">
 		                <if test="counselMethods != null and !counselMethods.isEmpty()">
 		                    OR
@@ -69,7 +69,7 @@
 			, CR_ID DESC
 		OFFSET #{startRow} - 1 ROWS FETCH NEXT #{endRow} - #{startRow} + 1 ROWS ONLY
 	</select>
-	
+
 	<select id="selectCounselingReviewTotal" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO" resultType="int">
 	    SELECT
 	        COUNT(*)
@@ -89,13 +89,13 @@
 	                    AND A.CR_CONTENT LIKE '%' || #{keyword} || '%'
 	                </when>
 	                <when test = "status == 'writer'">
-	                    AND MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                    AND MEM.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
 	                </when>
 	                <otherwise>
 	                    AND (
 	                        COUNSEL.MEM_NAME LIKE '%' || #{keyword} || '%'
 	                        OR A.CR_CONTENT LIKE '%' || #{keyword} || '%'
-	                        OR MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                        OR MEM.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
 	                    )
 	                </otherwise>
 	            </choose>
@@ -108,7 +108,7 @@
 		                    #{counselMethod}
 		                </foreach>
 		            </if>
-		            
+
 		            <if test="counselCategorys != null and !counselCategorys.isEmpty()">
 		                <if test="counselMethods != null and !counselMethods.isEmpty()">
 		                    OR
@@ -121,7 +121,7 @@
 		        )
 		    </if>
 	</select>
-	
+
 	<select id="selectCounselingReview" parameterType="int" resultType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO">
 		SELECT
 			A.CR_ID
@@ -142,7 +142,7 @@
 		WHERE
 			CR_ID = #{crId}
 	</select>
-	
+
 	<select id="selectCounselingHistory" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO" resultType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
 		SELECT
 		    A.COUNSEL_ID
@@ -168,7 +168,7 @@
 			AND COUNSEL.MEM_NAME LIKE '%' || #{counselName} || '%'
 	    </if>
 	</select>
-	
+
 	<update id="updateCnsReview" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO">
 		MERGE INTO
 			COUNSELING_REVIEW A
@@ -194,7 +194,7 @@
 					, #{crPublic}
 				)
 	</update>
-	
+
 	<update id="updateCounselReviewd">
 		UPDATE COUNSELING
 		SET
@@ -202,7 +202,7 @@
 		WHERE
 		    COUNSEL_ID = #{crId}
 	</update>
-	
+
 	<delete id="deleteCnsReview" parameterType="int">
 	DELETE FROM
 		COUNSELING_REVIEW
