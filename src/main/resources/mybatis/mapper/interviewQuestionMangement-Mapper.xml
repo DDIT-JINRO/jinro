@@ -74,19 +74,6 @@
 		WHERE  IDL_ID = #{idlId}
 		ORDER BY ID_ORDER
 	</select>
-
-	<!-- 
-	// 공통질문 가져오기
-	public List<InterviewQuestionVO> selectCommonQuestions();
-	 -->
-	<select id="selectCommonQuestions" resultType="kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.InterviewQuestionVO">
-	  SELECT IQ_ID
-	  	   , IQ_GUBUN
-	  	   , IQ_CONTENT
-	  FROM 	 INTERVIEW_QUESTION
-	  WHERE  IQ_GUBUN IS NULL
-	  ORDER BY IQ_ID
-	</select> 
 	
 	<!-- 
 	//질문 가져오기

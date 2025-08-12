@@ -136,7 +136,6 @@ public class InterviewQuestionMangementController {
 
 		} else {
 			// 새 글 쓰기일 때 빈 VO 하나
-			commonQList = interviewQuestionMangementService.selectCommonQuestions();
 			model.addAttribute("interviewDetailListVO", interviewDetailListVO);
 			model.addAttribute("commonQList", commonQList);
 			model.addAttribute("interviewQuestionVOList", interviewQuestionVOlist);

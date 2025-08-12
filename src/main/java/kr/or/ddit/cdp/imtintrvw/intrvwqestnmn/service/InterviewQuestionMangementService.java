@@ -23,9 +23,6 @@ public interface InterviewQuestionMangementService {
 	// 항목별 자소서내용가져오기
 	public List<InterviewDetailVO> selectByInterviewQuestionContentIdList(InterviewDetailListVO interviewDetailListVO);
 
-	// 공통질문 가져오기
-	public List<InterviewQuestionVO> selectCommonQuestions();
-
 	// 질문 가져오기
 	public InterviewQuestionVO selectByInterviewQuestionQId(InterviewDetailVO interviewDetailVO);
 

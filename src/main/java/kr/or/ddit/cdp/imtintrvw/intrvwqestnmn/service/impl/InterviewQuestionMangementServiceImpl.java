@@ -69,13 +69,6 @@ public class InterviewQuestionMangementServiceImpl implements InterviewQuestionM
 		return interviewQuestionMangementMapper.selectByInterviewQuestionContentIdList(interviewDetailListVO);
 	}
 
-	// 공통질문 가져오기
-	@Override
-	public List<InterviewQuestionVO> selectCommonQuestions() {
-		// TODO Auto-generated method stub
-		return interviewQuestionMangementMapper.selectCommonQuestions();
-	}
-
 	// 질문 가져오기
 	@Override
 	public InterviewQuestionVO selectByInterviewQuestionQId(InterviewDetailVO interviewDetailVO) {
