@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.or.ddit.cdp.aifdbck.sint.service.impl.AiFeedbackSelfIntroMapper">
+<mapper namespace="kr.or.ddit.cdp.aifdbck.rsm.service.impl.AiFeedbackResumeMapper">
 
 	<!-- //현재 구독정보가 잇으면 최신 결제 정보(남은 횟수 포함) 가져오기
 	public PaymentVO selectLastPaymentInfo(MemberSubscriptionVO currentSub);
@@ -10,7 +10,7 @@
 		    PAY_ID,
 		    MS_ID,
 		    PAY_DATE,
-		    PAY_COVER_CNT
+		    PAY_RESUME_CNT
 		FROM
 		    PAYMENT
 		WHERE
@@ -22,13 +22,13 @@
 	
 	<!-- 
 	//횟수 차감 및 AI 피드백을 요청
-	public int deductCoverLetterCount(int payId);
+	public int deductAndGetFeedback(int payId);
 	 -->
-	<update id="deductCoverLetterCount" parameterType="int">
+	<update id="deductAndGetFeedback" parameterType="int">
 		UPDATE	PAYMENT
-		SET		PAY_COVER_CNT  = PAY_COVER_CNT  - 1
+		SET		PAY_RESUME_CNT  = PAY_RESUME_CNT  - 1
 		WHERE	PAY_ID = #{payId} 
-		AND		PAY_COVER_CNT > 0
+		AND		PAY_CONSULT_CNT > 0
 	</update>
 	
 </mapper>
