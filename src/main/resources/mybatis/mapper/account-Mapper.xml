@@ -55,6 +55,8 @@
 		FROM
 		MEMBER_PENALTY
 		WHERE MEM_ID = #{memId}
+		AND MP_TYPE = 'G14002'
+        AND MP_COMPLETE_AT > SYSDATE
 	</select>
 
 	<update id="memTokenInsert" parameterType="map">
