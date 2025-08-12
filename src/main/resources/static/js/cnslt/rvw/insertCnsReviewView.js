@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	    const crId = document.querySelector("#counsel-name").dataset.crId;
 	    const crRate = window.getCounselReviewRating();
 	    const crContent = document.querySelector("#cr-content").value.trim();
-		const crPublic = document.querySelector("input[name='cr-public']").value.trim();
+		const crPublic = document.querySelector("input[name='cr-public']:checked").value.trim();
 		
 		if (!crId) {
 			alert("과거상담내역을 선택해 주세요.");
