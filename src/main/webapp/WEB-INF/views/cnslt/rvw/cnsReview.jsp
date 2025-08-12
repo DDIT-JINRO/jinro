@@ -46,7 +46,79 @@
            				</svg>
 					</button>
 				</div>
+
+				<div class="com-accordion-filter">
+					<button type="button" class="com-accordion-header" id="com-accordion-toggle">
+						<span>필터</span>
+						<span class="com-arrow-icon">▲</span>
+					</button>
+					<div class="com-accordion-panel" id="com-accordion-panel">
+						<div class="com-accordion-content">
+							<div class="com-filter-section">
+								<label class="com-filter-title">상담 방법</label>
+								<div class="com-filter-options">
+									<c:forEach var="method" items="${counselMethod}">
+										<c:set var="isChecked" value="${false}" />
+
+										<c:forEach var="filterParams" items="${paramValues.counselMethod}">
+											<c:if test="${method.key eq filterParams}">
+												<c:set var="isChecked" value="${true}" />
+											</c:if>
+										</c:forEach>
+
+										<label class="com-filter-item">
+											<input id="${method.key}" type="checkbox" name="counselMethod" value="${method.key}" ${isChecked ? 'checked' : ''} />
+											<span>${method.value}</span>
+										</label>
+									</c:forEach>
+								</div>
+							</div>
+							<div class="com-filter-section">
+								<label class="com-filter-title">상담 분류</label>
+								<div class="com-filter-options">
+									<c:forEach var="category" items="${counselCategory}">
+										<c:set var="isChecked" value="${false}" />
+
+										<c:forEach var="filterParams" items="${paramValues.counselCategory}">
+											<c:if test="${category.key eq filterParams}">
+												<c:set var="isChecked" value="${true}" />
+											</c:if>
+										</c:forEach>
+
+										<label class="com-filter-item">
+											<input id="${category.key}" type="checkbox" name="counselCategory" value="${category.key}" ${isChecked ? 'checked' : ''} />
+											<span>${category.value}</span>
+										</label>
+									</c:forEach>
+								</div>
+							</div>
+							<div class="com-filter-section">
+								<div class="com-button-container">
+									<label class="com-filter-title">선택된 필터</label>
+									<button type="button" class="com-filter-reset-btn">초기화</button>
+								</div>
+								<div class="com-selected-filters">
+									<c:forEach var="filterParams" items="${paramValues.counselMethod}">
+										<span class="com-selected-filter" data-group="jobLcls" data-value="${param}">
+											상담 방법 > ${counselMethod[filterParams]}
+											<button type="button" class="com-remove-filter">×</button>
+										</span>
+									</c:forEach>
+
+									<c:forEach var="filterParams" items="${paramValues.counselCategory}">
+										<span class="com-selected-filter" data-group="jobSals" data-value="${param}">
+											상담 분야 > ${counselCategory[filterParams]}
+											<button type="button" class="com-remove-filter">×</button>
+										</span>
+									</c:forEach>
+								</div>
+							</div>
+							<button type="submit" class="com-submit-search-btn">검색</button>
+						</div>
+					</div>
+				</div>
 			</form>
+			
 			<div class="group-card-content">
 				<div class="content-header">
 					<div class="card-header-left">

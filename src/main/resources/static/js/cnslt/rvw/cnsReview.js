@@ -116,3 +116,104 @@ document.addEventListener('DOMContentLoaded', function() {
     allHeaders.forEach(header => header.classList.remove('active'));
     allToggles.forEach(toggle => toggle.classList.remove('active'));
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+	// 필터 정렬 순서
+	const filterOrder = ['counselCategory', 'counselMethod'];
+
+	// 토글 버튼
+	const toggleButton = document.getElementById('com-accordion-toggle');
+
+	// 필터 패널 
+	const panel = document.getElementById('com-accordion-panel');
+
+	// 필터 키워드
+	const allCheckboxGroups = {
+	    counselCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="counselCategory"]'),
+	    counselMethod: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="counselMethod"]'),
+	};
+	
+	// 선택 필터 영역
+	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
+	
+	// 초기화 버튼
+	const resetButton = document.querySelector('.com-filter-reset-btn');
+
+	// 아코디언 코드
+	if (toggleButton && panel) {
+		toggleButton.addEventListener('click', function() {
+			this.classList.toggle('active');
+			panel.classList.toggle('open');
+		});
+	}
+
+	// 선택된 필터 업데이트
+	const updateSelectedFiltersDisplay = () => {
+
+        selectedFiltersContainer.innerHTML = ''
+
+	    // 정의된 순서(filterOrder)대로 각 필터 그룹을 확인합니다.
+	    filterOrder.forEach(groupName => {
+	        const checkboxList = allCheckboxGroups[groupName];
+
+	        const selectedCheckboxes = Array.from(checkboxList).filter(checkBox => checkBox.checked);
+
+            // 선택된 모든 체크박스에 대해 반복 실행
+            selectedCheckboxes.forEach(checkbox => {
+                let text = checkbox.nextElementSibling.textContent;
+
+                if (groupName === "counselCategory") {
+                    text = "상담 분류 > " + text;
+                } else if (groupName === "counselMethod") {
+                    text = "상담 방법 > " + text;
+                }
+                
+                const filterTagHTML = `<span class="com-selected-filter" data-group="${groupName}" data-value="${checkbox.value}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
+                selectedFiltersContainer.innerHTML += filterTagHTML;
+            });
+	    });
+	};
+
+	// 체크 박스 선택 시 이벤트
+	const handleCheckboxChange = () => {
+		updateSelectedFiltersDisplay();
+	}
+
+    // 이벤트 등록
+    Object.values(allCheckboxGroups).forEach(checkboxList => {
+        checkboxList.forEach(checkbox => {
+            checkbox.addEventListener('change', handleCheckboxChange);
+        });
+    });
+
+	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
+	selectedFiltersContainer.addEventListener('click', (e) => {
+		if (e.target.classList.contains('com-remove-filter')) {
+			const tag = e.target.closest('.com-selected-filter');
+			const groupName = tag.dataset.group;
+            const value = tag.dataset.value;
+
+	        const checkboxToUncheck = Array.from(allCheckboxGroups[groupName]).find(checkbox => checkbox.value === value);
+
+	        if (checkboxToUncheck) {
+	            checkboxToUncheck.checked = false;
+	        }
+
+			// 화면을 다시 그립니다.
+			updateSelectedFiltersDisplay();
+		}
+	});
+
+	// 초기화 버튼 클릭 시 이벤트 처리
+	if (resetButton) {
+		resetButton.addEventListener('click', () => {
+			Object.values(allCheckboxGroups).forEach(checkboxList => {
+				checkboxList.forEach(checkbox => {
+					checkbox.checked = false;
+				});
+			});
+
+			selectedFiltersContainer.innerHTML = '';
+		});
+	}
+});
