@@ -31,7 +31,7 @@ public class FileServiceImpl implements FileService {
 
 	private final FileMapper fileMapper;
 	private final FileUtil fileUtil;
-	private final String shareFilePath = "\\\\192.168.145.21\\careerpath\\upload";
+	private final String shareFilePath = "/opt/upload";
 
 	@Override
 	public Long createFileGroup() {

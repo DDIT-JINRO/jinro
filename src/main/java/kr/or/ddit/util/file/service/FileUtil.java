@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FileUtil {
 
-    private final String basePath = "\\\\192.168.145.21\\careerpath\\upload";
+    private final String basePath = "/opt/upload";
 
     public FileDetailVO saveFile(MultipartFile file, Long fileGroupId, int fileSeq) throws IOException {
         String datePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
