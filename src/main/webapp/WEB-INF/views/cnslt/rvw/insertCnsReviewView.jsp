@@ -111,6 +111,17 @@
 							        </div>
 							    </td>
 							</tr>
+							<tr>
+								<th>
+									<span>공개여부</span>
+								</th>
+								<td>
+									<input type="radio" value="Y" ${counselingReview.crPublic == 'Y' ? 'checked' : ''}>
+									<label>Y</label>
+									<input type="radio" value="N" ${counselingReview.crPublic == 'N' ? 'checked' : ''}>
+									<label>N</label>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
