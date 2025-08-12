@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class CounselingVO {
+	private int counselId;
 	private int memId;
 	private int counsel;
 	private String counselCategory;
@@ -19,7 +20,6 @@ public class CounselingVO {
 	private String counselReviewd;
 	private Date counselCreatedAt;
 	private Date counselUpdatedAt;
-	private int counselId;
 	private String counselUrlUser;
 
 	private CounselingLogVO counselingLog;

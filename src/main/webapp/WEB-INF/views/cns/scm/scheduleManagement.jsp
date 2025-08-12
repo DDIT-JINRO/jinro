@@ -13,7 +13,7 @@
 			style="cursor: pointer; text-decoration: none">상담 리스트</div>
 
 		<p>
-			총 <span id="notice-count"></span>건
+			총 <span id="schedule-count"></span>건
 		</p>
 		<div id="selectedDateText"></div>
 		<div class="table-wrapper">
@@ -135,5 +135,6 @@
 	src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
 <script
 	src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ko.js'></script>
+	
 <script type="text/javascript"
 	src="/js/include/cns/scm/scheduleManagement.js"></script>

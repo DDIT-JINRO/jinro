@@ -109,4 +109,11 @@ public class CounselorApiController {
 	    	   return null;
 	       }
 	}
+	
+	@GetMapping("/updateCounselStatus.do")
+	public ResponseEntity<Boolean> updateCounselStatus(
+			@ModelAttribute CounselingVO counselingVO){
+		log.info("counselingVO : "+counselingVO);
+		return null;
+	}
 }

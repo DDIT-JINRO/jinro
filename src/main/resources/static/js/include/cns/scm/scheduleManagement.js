@@ -82,7 +82,7 @@ if (typeof FullCalendar !== 'undefined') {
 
             if (!data || data.length === 0) {
                 container.innerHTML = `<tr><td colspan="6" style="text-align:center;">데이터가 없습니다</td></tr>`;
-                document.getElementById('notice-count').textContent = 0;
+                document.getElementById('schedule-count').textContent = 0;
                 return;
             }
 
@@ -98,7 +98,7 @@ if (typeof FullCalendar !== 'undefined') {
             `).join('');
 
             container.innerHTML = rows;
-            document.getElementById('notice-count').textContent = data.length;
+            document.getElementById('schedule-count').textContent = data.length;
         })
         .catch(function (error) {
             console.error("상담 데이터 로드 실패:", error);
@@ -136,7 +136,6 @@ function calculateAge(birthDate) {
   else if (currentMonth === birthMonth && currentDay < birthDay) {
     age--;
   }
-console.log("age"+age);
   return age;
 }
 
@@ -177,8 +176,23 @@ function renderCounselDetail(counselData) {
 
     // 상태 정보 채우기
     document.getElementById('counselStatus').textContent = counselData.counselStatusStr || '';
-    document.getElementById('counselStatusSelect').value = counselData.counselStatus;
+    //document.getElementById('counselStatusSelect').value = counselData.counselStatus;
     
+	const subBtn = document.querySelector('.btn.btn-save');
+	console.log("subBtn : ",subBtn);
+	console.log("counselStatus : "+counselData.counselStatus);
+	if(counselData.counselStatus == 'S04001'){
+		subBtn.textContent='확정하기'
+		subBtn.addEventListener("click",function(){
+			axios.get('/api/cns/updateCounselStatus.do', {
+					params : {
+			         counselId : counselData.counselId,
+					 counselStatus : "S04003"			
+					 }		 
+			       })
+		})
+	}
+	
     // 신청 동기 채우기
     document.getElementById('counselDescription').value = counselData.counselDescription || '';
 
