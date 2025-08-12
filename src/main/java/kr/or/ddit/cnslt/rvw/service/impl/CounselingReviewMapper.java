@@ -13,4 +13,6 @@ public interface CounselingReviewMapper {
 
 	int selectCounselingReviewTotal(CounselingReviewVO counselingReview);
 
+	CounselingReviewVO selectCounselingReview(int crId);
+
 }

@@ -21,6 +21,7 @@ public class CounselingReviewVO {
 	private String counselCategory;
 	private String counselMethod;
 	private String crPublic;
+	private Date counselReqDatetime;
 	
 	// 필터조건
 	private String keyword;

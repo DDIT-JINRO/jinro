@@ -20,7 +20,7 @@ public class CounselingReviewServiceImpl implements CounselingReviewService {
 	private CounselingReviewMapper counselingReviewMapper;
 	
 	@Override
-	public ArticlePage<CounselingReviewVO> selectCounselingReview(CounselingReviewVO counselingReview) {
+	public ArticlePage<CounselingReviewVO> selectCounselingReviewList(CounselingReviewVO counselingReview) {
 
 		List<CounselingReviewVO> counselingReviewList = counselingReviewMapper.selectCounselingReviewList(counselingReview);
 		
@@ -34,6 +34,14 @@ public class CounselingReviewServiceImpl implements CounselingReviewService {
 		articlePage.setUrl("/cnslt/rvw/cnsReview.do");
 		
 		return articlePage;
+	}
+
+	@Override
+	public CounselingReviewVO selectCounselingReview(String crId) {
+		
+		CounselingReviewVO counselingReview = counselingReviewMapper.selectCounselingReview(Integer.parseInt(crId));
+		
+		return counselingReview;
 	}
 	
 }
