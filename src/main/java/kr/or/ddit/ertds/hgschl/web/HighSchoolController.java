@@ -37,7 +37,7 @@ public class HighSchoolController {
 			@RequestParam(value = "regionFilter", required = false) List<String> regionFilter,
 			@RequestParam(value = "schoolType", required = false) List<String> schoolType,
 			@RequestParam(value = "coedTypeFilter", required = false) List<String> coedTypeFilter,
-	        @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+	        @RequestParam(value = "size", required = false, defaultValue = "6") int size,
 	        Model model) {
 		log.info("regionFilter : " + regionFilter);
 		log.info("schoolType : " + schoolType);
@@ -54,8 +54,8 @@ public class HighSchoolController {
 
 		HighSchoolVO highSchoolVO = new HighSchoolVO();
 		highSchoolVO.setKeyword(keyword);
-		highSchoolVO.setCurrentPage(size);
-		highSchoolVO.setSize(currentPage);
+		highSchoolVO.setCurrentPage(currentPage);
+		highSchoolVO.setSize(size);
 		highSchoolVO.setRegionFilter(regionFilter);
 		highSchoolVO.setSchoolType(schoolType);
 		highSchoolVO.setCoedTypeFilter(coedTypeFilter);
