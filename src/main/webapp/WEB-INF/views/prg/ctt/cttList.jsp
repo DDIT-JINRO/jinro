@@ -48,6 +48,7 @@
 			        </button>
 			        <div class="com-accordion-panel" id="com-accordion-panel">
 				        <div class="com-accordion-content">
+			           
 			            <div class="com-filter-section">
 			                <label class="com-filter-title">모집 분야</label>
                             <div class="com-filter-options">
@@ -89,6 +90,23 @@
                                 </c:forEach>
                             </div>
                         </div>
+                        
+                        <div class="com-filter-section">
+			                <label class="com-filter-title">정렬 순서</label>
+                            <div class="com-filter-options">
+	                            <label class="com-filter-item"> 
+	                                <input type="radio" name="sortOrder" value="deadline" 
+	                                       ${checkedFilters.sortOrder == 'deadlin' or empty checkedFilters.sortOrder ? 'checked' : ''} />
+	                                <span>마감일 임박순</span>
+	                            </label>
+	                            <label class="com-filter-item"> 
+	                                <input type="radio" name="sortOrder" value="latest" 
+	                                       ${checkedFilters.sortOrder == 'latest' ? 'checked' : ''} />
+	                                <span>최신 등록순</span>
+	                            </label>
+                            </div>
+                        </div>
+                        
 			            <div class="com-filter-section">
 			            	<div class="com-button-container">
 			                  <label class="com-filter-title">선택된 필터</label>
@@ -97,6 +115,7 @@
 			                <div class="com-selected-filters">
 			                </div>
 			            </div>
+			            
 			            <button type="submit" class="com-submit-search-btn">검색</button>
 			          </div>
 			        </div>
@@ -179,6 +198,7 @@
 		            <c:url value="/prg/ctt/cttList.do" var="prevUrl">
 		                <c:param name="currentPage" value="${articlePage.startPage - 5}" />
 		                <c:param name="keyword" value="${checkedFilters.keyword}" />
+		                <c:param name="sortOrder" value="${checkedFilters.sortOrder}" />
 		                <%-- 현재 적용된 모든 필터 값들을 다시 파라미터로 추가 --%>
 		                <c:forEach var="filter" items="${checkedFilters.contestGubunFilter}"><c:param name="contestGubunFilter" value="${filter}" /></c:forEach>
 		                <c:forEach var="filter" items="${checkedFilters.contestTargetFilter}"><c:param name="contestTargetFilter" value="${filter}" /></c:forEach>
@@ -194,6 +214,7 @@
 		                <c:url value="/prg/ctt/cttList.do" var="pageUrl">
 		                    <c:param name="currentPage" value="${pNo}" />
 		                    <c:param name="keyword" value="${checkedFilters.keyword}" />
+		               		<c:param name="sortOrder" value="${checkedFilters.sortOrder}" />
 		                    <%-- 현재 적용된 모든 필터 값들을 다시 파라미터로 추가 --%>
 			                <c:forEach var="filter" items="${checkedFilters.contestGubunFilter}"><c:param name="contestGubunFilter" value="${filter}" /></c:forEach>
 			                <c:forEach var="filter" items="${checkedFilters.contestTargetFilter}"><c:param name="contestTargetFilter" value="${filter}" /></c:forEach>
@@ -209,6 +230,7 @@
 		            <c:url value="/prg/ctt/cttList.do" var="nextUrl">
 		                <c:param name="currentPage" value="${articlePage.startPage + 5}" />
 		                <c:param name="keyword" value="${checkedFilters.keyword}" />
+		                <c:param name="sortOrder" value="${checkedFilters.sortOrder}" />
 		                <%-- 현재 적용된 모든 필터 값들을 다시 파라미터로 추가 --%>
 		                <c:forEach var="filter" items="${checkedFilters.contestGubunFilter}"><c:param name="contestGubunFilter" value="${filter}" /></c:forEach>
 		                <c:forEach var="filter" items="${checkedFilters.contestTargetFilter}"><c:param name="contestTargetFilter" value="${filter}" /></c:forEach>

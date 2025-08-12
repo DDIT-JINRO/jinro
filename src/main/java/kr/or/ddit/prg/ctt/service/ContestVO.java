@@ -10,8 +10,8 @@ public class ContestVO {
 
 	private String contestId; // 공모전번호
 	private String contestTitle; // 제목
-	private String contestGubunCode; // 공모전구분코드
-	private String contestGubunName; // 공모전구분명
+	private String contestGubunCode; // 공모전구분코드(G25001 등)
+	private String contestGubunName; // 공모전구분명(공모전, 봉사활동, 서포터즈, 인턴십)
 	private String contestDescription; // 설명
 	private String contestType; // 공모전분류 코드 (G35001 등)
 	private String contestTypeName; // 공모전분류명 (건축, 게임/소프트웨어 등)
@@ -40,6 +40,7 @@ public class ContestVO {
 	private List<String> contestGubunFilter;
 	private List<String> contestTargetFilter;
 	private List<String> contestTypeFilter;
+	private String sortOrder; // d-day 정렬기준
 
 	// 페이징
 	private int currentPage;

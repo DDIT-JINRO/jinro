@@ -30,7 +30,8 @@ public class ActivityCareerExpController {
 			@RequestParam(required = false) String keyword,
 			@RequestParam(value = "contestGubunFilter", required = false) List<String> contestGubunFilter,
 			@RequestParam(value = "contestTargetFilter", required = false) List<String> contestTargetFilter,
-			@RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter) {
+			@RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter,
+			@RequestParam(value = "sortOrder", defaultValue = "deadline") String sortOrder) {
 
 		ActivityVO activityVO = new ActivityVO();
 		activityVO.setKeyword(keyword);
@@ -39,6 +40,7 @@ public class ActivityCareerExpController {
 		activityVO.setContestGubunFilter(contestGubunFilter);
 		activityVO.setContestTargetFilter(contestTargetFilter);
 		activityVO.setContestStatusFilter(contestStatusFilter);
+		activityVO.setSortOrder(sortOrder);
 
 		int total = activityCareerExpService.selectCrCount(activityVO);
 		List<ActivityVO> contestList = activityCareerExpService.selectCrList(activityVO);

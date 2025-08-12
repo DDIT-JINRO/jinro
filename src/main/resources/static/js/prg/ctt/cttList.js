@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	const panel = document.getElementById('com-accordion-panel');
 
 	// 필터 키워드
+	const filterInputs = document.querySelectorAll('.com-filter-item input[type="checkbox"], .com-filter-item input[type="radio"]');
 	const filterCheckboxes = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
+	const filterRadios = document.querySelectorAll('.com-filter-item input[type="radio"]'); // 라디오 버튼 추가
 
 	// 선택 필터 영역
 	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
@@ -27,9 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	// 필터 태그 추가
-	const createFilterTag = (text) => {
-		const filterTag = `<span class="com-selected-filter" data-filter="${text}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
-
+	const createFilterTag = (text, inputName) => {
+		const filterTag = `<span class="com-selected-filter" data-filter="${text}" data-name="${inputName}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
 		selectedFiltersContainer.innerHTML += filterTag;
 	};
 
@@ -37,18 +38,40 @@ document.addEventListener('DOMContentLoaded', function() {
 	const removeFilterTag = (text) => {
 		const tagToRemove = selectedFiltersContainer.querySelector(`[data-filter="${text}"]`);
 		if (tagToRemove) {
-			selectedFiltersContainer.removeChild(tagToRemove);
+			tagToRemove.remove();
 		}
 	};
+
+	//라디오 버튼처럼 그룹 내에서 하나만 존재하는 태그를 지우기 위한 함수
+	const removeFilterTagByInputName = (inputName) => {
+		const tagToRemove = selectedFiltersContainer.querySelector(`[data-name="${inputName}"]`);
+		if (tagToRemove) {
+			tagToRemove.remove();
+		}
+	}
 
 	// 체크박스 변경 시 이벤트 처리
 	filterCheckboxes.forEach(checkbox => {
 		checkbox.addEventListener('change', (e) => {
 			const labelText = e.target.nextElementSibling.textContent;
 			if (e.target.checked) {
-				createFilterTag(labelText);
+				createFilterTag(labelText, e.target.name);
 			} else {
 				removeFilterTag(labelText);
+			}
+		});
+	});
+
+	//라디오 버튼 변경 시 이벤트 처리
+	filterRadios.forEach(radio => {
+		radio.addEventListener('change', (e) => {
+			// 1. 같은 그룹의 기존 태그를 먼저 삭제
+			removeFilterTagByInputName(e.target.name);
+
+			// 2. 새로 선택된 항목의 태그를 추가 (기본값은 제외)
+			if (e.target.checked && !(e.target.name === 'sortOrder' && e.target.value === 'deadline')) {
+				const labelText = e.target.nextElementSibling.textContent;
+				createFilterTag(labelText, e.target.name);
 			}
 		});
 	});
@@ -59,15 +82,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			const tag = e.target.closest('.com-selected-filter');
 			const filterText = tag.dataset.filter;
 
-			// 연결된 체크박스 찾아서 해제
-			const checkboxToUncheck = Array.from(filterCheckboxes).find(
-				cb => cb.nextElementSibling.textContent === filterText
+			// 연결된 체크박스 또는 라디오 버튼을 찾아서 해제
+			const inputToUncheck = Array.from(filterInputs).find(
+				input => input.nextElementSibling.textContent.trim() === filterText.trim()
 			);
-			if (checkboxToUncheck) {
-				checkboxToUncheck.checked = false;
+			if (inputToUncheck) {
+				inputToUncheck.checked = false;
 			}
 
-			// 태그 삭제
 			tag.remove();
 		}
 	});
@@ -75,9 +97,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 초기화 버튼 클릭 시 이벤트 처리
 	if (resetButton) {
 		resetButton.addEventListener('click', () => {
-			filterCheckboxes.forEach(checkbox => {
-				checkbox.checked = false;
+			filterCheckboxes.forEach(input => {
+				input.checked = false;
 			});
+			// 정렬 라디오 버튼은 기본값(마감일순)으로 다시 체크해줍니다.
+			const defaultSort = document.querySelector('input[name="sortOrder"][value="deadline"]');
+			if (defaultSort) defaultSort.checked = true;
 
 			selectedFiltersContainer.innerHTML = '';
 		});
@@ -87,21 +112,36 @@ document.addEventListener('DOMContentLoaded', function() {
 			// 1. 현재 페이지의 URL에서 모든 파라미터를 읽어옵니다.
 			const urlParams = new URLSearchParams(window.location.search);
 
-			// 2. 모든 필터 체크박스를 하나씩 확인합니다.
-			filterCheckboxes.forEach(checkbox => {
-				const paramName = checkbox.name;   // <input>의 name 속성 (예: contestGubunFilter)
-				const paramValue = checkbox.value; // <input>의 value 속성 (예: G32001)
+			// 2. 모든 필터 입력(체크박스 + 라디오)을 하나씩 확인합니다.
+			filterInputs.forEach(input => {
+				const paramName = input.name;   // <input>의 name 속성
+				const paramValue = input.value; // <input>의 value 속성
 
-				// 3. URL에서 현재 체크박스의 name과 일치하는 모든 파라미터 값들을 가져옵니다.
-				const paramValues = urlParams.getAll(paramName);
+				let isSelected = false;
 
-				// 4. 만약 URL 파라미터 목록에 현재 체크박스의 value가 포함되어 있다면,
-				if (paramValues.includes(paramValue)) {
-					checkbox.checked = true; // 해당 체크박스를 체크 상태로 만듭니다.
+				// 3. 입력 타입에 따라 URL 파라미터와 비교합니다.
+				if (input.type === 'checkbox') {
+					// 체크박스는 같은 name으로 여러 값이 올 수 있으므로 getAll, includes로 확인
+					const paramValues = urlParams.getAll(paramName);
+					if (paramValues.includes(paramValue)) {
+						isSelected = true;
+					}
+				} else if (input.type === 'radio') {
+					// 라디오 버튼 그룹은 하나의 값만 가지므로 get으로 확인
+					if (urlParams.get(paramName) === paramValue) {
+						isSelected = true;
+					}
+				}
 
-					// 5. '선택된 필터' 영역에 태그도 함께 생성합니다.
-					const labelText = checkbox.nextElementSibling.textContent;
-					createFilterTag(labelText);
+				// 4. URL 파라미터와 일치하는 입력 요소를 선택 상태로 만듭니다.
+				if (isSelected) {
+					input.checked = true;
+
+					// 5. '선택된 필터' 영역에 태그도 함께 생성합니다. (단, 기본 정렬값은 제외)
+					if (!(input.name === 'sortOrder' && input.value === 'deadline')) {
+						const labelText = input.nextElementSibling.textContent;
+						createFilterTag(labelText, input.name);
+					}
 				}
 			});
 		}

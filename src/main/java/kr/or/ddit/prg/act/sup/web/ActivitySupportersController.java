@@ -30,7 +30,8 @@ public class ActivitySupportersController {
 			@RequestParam(required = false) String keyword,
 			@RequestParam(value = "contestGubunFilter", required = false) List<String> contestGubunFilter,
 			@RequestParam(value = "contestTargetFilter", required = false) List<String> contestTargetFilter,
-			@RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter) {
+			@RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter,
+			@RequestParam(value = "sortOrder", defaultValue = "deadline") String sortOrder) {
 
 		ActivityVO activityVO = new ActivityVO();
 		activityVO.setKeyword(keyword);
@@ -39,6 +40,7 @@ public class ActivitySupportersController {
 		activityVO.setContestGubunFilter(contestGubunFilter);
 		activityVO.setContestTargetFilter(contestTargetFilter);
 		activityVO.setContestStatusFilter(contestStatusFilter);
+		activityVO.setSortOrder(sortOrder);
 
 		int total = activitySupportersService.selectSupCount(activityVO);
 		List<ActivityVO> contestList = activitySupportersService.selectSupList(activityVO);

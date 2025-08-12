@@ -39,6 +39,7 @@ public class ActivityVO {
 	private List<String> contestStatusFilter;
 	private List<String> contestGubunFilter;
 	private List<String> contestTargetFilter;
+	private String sortOrder; // d-day 정렬기준
 
 	// 페이징
 	private int currentPage;

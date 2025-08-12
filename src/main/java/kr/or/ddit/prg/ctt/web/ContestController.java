@@ -34,7 +34,8 @@ public class ContestController {
 			@RequestParam(value = "contestGubunFilter", required = false) List<String> contestGubunFilter,
 			@RequestParam(value = "contestTargetFilter", required = false) List<String> contestTargetFilter,
 			@RequestParam(value = "contestTypeFilter", required = false) List<String> contestTypeFilter,
-			@RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter) {
+			@RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter,
+			@RequestParam(value = "sortOrder", defaultValue = "deadline") String sortOrder) {
 
 		log.info(
 				"cttList : contestGubunFilter={}, contestTargetFilter={}, contestTypeFilter={}, contestStatusFilter={}",
@@ -44,10 +45,13 @@ public class ContestController {
 		contestVO.setKeyword(keyword);
 		contestVO.setCurrentPage(currentPage);
 		contestVO.setSize(6);
+		
+		//필터
 		contestVO.setContestGubunFilter(contestGubunFilter);
 		contestVO.setContestTargetFilter(contestTargetFilter);
 		contestVO.setContestTypeFilter(contestTypeFilter);
 		contestVO.setContestStatusFilter(contestStatusFilter);
+		contestVO.setSortOrder(sortOrder);
 
 		int total = contestService.selectCttCount(contestVO);
 		List<ContestVO> contestList = contestService.selectCttList(contestVO);
