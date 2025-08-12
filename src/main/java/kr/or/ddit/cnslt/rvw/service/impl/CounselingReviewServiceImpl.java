@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.ddit.cnslt.resve.crsv.service.CounselingVO;
 import kr.or.ddit.cnslt.rvw.service.CounselingReviewService;
 import kr.or.ddit.cnslt.rvw.service.CounselingReviewVO;
-import kr.or.ddit.exception.CustomException;
-import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,10 +23,6 @@ public class CounselingReviewServiceImpl implements CounselingReviewService {
 
 		List<CounselingReviewVO> counselingReviewList = counselingReviewMapper.selectCounselingReviewList(counselingReview);
 		
-		if(counselingReviewList == null || counselingReviewList.isEmpty()) {
-			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-		}
-		
 		int counselingReviewListTotal = counselingReviewMapper.selectCounselingReviewTotal(counselingReview);
 		
 		ArticlePage<CounselingReviewVO> articlePage = new ArticlePage<>(counselingReviewListTotal, counselingReview.getCurrentPage(), counselingReview.getSize(), counselingReviewList, counselingReview.getKeyword());
@@ -37,11 +32,34 @@ public class CounselingReviewServiceImpl implements CounselingReviewService {
 	}
 
 	@Override
-	public CounselingReviewVO selectCounselingReview(String crId) {
+	public CounselingReviewVO selectCounselingReview(int crId) {
 		
-		CounselingReviewVO counselingReview = counselingReviewMapper.selectCounselingReview(Integer.parseInt(crId));
+		CounselingReviewVO counselingReview = counselingReviewMapper.selectCounselingReview(crId);
 		
 		return counselingReview;
+	}
+
+	@Override
+	public List<CounselingVO> selectCounselingHistory(String memIdStr, String counselName) {
+		
+		CounselingVO counseling = new CounselingVO();
+		counseling.setMemId(Integer.parseInt(memIdStr));
+		counseling.setCounselName(counselName);
+		
+		List<CounselingVO> counselingList = counselingReviewMapper.selectCounselingHistory(counseling);
+		
+		return counselingList;
+	}
+
+	@Override
+	public void updateCnsReview(CounselingReviewVO counselingReview) {
+		counselingReviewMapper.updateCnsReview(counselingReview);
+		counselingReviewMapper.updateCounselReviewd(counselingReview.getCrId(), "Y");
+	}
+
+	@Override
+	public void deleteCnsReview(int crId) {
+		counselingReviewMapper.deleteCnsReview(crId);
 	}
 	
 }

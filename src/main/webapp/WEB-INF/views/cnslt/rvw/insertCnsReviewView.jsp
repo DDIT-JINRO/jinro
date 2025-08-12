@@ -32,46 +32,47 @@
 						<tbody>
 							<tr>
 								<th>
-									<label for="companyName">
+									<label for="counsel-name">
 										상담사
 										<span class="required">*</span>
 									</label>
 								</th>
 								<td>
 									<div class="input-group">
-										<input type="text" id="company-name" data-cp-id="" placeholder="상담사명을 입력하세요." readonly required="required">
-										<button type="button" id="company-search" class="btn-search">과거 상담내역 검색</button>
+										<input type="text" id="counsel-name" data-cr-id="" placeholder="상담사명을 입력하세요." readonly required="required">
+										<button type="button" id="counsel-search" class="btn-search">과거 상담내역 검색</button>
 									</div>
 								</td>
 							</tr>
 							<tr>
 								<th>
-									<label for="interview-position">
+									<label for="counsel-category">
 										상담분야
 									</label>
 								</th>
 								<td>
-									<input type="text" id="interview-position" placeholder="상담 분야를 입력하세요." maxlength="25" readonly="readonly">
+									<input type="text" id="counsel-category" placeholder="상담분야" maxlength="25" readonly="readonly">
 								</td>
 							</tr>
 							<tr>
 								<th>
-									<label for="interview-position">
+									<label for="counsel-method">
 										상담방법
 									</label>
 								</th>
 								<td>
-									<input type="text" id="interview-position" placeholder="상담방법 입력하세요." maxlength="25" readonly="readonly">
+									<input type="text" id="counsel-method" placeholder="상담방법" maxlength="25" readonly="readonly">
 								</td>
 							</tr>
 							<tr>
 								<th>
-									상담 일자
-									<span class="required">*</span>
+									<label for="counsel-req-datetime">
+										상담 일자
+									</label>
 								</th>
 								<td>
 									<div class="input-group">
-										<input type="date" id="interview-date" required="required">
+										<input type="datetime-local" id="counsel-req-datetime" required="required" readonly="readonly">
 									</div>
 								</td>
 							</tr>
@@ -82,7 +83,7 @@
 							    </th>
 							    <td>
 							        <div class="star-rating-container">
-							            <div class="star-rating" id="company-rating" data-rating="0">
+							            <div class="star-rating" id="cr-rate" data-rating="0">
 							                <span class="star" data-value="1">★</span>
 							                <span class="star" data-value="2">★</span>
 							                <span class="star" data-value="3">★</span>
@@ -103,7 +104,7 @@
 								</th>
 							    <td>
 							        <div class="input-group textarea-container">
-							            <textarea id="interview-detail" 
+							            <textarea id="cr-content" 
 							                      placeholder="상담 이후 어떤 경험을 하셧나요?&#13;&#10;(사실이 아닌 비방이나 개인적인 의견은 등록이 거절될 수 있습니다.)" 
 							                      rows="5"
 							                      maxlength="300"
@@ -116,10 +117,10 @@
 									<span>공개여부</span>
 								</th>
 								<td>
-									<input type="radio" value="Y" ${counselingReview.crPublic == 'Y' ? 'checked' : ''}>
-									<label>Y</label>
-									<input type="radio" value="N" ${counselingReview.crPublic == 'N' ? 'checked' : ''}>
-									<label>N</label>
+									<label>공개</label>
+									<input type="radio" name="cr-public" value="Y" checked>
+									<label>비공개</label>
+									<input type="radio" name="cr-public" value="N">
 								</td>
 							</tr>
 						</tbody>
@@ -135,20 +136,20 @@
 
 	<!-- 기업 검색 모달 -->
 	<div class="modal-overlay" id="modal-overlay">
-		<div class="modal-content company-search-modal">
+		<div class="modal-content counsel-search-modal">
 			<button class="modal-close-btn" type="button">&times;</button>
 			<h3>내 상담 내역 검색</h3>
 			<p>후기를 작성 할 상담 내역을 선택해주세요.</p>
 
 			<!-- 검색 입력창 -->
 			<div class="search-input-container">
-				<input type="text" id="company-search-input" placeholder="상담사명을 입력하세요" autocomplete="off">
+				<input type="text" id="counsel-search-input" placeholder="상담사명을 입력하세요" autocomplete="off">
 				<button type="button" id="search-btn" class="btn btn-primary">검색</button>
 			</div>
 
 			<!-- 기업 목록 -->
-			<div class="company-list-container">
-				<ul id="company-list" class="company-list">
+			<div class="counsel-list-container">
+				<ul id="counsel-list" class="counsel-list">
 					<!-- 기업 목록이 동적으로 추가됩니다 -->
 				</ul>
 			</div>

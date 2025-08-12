@@ -87,7 +87,7 @@
 /* ==================================
     입력 필드 (Input, Select, Radio 등)
 ===================================== */
-#interview-detail {
+#cr-content {
     width: 100%;
     min-height: 120px;
     padding: 12px;
@@ -100,7 +100,7 @@
     box-sizing: border-box;
 }
 
-#interview-detail:focus {
+#cr-content:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);

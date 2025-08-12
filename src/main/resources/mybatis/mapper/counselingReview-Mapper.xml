@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.cnslt.rvw.service.impl.CounselingReviewMapper">
 
-	<select id="selectCounselingReviewList" resultType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO"> 
+	<select id="selectCounselingReviewList" resultType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO">
 		SELECT
 			A.CR_ID
 			, A.CR_RATE
@@ -24,31 +24,52 @@
 		    LEFT JOIN COM_CODE          METHOD_CODE ON B.COUNSEL_METHOD = METHOD_CODE.CC_ID
 		WHERE
 			1 = 1
-		    <if test = "keyword != null and keyword != ''">
-			    <choose>
-			        <when test = "status == 'counselName'">
-						AND COUNSEL_NAME LIKE '%' || #{keyword} || '%'
-			        </when>
-			        <when test = "status == 'content'">
-						AND CR_CONTENT LIKE '%' || #{keyword} || '%'
-			        </when>
-			        <when test = "status == 'writer'">
-						AND MEM_NAME LIKE '%' || #{keyword} || '%'
-			        </when>
-			        <otherwise>
-						AND (
-							COUNSEL_NAME LIKE '%' || #{keyword} || '%'
-							OR CR_CONTENT LIKE '%' || #{keyword} || '%'
-							OR MEM_NAME LIKE '%' || #{keyword} || '%'
-						)
-			        </otherwise>
-			    </choose>
+	        <if test = "keyword != null and keyword != ''">
+	            <choose>
+	                <when test = "status == 'counselName'">
+	                    AND COUNSEL.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                </when>
+	                <when test = "status == 'content'">
+	                    AND A.CR_CONTENT LIKE '%' || #{keyword} || '%'
+	                </when>
+	                <when test = "status == 'writer'">
+	                    AND MEM.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
+	                </when>
+	                <otherwise>
+	                    AND (
+	                        COUNSEL.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                        OR A.CR_CONTENT LIKE '%' || #{keyword} || '%'
+	                        OR MEM.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
+	                    )
+	                </otherwise>
+	            </choose>
+	        </if>
+		    <if test="(counselMethods != null and !counselMethods.isEmpty()) or (counselCategorys != null and !counselCategorys.isEmpty())">
+		        AND (
+		            <if test="counselMethods != null and !counselMethods.isEmpty()">
+		                B.COUNSEL_METHOD IN
+		                <foreach collection="counselMethods" item="counselMethod" open="(" close=")" separator=",">
+		                    #{counselMethod}
+		                </foreach>
+		            </if>
+
+		            <if test="counselCategorys != null and !counselCategorys.isEmpty()">
+		                <if test="counselMethods != null and !counselMethods.isEmpty()">
+		                    OR
+		                </if>
+		                B.COUNSEL_CATEGORY IN
+		                <foreach collection="counselCategorys" item="counselCategory" open="(" close=")" separator=",">
+		                    #{counselCategory}
+		                </foreach>
+		            </if>
+		        )
 		    </if>
 		ORDER BY
 			CR_CREATED_AT DESC
+			, CR_ID DESC
 		OFFSET #{startRow} - 1 ROWS FETCH NEXT #{endRow} - #{startRow} + 1 ROWS ONLY
 	</select>
-	
+
 	<select id="selectCounselingReviewTotal" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO" resultType="int">
 	    SELECT
 	        COUNT(*)
@@ -68,19 +89,39 @@
 	                    AND A.CR_CONTENT LIKE '%' || #{keyword} || '%'
 	                </when>
 	                <when test = "status == 'writer'">
-	                    AND MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                    AND MEM.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
 	                </when>
 	                <otherwise>
 	                    AND (
 	                        COUNSEL.MEM_NAME LIKE '%' || #{keyword} || '%'
 	                        OR A.CR_CONTENT LIKE '%' || #{keyword} || '%'
-	                        OR MEM.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                        OR MEM.MEM_NICKNAME LIKE '%' || #{keyword} || '%'
 	                    )
 	                </otherwise>
 	            </choose>
 	        </if>
+   		    <if test="(counselMethods != null and !counselMethods.isEmpty()) or (counselCategorys != null and !counselCategorys.isEmpty())">
+		        AND (
+		            <if test="counselMethods != null and !counselMethods.isEmpty()">
+		                B.COUNSEL_METHOD IN
+		                <foreach collection="counselMethods" item="counselMethod" open="(" close=")" separator=",">
+		                    #{counselMethod}
+		                </foreach>
+		            </if>
+
+		            <if test="counselCategorys != null and !counselCategorys.isEmpty()">
+		                <if test="counselMethods != null and !counselMethods.isEmpty()">
+		                    OR
+		                </if>
+		                B.COUNSEL_CATEGORY IN
+		                <foreach collection="counselCategorys" item="counselCategory" open="(" close=")" separator=",">
+		                    #{counselCategory}
+		                </foreach>
+		            </if>
+		        )
+		    </if>
 	</select>
-	
+
 	<select id="selectCounselingReview" parameterType="int" resultType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO">
 		SELECT
 			A.CR_ID
@@ -101,5 +142,72 @@
 		WHERE
 			CR_ID = #{crId}
 	</select>
+
+	<select id="selectCounselingHistory" parameterType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO" resultType="kr.or.ddit.cnslt.resve.crsv.service.CounselingVO">
+		SELECT
+		    A.COUNSEL_ID
+		    , A.MEM_ID
+		    , A.COUNSEL
+		    , COUNSEL.MEM_NAME      AS COUNSEL_NAME
+		    , CATEGORY_CODE.CC_NAME AS COUNSEL_CATEGORY
+		    , METHOD_CODE.CC_NAME   AS COUNSEL_METHOD
+		    , A.COUNSEL_REQ_DATETIME
+		    , A.COUNSEL_REVIEWD
+		FROM
+		    COUNSELING A
+		    LEFT JOIN MEMBER            COUNSEL ON A.COUNSEL = COUNSEL.MEM_ID
+		    LEFT JOIN COM_CODE          CATEGORY_CODE ON A.COUNSEL_CATEGORY = CATEGORY_CODE.CC_ID
+		    LEFT JOIN COM_CODE          METHOD_CODE ON A.COUNSEL_METHOD = METHOD_CODE.CC_ID
+		WHERE
+		    A.COUNSEL_STATUS = 'S04004'
+		AND
+		    A.MEM_ID = #{memId}
+		AND
+		    A.COUNSEL_REVIEWD = 'N'
+	    <if test = "counselName != null and counselName != ''">
+			AND COUNSEL.MEM_NAME LIKE '%' || #{counselName} || '%'
+	    </if>
+	</select>
+
+	<update id="updateCnsReview" parameterType="kr.or.ddit.cnslt.rvw.service.CounselingReviewVO">
+		MERGE INTO
+			COUNSELING_REVIEW A
+		USING DUAL
+		ON (CR_ID = #{crId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					A.CR_RATE      = #{crRate}
+					, A.CR_CONTENT = #{crContent}
+					, A.CR_PUBLIC  = #{crPublic}
+			WHEN NOT MATCHED THEN
+				INSERT(
+					CR_ID
+					, CR_RATE
+					, CR_CONTENT
+					, CR_CREATED_AT
+					, CR_PUBLIC
+				) VALUES (
+					#{crId}
+					, #{crRate}
+					, #{crContent}
+					, SYSDATE
+					, #{crPublic}
+				)
+	</update>
+
+	<update id="updateCounselReviewd">
+		UPDATE COUNSELING
+		SET
+		    COUNSEL_REVIEWD = #{counselReviewd}
+		WHERE
+		    COUNSEL_ID = #{crId}
+	</update>
+
+	<delete id="deleteCnsReview" parameterType="int">
+	DELETE FROM
+		COUNSELING_REVIEW
+	WHERE
+        CR_ID = #{crId}
+	</delete>
 
 </mapper>

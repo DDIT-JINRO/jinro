@@ -9,28 +9,30 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	document.querySelector("#submit-btn").addEventListener("click", async function() {
-	    const irId = document.querySelector("#cr-id").value.trim();
-	    const interviewDetail = document.querySelector("#interview-detail").value.trim();
-		const interviewRating = window.getInterviewRating();
+	    const crId = document.querySelector("#cr-id").value.trim();
+	    const crContent = document.querySelector("#cr-content").value.trim();
+		const crRate = window.getCrRate();
+		const crPublic = document.querySelector("input[name='cr-public']:checked").value.trim();
 		
-		if (interviewRating === 0) {
+		if (crRate === 0) {
 			alert("상담 평가를 선택해 주세요.");
 			return;
 		}
 	    
-	    if (!interviewDetail) {
+	    if (!crContent) {
 	        alert("상담 후기를 입력해 주세요.");
 	        return;
 	    }
 
 	    // FormData 생성
 	    const formData = new FormData();
-		formData.append('irId', irId)
-	    formData.append('irContent', interviewDetail);
-		formData.append('irRating', interviewRating);
+		formData.append('crId', crId)
+	    formData.append('crContent', crContent);
+		formData.append('crRate', crRate);
+		formData.append('crPublic', crPublic);
 
-/*	    try {
-	        const response = await fetch("/empt/ivfb/updateInterViewFeedback.do", {
+	    try {
+	        const response = await fetch("/cnslt/rvw/updateCnsReview.do", {
 	            method: "POST",
 	            body: formData
 	        });
@@ -40,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	            
 	            if (result.success) {
 	                alert("후기 수정이 완료되었습니다");
-	                window.location.href = "/empt/ivfb/interViewFeedback.do";
+	                window.location.href = "/cnslt/rvw/cnsReview.do";
 	            } else {
 	                alert(result.message || "수정에 실패했습니다.");
 	            }
@@ -50,8 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	    } catch (error) {
 	        console.error("수정 중 오류:", error);
 	        alert("수정에 실패했습니다.");
-	    }*/
-		alert("등록 기능 구현 예정입니다.");
+	    }
 	});
 
 	document.querySelector("#back-btn").addEventListener("click", function() {
@@ -61,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 별점 평가 기능
 document.addEventListener('DOMContentLoaded', function() {
-    const starRating = document.getElementById('company-rating');
+    const starRating = document.getElementById('cr-rate');
     const ratingText = document.getElementById('rating-text');
     const stars = starRating.querySelectorAll('.star');
     
@@ -139,14 +140,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 별점 값을 가져오는 함수 (폼 제출 시 사용)
-    window.getInterviewRating = function() {
+    window.getCrRate = function() {
         return parseInt(currentRating) || 0;
     };
 });
 
 // textarea 글자수 카운터 기능
 document.addEventListener('DOMContentLoaded', function() {
-    const textarea = document.getElementById('interview-detail');
+    const textarea = document.getElementById('cr-content');
     const maxLength = 300; // 최대 글자수 설정
     
     // 글자수 카운터 HTML 생성
