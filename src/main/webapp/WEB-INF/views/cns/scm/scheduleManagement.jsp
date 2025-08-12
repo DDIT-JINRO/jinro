@@ -85,15 +85,6 @@
 					<span class="info-label">상담 상태</span> <span class="info-value"
 						id="counselStatus"></span>
 				</div>
-				<div class="info-item">
-					<span class="info-label">상태 변경</span> <select
-						id="counselStatusSelect" class="info-value">
-						<option value="">선택</option>
-						<option value="S04001">예약</option>
-						<option value="S04002">취소</option>
-						<option value="S04003">확정</option>
-					</select>
-				</div>
 			</div>
 
 			<div class="counsel-detail-content">
