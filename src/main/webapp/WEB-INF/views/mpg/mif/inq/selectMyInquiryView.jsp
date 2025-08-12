@@ -105,25 +105,23 @@
 								<div class="info-item">
 									<label>학생 여부</label>
 									<c:choose>
-										<c:when test="${member.svStatus == 'S05001'}">
+										<c:when test="${member.veriStatus == 'S05001'}">
 											<span>신청 중</span>
-											<small>
-												<fmt:formatDate pattern="(yyyy년 MM월 dd일)" value="${member.svCreatedAt}" />
+											<small> <fmt:formatDate pattern="(yyyy년 MM월 dd일)" value="${member.veriCreatedAt}" />
 											</small>
 										</c:when>
-										<c:when test="${member.svStatus == 'S05002'}">
+										<c:when test="${member.veriStatus == 'S05002'}">
 											<span>인증</span>
 										</c:when>
-										<c:when test="${member.svStatus == 'S05003'}">
+										<c:when test="${member.veriStatus == 'S05003'}">
 											<span>반려</span>
 											<button type="button" id="reject-reason-btn" class="btn btn-secondary">반려 이유</button>
 										</c:when>
 										<c:otherwise>
 											<span>미인증</span>
 											<button type="button" id="auth-student" class="btn btn-auth">학생 인증</button>
-										</c:otherwise>					
+										</c:otherwise>
 									</c:choose>
-									
 								</div>
 							</div>
 						</form>

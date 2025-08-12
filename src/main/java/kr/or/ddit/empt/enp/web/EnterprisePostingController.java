@@ -42,6 +42,16 @@ public class EnterprisePostingController {
 		int total = enterprisePostingService.selectCompanyListCount(companyVO);
 
 		List<CompanyVO> companyVOList = enterprisePostingService.selectCompanyList(companyVO);
+
+		for (CompanyVO c : companyVOList) {
+			InterviewReviewVO interviewReviewVO = new InterviewReviewVO();
+			// 기업리뷴
+			interviewReviewVO.setIrType("G02002");
+			interviewReviewVO.setTargetId(c.getCpId());
+			
+			c.setInterviewReviewList(enterprisePostingService.selectEnpInterviewReview(interviewReviewVO));
+		}
+		
 		List<ComCodeVO> codeVOCompanyScaleList = enterprisePostingService.selectCodeVOCompanyScaleList();
 		List<ComCodeVO> CodeVORegionList = enterprisePostingService.selectCodeVORegionList();
 
@@ -49,12 +59,6 @@ public class EnterprisePostingController {
 				companyVO.getSize(), companyVOList, companyVO.getKeyword());
 		// 북마크 VO
 		List<BookMarkVO> bookMarkVOList = new ArrayList<>();
-
-		// 기업리뷴
-		InterviewReviewVO interviewReviewVO = new InterviewReviewVO();
-		interviewReviewVO.setIrType("G02002");
-		List<InterviewReviewVO> interviewReviewVOList = enterprisePostingService
-				.selectEnpInterviewReview(interviewReviewVO);
 
 		if (principal != null && !principal.getName().equals("anonymousUser")) {
 			int memId = Integer.parseInt(principal.getName());
@@ -67,7 +71,6 @@ public class EnterprisePostingController {
 		}
 
 		articlePage.setUrl("/empt/enp/enterprisePosting.do");
-		model.addAttribute("interviewReviewVOList", interviewReviewVOList);
 		model.addAttribute("bookMarkVOList", bookMarkVOList);
 		model.addAttribute("articlePage", articlePage);
 		model.addAttribute("codeVOCompanyScaleList", codeVOCompanyScaleList);

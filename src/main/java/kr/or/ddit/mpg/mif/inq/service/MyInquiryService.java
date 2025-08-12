@@ -3,7 +3,6 @@ package kr.or.ddit.mpg.mif.inq.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.main.service.MemberVO;
@@ -23,7 +22,7 @@ public interface MyInquiryService {
 
 	int parseMemId(String memIdStr);
 
-	Resource insertStudentAuth(String memId, MultipartFile authFile);
+	void insertVerification(String memId, String vCategory, MultipartFile authFile);
 	
 	MemberVO getProfileFile(MemberVO member);
 }

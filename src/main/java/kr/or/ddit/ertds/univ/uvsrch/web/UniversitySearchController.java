@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.empt.enp.service.InterviewReviewVO;
+import kr.or.ddit.empt.ivfb.service.InterviewFeedbackService;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityService;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
@@ -25,8 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 public class UniversitySearchController {
 
 	@Autowired
-	UniversityService universityService;
+	private UniversityService universityService;
 
+	@Autowired
+	private InterviewFeedbackService interviewFeedbackService;
+	
 	// 중분류 대학검색으로 이동
 	@GetMapping("/selectUnivList.do")
 	public String selectUnivList(
@@ -74,6 +79,11 @@ public class UniversitySearchController {
 			@RequestParam("univId") int univId, 
 			Model model, 
 			Principal principal) {
+		
+		InterviewReviewVO interviewReview = new InterviewReviewVO();
+		interviewReview.setIrType("G02001");
+		interviewReview.setTargetId(univId);
+		List<InterviewReviewVO> interviewReviewList = interviewFeedbackService.selectInterviewFeedbackList(interviewReview).getContent();
 
 		UniversityDetailVO universityDetail = this.universityService.selectUniversityDetail(univId);
 
@@ -98,6 +108,7 @@ public class UniversitySearchController {
 		}
 
 		model.addAttribute("universityDetail", universityDetail);
+		model.addAttribute("interviewReviewList", interviewReviewList);
 		model.addAttribute("bookMarkVOList", bookMarkVOList);
 
 		return "ertds/univ/uvsrch/selectDetail"; // /WEB-INF/views/ertds/univ/uvsrch/detail.jsp

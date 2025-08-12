@@ -28,6 +28,9 @@ public class CompanyVO {
 	private List<String> regionId; // 기업 위치 선택
 	private List<String> hiringStatus; // 채용 상태 선택
 
+	//
+	private List<InterviewReviewVO> interviewReviewList; // 채용 상태 선택
+	
 	// 페이징
 	private int currentPage;
 	private int size;

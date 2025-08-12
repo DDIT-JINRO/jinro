@@ -188,7 +188,7 @@
 								<c:set var="isReview" value="false" />
 
 								<c:forEach var="interviewReview"
-									items="${interviewReviewVOList}">
+									items="${company.interviewReviewList}">
 									<c:if test="${company.cpId eq interviewReview.targetId}">
 										<div class="review-item">
 											<div class="review-meta">

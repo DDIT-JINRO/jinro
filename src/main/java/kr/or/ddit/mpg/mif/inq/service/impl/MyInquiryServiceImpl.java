@@ -16,6 +16,7 @@ import kr.or.ddit.exception.CustomException;
 import kr.or.ddit.exception.ErrorCode;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.mpg.mif.inq.service.MyInquiryService;
+import kr.or.ddit.mpg.mif.inq.service.VerificationVO;
 import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
@@ -149,7 +150,7 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 	}
 
 	@Override
-	public Resource insertStudentAuth(String memIdStr, MultipartFile authFile) {
+	public void insertVerification(String memIdStr, String vCategory, MultipartFile authFile) {
 		int memId = parseMemId(memIdStr);
 
 		if (authFile == null || authFile.isEmpty()) {
@@ -157,9 +158,11 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 		}
 		Long fileGroupId = fileService.createFileGroup();
 
-		StudentVerificationVO studentVerification = new StudentVerificationVO();
-		studentVerification.setMemId(memId);
-		studentVerification.setFileGroupId(fileGroupId);
+		VerificationVO verification = VerificationVO.builder()
+												.memId(memId)
+												.fileGroupId(fileGroupId)
+												.veriCategory(vCategory)
+												.build();
 		
 		List<MultipartFile> files = new ArrayList<MultipartFile>();
 		files.add(authFile);
@@ -170,17 +173,9 @@ public class MyInquiryServiceImpl implements MyInquiryService {
 			throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
 		}
 
-		int result = this.myInquiryMapper.insertStudentVerification(studentVerification);
+		int result = this.myInquiryMapper.insertVerification(verification);
 		if (result == 0) {
 			throw new CustomException(ErrorCode.USER_UPDATE_FAILED);
-		}
-		
-		Resource resource = null;
-		try {
-			resource = this.fileService.downloadFile(fileGroupId, 1);
-			return resource;
-		} catch (IOException e) {
-			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
