@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		// 입력창, 전송버튼에 이벤트 등록
 		const inputEl = document.getElementById('chatMessageInput');
 		const sendBtn = document.getElementById('sendMsgBtn');
+
 		sendBtn.addEventListener('click', function () {
 		    sendCurrentInput();
 		});
@@ -77,7 +78,79 @@ document.addEventListener('DOMContentLoaded', function(){
 			})
 		})
 	}
+
+	const imgAttachBtn = document.getElementById('chatImgBtn');
+	const fileAttachBtn = document.getElementById('chatFileBtn');
+	const imgInput = document.getElementById('attach-input-img');
+	const fileInput = document.getElementById('attach-input-file');
+	const previewBarEl  = document.getElementById('attach-preview-bar');
+	const previewListEl = document.getElementById('attachPreviewList');
+	const clearAttachBtn = document.getElementById('clearAttachBtn');
+	imgAttachBtn.addEventListener('click', function(){
+		imgInput.click();
+	})
+	fileAttachBtn.addEventListener('click', function(){
+		fileInput.click();
+	})
+
+	function renderAttachOverlay() {
+	  const imgCount  = (imgInput.files && imgInput.files.length) || 0;
+	  const fileCount = (fileInput.files && fileInput.files.length) || 0;
+
+	  if (imgCount === 0 && fileCount === 0) {
+	    previewBarEl.style.display = 'none';
+	    previewListEl.innerHTML = '';
+	    return;
+	  }
+
+	  previewBarEl.style.display = 'flex';
+
+	  if (imgCount > 0) {
+	    previewListEl.innerHTML =
+	      `<span>🖼️ <b>이미지 첨부</b> · ${imgCount}개 선택됨</span>`;
+	  } else {
+	    previewListEl.innerHTML =
+	      `<span>📎 <b>파일 첨부</b> · ${fileCount}개 선택됨</span>`;
+	  }
+	}
+
+
+	imgInput.addEventListener('input', () => {
+	  if (imgInput.files?.length) {
+	    fileInput.value = '';        // 파일 선택 비우기 (파일 모드 종료)
+	  }
+	  renderAttachOverlay();
+	});
+	imgInput.addEventListener('change', () => {
+	  if (imgInput.files?.length) {
+	    fileInput.value = '';
+	  }
+	  renderAttachOverlay();
+	});
+
+	fileInput.addEventListener('input', () => {
+	  if (fileInput.files?.length) {
+	    imgInput.value = '';         // 이미지 선택 비우기 (이미지 모드 종료)
+	  }
+	  renderAttachOverlay();
+	});
+	fileInput.addEventListener('change', () => {
+	  if (fileInput.files?.length) {
+	    imgInput.value = '';
+	  }
+	  renderAttachOverlay();
+	});
+
+	// "모두 제거" 버튼: 현재 선택만 초기화
+	clearAttachBtn.addEventListener('click', () => {
+	  imgInput.value = '';
+	  fileInput.value = '';
+	  renderAttachOverlay();
+	});
+
 })
+
+
 
 document.addEventListener('click', function(e){
 	// 모달 바깥쪽 클릭시 모달창 닫기
@@ -86,8 +159,24 @@ document.addEventListener('click', function(e){
 	}
 })
 
+function cleanInputDatas(){
+	// 첨부 input 요소 비우기
+	const imgInputEl  = document.getElementById('attach-input-img');
+	const fileInputEl = document.getElementById('attach-input-file');
+	const previewBarEl = document.getElementById('attach-preview-bar');
+	const previewListEl = document.getElementById('attachPreviewList');
+	const messageTextarea = document.getElementById('chatMessageInput');
+
+	if (imgInputEl) imgInputEl.value = '';
+	if (fileInputEl) fileInputEl.value = '';
+	if (previewBarEl) previewBarEl.style.display = 'none';
+	if (previewListEl) previewListEl.innerHTML = '';
+	if (messageTextarea) messageTextarea.value = '';
+
+}
 // 모달 닫기
 function closeChatModal(){
+	cleanInputDatas();
 	// 채팅방 목록 비우기
 	document.getElementById('chatRoomList').innerHTML = "";
 	// 채팅창 영역 비우기
@@ -95,11 +184,8 @@ function closeChatModal(){
 		<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
 	`;
 	document.getElementById('chat-container').innerHTML = emptyRoomMsg;
-
 	document.getElementById('chat-modal').style.display = 'none';
-
 	document.getElementById('chat-input').style.display = 'none';
-
 	document.querySelector('.chat-room-meta').style.display = 'none';
 	// 보고 있는 채팅방 초기화
 	currentChatRoomId = null;
@@ -208,6 +294,8 @@ function subscribeToUnreadDetail() {
 
 // 채팅방 채팅 불러와서 채우기 -> 채팅방 목록 클릭했을 때 호출
 async function printFetchMessages(el) {
+	cleanInputDatas();
+
     const crId = el.dataset.crId;
 	document.getElementById('exitBtn').dataset.crId = crId;
 	const chatTitle = el.querySelector('.chat-room-title').textContent;

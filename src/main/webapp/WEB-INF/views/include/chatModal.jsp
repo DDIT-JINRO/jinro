@@ -20,10 +20,20 @@
 	    <div id="chat-container">
 	    	<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
 	    </div>
+	    <div id="attach-preview-bar" class="attach-preview-bar" hidden>
+			<div class="attach-preview-list" id="attachPreviewList"></div>
+			<button type="button" id="clearAttachBtn" class="attach-clear-btn">취소</button>
+		</div>
 	    <div class="chat-input" id="chat-input">
-	      <textarea id="chatMessageInput" placeholder="메시지를 입력하세요..."></textarea>
-	      <button id="sendMsgBtn">전송</button>
-	      <button id="exitBtn" data-cr-id>퇴장</button>
+	    	<div class="attach-group">
+	      		<img id="chatImgBtn" class="chat-img-btn" src="/images/image-attach.png" title="사진첨부">
+	      		<img id="chatFileBtn" class="chat-file-btn" src="/images/file-attach.png" title="파일첨부">
+	      		<input type="file" id="attach-input-img" accept="image/*" multiple hidden/>
+	      		<input type="file" id="attach-input-file" multiple hidden/>
+	    	</div>
+	    	<textarea id="chatMessageInput" placeholder="메시지를 입력하세요..."></textarea>
+	    	<button id="sendMsgBtn">전송</button>
+	    	<button id="exitBtn" data-cr-id>퇴장</button>
 	    </div>
 	  </div>
 	</div>

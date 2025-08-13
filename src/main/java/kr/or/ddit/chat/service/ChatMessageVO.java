@@ -1,7 +1,11 @@
 package kr.or.ddit.chat.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.or.ddit.util.file.service.FileDetailVO;
 import lombok.Data;
 
 @Data
@@ -24,4 +28,7 @@ public class ChatMessageVO {
 	private String memNickname;
 
 	private String memName;
+
+	private List<MultipartFile> files;
+	private List<FileDetailVO> fileDetailList;
 }
