@@ -1,0 +1,168 @@
+.topBox {
+	display: flex;
+	gap: 20px;
+}
+
+.topheader {
+	width: 100%;
+	height: 450px;
+}
+
+.bottomBox {
+	width: 100%;
+	height: 415px;
+}
+
+h3 {
+	margin-bottom: 10px;
+}
+/* ──────────────────────────────────────────────────────────
+   필터 영역
+──────────────────────────────────────────────────────────*/
+.filter-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: row-reverse;
+}
+
+.filter-box select,
+.filter-box input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-box input[type="text"] {
+    flex: 1;
+}
+
+.filter-box .btn-save {
+    background-color: #07223D;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filter-box .btn-save:hover {
+    background-color: #051a2d;
+}
+
+p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+
+/* ──────────────────────────────────────────────────────────
+   테이블 영역
+──────────────────────────────────────────────────────────*/
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+
+/* ──────────────────────────────────────────────────────────
+   하단 박스 (스케줄 관리)
+──────────────────────────────────────────────────────────*/
+.template-panel.bottomBox {
+    display: flex;
+    flex-direction: column; /* 헤더와 콘텐츠가 세로로 쌓이도록 */
+    gap: 20px;
+}
+
+.bottom-content-wrapper {
+    display: flex;
+    gap: 20px;
+    height: 100%;
+}
+
+.bottom-panel {
+    background-color: #f9f9f9; /* 배경색을 약간 다르게 하여 구분을 명확히 함 */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    flex: 1; /* 부모 요소의 남은 공간을 균등하게 나눠 가짐 */
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 10px 0 10px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.panel-section-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-item {
+    display: flex;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #555;
+    min-width: 80px; /* 라벨 너비를 고정하여 값들이 정렬되게 함 */
+}
+
+.info-value {
+    font-weight: 400;
+}
+
+/* ------------------ FullCalendar 영역 스타일 수정 ------------------ */
+/* FullCalendar 기본 스타일: 오늘 날짜의 노란색 하이라이트를 제거하거나 조정 */
+.fc-day-today {
+	background-color: transparent; /* 기본 노란색 배경 제거 */
+	border: none; /* 기본 테두리 제거 */
+}
+
+/* 사용자 정의 스타일: 선택된 날짜에 대한 파란색 하이라이트 */
+.fc-day.selected {
+	background-color: #e0f7fa; /* 연한 하늘색 배경 */
+	border: 2px solid #00acc1; /* 테두리 강조 */
+}
+
+/* 오늘 날짜가 선택되었을 경우의 스타일 */
+.fc-day-today.selected {
+	background-color: #e0f7fa !important; /* 선택된 날짜와 동일한 배경색 */
+	border: 2px solid #00acc1; /* 선택된 날짜와 동일한 테두리 */
+}
+/* FullCalendar 컨테이너 스타일 */
+#calendar {
+	flex : 1;
+	height: auto;
+	width: 100%; /* 화면 너비의 100%를 차지하도록 설정 */
+	max-width: none; /* 최대 너비 제한 해제 */
+	margin: 0px auto;
+	margin-bottom: 20px;
+	padding: 0; /* 내부 패딩을 0으로 설정 */
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+	margin: 0;
+}
+
+.fc .fc-toolbar-title {
+	font-size: 1em;
+	margin: 0;
+}
+
+/* 캘린더 버튼 크기 줄이기 */
+.fc .fc-button {
+	padding: 0; /* 버튼 내부 패딩을 줄입니다. */
+}
