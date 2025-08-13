@@ -111,6 +111,8 @@ public class AlarmServiceImpl implements AlarmService {
 			return "채용공고 마감 임박!!";
 		case REPLY_TO_PENALTY:
 			return "정책 위반에 대한 경고를 받았습니다.";
+        case SUBSCRIPTION_PAYMENT_DUE:
+            return "내일 정기결제가 예정되어 있습니다.";
 		default:
 			throw new IllegalArgumentException("정의되지 않은 알림 유형 : " + type);
 		}
