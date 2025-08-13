@@ -5,18 +5,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.or.ddit.cdp.aifdbck.sint.service.AiFeedbackSelfIntroService;
 import kr.or.ddit.cdp.aifdbck.sint.service.SelfIntroDetailDto;
+import kr.or.ddit.cdp.aifdbck.sint.service.SelfIntroFeedbackRequestDto;
 import kr.or.ddit.cdp.sint.service.SelfIntroContentVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroQVO;
 import kr.or.ddit.cdp.sint.service.SelfIntroService;
 import kr.or.ddit.cdp.sint.service.SelfIntroVO;
+import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
+import kr.or.ddit.mpg.pay.service.PaymentService;
+import kr.or.ddit.mpg.pay.service.PaymentVO;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("/cdp/aifdbck/sint")
@@ -26,6 +35,12 @@ public class AiFeedbackSelfIntroController {
 
 	@Autowired
 	private SelfIntroService selfIntroService;
+
+	@Autowired
+	private AiFeedbackSelfIntroService aiFeedbackSelfIntroService;
+
+	@Autowired
+	private PaymentService paymentService;
 
 	@GetMapping("/aiFeedbackSelfIntroList.do")
 	public String aiImitationInterviewPage(Principal principal, Model model) {
@@ -85,5 +100,41 @@ public class AiFeedbackSelfIntroController {
 		dto.setContents(contentList);
 
 		return dto; // JSON 형태로 변환되어 클라이언트로 전송됨
+	}
+
+	// 사용자의 구독 상태와 이력서 첨삭 횟수를 확인
+	@GetMapping("/checkSubscriptionPI.do")
+	@ResponseBody
+	public ResponseEntity<PaymentVO> checkUserSubscription(Principal principal) {
+		if (principal == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+
+		int memId = Integer.parseInt(principal.getName());
+
+		// 1. 회원 현재 구독정보 가져오기
+		MemberSubscriptionVO currentSub = paymentService.selectByMemberId(memId);
+		if (currentSub == null) {
+			PaymentVO paymentVO = new PaymentVO();
+			return ResponseEntity.ok(paymentVO);
+		}
+
+		// 2. 현재 구독정보가 잇으면 최신 결제 정보(남은 횟수 포함) 가져오기
+		PaymentVO paymentVO = aiFeedbackSelfIntroService.selectLastPaymentInfo(currentSub);
+		return ResponseEntity.ok(paymentVO);
+	}
+
+	// 횟수 차감 및 AI 피드백을 요청
+	@PostMapping("/requestFeedbackPI.do")
+	@ResponseBody
+	public ResponseEntity<String> requestFeedback(@RequestBody SelfIntroFeedbackRequestDto body) {
+
+		// DTO를 사용하므로 더 이상 수동으로 값을 꺼내거나 형변환할 필요가 없습니다
+		if (body.getPayId() == null || body.getSections() == null || body.getSections().isEmpty()) {
+			return ResponseEntity.badRequest().body("필수 파라미터가 누락되었습니다");
+		}
+
+		String feedback = aiFeedbackSelfIntroService.deductAndGetFeedback(body.getPayId(), body.getSections());
+		return ResponseEntity.ok(feedback);
 	}
 }

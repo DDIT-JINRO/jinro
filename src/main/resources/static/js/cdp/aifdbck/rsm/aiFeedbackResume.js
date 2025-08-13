@@ -2,89 +2,126 @@
 /**
  * 이력서 AI 피드백 화면을 위한 자바스크립트
  */
+document.addEventListener('DOMContentLoaded', () => {
 
-let aiFeedbackData = null;
-let originalData = null;
+	let subscriptionInfo = null;
+	let aiFeedbackData = null;
+	let originalData = null;
 
-const resumeList = document.getElementById('resumeList');
-resumeList.addEventListener('change', loadResumeDetail);
+	const resumeList = document.getElementById('resumeList');
+	resumeList.addEventListener('change', loadResumeDetail);
 
-const requestAiFeedbackBtn = document.getElementById('requestAiFeedback');
-if (requestAiFeedbackBtn) {
-	requestAiFeedbackBtn.addEventListener('click', requestAiFeedback);
-}
-
-//불필요한 문장정리
-function cleanAiResponse(text) {
-	let cleanedText = text.trim();
-	if (cleanedText.startsWith('```json')) {
-		cleanedText = cleanedText.substring('```json'.length);
+	const requestAiFeedbackBtn = document.getElementById('requestAiFeedback');
+	if (requestAiFeedbackBtn) {
+		requestAiFeedbackBtn.addEventListener('click', requestAiFeedback);
 	}
 
-	if (cleanedText.endsWith('```')) {
-		cleanedText = cleanedText.substring(0, cleanedText.length - '```'.length);
-	}
-	return cleanedText.trim();
-}
-
-//이력서 상세 호출
-function loadResumeDetail() {
-	const selectedResumeId = resumeList.value;
-
-	if (!selectedResumeId) {
-		document.querySelector('.aifb-title').textContent = '이력서 제목';
-		document.getElementById('questionsWrapper').innerHTML = '이력서의 내용이 출력될 공간입니다';
-		document.getElementById('feedbackArea').innerHTML = 'AI의 피드백 내용이 출력될 공간입니다';
-		return;
-	}
-
-
-	fetch(`/cdp/aifdbck/rsm/getResumeDetail.do?resumeId=${selectedResumeId}`)
-		.then(response => {
-			if (!response.ok) throw new Error('이력서 상세 정보 요청 실패');
-			return response.json();
-		})
-		.then(data => {
-			if (data) {
-				// 1️⃣ 이미지 경로 정리
-				data.resumeContent = data.resumeContent.replace(/\\+/g, '/');
-				originalData = data;
-
-				document.querySelector('.aifb-title').textContent = data.resumeTitle
-					;
-
-				// HTML 내용을 파싱하여 불필요한 요소 제거
-				const parser = new DOMParser();
-				const doc = parser.parseFromString(data.resumeContent, 'text/html');
-
-				// '필수 입력 정보입니다.' 문구 제거
-				const requiredInfo = doc.querySelector('.required-info');
-				if (requiredInfo) {
-					requiredInfo.remove();
+	//페이지 로드시 구독 상태를 확인하는 함수
+	const checkSubscription = () => {
+		fetch('/cdp/aifdbck/rsm/checkSubscription.do')
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('구독 정보 확인 중 서버 오류 발생');
 				}
-
-				// 이력서의 HTML 내용을 innerHTML로 삽입
-				document.getElementById('questionsWrapper').innerHTML = data.resumeContent;
-				document.getElementById('feedbackArea').innerHTML = 'AI의 피드백 내용이 출력될 공간입니다';
-			}
-		})
-		.catch(error => {
-			console.error('이력서 불러오기 오류:', error);
-			alert('이력서 데이터를 불러오는 데 실패했습니다.');
-			document.querySelector('.aifb-title').textContent = '오류 발생';
-			document.getElementById('questionsWrapper').innerHTML = '데이터를 불러오는 데 실패했습니다.';
-		});
-}
-
-//이력서 ai첨삭 호출
-function requestAiFeedback() {
-	if (!originalData) {
-		alert('먼저 이력서를 선택해주세요.');
-		return;
+				return response.json(); //.json()의 결과는 Promise이므로 return
+			})
+			.then(data => {
+				subscriptionInfo = data;
+				if (!subscriptionInfo || !subscriptionInfo.payId) {
+					alert('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.');
+					resumeList.disabled = true;
+					requestAiFeedbackBtn.disabled = true;
+				}
+			})
+			.catch(error => {
+				alert('구독 정보를 불러오는 중 오류가 발생했습니다. 페이지를 새로고침해주세요.');
+				resumeList.disabled = true;
+				requestAiFeedbackBtn.disabled = true;
+			})
 	}
 
-	const feedbackArea = document.getElementById('feedbackArea');
-	feedbackArea.innerHTML = `
+	//불필요한 문장정리
+	function cleanAiResponse(text) {
+		let cleanedText = text.trim();
+		if (cleanedText.startsWith('```json')) {
+			cleanedText = cleanedText.substring('```json'.length);
+		}
+
+		if (cleanedText.endsWith('```')) {
+			cleanedText = cleanedText.substring(0, cleanedText.length - '```'.length);
+		}
+		return cleanedText.trim();
+	}
+
+	//이력서 상세 호출
+	function loadResumeDetail() {
+		const selectedResumeId = resumeList.value;
+
+		if (!selectedResumeId) {
+			document.querySelector('.aifb-title').textContent = '이력서 제목';
+			document.getElementById('questionsWrapper').innerHTML = '이력서의 내용이 출력될 공간입니다';
+			document.getElementById('feedbackArea').innerHTML = 'AI의 피드백 내용이 출력될 공간입니다';
+			return;
+		}
+
+
+		fetch(`/cdp/aifdbck/rsm/getResumeDetail.do?resumeId=${selectedResumeId}`)
+			.then(response => {
+				if (!response.ok) throw new Error('이력서 상세 정보 요청 실패');
+				return response.json();
+			})
+			.then(data => {
+				if (data) {
+					// 1️⃣ 이미지 경로 정리
+					data.resumeContent = data.resumeContent.replace(/\\+/g, '/');
+					originalData = data;
+
+					document.querySelector('.aifb-title').textContent = data.resumeTitle
+						;
+
+					// HTML 내용을 파싱하여 불필요한 요소 제거
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(data.resumeContent, 'text/html');
+
+					// '필수 입력 정보입니다.' 문구 제거
+					const requiredInfo = doc.querySelector('.required-info');
+					if (requiredInfo) {
+						requiredInfo.remove();
+					}
+
+					// 이력서의 HTML 내용을 innerHTML로 삽입
+					document.getElementById('questionsWrapper').innerHTML = data.resumeContent;
+					document.getElementById('feedbackArea').innerHTML = 'AI의 피드백 내용이 출력될 공간입니다';
+				}
+			})
+			.catch(error => {
+				console.error('이력서 불러오기 오류:', error);
+				alert('이력서 데이터를 불러오는 데 실패했습니다.');
+				document.querySelector('.aifb-title').textContent = '오류 발생';
+				document.getElementById('questionsWrapper').innerHTML = '데이터를 불러오는 데 실패했습니다.';
+			});
+	}
+
+	//이력서 ai첨삭 호출
+	function requestAiFeedback() {
+
+		if (!subscriptionInfo || !subscriptionInfo.payId) {
+			alert('유효한 구독 정보가 없습니다.');
+			return;
+		}
+
+		if (!originalData) {
+			alert('먼저 이력서를 선택해주세요.');
+			return;
+		}
+
+		if (subscriptionInfo.payResumeCnt <= 0) {
+			alert('이력서 첨삭 횟수를 모두 사용했습니다.');
+			return;
+		}
+
+		const feedbackArea = document.getElementById('feedbackArea');
+		feedbackArea.innerHTML = `
 		<div class="spinner-wrapper">
 			<div class="spinner-border text-primary" role="status">
 				<span class="visually-hidden">Loading...</span>
@@ -93,38 +130,46 @@ function requestAiFeedback() {
 		</div>
 	`;
 
-	const parser = new DOMParser();
-	const doc = parser.parseFromString(originalData.resumeContent, 'text/html');
-	const cleanedHtml = doc.body.innerHTML;
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(originalData.resumeContent, 'text/html');
+		const cleanedHtml = doc.body.innerHTML;
 
-	fetch('/ai/proofread/resume', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ "html": cleanedHtml })
-	})
-		.then(response => {
-			if (!response.ok) throw new Error('AI 첨삭 요청 실패');
-			return response.text();
+		fetch('/cdp/aifdbck/rsm/requestFeedback.do', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				"html": originalData.resumeContent,
+				"payId": subscriptionInfo.payId
+			})
 		})
-		.then(aiResponseText => {
-			const cleanedText = cleanAiResponse(aiResponseText);
+			.then(response => {
+				if (!response.ok) throw new Error('AI 첨삭 요청 실패');
+				return response.text();
+			})
+			.then(aiResponseText => {
+				const cleanedText = cleanAiResponse(aiResponseText);
 
-			aiFeedbackData = {
-				sections_feedback: [cleanedText], // 배열로 감싸기!
-				questions: ["이력서 전체 피드백"] // 제목만 하나 넣기
-			};
+				aiFeedbackData = {
+					sections_feedback: [cleanedText], // 배열로 감싸기!
+					questions: ["이력서 전체 피드백"] // 제목만 하나 넣기
+				};
 
-			// 화면 표시
-			document.getElementById('feedbackArea').innerHTML = cleanedText.replace(/\n/g, '<br>');
-		})
-		.catch(error => {
-			console.error('AI 피드백 요청 오류:', error);
-			feedbackArea.textContent = 'AI 피드백을 불러오는 데 실패했습니다.';
-			alert('AI 피드백을 불러오는 데 실패했습니다.');
-		});
-}
+				feedbackArea.innerHTML = aiResponseText.replace(/\n/g, '<br>');
+				subscriptionInfo.payResumeCnt--;
+				alert(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payResumeCnt}회)`);
 
+				// 화면 표시
+				//document.getElementById('feedbackArea').innerHTML = cleanedText.replace(/\n/g, '<br>');
+			})
+			.catch(error => {
+				console.error('AI 피드백 요청 오류:', error);
+				feedbackArea.textContent = 'AI 피드백을 불러오는 데 실패했습니다.';
+				alert('AI 피드백을 불러오는 데 실패했습니다.');
+			});
+	}
 
+	checkSubscription();
+});
 //이력서 수정화면으로 이동
 function requestProofread() {
 	const selectedResumeId = document.getElementById('resumeList').value;
