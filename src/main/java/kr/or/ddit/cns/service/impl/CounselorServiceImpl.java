@@ -180,7 +180,7 @@ public class CounselorServiceImpl implements CounselorService {
 
 	@Override
 	@Transactional
-	public String updateCounselStatus(CounselingVO counselingVO,int payId) {
+	public String updateCounselStatus(CounselingVO counselingVO, Integer payId) {
 		
 		// TODO Auto-generated method stub
 		String counselUrl = "";
