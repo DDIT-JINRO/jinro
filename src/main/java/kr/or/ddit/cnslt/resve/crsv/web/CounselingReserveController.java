@@ -135,7 +135,6 @@ public class CounselingReserveController {
 			// FlashAttribute가 없을 경우의 예외 처리
 			return "redirect:/cnslt/resve/crsv/reservation.do";
 		}
-		log.info("reservationDetail -> payId" + payId);
 		MemberVO memberVO = new MemberVO();
 		memberVO.setMemId(counselingVO.getMemId());
 		memberVO = counselingReserveService.selectMemberInfo(memberVO);
@@ -159,8 +158,8 @@ public class CounselingReserveController {
 		return "cnslt/resve/crsv/counselingreserveDetail";
 	}
 
-	@GetMapping("/checkSbscription")
-	public ResponseEntity<PaymentVO> checkSbscription(@RequestParam int memId) {
+	@GetMapping("/checkSubscription")
+	public ResponseEntity<PaymentVO> checkSubscription(@RequestParam int memId) {
 
 		// 회원 현재 구독 정보 가져오기
 		MemberSubscriptionVO currentSub = paymentService.selectByMemberId(memId);

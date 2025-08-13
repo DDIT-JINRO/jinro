@@ -180,7 +180,8 @@ public class CounselorServiceImpl implements CounselorService {
 
 	@Override
 	@Transactional
-	public String updateCounselStatus(CounselingVO counselingVO) {
+	public String updateCounselStatus(CounselingVO counselingVO,int payId) {
+		
 		// TODO Auto-generated method stub
 		String counselUrl = "";
 		String userUrl = "";
@@ -200,11 +201,19 @@ public class CounselorServiceImpl implements CounselorService {
 				videoService.createVideoChatRoom(counselingVO.getCounselId());
 			}
 		}
+		if(counselingVO.getCounselStatus().equals("S04002")) {
+			int cnt = this.plusPayConsultCnt(payId);
+		}
 
 		this.counselorMapper.updateCounselStatus(counselingVO);
 		counselingVO = this.counselorMapper.selectCounselDetail(counselingVO.getCounselId());
 
 		return counselingVO.getCounselUrlCou();
+	}
+	
+	private int plusPayConsultCnt(int payId) {
+		// TODO Auto-generated method stub
+		return counselorMapper.plusPayConsultCnt(payId);
 	}
 
 }

@@ -461,5 +461,11 @@
 	  </set>
 	  WHERE counsel_id = #{counselId}
 	</update>
+	
+	<update id="plusPayConsultCnt" parameterType="int">
+		UPDATE PAYMENT
+			SET PAY_CONSULT_CNT = PAY_CONSULT_CNT + 1
+			WHERE PAY_ID = #{payId}
+	</update>
 
 </mapper>

@@ -102,4 +102,6 @@ public interface CounselorMapper {
 
 	public int updateCounselStatus(CounselingVO counselingVO);
 
+	public int plusPayConsultCnt(int payId);
+
 }

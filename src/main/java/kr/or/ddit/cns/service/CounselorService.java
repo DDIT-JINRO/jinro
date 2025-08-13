@@ -79,6 +79,6 @@ public interface CounselorService {
 	 */
 	public List<CounselingVO> selectCounselingSchedules(CounselingVO counselingVO);
 
-	public String updateCounselStatus(CounselingVO counselingVO);
+	public String updateCounselStatus(CounselingVO counselingVO,int payId);
 
 }

@@ -178,7 +178,7 @@ function renderCounselDetail(counselData) {
 	// 상태 정보 채우기
 	document.getElementById('counselStatus').textContent = counselData.counselStatusStr || '';
 
-	statusBtn(counselData.counselStatus, counselData.counselId, counselData.counselMethod, counselData.counselReqDatetime, counselData.counselUrlCou);
+	statusBtn(counselData.counselStatus, counselData.counselId, counselData.counselMethod, counselData.counselReqDatetime, counselData.counselUrlCou, counselData.memId);
 
 
 	// 신청 동기 채우기
@@ -191,7 +191,7 @@ function renderCounselDetail(counselData) {
 	document.getElementById('memPhoneNumber').textContent = counselData.memPhoneNumber || '';
 }
 
-function statusBtn(status, id, method, date, url) {
+function statusBtn(status, id, method, date, url ,memId) {
 	const datetime = new Date(date);
 	const subBtn = document.querySelector('.btn.btn-save');
 	const cancelBtn = document.querySelector('.btn.btn-cancel');
@@ -227,11 +227,20 @@ function statusBtn(status, id, method, date, url) {
 		});
 
 		updatedCancelBtn.style.display = 'block';
-		updatedCancelBtn.addEventListener("click", function() {
-			axios.get('/api/cns/updateCounselStatus.do', {
+		updatedCancelBtn.addEventListener("click",async function() {
+			const payVO = await axios.get('/cnslt/resve/checkSubscription',{
+				params: {
+					memId : memId
+				}
+			});
+			
+			const payId = payVO.data.payId;
+			console.log("patId",payId);
+			await axios.get('/api/cns/updateCounselStatus.do', {
 				params: {
 					counselId: id,
-					counselStatus: "S04002"
+					counselStatus: "S04002",
+					payId :payId
 				}
 			})
 				.then(response => {
