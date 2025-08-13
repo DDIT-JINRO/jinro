@@ -42,4 +42,7 @@ public interface MemberSubscriptionMapper {
 
 	// 원래 구독의 상태를 다시 'Y'로 복원
 	public void reactivateSubscriptionById(int msId);
+
+	//내일이 결제일인 구독 목록을 DB에서 조회
+	public List<MemberSubscriptionVO> findSubscriptionsDueTomorrow();
 }

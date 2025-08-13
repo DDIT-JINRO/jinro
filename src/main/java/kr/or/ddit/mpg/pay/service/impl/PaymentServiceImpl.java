@@ -288,4 +288,11 @@ public class PaymentServiceImpl implements PaymentService {
 			}
 		}
 	}
+	
+	//내일이 결제일인 구독 목록을 DB에서 조회
+	@Override
+	public List<MemberSubscriptionVO> findSubscriptionsDueTomorrow() {
+		// TODO Auto-generated method stub
+		return memberSubscriptionMapper.findSubscriptionsDueTomorrow();
+	}
 }

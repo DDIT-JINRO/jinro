@@ -42,5 +42,8 @@ public interface PaymentService {
     
     // 스케줄러가 호출할 정기경제 메서드
     public void processScheduledPayments();
+    
+    //내일이 결제일인 구독 목록을 DB에서 조회
+	public List<MemberSubscriptionVO> findSubscriptionsDueTomorrow();
 
 }

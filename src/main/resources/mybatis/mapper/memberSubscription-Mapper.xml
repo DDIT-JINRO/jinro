@@ -166,48 +166,71 @@
 	    FROM	MEMBER_SUBSCRIPTION
 	    WHERE	MEM_ID = #{memId}
 	    AND		RECUR_PAY_CNT = 0
-</select>
-
-<!-- 
-//이전에 취소했던 원래 구독 정보 조회(가장 최신 'n' 상태 구독)
-	public MemberSubscriptionVO findCancelledOriginalSubscription(int memId);
- -->
-<select id="findCancelledOriginalSubscription" resultType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO">
-        SELECT	MS_ID
-		      , MEM_ID
-		      , SUB_ID
-		      , CUSTOMER_UID
-		      , SUB_STATUS
-		      , SUB_START_DT
-		      , SUB_END_DT
-		      , LAST_PAY_DT
-		      , RECUR_PAY_CNT
-		      , CREATED_DT
-		      , UPDATED_DT
-	    FROM	MEMBER_SUBSCRIPTION
-        WHERE	MEM_ID = #{memId}
-          AND	SUB_STATUS = 'N'
-          AND	SUB_END_DT <![CDATA[ > ]]> TRUNC(SYSDATE)
-        ORDER	BY MS_ID DESC
-		FETCH FIRST 1 ROWS ONLY
-</select>
-
-<!-- 
-//예약된 구독은 DB에서 삭제
-	public void deleteSubscriptionById(int msId);
- -->
-<delete id="deleteSubscriptionById">
-    DELETE FROM MEMBER_SUBSCRIPTION 
-    WHERE  MS_ID = #{msId}
-</delete>
-
-<!-- 
-//원래 구독의 상태를 다시 'Y'로 복원
-	public void reactivateSubscriptionById(int msId);
+	</select>
+	
+	<!-- 
+	//이전에 취소했던 원래 구독 정보 조회(가장 최신 'n' 상태 구독)
+		public MemberSubscriptionVO findCancelledOriginalSubscription(int memId);
 	 -->
-<update id="reactivateSubscriptionById">
-    UPDATE	MEMBER_SUBSCRIPTION 
-    SET		SUB_STATUS = 'Y'
-    WHERE	MS_ID = #{msId}
-</update>
+	<select id="findCancelledOriginalSubscription" resultType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO">
+	        SELECT	MS_ID
+			      , MEM_ID
+			      , SUB_ID
+			      , CUSTOMER_UID
+			      , SUB_STATUS
+			      , SUB_START_DT
+			      , SUB_END_DT
+			      , LAST_PAY_DT
+			      , RECUR_PAY_CNT
+			      , CREATED_DT
+			      , UPDATED_DT
+		    FROM	MEMBER_SUBSCRIPTION
+	        WHERE	MEM_ID = #{memId}
+	          AND	SUB_STATUS = 'N'
+	          AND	SUB_END_DT <![CDATA[ > ]]> TRUNC(SYSDATE)
+	        ORDER	BY MS_ID DESC
+			FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<!-- 
+	//예약된 구독은 DB에서 삭제
+		public void deleteSubscriptionById(int msId);
+	 -->
+	<delete id="deleteSubscriptionById">
+	    DELETE FROM MEMBER_SUBSCRIPTION 
+	    WHERE  MS_ID = #{msId}
+	</delete>
+	
+	<!-- 
+	//원래 구독의 상태를 다시 'Y'로 복원
+		public void reactivateSubscriptionById(int msId);
+		 -->
+	<update id="reactivateSubscriptionById">
+	    UPDATE	MEMBER_SUBSCRIPTION 
+	    SET		SUB_STATUS = 'Y'
+	    WHERE	MS_ID = #{msId}
+	</update>
+	
+	<!-- 
+	//내일이 결제일인 구독 목록을 DB에서 조회
+	public List<MemberSubscriptionVO> findSubscriptionsDueTomorrow();
+	 -->
+	<select id="findSubscriptionsDueTomorrow" resultType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO">
+	    SELECT	a.MS_ID
+			  , a.MEM_ID
+			  , a.SUB_ID
+			  , a.CUSTOMER_UID
+			  , a.SUB_STATUS
+			  , a.SUB_START_DT
+			  , a.SUB_END_DT
+			  , a.LAST_PAY_DT
+			  , a.RECUR_PAY_CNT
+			  , a.CREATED_DT
+			  , a.UPDATED_DT
+			  , b.SUB_PRICE
+	    FROM	MEMBER_SUBSCRIPTION a
+	    JOIN	SUBSCRIBE b ON (A.SUB_ID = B.SUB_ID)
+	    WHERE	SUB_STATUS = 'Y'
+	    AND		TRUNC(SUB_END_DT) = TRUNC(SYSDATE+1)
+	</select>
 </mapper>
