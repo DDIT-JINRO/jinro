@@ -1,6 +1,5 @@
 /**
- * 
- */
+ * */
 
 function fetchEntList(page = 1) {
 
@@ -102,37 +101,68 @@ function entDetail(formData) {
 		.then(res => {
 			const { companyVO, filePath } = res.data;
 
-			console.log(res.data);
+			document.getElementById('postcode').value = "";
 
 			const detailAbout = document.getElementById('entDetailAbout');
-
 			detailAbout.innerHTML = `${companyVO.cpDescription == null ? '기업정보가 없습니다.' : companyVO.cpDescription}`;
 
 			const linkElement = document.getElementById('companyWebsiteLink');
-
-
 			const companyWebsiteUrl = companyVO.cpWebsite;
-
-
 			if (companyWebsiteUrl) {
 				linkElement.href = companyWebsiteUrl;
 			} else {
 				linkElement.addEventListener('click', (e) => e.preventDefault());
 			}
 
-			if (filePath != null || filePath != "") {
-				document.getElementById('entLogo').src = filePath || '-';
+			// --- 이미지 URL 미리보기 처리 ---
+			const cpLogoPreview = document.getElementById('cpLogoPreview');
+			const imageUploadBox = document.getElementById('imageUploadBox');
+			if (companyVO.cpImgUrl) {
+				cpLogoPreview.src = companyVO.cpImgUrl;
+				cpLogoPreview.style.display = 'block';
+				// URL이 있을 경우 기존 업로드 텍스트 및 아이콘 숨기기
+				if (imageUploadBox) {
+					imageUploadBox.querySelector('i').style.display = 'none';
+					imageUploadBox.querySelector('p').style.display = 'none';
+				}
 			} else {
-				document.getElementById('entLogo').src = companyVO.cpImgUrl || '-';
+				cpLogoPreview.src = '';
+				cpLogoPreview.style.display = 'none';
+				// URL이 없을 경우 업로드 텍스트 및 아이콘 보이기
+				if (imageUploadBox) {
+					imageUploadBox.querySelector('i').style.display = 'block';
+					imageUploadBox.querySelector('p').style.display = 'block';
+				}
 			}
 
+
+			document.getElementById('cpNoOn').value = companyVO.cpId || '';
+			document.getElementById('cpName').value = companyVO.cpName || '';
+			document.getElementById('jibunAddress').value = companyVO.cpRegion || '';
+			document.getElementById('cpSclae').value = companyVO.ccName || '';
+			document.getElementById('cpWebsite').value = companyVO.cpWebsite || '';
+			document.getElementById('cpImgUrl').value = companyVO.cpImgUrl || '';
+			document.getElementById('cpDescription').value = companyVO.cpDescription || '';
+			document.getElementById('cpBusinessNo').value = formatBusinessNumber(companyVO.cpBusino) || '';
+
+			const cpSclaeSelect = document.getElementById('cpSclae');
+			const options = cpSclaeSelect.options;
+
+			const selectedValue = companyVO.cpScale;
+			for (let i = 0; i < options.length; i++) {
+				if (options[i].value === selectedValue) {
+					options[i].selected = true;
+					break;
+				}
+			}
+
+			document.getElementById('entLogo').src = companyVO.cpImgUrl;
 			document.getElementById('entName').innerHTML = companyVO.cpName || '-';
 			document.getElementById('gubun').innerHTML = companyVO.cpScale || '-';
 			document.getElementById('gubunName').innerHTML = companyVO.ccName || '-';
 			document.getElementById('entId').innerHTML = `NO.${companyVO.cpId}` || '-';
 			document.getElementById('entName2').innerText = companyVO.cpName || '-';
 			document.getElementById('entAddress').innerText = companyVO.cpRegion || '-';
-
 		})
 		.catch(error => {
 			console.error('기업 정보 불러오기 실패', error);
@@ -197,22 +227,122 @@ function execDaumPostcode() {
 	}).open();
 }
 
-function save() {
+function entSave() {
 	const saveBtn = document.getElementById('btnRegister');
-	
+
 	saveBtn.addEventListener('click', function() {
-		const cpName = document.getElementById('cpName').value;
-		
+
+		const cpNoOn = document.getElementById('cpNoOn').value.trim(); // ID 필드
+		const cpName = document.getElementById('cpName').value.trim();
+		const cpWebsite = document.getElementById('cpWebsite').value.trim();
+		const cpImgUrl = document.getElementById('cpImgUrl').value.trim();
+		const postcode = document.getElementById('postcode').value.trim();
+		const jibunAddress = document.getElementById('jibunAddress').value.trim();
+		const cpSclae = document.getElementById('cpSclae').value;
+		let cpBusinessNo = document.getElementById('cpBusinessNo').value.trim();
+		const cleanedBusinessNo = cpBusinessNo.replace(/-/g, '');
+		const cpDescription = document.getElementById('cpDescription').value.trim();
+
 		let form = new FormData();
+
+
+		if (cpNoOn && cpNoOn !== '-') {
+			form.set("cpId", cpNoOn);
+		}
+
+
 		form.set("cpName", cpName);
+		form.set("cpWebsite", cpWebsite);
+		form.set("cpImgUrl", cpImgUrl);
+
+		form.set("cpRegion", jibunAddress);
+
+		form.set("cpScale", cpSclae);
+		form.set("cpBusino", cleanedBusinessNo);
+		form.set("cpDescription", cpDescription);
+
 		axios.post('/empt/enp/enterprisePostingUpdate.do', form).then(res => {
-			console.log(res);
-		})
+			alert('등록/수정 완료');
 
+		}).catch(err => {
+			console.error("저장 실패", err);
 
-	})
+		});
+	});
 }
-save();
+
+function formatBusinessNumber(number) {
+	// 숫자를 문자열로 먼저 변환합니다.
+	const numberStr = String(number);
+
+	if (numberStr && numberStr.length === 10) {
+		const part1 = numberStr.slice(0, 3);
+		const part2 = numberStr.slice(3, 5);
+		const part3 = numberStr.slice(5, 10);
+		return `${part1}-${part2}-${part3}`;
+	}
+	return numberStr; // 10자리가 아니면 원본 반환
+}
+
+function resetForm() {
+
+	const resetButton = document.getElementById('btnReset');
+	resetButton.addEventListener('click', function() {
+		// 텍스트, 숫자, URL 입력 필드 초기화
+		document.getElementById('cpName').value = '';
+		document.getElementById('cpWebsite').value = '';
+		document.getElementById('cpImgUrl').value = '';
+		document.getElementById('postcode').value = '';
+		document.getElementById('jibunAddress').value = '';
+		document.getElementById('cpBusinessNo').value = '';
+		document.getElementById('cpNoOn').value = '';
+
+		// textarea 초기화
+		document.getElementById('cpDescription').value = '';
+
+		// select 박스 초기화 (첫 번째 옵션 선택)
+		document.getElementById('cpSclae').selectedIndex = 0;
+
+		// 파일 입력 필드 초기화
+		const cpLogoFile = document.getElementById('cpLogoFile');
+		if (cpLogoFile) {
+			cpLogoFile.value = ''; // 파일 선택 내용 삭제
+		}
+
+		// 이미지 미리보기 초기화
+		const cpLogoPreview = document.getElementById('cpLogoPreview');
+		const imageUploadBox = document.getElementById('imageUploadBox');
+
+		cpLogoPreview.src = '';
+		cpLogoPreview.style.display = 'none';
+
+		// 업로드 안내 텍스트와 아이콘 다시 표시
+		if (imageUploadBox) {
+			const icon = imageUploadBox.querySelector('i');
+			const text = imageUploadBox.querySelector('p');
+			if (icon) icon.style.display = 'block';
+			if (text) text.style.display = 'block';
+		}
+
+		// 변경/삭제 버튼 숨기기 (만약 있다면)
+		const imageUploadControls = document.querySelector('.image-upload-controls');
+		if (imageUploadControls) {
+			imageUploadControls.style.display = 'none';
+		}
+
+		// 우편번호 API로 채워지는 도로명 주소 필드도 초기화
+		const roadAddress = document.getElementById('roadAddress');
+		if (roadAddress) {
+			roadAddress.value = '';
+		}
+	});
+
+
+
+}
+
+resetForm();
+entSave();
 imgView();
 entSearchFn();
 fetchEntList();

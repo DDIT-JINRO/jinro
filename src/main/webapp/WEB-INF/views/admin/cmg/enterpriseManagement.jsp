@@ -110,13 +110,13 @@
 			</div>
 			<div class="template-panel entAbout" style="margin-top: 20px;">
 				<div class="middleTitle" style="margin-bottom: 10px;">기업 설명</div>
-				<div id="entDetailAbout"></div>
+				<textarea id="entDetailAbout"></textarea>
 			</div>
 		</div>
 	</div>
 
 	<div class="template-panel admin-entMng-2">
-		<div class="middleTitle">신규 기업 등록</div>
+		<div class="middleTitle">기업 등록/수정</div>
 
 		<p class="form-subtitle">새로운 기업 정보를 등록하여 다양한 인재를 만나보세요.</p>
 
@@ -129,15 +129,6 @@
 						<input type="text" id="cpName" placeholder="예) 커리어패스 주식회사">
 					</div>
 				</div>
-
-				<div class="input-group">
-					<label for="cpIndustry">업종</label>
-					<div class="input-with-icon">
-						<i class="fas fa-briefcase"></i>
-						<input type="text" id="cpIndustry" placeholder="예) 소프트웨어 개발, 컨설팅">
-					</div>
-				</div>
-
 				<div class="input-group">
 					<label for="cpWebsite">홈페이지 URL</label>
 					<div class="input-with-icon">
@@ -146,13 +137,27 @@
 					</div>
 				</div>
 				<div class="input-group">
+					<label for="cpImgUrl">이미지 URL</label>
+					<div class="input-with-icon">
+						<i class="fas fa-globe"></i>
+						<input type="text" id="cpImgUrl" placeholder="예) https://www.careerpath.store">
+					</div>
+				</div>
+
+				<div class="input-group">
 					<label for="postcode">주소</label>
 					<div class="address-search-group">
+						<div class="input-with-icon">
+							<i class="fas fa-map-marked-alt"></i>
 							<input type="text" id="postcode" placeholder="우편번호" readonly>
-							<button type="button" id="btnPostcodeSearch" class="btn-secondary" onclick="execDaumPostcode()">
-								<i class="fas fa-search"></i> 찾기
-							</button>
-						<input type="text" id="jibunAddress" placeholder="지번주소" readonly>
+						</div>
+						<button type="button" id="btnPostcodeSearch" class="btn-secondary" onclick="execDaumPostcode()">
+							<i class="fas fa-search"></i> 찾기
+						</button>
+						<div class="input-with-icon">
+							<i class="fas fa-home"></i>
+							<input type="text" id="jibunAddress" placeholder="지번주소" readonly>
+						</div>
 					</div>
 				</div>
 				<div class="location-group">
@@ -167,9 +172,7 @@
 							<option value='G30UNK'>미지정</option>
 						</select>
 					</div>
-
 				</div>
-
 				<div class="input-group">
 					<label for="cpBusinessNo">사업자 등록번호</label>
 					<div class="input-with-icon">
@@ -177,20 +180,32 @@
 						<input type="text" id="cpBusinessNo" placeholder="예) 123-45-67890">
 					</div>
 				</div>
-				<div class="form-actions">
-					<button type="button" id="btnRegister" class="btn-primary">
-						<i class="fas fa-save"></i> 저장
-					</button>
+				<div class="flex" style="flex-direction: row-reverse; gap: 20px;">
+					<div class="form-actions">
+						<button type="button" id="btnRegister" class="btn-primary">
+							<i class="fas fa-save"></i> 저장
+						</button>
+					</div>
+					<div class="form-actions">
+						<button type="button" id="btnReset" class="btn-warning">
+							<i class="fas fa-undo-alt"></i> 초기화
+						</button>
+					</div>
 				</div>
 			</div>
 
 			<div class="form-image-section">
+				<div class="input-group">
+					<label for="cpNoOn">ID</label>
+					<input type="text" id="cpNoOn" readonly="readonly">
+				</div>
 				<div class="image-upload-box" id="imageUploadBox">
 					<i class="fas fa-camera"></i>
-					<p>기업 로고를 업로드하세요</p>
+					<p style="margin-top: 0;">기업 로고를 업로드하세요</p>
 					<input type="file" id="cpLogoFile" accept="image/*" class="file-input">
 					<img id="cpLogoPreview" src="" alt="로고 미리보기" style="display: none;">
 				</div>
+
 
 				<div class="image-upload-controls">
 					<button type="button" id="btnChangeLogo" class="btn-secondary">변경</button>
