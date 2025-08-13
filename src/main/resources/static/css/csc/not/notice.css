@@ -1,8 +1,5 @@
 @charset "UTF-8";
 
-/* ==============================
-   검색창
-   ============================== */
 .com-select-wrapper {
     position: relative;
     display: flex;
@@ -21,11 +18,22 @@
     background-color: transparent;
     border: none;
     padding: 0 36px 0 16px; /* 오른쪽 패딩으로 화살표 공간 확보 */
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #4b5563;
     cursor: pointer;
     height: 100%;
+    font-weight: 600;
 }
+
+.textmessage {
+	font-size: 14px;
+	color: gray;
+}
+
+.search-input {
+	font-weight: 500;
+}
+
 .com-status-filter:focus {
     outline: none;
 }
@@ -54,6 +62,29 @@
     background-color: #fff;
 }
 
+.teenListTop {
+	padding-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.teenListTop button {
+	width: 80px;
+	border: none;
+	border-radius: 10px;
+	background-color: #7881f5;
+	color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.teenListTop button:hover {
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 .com-default-search input {
     width: 100%;
     border: none;
@@ -73,93 +104,246 @@
     color: #6b7280;
 }
 
-/* ==============================
-   테이블 스타일
-   ============================== */
-table {
-	width: 100%;
-	font-size: 15px;
-	table-layout: fixed; /* 컬럼 균형 */
-	border: 2px solid #e0e6ed;
-	border-radius: 12px;
+/* 2. 아코디언 상세 필터 스타일 */
+.com-accordion-filter {
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    background-color: #fff;
+    margin-bottom: 40px;
+    overflow: hidden; /* 아코디언 애니메이션을 위해 추가 */
 }
 
-thead th, tbody td {
-	padding: 14px 10px;
-	font-size: 16px;
-	text-align: center;
-	vertical-align: middle;
+.com-accordion-header {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #fff;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #4b5563;
 }
 
-
-/* 제목만 좌측 정렬 */
-th:nth-child(2), td:nth-child(2) {
-	text-align: left;
-	padding-left: 16px;
-}
-thead tr {
-	background-color: white;
-	height: 48px;
-	padding: 32px 40px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-	flex-direction: column;
-	gap: 24px;
-	border: 2px solid #e0e6ed;
+.com-accordion-header .com-arrow-icon {
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
 }
 
-
-
-tbody tr {
-	background-color: white;
-	border-radius: 25px;
-	border: 2px solid #e0e6ed;
-	height: 64px;
-	border-bottom: 1px solid #eee;
-	padding: 32px 40px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-	flex-direction: column;
+.com-accordion-header.active .com-arrow-icon {
+    transform: rotate(0deg); /* active일 때(열렸을 때) 원상태 */
 }
 
-tbody td {
-	padding: 14px 10px;
-	vertical-align: middle;
-	font-size: 16px;
-	font-weight: bold;
-	border-bottom: 2px;
-	color: #858E96;
+.com-accordion-header:not(.active) .com-arrow-icon {
+    transform: rotate(180deg); /* active가 아닐 때(닫혔을 때) 회전 */
 }
 
-tbody td a {
+/* 아코디언 내부 패널 */
+.com-accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: #f9fafb;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.com-accordion-panel.open {
+    padding: 24px; /* 열릴 때만 패딩 적용 */
+}
+
+.com-button-container {
+	display: flex;
+	justify-content: space-between;
+}
+
+.com-filter-reset-btn {
+    width: auto;
+    padding: 5px 15px;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.com-filter-title {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 12px;
+}
+
+.com-filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.com-filter-item {
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.com-filter-item span:hover {
+    background-color: #f0f0ff;
+}
+
+.com-filter-item input { display: none; }
+.com-filter-item span {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    background-color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+.group-card a {
 	text-decoration: none;
 	color: #333;
 }
-
-tbody td a:hover {
-	text-decoration: underline;
+.com-filter-item input:checked + span {
+    background-color: #eef2ff;
+    border-color: #818cf8;
+    color: #4338ca;
+    font-weight: 500;
 }
 
-/* ==============================
-   번호 스타일 (뱃지처럼)
-   ============================== */
-.notice-no {
-	max-width:15%;
-	background: linear-gradient(to right, #e4f3ff, #d7e9fb);
-	color: #007bff;
-	font-weight: bold;
+.com-selected-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 38px; /* 필터가 없을 때도 높이 유지 */
+}
+
+.com-selected-filter {
+    font-size: 0.9rem;
+    background-color: #eef6ff;
+    color: #1f5ea9;
+    padding: 9px 15px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #c4defc;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.2s, border 0.2s;
+}
+
+.com-remove-filter {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #38bdf8;
+    font-weight: bold;
+    padding: 0;
+}
+
+.com-submit-search-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #7881f5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.group-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 25px 35px;
+    margin-bottom: 20px;
+    border: 2px solid #e8ecef;
+    border-radius: 10px;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.group-card:hover {
+	transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.07);
+}
+
+.group-card-top {
 	text-align: center;
-	padding: 8px 14px;
-	border-radius: 20px;
-	display: inline-block;
-	min-width: 40px;
-	font-size: 13px;
-	line-height: 1.2; /* 세로 정렬 안정화 */
-	left: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 10px 35px;
+    margin-bottom: 20px;
+    border: 2px solid #e8ecef;
+    border-radius: 10px;
+    transition: all 0.2s ease;
 }
 
-/* ==============================
-   제목 좌측 정렬 여유
-   ============================== */
-td:nth-child(2) {
-	text-align: left;
-	padding-left: 16px;
+.group-meta-top {
+	display: flex;
+	gap: 30px;
+	justify-content: center;
+	font-size: 15px;
+	font-weight: 800;
+}
+
+.group-meta-top #writeAt {
+	margin-right:10px;
+}
+.group-meta-top div {
+	width: 50px;
+	text-align: center;
+}
+
+.group-meta {
+	display: flex;
+	justify-content: center;
+	gap: 30px;
+	color: #858E96;
+	font-weight: 600;
+	
+}
+
+.group-info {
+	
+	display: flex;
+	gap: 50px;
+}
+
+.group-no {
+	text-align: center;	
+}
+
+.group-meta div {
+	text-align: center;
+	font-size: 13px;
+}
+
+.group-no {
+	border-radius: 12px;
+	background-color: #848EFB;
+	width: 50px; 
+	font-weight: 500;
+	color: white;
+	font-size: 15px;
+}
+
+.group-title {
+	font-weight: 800;
+}
+
+.group-title-list {
+	font-weight: 600;
 }

@@ -71,6 +71,7 @@
 
 /* 댓글 하나 */
 .reply-box {
+  max-width: 89.3%;
   border: 2px solid #e8ecef;
   border-radius: 10px;
   padding: 20px;
