@@ -123,10 +123,7 @@ function drawBookmarkTopN() {
 		ageBand : ageBand ? ageBand : '',
 	};
 
-	console.log(filters);
-
   return apiGet(API.bmTopN, filters).then(data => {
-	console.log("bmTOP ", data);
     const rows = toArray(data);
     const labels = rows.map(r => `(${r.CATEGORYNAME})${r.TARGETNAME}`);
     const values = rows.map(r => `${r.CNT || 0}`);
