@@ -12,6 +12,7 @@ import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptDetailVO;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptService;
 import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptVO;
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkVO;
+import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -62,5 +63,17 @@ public class UnivDeptServiceImpl implements UnivDeptService {
 
 		return univDeptMapper.selectDeptCompareList(uddIdList);
 	}
+	
+	// 추가: 학과 목록 조회 (페이징)
+    @Override
+    public ArticlePage<UnivDeptVO> getUnivDeptList(UnivDeptVO univDeptVO) {
+        
+        List<UnivDeptVO> univDeptList = this.univDeptMapper.selectUnivDeptList(univDeptVO);
+        
+        int total = this.univDeptMapper.selectUniversityTotalCount(univDeptVO);
+        
+        return new ArticlePage<UnivDeptVO>(total, univDeptVO.getCurrentPage(), univDeptVO.getSize(), univDeptList,
+                univDeptVO.getKeyword());
+    }
 
 }
