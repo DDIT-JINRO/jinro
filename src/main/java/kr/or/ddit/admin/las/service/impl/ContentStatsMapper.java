@@ -46,12 +46,13 @@ public interface ContentStatsMapper {
 	List<Map<String,Object>> communityTopActiveMembers(Map<String,Object> param);   // 활동 회원 TOP N
 	List<Map<String,Object>> communityTopPostsByEngage(Map<String,Object> param);   // 반응 높은 글 TOP N
 
-	// 우측하단 - 요약(도넛/바): BOOKMARK vs WORLDCUP 총건수/유니크 유저 수
-	List<Map<String,Object>> bookmarkWorldcupSummary(Map<String,Object> param);
+	List<Map<String,Object>> wrSummary(Map<String,Object> param);
 
-	// 우측하단 - 일자별 추이(라인): BOOKMARK vs WORLDCUP 일자별 건수
-	List<Map<String,Object>> bookmarkWorldcupDailyTrend(Map<String,Object> param);
+	List<Map<String,Object>> wrDailyTrend(Map<String,Object> param);
 
 	// (옵션) 월드컵 인기 직업 TOP N
 	List<Map<String,Object>> worldcupTopJobs(Map<String,Object> param);
+
+	List<Map<String,Object>> roadmapCreateCompleteSummary(Map<String,Object> param);
+	List<Map<String,Object>> roadmapCreateCompleteDaily(Map<String,Object> param);
 }

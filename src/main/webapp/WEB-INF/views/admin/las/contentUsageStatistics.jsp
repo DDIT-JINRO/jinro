@@ -2,12 +2,6 @@
 	pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="/css/admin/las/contentUsageStatistics.css">
 <h3>로그 및 통계 > 접속/이용 통계</h3>
-<!-- 기간 전용 툴바 (filter-bar 삭제 대체) -->
-<button type="button" id="cusDateBtn" class="btn btn-range">기간 선택</button>
-<input type="text" id="cusDateInput" class="visually-hidden" />
-<span id="cusDateLabel" class="date-label"></span>
-<button type="button" id="cusDateApply" class="btn btn-apply">기간 적용</button>
-<!-- 상단 필터 바 -->
 <div id="cus-root" class="template-container" data-page="content-usage">
 
   <!-- 좌/우 2열 레이아웃 -->
@@ -21,12 +15,6 @@
 		  <button type="button" class="btn-gender" data-gender="G11001">남</button>
 		  <button type="button" class="btn-gender" data-gender="G11002">여</button>
 
-		  <!-- 공통 적용: 성별/연령 -->
-		  <select id="cusGender" class="compact">
-		    <option value="ALL">성별 전체</option>
-		    <option value="G11001">남</option>
-		    <option value="G11002">여</option>
-		  </select>
 		  <select id="cusAgeBand" class="compact">
 		    <option value="ALL">연령 전체</option>
 		    <option value="U15">~14</option>
@@ -35,7 +23,9 @@
 		    <option value="25-29">25-29</option>
 		    <option value="30+">30+</option>
 		  </select>
-		  <button type="button" id="cusDemoApply" class="btn btn-apply">성별/연령 적용</button>
+		  <button type="button" id="calBtnBMC">달력</button>
+		  <input type="hidden" id="fromBMC" />
+		  <input type="hidden" id="toBMC" />
 		</div>
       </div>
       <div class="chart">
@@ -45,19 +35,33 @@
 
     <!-- 좌하단: 북마크 상세 TOP5 -->
     <section class="template-panel">
-      <div class="panel-header">북마크 상세 현황 (TOP5)
-        <div class="btn-group">
+      <div class="panel-header">북마크 상세 현황 (TOP)
+        <div class="btn-group" id="bmkGroup">
+		  <button type="button" class="btn-gender active" data-gender="ALL">전체</button>
+		  <button type="button" class="btn-gender" data-gender="G11001">남</button>
+		  <button type="button" class="btn-gender" data-gender="G11002">여</button>
           <select id="bmTopCategory" class="compact">
-            <option value="ALL">전체</option>
+            <option value="ALL">카테고리 전체</option>
             <option value="G03001">대학</option>
             <option value="G03002">기업</option>
             <option value="G03004">직업</option>
-            <option value="G03005">이템플릿</option>
+            <option value="G03005">이력서템플릿</option>
             <option value="G03006">학과</option>
           </select>
+          <select id="bmtAgeBand" class="compact">
+		    <option value="ALL">연령 전체</option>
+		    <option value="U15">~14</option>
+		    <option value="15-19">15-19</option>
+		    <option value="20-24">20-24</option>
+		    <option value="25-29">25-29</option>
+		    <option value="30+">30+</option>
+		  </select>
           <select id="bmTopLimit" class="compact">
             <option>5</option><option>10</option>
           </select>
+          <button type="button" id="calBtnBMT">달력</button>
+   		  <input type="hidden" id="fromBMT" />
+		  <input type="hidden" id="toBMT" />
         </div>
       </div>
       <div class="chart">
@@ -79,6 +83,13 @@
 	      <!-- 추가 -->
 	      <button type="button" class="btn-tab" data-tab="topMembers">활동 회원 TOP</button>
 	      <button type="button" class="btn-tab" data-tab="topPosts">반응 글 TOP</button>
+
+          <select id="cusCcId" class="compact" style="margin-left:8px">
+			<option value="ALL">게시판 전체</option>
+			<option value="G09001">청소년 커뮤니티</option>
+			<option value="G09005">스터디그룹</option>
+			<option value="G09006">청년 커뮤니티</option>
+	      </select>
 	    </div>
 	  </div>
 
@@ -111,11 +122,16 @@
 
 	<!-- 우하단: 북마크 · 월드컵 + 인기직업 -->
 	<section class="template-panel">
-	  <div class="panel-header">북마크 · 월드컵 이용현황
+	  <div class="panel-header">월드컵 · 로드맵 이용현황
 	    <div class="btn-group">
 	      <button type="button" id="btnWorldcupTop">인기 직업 TOP</button>
 	      <select id="worldcupTopLimit" class="compact"><option>5</option><option>10</option></select>
 	    </div>
+    	<!-- 우하단 모드 토글 (월드컵·로드맵 / 로드맵 생성·완료) -->
+		<div class="btn-group" id="brModeGroup" style="margin-left:auto">
+		  <button type="button" class="btn-toggle active" data-mode="WR">월드컵·로드맵</button>
+		  <button type="button" class="btn-toggle" data-mode="RC">로드맵 생성·완료</button>
+		</div>
 	  </div>
 	  <div class="chart two-col">
 	    <div class="cell"><canvas id="bwSummaryChart"></canvas></div>
