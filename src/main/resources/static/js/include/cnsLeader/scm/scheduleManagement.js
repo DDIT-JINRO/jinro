@@ -79,16 +79,19 @@
 	 * @param {string} date - 상담 스케줄을 조회할 날짜 (YYYY-MM-DD 형식).
 	 * @param {number} page - 현재 페이지 번호.
 	 */
-	function selectCounselSchedules(date, page = 1) {
+	function selectCounselSchedules(counselReqDatetime, page = 1) {
 		const keyword = document.getElementById("keyword").value;
+		console.log("counselReqDatetime"+counselReqDatetime);
+		console.log("keyword"+keyword);
+		
 	    // API 호출 시 페이지 정보와 날짜를 파라미터로 보냅니다.
 	    axios.get('/api/cnsld/counselScheduleList.do', {
-	        
-				keyword : keyword,
-	            counselReqDatetime: date,
-	            currentPage: page,
-	            size: pageSize
-	        
+			params: { // 여기에 쿼리 파라미터로 보낼 데이터를 객체로 묶어줍니다.
+			           keyword: keyword,
+			           counselReqDatetime: counselReqDatetime,
+			           currentPage: page,
+			           size: pageSize
+			       }
 	    })
 	    .then(({ data }) => { // ES6 구조분해 할당으로 response.data를 바로 data 변수로 받습니다.
 	        // `fetchCounselingLog`처럼 백엔드 응답이 `total`과 `content`를 포함한다고 가정
@@ -130,9 +133,11 @@
 	            container.innerHTML = rows;
 	            if (countEl) countEl.textContent = totalCount;
 	        }
-	        
+			data.counselReqDatetime = counselReqDatetime;
+			console.log('data',data);
 	        // 페이징 버튼 렌더링 함수 호출
-	        renderPagination(totalCount, pageSize, currentPage);
+			
+	        renderPagination(data);
 	    })
 	    .catch(function(error) {
 	        console.error("상담 데이터 로드 실패:", error);
@@ -145,15 +150,15 @@
 	        renderPagination(0, pageSize, 1);
 	    });
 	}
-
+	window.selectCounselSchedules = selectCounselSchedules;
 	// 비동기 로딩된 JSP에서도 바로 실행
 	initCalendar();
 	
-	function renderPagination({ startPage, endPage, currentPage, totalPages }) {
+	function renderPagination({ startPage, endPage, currentPage, totalPages,counselReqDatetime }) {
 		let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 
 		for (let p = startPage; p <= endPage; p++) {
-			html += `<a href="#" onclick="fetchCounselingLog(${p})" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
+			html += `<a href="#" onclick="selectCounselSchedules('${counselReqDatetime}',${p})" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
 		}
 
 		html += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;

@@ -64,7 +64,7 @@ p {
 .table-wrapper {
     border: 1px solid #ddd; /* 테이블 외곽선 */
     border-radius: 4px;
-    overflow: hidden; /* 테이블 내용이 wrapper 밖으로 넘치면 숨김 */
+    overflow: auto; /* 테이블 내용이 wrapper 밖으로 넘치면 숨김 */
     margin-bottom: 20px; /* 하단 간격 추가 */
 }
 
@@ -107,7 +107,7 @@ tbody td {
     color: #6c757d; /* 글자색 */
     text-align: center;
     border-right: 1px solid #eee; /* 데이터 셀 구분선 */
-    overflow: hidden; /* 내용이 넘치면 숨김 */
+    overflow: auto; /* 내용이 넘치면 숨김 */
     text-overflow: ellipsis; /* 내용이 넘치면 ...으로 표시 */
     white-space: nowrap; /* 내용이 한 줄로 표시되도록 */
 }

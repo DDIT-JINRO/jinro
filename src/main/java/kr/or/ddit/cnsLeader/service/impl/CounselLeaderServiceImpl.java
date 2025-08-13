@@ -77,7 +77,7 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 
 	@Override
 	public ArticlePage<CounselingVO> selectCounselScheduleList(CounselingVO counselingVO) {
-		int total = this.counselLeaderMapper.selectcounselTotal(counselingVO);
+		int total = this.counselLeaderMapper.selectCounselTotal(counselingVO);
 		List<CounselingVO> list = this.counselLeaderMapper.selectCounselScheduleList(counselingVO);
 		
 		ArticlePage<CounselingVO> articlePage = new ArticlePage<>(total, counselingVO.getCurrentPage(), counselingVO.getSize(), list, counselingVO.getKeyword());

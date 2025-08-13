@@ -67,7 +67,17 @@ public class CnsLeaderApiController {
 	
 	@GetMapping("/counselScheduleList.do")
 	public  ResponseEntity<ArticlePage<CounselingVO>> counselScheduleList(
-					@ModelAttribute CounselingVO counselingVO){
+			@RequestParam("counselReqDatetime") @DateTimeFormat(pattern = "yyyy-MM-dd") Date counselReqDatetime,
+			@RequestParam String keyword,
+			@RequestParam int currentPage,
+			@RequestParam int size
+			){
+		CounselingVO counselingVO = new CounselingVO();
+		counselingVO.setCounselReqDatetime(counselReqDatetime);
+		counselingVO.setKeyword(keyword);
+		counselingVO.setCurrentPage(currentPage);
+		counselingVO.setSize(size);
+		log.info("counselingVO"+counselingVO);
 		ArticlePage<CounselingVO> articlePage = this.counselLeaderService.selectCounselScheduleList(counselingVO);
 		
 		return ResponseEntity.ok(articlePage);

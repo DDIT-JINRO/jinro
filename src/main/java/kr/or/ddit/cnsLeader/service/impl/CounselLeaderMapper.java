@@ -31,6 +31,6 @@ public interface CounselLeaderMapper {
 
 	List<CounselingVO> selectCounselScheduleList(CounselingVO counselingVO);
 	
-	int selectcounselTotal(CounselingVO counselingVO);
+	int selectCounselTotal(CounselingVO counselingVO);
 
 }

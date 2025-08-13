@@ -343,7 +343,7 @@
 	WHERE RNUM BETWEEN #{startNo} AND #{endNo}
     </select>
     
-    <select id="selectcounselTotal" parameterType="kr.or.ddit.cns.service.CounselingVO" resultType="int">
+    <select id="selectCounselTotal" parameterType="kr.or.ddit.cns.service.CounselingVO" resultType="int">
     	SELECT COUNT(*)
 			FROM counseling a
 			WHERE trunc(a.counsel_req_datetime) = trunc(#{counselReqDatetime})
