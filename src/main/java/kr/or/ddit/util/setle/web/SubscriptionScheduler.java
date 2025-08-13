@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import kr.or.ddit.config.redis.RedisConfig;
 import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
 import kr.or.ddit.mpg.pay.service.PaymentService;
 import kr.or.ddit.util.alarm.service.AlarmService;
@@ -15,7 +14,6 @@ import kr.or.ddit.util.alarm.service.AlarmVO;
 @Component
 public class SubscriptionScheduler {
 
-    private final RedisConfig redisConfig;
 
 	@Autowired
 	private PaymentService paymentService;
@@ -23,14 +21,9 @@ public class SubscriptionScheduler {
 	@Autowired
 	private AlarmService alarmService;
 
-    SubscriptionScheduler(RedisConfig redisConfig) {
-        this.redisConfig = redisConfig;
-    }
-
 	// 정기결제를 위한 스케줄러
 	// 매일 새벽0시에 실행 (서버 부하가 적은 시간)
-	//@Scheduled(cron = "0 0 0 * * *") // 매일0시
-	@Scheduled(cron = "0 0/1 * * * *") //1분마다
+	@Scheduled(cron = "0 0 0 * * *") // 매일0시
 	public void scheduleDailyPayments() {
 		paymentService.processScheduledPayments();
 
@@ -48,7 +41,6 @@ public class SubscriptionScheduler {
 	// 매일 자정에 실행되는 결제일 임박 알림 스케줄러
 	@Scheduled(cron = "0 0 0 * * *") // 매일0시
 	public void notifyPaymentDue() {
-		System.out.println("--결제일 임박 알림 스케줄러 시작---");
 		
 		//1 내일이 결제일인 구독 목록을 DB에서 조회
 		List<MemberSubscriptionVO> dueTomorrow = paymentService.findSubscriptionsDueTomorrow();
@@ -62,6 +54,5 @@ public class SubscriptionScheduler {
 			
 			alarmService.sendEvent(alarmVO);
 		}
-		System.out.println();
 	}
 }
