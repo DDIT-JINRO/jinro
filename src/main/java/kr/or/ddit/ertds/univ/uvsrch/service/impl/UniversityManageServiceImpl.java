@@ -1,10 +1,13 @@
 package kr.or.ddit.ertds.univ.uvsrch.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO.DeptInfo;
+import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityManageService;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
 
@@ -13,6 +16,17 @@ public class UniversityManageServiceImpl implements UniversityManageService {
 
 	@Autowired
 	UniversityMapper universityMapper;
+	
+	@Override
+	public ArticlePage<UniversityVO> getUniversityList(UniversityVO universityVO) {
+	    
+	    List<UniversityVO> universityList = universityMapper.selectUniversityList(universityVO);
+	    
+	    int total = universityMapper.selectUniversityTotalCount(universityVO);
+	    
+	    return new ArticlePage<UniversityVO>(total, universityVO.getCurrentPage(), universityVO.getSize(), universityList,
+	            universityVO.getKeyword());
+	}
 
 	@Override
 	public int updateUniversity(UniversityVO universityVO) {

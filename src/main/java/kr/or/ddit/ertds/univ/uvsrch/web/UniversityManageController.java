@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptService;
+import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptVO;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO.DeptInfo;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityManageService;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
+import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -27,6 +30,31 @@ public class UniversityManageController {
 
 	@Autowired
 	private UniversityManageService universityManageService;
+	
+	@Autowired  // 추가
+    private UnivDeptService univDeptService;
+	
+	/**
+	 * 대학 목록 조회 (페이징)
+	 */
+	@GetMapping("/universities")
+	public ResponseEntity<Map<String, Object>> getUniversityList(UniversityVO universityVO) {
+	    Map<String, Object> response = new HashMap<>();
+	    
+	    try {
+	        ArticlePage<UniversityVO> universityPage = universityManageService.getUniversityList(universityVO);
+	        
+	        response.put("success", true);
+	        response.put("data", universityPage);
+	        return ResponseEntity.ok(response);
+	        
+	    } catch (Exception e) {
+	        log.error("대학 목록 조회 중 오류 발생: ", e);
+	        response.put("success", false);
+	        response.put("message", "대학 목록 조회 중 오류가 발생했습니다: " + e.getMessage());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	    }
+	}
 
 	/**
 	 * 대학 추가
@@ -143,6 +171,28 @@ public class UniversityManageController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 		}
 	}
+	
+	/**
+     * 학과 목록 조회 (페이징) - 추가
+     */
+    @GetMapping("/departments")
+    public ResponseEntity<Map<String, Object>> getUnivDeptList(UnivDeptVO univDeptVO) {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            ArticlePage<UnivDeptVO> univDeptPage = univDeptService.getUnivDeptList(univDeptVO);
+            
+            response.put("success", true);
+            response.put("data", univDeptPage);
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            log.error("학과 목록 조회 중 오류 발생: ", e);
+            response.put("success", false);
+            response.put("message", "학과 목록 조회 중 오류가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 
 	/**
 	 * 학과 추가
