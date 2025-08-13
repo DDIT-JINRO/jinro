@@ -125,9 +125,9 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script
 	src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-	
+
 <script
 	src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ko.js'></script>
-	
+
 <script type="text/javascript"
 	src="/js/include/cns/scm/scheduleManagement.js"></script>
