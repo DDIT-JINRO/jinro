@@ -11,7 +11,7 @@
 
 .admin-entMng-1-1 {
 	width: 100%;
-	height: 850px;
+	height: 800px;
 }
 
 .filter-box {
@@ -223,7 +223,7 @@ table th:last-child {
 
 .entAbout {
 	width: 600px;
-	height: 460px;
+	height: 410px;
 	font-size: 13px;
 }
 
@@ -249,6 +249,7 @@ table th:last-child {
 
 .admin-entMng-2 {
 	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 /* 기업 등록 폼 스타일 */
@@ -277,7 +278,7 @@ label {
 }
 
 /* 특정 입력 필드 및 텍스트 영역 스타일 */
-#cpName, #cpIndustry, #cpWebsite, #cpLocationY, #cpLocationX,
+#cpName, #cpIndustry, #cpWebsite, #cpLocationY, #cpLocationX, #cpImgUrl,
 	#cpBusinessNo {
 	width: 100%;
 	padding: 12px 15px;
@@ -318,10 +319,22 @@ label {
 }
 
 #cpName:focus, #cpIndustry:focus, #cpWebsite:focus, #cpLocationY:focus,
-	#cpLocationX:focus, #cpBusinessNo:focus, #cpDescription:focus {
+	#cpLocationX:focus, #cpBusinessNo:focus, #cpDescription:focus, #cpNoOn:focus
+	{
 	box-shadow: 0 0 8px rgba(52, 152, 219, 0.1);
 	outline: none;
 	background-color: #fff;
+}
+
+#cpNoOn {
+	width: 100%;
+	padding: 12px 15px;
+	border: 1px solid #e0e6ed;
+	border-radius: 8px;
+	font-size: 13px;
+	transition: all 0.3s ease;
+	box-sizing: border-box;
+	background-color: #fafbfd;
 }
 
 .input-with-icon {
@@ -362,7 +375,7 @@ textarea {
 
 .image-upload-box {
 	width: 100%;
-	height: 180px;
+	height: 100px;
 	border: 2px dashed #bdc3c7;
 	border-radius: 12px;
 	display: flex;
@@ -384,7 +397,7 @@ textarea {
 .image-upload-box i {
 	font-size: 40px;
 	color: #95a5a6;
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 }
 
 .image-upload-box p {
@@ -404,8 +417,8 @@ textarea {
 }
 
 #cpLogoPreview {
-	width: 100%;
-	height: 100%;
+	width: 300px;
+	height: 100px;
 	object-fit: cover;
 	position: absolute;
 	top: 0;
@@ -439,6 +452,18 @@ textarea {
 
 .btn-primary {
 	background-color: #7c7cf5;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 8px;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease, box-shadow
+		0.3s ease;
+}
+.btn-warning {
+	background-color: #DC143C;
 	color: #fff;
 	border: none;
 	padding: 10px 20px;
@@ -501,6 +526,7 @@ textarea {
 	transition: background-color 0.3s;
 }
 
+
 .btn-secondary:hover {
 	background-color: #dfe6e9;
 }
@@ -517,12 +543,28 @@ textarea {
 #postcode {
 	flex-basis: 120px; /* 우편번호 입력 필드 너비 고정 */
 	width: auto;
+	margin-left: 40px;
+	padding: 12px 15px;
+	border: 1px solid #e0e6ed;
+	border-radius: 8px;
+	font-size: 13px;
+	transition: all 0.3s ease;
+	box-sizing: border-box;
+	background-color: #fafbfd;
 }
 
 /* 주소 입력 필드 */
 #jibunAddress {
 	width: 300px; /* 원하는 너비로 조절 */
 	flex-grow: 0; /* Flexbox 내에서 크기가 늘어나지 않도록 설정 */
+	margin-left: 40px;
+	padding: 12px 15px;
+	border: 1px solid #e0e6ed;
+	border-radius: 8px;
+	font-size: 13px;
+	transition: all 0.3s ease;
+	box-sizing: border-box;
+	background-color: #fafbfd;
 }
 
 /* '찾기' 버튼 */
