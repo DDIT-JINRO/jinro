@@ -1,12 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="css/admin/cmg/enterpriseManagement.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="/js/include/admin/cmg/enterpriseManagement.js"></script>
-<!-- 제목입니다 -->
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">기업
-	관리</h2>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">기업 관리</h2>
 <body>
 	<div class="admin-EntMng-1" style="margin-bottom: 20px;">
 		<div class="template-panel admin-entMng-1-1">
@@ -16,7 +13,8 @@
 					<option value="1">전체</option>
 					<option value="2">기업명</option>
 					<option value="3">지역명</option>
-				</select> <input type="text" name="keyword" placeholder="기업명으로 검색" />
+				</select>
+				<input type="text" name="keyword" placeholder="기업명으로 검색" />
 				<button type="button" class="btn-save" id="btnSearch">조회</button>
 			</div>
 			<div class="listEnt">
@@ -41,25 +39,24 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="card-footer clearfix">
-					<div class="panel-footer pagination entListPage"></div>
-				</div>
+			</div>
+			<div class="card-footer clearfix">
+				<div class="panel-footer pagination entListPage"></div>
 			</div>
 		</div>
 
 		<div>
 			<div class="entDetail-container">
 				<div class="ent-profile-container">
-					<!-- 좌측 프로필 -->
 					<div class="ent-profile-left">
 						<div class="profile-card">
-							<img id="entLogo" src="http://www.work.go.kr/framework/filedownload/getImage.do?filePathName=tqyczLUvysXSEcOVhPgDCrrcRciqlR8qoTAjsPuEp44sKoGxe9VyqEeBMF5IUTkBaD8EvNXUzF3cvyArjHjQkV5OHVJHQRI4rj9jllpoHbs%3D" alt="기업 로고" class="profile-logo">
-							<h3 id="entName" class="profile-name">한국개발연구원국제정책대학원대학교</h3>
+							<img id="entLogo" src="/images/cp31logo.png" alt="기업 로고" class="profile-logo">
+							<h3 id="entName" class="profile-name">CareerPath</h3>
 							<p id="entRole" class="profile-role">South Korea / 대한민국</p>
 
 							<div class="profile-actions">
-								<div class="btn-follow">G30UNK</div>
-								<div class="btn-message">미지정</div>
+								<div id="gubun" class="btn-follow">G30UNK</div>
+								<div id="gubunName" class="btn-message">미지정</div>
 							</div>
 
 							<div class="profile-about">
@@ -73,15 +70,11 @@
 								</p>
 								<p>
 									<strong>기업명:</strong>
-									<span id="entName">contact@example.com</span>
-								</p>
-								<p>
-									<strong>기업규모:</strong>
-									<span id="entScale">-</span>
+									<span id="entName2">커리어패스</span>
 								</p>
 								<p>
 									<strong>주소:</strong>
-									<span id="entAddress">서울특별시 강남구</span>
+									<span id="entAddress">대전광역시 유성구 대학로 91</span>
 								</p>
 							</div>
 
@@ -89,19 +82,16 @@
 						</div>
 					</div>
 
-					<!-- 우측 상세 내용 -->
 					<div>
 						<div class="ent-profile-right" style="margin-bottom: 20px;">
-							<!-- 탭 메뉴 -->
 							<div>
 								<div class="tab-menu">
 									<button class="tab-btn active" data-tab="about">About</button>
 									<button class="tab-btn" data-tab="timeline">Timeline</button>
 								</div>
-								<!-- 탭 내용 -->
 								<div class="tab-content active" id="about">
 									<div class="profile-social">
-										<a href="" target="_blank">
+										<a id="companyWebsiteLink" href="careerpath.store" target="_blank">
 											<i class="fas fa-link"></i>&nbsp;&nbsp;&nbsp; URL Link
 										</a>
 									</div>
@@ -118,15 +108,101 @@
 					</div>
 				</div>
 			</div>
-			<div class="template-panel entAbout" id="entDetailAbout" style="margin-top: 20px; height: 330px;">
-
+			<div class="template-panel entAbout" style="margin-top: 20px;">
+				<div class="middleTitle" style="margin-bottom: 10px;">기업 설명</div>
+				<div id="entDetailAbout"></div>
 			</div>
 		</div>
 	</div>
 
 	<div class="template-panel admin-entMng-2">
 		<div class="middleTitle">신규 기업 등록</div>
+
+		<p class="form-subtitle">새로운 기업 정보를 등록하여 다양한 인재를 만나보세요.</p>
+
+		<div class="form-row">
+			<div class="form-input-section">
+				<div class="input-group">
+					<label for="cpName">기업명</label>
+					<div class="input-with-icon">
+						<i class="fas fa-building"></i>
+						<input type="text" id="cpName" placeholder="예) 커리어패스 주식회사">
+					</div>
+				</div>
+
+				<div class="input-group">
+					<label for="cpIndustry">업종</label>
+					<div class="input-with-icon">
+						<i class="fas fa-briefcase"></i>
+						<input type="text" id="cpIndustry" placeholder="예) 소프트웨어 개발, 컨설팅">
+					</div>
+				</div>
+
+				<div class="input-group">
+					<label for="cpWebsite">홈페이지 URL</label>
+					<div class="input-with-icon">
+						<i class="fas fa-globe"></i>
+						<input type="text" id="cpWebsite" placeholder="예) https://www.careerpath.store">
+					</div>
+				</div>
+				<div class="input-group">
+					<label for="postcode">주소</label>
+					<div class="address-search-group">
+							<input type="text" id="postcode" placeholder="우편번호" readonly>
+							<button type="button" id="btnPostcodeSearch" class="btn-secondary" onclick="execDaumPostcode()">
+								<i class="fas fa-search"></i> 찾기
+							</button>
+						<input type="text" id="jibunAddress" placeholder="지번주소" readonly>
+					</div>
+				</div>
+				<div class="location-group">
+					<label>기업 규모</label>
+					<div class="input-with-icon">
+						<i class="fas fa-expand"></i> <select class="coords-select-group" id="cpSclae">
+							<option value="G30002">공공기관</option>
+							<option value="G30003">중견기업</option>
+							<option value="G30004">공기업</option>
+							<option value="G30005">대기업</option>
+							<option value="G30006">강소기업</option>
+							<option value='G30UNK'>미지정</option>
+						</select>
+					</div>
+
+				</div>
+
+				<div class="input-group">
+					<label for="cpBusinessNo">사업자 등록번호</label>
+					<div class="input-with-icon">
+						<i class="fas fa-id-card"></i>
+						<input type="text" id="cpBusinessNo" placeholder="예) 123-45-67890">
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="button" id="btnRegister" class="btn-primary">
+						<i class="fas fa-save"></i> 저장
+					</button>
+				</div>
+			</div>
+
+			<div class="form-image-section">
+				<div class="image-upload-box" id="imageUploadBox">
+					<i class="fas fa-camera"></i>
+					<p>기업 로고를 업로드하세요</p>
+					<input type="file" id="cpLogoFile" accept="image/*" class="file-input">
+					<img id="cpLogoPreview" src="" alt="로고 미리보기" style="display: none;">
+				</div>
+
+				<div class="image-upload-controls">
+					<button type="button" id="btnChangeLogo" class="btn-secondary">변경</button>
+				</div>
+
+				<div class="form-textarea-section">
+					<div class="input-group">
+						<label for="cpDescription">기업에 대한 설명</label>
+						<textarea id="cpDescription" placeholder="기업의 비전, 주요 사업, 문화 등 자세한 설명을 작성해주세요."></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
-
-
