@@ -45,12 +45,13 @@
 
 .resume-card {
 	display: flex;
+	width: 88%;
 	justify-content: space-between;
 	align-items: center;
 	padding: 20px 30px;
 	border: 2px solid #848EFB;
 	border-radius: 10px;
-	height: 120px;
+	height: 80px;
 }
 
 .resume-title-section {

@@ -133,19 +133,48 @@ a {
 	color: #343a40;
 }
 
+/* 모집 요강 수정사항 시작*/
+
 .tab-content {
 	padding: 30px 10px;
 	border: 1px solid #e9ecef;
 	border-top: none;
 	border-radius: 0 0 8px 8px;
+	 background-color: #fff;
 }
 
 .contest-description {
 	font-size: 16px;
 	line-height: 1.8;
 	color: #343a40;
-	white-space: pre-wrap; /* 줄바꿈과 공백을 그대로 표시 */
+	white-space: pre-wrap; 
 }
+
+.description-section {
+    margin-bottom: 20px; 
+}
+.description-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #343a40;
+}
+
+.description-text strong {
+    font-weight: bold;
+    color: #000; /* 강조 글씨 더 진하게 */
+}
+
+.description-text ul {
+    margin: 10px 0;
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.description-text li {
+    margin-bottom: 6px;
+}
+
+/* 모집 요강 수정사항 끝*/
 
 /* 4. 하단 목록 버튼 */
 .bottom-button-wrapper {

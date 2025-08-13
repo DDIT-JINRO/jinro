@@ -26,10 +26,8 @@
 </section>
 <div>
 	<div class="public-wrapper">
-
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			<!-- 검색 기능 -->
 			<form method="get" action="/csc/not/noticeList.do">
 				<div class="com-default-search">
 					<input type="search" name="keyword" placeholder="공지사항 내에서 검색">
@@ -40,30 +38,32 @@
 					</button>
 				</div>
 			</form>
-			<p id="getAllNotice">총 ${getAllNotice}건</p>
-			<table>
-				<thead>
-					<tr>
-						<th >번호</th>
-						<th>제목</th>
-						<th>조회수</th>
-						<!--  작성일 MM/DD/HH/MM/ 형식으로 -->
-						<th>작성일</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="notice" items="${getList}">
-						<tr>
-							<td><div class="notice-no"> ${notice.noticeId}</div></td>
-							<td style="text-align: left;">
-								<a href="/csc/not/noticeDetail.do?noticeId=${notice.noticeId}">${notice.noticeTitle}</a></td>
-							<td>${notice.noticeCnt}</td>
-							<td><fmt:formatDate value="${notice.noticeCreatedAt}" pattern="MM.dd" /></td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-			<div class="card-footer clearfix">
+			<div class="group-card-top">
+				<div class="group-no">번호</div>
+				<div class="group-title">제목</div>
+				<div class="group-meta-top">
+					<div id="cnt">조회수</div>
+					<div id="writeAt">작성일</div>
+				</div>
+			</div>
+			<c:forEach var="notice"  varStatus="stat" items="${getList}">
+				<div class="teenList-list">
+					<div class="group-card" data-tbd-id="${notice.noticeId}">
+						<div class="group-info">
+							<div class="group-no">${notice.noticeId}</div>
+							<div class="group-title-list">
+								<a href="/csc/not/noticeDetail.do?noticeId=${notice.noticeId}">${notice.noticeTitle}</a>
+							</div>
+						</div>
+						<div class="group-meta">
+							<div id="cnt">${notice.noticeCnt}</div>
+							<div id="writeAt">
+								<fmt:formatDate value="${notice.noticeCreatedAt}" pattern="yyyy. MM. dd" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
 				<ul class="pagination">
 					<!-- Previous -->
 					<li><a
@@ -85,7 +85,6 @@
 						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
 							Next → </a></li>
 				</ul>
-			</div>
 		</div>
 	</div>
 </div>

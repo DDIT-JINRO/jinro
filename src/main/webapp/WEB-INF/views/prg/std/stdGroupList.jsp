@@ -18,6 +18,7 @@
 </section>
 <div>
 	<div class="public-wrapper">
+		<div class="public-wrapper-main">
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 			<form method="get" action="/prg/std/stdGroupList.do">
 			    <div class="com-default-search">

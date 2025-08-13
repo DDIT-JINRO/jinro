@@ -17,6 +17,7 @@
 
 .intro-card {
 	display: flex;
+	max-width: 88%;
 	justify-content: space-between;
 	align-items: center;
 	padding: 20px 30px;

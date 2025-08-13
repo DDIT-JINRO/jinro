@@ -33,34 +33,26 @@
 				</div>
 			</form>
 			<p id="getAllNotice">총 ${getTotal}건</p>
-			<table>
-				<colgroup>
-					<col style="width: 15%;">
-					<col style="width: 45%;">
-					<col style="width: 20%;">
-					<col style="width: 20%;">
-				</colgroup>
-				<thead>
-					<tr>
-						<th>번호</th>
-						<th>제목</th>
-						<th>교육기관</th>
-						<!--  작성일 MM/DD/HH/MM/ 형식으로 -->
-						<th>작성일</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="item" items="${getList}">
-						<tr>
-							<td><div class="notice-no"> ${item.examId}</div></td>
-							<td style="text-align: left;">
-								<a href="/ertds/qlfexm/selectQlfexmDetail.do?examId=${item.examId}">${item.examTitle}</a></td>
-							<td>${item.examAreaCode}</td>
-							<td><fmt:formatDate value="${item.examNotiDate}" pattern="yyyy.MM.dd" /></td>
-						</tr>
+			<div class="result-list-wrapper">
+				<div class="list-header" >
+					<div class="header-item" style="padding-left: 20px; ">번호</div>
+					<div class="header-item">제목</div>
+					<div class="header-item">교육기관</div>
+					<div class="header-item">작성일</div>
+
+				</div>
+				<div class="data-list">
+					<c:forEach var="item" items="${articlePage.content}">
+						<div class="data-item" ">
+							<div class="notice-no"> ${item.examId}</div>
+							<div><a href="/ertds/qlfexm/selectQlfexmDetail.do?examId=${item.examId}">${item.examTitle}</a></div>
+							<div style="padding-left: 20px; text-align: center;">${item.examAreaCode}</div>
+							<div style="text-align: center; "><fmt:formatDate value="${item.examNotiDate}" pattern="yyyy.MM.dd" /></div>
+
+						</div>
 					</c:forEach>
-				</tbody>
-			</table>
+				</div>
+			</div>
 			<div class="card-footer clearfix">
 				<ul class="pagination">
 					<!-- Previous -->

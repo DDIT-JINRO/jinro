@@ -76,8 +76,8 @@
 		            <div class="tab-content">
 		                <c:forEach var="section" items="${volDetail.descriptionSections}">
 					        <div class="description-section">
-					            <p class="description-text">${section}</p>
-					        </div>
+					         	<p class="description-text">${section}</p>
+							</div>
 					    </c:forEach>
 		            </div>
 		        </div>
