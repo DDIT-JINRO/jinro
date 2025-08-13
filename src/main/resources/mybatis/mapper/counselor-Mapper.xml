@@ -227,6 +227,8 @@
 			 , A.COUNSEL_REVIEWD
 			 , A.COUNSEL_CREATED_AT
 			 , A.COUNSEL_UPDATED_AT
+			 , A.COUNSEL
+			 , A.COUNSEL_URL_COU
 
 			 , CL.CL_IDX
              , CL.CL_CONTENT
@@ -407,5 +409,63 @@
 		   AND VA_END >= SYSDATE
 		   AND VA_REQUESTOR = #{vaRequestor}
 	</select>
+	
+	
+	<select id="selectCounselingSchedules" parameterType="kr.or.ddit.cns.service.CounselingVO" resultType="kr.or.ddit.cns.service.CounselingVO">
+	  SELECT
+		    a.counsel_id,
+		    a.mem_id,
+		    a.counsel,
+		    a.counsel_category,
+		    a.counsel_method,
+		    a.counsel_title,
+		    a.counsel_description,
+		    a.counsel_status,
+		    a.counsel_req_datetime,
+		    a.counsel_url_cou,
+		    b.MEM_EMAIL,
+		    b.MEM_NAME,
+		    b.MEM_GEN,
+		    b.MEM_BIRTH,
+		    b.MEM_PHONE_NUMBER,
+		    c.cc_name counsel_category_str,
+		    d.cc_name counsel_method_str,
+		    e.cc_name mem_gen_str,
+		    f.cc_name counsel_status_str
+		FROM
+		         counseling a
+		    JOIN member b ON a.mem_id = b.mem_id
+		    JOIN COM_CODE C ON a.counsel_category = c.cc_id
+		    JOIN COM_CODE d ON a.counsel_method = d.cc_id
+		    JOIN COM_CODE e ON b.MEM_GEN = e.cc_id
+		    JOIN COM_CODE f ON a.counsel_status = f.cc_id
+		
+		WHERE
+		        counsel = #{counsel}
+		    AND trunc(counsel_req_datetime) = trunc(#{counselReqDatetime})
+		order by a.counsel_req_datetime 
+    </select>
+    
+	<update id="updateCounselStatus" parameterType="kr.or.ddit.cns.service.CounselingVO">
+	  UPDATE COUNSELING
+	  <set>
+	    <if test="counselStatus != null">
+	      COUNSEL_STATUS = #{counselStatus},
+	    </if>
+	    <if test="counselUrlCou != null">
+	      COUNSEL_URL_COU = #{counselUrlCou},
+	    </if>
+	    <if test="counselUrlUser != null">
+	      COUNSEL_URL_USER = #{counselUrlUser},
+	    </if>
+	  </set>
+	  WHERE counsel_id = #{counselId}
+	</update>
+	
+	<update id="plusPayConsultCnt" parameterType="int">
+		UPDATE PAYMENT
+			SET PAY_CONSULT_CNT = PAY_CONSULT_CNT + 1
+			WHERE PAY_ID = #{payId}
+	</update>
 
 </mapper>

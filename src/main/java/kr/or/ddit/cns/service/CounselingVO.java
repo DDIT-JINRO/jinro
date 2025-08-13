@@ -1,12 +1,12 @@
 package kr.or.ddit.cns.service;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 
 @Data
 public class CounselingVO {
+	private int counselId;
 	private int memId;
 	private int counsel;
 	private String counselCategory;
@@ -19,7 +19,6 @@ public class CounselingVO {
 	private String counselReviewd;
 	private Date counselCreatedAt;
 	private Date counselUpdatedAt;
-	private int counselId;
 	private String counselUrlUser;
 
 	private CounselingLogVO counselingLog;
@@ -31,6 +30,11 @@ public class CounselingVO {
 	private String memGen;
 
 	private String counselName;
+
+	private String counselCategoryStr;
+	private String counselMethodStr;
+	private String memGenStr;
+	private String counselStatusStr;
 
 	// 검색 키워드
 	private String keyword;

@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (selectedDate && selectedTime) {
 				const isConfirmed = confirm("상담사: " + counselorName + "\n날짜: " + selectedDate + "\n시간: " + selectedTime + "\n\n이대로 예약하시겠습니까?");
 				if (isConfirmed) {
-					axios.get('/cnslt/resve/checkSbscription', {
+					axios.get('/cnslt/resve/checkSubscription', {
 						params: {
 							memId: memId
 						}

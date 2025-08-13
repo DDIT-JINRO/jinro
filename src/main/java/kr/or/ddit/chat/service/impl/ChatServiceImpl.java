@@ -1,13 +1,8 @@
 package kr.or.ddit.chat.service.impl;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.or.ddit.chat.service.ChatMemberVO;
-import kr.or.ddit.chat.service.ChatMessageVO;
-import kr.or.ddit.chat.service.ChatReceiverVO;
 import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatMessageVO;
 import kr.or.ddit.chat.service.ChatReceiverVO;
@@ -33,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class ChatServiceImpl implements ChatService {
-
 
 	@Autowired
 	ChatRoomSessionManager chatRoomSessionManager;
@@ -72,7 +63,7 @@ public class ChatServiceImpl implements ChatService {
 	public List<ChatMessageVO> selectChatMsgByChatRoomIdAndMemId(ChatMemberVO vo) {
 		List<ChatMessageVO> chatList = this.chatMapper.selectChatMsgByChatRoomIdAndMemId(vo);
 
-		for(ChatMessageVO chatVO : chatList) {
+		for (ChatMessageVO chatVO : chatList) {
 			setChatMessageMemberFileStr(chatVO);
 		}
 		return chatList;
@@ -80,10 +71,10 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public void saveChatMessage(ChatMessageVO chatMessageVO) {
-		if(chatMessageVO.getMessageType()==null) {
+		if (chatMessageVO.getMessageType() == null) {
 			chatMessageVO.setMessageType("TEXT");
 		}
-        // 1. 메시지 insert
+		// 1. 메시지 insert
 		this.chatMapper.insertChatMessage(chatMessageVO);
 
 		// 2. 채팅방 참여자 전체 목록 불러오기
@@ -92,14 +83,14 @@ public class ChatServiceImpl implements ChatService {
 		Set<Integer> subscribeMemList = this.chatRoomSessionManager.getOpendUser(chatMessageVO.getCrId());
 
 		// 4. 수신자 테이블 처리 (구독중인 사람은 현재시간, 아닌사람은 null)
-		for(int receiverId : enteredMemList) {
+		for (int receiverId : enteredMemList) {
 			ChatReceiverVO chatReceiverVO = new ChatReceiverVO();
 			chatReceiverVO.setMsgId(chatMessageVO.getMsgId());
 			chatReceiverVO.setReceiverId(receiverId);
 
-			if(receiverId == chatMessageVO.getMemId() || subscribeMemList.contains(receiverId)) {
+			if (receiverId == chatMessageVO.getMemId() || subscribeMemList.contains(receiverId)) {
 				chatReceiverVO.setReadAt(LocalDateTime.now());
-			}else {
+			} else {
 				chatReceiverVO.setReadAt(null);
 			}
 
@@ -136,10 +127,11 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public boolean isEntered(int crId, String memIdStr) {
 		List<ChatRoomVO> rooms = this.findRoomsByMemId(memIdStr);
-		if(rooms == null || rooms.size() == 0) return false;
+		if (rooms == null || rooms.size() == 0)
+			return false;
 
-		for(ChatRoomVO chatRoomVO : rooms) {
-			if(chatRoomVO.getCrId() == crId) {
+		for (ChatRoomVO chatRoomVO : rooms) {
+			if (chatRoomVO.getCrId() == crId) {
 				return true;
 			}
 		}
@@ -153,7 +145,7 @@ public class ChatServiceImpl implements ChatService {
 		int crId = chatRoomVO.getCrId();
 		List<Integer> enterMemList = this.chatMapper.findChatMemberIdsByCrId(crId);
 
-		for(int memId : enterMemList) {
+		for (int memId : enterMemList) {
 			ChatMemberVO chatMemberVO = new ChatMemberVO();
 			chatMemberVO.setCrId(crId);
 			chatMemberVO.setMemId(memId);
@@ -191,13 +183,13 @@ public class ChatServiceImpl implements ChatService {
 		FileDetailVO fileProfileDetail = this.fileService.getFileDetail(fileProfileId, 1);
 		FileDetailVO fileSubDetail = this.fileService.getFileDetail(fileSubId, 1);
 
-		if(fileBadgeDetail != null) {
+		if (fileBadgeDetail != null) {
 			chatMessageVO.setFileBadgeStr(this.fileService.getSavePath(fileBadgeDetail));
 		}
-		if(fileProfileDetail != null) {
+		if (fileProfileDetail != null) {
 			chatMessageVO.setFileProfileStr(this.fileService.getSavePath(fileProfileDetail));
 		}
-		if(fileSubDetail != null) {
+		if (fileSubDetail != null) {
 			chatMessageVO.setFileSubStr(this.fileService.getSavePath(fileSubDetail));
 		}
 	}
@@ -206,13 +198,14 @@ public class ChatServiceImpl implements ChatService {
 	public boolean validateCounselChatRoom(int crId, String memIdStr) {
 		try {
 			ChatRoomVO chatRoomVO = selectChatRoom(crId);
-			if(!"G04002".equals(chatRoomVO.getCcId())) return false;	// 채팅방 정보 조회 후 상담목적 채팅방이 아니면 false
+			if (!"G04002".equals(chatRoomVO.getCcId()))
+				return false; // 채팅방 정보 조회 후 상담목적 채팅방이 아니면 false
 
 			ChatMemberVO chatMemberVO = new ChatMemberVO();
 			chatMemberVO.setCrId(crId);
 			chatMemberVO.setMemId(Integer.parseInt(memIdStr));
 			ChatMemberVO target = this.chatMapper.selectChatMember(chatMemberVO); // 해당 채팅방에 현재 요청한 회원이 없으면 false
-			if(target!=null) {
+			if (target != null) {
 				return true;
 			}
 		} catch (Exception e) {
@@ -226,13 +219,13 @@ public class ChatServiceImpl implements ChatService {
 	public Map<String, MemberVO> getMemberAndCounselorInfo(int crId) {
 		List<Integer> members = this.chatMapper.findChatMemberIdsByCrId(crId);
 		Map<String, MemberVO> counselMembers = new HashMap<>();
-		for(int memId : members) {
+		for (int memId : members) {
 			MemberVO memberVO = this.chatMapper.selectMemInfoForCounsel(memId);
 			myInquiryService.getProfileFile(memberVO);
 			String role = memberVO.getMemRole();
-			if("R01003".equals(role)) {
+			if ("R01003".equals(role)) {
 				counselMembers.put("counselor", memberVO);
-			}else {
+			} else {
 				counselMembers.put("member", memberVO);
 			}
 		}
@@ -257,6 +250,7 @@ public class ChatServiceImpl implements ChatService {
 		chatRoomVO.setCcId("G04002");
 		chatRoomVO.setTargetId(counselingVO.getCounselId());
 		chatRoomVO.setCrMaxCnt(2);
+		chatRoomVO.setCrTitle(counselingVO.getCounselTitle());
 		int result1 = this.chatMapper.insertChatRoom(chatRoomVO);
 
 		// 상담사 및 회원 입장처리
@@ -269,8 +263,8 @@ public class ChatServiceImpl implements ChatService {
 		int result2 = this.chatMapper.insertAndUpdateChatMember(chatMemCounselor);
 		int result3 = this.chatMapper.insertAndUpdateChatMember(chatMemMember);
 
-		if(result1 > 0 && result2 > 0 && result3 > 0) {
-			returningURL = "/counselChat/"+chatRoomVO.getCrId();
+		if (result1 > 0 && result2 > 0 && result3 > 0) {
+			returningURL = "/counselChat/" + chatRoomVO.getCrId();
 		}
 
 		return returningURL;
@@ -278,7 +272,7 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public void saveChatMessageWithoutReceiver(ChatMessageVO chatMessageVO) {
-		if(chatMessageVO.getMessageType()==null) {
+		if (chatMessageVO.getMessageType() == null) {
 			chatMessageVO.setMessageType("TEXT");
 		}
 		this.chatMapper.insertChatMessage(chatMessageVO);
