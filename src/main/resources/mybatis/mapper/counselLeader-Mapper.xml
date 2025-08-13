@@ -301,5 +301,54 @@
 		   AND COUNSEL_REQ_DATETIME >= TRUNC(#{vaStart})
            AND COUNSEL_REQ_DATETIME <![CDATA[<]]>  TRUNC(#{vaEnd}) + 1
 	</select>
-
+<select id="selectCounselScheduleList" parameterType="kr.or.ddit.cns.service.CounselingVO" resultType="kr.or.ddit.cns.service.CounselingVO">
+  SELECT *
+	FROM (
+	    SELECT
+	        a.counsel_id,
+	        a.mem_id,
+	        a.counsel,
+	        a.counsel_category,
+	        a.counsel_method,
+	        a.counsel_title,
+	        a.counsel_description,
+	        a.counsel_status,
+	        a.counsel_req_datetime,
+	        a.counsel_url_cou,
+	        b.MEM_EMAIL,
+	        b.MEM_NAME,
+	        b.MEM_GEN,
+	        b.MEM_BIRTH,
+	        b.MEM_PHONE_NUMBER,
+	        c.cc_name counsel_category_str,
+	        d.cc_name counsel_method_str,
+	        e.cc_name mem_gen_str,
+	        f.cc_name counsel_status_str,
+	        g.mem_name counsel_name,
+	        ROW_NUMBER() OVER(ORDER BY a.counsel_req_datetime) AS RNUM
+	    FROM
+	        counseling a
+	        JOIN member b ON a.mem_id = b.mem_id
+	        JOIN COM_CODE C ON a.counsel_category = c.cc_id
+	        JOIN COM_CODE d ON a.counsel_method = d.cc_id
+	        JOIN COM_CODE e ON b.MEM_GEN = e.cc_id
+	        JOIN COM_CODE f ON a.counsel_status = f.cc_id
+	        JOIN MEMBER g ON a.counsel = g.mem_id
+	    WHERE
+	        trunc(counsel_req_datetime) = trunc(#{counselReqDatetime})
+	        <if test="keyword != null and !keyword.equals('')">
+	            AND g.mem_name LIKE '%' || #{keyword} || '%'
+	        </if>
+	)
+	WHERE RNUM BETWEEN #{startNo} AND #{endNo}
+    </select>
+    
+    <select id="selectcounselTotal" parameterType="kr.or.ddit.cns.service.CounselingVO" resultType="int">
+    	SELECT COUNT(*)
+			FROM counseling a
+			WHERE trunc(a.counsel_req_datetime) = trunc(#{counselReqDatetime})
+			  <if test="keyword != null and !keyword.equals('')">
+			      AND a.counsel = (SELECT mem_id FROM member WHERE mem_name LIKE '%' || #{keyword} || '%')
+			  </if>
+    </select>
 </mapper>

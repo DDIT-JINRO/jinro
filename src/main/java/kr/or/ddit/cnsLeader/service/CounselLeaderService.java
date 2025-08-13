@@ -50,4 +50,6 @@ public interface CounselLeaderService {
 	 */
 	List<CounselingVO> selectRequestedCounselBetweenVacation(int vaId);
 
+	ArticlePage<CounselingVO> selectCounselScheduleList(CounselingVO counselingVO);
+
 }

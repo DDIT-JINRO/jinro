@@ -21,36 +21,42 @@ rel='stylesheet' />
 				<select name="status">
 					<option value="counselor">상담사명</option>
 					<!-- … -->
-				</select> <input type="text" name="keyword" placeholder="상담사명을 입력하세요" />
+				</select> <input type="text" name="keyword" id="keyword" placeholder="상담사명을 입력하세요" />
 				<button type="button" class="btn-save" id="btn-search">조회</button>
 			</form>
 		</div>
 		<p>
-			총 <span id="notice-count"></span>건
+			총 <span id="schedule-count"></span>건
 		</p>
 			<span id="selectedDateText"></span>
 		<div class="table-wrapper">
 			<table>
 				<colgroup>
-					<col style="width: 20%;">
-					<col style="width: 20%;">
-					<col style="width: 20%;">
-					<col style="width: 20%;">
-					<col style="width: 20%;">
+					<col style="width: 10%;">
+					<col style="width: 25%;">
+					<col style="width: 25%;">
+					<col style="width: 25%;">
+					<col style="width: 15%;">
 				</colgroup>
 				<thead>
 					<tr>
 						<th>번 호</th>
-						<th>상담사</th>
 						<th>상담 회원</th>
 						<th>상담일시</th>
+						<th>상담사</th>
 						<th>상 태</th>
 					</tr>
 				</thead>
-				<tbody id="notice-list">
-					<!-- Java 백엔드 렌더링용 -->
+				<tbody id="bookedSchedulesContainer">
 				</tbody>
 			</table>
+		</div>
+		<div style="margin-top: 10px; text-align: center;">
+			<div class="card-footer clearfix">
+				<div class="panel-footer pagination">
+				
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="template-panel topheader">

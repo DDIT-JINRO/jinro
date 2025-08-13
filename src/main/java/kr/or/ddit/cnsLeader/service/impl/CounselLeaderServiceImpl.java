@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import kr.or.ddit.cns.service.CounselingLogVO;
 import kr.or.ddit.cns.service.CounselingVO;
@@ -72,6 +73,15 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 		VacationVO vacationVO = this.counselLeaderMapper.vacationDetail(vaId);
 		List<CounselingVO> list = this.counselLeaderMapper.selectRequestedCounselBetweenVacation(vacationVO);
 		return list;
+	}
+
+	@Override
+	public ArticlePage<CounselingVO> selectCounselScheduleList(CounselingVO counselingVO) {
+		int total = this.counselLeaderMapper.selectcounselTotal(counselingVO);
+		List<CounselingVO> list = this.counselLeaderMapper.selectCounselScheduleList(counselingVO);
+		
+		ArticlePage<CounselingVO> articlePage = new ArticlePage<>(total, counselingVO.getCurrentPage(), counselingVO.getSize(), list, counselingVO.getKeyword());
+		return articlePage;
 	}
 
 }

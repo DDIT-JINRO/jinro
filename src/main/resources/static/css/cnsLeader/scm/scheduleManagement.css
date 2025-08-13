@@ -60,14 +60,86 @@ p {
 /* ──────────────────────────────────────────────────────────
    테이블 영역
 ──────────────────────────────────────────────────────────*/
+/* 테이블 전체 스타일 */
 .table-wrapper {
-    overflow-x: auto;
+    border: 1px solid #ddd; /* 테이블 외곽선 */
+    border-radius: 4px;
+    overflow: hidden; /* 테이블 내용이 wrapper 밖으로 넘치면 숨김 */
+    margin-bottom: 20px; /* 하단 간격 추가 */
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
+}
+
+/* 테이블 헤더 스타일 */
+thead {
+    background-color: #f8f9fa; /* 밝은 회색 배경 */
+    border-bottom: 2px solid #dee2e6; /* 헤더 아래 구분선 */
+}
+
+thead th {
+    padding: 12px;
+    font-weight: 600;
+    color: #495057; /* 글자색 */
+    text-align: center;
+    border-right: 1px solid #dee2e6; /* 헤더 셀 구분선 */
+}
+
+thead th:last-child {
+    border-right: none; /* 마지막 헤더 셀의 오른쪽 테두리 제거 */
+}
+
+/* 테이블 바디 스타일 */
+tbody tr {
+    border-bottom: 1px solid #eee; /* 행 아래 구분선 */
+    cursor: pointer; /* 마우스 오버 시 커서 변경 */
+}
+
+tbody tr:last-child {
+    border-bottom: none; /* 마지막 행의 아래 테두리 제거 */
+}
+
+tbody td {
+    padding: 10px;
+    color: #6c757d; /* 글자색 */
+    text-align: center;
+    border-right: 1px solid #eee; /* 데이터 셀 구분선 */
+    overflow: hidden; /* 내용이 넘치면 숨김 */
+    text-overflow: ellipsis; /* 내용이 넘치면 ...으로 표시 */
+    white-space: nowrap; /* 내용이 한 줄로 표시되도록 */
+}
+
+tbody td:last-child {
+    border-right: none; /* 마지막 데이터 셀의 오른쪽 테두리 제거 */
+}
+
+tbody tr:hover {
+    background-color: #f5f5f5; /* 마우스 오버 시 배경색 변경 */
+}
+
+/* 번호 컬럼 너비 조정 (이미지 참고) */
+colgroup col:nth-child(1) {
+    width: 10%; /* 예시: 필요에 따라 조정 */
+}
+
+/* 나머지 컬럼 너비는 auto 또는 필요에 따라 조정 */
+colgroup col:nth-child(2) {
+    width: auto;
+}
+
+colgroup col:nth-child(3) {
+    width: auto;
+}
+
+colgroup col:nth-child(4) {
+    width: auto;
+}
+
+colgroup col:nth-child(5) {
+    width: 15%; /* 상태 컬럼 너비 예시 */
 }
 
 
