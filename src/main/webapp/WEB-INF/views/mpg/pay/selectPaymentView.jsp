@@ -115,7 +115,7 @@
 						varStatus="status">
 						<div class="history-row">
 							<a href="#">${status.count}</a> <span>${payment.subName}</span> <span><fmt:formatDate
-									value="${payment.payDate}" pattern="yyyy-MM-dd" /></span> <span><fmt:formatNumber
+									value="${payment.payDate}" pattern="yyyy. MM. dd" /></span> <span><fmt:formatNumber
 									value="${payment.payAmount}" pattern="#,###" /> 원</span>
 						</div>
 					</c:forEach>
