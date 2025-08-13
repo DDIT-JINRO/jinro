@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.empt.enp.service.CompanyVO;
@@ -79,7 +80,8 @@ public class EnterprisePostingController {
 	}
 
 	@PostMapping("/enp/enterprisePostingUpdate.do")
-	public ResponseEntity<String> enterprisePostingUpdate(@RequestBody CompanyVO companyVO) {
+	@ResponseBody
+	public ResponseEntity<String> enterprisePostingUpdate(CompanyVO companyVO) {
 
 		int cpId = enterprisePostingService.checkCompanyByCpId(companyVO);
 

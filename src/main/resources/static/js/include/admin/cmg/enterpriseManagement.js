@@ -98,30 +98,40 @@ document.getElementById("entList").addEventListener("click", function(e) {
 
 
 function entDetail(formData) {
-	axios.get('/admin/cmg/entDetail.do', formData)
+	axios.post('/admin/cmg/entDetail.do', formData)
 		.then(res => {
-			const { memberDetail, filePath, countVO, interestCn, vacByCns, counseling, avgRate } = res.data;
-			const profileImgEl = document.getElementById('member-profile-img');
-			profileImgEl.src = filePath ? filePath : '/images/defaultProfileImg.png';
+			const { companyVO, filePath } = res.data;
+
+			console.log(res.data);
+
+			const detailAbout = document.getElementById('entDetailAbout');
+
+			detailAbout.innerHTML = `${companyVO.cpDescription == null ? '기업정보가 없습니다.' : companyVO.cpDescription}`;
+
+			const linkElement = document.getElementById('companyWebsiteLink');
 
 
-			document.getElementById('mem-id').value = memberDetail.memId || '-';
-			document.getElementById('mem-name').value = memberDetail.memName || '-';
-			document.getElementById('mem-nickname').value = memberDetail.memNickname || '-';
-			document.getElementById('mem-email').value = memberDetail.memEmail || '-';
-			document.getElementById('mem-phone').value = memberDetail.memPhoneNumber || '-';
-			document.getElementById('mem-gen').value = memberGender(memberDetail.memGen) || '-';
-			document.getElementById('mem-birth').value = formatDate(memberDetail.memBirth) || '-';
-			document.getElementById('mem-logType').value = convertLoginType(memberDetail.loginType) || '-';
+			const companyWebsiteUrl = companyVO.cpWebsite;
 
-			const selectElement = document.getElementById("mem-role");
 
-			for (let i = 0; i < selectElement.options.length; i++) {
-				if (selectElement.options[i].value === memberDetail.memRole) {
-					selectElement.options[i].selected = true;
-					break;
-				}
+			if (companyWebsiteUrl) {
+				linkElement.href = companyWebsiteUrl;
+			} else {
+				linkElement.addEventListener('click', (e) => e.preventDefault());
 			}
+
+			if (filePath != null || filePath != "") {
+				document.getElementById('entLogo').src = filePath || '-';
+			} else {
+				document.getElementById('entLogo').src = companyVO.cpImgUrl || '-';
+			}
+
+			document.getElementById('entName').innerHTML = companyVO.cpName || '-';
+			document.getElementById('gubun').innerHTML = companyVO.cpScale || '-';
+			document.getElementById('gubunName').innerHTML = companyVO.ccName || '-';
+			document.getElementById('entId').innerHTML = `NO.${companyVO.cpId}` || '-';
+			document.getElementById('entName2').innerText = companyVO.cpName || '-';
+			document.getElementById('entAddress').innerText = companyVO.cpRegion || '-';
 
 		})
 		.catch(error => {
@@ -151,6 +161,59 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 	});
 });
 
+function imgView() {
+	const cpLogoFile = document.getElementById('cpLogoFile');
+	const cpLogoPreview = document.getElementById('cpLogoPreview');
+	const btnChangeLogo = document.getElementById('btnChangeLogo');
+	const imageUploadBox = document.getElementById('imageUploadBox');
+
+
+	cpLogoFile.addEventListener('change', (event) => {
+		const file = event.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+
+			reader.onload = (e) => {
+				cpLogoPreview.src = e.target.result;
+				cpLogoPreview.style.display = 'block';
+				imageUploadBox.querySelector('i').style.display = 'none';
+				imageUploadBox.querySelector('p').style.display = 'none';
+			};
+			reader.readAsDataURL(file);
+		}
+	});
+
+	btnChangeLogo.addEventListener('click', () => {
+		cpLogoFile.click();
+	});
+}
+
+function execDaumPostcode() {
+	new daum.Postcode({
+		oncomplete: function(data) {
+			document.getElementById('postcode').value = data.zonecode;
+			document.getElementById('jibunAddress').value = data.jibunAddress;
+		}
+	}).open();
+}
+
+function save() {
+	const saveBtn = document.getElementById('btnRegister');
+	
+	saveBtn.addEventListener('click', function() {
+		const cpName = document.getElementById('cpName').value;
+		
+		let form = new FormData();
+		form.set("cpName", cpName);
+		axios.post('/empt/enp/enterprisePostingUpdate.do', form).then(res => {
+			console.log(res);
+		})
+
+
+	})
+}
+save();
+imgView();
 entSearchFn();
 fetchEntList();
 entListPangingFn();

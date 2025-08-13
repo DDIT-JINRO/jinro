@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import kr.or.ddit.admin.cmg.service.ContentsManagementService;
 import kr.or.ddit.empt.enp.service.CompanyVO;
 import kr.or.ddit.util.ArticlePage;
+import kr.or.ddit.util.file.service.FileDetailVO;
+import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -17,6 +19,8 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 
 	@Autowired
 	ContentsManagementMapper contentsManagementMapper;
+	@Autowired
+	FileService fileService;
 
 	@Override
 	public ArticlePage<CompanyVO> getEntList(CompanyVO companyVO) {
@@ -31,10 +35,20 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 
 	@Override
 	public Map<String, Object> entDetail(String id) {
-		
 		CompanyVO companyVO = contentsManagementMapper.entDetail(id);
-		
-		return null;
+		String filePath = "";
+		log.info("companyVO @@@@@@@@ : {}", companyVO);
+
+		if (companyVO != null) {
+			
+			if (null != companyVO.getFileGroupId()) {
+				log.error("여기 들어왔음@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+				FileDetailVO file = fileService.getFileDetail(companyVO.getFileGroupId(), 0);
+				filePath = fileService.getSavePath(file);
+			}
+		}
+
+		return Map.of("companyVO", companyVO, "filePath", filePath);
 	}
 
 }

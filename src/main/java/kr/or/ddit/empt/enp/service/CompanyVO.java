@@ -16,8 +16,8 @@ public class CompanyVO {
 	private Long cpBusino;
 	private String cpImgUrl;
 	private String cpRegion;
-	private int fileGroupId;
-
+	private Long fileGroupId;
+	
 //	새로받는 값
 	private String cpHiringStatus; // 현재 채용 여부
 	private String ccName; // 기업규모 내용

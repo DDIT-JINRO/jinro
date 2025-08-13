@@ -33,9 +33,7 @@ public class ContentsManagementController {
 	@PostMapping("/entDetail.do")
 	public Map<String, Object> entDetail(@RequestParam String id) {
 
-		contentsManagementService.entDetail(id);
-
-		return null;
+		return contentsManagementService.entDetail(id);
 	}
 
 }
