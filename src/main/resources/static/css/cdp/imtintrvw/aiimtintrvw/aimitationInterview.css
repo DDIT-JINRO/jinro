@@ -204,7 +204,7 @@
 /* Select 박스 스타일링 */
 .question-select {
     box-sizing: border-box;
-    width: 100%;
+    max-width: 93%;
     height: 49px;
     padding: 12px 12px;
     

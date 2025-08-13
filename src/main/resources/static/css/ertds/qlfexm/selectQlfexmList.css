@@ -20,10 +20,9 @@
     appearance: none;
     background-color: transparent;
     border: none;
-    padding: 0 36px 0 16px; /* 오른쪽 패딩으로 화살표 공간 확보 */
+    padding: 0 36px 0 16px; 
     font-size: 1rem;
     color: #4b5563;
-    cursor: pointer;
     height: 100%;
 }
 .com-status-filter:focus {
@@ -133,23 +132,16 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.data-item :hover {
-	color: #5A67D8;
-	text-decoration: underline;
-}
 
 .data-item a {
 	text-decoration: none;
 	color: #333;
 }
 
-.data-item a:hover {
-	text-decoration: underline;
-}
 /* ==============================
    번호 스타일 (뱃지처럼)
    ============================== */
-.notice-no {
+.data-no {
 	max-width:15%;
 	background: linear-gradient(to right, #e4f3ff, #d7e9fb);
 	color: #007bff;

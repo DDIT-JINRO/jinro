@@ -63,15 +63,39 @@ public class ContestServiceImpl implements ContestService {
 		if (detail != null && detail.getContestDescription() != null) {
 			// 2. 상세 설명(contestDescription)을 '●' 기준으로 나누기
 			String[] sections = detail.getContestDescription().split("●");
+			List<String> sectionList = new ArrayList<>(); // return될 리스트
 
-			// 3. 나눈 조각들을 List<String>으로 변환하여 새로운 필드에 저장
-			List<String> sectionList = new ArrayList<>();
-			for (String section : sections) {
-				String trimmedSection = section.trim();
-				if (!trimmedSection.isEmpty()) {
-					sectionList.add(trimmedSection);
+			for(int i=0; i<sections.length;i++) {
+
+				if(i==0) {
+					// 첫 줄은 Strong으로 처리
+					sectionList.add("<strong style=\"font-size: 16px;\">" + sections[0] + "</strong>");
+					continue;
 				}
+				
+				
+				if(i!=0 && sections[i].contains(" - ")) {					
+					String data = sections[i].replace(" - ", "<br>&nbsp;&nbsp; - ");
+					String[] parts = data.split("<br>"); // 배열 뽑고
+					String firstPart = parts[0].trim(); // 첫번째 가져오기
+					sections[i] = "<strong class=\"supDetailData\" style=\"font-size: 16px;\">" + firstPart + "</strong>";
+					for(int j=1;j<parts.length;j++) {
+						sections[i]+= "<br>"+parts[j];
+					}
+				}
+				
+				if((i!=0 && sections[i].contains("*"))){
+					sections[i] = sections[i].replace("*", "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * ");
+				}
+				
+				if((i!=0 && sections[i].contains("※"))){
+					sections[i] = sections[i].replace("※", "<br>&nbsp;&nbsp;&nbsp;&nbsp; * ");
+				}
+				
+				sectionList.add(sections[i]);					
+				
 			}
+			
 			detail.setDescriptionSections(sectionList);
 		}
 

@@ -43,13 +43,14 @@
 				</div>
 				<div class="data-list">
 					<c:forEach var="item" items="${articlePage.content}">
-						<div class="data-item" ">
-							<div class="notice-no"> ${item.examId}</div>
-							<div><a href="/ertds/qlfexm/selectQlfexmDetail.do?examId=${item.examId}">${item.examTitle}</a></div>
-							<div style="padding-left: 20px; text-align: center;">${item.examAreaCode}</div>
-							<div style="text-align: center; "><fmt:formatDate value="${item.examNotiDate}" pattern="yyyy.MM.dd" /></div>
-
-						</div>
+					    <div class="data-item" data-exam-id="${item.examId}">
+					        <div class="data-no">${item.examId}</div>
+					        <div>${item.examTitle}</div>
+					        <div style="padding-left: 20px; text-align: center;">${item.examAreaCode}</div>
+					        <div style="text-align: center;">
+					            <fmt:formatDate value="${item.examNotiDate}" pattern="yyyy.MM.dd" />
+					        </div>
+					    </div>
 					</c:forEach>
 				</div>
 			</div>
@@ -80,8 +81,6 @@
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
+<script src="/js/ertds/qlfexm/selectQlfexmList.js"></script>
 </body>
 </html>
-<script>
-	// 스크립트 작성 해주시면 됩니다.
-</script>
