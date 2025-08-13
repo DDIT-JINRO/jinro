@@ -281,4 +281,414 @@
 		  </choose>
 	</select>
 
+	<select id="communityPostDailyTrend" parameterType="map" resultType="map">
+	  SELECT
+	    TRUNC(b.BOARD_CREATED_AT)                                     AS "dt",
+	    b.CC_ID                                                        AS "ccId",
+	    CASE b.CC_ID WHEN 'G09001' THEN '청소년'
+	                 WHEN 'G09005' THEN '스터디그룹'
+	                 WHEN 'G09006' THEN '청년'
+	                 ELSE b.CC_ID END                                  AS "ccName",
+	    COUNT(*)                                                       AS "postCnt",
+	    COUNT(DISTINCT b.MEM_ID)                                       AS "uniqueAuthors"
+	  FROM BOARD b
+	  JOIN MEMBER m ON m.MEM_ID = b.MEM_ID
+	  WHERE b.BOARD_DEL_YN = 'N'
+	    AND b.CC_ID IN ('G09001','G09005','G09006')
+	    <if test="ccId != null and ccId != '' and ccId != 'ALL'">
+	      AND b.CC_ID = #{ccId}
+	    </if>
+	    <if test="from != null and from != ''">
+	      AND b.BOARD_CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')
+	    </if>
+	    <if test="to != null and to != ''">
+	      AND b.BOARD_CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1
+	    </if>
+	    <if test="gender != null and gender != '' and gender != 'ALL'">
+	      AND m.MEM_GEN = #{gender}
+	    </if>
+	    <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	      AND m.MEM_BIRTH IS NOT NULL
+	      AND CASE
+	            WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BOARD_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	            WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BOARD_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	            WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BOARD_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	            WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BOARD_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	            ELSE '30+'
+	          END = #{ageBand}
+	    </if>
+	  GROUP BY TRUNC(b.BOARD_CREATED_AT), b.CC_ID
+	  ORDER BY "dt", "ccId"
+	</select>
+
+	<select id="communityReactionDailyTrend" parameterType="map" resultType="map">
+	  SELECT "dt","ccId","ccName","type", SUM("cnt") AS "cnt"
+	  FROM (
+	    /* 댓글 */
+	    SELECT
+	      TRUNC(r.REPLY_CREATED_AT)                                   AS "dt",
+	      b.CC_ID                                                     AS "ccId",
+	      CASE b.CC_ID WHEN 'G09001' THEN '청소년'
+	                   WHEN 'G09005' THEN '스터디그룹'
+	                   WHEN 'G09006' THEN '청년'
+	                   ELSE b.CC_ID END                               AS "ccName",
+	      'REPLY'                                                     AS "type",
+	      COUNT(*)                                                    AS "cnt"
+	    FROM REPLY r
+	    JOIN BOARD b  ON b.BOARD_ID = r.BOARD_ID
+	    JOIN MEMBER m ON m.MEM_ID   = r.MEM_ID
+	    WHERE b.BOARD_DEL_YN = 'N'
+	      AND b.CC_ID IN ('G09001','G09005','G09006')
+	      <if test="ccId != null and ccId != '' and ccId != 'ALL'">AND b.CC_ID = #{ccId}</if>
+	      <if test="from != null and from != ''">AND r.REPLY_CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND r.REPLY_CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+	    GROUP BY TRUNC(r.REPLY_CREATED_AT), b.CC_ID
+
+	    UNION ALL
+
+	    /* 좋아요 */
+	    SELECT
+	      TRUNC(l.LIKE_AT)                                            AS "dt",
+	      b.CC_ID                                                     AS "ccId",
+	      CASE b.CC_ID WHEN 'G09001' THEN '청소년'
+	                   WHEN 'G09005' THEN '스터디그룹'
+	                   WHEN 'G09006' THEN '청년'
+	                   ELSE b.CC_ID END                               AS "ccName",
+	      'LIKE'                                                      AS "type",
+	      COUNT(*)                                                    AS "cnt"
+	    FROM BOARD_LIKE l
+	    JOIN BOARD b  ON b.BOARD_ID = l.BOARD_ID
+	    JOIN MEMBER m ON m.MEM_ID   = l.MEM_ID
+	    WHERE b.BOARD_DEL_YN = 'N'
+	      AND b.CC_ID IN ('G09001','G09005','G09006')
+	      <if test="ccId != null and ccId != '' and ccId != 'ALL'">AND b.CC_ID = #{ccId}</if>
+	      <if test="from != null and from != ''">AND l.LIKE_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND l.LIKE_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+	    GROUP BY TRUNC(l.LIKE_AT), b.CC_ID
+	  )
+	  GROUP BY "dt","ccId","ccName","type"
+	  ORDER BY "dt","ccId","type"
+	</select>
+
+	<select id="communityTopActiveMembers" parameterType="map" resultType="map">
+	  WITH
+	  P AS ( /* 게시글 */
+	    SELECT b.MEM_ID AS mem_id, COUNT(*) AS pcnt
+	    FROM BOARD b
+	    JOIN MEMBER m ON m.MEM_ID = b.MEM_ID
+	    WHERE b.BOARD_DEL_YN = 'N'
+	      AND b.CC_ID IN ('G09001','G09005','G09006')
+	      <if test="ccId != null and ccId != '' and ccId != 'ALL'">AND b.CC_ID = #{ccId}</if>
+	      <if test="from != null and from != ''">AND b.BOARD_CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND b.BOARD_CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BOARD_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BOARD_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BOARD_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BOARD_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+	    GROUP BY b.MEM_ID
+	  ),
+	  R AS ( /* 댓글 */
+	    SELECT r.MEM_ID AS mem_id, COUNT(*) AS rcnt
+	    FROM REPLY r
+	    JOIN BOARD b  ON b.BOARD_ID = r.BOARD_ID
+	    JOIN MEMBER m ON m.MEM_ID   = r.MEM_ID
+	    WHERE b.BOARD_DEL_YN = 'N'
+	      AND b.CC_ID IN ('G09001','G09005','G09006')
+	      <if test="ccId != null and ccId != '' and ccId != 'ALL'">AND b.CC_ID = #{ccId}</if>
+	      <if test="from != null and from != ''">AND r.REPLY_CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND r.REPLY_CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+	    GROUP BY r.MEM_ID
+	  ),
+	  L AS ( /* 좋아요 */
+	    SELECT l.MEM_ID AS mem_id, COUNT(*) AS lcnt
+	    FROM BOARD_LIKE l
+	    JOIN BOARD b  ON b.BOARD_ID = l.BOARD_ID
+	    JOIN MEMBER m ON m.MEM_ID   = l.MEM_ID
+	    WHERE b.BOARD_DEL_YN = 'N'
+	      AND b.CC_ID IN ('G09001','G09005','G09006')
+	      <if test="ccId != null and ccId != '' and ccId != 'ALL'">AND b.CC_ID = #{ccId}</if>
+	      <if test="from != null and from != ''">AND l.LIKE_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND l.LIKE_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+	    GROUP BY l.MEM_ID
+	  )
+	  SELECT *
+	  FROM (
+	    SELECT
+	      u.MEM_ID                                              AS "memId",
+	      NVL(m.MEM_NICKNAME, m.MEM_EMAIL)                      AS "nickname",
+	      NVL(p.pcnt,0)                                         AS "postCnt",
+	      NVL(r.rcnt,0)                                         AS "replyCnt",
+	      NVL(l.lcnt,0)                                         AS "likeCnt",
+	      ( NVL(p.pcnt,0)*3 + NVL(r.rcnt,0)*2 + NVL(l.lcnt,0) ) AS "score"
+	    FROM (SELECT DISTINCT mem_id FROM (
+	            SELECT mem_id FROM P UNION ALL
+	            SELECT mem_id FROM R UNION ALL
+	            SELECT mem_id FROM L
+	          )) u
+	    LEFT JOIN P p ON p.mem_id = u.mem_id
+	    LEFT JOIN R r ON r.mem_id = u.mem_id
+	    LEFT JOIN L l ON l.mem_id = u.mem_id
+	    JOIN MEMBER m ON m.MEM_ID = u.mem_id
+	    ORDER BY "score" DESC, "postCnt" DESC, "replyCnt" DESC
+	  )
+	  WHERE ROWNUM &lt;= #{limit}
+	</select>
+
+	<select id="communityTopPostsByEngage" parameterType="map" resultType="map">
+	  SELECT *
+	  FROM (
+	    SELECT
+	      b.BOARD_ID                                           AS "boardId",
+	      b.CC_ID                                              AS "ccId",
+	      CASE b.CC_ID WHEN 'G09001' THEN '청소년'
+	                   WHEN 'G09005' THEN '스터디그룹'
+	                   WHEN 'G09006' THEN '청년'
+	                   ELSE b.CC_ID END                         AS "ccName",
+	      b.BOARD_TITLE                                        AS "title",
+	      b.MEM_ID                                             AS "authorId",
+	      NVL(a.MEM_NICKNAME, a.MEM_EMAIL)                     AS "authorNickname",
+	      NVL(r.rcnt,0)                                        AS "replyCnt",
+	      NVL(l.lcnt,0)                                        AS "likeCnt",
+	      (NVL(r.rcnt,0) + NVL(l.lcnt,0))                      AS "engageCnt",
+	      b.BOARD_CREATED_AT                                   AS "createdAt"
+	    FROM BOARD b
+	    JOIN MEMBER a ON a.MEM_ID = b.MEM_ID
+	    LEFT JOIN (
+	      SELECT r.BOARD_ID, COUNT(*) rcnt
+	      FROM REPLY r
+	      JOIN MEMBER m ON m.MEM_ID = r.MEM_ID
+	      WHERE 1=1
+	        <if test="from != null and from != ''">AND r.REPLY_CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	        <if test="to   != null and to   != ''">AND r.REPLY_CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	        <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	        <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	          AND m.MEM_BIRTH IS NOT NULL
+	          AND CASE
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(r.REPLY_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	                ELSE '30+'
+	              END = #{ageBand}
+	        </if>
+	      GROUP BY r.BOARD_ID
+	    ) r ON r.BOARD_ID = b.BOARD_ID
+	    LEFT JOIN (
+	      SELECT l.BOARD_ID, COUNT(*) lcnt
+	      FROM BOARD_LIKE l
+	      JOIN MEMBER m ON m.MEM_ID = l.MEM_ID
+	      WHERE 1=1
+	        <if test="from != null and from != ''">AND l.LIKE_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	        <if test="to   != null and to   != ''">AND l.LIKE_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	        <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	        <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	          AND m.MEM_BIRTH IS NOT NULL
+	          AND CASE
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.LIKE_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	                ELSE '30+'
+	              END = #{ageBand}
+	        </if>
+	      GROUP BY l.BOARD_ID
+	    ) l ON l.BOARD_ID = b.BOARD_ID
+	    WHERE b.BOARD_DEL_YN = 'N'
+	      AND b.CC_ID IN ('G09001','G09005','G09006')
+	      <if test="ccId != null and ccId != '' and ccId != 'ALL'">AND b.CC_ID = #{ccId}</if>
+	      <if test="from != null and from != ''">AND b.BOARD_CREATED_AT &lt;= TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	    ORDER BY "engageCnt" DESC, "likeCnt" DESC, "replyCnt" DESC
+	  )
+	  WHERE ROWNUM &lt;= #{limit}
+	</select>
+
+	<select id="bookmarkWorldcupSummary" parameterType="map" resultType="map">
+	  SELECT "feature", SUM("cnt") AS "cnt", SUM("uniqueUsers") AS "uniqueUsers"
+	  FROM (
+	    /* BOOKMARK: 채용(G03003) 제외 */
+	    SELECT
+	      'BOOKMARK' AS "feature",
+	      COUNT(*)   AS "cnt",
+	      COUNT(DISTINCT b.MEM_ID) AS "uniqueUsers"
+	    FROM BOOKMARK b
+	    JOIN MEMBER  m ON m.MEM_ID = b.MEM_ID
+	    WHERE b.BM_CATEGORY_ID IN ('G03001','G03002','G03004','G03005','G03006')
+	      <if test="from != null and from != ''">AND b.BM_CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND b.BM_CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+
+	    UNION ALL
+
+	    /* WORLDCUP */
+	    SELECT
+	      'WORLDCUP' AS "feature",
+	      COUNT(*)   AS "cnt",
+	      COUNT(DISTINCT w.MEM_ID) AS "uniqueUsers"
+	    FROM WORLDCUP w
+	    JOIN MEMBER  m ON m.MEM_ID = w.MEM_ID
+	    WHERE 1=1
+	      <if test="from != null and from != ''">AND w.CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND w.CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+	  )
+	  GROUP BY "feature"
+	  ORDER BY "feature"
+	</select>
+
+	<select id="bookmarkWorldcupDailyTrend" parameterType="map" resultType="map">
+	  SELECT "dt","feature", SUM("cnt") AS "cnt"
+	  FROM (
+	    /* BOOKMARK */
+	    SELECT
+	      TRUNC(b.BM_CREATED_AT) AS "dt",
+	      'BOOKMARK'             AS "feature",
+	      COUNT(*)               AS "cnt"
+	    FROM BOOKMARK b
+	    JOIN MEMBER  m ON m.MEM_ID = b.MEM_ID
+	    WHERE b.BM_CATEGORY_ID IN ('G03001','G03002','G03004','G03005','G03006')
+	      <if test="from != null and from != ''">AND b.BM_CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND b.BM_CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+	    GROUP BY TRUNC(b.BM_CREATED_AT)
+
+	    UNION ALL
+
+	    /* WORLDCUP */
+	    SELECT
+	      TRUNC(w.CREATED_AT) AS "dt",
+	      'WORLDCUP'          AS "feature",
+	      COUNT(*)            AS "cnt"
+	    FROM WORLDCUP w
+	    JOIN MEMBER  m ON m.MEM_ID = w.MEM_ID
+	    WHERE 1=1
+	      <if test="from != null and from != ''">AND w.CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND w.CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+	    GROUP BY TRUNC(w.CREATED_AT)
+	  )
+	  GROUP BY "dt","feature"
+	  ORDER BY "dt","feature"
+	</select>
+
+	<select id="worldcupTopJobs" parameterType="map" resultType="map">
+	  SELECT *
+	  FROM (
+	    SELECT
+	      w.JOB_CODE         AS "jobCode",
+	      j.JOB_NAME         AS "jobName",
+	      COUNT(*)           AS "cnt"
+	    FROM WORLDCUP w
+	    JOIN MEMBER m ON m.MEM_ID = w.MEM_ID
+	    LEFT JOIN JOBS   j ON j.JOB_CODE = w.JOB_CODE
+	    WHERE 1=1
+	      <if test="from != null and from != ''">AND w.CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	      <if test="to   != null and to   != ''">AND w.CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	      <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	      <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        AND m.MEM_BIRTH IS NOT NULL
+	        AND CASE
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
+	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(w.CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
+	              ELSE '30+'
+	            END = #{ageBand}
+	      </if>
+	    GROUP BY w.JOB_CODE, j.JOB_NAME
+	    ORDER BY "cnt" DESC, "jobName" ASC
+	  )
+	  WHERE ROWNUM &lt;= #{limit}
+	</select>
+
 </mapper>
