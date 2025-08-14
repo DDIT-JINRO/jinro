@@ -1,5 +1,6 @@
 package kr.or.ddit.admin.cmg.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.or.ddit.admin.cmg.service.ContentsManagementService;
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.empt.enp.service.CompanyVO;
+import kr.or.ddit.prg.act.cr.service.ActivityCareerExpService;
 import kr.or.ddit.prg.act.service.ActivityVO;
+import kr.or.ddit.prg.act.sup.service.ActivitySupportersService;
 import kr.or.ddit.prg.act.vol.service.ActivityVolunteerService;
 import kr.or.ddit.prg.ctt.service.ContestService;
 import kr.or.ddit.util.ArticlePage;
@@ -32,13 +35,19 @@ public class ContentsManagementController {
 	ContentsManagementService contentsManagementService;
 	
 	@Autowired
-	ActivityVolunteerService activityVolunteerService;
+	private ActivityVolunteerService activityVolunteerService;
 	
 	@Autowired
-	ContestService contestService;
+	private ContestService contestService;
 	
 	@Autowired
-	FileServiceImpl fileServiceImpl;
+	private FileServiceImpl fileServiceImpl;
+	
+	@Autowired
+	private ActivityCareerExpService activityCareerExpService;
+	
+	@Autowired
+	private ActivitySupportersService activitySupportersService;
 
 	@GetMapping("/getEntList.do")
 	public ArticlePage<CompanyVO> getEntList(CompanyVO companyVO) {
@@ -59,6 +68,7 @@ public class ContentsManagementController {
 			@RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "1") int currentPage,
 			@RequestParam(required = false) String keyword,
+			@RequestParam(required = false) String category,
 			@RequestParam(required = false) List<String> contestGubunFilter,
 			@RequestParam(required = false) List<String> contestTargetFilter,
 			@RequestParam(required = false) List<String> contestStatusFilter) {
@@ -71,9 +81,30 @@ public class ContentsManagementController {
 		activityVO.setContestGubunFilter(contestGubunFilter);
 		activityVO.setContestTargetFilter(contestTargetFilter);
 		activityVO.setContestStatusFilter(contestStatusFilter);
-
-		int total = activityVolunteerService.selectVolCount(activityVO);
-		List<ActivityVO> activityList = activityVolunteerService.selectVolList(activityVO);
+		
+		List<ActivityVO> activityList = new ArrayList<>();
+		int total = 0;
+		
+		switch (category) {
+		case "vol": {
+			total = activityVolunteerService.selectVolCount(activityVO);
+			activityList = activityVolunteerService.selectVolList(activityVO);
+			break;
+		}
+		case "cr": {
+			total = activityCareerExpService.selectCrCount(activityVO);
+			activityList = activityCareerExpService.selectCrList(activityVO);
+			break;
+		}
+		case "sup": {
+			total = activitySupportersService.selectSupCount(activityVO);
+			activityList = activitySupportersService.selectSupList(activityVO);
+			break;
+		}
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + category);
+		}
+		
 		if(activityList == null || activityList.isEmpty()) {
 			response.put("success", false);
 			response.put("message", "리스트 로딩 중 에러 발생");
