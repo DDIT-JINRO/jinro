@@ -234,7 +234,9 @@
 	            , A.APPLICATION_METHOD = #{applicationMethod}
 	            , A.AWARD_TYPE         = #{awardType}
 	            , A.CONTEST_URL        = #{contestUrl}
+	            <if test="fileGroupId != null and fileGroupId != ''">
 	            , A.FILE_GROUP_ID      = #{fileGroupId}
+	            </if>
 	    WHEN NOT MATCHED THEN
 	        INSERT (
 	              CONTEST_ID, CONTEST_TITLE

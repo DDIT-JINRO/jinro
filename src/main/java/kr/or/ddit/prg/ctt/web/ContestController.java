@@ -87,10 +87,12 @@ public class ContestController {
 	@ResponseBody
 	public ResponseEntity<String> saveContest(@RequestBody ContestVO contestVO) {
 		int result = contestService.updateContest(contestVO);
+
 		if (result > 0) {
 			return ResponseEntity.ok("성공적으로 저장되었습니다.");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("저장에 실패했습니다.");
 		}
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("저장에 실패했습니다.");
 	}
 
 	@PostMapping("/contestDelete.do")
