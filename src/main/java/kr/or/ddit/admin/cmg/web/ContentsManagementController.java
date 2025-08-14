@@ -182,10 +182,33 @@ public class ContentsManagementController {
 		List<ComCodeVO> contestTargetList = contestService.getContestTargetList();
 		ArticlePage<ContestVO> articlePage = new ArticlePage<>(total, currentPage, size, contestList, keyword);
 
+		response.put("success", true);
 		response.put("contestTypeList", contestTypeList);
 		response.put("contestTargetList", contestTargetList);
 		response.put("articlePage", articlePage);
 
+		return ResponseEntity.ok(response);
+	}
+	
+	@PostMapping("/selectCctDetail.do")
+	public ResponseEntity<Map<String, Object>> selectCctDetail(@RequestParam String id) {
+		Map<String, Object> response = new HashMap<>();
+		ContestVO cttDetail = contestService.selectCttDetail(id);
+		
+		if(cttDetail == null) {
+			response.put("success", false);
+			response.put("message", "데이터 로딩 중 에러 발생");
+			return ResponseEntity.ok(response);
+		}
+		
+		Long fileId = cttDetail.getFileGroupId();
+		FileDetailVO fileDetail = fileServiceImpl.getFileDetail(fileId, 1);
+		String savePath = fileServiceImpl.getSavePath(fileDetail);
+		cttDetail.setSavePath(savePath);
+		
+		response.put("success", true);
+		response.put("cttDetail", cttDetail);
+		
 		return ResponseEntity.ok(response);
 	}
 }
