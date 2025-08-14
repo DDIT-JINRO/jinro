@@ -35,6 +35,25 @@
 	    	<button id="sendMsgBtn">전송</button>
 	    	<button id="exitBtn" data-cr-id>퇴장</button>
 	    </div>
+
+	    <!-- 이미지 확대 오버레이 -->
+		<div id="img-overlay">
+		  <div class="imgov-stage">
+		    <button type="button" class="imgov-btn" id="imgov-prev">‹</button>
+		    <div class="imgov-viewport">
+		    	<img id="imgov-view" src="" alt="">
+		    </div>
+		    <button type="button" class="imgov-btn" id="imgov-next">›</button>
+
+		    <div class="imgov-topbar">
+		      <div class="imgov-caption">
+		        <span id="imgov-name"></span>
+		        <a id="imgov-download" class="imgov-download" href="" download>다운로드</a>
+		      </div>
+		      <button type="button" class="imgov-close" id="imgov-close">×</button>
+		    </div>
+		  </div>
+		</div>
 	  </div>
 	</div>
 </div>

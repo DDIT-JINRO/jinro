@@ -1,6 +1,7 @@
 /**
  * 헤더의 채팅 모달을 컨트롤 하기 위한 js
  */
+const imageMsgStore = new Map();
 
 document.addEventListener('DOMContentLoaded', function(){
 	// 로그인 여부 확인
@@ -167,6 +168,76 @@ document.addEventListener('DOMContentLoaded', function(){
 	  imgInput.value = '';
 	  fileInput.value = '';
 	  renderAttachOverlay();
+	});
+
+
+	// 오버레이 상태
+	let imgovMsgId = null;
+	let imgovIndex = 0;
+
+	const imgOverlay     = document.getElementById('img-overlay');
+	const imgovView      = document.getElementById('imgov-view');
+	const imgovNameEl    = document.getElementById('imgov-name');
+	const imgovDownEl    = document.getElementById('imgov-download');
+	const imgovPrevBtn   = document.getElementById('imgov-prev');
+	const imgovNextBtn   = document.getElementById('imgov-next');
+	const imgovCloseBtn  = document.getElementById('imgov-close');
+
+	// 썸네일 클릭(위임)
+	document.getElementById('chat-container').addEventListener('click', (e) => {
+	  const thumb = e.target.closest('.img-thumb-wrap');
+	  if (!thumb) return;
+
+	  imgovMsgId = thumb.dataset.msgId;
+	  imgovIndex = parseInt(thumb.dataset.index || '0', 10);
+	  openImageOverlay();
+	});
+
+	function openImageOverlay(){
+		const list = imageMsgStore.get(String(imgovMsgId)) || [];
+		if (list.length === 0) return;
+		renderImageOverlayImage();
+		imgOverlay.style.display = 'flex';
+	}
+
+	function closeImageOverlay(){
+	  imgOverlay.style.display = 'none';
+	  imgovMsgId = null;
+	  imgovIndex = 0;
+	}
+
+	function renderImageOverlayImage(){
+	  const list = imageMsgStore.get(String(imgovMsgId)) || [];
+	  const cur  = list[imgovIndex];
+	  if (!cur) return;
+		console.log(cur);
+	  imgovView.src = cur.filePath;
+	  imgovView.alt = cur.fileOrgName || '';
+	  imgovNameEl.textContent = cur.fileOrgName || '';
+	  imgovDownEl.href = `/files/download?fileGroupId=${cur.fileGroupId}&seq=${cur.fileSeq}`;
+
+	  // 좌우 버튼 가시성
+	  imgovPrevBtn.style.visibility = (imgovIndex > 0) ? 'visible' : 'hidden';
+	  imgovNextBtn.style.visibility = (imgovIndex < list.length-1) ? 'visible' : 'hidden';
+	}
+
+	// 버튼들
+	imgovPrevBtn.addEventListener('click', () => {
+	  const list = imageMsgStore.get(String(imgovMsgId)) || [];
+	  if (imgovIndex > 0) { imgovIndex--; renderImageOverlayImage(); }
+	});
+	imgovNextBtn.addEventListener('click', () => {
+	  const list = imageMsgStore.get(String(imgovMsgId)) || [];
+	  if (imgovIndex < list.length-1) { imgovIndex++; renderImageOverlayImage(); }
+	});
+	imgovCloseBtn.addEventListener('click', closeImageOverlay);
+	// 오버레이 바깥 클릭 닫기
+	imgOverlay.addEventListener('click', (e) => {
+	  if (e.target === imgOverlay) closeImageOverlay();
+	});
+	// ESC 닫기
+	document.addEventListener('keydown', (e) => {
+	  if (e.key === 'Escape' && imgOverlay.style.display === 'flex') closeImageOverlay();
 	});
 
 })
@@ -489,7 +560,7 @@ function escapeHtml(s='') {
     .replaceAll("'",'&#039;');
 }
 
-// 메시지 출력
+// 메시지 출력 -> messageType에 따라 분기처리.
 function appendMessage(msgVO) {
 	console.log(msgVO);
     const container = document.getElementById('chat-container');
@@ -513,6 +584,44 @@ function appendMessage(msgVO) {
 	    container.innerHTML += systemHTML;
 	    container.scrollTop = container.scrollHeight;
 	    return;  // 여기서 끝내고 일반 메시지 렌더링은 건너뜀
+	}
+
+	if(msgVO.messageType == 'IMAGE'){
+		const imgFile = msgVO.fileDetailList;
+		// 나중에 불러오기 위해 전역변수 Map에다가 저장
+		imageMsgStore.set(String(msgVO.msgId), imgFile);
+
+		const first = imgFile[0];
+		const moreN = imgFile.length - 1;
+
+		const thumbHTML = `
+		  <div class="img-thumb-wrap" data-msg-id="${escapeHtml(String(msgVO.msgId))}" data-index="0">
+		    <img src="${first.filePath}" alt="${first.fileOrgName}">
+		    ${moreN > 0 ? `<span class="img-more-badge">+${moreN}</span>` : ''}
+		  </div>
+		`;
+		const chatHTML = `
+		  <div class="message-box ${isMine ? 'mine' : 'other'}">
+		    <div class="chat-meta">
+		      ${isMine ? `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` : '' }
+		      <div class="profile-wrapper chat-profile">
+		        <img class="profile-img" src="${msgVO.fileProfileStr ? msgVO.fileProfileStr : '/images/defaultProfileImg.png'}" />
+		        <img class="badge-img" src="${msgVO.fileBadgeStr ? msgVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
+		        ${msgVO.fileSubStr ? `<img class="effect-img sparkle" src="${msgVO.fileSubStr}"/>` : ''}
+		      </div>
+		      ${isMine ? '' : `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` }
+		    </div>
+
+		    <div class="chat-message ${isMine ? 'mine' : 'other'}">
+		      ${msgVO.message ? `<div class="text-part" style="margin-bottom:6px;">${msgVO.message}</div>` : ''}
+		      ${thumbHTML}
+		    </div>
+
+		    <div class="chat-time">${timeStr}</div>
+		  </div>`;
+		container.innerHTML += chatHTML;
+		container.scrollTop = container.scrollHeight;
+		return;
 	}
 
 	if(msgVO.messageType == 'FILE'){
