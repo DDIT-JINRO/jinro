@@ -130,7 +130,7 @@
 					<label for="applicationMethod">접수 방법</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="applicationMethod" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="applicationMethod" placeholder="예) 홈페이지 지원서 작성">
 					</div>
 				</div>
 				
@@ -138,7 +138,7 @@
 					<label for="awardType">시상 종류</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="awardType" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="awardType" placeholder="예) 활동 수료증 발급, 최우수 활동자 시상">
 					</div>
 				</div>
 				
@@ -154,7 +154,7 @@
 					<label for="contestHost">주최사</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="contestHost" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="contestHost" placeholder="예) (주)커리어패스">
 					</div>
 				</div>
 				
@@ -162,7 +162,7 @@
 					<label for="contestSponsor">후원사</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="contestSponsor" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="contestSponsor" placeholder="예) 고용노동부, 서울시">
 					</div>
 				</div>
 				
@@ -170,7 +170,7 @@
 					<label for="contestOrganizer">주관</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="contestOrganizer" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="contestOrganizer" placeholder="예) 커리어패스 운영사무국">
 					</div>
 				</div>
 
@@ -194,7 +194,7 @@
 				<div class="form-textarea-section">
 					<div class="input-group">
 						<label for="contestDescription">대외활동에 대한 설명</label>
-						<textarea id="contestDescription" class="contest-form-input" placeholder="기업의 비전, 주요 사업, 문화 등 자세한 설명을 작성해주세요."></textarea>
+						<textarea id="contestDescription" class="contest-form-input" placeholder="활동 내용, 모집 대상, 제공 혜택, 유의사항 등 상세한 내용을 작성해주세요."></textarea>
 					</div>
 				</div>
 
