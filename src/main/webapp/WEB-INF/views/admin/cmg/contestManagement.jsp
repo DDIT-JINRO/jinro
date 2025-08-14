@@ -19,7 +19,7 @@
 				<div class="search-filter-bar">
 					<p class="ptag-list" style="margin-bottom: 10px">
 						총
-						<span id="actList-count"></span>
+						<span id="cctList-count"></span>
 						건
 					</p>
 				</div>
@@ -33,13 +33,13 @@
 								<th class="body-act-host">주최</th>
 							</tr>
 						</thead>
-						<tbody id="actList">
+						<tbody id="cctList">
 						</tbody>
 					</table>
 				</div>
 			</div>
 			<div class="card-footer clearfix">
-				<div class="panel-footer pagination actListPage"></div>
+				<div class="panel-footer pagination cctListPage"></div>
 			</div>
 		</div>
 
@@ -47,13 +47,8 @@
 			<div class="template-panel">
 				<div class="act-profile-container">
 					<div class="profile-card">
-						<img id="actImg" src="/images/cp31logo.png" alt="기업 로고" class="profile-logo">
+						<img id="cctImg" src="/images/cp31logo.png" alt="기업 로고" class="profile-logo">
 						<h3 id="actName" class="profile-name">공모전명</h3>
-
-						<div class="profile-actions">
-							<div id="gubun" class="btn-follow">구분코드</div>
-							<div id="gubunName" class="btn-message">구분명</div>
-						</div>
 
 						<div class="profile-about">
 							<h4>ABOUT</h4>
@@ -78,7 +73,7 @@
 			</div>
 			<div class="template-panel entAbout" style="margin-top: 20px;">
 				<div class="middleTitle" style="margin-bottom: 10px;">공모전 설명</div>
-				<textarea id="actDetailAbout"></textarea>
+				<textarea id="cctDetailAbout"></textarea>
 			</div>
 		</div>
 	</div>
@@ -217,8 +212,8 @@
 				<div class="image-upload-box" id="imageUploadBox">
 					<i class="fas fa-camera"></i>
 					<p style="margin-top: 0;">공모전 포스터 이미지를 업로드하세요</p>
-					<input type="file" id="actImgFile" accept="image/*" class="file-input">
-					<img id="actImgPreview" src="" alt="로고 미리보기" style="display: none;">
+					<input type="file" id="cctImgFile" accept="image/*" class="file-input">
+					<img id="cctImgPreview" src="" alt="로고 미리보기" style="display: none;">
 				</div>
 
 				<div class="image-upload-controls">
