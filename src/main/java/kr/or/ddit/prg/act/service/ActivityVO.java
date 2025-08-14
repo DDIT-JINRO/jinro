@@ -28,6 +28,8 @@ public class ActivityVO {
 	private String contestSponsor; // 후원사
 	private String applicationMethod; // 접수방법
 	private String awardType; // 시상종류
+	
+	private String savePath;
 
 	// 가공된 상세 설명을 담을 리스트
 	private List<String> descriptionSections;
