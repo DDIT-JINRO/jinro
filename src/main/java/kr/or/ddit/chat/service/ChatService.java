@@ -161,4 +161,13 @@ public interface ChatService {
 	 */
 	void saveChatMessageWithoutReceiver(ChatMessageVO chatMessageVO);
 
+
+	/**
+	 * 파일첨부된 채팅메시지 처리.
+	 * 파일첨부완료하고나서 파라미터로 받은 ChatMessageVO에 파일그룹번호세팅
+	 * @param chatMessageVO
+	 * @return
+	 */
+	void fileUpload(ChatMessageVO chatMessageVO);
+
 }

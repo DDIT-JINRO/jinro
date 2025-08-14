@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function(){
 		    const content = inputEl.value.trim();
 			const imageInput = document.getElementById('attach-input-img');
 			const fileInput = document.getElementById('attach-input-file');
-		    if (!content) return;
 
 		    inputEl.value = '';
 			const fileObj = {};
@@ -44,6 +43,8 @@ document.addEventListener('DOMContentLoaded', function(){
 				return;
 			}
 
+			// 파일 첨부 안한 경우에 메시지도 입력 안했으면 요청안되도록.
+		    if (!content) return;
 		    sendMessage(currentChatRoomId, content);
 		}
 
@@ -404,19 +405,93 @@ function connectSocket() {
 
 
 // 메시지 전송
-function sendMessage(roomId, content) {
+function sendMessage(roomId, content, fileObj) {
 	content = content.replace(/\n/g, '<br/>');
-    const msg = {
-        crId: roomId,
-        message: content,
-        memId: memId, // 전역에서 선언된 로그인된 사용자 ID
-    };
+	console.log(fileObj);
 
-    stompClient.send("/pub/chat/message", {}, JSON.stringify(msg));
+	if(fileObj && fileObj.files && fileObj.files.length>0){
+		const msg = new FormData();
+		msg.append('crId', roomId);
+		msg.append('message', content);
+		msg.append('memId', memId);
+		msg.append('messageType', fileObj.messageType);
+
+		for(let i=0; i<fileObj.files.length; i++){
+			msg.append('files', fileObj.files[i]);
+		}
+
+		fetch(`/chat/message/upload`,{
+			method : 'POST',
+			headers : {},
+			body : msg
+		})
+		.then(resp =>{
+			if(!resp.ok) throw new Error('업로드 메시지 전송 실패')
+				// 전송완료후 비우기
+			cleanInputDatas();
+		})
+		.catch(err =>{
+			console.error("파일채팅중 err : ", err);
+		})
+	}else{
+	    const msg = {
+	        crId: roomId,
+	        message: content,
+	        memId: memId, // 전역에서 선언된 로그인된 사용자 ID
+	    };
+	    stompClient.send("/pub/chat/message", {}, JSON.stringify(msg));
+	}
+}
+
+// 첨부파일 있는 경우 사이즈를 표시해주기 위한 함수
+function formatBytes(size) {
+	if (size == null || size === 0) return '';
+	const k = 1024, sizes = ['B','KB','MB','GB','TB'];
+	let idx = 0;
+	while(size > k){
+		if(idx == 4) break;
+		idx++;
+		size /= k;
+	}
+	return `${size.toFixed(1)}${sizes[idx]}`
+}
+
+// 첨부파일에 대응하도록 파일메시지 만들어주기. appendMessage에서 호출됨
+function buildFileItemsHTML(fileGroupId, files){
+  return (files || []).map((f, idx) => {
+    const seq   = f.fileSeq;
+    const name  = f.fileOrgName;
+    const size  = f.fileSize;
+    const sizeLabel = size != null ? formatBytes(+size) : '';
+    const ext   = f.fileExt;
+    const href  = `/files/download?fileGroupId=${fileGroupId}&seq=${seq}`;
+
+    return `
+      <div class="file-item" data-ext="${ext}">
+        <div class="file-icon">${ext}</div>
+        <div class="file-meta">
+          <div class="file-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
+          ${sizeLabel ? `<div class="file-size">${sizeLabel}</div>` : ''}
+        </div>
+        <a class="file-download-btn" href="${href}" download>다운로드</a>
+      </div>
+    `;
+  }).join('');
+}
+
+// 파일이름에 특수기호 들어가버린경우 치환
+function escapeHtml(s='') {
+  return String(s)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
 }
 
 // 메시지 출력
 function appendMessage(msgVO) {
+	console.log(msgVO);
     const container = document.getElementById('chat-container');
     const isMine = msgVO.memId == memId;
 
@@ -438,6 +513,36 @@ function appendMessage(msgVO) {
 	    container.innerHTML += systemHTML;
 	    container.scrollTop = container.scrollHeight;
 	    return;  // 여기서 끝내고 일반 메시지 렌더링은 건너뜀
+	}
+
+	if(msgVO.messageType == 'FILE'){
+		const files = msgVO.fileDetailList;
+		const filesHTML = buildFileItemsHTML(msgVO.fileGroupId, files);
+
+		const chatHTML = `
+		  <div class="message-box ${isMine ? 'mine' : 'other'}">
+		    <div class="chat-meta">
+		      ${isMine ? `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` : '' }
+		      <div class="profile-wrapper chat-profile">
+		        <img class="profile-img" src="${msgVO.fileProfileStr ? msgVO.fileProfileStr : '/images/defaultProfileImg.png'}" />
+		        <img class="badge-img" src="${msgVO.fileBadgeStr ? msgVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
+		        ${msgVO.fileSubStr ? `<img class="effect-img sparkle" src="${msgVO.fileSubStr}"/>` : ''}
+		      </div>
+		      ${isMine ? '' : `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` }
+		    </div>
+
+		    <div class="chat-message ${isMine ? 'mine' : 'other'}">
+		      ${msgVO.message ? `<div class="text-part" style="margin-bottom:6px;">${msgVO.message}</div>` : ''}
+		      <div class="file-bubble-list">
+		        ${filesHTML}
+		      </div>
+		    </div>
+
+		    <div class="chat-time">${timeStr}</div>
+		  </div>`;
+		container.innerHTML += chatHTML;
+		container.scrollTop = container.scrollHeight;
+		return;
 	}
 
     const chatHTML = `

@@ -74,6 +74,16 @@ public class ChatServiceImpl implements ChatService {
 
 		for(ChatMessageVO chatVO : chatList) {
 			setChatMessageMemberFileStr(chatVO);
+			Long fileGroupId = chatVO.getFileGroupId();
+			if(fileGroupId != null && fileGroupId != 0) {
+				List<FileDetailVO> list = fileService.getFileList(fileGroupId);
+				for(FileDetailVO f : list) {
+					String realPath = fileService.getSavePath(f);
+					f.setFilePath(realPath);
+					chatVO.setFileDetailList(list);
+				}
+			}
+
 		}
 		return chatList;
 	}
@@ -179,6 +189,20 @@ public class ChatServiceImpl implements ChatService {
 	public ChatMessageVO selectChatMessage(int msgId) {
 		ChatMessageVO selectedChatMessageVO = this.chatMapper.selectChatMessage(msgId);
 		setChatMessageMemberFileStr(selectedChatMessageVO);
+
+		String messageType = selectedChatMessageVO.getMessageType();
+		if("FILE".equals(messageType) || "IMAGE".equals(messageType)) {
+			// fileDetailVOList 불러와서 넣어주기.
+			Long fileGroupId = selectedChatMessageVO.getFileGroupId();
+			List<FileDetailVO> list = fileService.getFileList(fileGroupId);
+			for(FileDetailVO f : list) {
+				String realPath = fileService.getSavePath(f);
+				f.setFilePath(realPath);
+			}
+
+			selectedChatMessageVO.setFileDetailList(list);
+		}
+
 		return selectedChatMessageVO;
 	}
 
@@ -282,6 +306,17 @@ public class ChatServiceImpl implements ChatService {
 			chatMessageVO.setMessageType("TEXT");
 		}
 		this.chatMapper.insertChatMessage(chatMessageVO);
+	}
+
+	@Override
+	public void fileUpload(ChatMessageVO chatMessageVO) {
+		try {
+			Long fileGroupId =  this.fileService.createFileGroup();
+			this.fileService.uploadFiles(fileGroupId, chatMessageVO.getFiles());
+			chatMessageVO.setFileGroupId(fileGroupId);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
 	}
 
 }
