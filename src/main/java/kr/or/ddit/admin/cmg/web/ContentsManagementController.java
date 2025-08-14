@@ -21,6 +21,7 @@ import kr.or.ddit.prg.act.service.ActivityVO;
 import kr.or.ddit.prg.act.sup.service.ActivitySupportersService;
 import kr.or.ddit.prg.act.vol.service.ActivityVolunteerService;
 import kr.or.ddit.prg.ctt.service.ContestService;
+import kr.or.ddit.prg.ctt.service.ContestVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.impl.FileServiceImpl;
@@ -116,7 +117,6 @@ public class ContentsManagementController {
 		List<ComCodeVO> contestTypeList = contestService.getContestTypeList();
 		
 		ArticlePage<ActivityVO> articlePage = new ArticlePage<>(total, currentPage, 6, activityList, keyword);
-		articlePage.setUrl("/prg/ctt/cttList.do");
 		response.put("success", true);
 		response.put("contestTargetList", contestTargetList);
 		response.put("articlePage", articlePage);
@@ -146,6 +146,46 @@ public class ContentsManagementController {
 		response.put("success", true);
 		response.put("activity", activity);
 		
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping("/selectCttList.do")
+	public ResponseEntity<Map<String, Object>> selectCttList(
+			@RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "1") int currentPage,
+			@RequestParam(required = false) String keyword,
+			@RequestParam(required = false) List<String> contestGubunFilter,
+			@RequestParam(required = false) List<String> contestTargetFilter,
+			@RequestParam(required = false) List<String> contestTypeFilter,
+			@RequestParam(required = false) List<String> contestStatusFilter) {
+		Map<String, Object> response = new HashMap<>();
+	
+		ContestVO contestVO = new ContestVO();
+		contestVO.setKeyword(keyword);
+		contestVO.setCurrentPage(currentPage);
+		contestVO.setSize(size);
+		contestVO.setContestGubunFilter(contestGubunFilter);
+		contestVO.setContestTargetFilter(contestTargetFilter);
+		contestVO.setContestTypeFilter(contestTypeFilter);
+		contestVO.setContestStatusFilter(contestStatusFilter);
+
+		List<ContestVO> contestList = contestService.selectCttList(contestVO);
+		
+		if(contestList == null || contestList.isEmpty()) {
+			response.put("success", false);
+			response.put("message", "리스트 불러오는 중 에러 발생");
+			return ResponseEntity.ok(response);
+		}
+		
+		int total = contestService.selectCttCount(contestVO);
+		List<ComCodeVO> contestTypeList = contestService.getContestTypeList();
+		List<ComCodeVO> contestTargetList = contestService.getContestTargetList();
+		ArticlePage<ContestVO> articlePage = new ArticlePage<>(total, currentPage, size, contestList, keyword);
+
+		response.put("contestTypeList", contestTypeList);
+		response.put("contestTargetList", contestTargetList);
+		response.put("articlePage", articlePage);
+
 		return ResponseEntity.ok(response);
 	}
 }
