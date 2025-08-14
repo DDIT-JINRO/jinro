@@ -1,8 +1,8 @@
 /**
  *
  */
-function activityManagementInit () {
-	function fetchActList(page = 1) {
+function contestManagementInit () {
+	function fetchCctList(page = 1) {
 		
 		const pageSize = 10;
 		const keyword = document.querySelector('input[name="keyword"]').value;
@@ -17,20 +17,21 @@ function activityManagementInit () {
 			params: paramData
 		}).then(({data}) => {
 			const {articlePage, contestTypeList} = data;
-			console.log(data);
+			
 			if(data.success) {
 				let contestTypeHtml = '';
 				contestTypeList.map(contestType => {
 					contestTypeHtml += `<option value="${contestType.ccId}">${contestType.ccName}</option>`
 				})
+				
 				document.getElementById('contestType').innerHTML = contestTypeHtml;
 				
-				const countEl = document.getElementById('actList-count');
+				const countEl = document.getElementById('cctList-count');
 				if (countEl) {
 					countEl.textContent = parseInt(articlePage.total, 10).toLocaleString();
 				}
 					
-				const listEl = document.getElementById('actList');
+				const listEl = document.getElementById('cctList');
 				if (!listEl) return;
 				
 				if (articlePage.content.length < 1 && keyword.trim() !== '') {
@@ -49,13 +50,13 @@ function activityManagementInit () {
 						}).join('');
 					listEl.innerHTML = rows;
 				}
-				renderPaginationAct(data.articlePage);
+				renderPaginationCtt(data.articlePage);
 			}
 		})
 		.catch(err => console.error('목록 조회 중 에러:', err));
 	}
 	
-	function renderPaginationAct({ startPage, endPage, currentPage, totalPages }) {
+	function renderPaginationCtt({ startPage, endPage, currentPage, totalPages }) {
 		let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 
 		for (let p = startPage; p <= endPage; p++) {
@@ -64,15 +65,15 @@ function activityManagementInit () {
 
 		html += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
 
-		const footer = document.querySelector('.actListPage');
+		const footer = document.querySelector('.cctListPage');
 		if (footer) footer.innerHTML = html;
 	}
 	
-	function actListPangingFn() {
-		const actListPaginationContainer = document.querySelector('.panel-footer.pagination');
-		if (actListPaginationContainer) {
+	function cctListPangingFn() {
+		const cctListPaginationContainer = document.querySelector('.panel-footer.pagination');
+		if (cctListPaginationContainer) {
 			
-			actListPaginationContainer.addEventListener('click', e => {
+			cctListPaginationContainer.addEventListener('click', e => {
 				e.preventDefault();
 				const link = e.target.closest('a[data-page]');
 				
@@ -83,13 +84,13 @@ function activityManagementInit () {
 				const page = parseInt(link.dataset.page, 10);
 
 				if (!isNaN(page) && page > 0) {
-					fetchActList(page);
+					fetchCctList(page);
 				}
 			});
 		}
 	}
 
-	document.getElementById("actList").addEventListener("click", function(e) {
+	document.getElementById("cctList").addEventListener("click", function(e) {
 		const tr = e.target.closest("tr");
 		if (!tr) return;
 
@@ -99,44 +100,42 @@ function activityManagementInit () {
 		let formData = new FormData();
 		formData.set("id", id);
 
-		actDetail(formData);
+		cctDetail(formData);
 	});
 
-	function actDetail(formData) {
-		axios.post('/admin/cmg/selectActDetail.do', formData)
+	function cctDetail(formData) {
+		axios.post('/admin/cmg/selectCctDetail.do', formData)
 			.then(({data}) => {
-				const {success, activity} = data;
+				const {cttDetail, success} = data;
 				
 				if(success) {
-					const formattedStartDate = formatDateOne(activity.contestStartDate);
-					const formattedEndDate   = formatDateOne(activity.contestEndDate);
+					const formattedStartDate = formatDateOne(cttDetail.contestStartDate);
+					const formattedEndDate   = formatDateOne(cttDetail.contestEndDate);
 					
 					// 우측 상세 내용 출력 시작
-					document.getElementById('actImg').src                        = activity.savePath;
-					document.getElementById('actName').innerHTML                 = activity.contestTitle
-					document.getElementById('gubun').innerHTML                   = activity.contestGubunCode
-					document.getElementById('gubunName').innerHTML               = activity.contestGubunName
-					document.getElementById('contestHostProfile').innerHTML      = activity.contestHost
-					document.getElementById('contestOrganizerProfile').innerHTML = activity.contestOrganizer == null ? '-' : activity.contestOrganizer == 'N/A' ? '-' : activity.contestOrganizer;
+					document.getElementById('cctImg').src                        = cttDetail.savePath;
+					document.getElementById('actName').innerHTML                 = cttDetail.contestTitle
+					document.getElementById('contestHostProfile').innerHTML      = cttDetail.contestHost
+					document.getElementById('contestOrganizerProfile').innerHTML = cttDetail.contestOrganizer == null ? '-' : cttDetail.contestOrganizer == 'N/A' ? '-' : cttDetail.contestOrganizer;
 					document.getElementById('contestDate').innerHTML             = `${formattedStartDate} - ${formattedEndDate} `;
-					document.getElementById('actDetailAbout').innerHTML          = `${activity.descriptionSections == null ? '활동 설명이 없습니다.' : activity.descriptionSections[0]}`;
+					document.getElementById('cctDetailAbout').innerHTML          = `${cttDetail.descriptionSections == null ? '활동 설명이 없습니다.' : cttDetail.descriptionSections[0]}`;
 					
 					// 하단 상세 내용 출력 시작
-					document.getElementById('contestId').value = activity.contestId
+					document.getElementById('contestId').value = cttDetail.contestId
 					
 					// 이미지 출력 시작
-					const actImgPreview = document.getElementById('actImgPreview');
+					const cctImgPreview = document.getElementById('cctImgPreview');
 					const imageUploadBox = document.getElementById('imageUploadBox');
-					if (activity.savePath) {
-						actImgPreview.src = activity.savePath;
-						actImgPreview.style.display = 'block';
+					if (cttDetail.savePath) {
+						cctImgPreview.src = cttDetail.savePath;
+						cctImgPreview.style.display = 'block';
 						if (imageUploadBox) {
 							imageUploadBox.querySelector('i').style.display = 'none';
 							imageUploadBox.querySelector('p').style.display = 'none';
 						}
 					} else {
-						actImgPreview.src = '';
-						actImgPreview.style.display = 'none';
+						cctImgPreview.src = '';
+						cctImgPreview.style.display = 'none';
 						if (imageUploadBox) {
 							imageUploadBox.querySelector('i').style.display = 'block';
 							imageUploadBox.querySelector('p').style.display = 'block';
@@ -144,36 +143,26 @@ function activityManagementInit () {
 					}
 					// 이미지 출력 종료
 					
-					document.getElementById('contestTitle').value = activity.contestTitle
-					
-					const contestGubunSelect = document.getElementById('contestGubun');
-					const gubunOptions = contestGubunSelect.options;
-					const gubunSelectedValue = activity.contestGubunCode;
-					for (let i = 0; i < gubunOptions.length; i++) {
-						if (gubunOptions[i].value === gubunSelectedValue) {
-							gubunOptions[i].selected = true;
-							break;
-						}
-					}
+					document.getElementById('contestTitle').value = cttDetail.contestTitle
 					
 					const contestTargetSelect = document.getElementById('contestTarget');
 					const targetOptions = contestTargetSelect.options;
-					const targetSelectedValue = activity.contestTarget;
+					const targetSelectedValue = cttDetail.contestTarget;
 					for (let i = 0; i < targetOptions.length; i++) {
 						if (targetOptions[i].value === targetSelectedValue) {
 							targetOptions[i].selected = true;
 							break;
 						}
 					}
-					document.getElementById('applicationMethod').value      = activity.applicationMethod == null ? '-' : activity.applicationMethod == 'N/A' ? '-' : activity.applicationMethod;
-					document.getElementById('awardType').value              = activity.awardType;
-					document.getElementById('contestUrl').value             = activity.contestUrl == null ? '-' : activity.contestUrl == 'N/A' ? '-' : activity.contestUrl;
-					document.getElementById('contestHost').value            = activity.contestHost == null ? '-' : activity.contestHost == 'N/A' ? '-' : activity.contestHost;
-					document.getElementById('contestSponsor').value         = activity.contestSponsor == null ? '-' : activity.contestSponsor == 'N/A' ? '-' : activity.contestSponsor;
-					document.getElementById('contestOrganizer').value       = activity.contestOrganizer == null ? '-' : activity.contestOrganizer == 'N/A' ? '-' : activity.contestOrganizer;
-					document.getElementById('contestStartDate').value       = formatDateTwo(activity.contestStartDate);
-					document.getElementById('contestEndDate').value         = formatDateTwo(activity.contestEndDate);
-					document.getElementById('contestDescription').innerHTML = activity.contestDescription;
+					document.getElementById('applicationMethod').value      = cttDetail.applicationMethod == null ? '-' : cttDetail.applicationMethod == 'N/A' ? '-' : cttDetail.applicationMethod;
+					document.getElementById('awardType').value              = cttDetail.awardType;
+					document.getElementById('contestUrl').value             = cttDetail.contestUrl == null ? '-' : cttDetail.contestUrl == 'N/A' ? '-' : cttDetail.contestUrl;
+					document.getElementById('contestHost').value            = cttDetail.contestHost == null ? '-' : cttDetail.contestHost == 'N/A' ? '-' : cttDetail.contestHost;
+					document.getElementById('contestSponsor').value         = cttDetail.contestSponsor == null ? '-' : cttDetail.contestSponsor == 'N/A' ? '-' : cttDetail.contestSponsor;
+					document.getElementById('contestOrganizer').value       = cttDetail.contestOrganizer == null ? '-' : cttDetail.contestOrganizer == 'N/A' ? '-' : cttDetail.contestOrganizer;
+					document.getElementById('contestStartDate').value       = formatDateTwo(cttDetail.contestStartDate);
+					document.getElementById('contestEndDate').value         = formatDateTwo(cttDetail.contestEndDate);
+					document.getElementById('contestDescription').innerHTML = cttDetail.contestDescription;
 				}
 			})
 			.catch(error => {
@@ -183,23 +172,23 @@ function activityManagementInit () {
 
 	document.getElementById('btnSearch').addEventListener("click", function() {
 		window.currentPage = 1;
-		fetchActList(1);
+		fetchCctList(1);
 	});
 
 	function imgView() {
-		const actImgFile     = document.getElementById('actImgFile');
-		const actImgPreview  = document.getElementById('actImgPreview');
+		const cctImgFile     = document.getElementById('cctImgFile');
+		const cctImgPreview  = document.getElementById('cctImgPreview');
 		const btnChangeImg   = document.getElementById('btnChangeImg');
 		const imageUploadBox = document.getElementById('imageUploadBox');
 
-		actImgFile.addEventListener('change', (event) => {
+		cctImgFile.addEventListener('change', (event) => {
 			const file = event.target.files[0];
 			if (file) {
 				const reader = new FileReader();
 
 				reader.onload = (e) => {
-					actImgPreview.src = e.target.result;
-					actImgPreview.style.display = 'block';
+					cctImgPreview.src = e.target.result;
+					cctImgPreview.style.display = 'block';
 					imageUploadBox.querySelector('i').style.display = 'none';
 					imageUploadBox.querySelector('p').style.display = 'none';
 				};
@@ -208,17 +197,16 @@ function activityManagementInit () {
 		});
 
 		btnChangeImg.addEventListener('click', () => {
-			actImgFile.click();
+			cctImgFile.click();
 		});
 	}
 	
-	function actSave() {
+	function cctSave() {
 		const saveBtn = document.getElementById('btnRegister');
 
-		saveBtn.addEventListener('click', async function() {
+		saveBtn.addEventListener('click', function() {
 			const contestId          = document.getElementById('contestId').value.trim();
 			const contestTitle       = document.getElementById('contestTitle').value.trim();
-			const contestGubun       = document.getElementById('contestGubun').value;
 			const contestDescription = document.getElementById('contestDescription').value.trim();
 			const contestType        = document.getElementById('contestType').value;
 			const contestTarget      = document.getElementById('contestTarget').value;
@@ -230,6 +218,7 @@ function activityManagementInit () {
 			const applicationMethod  = document.getElementById('applicationMethod').value.trim();
 			const awardType          = document.getElementById('awardType').value.trim();
 			const contestUrl         = document.getElementById('contestUrl').value.trim();
+			const actImgFile         = document.getElementById('cctImgFile').files[0]
 
 			const form = new FormData();
 
@@ -238,7 +227,6 @@ function activityManagementInit () {
 			}
 
 			form.append("contestTitle", contestTitle);
-			form.append("contestGubun", contestGubun);
 			form.append("contestDescription", contestDescription);
 			form.append("contestType", contestType);
 			form.append("contestTarget", contestTarget);
@@ -250,53 +238,21 @@ function activityManagementInit () {
 			form.append("applicationMethod", applicationMethod);
 			form.append("awardType", awardType);
 			form.append("contestUrl", contestUrl);
+			form.append("files", actImgFile);
 
-			const actImgFile         = document.getElementById('actImgFile').files[0]
-			form.append("file", actImgFile);
+			console.log(actImgFile);
 			
-			console.log("--- 전송될 FormData 데이터 ---");
-			for (const [key, value] of form.entries()) {
-			    console.log(`${key}:`, value);
-			}
-			
-			try {
-		        const response = await fetch("/prg/ctt/contestUpdate.do", {
-		            method: "POST",
-		            body: form
-		        });
-
-		        if (response.ok) {
-		            const result = await response.json();
-		            
-		            if (result.success) {
-		                alert("후기 등록 요청이 완료되었습니다");
-		                window.location.href = "/empt/ivfb/interViewFeedback.do";
-		            } else {
-		                alert(result.message || "등록에 실패했습니다.");
-		            }
-		        } else {
-		            throw new Error(`서버 응답 오류: ${response.status}`);
-		        }
-		    } catch (error) {
-		        console.error("등록 중 오류:", error);
-		        alert("등록에 실패했습니다.");
-		    }
-		/*	
-			fetch('/prg/ctt/contestUpdate.do', {
-				method: "POST",
-				body: form
-			}).then(res => {
-				return res.json();
-			}).then(result => {
-				console.log(result);
+			axios.post('/prg/ctt/contestUpdate.do', form).then(res => {
+				console.log(res);
+				alert('등록/수정 완료');
 			}).catch(err => {
 				console.error("저장 실패", err);
 
-			});*/
+			});
 		});
 	}
 	
-	function actDelete() {
+	function cctDelete() {
 		const deleteBtn = document.getElementById('btnDelete');
 
 		deleteBtn.addEventListener('click', function() {
@@ -308,7 +264,7 @@ function activityManagementInit () {
 
 			axios.post('/prg/ctt/contestDelete.do', data).then(res => {
 				alert('삭제 완료');
-				fetchActList();
+				fetchCctList();
 			}).catch(err => {
 				console.error("삭제 실패", err);
 			});
@@ -321,7 +277,6 @@ function activityManagementInit () {
 		resetButton.addEventListener('click', function() {
 			// 텍스트, 숫자, URL 입력 필드 초기화
 			document.getElementById('contestTitle').value = '';
-			document.getElementById('contestGubun').selectedIndex = 0;
 			document.getElementById('contestStartDate').value = '';
 			document.getElementById('contestEndDate').value = '';
 			document.getElementById('contestDescription').value = '';
@@ -334,18 +289,17 @@ function activityManagementInit () {
 			document.getElementById('awardType').value = '';
 			document.getElementById('contestUrl').value = '';
 
-			/*
-			const cpLogoFile = document.getElementById('cpLogoFile');
-			if (cpLogoFile) {
-				cpLogoFile.value = ''; // 파일 선택 내용 삭제
-			}*/
+			const cctImgFile = document.getElementById('cctImgFile');
+			if (cctImgFile) {
+				cctImgFile.value = ''; // 파일 선택 내용 삭제
+			}
 			
 			// 이미지 미리보기 초기화
-			const actImgPreview = document.getElementById('actImgPreview');
+			const cctImgPreview = document.getElementById('cctImgPreview');
 			const imageUploadBox = document.getElementById('imageUploadBox');
 
-			actImgPreview.src = '';
-			actImgPreview.style.display = 'none';
+			cctImgPreview.src = '';
+			cctImgPreview.style.display = 'none';
 
 			// 업로드 안내 텍스트와 아이콘 다시 표시
 			if (imageUploadBox) {
@@ -372,12 +326,12 @@ function activityManagementInit () {
 	}
 	
 	resetForm();
-	actSave();
-	actDelete();
+	cctSave();
+	cctDelete();
 	imgView();
-	actListPangingFn();
-	fetchActList();
+	cctListPangingFn();
+	fetchCctList();
 }
 
 
-activityManagementInit();
+contestManagementInit();
