@@ -18,15 +18,9 @@ function activityManagementInit () {
 		axios.get('/admin/cmg/selectActList.do', {
 			params: paramData
 		}).then(({data}) => {
-			const {articlePage, contestTypeList} = data;
+			const {articlePage} = data;
 			
 			if(data.success) {
-				let contestTypeHtml = '';
-				contestTypeList.map(contestType => {
-					contestTypeHtml += `<option value="${contestType.ccId}">${contestType.ccName}</option>`
-				})
-				document.getElementById('contestType').innerHTML = contestTypeHtml;
-				
 				const countEl = document.getElementById('actList-count');
 				if (countEl) {
 					countEl.textContent = parseInt(articlePage.total, 10).toLocaleString();
