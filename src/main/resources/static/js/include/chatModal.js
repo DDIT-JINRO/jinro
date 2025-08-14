@@ -537,11 +537,16 @@ function buildFileItemsHTML(fileGroupId, files){
     const ext   = f.fileExt;
     const href  = `/files/download?fileGroupId=${fileGroupId}&seq=${seq}`;
 
+	let printName = name;
+	if(name.length > 14){
+		printName = name.slice(0,8)+"…"+name.slice(name.lastIndexOf('.'));
+	}
+
     return `
-      <div class="file-item" data-ext="${ext}">
+      <div class="file-item" data-ext="${ext}" title="${escapeHtml(name)}">
         <div class="file-icon">${ext}</div>
         <div class="file-meta">
-          <div class="file-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
+          <div class="file-name" title="${escapeHtml(name)}">${escapeHtml(printName)}</div>
           ${sizeLabel ? `<div class="file-size">${sizeLabel}</div>` : ''}
         </div>
         <a class="file-download-btn" href="${href}" download>다운로드</a>
