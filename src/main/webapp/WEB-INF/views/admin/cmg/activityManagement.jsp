@@ -107,19 +107,9 @@
 					<div class="input-with-icon">
 						<i class="fas fa-expand"></i>
 						<select class="coords-select-group contest-form-input" id="contestGubun">
-							<option value="G32001">공모전</option>
 							<option value="G32002">서포터즈</option>
 							<option value="G32003">봉사활동</option>
 							<option value="G32004">인턴십</option>
-						</select>
-					</div>
-				</div>
-				
-				<div class="location-group">
-					<label>공모전 분류</label>
-					<div class="input-with-icon">
-						<i class="fas fa-expand"></i>
-						<select class="coords-select-group contest-form-input" id="contestType">
 						</select>
 					</div>
 				</div>
