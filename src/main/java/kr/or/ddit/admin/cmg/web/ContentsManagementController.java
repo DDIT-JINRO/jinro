@@ -95,4 +95,26 @@ public class ContentsManagementController {
 		return ResponseEntity.ok(response);
 	}
 	
+	@PostMapping("/selectActDetail.do")
+	public ResponseEntity<Map<String, Object>> selectActDetail(@RequestParam String id) {
+		Map<String, Object> response = new HashMap<>();
+	
+		ActivityVO activity = activityVolunteerService.selectVolDetail(id);
+		
+		if(activity == null) {
+			response.put("success", false);
+			response.put("message", "데이터 로딩 중 에러 발생");
+			return ResponseEntity.ok(response);
+		}
+		
+		Long fileId = activity.getFileGroupId();
+		FileDetailVO fileDetail = fileServiceImpl.getFileDetail(fileId, 1);
+		String savePath = fileServiceImpl.getSavePath(fileDetail);
+		activity.setSavePath(savePath);
+		
+		response.put("success", true);
+		response.put("activity", activity);
+		
+		return ResponseEntity.ok(response);
+	}
 }
