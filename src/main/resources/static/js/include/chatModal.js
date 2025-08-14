@@ -25,9 +25,25 @@ document.addEventListener('DOMContentLoaded', function(){
 
 		function sendCurrentInput() {
 		    const content = inputEl.value.trim();
+			const imageInput = document.getElementById('attach-input-img');
+			const fileInput = document.getElementById('attach-input-file');
 		    if (!content) return;
 
 		    inputEl.value = '';
+			const fileObj = {};
+			if(imageInput.files && imageInput.files.length > 0){
+				fileObj.messageType = 'IMAGE';
+				fileObj.files = imageInput.files;
+				sendMessage(currentChatRoomId, content, fileObj);
+				return;
+			}
+			if(fileInput.files && fileInput.files.length > 0){
+				fileObj.messageType = 'FILE';
+				fileObj.files = fileInput.files;
+				sendMessage(currentChatRoomId, content, fileObj);
+				return;
+			}
+
 		    sendMessage(currentChatRoomId, content);
 		}
 
@@ -87,9 +103,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	const previewListEl = document.getElementById('attachPreviewList');
 	const clearAttachBtn = document.getElementById('clearAttachBtn');
 	imgAttachBtn.addEventListener('click', function(){
+		imgInput.value = '';
+		fileInput.value = '';
 		imgInput.click();
 	})
 	fileAttachBtn.addEventListener('click', function(){
+		imgInput.value = '';
+		fileInput.value = '';
 		fileInput.click();
 	})
 

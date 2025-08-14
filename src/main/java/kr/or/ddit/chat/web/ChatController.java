@@ -238,4 +238,10 @@ public class ChatController {
 		// 같은 채팅방번호에 구독중인 멤버에게 채팅메시지 전송
 		this.messagingTemplate.convertAndSend("/sub/chat/counsel/"+chatMessageVO.getCrId(), chatMessageVO);
 	}
+
+	@PostMapping("/chat/message/upload")
+	public ResponseEntity<Void> chatMessageUpload(ChatMessageVO chatMessageVO) {
+		this.chatService.fileUpload();
+
+	}
 }
