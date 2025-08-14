@@ -1,6 +1,7 @@
 package kr.or.ddit.ertds.univ.uvsrch.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class UniversityManageController {
 	 * 대학 추가
 	 */
 	@PostMapping("/universities")
-	public ResponseEntity<Map<String, Object>> createUniversity(@RequestBody UniversityVO universityVO) {
+	public ResponseEntity<Map<String, Object>> createUniversity(UniversityVO universityVO) {
 		Map<String, Object> response = new HashMap<>();
 
 		try {
@@ -89,7 +90,7 @@ public class UniversityManageController {
 	 * 대학 수정
 	 */
 	@PutMapping("/universities/{univId}")
-	public ResponseEntity<Map<String, Object>> updateUniversity(@PathVariable("univId") int univId, @RequestBody UniversityVO universityVO) {
+	public ResponseEntity<Map<String, Object>> updateUniversity(@PathVariable("univId") int univId, UniversityVO universityVO) {
 
 		Map<String, Object> response = new HashMap<>();
 
@@ -153,10 +154,12 @@ public class UniversityManageController {
 
 		try {
 			UniversityVO university = universityManageService.selectUniversityById(univId);
-
+			List<DeptInfo> univDept = universityManageService.selectUniversityDeptList(univId);
+			
 			if (university != null) {
 				response.put("success", true);
 				response.put("data", university);
+				response.put("deptData", univDept);
 				return ResponseEntity.ok(response);
 			} else {
 				response.put("success", false);
@@ -193,7 +196,7 @@ public class UniversityManageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
+    
 	/**
 	 * 학과 추가
 	 */

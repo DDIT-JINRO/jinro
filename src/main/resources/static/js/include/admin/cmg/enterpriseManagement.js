@@ -18,8 +18,6 @@ function fetchEntList(page = 1) {
 	})
 		.then(({ data }) => {
 
-			console.log(data);
-
 			const countEl = document.getElementById('entList-count');
 			if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
 

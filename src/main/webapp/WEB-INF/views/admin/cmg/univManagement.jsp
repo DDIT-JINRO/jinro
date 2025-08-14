@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="css/admin/cmg/univManagement.css">
 <!-- 스크립트 작성해주시면 됩니다 (유의점 : DOMContentLoaded x) -->
-<script>
+<script src="/js/include/admin/cmg/univManagement.js">
 	
 </script>
 <!-- 제목입니다 -->
@@ -33,9 +33,10 @@
 						<thead>
 							<tr>
 								<th class="body-id">ID</th>
-								<th class="body-memName">회원명</th>
-								<th class="body-email">이메일</th>
-								<th class="body-nickname">닉네임</th>
+								<th class="body-univName">대학명</th>
+								<th class="body-univGubun">대학구분</th>
+								<th class="body-univType">대학타입</th>
+								<th class="body-univRegion">지역</th>
 							</tr>
 						</thead>
 						<tbody id="univList">
@@ -43,15 +44,75 @@
 					</table>
 				</div>
 				<div class="card-footer clearfix">
-					<div class="panel-footer pagination"></div>
+					<div class="panel-footer pagination univListPage"></div>
 				</div>
 			</div>
 		</div>
-		<div class="template-panel admin-univMng-1-1">
-			<div class="middleTitle">대학 상세</div>
+		
+			<div class="template-panel admin-univMng-1-1">
+				<div class="middleTitle">대학 상세</div>
+				<div class="detail-item">
+					<span class="detail-label">대학 ID:</span>
+					<input id="univ-detail-univId" placeholder="자동 입력" readonly="readonly" />
+				</div>
+				<div class="detail-item">
+					<span class="detail-label">대학명:</span>
+					<input id="univ-detail-univName" placeholder="대학명 입력" />
+				</div>
+				<div class="detail-item">
+					<span class="detail-label">대학구분</span>
+					<select id="univ-detail-univGubun">
+						<option value="G21001">국립</option>
+						<option value="G21002">공립</option>
+						<option value="G21003">사립</option>
+					</select>
+				</div>
+				<div class="detail-item">
+					<span class="detail-label">대학 지역:</span>
+					<input id="univ-detail-univRegion" placeholder="대학 지역:" />
+				</div>
+				<div class="detail-item">
+					<span class="detail-label">대학 상세 주소</span>
+					<input id="univ-detail-univAddr" placeholder="대학 상세 주소:" />
+				</div>
+				<div class="detail-item">
+					<span class="detail-label">대학 타입</span>
+					<select id="univ-detail-univType">
+						<option value="G20001">대학(4년제)</option>
+						<option value="G20002">전문대학</option>
+					</select>
+				</div>
+				<div class="detail-item">
+					<span class="detail-label">URL 주소:</span>
+					<input id="univ-detail-univUrl" placeholder="URL 주소:" />
+				</div>
+				<div class="flex">
+					<button id="univReset">초기화</button>
+					<button id="univSave">저장</button>
+					<button id="univDel">삭제</button>
+				</div>
+			</div>
 		</div>
-	</div>
+	
+	<div class="flex" style="gap: 20px;">
 	<div class="template-panel admin-univMng-2">
-		<div class="middleTitle">대학 상세 학과</div>
+		<div class="middleTitle">해당 대학 학과정보</div>
+		<table>
+			<thead>
+				<tr>
+					<th>학과명</th>
+					<th>평균 등록금</th>
+					<th>평균 장학금</th>
+					<th>입시 경쟁률</th>
+					<th>평균 취업률</th>
+				</tr>
+			</thead>
+			<tbody id="tgDepart">
+			</tbody>
+		</table>
+	</div>
+		<div class="template-panel admin-univMng-3">
+			<div class="middleTitle">학과 정보</div>
+		</div>
 	</div>
 </body>

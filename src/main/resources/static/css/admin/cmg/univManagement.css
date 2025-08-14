@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.flex {
+	display: flex;
+}
+
 .admin-univMng-1 {
 	display: flex;
 	gap: 20px;
