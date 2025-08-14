@@ -268,6 +268,7 @@ function contestManagementInit () {
 		const resetButton = document.getElementById('btnReset');
 		resetButton.addEventListener('click', function() {
 			// 텍스트, 숫자, URL 입력 필드 초기화
+			document.getElementById('contestId').value = '';
 			document.getElementById('contestTitle').value = '';
 			document.getElementById('contestStartDate').value = '';
 			document.getElementById('contestEndDate').value = '';
