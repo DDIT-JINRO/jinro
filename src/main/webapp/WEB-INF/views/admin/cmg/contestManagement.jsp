@@ -88,7 +88,7 @@
 					<label for="contestTitle">공모전명</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="contestTitle" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="contestTitle" placeholder="예) 2025년 커리어패스배 공모전">
 					</div>
 				</div>
 				
@@ -117,7 +117,7 @@
 					<label for="applicationMethod">접수 방법</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="applicationMethod" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="applicationMethod" placeholder="예) 홈페이지 접수">
 					</div>
 				</div>
 				
@@ -125,7 +125,7 @@
 					<label for="awardType">시상 종류</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="awardType" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="awardType" placeholder="예) OO 시장상">
 					</div>
 				</div>
 				
@@ -141,7 +141,7 @@
 					<label for="contestHost">주최사</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="contestHost" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="contestHost" placeholder="예) (주)커리어패스">
 					</div>
 				</div>
 				
@@ -149,7 +149,7 @@
 					<label for="contestSponsor">후원사</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="contestSponsor" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="contestSponsor" placeholder="예) 고용노동부, 일자리경제진흥원">
 					</div>
 				</div>
 				
@@ -157,7 +157,7 @@
 					<label for="contestOrganizer">주관</label>
 					<div class="input-with-icon">
 						<i class="fas fa-building"></i>
-						<input type="text" class="contest-form-input" id="contestOrganizer" placeholder="예) 커리어패스 서포터즈 모집 공고">
+						<input type="text" class="contest-form-input" id="contestOrganizer" placeholder="예) 커리어패스 공모전 운영사무국">
 					</div>
 				</div>
 
@@ -181,7 +181,7 @@
 				<div class="form-textarea-section">
 					<div class="input-group">
 						<label for="contestDescription">공모전에 대한 설명</label>
-						<textarea id="contestDescription" class="contest-form-input" placeholder="기업의 비전, 주요 사업, 문화 등 자세한 설명을 작성해주세요."></textarea>
+						<textarea id="contestDescription" class="contest-form-input" placeholder="공모전의 취지, 참가 자격, 심사 기준, 유의사항 등 상세한 내용을 작성해주세요."></textarea>
 					</div>
 				</div>
 
