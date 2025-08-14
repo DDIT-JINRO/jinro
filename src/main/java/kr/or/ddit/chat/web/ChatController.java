@@ -244,7 +244,6 @@ public class ChatController {
 	public ResponseEntity<Void> chatMessageUpload(ChatMessageVO chatMessageVO, Principal principal) {
 		this.chatService.fileUpload(chatMessageVO);
 		sendMessage(chatMessageVO, principal);
-		log.info("@@@@@@@@@@chatMessageUpload -> chatMessageVO : "+chatMessageVO);
 		return ResponseEntity.noContent().build();
 	}
 }

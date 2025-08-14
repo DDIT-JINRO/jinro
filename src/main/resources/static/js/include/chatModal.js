@@ -210,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function(){
 	  const list = imageMsgStore.get(String(imgovMsgId)) || [];
 	  const cur  = list[imgovIndex];
 	  if (!cur) return;
-		console.log(cur);
 	  imgovView.src = cur.filePath;
 	  imgovView.alt = cur.fileOrgName || '';
 	  imgovNameEl.textContent = cur.fileOrgName || '';
@@ -478,7 +477,6 @@ function connectSocket() {
 // 메시지 전송
 function sendMessage(roomId, content, fileObj) {
 	content = content.replace(/\n/g, '<br/>');
-	console.log(fileObj);
 
 	if(fileObj && fileObj.files && fileObj.files.length>0){
 		const msg = new FormData();
@@ -567,7 +565,6 @@ function escapeHtml(s='') {
 
 // 메시지 출력 -> messageType에 따라 분기처리.
 function appendMessage(msgVO) {
-	console.log(msgVO);
     const container = document.getElementById('chat-container');
     const isMine = msgVO.memId == memId;
 
