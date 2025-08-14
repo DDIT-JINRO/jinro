@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptVO;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO.DeptInfo;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
@@ -48,4 +49,6 @@ public interface UniversityMapper {
 	int deleteDepartmentsByUnivId(int univId);
 
 	DeptInfo selectDepartmentById(int udId);
+	
+	List<DeptInfo> selectUniversityDeptList(int univId);
 }

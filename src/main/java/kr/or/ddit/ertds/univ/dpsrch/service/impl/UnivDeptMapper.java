@@ -24,4 +24,5 @@ public interface UnivDeptMapper {
 	UnivDeptDetailVO selectDeptDetail(int uddId);
 
 	List<UnivDeptCompareVO> selectDeptCompareList(List<Integer> uddIdList);
+
 }

@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.or.ddit.ertds.univ.dpsrch.service.UnivDeptVO;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO.DeptInfo;
-import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityManageService;
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO;
+import kr.or.ddit.util.ArticlePage;
 
 @Service
 public class UniversityManageServiceImpl implements UniversityManageService {
@@ -63,6 +64,11 @@ public class UniversityManageServiceImpl implements UniversityManageService {
 	@Override
 	public DeptInfo selectDepartmentById(int udId) {
 		return universityMapper.selectDepartmentById(udId);
+	}
+
+	@Override
+	public List<DeptInfo> selectUniversityDeptList(int univId) {
+		return universityMapper.selectUniversityDeptList(univId);
 	}
 
 }

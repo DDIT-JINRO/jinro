@@ -48,7 +48,7 @@
 			            )
 			        </if>
 		        </where>
-		        ORDER BY U.UNIV_NAME
+		        ORDER BY U.UNIV_ID
 		
 			) sub
 			WHERE ROWNUM <![CDATA[<=]]> #{endNo}
@@ -219,7 +219,7 @@
 	</select>
 	
 	<!-- 대학 추가/수정 (MERGE INTO 사용) -->
-	<insert id="mergeUniversity" parameterType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
+	<insert id="updateUniversity" parameterType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
 	    <selectKey keyProperty="univId" resultType="int" order="BEFORE">
 	        <if test="univId == null or univId == 0">
 	            SELECT NVL(MAX(UNIV_ID), 0) + 1 FROM UNIVERSITY
@@ -239,9 +239,8 @@
 	            #{univGubun} AS UNIV_GUBUN,
 	            #{univUrl} AS UNIV_URL,
 	            #{univRegion} AS UNIV_REGION,
-	            #{univAddr} AS UNIV_ADDR,
-	            #{univLat} AS UNIV_LAT,
-	            #{univLot} AS UNIV_LOT
+	            #{univAddr} AS UNIV_ADDR
+	            
 	        FROM DUAL
 	    ) S ON (U.UNIV_ID = S.UNIV_ID)
 	    WHEN MATCHED THEN
@@ -252,19 +251,17 @@
 	            U.UNIV_GUBUN = S.UNIV_GUBUN,
 	            U.UNIV_URL = S.UNIV_URL,
 	            U.UNIV_REGION = S.UNIV_REGION,
-	            U.UNIV_ADDR = S.UNIV_ADDR,
-	            U.UNIV_LAT = S.UNIV_LAT,
-	            U.UNIV_LOT = S.UNIV_LOT
+	            U.UNIV_ADDR = S.UNIV_ADDR
+	           
 	    WHEN NOT MATCHED THEN
 	        INSERT (
 	            UNIV_ID, UNIV_NAME, UNIV_CAMPUS, UNIV_TYPE, 
-	            UNIV_GUBUN, UNIV_URL, UNIV_REGION, UNIV_ADDR, 
-	            UNIV_LAT, UNIV_LOT
+	            UNIV_GUBUN, UNIV_URL, UNIV_REGION, UNIV_ADDR 
+	            
 	        )
 	        VALUES (
 	            S.UNIV_ID, S.UNIV_NAME, S.UNIV_CAMPUS, S.UNIV_TYPE,
-	            S.UNIV_GUBUN, S.UNIV_URL, S.UNIV_REGION, S.UNIV_ADDR,
-	            S.UNIV_LAT, S.UNIV_LOT
+	            S.UNIV_GUBUN, S.UNIV_URL, S.UNIV_REGION, S.UNIV_ADDR
 	        )
 	</insert>
 	
