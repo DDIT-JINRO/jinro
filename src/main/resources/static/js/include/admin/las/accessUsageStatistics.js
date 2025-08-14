@@ -168,7 +168,7 @@ function dailyUserInquiry() {
 					}
 				}
 			};
-			
+
 			const existingChart = Chart.getChart(document.getElementById('dailyUserInquiry'));
 			if (existingChart) {
 			    existingChart.destroy();
@@ -262,12 +262,12 @@ function monthUserInquiry() {
 					}
 				}
 			};
-			
+
 			const existingChart = Chart.getChart(document.getElementById('monthUserInquiry'));
 			if (existingChart) {
 			    existingChart.destroy();
 			}
-			
+
 			const ctx = document.getElementById('monthUserInquiry').getContext('2d');
 			new Chart(ctx, config);
 		})
@@ -391,7 +391,7 @@ function dailyPageVisitCount() {
 			document.getElementById("monthlyPageVisitCount").style.display = "none";
 			document.getElementById("customPageVisitCount").style.display = "none";
 
-			
+
 			const labels = response.data.map(item => item.plTitle);
 			const data = response.data.map(item => item.count);
 
@@ -472,7 +472,7 @@ function dailyPageVisitCount() {
 			if (existingChart) {
 			    existingChart.destroy();
 			}
-			
+
 			const ctx = document.getElementById('dailyPageVisitCount').getContext('2d');
 			new Chart(ctx, config);
 		})
@@ -482,7 +482,7 @@ function dailyPageVisitCount() {
 }
 
 
-// 월간 
+// 월간
 function monthPageVisitCount(){
 	axios.get('admin/las/monthPageVisitCount.do')
 		.then(response => {
@@ -492,7 +492,7 @@ function monthPageVisitCount(){
 			document.getElementById("dailyPageVisitCount").style.display = "none";
 			document.getElementById("monthlyPageVisitCount").style.display = "block";
 			document.getElementById("customPageVisitCount").style.display = "none";
-			
+
 			const config = {
 				type: 'bar', // 차트 유형: 막대 그래프
 				data: {
@@ -570,7 +570,7 @@ function monthPageVisitCount(){
 			if (existingChart) {
 			    existingChart.destroy();
 			}
-			
+
 			const ctx = document.getElementById('monthlyPageVisitCount').getContext('2d');
 			new Chart(ctx, config);
 		})

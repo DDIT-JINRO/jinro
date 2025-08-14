@@ -20,16 +20,15 @@
 
 /* 우측 컬럼: 패널들을 수직으로 배치 */
 .right-column {
-    display: flex;
-    flex-direction: column; /* 패널을 세로로 쌓도록 지정 */
-    gap: 24px; /* 패널 사이의 세로 간격 */
-    flex: 1;
+	display: flex;
+	flex-direction: column; /* 패널을 세로로 쌓도록 지정 */
+	gap: 24px; /* 패널 사이의 세로 간격 */
+	flex: 1;
 }
 
 /* 좌측/우측 컬럼 내부의 패널: 수직 공간을 균등하게 분배 */
-.left-column .template-panel,
-.right-column .template-panel {
-    flex: 1;
+.left-column .template-panel, .right-column .template-panel {
+	flex: 1;
 }
 
 .template-panel {
@@ -96,12 +95,12 @@
 
 /* 차트 캔버스가 패널 높이에 맞게 조절되도록 설정 */
 .template-panel canvas {
-    max-width: 100%;
-    max-height: 90%;
+	max-width: 100%;
+	max-height: 90%;
 }
 
 #dailyUserInquiry, #monthUserInquiry {
-    display: none; /* Initial state handled by JS */
+	display: none; /* Initial state handled by JS */
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -121,8 +120,7 @@
 	font-size: 14px;
 }
 
-.template-panel th,
-.template-panel td {
+.template-panel th, .template-panel td {
 	padding: 12px;
 	text-align: left;
 	border-bottom: 1px solid #e0e0e0;
@@ -195,3 +193,132 @@
 	color: #757575;
 	pointer-events: none;
 }
+
+/* 상단 필터 바 */
+.filter-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 6px 0 16px;
+	gap: 12px;
+}
+
+.filter-left {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.filter-right {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.date-label {
+	font-size: 13px;
+	color: #555;
+}
+
+.btn {
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+}
+
+.btn-range {
+	background: #fff;
+	color: #07223D;
+	border: 1px solid #cfd8dc;
+	padding: 6px 10px;
+}
+
+.btn-apply {
+	background: #07223D;
+	color: #fff;
+	padding: 6px 12px;
+}
+
+.btn-reset {
+	background: #E0E0E0;
+	color: #2C2C2C;
+	padding: 6px 12px;
+}
+
+select.compact {
+	padding: 6px 8px;
+	font-size: 13px;
+}
+
+/* 패널 헤더 내부 버튼 */
+.btn-group {
+	margin-left: auto;
+	display: flex;
+	gap: 6px;
+}
+
+.btn-tab, .btn-toggle {
+	background: #fff;
+	color: #07223D;
+	border: 1px solid #cfd8dc;
+	padding: 6px 10px;
+	border-radius: 6px;
+}
+
+/* 우하단 두 칸 레이아웃 */
+.two-col {
+	display: flex;
+	gap: 12px;
+	width: 100%;
+}
+
+.two-col .cell {
+	flex: 1;
+	min-width: 0;
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.table-wrap {
+	margin-top: 12px;
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	padding: 8px;
+}
+
+.table-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	justify-content: flex-end;
+	margin-bottom: 6px;
+}
+
+.rank-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.rank-table th, .rank-table td {
+	padding: 8px 10px;
+	border-bottom: 1px solid #f0f2f5;
+	font-size: 13px;
+}
+
+.rank-table thead th {
+	background: #f7f9fc;
+	color: #07223D;
+}
+
+/* panel-header에 이미 쓰는 active 톤과 동일하게 */
