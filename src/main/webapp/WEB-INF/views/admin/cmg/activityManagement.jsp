@@ -219,6 +219,11 @@
 							<i class="fas fa-undo-alt"></i> 초기화
 						</button>
 					</div>
+					<div class="form-actions">
+						<button type="button" id="btnDelete" class="btn-warning">
+							삭제
+						</button>
+					</div>
 				</div>
 			</div>
 

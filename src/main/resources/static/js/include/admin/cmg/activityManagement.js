@@ -18,7 +18,6 @@ function activityManagementInit () {
 		axios.get('/admin/cmg/selectActList.do', {
 			params: paramData
 		}).then(({data}) => {
-			console.log(data);
 			const {articlePage, contestTypeList} = data;
 			
 			if(data.success) {
@@ -111,7 +110,6 @@ function activityManagementInit () {
 				const {success, activity} = data;
 				
 				if(success) {
-					console.log(activity);
 					const formattedStartDate = formatDateOne(activity.contestStartDate);
 					const formattedEndDate   = formatDateOne(activity.contestEndDate);
 					
@@ -262,6 +260,26 @@ function activityManagementInit () {
 
 		});
 	}
+	
+	function actDelete() {
+		const deleteBtn = document.getElementById('btnDelete');
+
+		deleteBtn.addEventListener('click', function() {
+			const contestId = document.getElementById('contestId').value.trim();
+			
+			const data = {
+				contestId : contestId
+			}
+
+			axios.post('/prg/ctt/contestDelete.do', data).then(res => {
+				alert('삭제 완료');
+				fetchActList();
+			}).catch(err => {
+				console.error("삭제 실패", err);
+			});
+
+		});
+	}
 
 	function resetForm() {
 		const resetButton = document.getElementById('btnReset');
@@ -320,6 +338,7 @@ function activityManagementInit () {
 	
 	resetForm();
 	actSave();
+	actDelete();
 	imgView();
 	actListPangingFn();
 	fetchActList();
