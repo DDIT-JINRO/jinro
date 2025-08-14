@@ -105,6 +105,116 @@ function activityManagementInit () {
 		actDetail(formData);
 	});
 
+	function actDetail(formData) {
+		axios.post('/admin/cmg/selectActDetail.do', formData)
+			.then(({data}) => {
+				const {success, activity} = data;
+				
+				if(success) {
+					console.log(activity);
+					const formattedStartDate = formatDateOne(activity.contestStartDate);
+					const formattedEndDate   = formatDateOne(activity.contestEndDate);
+					
+					// 우측 상세 내용 출력 시작
+					document.getElementById('actImg').src                        = activity.savePath;
+					document.getElementById('actName').innerHTML                 = activity.contestTitle
+					document.getElementById('gubun').innerHTML                   = activity.contestGubunCode
+					document.getElementById('gubunName').innerHTML               = activity.contestGubunName
+					document.getElementById('contestHostProfile').innerHTML      = activity.contestHost
+					document.getElementById('contestOrganizerProfile').innerHTML = activity.contestOrganizer == null ? '-' : activity.contestOrganizer == 'N/A' ? '-' : activity.contestOrganizer;
+					document.getElementById('contestDate').innerHTML             = `${formattedStartDate} - ${formattedEndDate} `;
+					document.getElementById('actDetailAbout').innerHTML          = `${activity.descriptionSections == null ? '활동 설명이 없습니다.' : activity.descriptionSections[0]}`;
+					
+					// 하단 상세 내용 출력 시작
+					document.getElementById('contestId').value = activity.contestId
+					
+					// 이미지 출력 시작
+					const actImgPreview = document.getElementById('actImgPreview');
+					const imageUploadBox = document.getElementById('imageUploadBox');
+					if (activity.savePath) {
+						actImgPreview.src = activity.savePath;
+						actImgPreview.style.display = 'block';
+						if (imageUploadBox) {
+							imageUploadBox.querySelector('i').style.display = 'none';
+							imageUploadBox.querySelector('p').style.display = 'none';
+						}
+					} else {
+						actImgPreview.src = '';
+						actImgPreview.style.display = 'none';
+						if (imageUploadBox) {
+							imageUploadBox.querySelector('i').style.display = 'block';
+							imageUploadBox.querySelector('p').style.display = 'block';
+						}
+					}
+					// 이미지 출력 종료
+					
+					document.getElementById('contestTitle').value = activity.contestTitle
+					
+					const contestGubunSelect = document.getElementById('contestGubun');
+					const gubunOptions = contestGubunSelect.options;
+					const gubunSelectedValue = activity.contestGubunCode;
+					for (let i = 0; i < gubunOptions.length; i++) {
+						if (gubunOptions[i].value === gubunSelectedValue) {
+							gubunOptions[i].selected = true;
+							break;
+						}
+					}
+					
+					const contestTargetSelect = document.getElementById('contestTarget');
+					const targetOptions = contestTargetSelect.options;
+					const targetSelectedValue = activity.contestTarget;
+					for (let i = 0; i < targetOptions.length; i++) {
+						if (targetOptions[i].value === targetSelectedValue) {
+							targetOptions[i].selected = true;
+							break;
+						}
+					}
+					document.getElementById('applicationMethod').value      = activity.applicationMethod == null ? '-' : activity.applicationMethod == 'N/A' ? '-' : activity.applicationMethod;
+					document.getElementById('awardType').value              = activity.awardType;
+					document.getElementById('contestUrl').value             = activity.contestUrl == null ? '-' : activity.contestUrl == 'N/A' ? '-' : activity.contestUrl;
+					document.getElementById('contestHost').value            = activity.contestHost == null ? '-' : activity.contestHost == 'N/A' ? '-' : activity.contestHost;
+					document.getElementById('contestSponsor').value         = activity.contestSponsor == null ? '-' : activity.contestSponsor == 'N/A' ? '-' : activity.contestSponsor;
+					document.getElementById('contestOrganizer').value       = activity.contestOrganizer == null ? '-' : activity.contestOrganizer == 'N/A' ? '-' : activity.contestOrganizer;
+					document.getElementById('contestStartDate').value       = formatDateTwo(activity.contestStartDate);
+					document.getElementById('contestEndDate').value         = formatDateTwo(activity.contestEndDate);
+					document.getElementById('contestDescription').innerHTML = activity.contestDescription;
+				}
+			})
+			.catch(error => {
+				console.error('활동 정보 불러오기 실패', error);
+			});
+	}
+
+	document.getElementById('btnSearch').addEventListener("click", function() {
+		window.currentPage = 1;
+		fetchActList(1);
+	});
+	
+	function imgView() {
+		const actImgFile     = document.getElementById('actImgFile');
+		const actImgPreview  = document.getElementById('actImgPreview');
+		const btnChangeImg   = document.getElementById('btnChangeImg');
+		const imageUploadBox = document.getElementById('imageUploadBox');
+
+		actImgFile.addEventListener('change', (event) => {
+			const file = event.target.files[0];
+			if (file) {
+				const reader = new FileReader();
+
+				reader.onload = (e) => {
+					actImgPreview.src = e.target.result;
+					actImgPreview.style.display = 'block';
+					imageUploadBox.querySelector('i').style.display = 'none';
+					imageUploadBox.querySelector('p').style.display = 'none';
+				};
+				reader.readAsDataURL(file);
+			}
+		});
+
+		btnChangeImg.addEventListener('click', () => {
+			actImgFile.click();
+		});
+	}
 	
 	const formatDateOne = (date) => {
 		return date.substring(0, 10).replaceAll('-', '. ');
