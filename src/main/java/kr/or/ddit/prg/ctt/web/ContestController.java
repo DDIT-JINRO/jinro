@@ -1,5 +1,6 @@
 package kr.or.ddit.prg.ctt.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.prg.ctt.service.ContestService;
 import kr.or.ddit.prg.ctt.service.ContestVO;
 import kr.or.ddit.util.ArticlePage;
-import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.util.file.service.FileDetailVO;
+import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -27,7 +33,10 @@ public class ContestController {
 
 	@Autowired
 	private ContestService contestService;
-
+	
+	@Autowired
+	private FileService fileService;
+	
 	@GetMapping("/cttList.do")
 	public String cttList(Model model, @RequestParam(defaultValue = "1") int currentPage,
 			@RequestParam(required = false) String keyword,
@@ -85,14 +94,68 @@ public class ContestController {
 
 	@PostMapping("/contestUpdate.do")
 	@ResponseBody
-	public ResponseEntity<String> saveContest(@RequestBody ContestVO contestVO) {
-		int result = contestService.updateContest(contestVO);
+	public ResponseEntity<String> saveContest(
+	    @RequestParam(required = false) String contestData,
+	    @RequestParam(required = false) MultipartFile contestFiles,
+	    @RequestParam(required = false) String contestId) {
+	    
+	    try {
+	        ContestVO contestVO;
+	        
+	        if (contestData != null) {
+	            ObjectMapper mapper = new ObjectMapper();
+	            contestVO = mapper.readValue(contestData, ContestVO.class);
+	        } else {
+	            contestVO = new ContestVO();
+	        }
+	        
+	        if (contestId != null && !"".equals(contestId)) {
+	        	contestVO.setContestId(contestId);
+	        }
+	        
+	        // 파일 처리
+	        if (contestFiles != null && !contestFiles.isEmpty()) {
+	            List<MultipartFile> fileList = new ArrayList<>();
+	            fileList.add(contestFiles);
 
-		if (result > 0) {
-			return ResponseEntity.ok("성공적으로 저장되었습니다.");
-		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("저장에 실패했습니다.");
-		}
+	            Long fileGroupId = null;
+	            
+	            // 기존 파일이 있는지 확인 (수정 모드인 경우)
+	            if (contestId != null && !"".equals(contestId)) {
+	                ContestVO cttDetail = contestService.selectCttDetail(contestId);
+	                if (cttDetail != null) {
+	                    fileGroupId = cttDetail.getFileGroupId();
+	                }
+	            }
+
+	            if (fileGroupId != null) {
+	                FileDetailVO fileDetail = fileService.getFileDetail(fileGroupId, 1);
+	                if (fileDetail != null) {
+	                    fileService.updateFile(fileGroupId, fileList);
+	                } else {
+	                    fileService.uploadFiles(fileGroupId, fileList);
+	                }
+	            } else {
+	                fileGroupId = fileService.createFileGroup();
+	                fileService.uploadFiles(fileGroupId, fileList);
+	            }
+
+	            contestVO.setFileGroupId(fileGroupId);
+	        }
+	        
+	        int result = contestService.updateContest(contestVO);
+	        
+	        if (result > 0) {
+	            return ResponseEntity.ok("성공적으로 저장되었습니다.");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("저장에 실패했습니다.");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	            .body("처리 중 오류가 발생했습니다.");
+	    }
 	}
 
 	@PostMapping("/contestDelete.do")

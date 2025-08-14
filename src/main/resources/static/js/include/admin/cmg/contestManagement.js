@@ -202,54 +202,46 @@ function contestManagementInit () {
 	}
 	
 	function cctSave() {
-		const saveBtn = document.getElementById('btnRegister');
+	    const saveBtn = document.getElementById('btnRegister');
 
-		saveBtn.addEventListener('click', function() {
-			const contestId          = document.getElementById('contestId').value.trim();
-			const contestTitle       = document.getElementById('contestTitle').value.trim();
-			const contestDescription = document.getElementById('contestDescription').value.trim();
-			const contestType        = document.getElementById('contestType').value;
-			const contestTarget      = document.getElementById('contestTarget').value;
-			const contestStartDate   = document.getElementById('contestStartDate').value;
-			const contestEndDate     = document.getElementById('contestEndDate').value;
-			const contestHost        = document.getElementById('contestHost').value.trim();
-			const contestOrganizer   = document.getElementById('contestOrganizer').value.trim();
-			const contestSponsor     = document.getElementById('contestSponsor').value.trim();
-			const applicationMethod  = document.getElementById('applicationMethod').value.trim();
-			const awardType          = document.getElementById('awardType').value.trim();
-			const contestUrl         = document.getElementById('contestUrl').value.trim();
-			const actImgFile         = document.getElementById('cctImgFile').files[0]
-
-			const form = new FormData();
-
-			if (contestId && contestId !== '-') {
-				form.append("contestId", contestId);
-			}
-
-			form.append("contestTitle", contestTitle);
-			form.append("contestDescription", contestDescription);
-			form.append("contestType", contestType);
-			form.append("contestTarget", contestTarget);
-			form.append("contestStartDate", contestStartDate);
-			form.append("contestEndDate", contestEndDate);
-			form.append("contestHost", contestHost);
-			form.append("contestOrganizer", contestOrganizer);
-			form.append("contestSponsor", contestSponsor);
-			form.append("applicationMethod", applicationMethod);
-			form.append("awardType", awardType);
-			form.append("contestUrl", contestUrl);
-			form.append("files", actImgFile);
-
-			console.log(actImgFile);
+	    saveBtn.addEventListener('click', function() {
+	        const form = new FormData();
+	        
+	        const contestData = {
+	            contestTitle       : document.getElementById('contestTitle').value.trim(),
+	            contestDescription : document.getElementById('contestDescription').value.trim(),
+	            contestType        : document.getElementById('contestType').value,
+	            contestGubunCode   : 'G32001',
+	            contestTarget      : document.getElementById('contestTarget').value,
+	            contestStartDate   : document.getElementById('contestStartDate').value,
+	            contestEndDate     : document.getElementById('contestEndDate').value,
+	            contestHost        : document.getElementById('contestHost').value.trim(),
+	            contestOrganizer   : document.getElementById('contestOrganizer').value.trim(),
+	            contestSponsor     : document.getElementById('contestSponsor').value.trim(),
+	            applicationMethod  : document.getElementById('applicationMethod').value.trim(),
+	            awardType          : document.getElementById('awardType').value.trim(),
+	            contestUrl         : document.getElementById('contestUrl').value.trim()
+	        };
 			
-			axios.post('/prg/ctt/contestUpdate.do', form).then(res => {
-				console.log(res);
-				alert('등록/수정 완료');
-			}).catch(err => {
-				console.error("저장 실패", err);
+			const contestId = document.getElementById('contestId').value.trim();
+			if (contestId && contestId !== '-') {
+			    form.append("contestId", contestId);
+			}
+	        
+	        form.append("contestData", JSON.stringify(contestData));
+	        
+	        const actImgFile = document.getElementById('cctImgFile').files[0];
+	        if (actImgFile) {
+	            form.append("contestFiles", actImgFile);
+	        }
 
-			});
-		});
+	        axios.post('/prg/ctt/contestUpdate.do', form).then(res => {
+	            alert('등록/수정 완료');
+				fetchCctList();
+	        }).catch(err => {
+	            console.error("저장 실패", err);
+	        });
+	    });
 	}
 	
 	function cctDelete() {
