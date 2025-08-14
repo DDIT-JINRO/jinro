@@ -583,8 +583,10 @@ function appendMessage(msgVO) {
 			<div class="chat-time system-time">${timeStr}</div>
 	      </div>
 	    `;
-	    container.innerHTML += systemHTML;
-	    container.scrollTop = container.scrollHeight;
+	    container.insertAdjacentHTML('beforeend', systemHTML);
+		const messageEl = container.lastElementChild;
+		hookMediaAutoScroll(container, messageEl);
+	    scrollToBottom(container);
 	    return;  // 여기서 끝내고 일반 메시지 렌더링은 건너뜀
 	}
 
@@ -621,8 +623,10 @@ function appendMessage(msgVO) {
 
 		    <div class="chat-time">${timeStr}</div>
 		  </div>`;
-		container.innerHTML += chatHTML;
-		container.scrollTop = container.scrollHeight;
+		container.insertAdjacentHTML('beforeend', chatHTML);
+		const messageEl = container.lastElementChild;
+		hookMediaAutoScroll(container, messageEl);
+		scrollToBottom(container);
 		return;
 	}
 
@@ -651,8 +655,10 @@ function appendMessage(msgVO) {
 
 		    <div class="chat-time">${timeStr}</div>
 		  </div>`;
-		container.innerHTML += chatHTML;
-		container.scrollTop = container.scrollHeight;
+		container.insertAdjacentHTML('beforeend', chatHTML);
+		const messageEl = container.lastElementChild;
+		hookMediaAutoScroll(container, messageEl);
+		scrollToBottom(container);
 		return;
 	}
 
@@ -675,8 +681,10 @@ function appendMessage(msgVO) {
 		</div>
 	</div>
 					  `;
-    container.innerHTML += chatHTML;
-    container.scrollTop = container.scrollHeight;
+	container.insertAdjacentHTML('beforeend', chatHTML);
+	const messageEl = container.lastElementChild;
+	hookMediaAutoScroll(container, messageEl);
+	scrollToBottom(container);
 }
 
 // 안읽음 UI 반영 (채팅방 목록)
@@ -723,4 +731,34 @@ function updateFloatingBadge(totalUnread) {
         badge.textContent = "0";
         badge.style.display = 'none';
     }
+}
+
+function scrollToBottom(container){
+	// paint가 끝난 다음 프레임에, 한 번 더 보정
+	requestAnimationFrame(() => {
+	  container.scrollTop = container.scrollHeight;
+	  // 이미지가 늦게 커질 수 있으니 한 프레임 더
+	  requestAnimationFrame(() => {
+	    container.scrollTop = container.scrollHeight;
+	  });
+	});
+}
+
+function hookMediaAutoScroll(container, messageEl) {
+  const mediaList = messageEl.querySelectorAll('img, video, audio');
+  mediaList.forEach(el => {
+    // img
+    if (el.tagName === 'IMG') {
+      if (!el.complete) {
+        el.addEventListener('load', () => scrollToBottom(container), { once: true });
+        el.addEventListener('error', () => scrollToBottom(container), { once: true });
+      }
+    }
+    // video/audio
+    if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO') {
+      if (el.readyState < 1) {
+        el.addEventListener('loadedmetadata', () => scrollToBottom(container), { once: true });
+      }
+    }
+  });
 }
