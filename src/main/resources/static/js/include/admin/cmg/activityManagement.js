@@ -189,6 +189,12 @@ function activityManagementInit () {
 		window.currentPage = 1;
 		fetchActList(1);
 	});
+
+	document.querySelector("select[name='act-mng-category']").addEventListener("change", () => {
+		window.currentPage = 1;
+		fetchActList(1);
+	});
+
 	
 	function imgView() {
 		const actImgFile     = document.getElementById('actImgFile');
@@ -216,6 +222,94 @@ function activityManagementInit () {
 		});
 	}
 	
+	function actSave() {
+		const saveBtn = document.getElementById('btnRegister');
+
+		saveBtn.addEventListener('click', function() {
+			// 필수 필드 검증
+			const contestTitle = document.getElementById('contestTitle').value.trim();
+			const contestGubun = document.getElementById('contestGubun').value;
+			const contestStartDate = document.getElementById('contestStartDate').value;
+			const contestEndDate = document.getElementById('contestEndDate').value;
+			
+			// JSON 객체로 데이터 준비
+			const data = {
+				contestTitle: contestTitle,
+				contestGubunCode: contestGubun,
+				contestDescription: document.getElementById('contestDescription').value.trim(),
+				contestType: document.getElementById('contestType').value,
+				contestTarget: document.getElementById('contestTarget').value,
+				contestStartDate: contestStartDate,
+				contestEndDate: contestEndDate,
+				contestHost: document.getElementById('contestHost').value.trim(),
+				contestOrganizer: document.getElementById('contestOrganizer').value.trim(),
+				contestSponsor: document.getElementById('contestSponsor').value.trim(),
+				applicationMethod: document.getElementById('applicationMethod').value.trim(),
+				awardType: document.getElementById('awardType').value.trim(),
+				contestUrl: document.getElementById('contestUrl').value.trim()
+			};
+
+			const contestId = document.getElementById('contestId').value.trim();
+			if (contestId && contestId !== '-' && contestId !== '') {
+				data.contestId = contestId;
+			}
+
+			axios.post('/prg/ctt/contestUpdate.do', data).then(res => {
+				alert('등록/수정 완료');
+			}).catch(err => {
+				console.error("저장 실패", err);
+			});
+
+		});
+	}
+
+	function resetForm() {
+		const resetButton = document.getElementById('btnReset');
+		resetButton.addEventListener('click', function() {
+			// 텍스트, 숫자, URL 입력 필드 초기화
+			document.getElementById('contestTitle').value = '';
+			document.getElementById('contestGubun').selectedIndex = 0;
+			document.getElementById('contestStartDate').value = '';
+			document.getElementById('contestEndDate').value = '';
+			document.getElementById('contestDescription').value = '';
+			document.getElementById('contestType').selectedIndex = 0;
+			document.getElementById('contestTarget').selectedIndex = 0;
+			document.getElementById('contestHost').value = '';
+			document.getElementById('contestOrganizer').value = '';
+			document.getElementById('contestSponsor').value = '';
+			document.getElementById('applicationMethod').value = '';
+			document.getElementById('awardType').value = '';
+			document.getElementById('contestUrl').value = '';
+
+			/*
+			const cpLogoFile = document.getElementById('cpLogoFile');
+			if (cpLogoFile) {
+				cpLogoFile.value = ''; // 파일 선택 내용 삭제
+			}*/
+			
+			// 이미지 미리보기 초기화
+			const actImgPreview = document.getElementById('actImgPreview');
+			const imageUploadBox = document.getElementById('imageUploadBox');
+
+			actImgPreview.src = '';
+			actImgPreview.style.display = 'none';
+
+			// 업로드 안내 텍스트와 아이콘 다시 표시
+			if (imageUploadBox) {
+				const icon = imageUploadBox.querySelector('i');
+				const text = imageUploadBox.querySelector('p');
+				if (icon) icon.style.display = 'block';
+				if (text) text.style.display = 'block';
+			}
+
+			// 변경/삭제 버튼 숨기기 (만약 있다면)
+			const imageUploadControls = document.querySelector('.image-upload-controls');
+			if (imageUploadControls) {
+				imageUploadControls.style.display = 'none';
+			}
+		});
+	}
+
 	const formatDateOne = (date) => {
 		return date.substring(0, 10).replaceAll('-', '. ');
 	}
@@ -223,10 +317,8 @@ function activityManagementInit () {
 	const formatDateTwo = (date) => {
 		return date.substring(0, 10);
 	}
-
 	
-	/*resetForm();
-	entSearchFn();*/
+	resetForm();
 	actSave();
 	imgView();
 	actListPangingFn();
