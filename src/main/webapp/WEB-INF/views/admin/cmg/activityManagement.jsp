@@ -193,7 +193,7 @@
 				
 				<div class="form-textarea-section">
 					<div class="input-group">
-						<label for="contestDescription">기업에 대한 설명</label>
+						<label for="contestDescription">대외활동에 대한 설명</label>
 						<textarea id="contestDescription" class="contest-form-input" placeholder="기업의 비전, 주요 사업, 문화 등 자세한 설명을 작성해주세요."></textarea>
 					</div>
 				</div>
