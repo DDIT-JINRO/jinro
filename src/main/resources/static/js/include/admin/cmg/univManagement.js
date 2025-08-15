@@ -42,9 +42,6 @@ function univManagement() {
 			renderPaginationUniv(result);
 		})
 			.catch(err => console.error('유저 목록 조회 중 에러:', err));
-
-
-
 	}
 
 	function renderPaginationUniv({ startPage, endPage, currentPage, totalPages }) {
@@ -92,12 +89,12 @@ function univManagement() {
 		const id = tds[0].textContent.trim();
 
 		univDetail(id);
-
-
-
 	});
 
 	function univDetail(id) {
+
+		univDepDetailReset();
+
 		axios.get(`/ertds/univ/uvsrch/universities/${id}`)
 			.then(res => {
 
@@ -128,6 +125,9 @@ function univManagement() {
 					}
 				}
 
+				document.getElementById('univ-dept-detail-univId').value = univVO.univId;
+				document.getElementById('univ-dept-detail-univName').value = univVO.univName;
+
 				document.getElementById('univ-detail-univId').value = univVO.univId || '';
 				document.getElementById('univ-detail-univName').value = univVO.univName || '';
 				document.getElementById('univ-detail-univRegion').value = univVO.univRegion || '';
@@ -140,7 +140,7 @@ function univManagement() {
 					tgDepart.innerHTML = `<tr><td colspan='2' style="text-align: center;">등록된 학과 정보가 없습니다.</td></tr>`;
 				} else {
 					const rows = univDeptList.map(item => `
-														  <tr>
+														  <tr id="${item.udId}">
 															<td>${item.udName == null ? '데이터 없음' : item.udName}</td>
 															<td>${item.udTuition == '0' ? '데이터 없음' : formatNumberWithCommas(item.udTuition)}</td>											
 															<td>${item.udScholar == '0' ? '데이터 없음' : formatNumberWithCommas(item.udScholar) || '데이터 없음'}</td>
@@ -151,10 +151,56 @@ function univManagement() {
 					tgDepart.innerHTML = rows;
 				}
 
+
 			});
 
-
 	};
+
+
+	document.getElementById('tgDepart').addEventListener('click', function(e) {
+		univDepDetail(e);
+	});
+
+	function univDepDetailReset() {
+		document.getElementById('univ-dept-detail-udId').value = '';
+		document.getElementById('univ-dept-detail-udName').value = '';
+		document.getElementById('univ-dept-detail-udTuition').value = '';
+		document.getElementById('univ-dept-detail-udScholar').value = '';
+		document.getElementById('univ-dept-detail-udCompetition').value = '';
+		document.getElementById('univ-dept-detail-udEmpRate').value = '';
+
+	}
+
+
+	function univDepDetail(e) {
+		const tr = e.target.closest('tr');
+		const tds = tr.querySelectorAll('td');
+
+		const udName = tds[0].textContent;
+		const udTuition = tds[1].textContent;
+		const udScholar = tds[2].textContent;
+		const udCompetition = tds[3].textContent;
+		const udEmpRate = tds[4].textContent;
+
+		if (!tr) {
+			return;
+		}
+
+		const udId = tr.id;
+		const univId = document.getElementById('univ-detail-univId').value;
+		const univName = document.getElementById('univ-detail-univName').value;
+
+
+		document.getElementById('univ-dept-detail-univId').value = univId;
+		document.getElementById('univ-dept-detail-univName').value = univName;
+		document.getElementById('univ-dept-detail-udId').value = udId;
+		document.getElementById('univ-dept-detail-udName').value = udName;
+		document.getElementById('univ-dept-detail-udTuition').value = udTuition;
+		document.getElementById('univ-dept-detail-udScholar').value = udScholar;
+		document.getElementById('univ-dept-detail-udCompetition').value = udCompetition;
+		document.getElementById('univ-dept-detail-udEmpRate').value = udEmpRate;
+	}
+
 	function formatNumberWithCommas(number) {
 		return number.toLocaleString('ko-KR');
 	}
@@ -259,6 +305,44 @@ function univManagement() {
 		}
 
 	}
+
+	document.getElementById('univ-udDel').addEventListener('click', function() {
+
+		const udId = document.getElementById('univ-dept-detail-udId').value;
+
+		if (udId == null || udId == '') {
+			alert('삭제할 학과를 선택해주세요.');
+		} else {
+			if (confirm('삭제된 데이터는 복구할 수 없으며, 모든 정보가 삭제됩니다.\n정말로 삭제하시겠습니까?')) {
+				axios.delete(`/ertds/univ/uvsrch/departments/${udId}`).then(res => {
+					alert(res);
+				})
+			}
+		}
+
+	})
+
+	document.getElementById('univ-udMod').addEventListener('click', function() {
+
+		const udId = document.getElementById('univ-dept-detail-udId').value;
+
+		if (udId == null || udId == '') {
+			alert('수정할 학과를 선택해주세요.');
+		} else {
+			if (confirm('정말로 수정하시겠습니까?')) {
+				
+				const udName = document.getElementById('univ-dept-detail-udName').value;
+				const udTuition = document.getElementById('univ-dept-detail-udTuition').value;
+				const udScholar = document.getElementById('univ-dept-detail-udScholar').value;
+				const udCompetition = document.getElementById('univ-dept-detail-udCompetition').value;
+				const udEmpRate = document.getElementById('univ-dept-detail-udEmpRate').value;
+				
+				axios.delete(`/ertds/univ/uvsrch/departments/${udId}`).then(res => {
+					alert(res);
+				})
+			}
+		}
+	})
 
 	entSearchFn();
 	fetchUnivList();
