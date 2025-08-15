@@ -22,4 +22,7 @@ public interface PaymentStatsService {
     
 	// 일일 구독 결제 매출
     public List<Map<String, Object>> getDailyRevenueForDashboard();
+
+    // AI 기능 이용 내역
+    List<Map<String, Object>> getAiServiceUsageStats(Map<String, Object> params);
 }

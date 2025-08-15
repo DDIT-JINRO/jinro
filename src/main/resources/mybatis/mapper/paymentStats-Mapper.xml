@@ -139,4 +139,53 @@
 	    LEFT JOIN REVENUE R ON D."dt" = R."dt"
 	    ORDER BY D."dt" ASC
 	</select>
+	
+	<!-- 
+	// AI 기능 이용 내역
+	public List<Map<String, Object>> selectAiServiceUsageStats(Map<String, Object> params);
+	 -->
+	<select id="selectAiServiceUsageStats" parameterType="map" resultType="map">
+	    SELECT
+	        <choose>
+	            <when test="period == 'monthly'">TO_CHAR(l.PL_CREATED_AT, 'YYYY-MM')</when>
+	            <otherwise>TO_CHAR(l.PL_CREATED_AT, 'YYYY-MM-DD')</otherwise>
+	        </choose> AS "dt",
+	        
+	        -- '나의 활동 - 이력서' 로그 카운트
+	        COUNT(CASE WHEN l.PL_TITLE = '나의 활동 - 이력서' THEN 1 END) AS "resumeCnt",
+	        
+	        -- '나의 활동 - 자기소개서' 로그 카운트
+	        COUNT(CASE WHEN l.PL_TITLE = '나의 활동 - 자기소개서' THEN 1 END) AS "coverCnt"
+	        
+	        -- 참고: 모의면접 로그가 있다면 여기에 추가
+	        -- COUNT(CASE WHEN l.PL_TITLE = '...' THEN 1 END) AS "mockCnt"
+	        
+	    FROM PAGE_LOG l
+	    JOIN MEMBER m ON l.MEM_ID = m.MEM_ID
+	    WHERE 
+	        l.PL_TITLE IN ('나의 활동 - 이력서', '나의 활동 - 자기소개서')
+	        
+	        <if test="from != null and from != ''">AND l.PL_CREATED_AT >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	        <if test="to != null and to != ''">AND l.PL_CREATED_AT &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	        
+	        <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	        
+	        <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	          AND m.MEM_BIRTH IS NOT NULL
+	          AND CASE
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) &lt; 20 THEN '10대'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 29 THEN '20대'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 30 AND 39 THEN '30대'
+	                ELSE '40대 이상'
+	              END = #{ageBand}
+	        </if>
+	        
+	    GROUP BY 
+	        <choose>
+	            <when test="period == 'monthly'">TO_CHAR(l.PL_CREATED_AT, 'YYYY-MM')</when>
+	            <otherwise>TO_CHAR(l.PL_CREATED_AT, 'YYYY-MM-DD')</otherwise>
+	        </choose>
+	        
+	    ORDER BY "dt" ASC
+	</select>
 </mapper>

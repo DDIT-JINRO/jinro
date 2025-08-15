@@ -55,4 +55,10 @@ public class PaymentStatsController {
     public List<Map<String, Object>> dailyRevenueForDashboard() {
         return paymentStatsService.getDailyRevenueForDashboard();
     }
+    
+	// AI 기능 이용 내역
+    @GetMapping("/ai-service-usage")
+    public List<Map<String, Object>> aiServiceUsage(@RequestParam Map<String, Object> params) {
+        return paymentStatsService.getAiServiceUsageStats(params);
+    }
 }

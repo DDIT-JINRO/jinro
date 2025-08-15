@@ -55,4 +55,11 @@ public class PaymentStatsServiceImpl implements PaymentStatsService {
 
 		return paymentStatsMapper.selectDailyRevenueForDashboard();
 	}
+
+    // AI 기능 이용 내역
+	@Override
+	public List<Map<String, Object>> getAiServiceUsageStats(Map<String, Object> params) {
+		
+		return paymentStatsMapper.selectAiServiceUsageStats(params);
+	}
 }

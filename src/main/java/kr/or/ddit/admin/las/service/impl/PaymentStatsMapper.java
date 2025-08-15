@@ -26,4 +26,7 @@ public interface PaymentStatsMapper {
 	// 일일 구독 결제 매출
 	public List<Map<String, Object>> selectDailyRevenueForDashboard();
 
+    // AI 기능 이용 내역
+	public List<Map<String, Object>> selectAiServiceUsageStats(Map<String, Object> params);
+
 }
