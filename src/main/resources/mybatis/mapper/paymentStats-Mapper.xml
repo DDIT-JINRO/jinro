@@ -1,7 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.admin.las.service.impl.PaymentStatsMapper">
-
+	
+	<!-- 
+	// 당일 기준 총 구독자 수
+	public int selectTotalSubscriberCount();
+	 -->
+	<select id="selectTotalSubscriberCount">
+        SELECT
+	        COUNT(DISTINCT MEM_ID)
+	    FROM
+	        MEMBER_SUBSCRIPTION
+	    WHERE
+	        TRUNC(SUB_END_DT) >= TRUNC(SYSDATE)
+    </select>
  
+ 	<!-- 
+ 	// 당일 새로운 구독자 수
+	public int selectNewSubscriberCountToday();
+	 -->
+	<select id="selectNewSubscriberCountToday">
+        SELECT
+        	COUNT(*)
+	    FROM PAYMENT P
+	    JOIN MEMBER_SUBSCRIPTION MS ON P.MS_ID = MS.MS_ID
+	    WHERE 
+	        TRUNC(P.PAY_DATE) = TRUNC(SYSDATE)
+	        AND P.PAY_DATE = (
+	            SELECT MIN(P2.PAY_DATE)
+	            FROM PAYMENT P2
+	            JOIN MEMBER_SUBSCRIPTION MS2 ON P2.MS_ID = MS2.MS_ID
+	            WHERE MS2.MEM_ID = MS.MEM_ID
+	        )
+    </select>
+	 
+	<!-- 
+	 // 구독 결제 매출 
+	public List<Map<String, Object>> selectRevenueStats(Map<String, Object> params);
+	 --> 
+	<select id="selectRevenueStats" parameterType="map" resultType="map">
+        SELECT
+            <choose>
+                <when test="period == 'monthly'">TO_CHAR(p.PAY_DATE, 'YYYY-MM')</when>
+                <otherwise>TO_CHAR(p.PAY_DATE, 'YYYY-MM-DD')</otherwise>
+            </choose> AS "dt",
+            SUM(p.PAY_AMOUNT) AS "revenue"
+        FROM PAYMENT p
+        JOIN MEMBER_SUBSCRIPTION ms ON p.MS_ID = ms.MS_ID
+        JOIN MEMBER m ON ms.MEM_ID = m.MEM_ID
+        WHERE p.PAY_AMOUNT > 0
+          <if test="from != null and from != ''">AND p.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+          <if test="to != null and to != ''">AND p.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+          <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+        GROUP BY 
+            <choose>
+                <when test="period == 'monthly'">TO_CHAR(p.PAY_DATE, 'YYYY-MM')</when>
+                <otherwise>TO_CHAR(p.PAY_DATE, 'YYYY-MM-DD')</otherwise>
+            </choose>
+        ORDER BY "dt" ASC
+    </select>
+	
+	<!-- 
+	// 구독자 수 
+	public List<Map<String, Object>> selectSubscriberCountStats(Map<String, Object> params);
+	 -->
+	<select id="selectSubscriberCountStats" parameterType="map" resultType="map">
+        SELECT
+            <choose>
+                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
+                <otherwise>TO_CHAR(P.PAY_DATE, 'YYYY-MM-DD')</otherwise>
+            </choose> AS "dt",
+            COUNT(*) AS "count"
+        FROM MEMBER_SUBSCRIPTION MS
+        JOIN PAYMENT P ON P.MS_ID = MS.MS_ID
+        JOIN MEMBER M ON M.MEM_ID = MS.MEM_ID
+        WHERE 1=1
+            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+            <if test="to != null and to != ''">AND P.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+            <if test="gender != null and gender != '' and gender != 'ALL'">AND M.MEM_GEN = #{gender}</if>
+        GROUP BY 
+            <choose>
+                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
+                <otherwise>TO_CHAR(P.PAY_DATE, 'YYYY-MM-DD')</otherwise>
+            </choose>
+        ORDER BY "dt" ASC
+    </select>
+	
+	 <!-- 
+	 // 상품별 인기 통계 
+	public List<Map<String, Object>> selectProductPopularityStats(Map<String, Object> params);
+	  -->
+	<select id="selectProductPopularityStats" parameterType="map" resultType="map">
+        SELECT
+            <choose>
+                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
+                <otherwise>TO_CHAR(P.PAY_DATE, 'YYYY-MM-DD')</otherwise>
+            </choose> AS "dt",
+            S.SUB_NAME AS "subName",
+            COUNT(*) AS "count"
+        FROM MEMBER_SUBSCRIPTION MS
+        JOIN PAYMENT P ON P.MS_ID = MS.MS_ID
+        JOIN SUBSCRIBE S ON S.SUB_ID = MS.SUB_ID
+        WHERE 1=1
+            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+            <if test="to != null and to != ''">AND P.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+        GROUP BY 
+            <choose>
+                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
+                <otherwise>TO_CHAR(P.PAY_DATE, 'YYYY-MM-DD')</otherwise>
+            </choose>,
+            S.SUB_NAME
+        ORDER BY "dt", "subName"
+    </select>
 
+	<!-- 
+	// 일일 구독 결제 매출
+	public List<Map<String, Object>> selectDailyRevenueForDashboard();
+	 -->	
+	<select id="selectDailyRevenueForDashboard" resultType="map">
+	    WITH DATES AS (
+	      SELECT TRUNC(SYSDATE) - LEVEL + 1 AS "dt"
+	      FROM DUAL
+	      CONNECT BY LEVEL &lt;= 7
+	    ),
+	    REVENUE AS (
+	        SELECT
+	            TRUNC(PAY_DATE) AS "dt",
+	            SUM(PAY_AMOUNT) AS "revenue"
+	        FROM PAYMENT
+	        WHERE PAY_DATE >= TRUNC(SYSDATE) - 6
+	          AND PAY_AMOUNT > 0
+	        GROUP BY TRUNC(PAY_DATE)
+	    )
+	    SELECT
+	        TO_CHAR(D."dt", 'YYYY-MM-DD') AS "dt",
+	        NVL(R."revenue", 0) AS "revenue"
+	    FROM DATES D
+	    LEFT JOIN REVENUE R ON D."dt" = R."dt"
+	    ORDER BY D."dt" ASC
+	</select>
 </mapper>
