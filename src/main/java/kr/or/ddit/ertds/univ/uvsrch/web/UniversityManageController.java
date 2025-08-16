@@ -201,7 +201,7 @@ public class UniversityManageController {
 	 * 학과 추가
 	 */
 	@PostMapping("/universities/{univId}/departments")
-	public ResponseEntity<Map<String, Object>> createDepartment(@PathVariable("univId") int univId, @RequestBody DeptInfo deptInfo) {
+	public ResponseEntity<Map<String, Object>> createDepartment(@PathVariable("univId") int univId, DeptInfo deptInfo) {
 
 		Map<String, Object> response = new HashMap<>();
 
@@ -234,7 +234,7 @@ public class UniversityManageController {
 	 * 학과 수정
 	 */
 	@PutMapping("/departments/{udId}")
-	public ResponseEntity<Map<String, Object>> updateDepartment(@PathVariable("udId") int udId, @RequestBody DeptInfo deptInfo) {
+	public ResponseEntity<Map<String, Object>> updateDepartment(@PathVariable("udId") int udId, DeptInfo deptInfo) {
 
 		Map<String, Object> response = new HashMap<>();
 
