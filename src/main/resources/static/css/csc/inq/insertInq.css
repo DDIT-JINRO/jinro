@@ -2,9 +2,10 @@
 
 /* 문의 작성 폼 전체 래퍼 */
 .inq-post-wrapper {
-  width: 1160px;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
+  margin-top: 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
