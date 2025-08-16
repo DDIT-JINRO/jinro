@@ -101,9 +101,11 @@
         FROM MEMBER_SUBSCRIPTION MS
         JOIN PAYMENT P ON P.MS_ID = MS.MS_ID
         JOIN SUBSCRIBE S ON S.SUB_ID = MS.SUB_ID
+        JOIN MEMBER M ON M.MEM_ID = MS.MEM_ID
         WHERE 1=1
             <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
             <if test="to != null and to != ''">AND P.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+            <if test="gender != null and gender != '' and gender != 'ALL'">AND M.MEM_GEN = #{gender}</if>
         GROUP BY 
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -114,7 +116,7 @@
     </select>
 
 	<!-- 
-	// 일일 구독 결제 매출
+	// 일일 구독 결제 매출 - 대시보드용
 	public List<Map<String, Object>> selectDailyRevenueForDashboard();
 	 -->	
 	<select id="selectDailyRevenueForDashboard" resultType="map">
