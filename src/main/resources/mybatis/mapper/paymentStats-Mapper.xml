@@ -213,13 +213,13 @@
 	                <otherwise>TO_CHAR(CREATED_AT, 'YYYY-MM-DD')</otherwise>
 	            </choose>
 	    ),
-	    NEW_SUBS_REVENUE AS (
+	    NEW_SUBS AS (
 	        SELECT
 	            <choose>
 	                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
 	                <otherwise>TO_CHAR(P.PAY_DATE, 'YYYY-MM-DD')</otherwise>
 	            </choose> AS "dt",
-	            SUM(P.PAY_AMOUNT) AS "newSubscriberRevenue"
+	            COUNT(*) AS "newSubscriberCount"
 	        FROM PAYMENT P
 	        JOIN MEMBER_SUBSCRIPTION MS ON P.MS_ID = MS.MS_ID
 	        WHERE 
@@ -240,13 +240,13 @@
 	    SELECT
 	        d."dt",
 	        d."newMemberCount",
-	        NVL(s."newSubscriberRevenue", 0) AS "newSubscriberRevenue",
+	        NVL(s."newSubscriberCount", 0) AS "newSubscriberCount",
 	        CASE
-	            WHEN d."newMemberCount" > 0 THEN ROUND(NVL(s."newSubscriberRevenue", 0) / d."newMemberCount")
+	            WHEN d."newMemberCount" > 0 THEN ROUND(NVL(s."newSubscriberCount", 0) / d."newMemberCount")
 	            ELSE 0
-	        END AS "revenuePerNewMember" -- 신규 가입자 1명당 평균 매출
+	        END AS "conversionRate" -- 신규 가입자 1명당 평균 매출
 	    FROM NEW_MEMBERS d
-	    LEFT JOIN NEW_SUBS_REVENUE s ON d."dt" = s."dt"
+	    LEFT JOIN NEW_SUBS s ON d."dt" = s."dt"
 	    ORDER BY d."dt" ASC
 	</select>
 	
