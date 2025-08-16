@@ -57,9 +57,11 @@
 
 				<!-- 하단 버튼 -->
 				<div class="aifb-footer-wrapper">
-					<button class="aifb-button back" onclick="history.back()">뒤로가기</button>
-					<button id="requestAiFeedback" class="aifb-button feedback">ai 피드백 요청</button>
-					<button class="aifb-button proofread" onclick="requestProofread()">내 이력서 수정하러 가기</button>
+				    <div class="ai-feedback-section">
+				        <button id="requestAiFeedback" class="aifb-button feedback">AI 피드백 요청</button>
+				        <span class="powered-by-text">Powered by Gemini</span>
+				    </div>
+				    <button class="aifb-button proofread" onclick="requestProofread()">내 이력서 수정하러 가기</button>
 				</div>
 			</div>
 		</div>
