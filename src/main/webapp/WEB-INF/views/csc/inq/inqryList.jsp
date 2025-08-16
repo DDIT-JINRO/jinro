@@ -43,33 +43,6 @@
 							</button>
 						</div>
 						
-						<div class="com-accordion-filter">
-							<button type="button" class="com-accordion-header" id="com-accordion-toggle">
-								<span>필터</span> <span class="com-arrow-icon">▲</span>
-							</button>
-							<div class="com-accordion-panel" id="com-accordion-panel">
-								<div class="com-filter-section">
-									<label class="com-filter-title">1:1문의 필터</label>
-									<div class="com-filter-options">
-										<c:if test="${memId !='anonymousUser'}">
-											<label class="com-filter-item">
-											<input type="checkbox"name="filter-keyword" value="mine"><span>내가 쓴 문의</span>
-										</c:if>
-										</label> 
-										<label class="com-filter-item">
-										<input type="checkbox" name="filter-keyword" value="open"><span>공개 문의</span></label>
-									</div>
-								</div>
-								<div class="com-filter-section">
-									<div class="com-button-container">
-										<label class="com-filter-title">선택된 필터</label>
-										<button type="button" class="com-filter-reset-btn">초기화</button>
-									</div>
-									<div class="com-selected-filters"></div>
-								</div>
-								<button type="submit" class="com-submit-search-btn">검색</button>
-							</div>
-						</div>
 					</form>
 					<div class="inq-list">
 						<input type="hidden" value="${memId}" id="getMemId">
@@ -82,12 +55,6 @@
 										<span class="inq-title-text">${item.contactTitle}</span>
 									</div>
 									<div class="inq-title-right">
-										<c:if test="${item.contactIsPublic == 'Y'}">
-											<span>공개</span>
-										</c:if>
-										<c:if test="${item.contactIsPublic == 'N'}">
-											<span>비공개</span>
-										</c:if>
 										<span>${item.memName}</span>
 										<c:if test="${item.contactReply != null}">
 											<span>답변 완료</span>

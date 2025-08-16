@@ -37,20 +37,8 @@ public class InqServiceimpl implements InqService{
 		// 키워드가 있다면
 		map.put("keyword", keyword);
 		// 내가 쓴 글 찾기
-		if(filterKeywords != null && filterKeywords.contains("mine")) {
-		    // 내가 쓴 글보기
-		    if (memId == null || "anonymousUser".equals(memId)) {
-		        map.put("mine", null); 
-		    } else {
-		        // memId가 숫자형이 아니라 문자열 ID일 경우
-		        map.put("mine", memId); // String 타입의 memId를 그대로 사용
-		    }
-		}
-		// 공개 설정인지
-		if(filterKeywords != null &&filterKeywords.contains("open")){
-			map.put("open", "open");
-		}
 
+		map.put("memId", memId);
 		map.put("currentPage", currentPage);
 		map.put("startNo", startNo);
 		map.put("endNo", endNo);

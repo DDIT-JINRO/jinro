@@ -22,20 +22,6 @@
 			1:1 문의 게시글 작성<br />
 			<div class="inq-post-wrapper">
 				<div class="form-group">
-					<div class="inqinfo-grid">
-						<div class="custom-select">
-						    <label for="publicOrNot">공개 여부</label>
-						    <div class="custom-select__label" id="selectLabel">선택해주세요.</div>
-						    <ul class="custom-select__options" id="selectOptions">
-						        <li data-value="공개">공개</li>
-						        <li data-value="비공개">비공개</li>
-						    </ul>
-						    <select name="publicOrNot" class="visually-hidden" id="publicOrNot">
-						        <option value="Y">공개</option>
-						        <option value="N">비공개</option>
-						    </select>
-						</div>
-					</div>
 					<label for="post-title">1:1 문의 제목</label>
 					<input type="text" placeholder="제목을 입력하세요" class="title-input" id="post-title"/>
 					<label for="description">1:1 문의 내용</label>
