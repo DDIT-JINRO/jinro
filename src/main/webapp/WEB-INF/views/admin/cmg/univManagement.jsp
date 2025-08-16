@@ -1,13 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="css/admin/cmg/univManagement.css">
 <!-- 스크립트 작성해주시면 됩니다 (유의점 : DOMContentLoaded x) -->
 <script src="/js/include/admin/cmg/univManagement.js">
 	
 </script>
 <!-- 제목입니다 -->
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">대학
-	관리</h2>
+<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">대학 관리</h2>
 <body>
 	<div class="admin-univMng-1" style="margin-bottom: 20px;">
 		<div class="template-panel admin-univMng-1-1">
@@ -17,7 +15,8 @@
 					<option value="1">전체</option>
 					<option value="2">학교명</option>
 					<option value="3">학교구분명</option>
-				</select> <input type="text" name="keyword" placeholder="검색어를 입력하세요" />
+				</select>
+				<input type="text" name="keyword" placeholder="검색어를 입력하세요" />
 				<button type="button" class="btn-save">조회</button>
 			</div>
 			<div class="listUniv">
@@ -54,8 +53,7 @@
 			<div class="middleTitle">대학 상세</div>
 			<div class="detail-item">
 				<span class="detail-label">대학 ID:</span>
-				<input id="univ-detail-univId" placeholder="자동 입력"
-					readonly="readonly" />
+				<input id="univ-detail-univId" placeholder="자동 입력" readonly="readonly" />
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">대학명:</span>
@@ -92,11 +90,12 @@
 				<button id="univReset">초기화</button>
 				<button id="univSave">저장</button>
 				<button id="univDel">삭제</button>
+				<button id="univDepInsert">학과 추가</button>
 			</div>
 		</div>
 	</div>
 
-	<div class="flex" style="gap: 20px;">
+	<div class="flex" style="gap: 20px; margin-bottom: 20px;">
 		<div class="template-panel admin-univMng-2">
 			<div class="middleTitle">해당 대학 학과정보</div>
 			<table>
@@ -107,6 +106,7 @@
 						<th>평균 장학금</th>
 						<th>입시 경쟁률</th>
 						<th>평균 취업률</th>
+						<th style="display: none;"></th>
 					</tr>
 				</thead>
 				<tbody id="tgDepart">
@@ -115,20 +115,18 @@
 		</div>
 		<div class="template-panel admin-univMng-3">
 			<div class="middleTitle">학과 정보</div>
+			<input id="univ-dept-detail-uddId" style="display: none;" placeholder="자동 입력" readonly="readonly" />
 			<div class="detail-item">
 				<span class="detail-label">대학 ID:</span>
-				<input id="univ-dept-detail-univId" placeholder="자동 입력"
-					readonly="readonly" />
+				<input id="univ-dept-detail-univId" placeholder="자동 입력" readonly="readonly" />
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">대학명:</span>
-				<input id="univ-dept-detail-univName" placeholder="자동 입력"
-					readonly="readonly" />
+				<input id="univ-dept-detail-univName" placeholder="자동 입력" readonly="readonly" />
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">학과번호:</span>
-				<input id="univ-dept-detail-udId" placeholder="자동 입력"
-					readonly="readonly" />
+				<input id="univ-dept-detail-udId" placeholder="자동 입력" />
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">학과명:</span>
@@ -140,7 +138,7 @@
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">평균 장학금:</span>
-				<input id="univ-dept-detail-udScholar"/>
+				<input id="univ-dept-detail-udScholar" />
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">입시 경쟁률:</span>
@@ -153,6 +151,25 @@
 			<div class="flex">
 				<button id="univ-udDel">학과 삭제</button>
 				<button id="univ-udMod">수정</button>
+			</div>
+		</div>
+	</div>
+	<div class="modal-overlay show" id="univDept-modal-overlay" style="display: none;">
+		<div class="modal-content">
+			<button class="modal-close-btn" id="modal-close-btn" type="button">×</button>
+			<h3>대학 학과 추가</h3>
+
+			<div class="modal-form">
+				<input type="text" id="showUvName" placeholder="대학명" readonly="readonly">
+				<input type="text" id="showUvId" readonly="readonly" style="display: none;">
+				<input type="text" id="insertUdName" placeholder="학과명">
+				<input type="text" id="showUddId" placeholder="학과계열 ID">
+				<input type="text" id="insertUdTuition" placeholder="평균 등록금">
+				<input type="text" id="insertUdScholar" placeholder="평균 장학금">
+				<input type="text" id="insertUdCompetition" placeholder="입시 경쟁률 예) 8.5:1">
+				<input type="text" id="insertUdEmpRate" placeholder="평균 취업률 예) 80.0">
+				<span class="modal-error-msg" id="modal-error-msg"></span>
+				<button class="btn btn-primary" id="univDept-insert-btn" type="button" style="margin-top: 20px;">등록</button>
 			</div>
 		</div>
 	</div>

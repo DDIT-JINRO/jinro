@@ -84,7 +84,7 @@ function univManagement() {
 
 		const tr = e.target.closest("tr");
 		if (!tr) return;
-
+		
 		const tds = tr.querySelectorAll("td");
 		const id = tds[0].textContent.trim();
 
@@ -97,7 +97,7 @@ function univManagement() {
 
 		axios.get(`/ertds/univ/uvsrch/universities/${id}`)
 			.then(res => {
-
+			
 				const univVO = res.data.data;
 				const univDeptList = res.data.deptData;
 
@@ -142,20 +142,16 @@ function univManagement() {
 					const rows = univDeptList.map(item => `
 														  <tr id="${item.udId}">
 															<td>${item.udName == null ? '데이터 없음' : item.udName}</td>
-															<td>${item.udTuition == '0' ? '데이터 없음' : formatNumberWithCommas(item.udTuition)}</td>											
-															<td>${item.udScholar == '0' ? '데이터 없음' : formatNumberWithCommas(item.udScholar) || '데이터 없음'}</td>
+															<td>${item.udTuition == null ? '데이터 없음' : formatNumberWithCommas(item.udTuition)}</td>											
+															<td>${item.udScholar == null ? '데이터 없음' : formatNumberWithCommas(item.udScholar)}</td>
 															<td>${item.udCompetition == null ? '데이터 없음' : item.udCompetition}</td>
 															<td>${item.udEmpRate == null ? '데이터 없음' : item.udEmpRate}</td>
-														   
+															<td style="display:none;">${item.uddId == null ? '데이터 없음' : item.uddId}</td>														   
 														  </tr>`).join('');
 					tgDepart.innerHTML = rows;
 				}
-
-
 			});
-
 	};
-
 
 	document.getElementById('tgDepart').addEventListener('click', function(e) {
 		univDepDetail(e);
@@ -171,26 +167,26 @@ function univManagement() {
 
 	}
 
-
 	function univDepDetail(e) {
 		const tr = e.target.closest('tr');
 		const tds = tr.querySelectorAll('td');
-
+		
 		const udName = tds[0].textContent;
 		const udTuition = tds[1].textContent;
 		const udScholar = tds[2].textContent;
 		const udCompetition = tds[3].textContent;
 		const udEmpRate = tds[4].textContent;
-
+		const uddId = tds[5].textContent;
+		
 		if (!tr) {
 			return;
 		}
-
+		
 		const udId = tr.id;
 		const univId = document.getElementById('univ-detail-univId').value;
 		const univName = document.getElementById('univ-detail-univName').value;
 
-
+		document.getElementById('univ-dept-detail-uddId').value = uddId;
 		document.getElementById('univ-dept-detail-univId').value = univId;
 		document.getElementById('univ-dept-detail-univName').value = univName;
 		document.getElementById('univ-dept-detail-udId').value = udId;
@@ -202,7 +198,11 @@ function univManagement() {
 	}
 
 	function formatNumberWithCommas(number) {
-		return number.toLocaleString('ko-KR');
+		if (number) {
+			return number.toLocaleString('ko-KR');
+		} else {
+			return 0;
+		}
 	}
 
 	function univGubunFn(stat) {
@@ -217,7 +217,12 @@ function univManagement() {
 	}
 
 	document.getElementById('univReset').addEventListener('click', function() {
-		// 대학 상세 정보에 해당하는 모든 input 태그를 선택합니다.
+
+		univDepDetailReset();
+		document.getElementById('univ-dept-detail-univId').value = '';
+		document.getElementById('univ-dept-detail-univName').value = '';
+		document.getElementById('tgDepart').innerHTML = `<tr><td colspan='2' style="text-align: center;">대학을 선택하세요.</td></tr>`;
+
 		const detailInputs = [
 			'univ-detail-univId',
 			'univ-detail-univName',
@@ -295,7 +300,6 @@ function univManagement() {
 	})
 
 	function entSearchFn() {
-
 		const searchBtn = document.getElementById('btnSearch');
 		if (searchBtn) {
 			searchBtn.addEventListener("click", function() {
@@ -321,7 +325,7 @@ function univManagement() {
 		}
 
 	})
-
+	
 	document.getElementById('univ-udMod').addEventListener('click', function() {
 
 		const udId = document.getElementById('univ-dept-detail-udId').value;
@@ -331,17 +335,82 @@ function univManagement() {
 		} else {
 			if (confirm('정말로 수정하시겠습니까?')) {
 				
+				const uddId = document.getElementById('univ-dept-detail-uddId').value;
+				const univId = document.getElementById('univ-dept-detail-univId').value;
 				const udName = document.getElementById('univ-dept-detail-udName').value;
-				const udTuition = document.getElementById('univ-dept-detail-udTuition').value;
-				const udScholar = document.getElementById('univ-dept-detail-udScholar').value;
-				const udCompetition = document.getElementById('univ-dept-detail-udCompetition').value;
-				const udEmpRate = document.getElementById('univ-dept-detail-udEmpRate').value;
+				const udTuition = document.getElementById('univ-dept-detail-udTuition').value == '데이터 없음' ? null : document.getElementById('univ-dept-detail-udTuition').value.replaceAll(",", "");
+				const udScholar = document.getElementById('univ-dept-detail-udScholar').value == '데이터 없음' ? null : document.getElementById('univ-dept-detail-udScholar').value.replaceAll(",", "");
+				const udCompetition = document.getElementById('univ-dept-detail-udCompetition').value == '데이터 없음' ? null : document.getElementById('univ-dept-detail-udCompetition').value;
+				const udEmpRate = document.getElementById('univ-dept-detail-udEmpRate').value == '데이터 없음' ? null : document.getElementById('univ-dept-detail-udEmpRate').value;
 				
-				axios.delete(`/ertds/univ/uvsrch/departments/${udId}`).then(res => {
-					alert(res);
+				console.log(udScholar, udCompetition);
+				
+				let form = new FormData();
+				form.set('uddId', uddId);
+				form.set('udId', udId);
+				form.set('udName', udName);
+				form.set('udTuition', udTuition);
+				form.set('udScholar', udScholar);
+				form.set('udCompetition', udCompetition);
+				form.set('udEmpRate', udEmpRate);
+
+				axios.post(`/ertds/univ/uvsrch/universities/${univId}/departments`, form).then(res => {
+					alert(res.data.message);
 				})
 			}
 		}
+	})
+
+	const univDeptInModal = document.getElementById("univDept-modal-overlay");
+	const univDeptInbtn = document.getElementById("univDepInsert");
+
+
+	univDeptInbtn.onclick = function() {
+		if (document.getElementById('univ-detail-univId').value == null || document.getElementById('univ-detail-univId').value == "") {
+			alert('학과를 추가할 대학을 선택해주세요.');
+			return;
+		}
+		
+		document.getElementById('showUvName').value = document.getElementById('univ-detail-univName').value;
+		document.getElementById('showUvId').value = document.getElementById('univ-detail-univId').value;
+		univDeptInModal.style.display = "flex";
+	}
+
+	window.onclick = function(event) {
+		if (event.target === univDeptInModal) {
+			univDeptInModal.style.display = "none";
+		}
+	}
+
+	document.getElementById('modal-close-btn').addEventListener('click', function() {
+
+		univDeptInModal.style.display = "none";
+
+	})
+
+	document.getElementById('univDept-insert-btn').addEventListener('click', function() {
+		
+		const univId = document.getElementById('showUvId').value;
+		const uddId = document.getElementById('showUddId').value;
+		const udTuition = document.getElementById('insertUdTuition').value;
+		const udScholar = document.getElementById('insertUdScholar').value;
+		const udCompetition = document.getElementById('insertUdCompetition').value;
+		const udName = document.getElementById('insertUdName').value;
+		const udEmpRate = document.getElementById('insertUdEmpRate').value;
+		
+		let form = new FormData();
+		
+		form.set("univId", univId);
+		form.set("uddId", uddId);
+		form.set("udTuition", udTuition);
+		form.set("udScholar", udScholar);
+		form.set("udCompetition", udCompetition);
+		form.set("udName", udName);
+		form.set("udEmpRate", udEmpRate);
+		
+		axios.post(`/ertds/univ/uvsrch/universities/${univId}/departments`,form).then(res => {
+			alert(res.data.message);
+		})
 	})
 
 	entSearchFn();
