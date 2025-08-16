@@ -128,24 +128,37 @@
 	background-color: #3e3bdb;
 }
 
-.aifb-button.back {
-	background: #E9E9E9;
-	color: #9C9B9D;
+.aifb-button.proofread {
+	background: #5a57f0;
+	color: #FFFFFF;
 }
 
-.aifb-button.proofread {
-	background: #848EFB;
-	color: #FFFFFF;
+.aifb-button.proofread:hover {
+	background: #3e3bdb;
 }
 
 .aifb-footer-wrapper {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 30px;
 	width: 100%;
 	box-sizing: border-box;
-	padding: 0;
+}
+
+.ai-feedback-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    gap: 5px;
+}
+
+.powered-by-text {
+    font-family: 'IBM Plex Sans KR';
+    font-size: 11px;
+    color: #888;
+    font-weight: 400;
+    letter-spacing: 0.3px;
 }
 
 .answer-block {

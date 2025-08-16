@@ -161,6 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				return response.text().then(text => Promise.reject(new Error(text)));
 			})
 			.then(aiResponseText => {
+
+				axios.post('/admin/las/aiSelfIntroVisitLog.do')
 				// AI 응답 텍스트를 정리하고 파싱
 				const cleanedText = cleanAiResponse(aiResponseText);
 
@@ -178,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				// ⭐️ 성공 시 로컬 자소서 횟수 1 차감 후 알림
 				subscriptionInfo.payCoverCnt--;
 				alert(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payCoverCnt}회)`);
+				
 			})
 			.catch(error => {
 				console.error('AI 피드백 요청 오류:', error);
