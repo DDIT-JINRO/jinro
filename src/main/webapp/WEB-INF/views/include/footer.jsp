@@ -7,11 +7,10 @@
     <div class="footer-column">
       <h4>주요 서비스</h4>
       <ul>
-        <li><a href="#">직업 백과</a></li>
-        <li><a href="#">진로 적성 검사</a></li>
-        <li><a href="#">모의 면접</a></li>
-        <li><a href="#">진로 상담</a></li>
-        <li><a href="#">교육 프로그램</a></li>
+        <li><a href="/pse/cat/careerAptitudeTest.do">진로 적성 검사</a></li>
+        <li><a href="/pse/cr/crl/selectCareerList.do">직업 백과</a></li>
+        <li><a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의 면접</a></li>
+        <li><a href="/cnslt/resve/crsv/reservation.do">진로 상담</a></li>
       </ul>
     </div>
 
@@ -19,21 +18,9 @@
     <div class="footer-column">
       <h4>고객지원</h4>
       <ul>
-        <li><a href="#">자주 묻는 질문</a></li>
-        <li><a href="#">문의하기</a></li>
-        <li><a href="#">서비스 상태</a></li>
-        <li><a href="#">자료실</a></li>
-      </ul>
-    </div>
-
-    <!-- 회사정보 -->
-    <div class="footer-column">
-      <h4>회사정보</h4>
-      <ul>
-        <li><a href="#">커리어패스 소개</a></li>
-        <li><a href="#">언론 보도자료</a></li>
-        <li><a href="#">채용 정보</a></li>
-        <li><a href="#">제휴 문의</a></li>
+        <li><a href="/csc/not/noticeList.do">공지사항</a></li>
+        <li><a href="/csc/faq/faqList.do">자주 묻는 질문</a></li>
+        <li><a href="/csc/inq/inqryList.do">1:1 문의하기</a></li>
       </ul>
     </div>
 
@@ -52,23 +39,16 @@
     <div class="footer-column">
       <h4>문의</h4>
       <ul>
-        <li><a href="#">careerpass@support.kr</a></li>
-        <li><a href="#">042-123-4567</a></li>
-        <li><a href="#">대전광역시 유성구 대학로 91</a></li>
-        <li><a href="#">사업자등록번호: 123-45-67890</a></li>
+        <li>careerpath@support.kr</li>
+        <li>042-123-4567</li>
+        <li>대전광역시 유성구 대학로 91</li>
+        <li>사업자등록번호: 123-45-67890</li>
       </ul>
     </div>
 
   </div>
 
   <div class="footer-bottom">
-    <div class="social-icons">
-      <a href="#"><i class="fab fa-facebook-f"></i></a>
-      <a href="#"><i class="fab fa-twitter"></i></a>
-      <a href="#"><i class="fab fa-instagram"></i></a>
-      <a href="#"><i class="fab fa-youtube"></i></a>
-      <a href="#"><i class="fab fa-github"></i></a>
-    </div>
     <p>&copy;2025 CareerPath. All rights reserved.</p>
   </div>
 </footer>

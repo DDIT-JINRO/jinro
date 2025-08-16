@@ -41,6 +41,48 @@ document.addEventListener('DOMContentLoaded', function() {
 const fn_init = () => {
 	const banner = document.querySelector('.main-loadmap-banner');
 	banner.classList.add('animate-in');
+	
+	// 로드맵 바로가기 버튼
+	const roadmap = document.querySelector('.roadmapBtn');
+	roadmap.addEventListener("click", () => {
+		if(!memId || memId=='anonymousUser') {
+			sessionStorage.setItem("redirectUrl", location.href);
+			location.href = "/login";
+		} else {
+			const roadmapUrl = 'http://localhost:5173/roadmap';
+			
+			const width  = 1084;
+			const height = 736;
+			const screenWidth  = window.screen.width;
+			const screenHeight = window.screen.height;
+            const left = Math.floor((screenWidth - width) / 2);
+            const top  = Math.floor((screenHeight - height) / 2);
+			
+            axios.post("/admin/las/roadMapVisitLog.do");
+            
+			window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+		}
+	});
+	
+	const worldcup = document.getElementById('worldcupBtn')
+	worldcup.addEventListener("click", () => {
+		if(!memId || memId=='anonymousUser') {
+			sessionStorage.setItem("redirectUrl", location.href);
+			location.href = "/login";
+		} else {
+			axios.post("/admin/las/worldCupVisitLog.do")
+			const worldcupUrl = 'http://localhost:5173/worldcup';
+			
+			const width  = 1200;
+			const height = 800;
+			const screenWidth  = window.screen.width;
+			const screenHeight = window.screen.height;
+			const left = Math.floor((screenWidth - width) / 2);
+			const top  = Math.floor((screenHeight - height) / 2);
+			
+			window.open(worldcupUrl, 'worldcup', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+		}
+	});
 }
 
 const roadmapPopup = () => {
