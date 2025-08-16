@@ -49,16 +49,28 @@ public class PaymentStatsController {
     public List<Map<String, Object>> productPopularity(@RequestParam Map<String, Object> params) {
         return paymentStatsService.getProductPopularityStats(params);
     }
-
-	// 일일 구독 결제 매출
-    @GetMapping("/daily-revenue")
-    public List<Map<String, Object>> dailyRevenueForDashboard() {
-        return paymentStatsService.getDailyRevenueForDashboard();
-    }
     
 	// AI 기능 이용 내역
     @GetMapping("/ai-service-usage")
     public List<Map<String, Object>> aiServiceUsage(@RequestParam Map<String, Object> params) {
         return paymentStatsService.getAiServiceUsageStats(params);
+    }
+
+	// 일일 구독 결제 매출 - 대시보드용
+    @GetMapping("/daily-revenue")
+    public List<Map<String, Object>> dailyRevenueForDashboard() {
+        return paymentStatsService.getDailyRevenueForDashboard();
+    }
+    
+	// 회원 가입 수 대비하여 구독 비율 - 대시보드용
+    @GetMapping("/newUser-revenueRate")
+    public List<Map<String, Object>> newUserRevenueRate(){
+    	return paymentStatsService.selectNewUserRevenueRate();
+    }
+
+	// 총 구독 결제 대비하여 신규 구독 결제 비율 - 대시보드용
+    @GetMapping("/newRevenue-rateStats")
+    public List<Map<String, Object>> newRevenueRateStats(){
+    	return paymentStatsService.selectNewRevenueRateStats();
     }
 }

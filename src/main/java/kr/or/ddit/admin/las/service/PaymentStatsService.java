@@ -19,10 +19,16 @@ public interface PaymentStatsService {
 
     // 상품별 인기 통계 
     public List<Map<String, Object>> getProductPopularityStats(Map<String, Object> params);
-    
-	// 일일 구독 결제 매출
-    public List<Map<String, Object>> getDailyRevenueForDashboard();
 
     // AI 기능 이용 내역
-    List<Map<String, Object>> getAiServiceUsageStats(Map<String, Object> params);
+    public List<Map<String, Object>> getAiServiceUsageStats(Map<String, Object> params);
+   
+    // 일일 구독 결제 매출 - 대시보드용
+    public List<Map<String, Object>> getDailyRevenueForDashboard();
+
+	// 회원 가입 수 대비하여 구독 비율 - 대시보드용
+	public List<Map<String, Object>> selectNewUserRevenueRate();
+
+	// 총 구독 결제 대비하여 신규 구독 결제 비율 - 대시보드용
+	public List<Map<String, Object>> selectNewRevenueRateStats();
 }
