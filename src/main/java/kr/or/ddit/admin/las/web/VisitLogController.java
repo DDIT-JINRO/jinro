@@ -30,6 +30,16 @@ public class VisitLogController {
 		visitLogService.insertPageLog(memId, "채팅", "/chat", null);
 	}
 	
+	@PostMapping("/las/aiResumeVisitLog.do")
+	public void aiResumeVisitLog(@AuthenticationPrincipal String memId) {
+		visitLogService.insertPageLog(memId, "이력서AI요청", "/aiResume", null);
+	}
+
+	@PostMapping("/las/aiSelfIntroVisitLog.do")
+	public void aiSelfIntroVisitLog(@AuthenticationPrincipal String memId) {
+		visitLogService.insertPageLog(memId, "자기소개서AI요청", "/aiSelfIntro", null);
+	}
+	
 	
 	
 }

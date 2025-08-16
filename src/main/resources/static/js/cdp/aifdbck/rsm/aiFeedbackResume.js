@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				subscriptionInfo.payResumeCnt--;
 				alert(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payResumeCnt}회)`);
 				
-				axios.post(`/las/aiResumeVisitLog.do `)
+				axios.post('/admin/las/aiResumeVisitLog.do')
 				// 화면 표시
 				//document.getElementById('feedbackArea').innerHTML = cleanedText.replace(/\n/g, '<br>');
 			})
