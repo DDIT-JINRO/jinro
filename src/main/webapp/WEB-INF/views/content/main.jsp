@@ -10,7 +10,7 @@
 				<p>
 					진로와 진학, 취업을 위한 종합 정보 제공<br /> 미래를 설계하는 데 필요한 모든 것
 				</p>
-				<button class="view-button">로드맵 바로가기</button>
+				<button class="roadmapBtn">로드맵 바로가기</button>
 			</div>
 			<div class="banner-right floating-icons">
 				<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
@@ -90,7 +90,7 @@
 						<p>
 							다른 사람들의 선호 직업은<br />무엇인지 확인할 수 있습니다
 						</p>
-						<button class="text-content-btn">직업 이상형 월드컵</button>
+						<button class="text-content-btn" id="worldcupBtn">직업 이상형 월드컵</button>
 					</div>
 				</div>
 			</div>
@@ -107,13 +107,12 @@
 						<p>
 							자신이 선호하는 직업이 무엇인지,<br /> 자신에게 적합한 진로를 탐색해 보세요
 						</p>
-						<button class="text-content-btn">진로 심리 검사</button>
+						<button class="text-content-btn" onclick="location.href='/pse/cat/careerAptitudeTest.do'">진로 심리 검사</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-
 
 	<section class="main-youtube-section">
 		<a href="/main/youtubeJsp">유튜브 API 확인 </a>
@@ -127,11 +126,6 @@
 			<div class="main-card"></div>
 			<div class="main-card"></div>
 			<div class="main-card"></div>
-		</div>
-	</section>
-	<section class="main-community-section">
-		<div class="main-communituy-section-header">
-			<p>다른 사용자들과 진로 정보와 고민을 나눠보세요.</p>
 		</div>
 	</section>
 </div>
