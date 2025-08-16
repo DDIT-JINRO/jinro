@@ -1,6 +1,7 @@
 /**
  * 헤더의 채팅 모달을 컨트롤 하기 위한 js
  */
+const imageMsgStore = new Map();
 
 document.addEventListener('DOMContentLoaded', function(){
 	// 로그인 여부 확인
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		// 입력창, 전송버튼에 이벤트 등록
 		const inputEl = document.getElementById('chatMessageInput');
 		const sendBtn = document.getElementById('sendMsgBtn');
+
 		sendBtn.addEventListener('click', function () {
 		    sendCurrentInput();
 		});
@@ -24,9 +26,26 @@ document.addEventListener('DOMContentLoaded', function(){
 
 		function sendCurrentInput() {
 		    const content = inputEl.value.trim();
-		    if (!content) return;
+			const imageInput = document.getElementById('attach-input-img');
+			const fileInput = document.getElementById('attach-input-file');
 
 		    inputEl.value = '';
+			const fileObj = {};
+			if(imageInput.files && imageInput.files.length > 0){
+				fileObj.messageType = 'IMAGE';
+				fileObj.files = imageInput.files;
+				sendMessage(currentChatRoomId, content, fileObj);
+				return;
+			}
+			if(fileInput.files && fileInput.files.length > 0){
+				fileObj.messageType = 'FILE';
+				fileObj.files = fileInput.files;
+				sendMessage(currentChatRoomId, content, fileObj);
+				return;
+			}
+
+			// 파일 첨부 안한 경우에 메시지도 입력 안했으면 요청안되도록.
+		    if (!content) return;
 		    sendMessage(currentChatRoomId, content);
 		}
 
@@ -77,7 +96,152 @@ document.addEventListener('DOMContentLoaded', function(){
 			})
 		})
 	}
+
+	const imgAttachBtn = document.getElementById('chatImgBtn');
+	const fileAttachBtn = document.getElementById('chatFileBtn');
+	const imgInput = document.getElementById('attach-input-img');
+	const fileInput = document.getElementById('attach-input-file');
+	const previewBarEl  = document.getElementById('attach-preview-bar');
+	const previewListEl = document.getElementById('attachPreviewList');
+	const clearAttachBtn = document.getElementById('clearAttachBtn');
+	imgAttachBtn.addEventListener('click', function(){
+		imgInput.value = '';
+		fileInput.value = '';
+		imgInput.click();
+	})
+	fileAttachBtn.addEventListener('click', function(){
+		imgInput.value = '';
+		fileInput.value = '';
+		fileInput.click();
+	})
+
+	function renderAttachOverlay() {
+	  const imgCount  = (imgInput.files && imgInput.files.length) || 0;
+	  const fileCount = (fileInput.files && fileInput.files.length) || 0;
+
+	  if (imgCount === 0 && fileCount === 0) {
+	    previewBarEl.style.display = 'none';
+	    previewListEl.innerHTML = '';
+	    return;
+	  }
+
+	  previewBarEl.style.display = 'flex';
+
+	  if (imgCount > 0) {
+	    previewListEl.innerHTML =
+	      `<span>🖼️ <b>이미지 첨부</b> · ${imgCount}개 선택됨</span>`;
+	  } else {
+	    previewListEl.innerHTML =
+	      `<span>📎 <b>파일 첨부</b> · ${fileCount}개 선택됨</span>`;
+	  }
+	}
+
+
+	imgInput.addEventListener('input', () => {
+	  if (imgInput.files?.length) {
+	    fileInput.value = '';        // 파일 선택 비우기 (파일 모드 종료)
+	  }
+	  renderAttachOverlay();
+	});
+	imgInput.addEventListener('change', () => {
+	  if (imgInput.files?.length) {
+	    fileInput.value = '';
+	  }
+	  renderAttachOverlay();
+	});
+
+	fileInput.addEventListener('input', () => {
+	  if (fileInput.files?.length) {
+	    imgInput.value = '';         // 이미지 선택 비우기 (이미지 모드 종료)
+	  }
+	  renderAttachOverlay();
+	});
+	fileInput.addEventListener('change', () => {
+	  if (fileInput.files?.length) {
+	    imgInput.value = '';
+	  }
+	  renderAttachOverlay();
+	});
+
+	// "모두 제거" 버튼: 현재 선택만 초기화
+	clearAttachBtn.addEventListener('click', () => {
+	  imgInput.value = '';
+	  fileInput.value = '';
+	  renderAttachOverlay();
+	});
+
+
+	// 오버레이 상태
+	let imgovMsgId = null;
+	let imgovIndex = 0;
+
+	const imgOverlay     = document.getElementById('img-overlay');
+	const imgovView      = document.getElementById('imgov-view');
+	const imgovNameEl    = document.getElementById('imgov-name');
+	const imgovDownEl    = document.getElementById('imgov-download');
+	const imgovPrevBtn   = document.getElementById('imgov-prev');
+	const imgovNextBtn   = document.getElementById('imgov-next');
+	const imgovCloseBtn  = document.getElementById('imgov-close');
+
+	// 썸네일 클릭(위임)
+	document.getElementById('chat-container').addEventListener('click', (e) => {
+	  const thumb = e.target.closest('.img-thumb-wrap');
+	  if (!thumb) return;
+
+	  imgovMsgId = thumb.dataset.msgId;
+	  imgovIndex = parseInt(thumb.dataset.index || '0', 10);
+	  openImageOverlay();
+	});
+
+	function openImageOverlay(){
+		const list = imageMsgStore.get(String(imgovMsgId)) || [];
+		if (list.length === 0) return;
+		renderImageOverlayImage();
+		imgOverlay.style.display = 'flex';
+	}
+
+	function closeImageOverlay(){
+	  imgOverlay.style.display = 'none';
+	  imgovMsgId = null;
+	  imgovIndex = 0;
+	}
+
+	function renderImageOverlayImage(){
+	  const list = imageMsgStore.get(String(imgovMsgId)) || [];
+	  const cur  = list[imgovIndex];
+	  if (!cur) return;
+	  imgovView.src = cur.filePath;
+	  imgovView.alt = cur.fileOrgName || '';
+	  imgovNameEl.textContent = cur.fileOrgName || '';
+	  imgovDownEl.href = `/files/download?fileGroupId=${cur.fileGroupId}&seq=${cur.fileSeq}`;
+
+	  // 좌우 버튼 가시성
+	  imgovPrevBtn.style.visibility = (imgovIndex > 0) ? 'visible' : 'hidden';
+	  imgovNextBtn.style.visibility = (imgovIndex < list.length-1) ? 'visible' : 'hidden';
+	}
+
+	// 버튼들
+	imgovPrevBtn.addEventListener('click', () => {
+	  const list = imageMsgStore.get(String(imgovMsgId)) || [];
+	  if (imgovIndex > 0) { imgovIndex--; renderImageOverlayImage(); }
+	});
+	imgovNextBtn.addEventListener('click', () => {
+	  const list = imageMsgStore.get(String(imgovMsgId)) || [];
+	  if (imgovIndex < list.length-1) { imgovIndex++; renderImageOverlayImage(); }
+	});
+	imgovCloseBtn.addEventListener('click', closeImageOverlay);
+	// 오버레이 바깥 클릭 닫기
+	imgOverlay.addEventListener('click', (e) => {
+	  if (e.target === imgOverlay) closeImageOverlay();
+	});
+	// ESC 닫기
+	document.addEventListener('keydown', (e) => {
+	  if (e.key === 'Escape' && imgOverlay.style.display === 'flex') closeImageOverlay();
+	});
+
 })
+
+
 
 document.addEventListener('click', function(e){
 	// 모달 바깥쪽 클릭시 모달창 닫기
@@ -86,8 +250,24 @@ document.addEventListener('click', function(e){
 	}
 })
 
+function cleanInputDatas(){
+	// 첨부 input 요소 비우기
+	const imgInputEl  = document.getElementById('attach-input-img');
+	const fileInputEl = document.getElementById('attach-input-file');
+	const previewBarEl = document.getElementById('attach-preview-bar');
+	const previewListEl = document.getElementById('attachPreviewList');
+	const messageTextarea = document.getElementById('chatMessageInput');
+
+	if (imgInputEl) imgInputEl.value = '';
+	if (fileInputEl) fileInputEl.value = '';
+	if (previewBarEl) previewBarEl.style.display = 'none';
+	if (previewListEl) previewListEl.innerHTML = '';
+	if (messageTextarea) messageTextarea.value = '';
+
+}
 // 모달 닫기
 function closeChatModal(){
+	cleanInputDatas();
 	// 채팅방 목록 비우기
 	document.getElementById('chatRoomList').innerHTML = "";
 	// 채팅창 영역 비우기
@@ -95,11 +275,8 @@ function closeChatModal(){
 		<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
 	`;
 	document.getElementById('chat-container').innerHTML = emptyRoomMsg;
-
 	document.getElementById('chat-modal').style.display = 'none';
-
 	document.getElementById('chat-input').style.display = 'none';
-
 	document.querySelector('.chat-room-meta').style.display = 'none';
 	// 보고 있는 채팅방 초기화
 	currentChatRoomId = null;
@@ -208,6 +385,8 @@ function subscribeToUnreadDetail() {
 
 // 채팅방 채팅 불러와서 채우기 -> 채팅방 목록 클릭했을 때 호출
 async function printFetchMessages(el) {
+	cleanInputDatas();
+
     const crId = el.dataset.crId;
 	document.getElementById('exitBtn').dataset.crId = crId;
 	const chatTitle = el.querySelector('.chat-room-title').textContent;
@@ -296,18 +475,95 @@ function connectSocket() {
 
 
 // 메시지 전송
-function sendMessage(roomId, content) {
+function sendMessage(roomId, content, fileObj) {
 	content = content.replace(/\n/g, '<br/>');
-    const msg = {
-        crId: roomId,
-        message: content,
-        memId: memId, // 전역에서 선언된 로그인된 사용자 ID
-    };
 
-    stompClient.send("/pub/chat/message", {}, JSON.stringify(msg));
+	if(fileObj && fileObj.files && fileObj.files.length>0){
+		const msg = new FormData();
+		msg.append('crId', roomId);
+		msg.append('message', content);
+		msg.append('memId', memId);
+		msg.append('messageType', fileObj.messageType);
+
+		for(let i=0; i<fileObj.files.length; i++){
+			msg.append('files', fileObj.files[i]);
+		}
+
+		fetch(`/chat/message/upload`,{
+			method : 'POST',
+			headers : {},
+			body : msg
+		})
+		.then(resp =>{
+			if(!resp.ok) throw new Error('업로드 메시지 전송 실패')
+				// 전송완료후 비우기
+			cleanInputDatas();
+		})
+		.catch(err =>{
+			console.error("파일채팅중 err : ", err);
+		})
+	}else{
+	    const msg = {
+	        crId: roomId,
+	        message: content,
+	        memId: memId, // 전역에서 선언된 로그인된 사용자 ID
+	    };
+	    stompClient.send("/pub/chat/message", {}, JSON.stringify(msg));
+	}
 }
 
-// 메시지 출력
+// 첨부파일 있는 경우 사이즈를 표시해주기 위한 함수
+function formatBytes(size) {
+	if (size == null || size === 0) return '';
+	const k = 1024, sizes = ['B','KB','MB','GB','TB'];
+	let idx = 0;
+	while(size > k){
+		if(idx == 4) break;
+		idx++;
+		size /= k;
+	}
+	return `${size.toFixed(1)}${sizes[idx]}`
+}
+
+// 첨부파일에 대응하도록 파일메시지 만들어주기. appendMessage에서 호출됨
+function buildFileItemsHTML(fileGroupId, files){
+  return (files || []).map((f, idx) => {
+    const seq   = f.fileSeq;
+    const name  = f.fileOrgName;
+    const size  = f.fileSize;
+    const sizeLabel = size != null ? formatBytes(+size) : '';
+    const ext   = f.fileExt;
+    const href  = `/files/download?fileGroupId=${fileGroupId}&seq=${seq}`;
+
+	let printName = name;
+	if(name.length > 14){
+		printName = name.slice(0,8)+"…"+name.slice(name.lastIndexOf('.'));
+	}
+
+    return `
+      <div class="file-item" data-ext="${ext}" title="${escapeHtml(name)}">
+        <div class="file-icon">${ext}</div>
+        <div class="file-meta">
+          <div class="file-name" title="${escapeHtml(name)}">${escapeHtml(printName)}</div>
+          ${sizeLabel ? `<div class="file-size">${sizeLabel}</div>` : ''}
+        </div>
+        <a class="file-download-btn" href="${href}" download>다운로드</a>
+      </div>
+    `;
+  }).join('');
+}
+
+// 파일이름에 특수기호 들어가버린경우 치환
+function escapeHtml(s='') {
+  return String(s)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+// 메시지 출력 -> messageType에 따라 분기처리.
 function appendMessage(msgVO) {
     const container = document.getElementById('chat-container');
     const isMine = msgVO.memId == memId;
@@ -327,9 +583,83 @@ function appendMessage(msgVO) {
 			<div class="chat-time system-time">${timeStr}</div>
 	      </div>
 	    `;
-	    container.innerHTML += systemHTML;
-	    container.scrollTop = container.scrollHeight;
+	    container.insertAdjacentHTML('beforeend', systemHTML);
+		const messageEl = container.lastElementChild;
+		hookMediaAutoScroll(container, messageEl);
+	    scrollToBottom(container);
 	    return;  // 여기서 끝내고 일반 메시지 렌더링은 건너뜀
+	}
+
+	if(msgVO.messageType == 'IMAGE'){
+		const imgFile = msgVO.fileDetailList;
+		// 나중에 불러오기 위해 전역변수 Map에다가 저장
+		imageMsgStore.set(String(msgVO.msgId), imgFile);
+
+		const first = imgFile[0];
+		const moreN = imgFile.length - 1;
+
+		const thumbHTML = `
+		  <div class="img-thumb-wrap" data-msg-id="${escapeHtml(String(msgVO.msgId))}" data-index="0">
+		    <img src="${first.filePath}" alt="${first.fileOrgName}">
+		    ${moreN > 0 ? `<span class="img-more-badge">+${moreN}</span>` : ''}
+		  </div>
+		`;
+		const chatHTML = `
+		  <div class="message-box ${isMine ? 'mine' : 'other'}">
+		    <div class="chat-meta">
+		      ${isMine ? `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` : '' }
+		      <div class="profile-wrapper chat-profile">
+		        <img class="profile-img" src="${msgVO.fileProfileStr ? msgVO.fileProfileStr : '/images/defaultProfileImg.png'}" />
+		        <img class="badge-img" src="${msgVO.fileBadgeStr ? msgVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
+		        ${msgVO.fileSubStr ? `<img class="effect-img sparkle" src="${msgVO.fileSubStr}"/>` : ''}
+		      </div>
+		      ${isMine ? '' : `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` }
+		    </div>
+
+		    <div class="chat-message ${isMine ? 'mine' : 'other'}">
+		      ${msgVO.message ? `<div class="text-part" style="margin-bottom:6px;">${msgVO.message}</div>` : ''}
+		      ${thumbHTML}
+		    </div>
+
+		    <div class="chat-time">${timeStr}</div>
+		  </div>`;
+		container.insertAdjacentHTML('beforeend', chatHTML);
+		const messageEl = container.lastElementChild;
+		hookMediaAutoScroll(container, messageEl);
+		scrollToBottom(container);
+		return;
+	}
+
+	if(msgVO.messageType == 'FILE'){
+		const files = msgVO.fileDetailList;
+		const filesHTML = buildFileItemsHTML(msgVO.fileGroupId, files);
+
+		const chatHTML = `
+		  <div class="message-box ${isMine ? 'mine' : 'other'}">
+		    <div class="chat-meta">
+		      ${isMine ? `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` : '' }
+		      <div class="profile-wrapper chat-profile">
+		        <img class="profile-img" src="${msgVO.fileProfileStr ? msgVO.fileProfileStr : '/images/defaultProfileImg.png'}" />
+		        <img class="badge-img" src="${msgVO.fileBadgeStr ? msgVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
+		        ${msgVO.fileSubStr ? `<img class="effect-img sparkle" src="${msgVO.fileSubStr}"/>` : ''}
+		      </div>
+		      ${isMine ? '' : `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` }
+		    </div>
+
+		    <div class="chat-message ${isMine ? 'mine' : 'other'}">
+		      ${msgVO.message ? `<div class="text-part" style="margin-bottom:6px;">${msgVO.message}</div>` : ''}
+		      <div class="file-bubble-list">
+		        ${filesHTML}
+		      </div>
+		    </div>
+
+		    <div class="chat-time">${timeStr}</div>
+		  </div>`;
+		container.insertAdjacentHTML('beforeend', chatHTML);
+		const messageEl = container.lastElementChild;
+		hookMediaAutoScroll(container, messageEl);
+		scrollToBottom(container);
+		return;
 	}
 
     const chatHTML = `
@@ -351,8 +681,10 @@ function appendMessage(msgVO) {
 		</div>
 	</div>
 					  `;
-    container.innerHTML += chatHTML;
-    container.scrollTop = container.scrollHeight;
+	container.insertAdjacentHTML('beforeend', chatHTML);
+	const messageEl = container.lastElementChild;
+	hookMediaAutoScroll(container, messageEl);
+	scrollToBottom(container);
 }
 
 // 안읽음 UI 반영 (채팅방 목록)
@@ -399,4 +731,34 @@ function updateFloatingBadge(totalUnread) {
         badge.textContent = "0";
         badge.style.display = 'none';
     }
+}
+
+function scrollToBottom(container){
+	// paint가 끝난 다음 프레임에, 한 번 더 보정
+	requestAnimationFrame(() => {
+	  container.scrollTop = container.scrollHeight;
+	  // 이미지가 늦게 커질 수 있으니 한 프레임 더
+	  requestAnimationFrame(() => {
+	    container.scrollTop = container.scrollHeight;
+	  });
+	});
+}
+
+function hookMediaAutoScroll(container, messageEl) {
+  const mediaList = messageEl.querySelectorAll('img, video, audio');
+  mediaList.forEach(el => {
+    // img
+    if (el.tagName === 'IMG') {
+      if (!el.complete) {
+        el.addEventListener('load', () => scrollToBottom(container), { once: true });
+        el.addEventListener('error', () => scrollToBottom(container), { once: true });
+      }
+    }
+    // video/audio
+    if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO') {
+      if (el.readyState < 1) {
+        el.addEventListener('loadedmetadata', () => scrollToBottom(container), { once: true });
+      }
+    }
+  });
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -237,5 +238,12 @@ public class ChatController {
 
 		// 같은 채팅방번호에 구독중인 멤버에게 채팅메시지 전송
 		this.messagingTemplate.convertAndSend("/sub/chat/counsel/"+chatMessageVO.getCrId(), chatMessageVO);
+	}
+
+	@PostMapping(value = "/chat/message/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Void> chatMessageUpload(ChatMessageVO chatMessageVO, Principal principal) {
+		this.chatService.fileUpload(chatMessageVO);
+		sendMessage(chatMessageVO, principal);
+		return ResponseEntity.noContent().build();
 	}
 }
