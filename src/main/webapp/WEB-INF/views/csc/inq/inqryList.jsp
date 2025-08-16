@@ -55,12 +55,6 @@
 										<span class="inq-title-text">${item.contactTitle}</span>
 									</div>
 									<div class="inq-title-right">
-										<c:if test="${item.contactIsPublic == 'Y'}">
-											<span>공개</span>
-										</c:if>
-										<c:if test="${item.contactIsPublic == 'N'}">
-											<span>비공개</span>
-										</c:if>
 										<span>${item.memName}</span>
 										<c:if test="${item.contactReply != null}">
 											<span>답변 완료</span>
