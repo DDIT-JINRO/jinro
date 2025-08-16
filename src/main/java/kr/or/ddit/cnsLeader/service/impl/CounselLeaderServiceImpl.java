@@ -18,6 +18,8 @@ import kr.or.ddit.util.file.service.FileService;
 @Service
 public class CounselLeaderServiceImpl implements CounselLeaderService {
 
+	private static final CounselingVO CounselingVO = null;
+
 	@Autowired
 	CounselLeaderMapper counselLeaderMapper;
 
@@ -83,5 +85,12 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 		ArticlePage<CounselingVO> articlePage = new ArticlePage<>(total, counselingVO.getCurrentPage(), counselingVO.getSize(), list, counselingVO.getKeyword());
 		return articlePage;
 	}
+
+	@Override
+	public CounselingVO selectCounselDetail(Integer counselId) {
+		CounselingVO counselingVO =  this.counselLeaderMapper.selectCounselDetail(counselId);
+		return counselingVO;
+	}
+
 
 }

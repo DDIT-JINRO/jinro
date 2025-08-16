@@ -78,26 +78,26 @@ rel='stylesheet' />
 			<div class="panel-section-title">상담사</div>
 			<div class="panel-section-content">
 				<div class="info-item">
-					<span class="info-label">이름</span> <span class="info-value"></span>
+					<span class="info-label">이름</span> <span class="info-value-counselName"></span>
 				</div>
 			</div>
 
 			<div class="panel-section-title">상담 신청 기본정보</div>
 			<div class="panel-section-content">
 				<div class="info-item">
-					<span class="info-label">이름</span> <span class="info-value"></span>
+					<span class="info-label">이름</span> <span class="info-value-memName"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">나이</span> <span class="info-value"></span>
+					<span class="info-label">나이</span> <span class="info-value-memBirth"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">성별</span> <span class="info-value"></span>
+					<span class="info-label">성별</span> <span class="info-value-memGenStr"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">이메일</span> <span class="info-value"></span>
+					<span class="info-label">이메일</span> <span class="info-value-memEmail"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">연락처</span> <span class="info-value"></span>
+					<span class="info-label">연락처</span> <span class="info-value-memPhoneNumber"></span>
 				</div>
 			</div>
 		</div>
@@ -106,19 +106,19 @@ rel='stylesheet' />
 			<div class="panel-section-title">상담 신청 정보</div>
 			<div class="panel-section-content">
 				<div class="info-item">
-					<span class="info-label">상담 분야</span> <span class="info-value"></span>
+					<span class="info-label">상담 분야</span> <span class="info-value-counselCategoryStr"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">상담 방법</span> <span class="info-value"></span>
+					<span class="info-label">상담 방법</span> <span class="info-value-counselMethodStr"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">상담 예약일</span> <span class="info-value"></span>
+					<span class="info-label">상담 예약일 : </span> <span class="info-value-counselReqDate"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">상담 예약시간</span> <span class="info-value"></span>
+					<span class="info-label">상담 예약시간 : </span> <span class="info-value-counselReqtime"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">예약 상태</span> <span class="info-value"></span>
+					<span class="info-label">예약 상태</span> <span class="info-value-counselStatusStr"></span>
 				</div>
 			</div>
 		</div>
@@ -127,7 +127,7 @@ rel='stylesheet' />
 			<div class="panel-section-title">신청동기</div>
 			<div class="panel-section-content">
 				<div class="info-item">
-					<span class="info-label"></span>
+					<span class="info-label-counselDescription"></span>
 				</div>
 			</div>
 		</div>

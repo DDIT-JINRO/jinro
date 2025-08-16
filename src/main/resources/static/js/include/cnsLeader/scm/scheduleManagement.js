@@ -69,6 +69,9 @@
 		calendarInstance.render();
 	}
 	
+	function buttonSearch(){
+		selectCounselSchedules(selectedDate);
+	}
 	
 	// 전역 변수로 페이지 정보와 항목 수를 관리합니다.
 	let currentPage = 1; 
@@ -81,8 +84,6 @@
 	 */
 	function selectCounselSchedules(counselReqDatetime, page = 1) {
 		const keyword = document.getElementById("keyword").value;
-		console.log("counselReqDatetime"+counselReqDatetime);
-		console.log("keyword"+keyword);
 		
 	    // API 호출 시 페이지 정보와 날짜를 파라미터로 보냅니다.
 	    axios.get('/api/cnsld/counselScheduleList.do', {
@@ -134,7 +135,6 @@
 	            if (countEl) countEl.textContent = totalCount;
 	        }
 			data.counselReqDatetime = counselReqDatetime;
-			console.log('data',data);
 	        // 페이징 버튼 렌더링 함수 호출
 			
 	        renderPagination(data);
@@ -166,4 +166,70 @@
 		const footer = document.querySelector('.panel-footer.pagination');
 		if (footer) footer.innerHTML = html;
 	}
+	
 })();
+
+// 상담 상세 정보 조회 함수
+function counselDetail(counselId) {
+    if (!counselId) return;
+
+    axios.get('/api/cnsld/counselDetail.do', { params: { counselId } })
+        .then(response => {
+            const data = response.data;
+            console.log("API 응답 데이터:", data); // 디버깅용 로그
+
+            // 1. 상담사 정보
+                document.querySelector('.info-value-counselName').textContent = data.counselName || "-";
+
+            // 2. 상담 신청 기본정보
+               document.querySelector('.info-value-memName').textContent = data.memName || "-"; // 이름
+               document.querySelector('.info-value-memBirth').textContent = calculateAge(new Date(data.memBirth)) || "-"; // 나이
+               document.querySelector('.info-value-memGenStr').textContent = getGenText(data.memGen) || "-"; // 성별
+               document.querySelector('.info-value-memEmail').textContent =  data.memEmail || "-"; // 이메일
+               document.querySelector('.info-value-memPhoneNumber').textContent = data.memPhoneNumber || "-"; // 연락처
+            
+
+            // 3. 상담 신청 정보
+                document.querySelector('.info-value-counselCategoryStr').textContent = data.counselCategoryStr || "-"; // 상담 분야
+                document.querySelector('.info-value-counselMethodStr').textContent = data.counselMethodStr || "-"; // 상담 방법
+				
+				const counselDate = new Date(data.counselReqDatetime);
+				document.querySelector('.info-value-counselReqDate').textContent = 
+				    `${counselDate.getFullYear()}. ${(counselDate.getMonth()+1).toString().padStart(2,'0')}. ${counselDate.getDate().toString().padStart(2,'0')}`;
+
+				document.querySelector('.info-value-counselReqtime').textContent = 
+				    `${counselDate.getHours().toString().padStart(2,'0')}:${counselDate.getMinutes().toString().padStart(2,'0')}`;
+                document.querySelector('.info-value-counselStatusStr').textContent = data.counselStatusStr || "-"; // 상태
+            
+
+            // 4. 신청동기
+                document.querySelector('.info-label-counselDescription').textContent = data.counselDescription || "신청동기 정보가 없습니다.";
+        })
+        .catch(error => {
+            console.error('상담 상세 정보 조회 실패:', error);
+            alert('상담 정보를 불러오는 데 실패했습니다.');
+        });
+}
+
+
+// 나이 계산 함수 (기존 코드에 추가)
+function calculateAge(birthDate) {
+    if (!birthDate) return "-";
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+        age--;
+    }
+    return age;
+}
+
+// 성별 코드 변환 함수 (기존 코드에 추가)
+function getGenText(genCode) {
+    switch(genCode) {
+        case 'G11001': return '남';
+        case 'G11002': return '여';
+        default: return '-';
+    }
+}

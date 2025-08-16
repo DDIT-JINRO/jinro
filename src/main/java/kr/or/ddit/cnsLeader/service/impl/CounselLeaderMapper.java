@@ -33,4 +33,6 @@ public interface CounselLeaderMapper {
 	
 	int selectCounselTotal(CounselingVO counselingVO);
 
+	CounselingVO selectCounselDetail(Integer counselId);
+
 }

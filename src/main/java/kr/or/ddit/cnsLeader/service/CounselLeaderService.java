@@ -52,4 +52,6 @@ public interface CounselLeaderService {
 
 	ArticlePage<CounselingVO> selectCounselScheduleList(CounselingVO counselingVO);
 
+	CounselingVO selectCounselDetail(Integer counselId);
+
 }

@@ -351,4 +351,39 @@
 			      AND a.counsel = (SELECT mem_id FROM member WHERE mem_name LIKE '%' || #{keyword} || '%')
 			  </if>
     </select>
+    
+    <select id="selectCounselDetail" parameterType="int" resultType="kr.or.ddit.cns.service.CounselingVO">
+    	SELECT
+		    a.counsel_id,
+		    a.mem_id,
+		    a.counsel,
+		    a.counsel_category,
+		    a.counsel_method,
+		    a.counsel_title,
+		    a.counsel_description,
+		    a.counsel_status,
+		    a.counsel_req_datetime,
+		    a.counsel_url_cou,
+		    b.MEM_EMAIL,
+		    b.MEM_NAME,
+		    b.MEM_GEN,
+		    b.MEM_BIRTH,
+		    b.MEM_PHONE_NUMBER,
+		    c.cc_name counsel_category_str,
+		    d.cc_name counsel_method_str,
+		    e.cc_name mem_gen_str,
+		    f.cc_name counsel_status_str,
+		    g.MEM_NAME counselName
+		FROM
+		         counseling a
+		    JOIN member b ON a.mem_id = b.mem_id
+		    JOIN COM_CODE C ON a.counsel_category = c.cc_id
+		    JOIN COM_CODE d ON a.counsel_method = d.cc_id
+		    JOIN COM_CODE e ON b.MEM_GEN = e.cc_id
+		    JOIN COM_CODE f ON a.counsel_status = f.cc_id
+		    join member g on a.counsel = g.mem_id 
+		
+		WHERE
+		        counsel_id = #{counselId}
+    </select>
 </mapper>
