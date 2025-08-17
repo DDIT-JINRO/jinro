@@ -17,28 +17,28 @@ document.addEventListener('DOMContentLoaded', function() {
 	const filterOrder = ['jobLclCategory', 'jobSalCategory'];
 
 	// 토글 버튼
-	const toggleButton = document.getElementById('com-accordion-toggle');
+	const toggleButton = document.querySelector('.search-filter__accordion-header');
 
 	// 필터 패널 
-	const panel = document.getElementById('com-accordion-panel');
+	const panel = document.querySelector('.search-filter__accordion-panel');
 
 	// 필터 키워드
-    const allCheckboxGroups = {
-        jobLclCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="jobLcls"]'),
-        jobSalCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="jobSals"]'),
-    };
+	const allCheckboxGroups = {
+	    jobLclCategory: document.querySelectorAll('.search-filter__option input[type="checkbox"][name="jobLcls"]'),
+	    jobSalCategory: document.querySelectorAll('.search-filter__option input[type="checkbox"][name="jobSals"]'),
+	};
 	
 	// 선택 필터 영역
-	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
+	const selectedFiltersContainer = document.querySelector('.search-filter__selected-tags');
 	
 	// 초기화 버튼
-	const resetButton = document.querySelector('.com-filter-reset-btn');
-
+	const resetButton = document.querySelector('.search-filter__reset-button');
+	
 	// 아코디언 코드
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
-			this.classList.toggle('active');
-			panel.classList.toggle('open');
+			this.classList.toggle('is-active');
+			panel.classList.toggle('is-open');
 		});
 	}
 
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     text = "직업 대분류 > " + text;
                 }
                 
-                const filterTagHTML = `<span class="com-selected-filter" data-group="${groupName}" data-value="${checkbox.value}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
+				const filterTagHTML = `<span class="search-filter__tag" data-group="${groupName}" data-value="${checkbox.value}">${text}<button type="button" class="search-filter__tag-remove">×</button></span>`;
                 selectedFiltersContainer.innerHTML += filterTagHTML;
             });
 	    });
@@ -83,18 +83,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
 	selectedFiltersContainer.addEventListener('click', (e) => {
-		if (e.target.classList.contains('com-remove-filter')) {
-			const tag = e.target.closest('.com-selected-filter');
+		if (e.target.classList.contains('search-filter__tag-remove')) {
+			const tag = e.target.closest('.search-filter__tag');
 			const groupName = tag.dataset.group;
-            const value = tag.dataset.value;
+	        const value = tag.dataset.value;
 
 	        const checkboxToUncheck = Array.from(allCheckboxGroups[groupName]).find(checkbox => checkbox.value === value);
 
 	        if (checkboxToUncheck) {
 	            checkboxToUncheck.checked = false;
 	        }
-
-			// 화면을 다시 그립니다.
+			
 			updateSelectedFiltersDisplay();
 		}
 	});
@@ -112,12 +111,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	}
 	
-	// 디테일 페이지로 이동
-	document.querySelectorAll('.jobs-item').forEach(jobs => {
+	document.querySelectorAll('.content-list__item').forEach(jobs => {
 		console.log("click")
 		jobs.addEventListener('click', (e) => {
-			// 북마크 버튼 눌렀을 때에는 디테일 페이지로 넘어가지 않도록 방지
-			if (e.target.closest('.bookmark-btn') || e.target.closest('.select-btn')) {
+			if (e.target.closest('.bookmark-button') || e.target.closest('.compare-button')) {
 				return;
 			}
 			location.href = '/pse/cr/crl/selectCareerDetail.do?jobCode=' + jobs.dataset.jobId;
@@ -127,10 +124,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    // 모든 북마크 버튼
-    const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
+    const bookmarkButtons = document.querySelectorAll('.bookmark-button');
 
-    // 이벤트 추가
     bookmarkButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault(); 
@@ -181,7 +176,6 @@ const handleBookmarkToggle = (button) => {
         }
     })
     .catch(error => {
-        // 네트워크 오류나 서버 응답 실패 시
         console.error('북마크 처리 중 오류 발생:', error);
         alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     });
@@ -189,20 +183,19 @@ const handleBookmarkToggle = (button) => {
 
 // 비교 팝업
 document.addEventListener('DOMContentLoaded', function() {
-    const popup = document.querySelector(".job-compare-popup");
-    const compareListContainer = document.querySelector(".compare-list");
-    const closeBtn = document.querySelector(".btn-close-popup");
-    const resetBtn = document.querySelector(".btn-clear-all");
-    const submitBtn = document.querySelector(".btn-view-results");
-    const selectButtons = document.querySelectorAll(".select-btn input");
+	const popup = document.querySelector(".compare-popup");
+	const compareListContainer = document.querySelector(".compare-popup__list");
+	const closeBtn = document.querySelector(".compare-popup__close-button");
+	const resetBtn = document.querySelector(".compare-popup__button--clear");
+	const submitBtn = document.querySelector(".compare-popup__button--submit");
+	const selectButtons = document.querySelectorAll(".compare-button input");
+	const floatingBar = document.querySelector(".floating-bar");
 
-    const floatBtnContainer = document.querySelector(".right-fixed-bar");
+	if (!floatingBar) return;
 
-    const popupOpenBtn = `
-        <button type="button" class="open-popup-btn">비교</button>
-    `;
+    const popupOpenBtn = `<button type="button" class="compare-float-button__button">비교</button>`;
 
-    floatBtnContainer.insertAdjacentHTML('beforeend', popupOpenBtn);
+    floatingBar.insertAdjacentHTML('beforeend', popupOpenBtn);
 
     // 기존 데이터 가져오기
     const initialCompareList = getCompareList();
@@ -237,58 +230,50 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 직업 카드 삭제
-    compareListContainer.addEventListener('click', function(event) {
-        const target = event.target.closest(".btn-remove-item");
-        if (target) {
-            const jobCode = target.dataset.removeItem;
-            deleteCompareCard(jobCode);
-        }
-    })
+	compareListContainer.addEventListener('click', function(event) {
+	    const target = event.target.closest(".compare-card__remove-button");
+	    if (target) {
+	        const jobCode = target.dataset.removeItem;
+	        deleteCompareCard(jobCode);
+	    }
+	})
 
     // 초기화 버튼
-    resetBtn.addEventListener('click', function() {
-        const currentCompareList = getCompareList();
-        for (const jobCode in currentCompareList)  {
-            const checkbox = document.querySelector(`#compare-btn${jobCode}`);
-            if (checkbox) {
-                checkbox.checked = false;
-            }
-        }
-        compareListContainer.innerHTML = "";
-        sessionStorage.removeItem("jobCompareList");
-        popup.classList.remove('is-open');
-    });
+	resetBtn.addEventListener('click', function() {
+	    const currentCompareList = getCompareList();
+	    for (const jobCode in currentCompareList)  {
+	        const checkbox = document.querySelector(`#compare-btn${jobCode}`);
+	        if (checkbox) { checkbox.checked = false; }
+	    }
+	    compareListContainer.innerHTML = "";
+	    sessionStorage.removeItem("jobCompareList");
+	    popup.classList.remove('is-open');
+	});
 
     // 비교 페이지 이동
-    submitBtn.addEventListener('click', function() {
-        const currentCompareList = getCompareList();
-        const jobCodes = Object.keys(currentCompareList);
-        
-		if (jobCodes.length < 2) {
-            alert("비교할 직업을 2개 이상 선택해주세요.");
-            return;
-        }
-		
+	submitBtn.addEventListener('click', function() {
+	    const currentCompareList = getCompareList();
+	    const jobCodes = Object.keys(currentCompareList);
+	    if (jobCodes.length < 2) {
+	        alert("비교할 직업을 2개 이상 선택해주세요.");
+	        return;
+	    }
 		for (const jobCode in currentCompareList)  {
-            const checkbox = document.querySelector(`#compare-btn${jobCode}`);
-            if (checkbox) {
-                checkbox.checked = false;
-            }
-        }
-
+	        const checkbox = document.querySelector(`#compare-btn${jobCode}`);
+	        if (checkbox) { checkbox.checked = false; }
+	    }
 		sessionStorage.removeItem("jobCompareList");
-        const queryString = jobCodes.map(code => `jobCodes=${code}`).join('&');
-        window.location.href = `/pse/cr/cco/careerComparisonView.do?${queryString}`;
-    });
+	    const queryString = jobCodes.map(code => `jobCodes=${code}`).join('&');
+	    window.location.href = `/pse/cr/cco/careerComparisonView.do?${queryString}`;
+	});
 
     // 팝업 열기 버튼
-    document.addEventListener('click', function(event) {
-        const target = event.target.closest(".open-popup-btn");
-
-        if (target) {
-            popup.classList.add('is-open');
-        }
-    })
+	document.addEventListener('click', function(event) {
+	    const target = event.target.closest(".compare-float-button__button");
+	    if (target) {
+	        popup.classList.add('is-open');
+	    }
+	})
 });
 
 // 세션에 비교 목록 가져오기
@@ -304,71 +289,59 @@ const saveCompareList = (compareList) => {
 
 // 비교 카드 생성하기
 const createCompareCard = (button, compareListContainer) => {
-    const popup = document.querySelector(".job-compare-popup");
-
-    const jobData = {
-        jobCode: button.value,
-        jobName: button.dataset.jobName,
-        jobSalaly: button.dataset.jobSal,
-        jobProspect: button.dataset.jobProspect,
-        jobSatis: button.dataset.jobSatis
-    }
-    
-    const compareList = getCompareList();
-
-    if (Object.keys(compareList).length >= 5) {
-        alert("직업 비교는 최대 5개 까지만 가능합니다.");
-        button.checked = false;
-        return;
-    }
-
-    compareList[jobData.jobCode] = jobData;
-    saveCompareList(compareList);
-
-    renderCompareItem(jobData, compareListContainer);
-
-    if(!popup.classList.contains('is-open')) {
-        popup.classList.add('is-open');
-    }
+	const jobData = {
+	    jobCode: button.value,
+	    jobName: button.dataset.jobName,
+	    jobSalaly: button.dataset.jobSal,
+	    jobProspect: button.dataset.jobProspect,
+	    jobSatis: button.dataset.jobSatis
+	}
+	const compareList = getCompareList();
+	if (Object.keys(compareList).length >= 5) {
+	    alert("직업 비교는 최대 5개 까지만 가능합니다.");
+	    button.checked = false;
+	    return;
+	}
+	compareList[jobData.jobCode] = jobData;
+	saveCompareList(compareList);
+	renderCompareItem(jobData, compareListContainer);
 }
 
 const renderCompareItem = (jobData, container) => {
-    const compareItemHtml = `
-        <div class="compare-item-card" id="compare-card-${jobData.jobCode}" data-job-code=${jobData.jobCode}>
-            <div class="card-header">
-                <h3 class="card-title">${jobData.jobName}</h3>
-                <button type="button" class="btn-remove-item" aria-label="삭제" data-remove-item="${jobData.jobCode}">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
-                        <path d="M2.22 2.22a.75.75 0 0 1 1.06 0L8 6.94l4.72-4.72a.75.75 0 1 1 1.06 1.06L9.06 8l4.72 4.72a.75.75 0 1 1-1.06 1.06L8 9.06l-4.72 4.72a.75.75 0 0 1-1.06-1.06L6.94 8 2.22 3.28a.75.75 0 0 1 0-1.06Z" />
-                    </svg>
-                </button>
-            </div>
-            <div class="card-metrics">
-                <div class="metric">
-                    <img src="/images/jobAverageImg.png" alt="연봉 아이콘" class="metric-icon">
-                    <div class="metric-text">
-                        <span class="metric-label">평균 연봉</span>
-                        <span class="metric-value">${jobData.jobSalaly}</span>
-                    </div>
-                </div>
-                <div class="metric">
-                    <img src="/images/jobProspectImg.png" alt="전망 아이콘" class="metric-icon">
-                    <div class="metric-text">
-                        <span class="metric-label">미래 전망</span>
-                        <span class="metric-value">${jobData.jobProspect}</span>
-                    </div>
-                </div>
-                <div class="metric">
-                    <img src="/images/jobSatisImg.png" alt="만족도 아이콘" class="metric-icon">
-                    <div class="metric-text">
-                        <span class="metric-label">만족도</span>
-                        <span class="metric-value">${jobData.jobSatis}점</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    container.innerHTML += compareItemHtml;
+	const compareItemHtml = `
+	    <div class="compare-card" id="compare-card-${jobData.jobCode}" data-job-code=${jobData.jobCode}>
+	        <div class="compare-card__header">
+	            <h3 class="compare-card__title">${jobData.jobName}</h3>
+	            <button type="button" class="compare-card__remove-button" aria-label="삭제" data-remove-item="${jobData.jobCode}">
+					×
+	            </button>
+	        </div>
+	        <div class="compare-card__metrics">
+	            <div class="compare-card__metric">
+	                <img src="/images/jobAverageImg.png" alt="연봉 아이콘" class="compare-card__metric-icon">
+	                <div class="compare-card__metric-text">
+	                    <span class="compare-card__metric-label">평균 연봉</span>
+	                    <span class="compare-card__metric-value">${jobData.jobSalaly}</span>
+	                </div>
+	            </div>
+	            <div class="compare-card__metric">
+	                <img src="/images/jobProspectImg.png" alt="전망 아이콘" class="compare-card__metric-icon">
+	                <div class="compare-card__metric-text">
+	                    <span class="compare-card__metric-label">미래 전망</span>
+	                    <span class="compare-card__metric-value">${jobData.jobProspect}</span>
+	                </div>
+	            </div>
+	            <div class="compare-card__metric">
+	                <img src="/images/jobSatisImg.png" alt="만족도 아이콘" class="compare-card__metric-icon">
+	                <div class="compare-card__metric-text">
+	                    <span class="compare-card__metric-label">만족도</span>
+	                    <span class="compare-card__metric-value">${jobData.jobSatis}점</span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	`;
+	container.insertAdjacentHTML('beforeend', compareItemHtml);
 }
 
 const deleteCompareCard = (itemId) => {
@@ -387,6 +360,6 @@ const deleteCompareCard = (itemId) => {
     saveCompareList(compareList);
 
     if (Object.keys(compareList).length === 0) {
-        document.querySelector(".job-compare-popup").classList.remove('is-open');
+        document.querySelector(".compare-popup").classList.remove('is-open');
     };
 }
