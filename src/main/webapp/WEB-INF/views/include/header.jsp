@@ -14,6 +14,7 @@
 <script src="/js/com/sockjs.min.js"></script>
 <script src="/js/com/stomp.min.js"></script>
 <script src="/ckeditor5/ckeditor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CareerPath</title>

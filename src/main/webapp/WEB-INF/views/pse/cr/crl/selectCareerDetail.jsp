@@ -127,10 +127,6 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 
 <script src="/js/pse/cr/crl/selectCareerDetail.js"></script>
-<!-- Chart.js 라이브러리 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-
-<!-- 차트 데이터 변수 -->
 <script type="text/javascript">
     // 취업 분야 분포 데이터
     
