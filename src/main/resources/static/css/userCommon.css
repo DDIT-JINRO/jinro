@@ -23,7 +23,20 @@ html, body {
 .public-wrapper {
 	max-width: 1160px;
 	width: 90%;
-	margin: 0 auto 70px;
+	margin: 70px auto;
+}
+
+.page-title-bar__title {
+	font-size: 18px;
+	padding: 15px 0;
+	margin: 0;
+    flex: 1;
+    text-align: center;
+    position: relative;
+    color: black;
+    z-index: 1;
+    text-decoration: none;
+    font-weight: 500;
 }
 
 .public-wrapper-main {
@@ -156,7 +169,6 @@ html, body {
 	display: flex;
 	position: relative;
 	font-size: 18px;
-	border-bottom: 1px solid #e5e7eb;
 }
 
 .tab-container::after {
@@ -613,6 +625,12 @@ html, body {
 	overflow: hidden;
 	margin-bottom: 12px;
 	background-color: #fff;
+}
+
+	
+.search-filter__input-wrapper {
+	display: flex;
+    width: 100%;
 }
 
 .search-filter__select-wrapper {
@@ -1203,17 +1221,15 @@ html, body {
 		width: 100%;
 	}
 	.content-list__meta-group {
-		flex-wrap: wrap;
 		justify-content: space-between;
 		width: 100%;
 	}
 	.content-list__meta-item {
-		width: auto;
-		flex: 1 1 45%;
-		justify-content: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
 	}
 	.content-list__actions {
-		align-self: flex-end;
+		align-self: flex-start;
 	}
 	
 	/* 푸터 */
@@ -1257,6 +1273,11 @@ html, body {
 		flex-direction: column;
 	}
 	
+	.search-filter__select {
+		width: 100%;
+	    padding: 10px 36px 10px 16px;
+	}
+	
 	.search-filter__select-wrapper {
 		border-right: none;
 		border-bottom: 2px solid #e5e7eb;
@@ -1264,5 +1285,14 @@ html, body {
 	
 	.search-filter__input {
 		padding: 14px 16px;
+	}
+	
+	.pagination {
+		gap:0;
+	}
+	
+	.pagination__link {
+		font-size: 0.8rem;
+        padding: 6px 12px;
 	}
 }
