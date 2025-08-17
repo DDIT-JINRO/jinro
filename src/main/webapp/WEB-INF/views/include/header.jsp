@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,28 +18,100 @@
 <script src="/js/com/stomp.min.js"></script>
 <script src="/ckeditor5/ckeditor.js"></script>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CareerPath</title>
 <script src="/js/include/header.js"></script>
 <script>
-const memId = '<sec:authentication property="name" />'
+	const memId = '<sec:authentication property="name" />';
 	document.addEventListener("DOMContentLoaded",() => {
 		header();
 	});
 </script>
 </head>
 <body>
-	<div class="public-topbar">
-		<div class="public-topbar-left">
+	<header class="header">
+		<div class="header__brand">
 			<a href="/">
-				<img src="/images/logo.png" alt="로고" class="logo" id="logo" />
+				<img src="/images/logo.png" alt="로고" class="header__logo" />
 			</a>
 		</div>
 
-		<div class="public-topbar-center">
-			<ul class="public-nav-menu">
-				<li>
-					<img src="/images/menuAll.png" alt="메뉴 아이콘" class="public-menu-icon" id="menuToggle" />
+		<button class="header__mobile-menu-trigger" id="mobileMenuTrigger">
+			<img src="/images/menuAll.png" alt="메뉴 열기" />
+		</button>
+
+		<div class="header__nav-container--desktop">
+			<ul class="main-nav">
+				<li class="main-nav__item main-nav__item--mega-menu-trigger" id="megaMenuToggle">
+					<img src="/images/menuAll.png" alt="메뉴 아이콘" class="main-nav__icon" />
 				</li>
+				<li class="main-nav__item">
+					<a href="/pse/cat/careerAptitudeTest.do" class="main-nav__link">진로</a>
+				</li>
+				<li class="main-nav__item">
+					<a href="/ertds/univ/uvsrch/selectUnivList.do" class="main-nav__link">진학</a>
+				</li>
+				<li class="main-nav__item">
+					<a href="/empt/ema/employmentAdvertisement.do" class="main-nav__link">취업</a>
+				</li>
+				<li class="main-nav__item main-nav__item--priority-low">
+					<a href="/cdp/rsm/rsm/resumeList.do" class="main-nav__link">경력관리</a>
+				</li>
+				<li class="main-nav__item">
+					<a href="/cnslt/resve/crsv/reservation.do" class="main-nav__link">상담</a>
+				</li>
+				<li class="main-nav__item main-nav__item--priority-low">
+					<a href="/prg/ctt/cttList.do" class="main-nav__link">프로그램</a>
+				</li>
+				<li class="main-nav__item">
+					<a href="/comm/peer/teen/teenList.do" class="main-nav__link">커뮤니티</a>
+				</li>
+				<li class="main-nav__item main-nav__item--priority-low">
+					<a href="/csc/not/noticeList.do" class="main-nav__link">고객센터</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="header__user-actions--desktop">
+			<sec:authorize access="hasRole('ROLE_CNSLEADER')">
+				<a href="/cnsLeader" class="user-actions__button">
+					<img src="/images/cnsLeader.png" alt="상담센터장" class="user-actions__icon">
+				</a>
+			</sec:authorize>
+			<sec:authorize access="hasRole('ROLE_COUNSEL')">
+				<a href="/cns" class="user-actions__button">
+					<img src="/images/counselor.png" alt="상담사" class="user-actions__icon">
+				</a>
+			</sec:authorize>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<a href="/admin" class="user-actions__button">
+					<img src="/images/manager.png" alt="관리자" class="user-actions__icon">
+				</a>
+			</sec:authorize>
+			<sec:authorize access="isAuthenticated()">
+				<a href="/mpg/mif/inq/selectMyInquiryView.do" class="user-actions__button">
+					<img src="/images/profile.png" alt="프로필" class="user-actions__icon" />
+				</a>
+				<a href="#" id="alarmBtn" class="user-actions__button user-actions__button--alarm">
+					<img src="/images/alarm.png" alt="알림" class="user-actions__icon" />
+					<span id="alarm-badge" class="badge">0</span>
+				</a>
+				<a href="/logoutProcess" class="user-actions__button">
+					<img src="/images/logout.png" alt="로그아웃" class="user-actions__icon" />
+				</a>
+			</sec:authorize>
+			<sec:authorize access="!isAuthenticated()">
+				<a href="/login" class="user-actions__button">
+					<img src="/images/login.png" alt="로그인" class="user-actions__icon" />
+				</a>
+			</sec:authorize>
+		</div>
+
+		<div class="mobile-nav-panel" id="mobileNavPanel">
+			<div class="mobile-nav-panel__header">
+				<button class="mobile-nav-panel__close" id="mobileNavClose"></button>
+			</div>
+			<ul class="mobile-nav-panel__menu">
 				<li>
 					<a href="/pse/cat/careerAptitudeTest.do">진로</a>
 					<div class="dropdown-submenu">
@@ -104,74 +176,47 @@ const memId = '<sec:authentication property="name" />'
 					</div>
 				</li>
 			</ul>
+			<div class="mobile-nav-panel__user-actions">
+				<sec:authorize access="isAuthenticated()">
+					<a href="/mpg/mif/inq/selectMyInquiryView.do">마이페이지</a>
+					<a href="/logoutProcess">로그아웃</a>
+				</sec:authorize>
+				<sec:authorize access="!isAuthenticated()">
+					<a href="/login">로그인</a>
+				</sec:authorize>
+			</div>
 		</div>
+		<div class="overlay" id="overlay"></div>
+	</header>
 
-		<div class="public-topbar-right">
-			<sec:authorize access="hasRole('ROLE_CNSLEADER')">
-				<a href="/cnsLeader">
-					<img src="/images/cnsLeader.png" alt="상담센터장" class="icon-btn">
-				</a>
-			</sec:authorize>
-			<sec:authorize access="hasRole('ROLE_COUNSEL')">
-				<a href="/cns">
-					<img src="/images/counselor.png" alt="상담사" class="icon-btn">
-				</a>
-			</sec:authorize>
-			<sec:authorize access="hasRole('ROLE_ADMIN')">
-				<a href="/admin">
-					<img src="/images/manager.png" alt="관리자" class="icon-btn">
-				</a>
-			</sec:authorize>
-			<sec:authorize access="isAuthenticated()">
-				<a href="/mpg/mif/inq/selectMyInquiryView.do">
-					<img src="/images/profile.png" alt="프로필" class="icon-btn" />
-				</a>
-				<a href="" id="alarmBtn">
-					<img src="/images/alarm.png" alt="알림" class="icon-btn" />
-					<span id="alarm-badge" class="badge">0</span>
-				</a>
-				<a href="/logoutProcess">
-					<img src="/images/logout.png" alt="로그아웃" class="icon-btn" />
-				</a>
-			</sec:authorize>
-			<sec:authorize access="!isAuthenticated()">
-				<a href="/login">
-					<img src="/images/login.png" alt="로그인" class="icon-btn" />
-				</a>
-			</sec:authorize>
-		</div>
-	</div>
-
-	<div id="dropdownMenu-tg" class="hidden dropdown-menu">
-		<div class="menu-header">
-			<div class="menu-dots">
+	<div id="megaMenu" class="mega-menu mega-menu--hidden">
+		<div class="mega-menu__header">
+			<div class="mega-menu__dots">
 				<span></span>
 				<span></span>
 				<span></span>
 			</div>
-			<div class="menu-title">MENU</div>
+			<div class="mega-menu__title">MENU</div>
 		</div>
-
-		<!-- 전체 메뉴 -->
-		<div class="menu-container">
-			<div class="menu-con-flex">
-				<div class="menu-box">
-					<div class="menu-box-title">진로 탐색</div>
-					<div class="menu-subitems">
+		<div class="mega-menu__container">
+			<div class="mega-menu__row">
+				<div class="mega-menu__category">
+					<div class="mega-menu__category-title">진로</div>
+					<div class="mega-menu__links">
 						<a href="/pse/cat/careerAptitudeTest.do">
 							<span>진로 심리 검사</span>
 						</a>
 						<a href="/pse/cr/crl/selectCareerList.do">
-							<span>직업목록</span>
+							<span>직업 목록</span>
 						</a>
 						<a href="/pse/cr/crr/selectCareerRcmList.do">
-							<span>추천직업</span>
+							<span>추천 직업</span>
 						</a>
 					</div>
 				</div>
-				<div class="menu-box">
-					<div class="menu-box-title">진학 정보</div>
-					<div class="menu-subitems">
+				<div class="mega-menu__category">
+					<div class="mega-menu__category-title">진학</div>
+					<div class="mega-menu__links">
 						<a href="/ertds/univ/uvsrch/selectUnivList.do">
 							<span>대학 검색</span>
 						</a>
@@ -186,10 +231,9 @@ const memId = '<sec:authentication property="name" />'
 						</a>
 					</div>
 				</div>
-
-				<div class="menu-box">
-					<div class="menu-box-title">취업 정보</div>
-					<div class="menu-subitems">
+				<div class="mega-menu__category">
+					<div class="mega-menu__category-title">취업</div>
+					<div class="mega-menu__links">
 						<a href="/empt/ema/employmentAdvertisement.do">
 							<span>채용공고</span>
 						</a>
@@ -204,11 +248,10 @@ const memId = '<sec:authentication property="name" />'
 						</a>
 					</div>
 				</div>
-
-				<div class="menu-box">
-					<div class="menu-box-title">경력관리</div>
-					<div class="menu-subitems">
-						<a href="cdp/rsm/rsm/resumeList.do">
+				<div class="mega-menu__category">
+					<div class="mega-menu__category-title">경력관리</div>
+					<div class="mega-menu__links">
+						<a href="/cdp/rsm/rsm/resumeList.do">
 							<span>이력서</span>
 						</a>
 						<a href="/cdp/sint/qestnlst/questionList.do">
@@ -222,9 +265,11 @@ const memId = '<sec:authentication property="name" />'
 						</a>
 					</div>
 				</div>
-				<div class="menu-box">
-					<div class="menu-box-title">상담</div>
-					<div class="menu-subitems">
+			</div>
+			<div class="mega-menu__row">
+				<div class="mega-menu__category">
+					<div class="mega-menu__category-title">상담</div>
+					<div class="mega-menu__links">
 						<a href="cdp/rsm/rsm/resumeList.do">
 							<span>오프라인 상담</span>
 						</a>
@@ -239,42 +284,62 @@ const memId = '<sec:authentication property="name" />'
 						</a>
 					</div>
 				</div>
-			</div>
-			<div class="menu-con-flex">
-				<div class="menu-box">
-					<div class="menu-box-title">프로그램</div>
-					<div class="menu-subitems"></div>
+				<div class="mega-menu__category">
+					<div class="mega-menu__category-title">프로그램</div>
+					<div class="mega-menu__links">
+						<a href="/prg/ctt/cttList.do">
+							<span>공모전</span>
+						</a>
+						<a href="/prg/act/vol/volList.do">
+							<span>대외 활동</span>
+						</a>
+						<a href="/prg/std/stdGroupList.do">
+							<span>스터디그룹</span>
+						</a>
+					</div>
 				</div>
-
-				<div class="menu-box">
-					<div class="menu-box-title">커뮤니티</div>
-					<div class="menu-subitems"></div>
+				<div class="mega-menu__category">
+					<div class="mega-menu__category-title">커뮤니티</div>
+					<div class="mega-menu__links">
+						<a href="/comm/peer/teen/teenList.do">
+							<span>또래 게시판</span>
+						</a>
+						<a href="/comm/path/pathList.do">
+							<span>진로/진학 게시판</span>
+						</a>
+					</div>
 				</div>
-				<div class="menu-box">
-					<div class="menu-box-title">고객센터</div>
-					<div class="menu-subitems"></div>
-				</div>
-				<div class="menu-box">
-					<div class="menu-box-title">마이페이지</div>
-					<div class="menu-subitems"></div>
+				<div class="mega-menu__category">
+					<div class="mega-menu__category-title">고객센터</div>
+					<div class="mega-menu__links">
+						<a href="/csc/not/noticeList.do">
+							<span>공지사항</span>
+						</a>
+						<a href="/csc/faq/faqList.do">
+							<span>자주 묻는 질문</span>
+						</a>
+						<a href="/csc/inq/inqryList.do">
+							<span>1:1 문의</span>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="right-fixed-bar">
-		<button class="right-fixed-btn">
-			<img src="/images/worldCup.png" id="worldcup" alt="월드컵">
+	<div class="floating-bar">
+		<button class="floating-bar__button" id="worldcup">
+			<img src="/images/worldCup.png" alt="월드컵">
 		</button>
-		<button class="right-fixed-btn" id="chatRooms">
+		<button class="floating-bar__button" id="chatRooms">
 			<img src="/images/chaticon.png" alt="채팅">
-			<span id="chatFloatingBadge" class="chat-unread-badge"
-				style="position: absolute; top: -5px; right: -10px; display: none;">0</span>
+			<span id="chatFloatingBadge" class="badge badge--chat" style="display: none;">0</span>
 		</button>
-		<button id="roadmap" class="right-fixed-btn">
+		<button class="floating-bar__button" id="roadmap">
 			<img src="/images/roadmapicon.png" alt="진로탐색">
 		</button>
 	</div>
+
 	<%@ include file="/WEB-INF/views/include/chatModal.jsp"%>
 	<%@ include file="/WEB-INF/views/include/alarmModal.jsp"%>
 </body>
