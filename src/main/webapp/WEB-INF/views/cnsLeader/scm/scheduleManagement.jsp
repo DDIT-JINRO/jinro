@@ -14,14 +14,15 @@
 				<select name="status">
 					<option value="counselor">상담사명</option>
 					<!-- … -->
-				</select> <input type="text" name="keyword" id="keyword" placeholder="상담사명을 입력하세요" />
+				</select> <input type="text" name="keyword" id="keyword"
+					placeholder="상담사명을 입력하세요" />
 				<button type="button" class="btn-save" id="btn-search">조회</button>
 			</div>
 		</div>
 		<p>
 			총 <span id="schedule-count"></span>건
 		</p>
-			<span id="selectedDateText"></span>
+		<span id="selectedDateText"></span>
 		<div class="table-wrapper">
 			<table>
 				<colgroup>
@@ -46,9 +47,7 @@
 		</div>
 		<div style="margin-top: 10px; text-align: center;">
 			<div class="card-footer clearfix">
-				<div class="panel-footer pagination">
-				
-				</div>
+				<div class="panel-footer pagination"></div>
 			</div>
 		</div>
 	</div>
@@ -71,7 +70,8 @@
 			<div class="panel-section-title">상담사</div>
 			<div class="panel-section-content">
 				<div class="info-item">
-					<span class="info-label">이름</span> <span class="info-value-counselName"></span>
+					<span class="info-label">이름</span> <span
+						class="info-value-counselName"></span>
 				</div>
 			</div>
 
@@ -81,16 +81,20 @@
 					<span class="info-label">이름</span> <span class="info-value-memName"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">나이</span> <span class="info-value-memBirth"></span>
+					<span class="info-label">나이</span> <span
+						class="info-value-memBirth"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">성별</span> <span class="info-value-memGenStr"></span>
+					<span class="info-label">성별</span> <span
+						class="info-value-memGenStr"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">이메일</span> <span class="info-value-memEmail"></span>
+					<span class="info-label">이메일</span> <span
+						class="info-value-memEmail"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">연락처</span> <span class="info-value-memPhoneNumber"></span>
+					<span class="info-label">연락처</span> <span
+						class="info-value-memPhoneNumber"></span>
 				</div>
 			</div>
 		</div>
@@ -99,19 +103,24 @@
 			<div class="panel-section-title">상담 신청 정보</div>
 			<div class="panel-section-content">
 				<div class="info-item">
-					<span class="info-label">상담 분야</span> <span class="info-value-counselCategoryStr"></span>
+					<span class="info-label">상담 분야</span> <span
+						class="info-value-counselCategoryStr"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">상담 방법</span> <span class="info-value-counselMethodStr"></span>
+					<span class="info-label">상담 방법</span> <span
+						class="info-value-counselMethodStr"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">상담 예약일 : </span> <span class="info-value-counselReqDate"></span>
+					<span class="info-label">상담 예약일 : </span> <span
+						class="info-value-counselReqDate"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">상담 예약시간 : </span> <span class="info-value-counselReqtime"></span>
+					<span class="info-label">상담 예약시간 : </span> <span
+						class="info-value-counselReqtime"></span>
 				</div>
 				<div class="info-item">
-					<span class="info-label">예약 상태</span> <span class="info-value-counselStatusStr"></span>
+					<span class="info-label">예약 상태</span> <span
+						class="info-value-counselStatusStr"></span>
 				</div>
 			</div>
 		</div>
@@ -126,7 +135,7 @@
 		</div>
 	</div>
 </div>
-	
+
 <script type="text/javascript" src="/js/com/fullcalendar.global.min.js"></script>
 <script type="text/javascript"
 	src="/js/include/cnsLeader/scm/scheduleManagement.js"></script>
