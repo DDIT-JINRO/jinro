@@ -98,6 +98,58 @@ html, body {
 }
 
 /* ==========================================================================
+   중메뉴 탭 설정
+   ========================================================================== */
+
+.channel {
+	background-image: url("/images/backImg.png");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 100%;
+	height: 220px;
+}
+
+.channel-title {
+	display: flex;
+	justify-content: center;
+	font-weight: 700;
+}
+
+.channel-title-text {
+	margin: 50px 0;
+	font-size: 25px;
+}
+
+.channel-sub-sections {
+	display: flex;
+	justify-content: center;
+	gap: 100px;
+}
+
+.channel-sub-section-item {
+	font-size : 18px;
+	font-weight: 600;
+	color: #848484;
+	width: 150px;
+	text-align: center;
+}
+
+.channel-sub-section-itemIn {
+	font-size : 18px;
+	font-weight: 600;
+	width: 150px;
+	text-align: center;
+}
+
+.channel-sub-section-itemIn a,
+.channel-sub-section-item a {
+	color: inherit;
+	text-decoration: none;
+	display: block;
+}
+
+/* ==========================================================================
    소메뉴 탭 설정
    ========================================================================== */
 .tab-container {
