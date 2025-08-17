@@ -144,27 +144,19 @@ document.addEventListener('DOMContentLoaded', () => {
 			};
 		});
 
-		// AI 첨삭 요청 (단일 요청으로 변경)
-		fetch('/cdp/aifdbck/sint/requestFeedbackPI.do', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				"sections": sections,
-				"payId": subscriptionInfo.payId
-			})
+	// AI 첨삭 요청 (단일 요청으로 변경)
+	fetch('/ai/proofread/coverletter', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ "sections": sections })
+	})
+		.then(response => {
+			if (!response.ok) throw new Error('AI 첨삭 요청 실패');
+			return response.text();
 		})
-			.then(response => {
-				// 더 안정적인 에러 처리
-				if (response.ok) {
-					return response.text();
-				}
-				return response.text().then(text => Promise.reject(new Error(text)));
-			})
-			.then(aiResponseText => {
-
-				axios.post('/admin/las/aiSelfIntroVisitLog.do')
-				// AI 응답 텍스트를 정리하고 파싱
-				const cleanedText = cleanAiResponse(aiResponseText);
+		.then(aiResponseText => {
+			// AI 응답 텍스트를 정리하고 파싱
+			const cleanedText = cleanAiResponse(aiResponseText);
 
 				// ---로 구분된 피드백을 파싱
 				const sections = cleanedText.split('---').map(section => section.trim()).filter(section => section.length > 0);

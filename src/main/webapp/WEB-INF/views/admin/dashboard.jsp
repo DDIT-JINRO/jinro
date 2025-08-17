@@ -88,9 +88,10 @@
 					<div class="middleTitlePp">뭐넣지</div>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
+	<div id="scriptContainer"></div>
 </body>
 <script src="/js/include/admin/dashboard.js"></script>
 </html>

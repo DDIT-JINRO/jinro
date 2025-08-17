@@ -1,6 +1,9 @@
 package kr.or.ddit.ertds.univ.uvsrch.service;
 
+import java.util.List;
+
 import kr.or.ddit.ertds.univ.uvsrch.service.UniversityDetailVO.DeptInfo;
+import kr.or.ddit.util.ArticlePage;
 
 public interface UniversityManageService {
 
@@ -19,5 +22,10 @@ public interface UniversityManageService {
 	int deleteDepartmentsByUnivId(int univId);
 
 	DeptInfo selectDepartmentById(int udId);
+	
+    // 대학 목록 조회 (페이징)
+	ArticlePage<UniversityVO> getUniversityList(UniversityVO universityVO);
+
+	List<DeptInfo> selectUniversityDeptList(int univId);
 
 }

@@ -61,7 +61,9 @@ public class SecurityConfig {
 		http
 				.cors(Customizer.withDefaults())
 				.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/test").hasRole("USER") // 모든 사용자는 유저권한을 포함시켜놨습니다. 로그인이 필요한 서비스는 여기에 넣어주시면 됩니다.
+				.requestMatchers("/admin").hasRole("ADMIN")
+				.requestMatchers("/cns").hasRole("COUNSEL")				
+				.requestMatchers("/cnsLeader").hasRole("CNSLEADER")				
 				.anyRequest().permitAll()).csrf(csrf -> csrf.disable())
 				.exceptionHandling(ex -> ex
 				.authenticationEntryPoint(authenticationEntryPoint()) // 인증 안됐을 때

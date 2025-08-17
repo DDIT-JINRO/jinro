@@ -16,14 +16,15 @@ public class CompanyVO {
 	private Long cpBusino;
 	private String cpImgUrl;
 	private String cpRegion;
-	private int fileGroupId;
-
+	private Long fileGroupId;
+	
 //	새로받는 값
 	private String cpHiringStatus; // 현재 채용 여부
 	private String ccName; // 기업규모 내용
 
 //	필터링할 값
 	private String keyword; // 기업이름
+	private String status;
 	private List<String> scaleId; // 기업 규모 선택
 	private List<String> regionId; // 기업 위치 선택
 	private List<String> hiringStatus; // 채용 상태 선택

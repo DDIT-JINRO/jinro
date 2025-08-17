@@ -31,6 +31,8 @@ public class ContestVO {
 
 	// 가공된 상세 설명을 담을 리스트
 	private List<String> descriptionSections;
+	
+	private String savePath;
 
 	// 필터조건
 	private String keyword;

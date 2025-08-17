@@ -134,20 +134,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		const doc = parser.parseFromString(originalData.resumeContent, 'text/html');
 		const cleanedHtml = doc.body.innerHTML;
 
-		fetch('/cdp/aifdbck/rsm/requestFeedback.do', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				"html": originalData.resumeContent,
-				"payId": subscriptionInfo.payId
-			})
+	fetch('/ai/proofread/resume', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ "html": cleanedHtml })
+	})
+		.then(response => {
+			if (!response.ok) throw new Error('AI 첨삭 요청 실패');
+			return response.text();
 		})
-			.then(response => {
-				if (!response.ok) throw new Error('AI 첨삭 요청 실패');
-				return response.text();
-			})
-			.then(aiResponseText => {
-				const cleanedText = cleanAiResponse(aiResponseText);
+		.then(aiResponseText => {
+			const cleanedText = cleanAiResponse(aiResponseText);
 
 				aiFeedbackData = {
 					sections_feedback: [cleanedText], // 배열로 감싸기!

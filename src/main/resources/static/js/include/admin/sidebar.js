@@ -11,10 +11,8 @@ function sidebar(){
 		  document.querySelectorAll('.admin-side-menu-link').forEach(function (el) {
 		    el.addEventListener('click', function (e) {
 		      e.preventDefault();
-
+			  
 		      const pageUrl = this.dataset.page;
-
-		      console.log(pageUrl);
 
 		      fetch(pageUrl)
 		        .then(response => {
@@ -23,7 +21,8 @@ function sidebar(){
 		        })
 		        .then(html => {
 		          document.getElementById('content').innerHTML = html;
-
+				  const scriptContainer = document.getElementById('scriptContainer');
+				  scriptContainer.innerHTML = '';
 		          const scripts = document.getElementById('content').querySelectorAll('script');
 		          scripts.forEach(oldScript => {
 		            const newScript = document.createElement('script');
@@ -34,7 +33,7 @@ function sidebar(){
 
 		              newScript.textContent = oldScript.textContent;
 		            }
-		            document.body.appendChild(newScript);
+		            scriptContainer.appendChild(newScript);
 
 		            oldScript.remove();
 		          });

@@ -26,8 +26,8 @@ public class UniversityDetailVO {
 		private int univId; // 대학 ID
 		private String uddId; // 학과 구분 ID
 		private String udName; // 학과명
-		private int udTuition; // 등록금
-		private int udScholar; // 1인당 평균 장학금
+		private Integer udTuition; // 등록금
+		private Integer udScholar; // 1인당 평균 장학금
 		private String udCompetition; // 경쟁률 (예: "5.6:1")
 		private String udEmpRate; // 취업률 (예: "88.6")
 

@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="/css/admin/admSideBar.css">
 <link rel="shortcut icon" href="/images/crppvc.png">
 <link rel="stylesheet" href="/css/pagenation.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/js/include/admin/sidebar.js"></script>
 <script src="/js/axios.min.js"></script>
@@ -60,9 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
 				</li>
 				<li>
 					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=cmg/activityManagement">대외활동 관리</a>
-				</li>
-				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=cmg/bannerManagement">배너 관리</a>
 				</li>
 			</ul>
 		</li>
