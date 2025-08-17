@@ -5,7 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 	// 모든 북마크 버튼
-	const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
+	const bookmarkButtons = document.querySelectorAll('.bookmark-button');
 
 	// 이벤트 추가
 	bookmarkButtons.forEach(button => {
@@ -38,7 +38,7 @@ const handleBookmarkToggle = (button) => {
     const bmTargetId = button.dataset.targetId;
 
     // 현재 버튼이 'active' 클래스를 가지고 있는지 확인
-    const isBookmarked = button.classList.contains('active');
+    const isBookmarked = button.classList.contains('is-active');
     
     const data = {
         bmCategoryId: bmCategoryId,
@@ -64,7 +64,7 @@ const handleBookmarkToggle = (button) => {
 		console.log(data);
         if (data.success) {
 			alert(data.message);
-            button.classList.toggle('active');
+            button.classList.toggle('is-active');
         } else {
             alert(data.message || '북마크 처리에 실패했습니다.');
         }

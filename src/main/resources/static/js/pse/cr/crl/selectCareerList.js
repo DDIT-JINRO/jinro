@@ -144,7 +144,7 @@ const handleBookmarkToggle = (button) => {
     const bmTargetId = button.dataset.targetId;
 
     // 현재 버튼이 'active' 클래스를 가지고 있는지 확인
-    const isBookmarked = button.classList.contains('active');
+    const isBookmarked = button.classList.contains('is-active');
     
     const data = {
         bmCategoryId: bmCategoryId,
@@ -170,7 +170,7 @@ const handleBookmarkToggle = (button) => {
 		console.log(data);
         if (data.success) {
 			alert(data.message);
-            button.classList.toggle('active');
+            button.classList.toggle('is-active');
         } else {
             alert(data.message || '북마크 처리에 실패했습니다.');
         }
