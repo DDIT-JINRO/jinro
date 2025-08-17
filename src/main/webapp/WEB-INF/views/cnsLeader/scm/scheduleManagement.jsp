@@ -17,13 +17,13 @@ rel='stylesheet' />
 			style="cursor: pointer; text-decoration: none">상담 리스트</div>
 		<!-- 리스트 패널 상단: 필터 영역 -->
 		<div class="filter-box">
-			<form action="/csc/admin/noticeList.do" method="get">
+			<div>
 				<select name="status">
 					<option value="counselor">상담사명</option>
 					<!-- … -->
 				</select> <input type="text" name="keyword" id="keyword" placeholder="상담사명을 입력하세요" />
 				<button type="button" class="btn-save" id="btn-search">조회</button>
-			</form>
+			</div>
 		</div>
 		<p>
 			총 <span id="schedule-count"></span>건
@@ -124,7 +124,7 @@ rel='stylesheet' />
 		</div>
 
 		<div class="bottom-panel" style="flex: 2">
-			<div class="panel-section-title">신청동기</div>
+			<div class="panel-section-title description">신청동기</div>
 			<div class="panel-section-content">
 				<div class="info-item">
 					<span class="info-label-counselDescription"></span>

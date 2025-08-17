@@ -88,7 +88,6 @@ public class CnsLeaderApiController {
 	public ResponseEntity<CounselingVO> counselDetail(@RequestParam Integer counselId){
 		CounselingVO counselingVO = new CounselingVO();
 		if(counselId != 0 && counselId != null ) {
-			log.info("counselId"+counselId);
 			counselingVO = this.counselLeaderService.selectCounselDetail(counselId);
 		}
 		return ResponseEntity.ok(counselingVO);

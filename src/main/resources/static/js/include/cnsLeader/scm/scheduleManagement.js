@@ -69,10 +69,6 @@
 		calendarInstance.render();
 	}
 	
-	function buttonSearch(){
-		selectCounselSchedules(selectedDate);
-	}
-	
 	// 전역 변수로 페이지 정보와 항목 수를 관리합니다.
 	let currentPage = 1; 
 	const pageSize = 5;
@@ -149,6 +145,10 @@
 	        // 페이징 버튼도 초기화
 	        renderPagination(0, pageSize, 1);
 	    });
+		
+		document.getElementById("btn-search").addEventListener("click",function(){
+			selectCounselSchedules(selectedDate);
+		})
 	}
 	window.selectCounselSchedules = selectCounselSchedules;
 	// 비동기 로딩된 JSP에서도 바로 실행
@@ -201,9 +201,18 @@ function counselDetail(counselId) {
 				    `${counselDate.getHours().toString().padStart(2,'0')}:${counselDate.getMinutes().toString().padStart(2,'0')}`;
                 document.querySelector('.info-value-counselStatusStr').textContent = data.counselStatusStr || "-"; // 상태
             
-
+			
             // 4. 신청동기
-                document.querySelector('.info-label-counselDescription').textContent = data.counselDescription || "신청동기 정보가 없습니다.";
+			//신청동기 타이틀
+			const descriptionTitle = document.querySelector(".panel-section-title.description")
+			const counselDescription = document.querySelector('.info-label-counselDescription');
+				if(data.crContent != null){
+					descriptionTitle.textContent = '상담리뷰';
+					counselDescription.textContent = data.crContent || "리뷰 정보가 없습니다.";
+				}else{
+					descriptionTitle.textContent = '신청동기';
+	                counselDescription.textContent = data.counselDescription || "신청동기 정보가 없습니다.";
+				}
         })
         .catch(error => {
             console.error('상담 상세 정보 조회 실패:', error);

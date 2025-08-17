@@ -348,7 +348,7 @@
 			FROM counseling a
 			WHERE trunc(a.counsel_req_datetime) = trunc(#{counselReqDatetime})
 			  <if test="keyword != null and !keyword.equals('')">
-			      AND a.counsel = (SELECT mem_id FROM member WHERE mem_name LIKE '%' || #{keyword} || '%')
+			      AND a.counsel in (SELECT mem_id FROM member WHERE mem_name LIKE '%' || #{keyword} || '%')
 			  </if>
     </select>
     
@@ -373,7 +373,8 @@
 		    d.cc_name counsel_method_str,
 		    e.cc_name mem_gen_str,
 		    f.cc_name counsel_status_str,
-		    g.MEM_NAME counselName
+		    g.MEM_NAME counsel_name,
+		    h.CR_CONTENT cr_content
 		FROM
 		         counseling a
 		    JOIN member b ON a.mem_id = b.mem_id
@@ -382,7 +383,7 @@
 		    JOIN COM_CODE e ON b.MEM_GEN = e.cc_id
 		    JOIN COM_CODE f ON a.counsel_status = f.cc_id
 		    join member g on a.counsel = g.mem_id 
-		
+		    left join counseling_review h on h.cr_id  = a.counsel_id
 		WHERE
 		        counsel_id = #{counselId}
     </select>

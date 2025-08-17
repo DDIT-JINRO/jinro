@@ -35,7 +35,8 @@ public class CounselingVO {
 	private String counselMethodStr;
 	private String memGenStr;
 	private String counselStatusStr;
-
+	private String crContent;
+	
 	// 검색 키워드
 	private String keyword;
 	private String status;
