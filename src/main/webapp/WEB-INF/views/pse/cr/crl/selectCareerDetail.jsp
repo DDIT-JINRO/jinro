@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/pse/cr/crl/selectCareerDetail.css">
+<link rel="stylesheet" href="/css/common/selectDetailPage.css">
 
 <section class="channel" data-error-message="${errorMessage}">
 	<div class="channel-title">

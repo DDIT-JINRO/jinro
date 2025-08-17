@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/ertds/univ/dpsrch/deptDetail.css">
+<link rel="stylesheet" href="/css/common/selectDetailPage.css">
 
 <section class="channel">
 	<div class="channel-title">
