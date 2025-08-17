@@ -27,15 +27,9 @@
 		FROM CONTACT C
 		JOIN MEMBER M ON C.MEM_ID = M.MEM_ID
 		<where>
-			C.CONTACT_ID IS NOT NULL
+			C.MEM_ID = #{memId}
 			<if test="keyword != null and keyword != ''">
 				AND C.CONTACT_TITLE LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="mine != null and mine != ''">
-				AND C.MEM_ID = #{mine}
-			</if>
-			<if test="open != null and open != ''">
-				AND C.CONTACT_IS_PUBLIC = 'Y'
 			</if>
 		</where>
 		ORDER BY C.CONTACT_ID DESC
@@ -49,15 +43,9 @@
 		SELECT COUNT(*)
 		FROM CONTACT
 		<where>
-			CONTACT_ID IS NOT NULL
+			MEM_ID = #{memId}
 			<if test="keyword != null and keyword != ''">
 				AND CONTACT_TITLE LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="mine != null and mine != '' and mine != 'anonymousUser'">
-				AND MEM_ID = #{mine}
-			</if>
-			<if test="open != null and open != ''">
-				AND CONTACT_IS_PUBLIC = 'Y'
 			</if>
 		</where>
 	</select>
