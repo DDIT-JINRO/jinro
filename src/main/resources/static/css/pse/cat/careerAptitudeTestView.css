@@ -90,8 +90,8 @@
   border-radius: 12px;
   padding: 20px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: 400px;
-  height: 320px;
+  width: 450px;
+  height: 360px;
   display: flex;
   flex-direction: column;
   align-items: center;
