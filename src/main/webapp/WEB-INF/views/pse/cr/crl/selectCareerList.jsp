@@ -37,7 +37,7 @@
 							</svg>
 					</div>
 					<div class="search-filter__input-wrapper">
-						<input class="search-filter__input" type="search" name="keyword" placeholder="내 북마크에서 검색" value="${param.keyword}">
+						<input class="search-filter__input" type="search" name="keyword" placeholder="직업 목록에서 검색" value="${param.keyword}">
 						<button class="search-filter__button" type="submit">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
 									<path fill-rule="evenodd"

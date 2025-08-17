@@ -36,7 +36,7 @@
 							<svg class="search-filter__select-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 								<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>
 						</div>
-						<input class="search-filter__input" type="search" name="keyword" placeholder="내 북마크에서 검색" value="${param.keyword}">
+						<input class="search-filter__input" type="search" name="keyword" placeholder="추천 직업에서 검색" value="${param.keyword}">
 						<button class="search-filter__button" type="submit">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
 								<path fill-rule="evenodd"
