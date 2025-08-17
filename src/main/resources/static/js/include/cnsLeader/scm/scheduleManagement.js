@@ -3,6 +3,12 @@
 	var calendarInstance = null; // 전역 변수로 선언
 	var selectedDate = null;
 
+	
+	document.getElementById("btn-search").addEventListener("click", function() {
+	    const selectedDate = document.querySelector('.fc-day.selected')?.dataset.date || new Date().toISOString().slice(0, 10);
+	    selectCounselSchedules(selectedDate);
+	});
+	
 	function initCalendar() {
 		var calendarEl = document.getElementById('calendar');
 		if (!calendarEl) {
@@ -146,9 +152,6 @@
 	        renderPagination(0, pageSize, 1);
 	    });
 		
-		document.getElementById("btn-search").addEventListener("click",function(){
-			selectCounselSchedules(selectedDate);
-		})
 	}
 	window.selectCounselSchedules = selectCounselSchedules;
 	// 비동기 로딩된 JSP에서도 바로 실행
