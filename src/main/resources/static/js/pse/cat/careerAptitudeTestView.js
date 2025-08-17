@@ -54,44 +54,57 @@ const cardData = {
 	}]
 };
 
-const tabs = document.querySelectorAll(".pse-cat-tab");
+// ⭐ 수정: BEM 클래스명으로 선택자 변경
+const tabs = document.querySelectorAll(".test-intro__tab");
 const cardGrid = document.getElementById("cardGrid");
 
+// 카드 목록을 화면에 렌더링하는 함수
 function renderCards(type) {
 	cardGrid.innerHTML = "";
 	const cards = cardData[type];
 	cards.forEach(card => {
 		const buttonHTML = window.isLoggedIn
-			? `<button onclick="startTest(${card.type}, '${card.title}')">검사 시작</button>`
-			: `<button onclick="logReq()">검사 시작</button>`;
+			? `<button class="test-card__button" onclick="startTest(${card.type}, '${card.title}')">검사 시작</button>`
+			: `<button class="test-card__button" onclick="logReq()">검사 시작</button>`;
 
+		// ⭐ 수정: 카드 HTML 내부 클래스명을 모두 BEM 방식으로 변경
 		const cardHTML = `
-		    <div class="pse-cat-card">
-		      <div class="pse-cat-card-icon"><img alt="" src="${card.img}"></div>
-		      <div class="pse-cat-card-title">${card.title}</div>
-		      <div class="pse-cat-card-desc">${card.desc}</div>
-		      <div class="pse-cat-card-time">평균 소요시간 : ${card.time}</div>
+		    <div class="test-card">
+		      <div class="test-card__icon"><img alt="" src="${card.img}"></div>
+		      <h3 class="test-card__title">${card.title}</h3>
+		      <p class="test-card__description">${card.desc}</p>
+		      <span class="test-card__meta">평균 소요시간 : ${card.time}</span>
 		      ${buttonHTML}
 		    </div>
 		  `;
-
 		cardGrid.insertAdjacentHTML("beforeend", cardHTML);
 	});
-
-	tabs.forEach(tab => {
-		tab.addEventListener("click", () => {
-
-			tabs.forEach(t => t.classList.remove("active"));
-			tab.classList.add("active");
-
-
-			const type = tab.dataset.type;
-			renderCards(type);
-		});
-	});
 }
-renderCards("student");
 
+// 탭 클릭 이벤트를 설정하는 함수
+function setupTabs() {
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            // 모든 탭에서 active 클래스 제거
+            tabs.forEach(t => t.classList.remove("test-intro__tab--active"));
+            // 클릭된 탭에만 active 클래스 추가
+            tab.classList.add("test-intro__tab--active");
+
+            // 데이터 타입에 맞는 카드 렌더링
+            const type = tab.dataset.type;
+            renderCards(type);
+        });
+    });
+}
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', () => {
+    renderCards("student"); // 기본으로 학생용 카드 표시
+    setupTabs(); // 탭 이벤트 리스너 설정
+});
+
+
+// 검사 시작 함수 (로그인 시)
 function startTest(type, title) {
 
 	axios.post("/admin/las/careerAptitudeTest.do", {
@@ -104,17 +117,16 @@ function startTest(type, title) {
 			const height = 800;
 			const left = window.screenX + (window.outerWidth - width) / 2;
 			const top = window.screenY + (window.outerHeight - height) / 2;
-
 			window.open(`http://localhost:5173/aptiTest/${type}`, title, `width=${width},height=${height},left=${left},top=${top},resizable=no`);
 		})
 		.catch(error => {
 			console.error("요청 실패:", error);
 			alert("검사 시작에 실패했습니다.");
 		});
-
 }
+
+// 로그인 필요 알림 함수 (비로그인 시)
 function logReq() {
-
-	location.href = "/error/logReq";
-
+	alert("로그인이 필요한 서비스입니다.");
+	location.href = "/login";
 }

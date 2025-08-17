@@ -1,32 +1,33 @@
 @charset "UTF-8";
-
-.pse-cat-container {
-  width: 90%;
-  max-width: 1000px;
-  margin: 40px auto;
+/* ==========================================================================
+   Block: Test Intro
+   ========================================================================== */
+.test-intro {
   text-align: center;
 }
 
-.pse-cat-main-title {
+.test-intro__title {
   font-size: 26px;
   color: #4254F4;
+  margin-top: 0;
   margin-bottom: 10px;
 }
 
-.pse-cat-sub-title {
+.test-intro__subtitle {
   font-size: 20px;
   font-weight: 600;
+  margin-top: 0;
   margin-bottom: 20px;
 }
 
-.pse-cat-description {
+.test-intro__description {
   font-size: 14px;
   color: #555;
   line-height: 1.6;
   margin-bottom: 40px;
 }
 
-.pse-cat-icon-section {
+.test-intro__features {
   display: flex;
   justify-content: center;
   gap: 30px;
@@ -34,7 +35,7 @@
   flex-wrap: wrap;
 }
 
-.pse-cat-icon-item {
+.test-intro__feature-item {
   padding: 20px;
   border-radius: 100px;
   width: 180px;
@@ -48,24 +49,15 @@
   line-height: 1.4;
   text-align: center;
 }
+.test-intro__feature-item--pink { background: #FFB7C5; }
+.test-intro__feature-item--blue { background: #B4C8F7; }
+.test-intro__feature-item--green { background: #B9E6B9; }
 
-.pse-cat-icon-item.pink {
-  background: #FFB7C5;
-}
-
-.pse-cat-icon-item.blue {
-  background: #B4C8F7;
-}
-
-.pse-cat-icon-item.green {
-  background: #B9E6B9;
-}
-
-.pse-cat-tab-wrapper {
+.test-intro__tabs {
   margin: 40px 0;
 }
 
-.pse-cat-tab {
+.test-intro__tab {
   background: white;
   border: 2px solid #C5C9F9;
   color: #7881f5;
@@ -77,12 +69,12 @@
   transition: background 0.3s;
 }
 
-.pse-cat-tab.active {
+.test-intro__tab--active {
   background: #7881f5;
   color: white;
 }
 
-.pse-cat-card-grid {
+.test-intro__card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   justify-items: center;
@@ -90,7 +82,10 @@
   margin-top: 30px;
 }
 
-.pse-cat-card {
+/* ==========================================================================
+   Block: Test Card
+   ========================================================================== */
+.test-card {
   border: 1px solid #D9D9D9;
   border-radius: 12px;
   padding: 20px;
@@ -101,42 +96,39 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 
-.pse-cat-card:hover {
+.test-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.pse-cat-card-icon {
-  font-size: 32px;
+.test-card__icon img {
+  width: 70px;
   margin-bottom: 10px;
 }
 
-.pse-cat-card-icon img {
-  width: 70px;
-}
-
-.pse-cat-card-title {
+.test-card__title {
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin: 0 0 8px 0;
 }
 
-.pse-cat-card-desc {
+.test-card__description {
   font-size: 14px;
   color: #666;
   margin-bottom: 10px;
   padding: 0 30px;
 }
 
-.pse-cat-card-time {
+.test-card__meta {
   font-size: 13px;
   color: #999;
   margin-bottom: 10px;
 }
 
-.pse-cat-card button {
+.test-card__button {
   background-color: #7881f5;
   color: white;
   padding: 10px 20px;
@@ -147,6 +139,68 @@
   transition: background 0.3s ease;
 }
 
-.pse-cat-card button:hover {
+.test-card__button:hover {
   background-color: #2f3abf;
+}
+
+/* ==========================================================================
+   반응형 스타일
+   ========================================================================== */
+
+/* 태블릿 (1024px 이하) */
+@media (max-width: 1024px) {
+    .test-intro__card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+
+    .test-card {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+/* 모바일 (768px 이하) */
+@media (max-width: 768px) {
+    .sub-nav__links {
+        flex-wrap: wrap; /* 공간 부족 시 줄바꿈 */
+    }
+    .test-intro__title { font-size: 22px; }
+    .test-intro__subtitle { font-size: 18px; }
+    .test-intro__description { font-size: 13px; }
+
+    .test-intro__features {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 60px;
+    }
+    
+    .test-intro__feature-item {
+      width: 80%;
+      max-width: 250px;
+      height: auto;
+      padding: 15px;
+    }
+
+    .test-intro__tabs {
+        display: flex;
+        justify-content: center;
+    }
+    .test-intro__tab {
+        flex: 1;
+        margin: 0 5px;
+    }
+
+    .test-intro__card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 15px;
+    }
+    .test-card {
+        width: 100%;
+        height: auto;
+        padding: 25px;
+    }
+    .test-card__description {
+        padding: 0;
+    }
 }
