@@ -7,7 +7,7 @@
 <html>
 <head>
 <link rel="shortcut icon" href="/images/crppvc.png">
-<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/userCommon.css">
 <link rel="stylesheet" href="/css/footer.css">
 <link rel="stylesheet" href="/css/channel.css">
 <link rel="stylesheet" href="/css/pagenation.css">
