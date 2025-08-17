@@ -25,6 +25,9 @@
 
 <div>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<h3 class="page-title-bar__title">진로 심리검사</h3>
+		</div>
 		<div class="public-wrapper-main">
 			
 			<div class="test-intro">
