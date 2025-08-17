@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const fn_init = () => {
-	const banner = document.querySelector('.main-loadmap-banner');
+	const banner = document.querySelector('.main-banner');
 	banner.classList.add('animate-in');
 
 	// 로드맵 바로가기 버튼

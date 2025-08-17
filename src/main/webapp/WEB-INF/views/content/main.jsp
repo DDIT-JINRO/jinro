@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/css/main.css" />
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <div class="mainContainer">
-	<!-- Trending Strip: 헤더와 메인 사이 -->
+		<!-- Trending Strip: 헤더와 메인 사이 -->
 	<div id="trending-strip" class="trending-strip" role="region" aria-label="인기 북마크/게시글 TOP5">
 	  <!-- 직업 -->
 	  <section class="trend-widget" data-endpoint="/bookmark/top?categoryId=G03004&limit=5" aria-label="직업 북마크 TOP5">
@@ -157,113 +157,94 @@
 		        </c:if>
 		    </div>
 		</div>
-	</section>
-	<section class="main-event-banner">
-		<div class="center-jr">
-			<p class="main-event-title">Career Path</p>
+		<div class="main-banner__visuals">
+			<img src="/images/main/loadMapIcon-board.png" class="main-banner__float-icon main-banner__float-icon--1" />
+			<img src="/images/main/loadMapIcon-charactor.png" class="main-banner__float-icon main-banner__float-icon--char" />
+			<img src="/images/main/loadMapIcon-book.png" class="main-banner__float-icon main-banner__float-icon--2" />
+			<img src="/images/main/loadMapIcon-book2.png" class="main-banner__float-icon main-banner__float-icon--3" />
+			<img src="/images/main/loadMapIcon-chart.png" class="main-banner__float-icon main-banner__float-icon--4" />
+			<img src="/images/main/loadMapIcon-cogwheel.png" class="main-banner__float-icon main-banner__float-icon--5" />
+			<img src="/images/main/loadMapIcon-lamp.png" class="main-banner__float-icon main-banner__float-icon--6" />
+			<img src="/images/main/loadMapIcon-reading_glasses.png" class="main-banner__float-icon main-banner__float-icon--7" />
 		</div>
-		<div class="center-jr">
-			<p class="main-event-sub-bold">도전</p>
-			<p class="main-event-sub">하는 순간,&nbsp;</p>
-			<p class="main-event-sub-bold">성장</p>
-			<p class="main-event-sub">의 기회가 시작됩니다.</p>
-			<p class="main-event-sub-bold">공모전·대외활동·인턴십</p>
-			<p class="main-event-sub">을 통해 새로운 길을 열어보세요.</p>
-		</div>
-		<div class="main-slider">
-			<div class="main-slides">
-				<a href="#">
-					<img src="images/main/배너테스트1.png" alt="img1" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트2.png" alt="img2" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트3.png" alt="img3" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트4.png" alt="img4" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트5.png" alt="img5" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트6.png" alt="img6" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트1.png" alt="img1" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트2.png" alt="img2" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트3.png" alt="img3" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트4.png" alt="img4" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트5.png" alt="img5" class="main-event-bannerImg" />
-				</a>
-				<a href="#">
-					<img src="images/main/배너테스트6.png" alt="img6" class="main-event-bannerImg" />
-				</a>
-			</div>
-		</div>
-	</section>
-	<section class="main-contents-section">
-		<div class="main-contents-flex">
-			<div class="main-contents-card">
-				<p class="main-contents-title">직업 이상형 월드컵</p>
-				<div class="content-box">
-					<div class="fixed-image">
-						<img src="/images/main/charactor1.png" alt="캐릭터" class="charactor-img1" /> <img alt="" src="/images/main/charactor4.png" class="charactor-img3">
-					</div>
-					<div class="text-content">
-						<p>
-							총 64개의 직업들 중<br />자신이 선호하는 직업이 무엇인지,
-						</p>
-						<p>
-							다른 사람들의 선호 직업은<br />무엇인지 확인할 수 있습니다
-						</p>
-						<button class="text-content-btn" id="worldcupBtn">직업 이상형 월드컵</button>
-					</div>
-				</div>
-			</div>
-			<div class="main-contens-card">
-				<p class="main-contents-title">진로 심리 검사</p>
-				<div class="content-box">
-					<div class="fixed-image">
-						<img src="/images/main/charactorChalsak.png" alt="캐릭터" class="charactor-img1Sec" /> <img src="/images/main/charactor3.png" alt="캐릭터" class="charactor-img2" />
-					</div>
-					<div class="text-content">
-						<p>
-							여러 검사들을 통해<br /> 나의 직업 성향과 특성을 이해하고,
-						</p>
-						<p>
-							자신이 선호하는 직업이 무엇인지,<br /> 자신에게 적합한 진로를 탐색해 보세요
-						</p>
-						<button class="text-content-btn" onclick="location.href='/pse/cat/careerAptitudeTest.do'">진로 심리 검사</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+	</div>
+</section>
 
-	<section class="main-youtube-section">
-		<a href="/main/youtubeJsp">유튜브 API 확인 </a>
-		<div class="section-header">
-			<p id="typing-js" class="typing-js"></p>
+<section class="feature-slider">
+	<div class="feature-slider__header">
+		<h2 class="feature-slider__title">Career Path</h2>
+		<p class="feature-slider__subtitle">
+			우리는 <strong>진로와 진학, 취업</strong>의 모든 과정을 지원합니다. 자신의 꿈을 이룰 수 있도록 다양한 정보를 제공합니다
+		</p>
+	</div>
+	<div class="feature-slider__container">
+		<div class="feature-slider__slides">
+			<!-- 원본 이미지들 -->
+			<a href="#"><img src="images/main/배너테스트1.png" alt="배너1" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트2.png" alt="배너2" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트3.png" alt="배너3" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트4.png" alt="배너4" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트5.png" alt="배너5" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트6.png" alt="배너6" class="feature-slider__image" /></a>
+			
+			<!-- ⭐ 무한 반복을 위한 복제본들 -->
+			<a href="#"><img src="images/main/배너테스트1.png" alt="배너1" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트2.png" alt="배너2" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트3.png" alt="배너3" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트4.png" alt="배너4" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트5.png" alt="배너5" class="feature-slider__image" /></a>
+			<a href="#"><img src="images/main/배너테스트6.png" alt="배너6" class="feature-slider__image" /></a>
 		</div>
-		<div class="card-list">
-			<div class="main-card">
-				<iframe class="youtube-iframe" width="300" height="215" src="https://www.youtube.com/embed/U5GU0uoKEUs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""> </iframe>
+	</div>
+</section>
+
+<section class="promo-section">
+	<div class="promo-section__inner">
+		<div class="promo-card">
+			<h3 class="promo-card__title">직업 이상형 월드컵</h3>
+			<div class="promo-card__body">
+				<div class="promo-card__visuals">
+					<img src="/images/main/charactor1.png" alt="캐릭터" class="promo-card__character promo-card__character--1" />
+					<img src="/images/main/charactor4.png" alt="캐릭터" class="promo-card__character promo-card__character--2" />
+				</div>
+				<div class="promo-card__text-content">
+					<p>총 64개의 직업들 중<br />자신이 선호하는 직업이 무엇인지,</p>
+					<p>다른 사람들의 선호 직업은<br />무엇인지 확인할 수 있습니다</p>
+					<button class="promo-card__button" id="worldcupBtn">직업 이상형 월드컵</button>
+				</div>
 			</div>
-			<div class="main-card"></div>
-			<div class="main-card"></div>
-			<div class="main-card"></div>
 		</div>
-	</section>
-</div>
+		<div class="promo-card">
+			<h3 class="promo-card__title">진로 심리 검사</h3>
+			<div class="promo-card__body">
+				<div class="promo-card__visuals">
+					<img src="/images/main/charactorChalsak.png" alt="캐릭터" class="promo-card__character promo-card__character--3" />
+					<img src="/images/main/charactor3.png" alt="캐릭터" class="promo-card__character promo-card__character--4" />
+				</div>
+				<div class="promo-card__text-content">
+					<p>여러 검사들을 통해<br /> 나의 직업 성향과 특성을 이해하고,</p>
+					<p>자신이 선호하는 직업이 무엇인지,<br /> 자신에게 적합한 진로를 탐색해 보세요</p>
+					<button class="promo-card__button" onclick="location.href='/pse/cat/careerAptitudeTest.do'">진로 심리 검사</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="content-showcase content-showcase--youtube">
+	<a href="/main/youtubeJsp">유튜브 API 확인 </a>
+	<div class="content-showcase__header">
+		<h2 id="typing-js" class="content-showcase__title typing-js"></h2>
+	</div>
+	<div class="content-showcase__list">
+		<div class="content-card">
+			<iframe class="content-card__video" width="300" height="215" src="https://www.youtube.com/embed/U5GU0uoKEUs" frameborder="0" allowfullscreen></iframe>
+		</div>
+		<div class="content-card"></div>
+		<div class="content-card"></div>
+		<div class="content-card"></div>
+	</div>
+</section>
+
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 <script src="/js/content/main.js"></script>
