@@ -1,8 +1,5 @@
-// FullCalendar가 이미 로드되어 있는지 확인
-if (typeof FullCalendar !== 'undefined') {
-
-	let calendarInstance = null; // 전역 변수로 선언
-	let selectedDate = null;
+	var calendarInstance = null; // 전역 변수로 선언
+	var selectedDate = null;
 
 	function initCalendar() {
 		var calendarEl = document.getElementById('calendar');
@@ -104,13 +101,10 @@ if (typeof FullCalendar !== 'undefined') {
 				console.error("상담 데이터 로드 실패:", error);
 			});
 	}
-
 	// 비동기 로딩된 JSP에서도 바로 실행
-	initCalendar();
-
-} else {
-	console.error("FullCalendar 라이브러리가 로드되지 않았습니다.");
-}
+	setTimeout(function() {
+	    initCalendar();
+	}, 100);
 
 // 나이 반환
 function calculateAge(birthDate) {
