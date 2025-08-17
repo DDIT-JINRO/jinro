@@ -1,18 +1,6 @@
 // 학과 디테일 페이지 JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 상세보기 버튼 이벤트 리스너
-    const detailBtn = document.querySelector('.dept-detail-btn');
-    if (detailBtn) {
-        detailBtn.addEventListener('click', handleDetailClick);
-    }
-
-    // 이미지 로드 에러 처리
-    const chartImages = document.querySelectorAll('.dept-chart-image');
-    chartImages.forEach(img => {
-        img.addEventListener('error', handleImageError);
-    });
-
     // 스크롤 애니메이션 초기화
     initScrollAnimations();
 
@@ -20,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCharts();
 	
 	// 이벤트 추가
-	document.querySelectorAll('.bookmark-btn').forEach(button => {
+	document.querySelectorAll('.bookmark-button').forEach(button => {
 		button.addEventListener('click', function(event) {
 			event.preventDefault();
 			// 함수 전달
@@ -39,7 +27,7 @@ const handleBookmarkToggle = (button) => {
 	const bmTargetId = button.dataset.targetId;
 
 	// 현재 버튼이 'active' 클래스를 가지고 있는지 확인
-	const isBookmarked = button.classList.contains('active');
+	const isBookmarked = button.classList.contains('is-active');
 	const data = {
 		bmCategoryId: bmCategoryId,
 		bmTargetId: bmTargetId
@@ -63,7 +51,7 @@ const handleBookmarkToggle = (button) => {
 		.then(data => {
 			if (data.success) {
 				alert(data.message);
-				button.classList.toggle('active');
+				button.classList.toggle('is-active');
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');
 			}
@@ -98,55 +86,6 @@ function handleImageError(event) {
         font-size: 16px;
     `;
     container.appendChild(fallbackText);
-}
-
-/**
- * 토스트 메시지 표시
- */
-function showToast(message, type = 'info') {
-    // 기존 토스트 제거
-    const existingToast = document.querySelector('.toast-message');
-    if (existingToast) {
-        existingToast.remove();
-    }
-    
-    // 새 토스트 생성
-    const toast = document.createElement('div');
-    toast.className = `toast-message toast-${type}`;
-    toast.textContent = message;
-    
-    // 스타일 적용
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 12px 20px;
-        border-radius: 6px;
-        color: white;
-        font-weight: 500;
-        z-index: 10000;
-        animation: slideInRight 0.3s ease-out;
-    `;
-    
-    // 타입별 배경색
-    const colors = {
-        success: '#4CAF50',
-        error: '#F44336',
-        info: '#2196F3',
-        warning: '#FF9800'
-    };
-    toast.style.backgroundColor = colors[type] || colors.info;
-    
-    // DOM에 추가
-    document.body.appendChild(toast);
-    
-    // 3초 후 제거
-    setTimeout(() => {
-        if (toast.parentElement) {
-            toast.style.animation = 'slideOutRight 0.3s ease-in';
-            setTimeout(() => toast.remove(), 300);
-        }
-    }, 3000);
 }
 
 /**
@@ -479,7 +418,7 @@ function initScrollAnimations() {
     }, observerOptions);
     
     // 애니메이션 대상 요소들
-    const animateElements = document.querySelectorAll('.dept-content-item');
+    const animateElements = document.querySelectorAll('.detail-content__section');
     animateElements.forEach((el, index) => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
@@ -499,37 +438,3 @@ function smoothScrollTo(element) {
         });
     }
 }
-
-// CSS 애니메이션 정의 (동적 추가)
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(300px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(300px);
-            opacity: 0;
-        }
-    }
-    
-    .dept-tag:hover,
-    
-    .dept-detail-btn:active,
-    .dept-bookmark-btn:active {
-        transform: scale(0.95);
-    }
-`;
-document.head.appendChild(style);
