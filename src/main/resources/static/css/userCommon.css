@@ -555,6 +555,7 @@ html, body {
    반응형 스타일
    ========================================================================== */
 @media (max-width: 1024px) {
+	/* 탑바 */
 	.main-nav__item--priority-low {
 		display: none;
 	}
@@ -567,23 +568,25 @@ html, body {
 	.header {
 		padding: 0 3%;
 	}
+	
+	/* 서브메뉴 */
 	.mega-menu__container {
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 0 20px;
-		display: grid; /* flex에서 grid로 변경 */
-		grid-template-columns: 1fr 1fr; /* 2열 그리드 */
+		display: grid;
+		grid-template-columns: 1fr 1fr;
 		gap: 20px;
 	}
 	.mega-menu__row {
-		display: contents; /* row 구조 무시하고 직접 grid에 배치 */
+		display: contents;
 	}
 	.mega-menu__category {
-		/* flex 관련 속성 제거 */
 		max-width: none;
 		min-width: auto;
 	}
 	
+	/* 푸터 */
 	.footer__info {
 		flex-basis: 40%;
 	}
@@ -596,6 +599,7 @@ html, body {
 }
 
 @media ( max-width : 768px) {
+	/* 탑바 */
 	.header {
 		padding: 0 15px;
 	}
@@ -612,6 +616,8 @@ html, body {
 		width: 28px;
 		height: 28px;
 	}
+	
+	/* 모바일 메뉴 */
 	.overlay {
 		display: block;
 		position: fixed;
@@ -707,9 +713,13 @@ html, body {
 		font-size: 16px;
 		padding: 10px;
 	}
+	
+	/* 서브 메뉴 */
 	.mega-menu {
 		display: none;
 	}
+	
+	/* 플로팅바 */
 	.floating-bar {
 		right: 10px;
 		gap: 10px;
@@ -720,6 +730,7 @@ html, body {
 		padding: 8px;
 	}
 	
+	/* 푸터 */
 	.footer {
 		padding-top: 40px;
 		text-align: center;
