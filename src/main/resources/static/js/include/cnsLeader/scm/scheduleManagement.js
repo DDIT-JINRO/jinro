@@ -1,6 +1,6 @@
+	var calendarInstance = null; // 전역 변수로 선언
 (function() {
 
-	var calendarInstance = null; // 전역 변수로 선언
 	var selectedDate = null;
 
 	
@@ -155,7 +155,9 @@
 	}
 	window.selectCounselSchedules = selectCounselSchedules;
 	// 비동기 로딩된 JSP에서도 바로 실행
-	initCalendar();
+	setTimeout(function() {
+	    initCalendar();
+	}, 100);
 	
 	function renderPagination({ startPage, endPage, currentPage, totalPages,counselReqDatetime }) {
 		let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
@@ -179,7 +181,6 @@ function counselDetail(counselId) {
     axios.get('/api/cnsld/counselDetail.do', { params: { counselId } })
         .then(response => {
             const data = response.data;
-            console.log("API 응답 데이터:", data); // 디버깅용 로그
 
             // 1. 상담사 정보
                 document.querySelector('.info-value-counselName').textContent = data.counselName || "-";

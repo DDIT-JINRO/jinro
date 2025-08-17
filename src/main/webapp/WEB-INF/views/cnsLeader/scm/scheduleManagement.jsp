@@ -1,13 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<link
-href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css'
-rel='stylesheet' />
+<script type="text/javascript" src="/js/com/fullcalendar.global.min.js"></script>
 <link rel="stylesheet" href="/css/cnsLeader/scm/scheduleManagement.css">
-<!-- 스크립트 작성해주시면 됩니다 (유의점 : DOMContentLoaded x) -->
-<script>
-	
-</script>
 <!-- 제목입니다 -->
 <h3>스케줄 관리</h3>
 
@@ -133,12 +127,6 @@ rel='stylesheet' />
 		</div>
 	</div>
 </div>
-
-<script
-	src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-
-<script
-	src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ko.js'></script>
-
+	
 <script type="text/javascript"
 	src="/js/include/cnsLeader/scm/scheduleManagement.js"></script>
