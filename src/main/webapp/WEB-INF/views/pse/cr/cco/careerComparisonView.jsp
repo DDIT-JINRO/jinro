@@ -18,6 +18,10 @@
 
 <div>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<h3 class="page-title-bar__title">직업 비교</h3>
+		</div>
+	
 		<div class="table-responsive-wrapper">
 			<table class="comparison-table">
 				<thead class="comparison-table__header">
