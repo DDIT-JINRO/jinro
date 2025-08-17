@@ -2,7 +2,7 @@ const sortOrders = {};
 
 document.addEventListener('DOMContentLoaded', function() {
     // 모든 북마크 버튼
-    const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
+    const bookmarkButtons = document.querySelectorAll('.bookmark-button');
 
     // 이벤트 추가
     bookmarkButtons.forEach(button => {
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    const sortableHeaders = document.querySelectorAll('.sortable-header');
+    const sortableHeaders = document.querySelectorAll('.comparison-table__category-header--sortable');
     sortableHeaders.forEach(header => {
         header.addEventListener('click', () => {
             const sortKey = header.dataset.sortKey;
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     highlightBestValues();
 
-    document.querySelectorAll('.close-btn').forEach(button => {
+    document.querySelectorAll('.job-card-condensed__remove').forEach(button => {
         button.addEventListener('click', handleRemoveJobColumn);
     });
 });
@@ -95,7 +95,7 @@ async function sortTableByColumn(sortKey, clickedHeader) {
 	
     // 3. 컬럼(열) 데이터를 추출하여 배열로 만듭니다.
     const columns = [];
-    const jobHeaders = Array.from(headerRow.querySelectorAll('th:not(:first-child)'));
+    const jobHeaders = Array.from(headerRow.querySelectorAll('.comparison-table__job-col-header'));
 
     jobHeaders.forEach((jobHeader, index) => {
         const columnData = {
@@ -198,13 +198,13 @@ function parseSortValue(text, key) {
  */
 function updateSortIndicator(activeHeader, order) {
     // 모든 헤더에서 활성 클래스와 아이콘 초기화
-    document.querySelectorAll('.sortable-header').forEach(header => {
-        header.classList.remove('sort-active');
+    document.querySelectorAll('.comparison-table__category-header--sortable').forEach(header => {
+        header.classList.remove('comparison-table__category-header--sort-active');
         header.textContent = header.textContent.replace(/ [↑↓]$/, ' ↕');
     });
 
     // 현재 클릭된 헤더에만 활성 클래스 추가
-    activeHeader.classList.add('sort-active');
+    activeHeader.classList.add('comparison-table__category-header--sort-active');
     
     // 정렬 방향 아이콘 변경
     const arrow = order === 'desc' ? ' ↓' : ' ↑';
@@ -215,9 +215,9 @@ function updateSortIndicator(activeHeader, order) {
  * 각 비교 항목(행)에서 가장 높은 값을 찾아 'highlight-best' 클래스를 적용합니다.
  */
 function highlightBestValues() {
-    const tbody = document.querySelector('.comparison-table tbody');
+    const tbody = document.querySelector('.comparison-table__body');
     // 정렬 가능한 행들만 대상으로 합니다.
-    const sortableRows = tbody.querySelectorAll('.sortable-header');
+    const sortableRows = tbody.querySelectorAll('.comparison-table__category-header--sortable');
 
     sortableRows.forEach(header => {
         const sortKey = header.dataset.sortKey;
@@ -239,10 +239,10 @@ function highlightBestValues() {
         cells.forEach(cell => {
              const value = parseSortValue(cell.textContent.trim(), sortKey);
              if (value === maxValue) {
-                 cell.classList.add('highlight-best');
+                 cell.classList.add('comparison-table__cell--highlighted');
              } else {
                  // 다른 정렬을 위해 이전에 적용된 클래스가 있다면 제거
-                 cell.classList.remove('highlight-best');
+                 cell.classList.remove('comparison-table__cell--highlighted');
              }
         });
     });
@@ -254,11 +254,11 @@ function highlightBestValues() {
  */
 function handleRemoveJobColumn(event) {
     // 1. 클릭된 버튼이 속한 헤더(th)를 찾습니다.
-    const headerCell = event.target.closest('th.job-card-header');
+    const headerCell = event.target.closest('.comparison-table__job-col-header');
     if (!headerCell) return;
 	
     // 2. 전체 직업 헤더 목록에서 현재 헤더의 인덱스(순서)를 찾습니다.
-    const allHeaderCells = Array.from(document.querySelectorAll('.comparison-table thead th.job-card-header'));
+    const allHeaderCells = Array.from(document.querySelectorAll('.comparison-table__header .comparison-table__job-col-header'));
 	
 	if (allHeaderCells.length <= 2) {
 	    alert("비교를 위해 최소 2개의 직업이 필요합니다.");
@@ -273,7 +273,7 @@ function handleRemoveJobColumn(event) {
     headerCell.remove();
 
     // 4. 본문의 모든 행(tr)을 순회하며 해당 인덱스의 데이터(td)를 삭제합니다.
-    const dataRows = document.querySelectorAll('.comparison-table tbody tr');
+    const dataRows = document.querySelectorAll('.comparison-table__body .comparison-table__row');
     dataRows.forEach(row => {
         const cellToRemove = row.querySelectorAll('td')[columnIndex];
         if (cellToRemove) {
