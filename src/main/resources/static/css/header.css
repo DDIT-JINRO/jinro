@@ -1,5 +1,8 @@
 @charset "UTF-8";
 
+/* ==========================================================================
+   초기 설정
+   ========================================================================== */
 @font-face {
 	font-family: 'MyFont';
 	src: url('../fonts/BMDOHYEON_ttf.woff2') format('woff2');
@@ -14,6 +17,9 @@ html, body {
 	padding-top: 45px;
 }
 
+/* ==========================================================================
+   공통 레이아웃 설정
+   ========================================================================== */
 .public-wrapper {
 	max-width: 1160px;
 	width: 90%;
@@ -28,6 +34,121 @@ html, body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* ==========================================================================
+   플로팅 바
+   ========================================================================== */  
+.floating-bar {
+	position: fixed;
+	top: 30%;
+	right: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	z-index: 999;
+	transition: top 0.3s ease;
+}
+
+.floating-bar__button {
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	background-color: white;
+	border: 1px solid #eee;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	padding: 12px;
+	animation: slideDownFadeIn 0.4s forwards;
+	opacity: 0;
+	transform: translateY(-20px);
+	transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s ease;
+}
+
+@keyframes slideDownFadeIn {
+	0% {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.floating-bar__button:nth-child(1) {
+	animation-delay: 0s;
+}
+
+.floating-bar__button:nth-child(2) {
+	animation-delay: 0.1s;
+}
+
+.floating-bar__button:nth-child(3) {
+	animation-delay: 0.2s;
+}
+
+.floating-bar__button:hover {
+	transform: scale(0.95);
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.floating-bar__button img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+/* ==========================================================================
+   소메뉴 탭 설정
+   ========================================================================== */
+.tab-container {
+	display: flex;
+	position: relative;
+	border-bottom: 2px solid transparent;
+	font-size: 18px;
+}
+
+.tab-container::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background-color: black;
+	z-index: 0;
+}
+
+.tab {
+	flex: 1;
+	text-align: center;
+	padding: 15px 0;
+	cursor: pointer;
+	position: relative;
+	color: black;
+	z-index: 1;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.tab.active {
+	color: #6c75ff;
+	font-weight: 600;
+}
+
+.tab.active::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background-color: #6c75ff;
+	z-index: 2;
+}
+
+/* ==========================================================================
+   헤더 설정
+   ========================================================================== */
 .header {
 	display: flex;
 	justify-content: space-between;
@@ -321,111 +442,6 @@ html, body {
 .mega-menu__links a span:hover {
 	color: #fff;
 	text-decoration: underline;
-}
-
-.floating-bar {
-	position: fixed;
-	top: 30%;
-	right: 20px;
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	z-index: 999;
-	transition: top 0.3s ease;
-}
-@keyframes slideDownFadeIn {
-	0% {
-		opacity: 0;
-		transform: translateY(-20px);
-	}
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-.floating-bar__button {
-	width: 64px;
-	height: 64px;
-	border-radius: 50%;
-	background-color: white;
-	border: 1px solid #eee;
-	box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-	cursor: pointer;
-	padding: 12px;
-	animation: slideDownFadeIn 0.4s forwards;
-	opacity: 0;
-	transform: translateY(-20px);
-	transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s ease;
-}
-
-.floating-bar__button:nth-child(1) {
-	animation-delay: 0s;
-}
-
-.floating-bar__button:nth-child(2) {
-	animation-delay: 0.1s;
-}
-
-.floating-bar__button:nth-child(3) {
-	animation-delay: 0.2s;
-}
-
-.floating-bar__button:hover {
-	transform: scale(0.95);
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-}
-
-.floating-bar__button img {
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
-}
-
-.tab-container {
-	display: flex;
-	position: relative;
-	border-bottom: 2px solid transparent;
-	font-size: 18px;
-}
-
-.tab-container::after {
-	content: "";
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background-color: black;
-	z-index: 0;
-}
-
-.tab {
-	flex: 1;
-	text-align: center;
-	padding: 15px 0;
-	cursor: pointer;
-	position: relative;
-	color: black;
-	z-index: 1;
-	text-decoration: none;
-	font-weight: 500;
-}
-
-.tab.active {
-	color: #6c75ff;
-	font-weight: 600;
-}
-
-.tab.active::after {
-	content: "";
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background-color: #6c75ff;
-	z-index: 2;
 }
    
 .header__mobile-menu-trigger, .mobile-nav-panel, .overlay {

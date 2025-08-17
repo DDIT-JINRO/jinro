@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<link rel="stylesheet" href="/css/main.css" />
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
+<link rel="stylesheet" href="/css/main.css" />
 <div class="mainContainer">
 		<!-- Trending Strip: 헤더와 메인 사이 -->
 	<div id="trending-strip" class="trending-strip" role="region" aria-label="인기 북마크/게시글 TOP5">
@@ -246,5 +246,5 @@
 	</div>
 </section>
 
-<%@ include file="/WEB-INF/views/include/footer.jsp"%>
 <script src="/js/content/main.js"></script>
+<%@ include file="/WEB-INF/views/include/footer.jsp"%>

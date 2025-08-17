@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==========================================================================
-   Block: main Banner
+   메인 배너
    ========================================================================== */
 .main-banner {
 	width: 100%;
@@ -180,7 +180,7 @@
 }
 
 /* ==========================================================================
-   Block: Feature Slider
+   자동 슬라이더 배너
    ========================================================================== */
 .feature-slider {
 	padding: 80px 0;
@@ -324,7 +324,7 @@
 
 
 /* ==========================================================================
-   Block: Promo Section
+   이상형 월드컵, 진로 심리 검사 섹션 
    ========================================================================== */
 .promo-section {
 	padding: 80px 20px;
@@ -428,7 +428,7 @@
 }
 
 /* ==========================================================================
-   Block: Content Showcase (YouTube)
+   유튜브 섹션
    ========================================================================== */
 .content-showcase {
 	padding: 80px 20px;
@@ -459,7 +459,6 @@
 	justify-content: center;
 	flex-wrap: wrap;
 	gap: 24px;
-	max-width: 1200px;
 	margin: 0 auto;
 }
 
@@ -488,9 +487,8 @@
 /* ==========================================================================
    태블릿 반응형 스타일 (1024px 이하)
    ========================================================================== */
-/* 태블릿 반응형 스타일 (1024px 이하) - 수정된 부분만 */
 @media (max-width: 1024px) {
-	/* Main Banner */
+	/* 메인 배너 */
 	.main-banner {
 		height: 600px;
 	}
@@ -553,7 +551,7 @@
 		top: 65%;
 	}
 
-	/* Feature Slider */
+	/* 자동 슬라이더 배너 */
 	.feature-slider {
 		padding: 60px 0;
 	}
@@ -582,20 +580,20 @@
 		}
 	}
 
-	/* Promo Section */
+	/* 직업 이상형 월드컵, 진로 심리 검사 섹션 */
 	.promo-section {
-		padding: 60px 30px; /* 좌우 패딩 증가 */
+		padding: 60px 30px;
 	}
 	
 	.promo-section__inner {
 		gap: 30px;
-		flex-wrap: wrap; /* 화면이 좁아지면 세로로 배치 */
+		flex-wrap: wrap;
 		justify-content: center;
 	}
 	
 	.promo-card {
-		width: 100%; /* 태블릿에서는 100% 너비 */
-		max-width: 500px; /* 최대 너비 제한 */
+		width: 100%;
+		max-width: 500px;
 	}
 	
 	.promo-card__title {
@@ -618,9 +616,8 @@
 		padding: 11px 22px;
 	}
 	
-	/* 캐릭터 위치 조정 */
 	.promo-card__character--1 { 
-		left: -105px; /* 태블릿에서 더 안쪽으로 */
+		left: -105px;
 		width: 130px; 
 	}
 	.promo-card__character--2 { 
@@ -628,7 +625,7 @@
 		width: 160px; 
 	}
 	.promo-card__character--3 { 
-		right: -50px; /* 더 안쪽으로 */
+		right: -50px;
 		width: 70px; 
 	}
 	.promo-card__character--4 { 
@@ -636,7 +633,7 @@
 		width: 180px; 
 	}
 
-	/* Content Showcase */
+	/* 유튜브 섹션 */
 	.content-showcase {
 		padding: 60px 20px;
 	}
@@ -655,7 +652,7 @@
    모바일 반응형 스타일 (768px 이하)
    ========================================================================== */
 @media (max-width: 768px) {
-	/* Main Banner */
+	/* 메인 베너 */
 	.main-banner {
         height: fit-content;
         padding: 60px 0;
@@ -674,7 +671,7 @@
 	}
 	
 	.main-banner__visuals {
-		display: none; /* 장식용 아이콘 모바일에서 숨김 */
+		display: none;
 	}
 	
 	.main-banner__logo {
@@ -698,7 +695,7 @@
 		font-size: 16px;
 	}
 
-	/* Feature Slider */
+	/* 자동 슬라이더 배너 */
 	.feature-slider {
 		padding: 50px 0;
 	}
@@ -765,7 +762,7 @@
 		}
 	}
 
-	/* Promo Section */
+	/* 직업 이상형 월드컵, 진로 심리 검사 섹션 */
 	.promo-section {
 		padding: 50px 20px;
 	}
@@ -791,7 +788,7 @@
 	}
 	
 	.promo-card__visuals {
-		display: none; /* 모바일에서 캐릭터 숨김 */
+		display: none;
 	}
 	
 	.promo-card__text-content {
@@ -816,7 +813,7 @@
 		min-width: 180px;
 	}
 	
-	/* Content Showcase */
+	/* 유튜브 섹션 */
 	.content-showcase {
 		padding: 50px 15px;
 	}
