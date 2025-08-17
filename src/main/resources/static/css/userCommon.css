@@ -448,6 +448,112 @@ html, body {
 	display: none;
 }
 
+/* ==========================================================================
+   푸터 설정
+   ========================================================================== */
+.footer {
+	background-color: #f5f7fa;
+	padding: 60px 20px 0;
+	font-family: 'Noto Sans KR', sans-serif;
+	color: #333;
+}
+
+.footer__container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	max-width: 1200px;
+	margin: 0 auto;
+	gap: 40px;
+}
+
+.footer__info {
+	flex: 1 1 100%;
+	margin-bottom: 20px;
+}
+
+.footer__logo {
+	width: 140px;
+	margin-bottom: 15px;
+}
+
+.footer__description {
+	font-size: 14px;
+	line-height: 1.7;
+	color: #555;
+	max-width: 400px;
+}
+
+.footer__navigation {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 40px;
+	width: 100%;
+}
+
+.footer__nav-group {
+	flex: 1 1 200px;
+}
+
+.footer__nav-title {
+	font-size: 16px;
+	font-weight: 600;
+	margin-top: 0;
+	margin-bottom: 12px;
+}
+
+.footer__nav-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	font-size: 14px;
+	color: #555;
+}
+
+.footer__nav-item {
+	margin-bottom: 8px;
+}
+
+.footer__nav-link {
+	text-decoration: none;
+	color: #555;
+	transition: color 0.2s;
+}
+
+.footer__nav-link:hover {
+	color: #007bff;
+}
+
+.footer__bottom {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	text-align: center;
+	padding: 20px 0;
+	border-top: 1px solid #ddd;
+	margin-top: 30px;
+	font-size: 12px;
+}
+
+.footer__copyright {
+	margin: 5px 0;
+}
+
+.footer__socials a {
+	margin: 0 10px;
+	color: #555;
+	font-size: 18px;
+	transition: color 0.3s;
+}
+
+.footer__socials a:hover {
+	color: #007bff;
+}
+   
+/* ==========================================================================
+   반응형 스타일
+   ========================================================================== */
 @media (max-width: 1024px) {
 	.main-nav__item--priority-low {
 		display: none;
@@ -476,6 +582,16 @@ html, body {
 		/* flex 관련 속성 제거 */
 		max-width: none;
 		min-width: auto;
+	}
+	
+	.footer__info {
+		flex-basis: 40%;
+	}
+	.footer__navigation {
+		flex-basis: 50%;
+	}
+	.footer__nav-group {
+		flex-basis: calc(50% - 20px);
 	}
 }
 
@@ -602,5 +718,40 @@ html, body {
 		width: 50px;
 		height: 50px;
 		padding: 8px;
+	}
+	
+	.footer {
+		padding-top: 40px;
+		text-align: center;
+	}
+
+	.footer__container {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.footer__info,
+	.footer__navigation {
+		flex-basis: 100%;
+		width: 100%;
+	}
+	
+	.footer__logo {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	
+	.footer__description {
+		margin: auto;
+	}
+
+	.footer__nav-group {
+		flex-basis: 100%;
+		margin-bottom: 20px;
+	}
+	
+	.footer__bottom {
+		flex-direction: column-reverse;
+		gap: 15px;
 	}
 }
