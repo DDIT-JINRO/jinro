@@ -8,7 +8,6 @@
 <head>
 <link rel="shortcut icon" href="/images/crppvc.png">
 <link rel="stylesheet" href="/css/userCommon.css">
-<link rel="stylesheet" href="/css/pagenation.css">
 <link rel="stylesheet" href="/css/user-profile.css">
 <link rel="stylesheet" href="/css/chatModal.css">
 <script src="/js/axios.min.js"></script>
