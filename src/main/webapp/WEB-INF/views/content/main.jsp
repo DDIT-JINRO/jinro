@@ -2,6 +2,53 @@
 <link rel="stylesheet" href="/css/main.css" />
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <div class="mainContainer">
+	<!-- Trending Strip: 헤더와 메인 사이 -->
+	<div id="trending-strip" class="trending-strip" role="region" aria-label="인기 북마크/게시글 TOP5">
+	  <!-- 직업 -->
+	  <section class="trend-widget" data-endpoint="/bookmark/top?categoryId=G03004&limit=5" aria-label="직업 북마크 TOP5">
+	    <header class="trend-header">
+	      <span class="trend-title">직업 TOP</span>
+	    </header>
+	    <div class="trend-viewport" tabindex="0">
+	      <ul class="trend-roller" id="trend-roller-jobs" aria-live="polite"></ul>
+	    </div>
+	    <div class="trend-panel hidden" id="trend-panel-jobs"></div>
+	  </section>
+
+	  <!-- 대학 -->
+	  <section class="trend-widget" data-endpoint="/bookmark/top?categoryId=G03001&limit=5" aria-label="대학 북마크 TOP5">
+	    <header class="trend-header">
+	      <span class="trend-title">대학 TOP</span>
+	    </header>
+	    <div class="trend-viewport" tabindex="0">
+	      <ul class="trend-roller" id="trend-roller-unis" aria-live="polite"></ul>
+	    </div>
+	    <div class="trend-panel hidden" id="trend-panel-unis"></div>
+	  </section>
+
+	  <!-- 학과 -->
+	  <section class="trend-widget" data-endpoint="/bookmark/top?categoryId=G03006&limit=5" aria-label="학과 북마크 TOP5">
+	    <header class="trend-header">
+	      <span class="trend-title">학과 TOP</span>
+	    </header>
+	    <div class="trend-viewport" tabindex="0">
+	      <ul class="trend-roller" id="trend-roller-majors" aria-live="polite"></ul>
+	    </div>
+	    <div class="trend-panel hidden" id="trend-panel-majors"></div>
+	  </section>
+
+	  <!-- 커뮤니티 -->
+	  <section class="trend-widget" data-endpoint="/community/top5/main" aria-label="커뮤니티 게시글 TOP5">
+	    <header class="trend-header">
+	      <span class="trend-title">커뮤니티 TOP</span>
+	    </header>
+	    <div class="trend-viewport" tabindex="0">
+	      <ul class="trend-roller" id="trend-roller-community" aria-live="polite"></ul>
+	    </div>
+	    <div class="trend-panel hidden" id="trend-panel-community"></div>
+	  </section>
+	</div>
+
 	<section class="main-loadmap-banner">
 		<div class="banner-inner">
 			<div class="banner-left">

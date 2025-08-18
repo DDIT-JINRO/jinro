@@ -55,4 +55,7 @@ public interface ContentStatsMapper {
 
 	List<Map<String,Object>> roadmapCreateCompleteSummary(Map<String,Object> param);
 	List<Map<String,Object>> roadmapCreateCompleteDaily(Map<String,Object> param);
+
+	// 청소년/청년 커뮤니티 인기TOP5 -> 파라미터 : 카테고리번호 ccId (G09001, G09006)
+	List<Map<String,Object>> selectCommunityTop5PostsByMemBirth(Map<String, Object> param);
 }
