@@ -40,9 +40,7 @@
 						<input class="search-filter__input" type="search" name="keyword" placeholder="직업 목록에서 검색" value="${param.keyword}">
 						<button class="search-filter__button" type="submit">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-									<path fill-rule="evenodd"
-									d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd"
-								/>
+									<path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
 								</svg>
 						</button>
 					</div>
@@ -123,14 +121,14 @@
 				</c:when>
 				<c:otherwise>
 					<div class="content-list">
-					    <div class="content-list__header">
-				        	<span class="content-list__header-col content-list__header-col--main">직업명</span>
-					        <span class="content-list__header-col content-list__header-col--meta">직업 정보</span>
-					        <div class="content-list__actions">
-						        <span class="content-list__header-col content-list__header-col--bookmark">북마크</span>
-						        <span class="content-list__header-col content-list__header-col--compare">비교</span>
-					        </div>
-					    </div>
+						<div class="content-list__header">
+							<span class="content-list__header-col content-list__header-col--main">직업명</span>
+							<span class="content-list__header-col content-list__header-col--meta">직업 정보</span>
+							<div class="content-list__actions">
+								<span class="content-list__header-col content-list__header-col--bookmark">북마크</span>
+								<span class="content-list__header-col content-list__header-col--compare">비교</span>
+							</div>
+						</div>
 
 						<c:forEach var="jobs" items="${articlePage.content}">
 							<div class="content-list__item" data-job-id="${jobs.jobCode}">
@@ -194,36 +192,53 @@
 			<div class="pagination">
 				<c:url var="prevUrl" value="${articlePage.url}">
 					<c:param name="currentPage" value="${articlePage.startPage - 5}" />
-					<c:forEach var="p" items="${param}">
-						<c:if test="${p.key ne 'currentPage'}">
-							<c:forEach var="v" items="${p.value}">
-								<c:param name="${p.key}" value="${v}" />
-							</c:forEach>
-						</c:if>
+					<c:if test="${not empty param.status}">
+						<c:param name="status" value="${param.status}" />
+					</c:if>
+					<c:if test="${not empty param.keyword}">
+						<c:param name="keyword" value="${param.keyword}" />
+					</c:if>
+					<c:forEach var="jobLcl" items="${paramValues.jobLcls}">
+						<c:param name="jobLcls" value="${jobLcl}" />
+					</c:forEach>
+					<c:forEach var="jobSal" items="${paramValues.jobSals}">
+						<c:param name="jobSals" value="${jobSal}" />
 					</c:forEach>
 				</c:url>
 				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
+
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 					<c:url var="pageUrl" value="${articlePage.url}">
 						<c:param name="currentPage" value="${pNo}" />
-						<c:forEach var="p" items="${param}">
-							<c:if test="${p.key ne 'currentPage'}">
-								<c:forEach var="v" items="${p.value}">
-									<c:param name="${p.key}" value="${v}" />
-								</c:forEach>
-							</c:if>
+						<c:if test="${not empty param.status}">
+							<c:param name="status" value="${param.status}" />
+						</c:if>
+						<c:if test="${not empty param.keyword}">
+							<c:param name="keyword" value="${param.keyword}" />
+						</c:if>
+						<c:forEach var="jobLcl" items="${paramValues.jobLcls}">
+							<c:param name="jobLcls" value="${jobLcl}" />
+						</c:forEach>
+						<c:forEach var="jobSal" items="${paramValues.jobSals}">
+							<c:param name="jobSals" value="${jobSal}" />
 						</c:forEach>
 					</c:url>
 					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
 				</c:forEach>
+
 				<c:url var="nextUrl" value="${articlePage.url}">
 					<c:param name="currentPage" value="${articlePage.startPage + 5}" />
-					<c:forEach var="p" items="${param}">
-						<c:if test="${p.key ne 'currentPage'}">
-							<c:forEach var="v" items="${p.value}">
-								<c:param name="${p.key}" value="${v}" />
-							</c:forEach>
-						</c:if>
+					<c:if test="${not empty param.status}">
+						<c:param name="status" value="${param.status}" />
+					</c:if>
+					<c:if test="${not empty param.keyword}">
+						<c:param name="keyword" value="${param.keyword}" />
+					</c:if>
+					<c:forEach var="jobLcl" items="${paramValues.jobLcls}">
+						<c:param name="jobLcls" value="${jobLcl}" />
+					</c:forEach>
+					<c:forEach var="jobSal" items="${paramValues.jobSals}">
+						<c:param name="jobSals" value="${jobSal}" />
 					</c:forEach>
 				</c:url>
 				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
@@ -240,10 +255,7 @@
 		</div>
 		<button type="button" class="compare-popup__close-button" aria-label="닫기">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1E1E1E" width="28" height="28">
-				<path fill-rule="evenodd"
-					d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
-					clip-rule="evenodd"
-				/></svg>
+				<path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>
 		</button>
 	</header>
 	<div class="compare-popup__content">
