@@ -74,6 +74,12 @@
 	color: #666;
 	margin-top: 5px;
 }
+.feedback-form__readonly-text {
+    font-size: 1rem;
+    color: #333;
+    padding: 8px 0;
+    display: inline-block;
+}
 
 /* --- 입력 필드 그룹 --- */
 .input-group {
