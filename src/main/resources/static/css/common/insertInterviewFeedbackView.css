@@ -367,6 +367,26 @@
 	border-top: 1px solid #eee;
 }
 
+.search-modal__page-button {
+	padding: 8px 16px;
+	border: 1px solid #ddd;
+	background-color: white;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 0.9rem;
+	transition: all 0.2s ease;
+}
+
+.search-modal__page-button:hover:not(:disabled) {
+	background-color: #f5f5f5;
+	border-color: #ccc;
+}
+
+.search-modal__page-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
 .search-modal__actions {
 	display: flex;
 	gap: 12px;
