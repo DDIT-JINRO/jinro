@@ -47,6 +47,61 @@ var calendarInstance = null; // 전역 변수로 선언
 			},
 			// 월이 변경될 때마다 호출되는 이벤트
 			datesSet: function(info) {
+				const colorPalette = [
+				    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+				    '#FF9F40', '#E7E9ED', '#A0A2A6', '#C751A5', '#7F3C8D'
+				];
+				// 각 상담사에게 할당된 색상을 저장할 객체
+				const assignedColors = {};
+				let colorIndex = 0;
+				
+				const title = info.view.title;
+				    const match = title.match(/(\d+)년 (\d+)월/);
+				    if (!match) {
+				        console.error("캘린더 제목에서 날짜를 파싱할 수 없습니다:", title);
+				        return;
+				    }
+				    const viewyear = match[1];
+				    const viewmonth = match[2].padStart(2, '0');
+				    const currentViewMonth = `${viewyear}-${viewmonth}`;
+
+				    // 캘린더에 표시할 상담사별 월별 건수를 비동기로 불러옵니다.
+				    axios.get('/api/cnsld/counselingLd/monthly-counts.do', {
+				        params: {
+				            counselReqDatetime: `${currentViewMonth}-01`
+				        }
+				    })
+				    .then(response => {
+				        const data = response.data;
+				        const events = [];
+						
+				        if (data && data.length > 0) {
+				            data.forEach(item => {
+								
+								const counselorName = item.counselName
+								
+								if (!assignedColors[counselorName]) {
+								    assignedColors[counselorName] = colorPalette[colorIndex % colorPalette.length];
+								    colorIndex++;
+								}
+								
+				                events.push({
+				                    title: `${item.counselName}: ${item.count}건`,
+				                    start: item.counselReqDatetime,
+				                    color: assignedColors[counselorName],
+				                    textColor: 'black'
+				                });
+				            });
+				        }
+
+				        calendarInstance.setOption('events', events);
+						
+				    })
+				    .catch(error => {
+				        console.error("월별 상담 데이터 로드 실패:", error);
+				        calendarInstance.setOption('events', []);
+				    });
+				
 				let currentDate = new Date();
 				let year = currentDate.getFullYear();
 				let month = (currentDate.getMonth() + 1).toString().padStart(2, '0');

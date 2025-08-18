@@ -387,4 +387,25 @@
 		WHERE
 		        counsel_id = #{counselId}
     </select>
+    
+	<select id="selectMonthlyCounselingData" parameterType="kr.or.ddit.cns.service.CounselingVO" resultType="kr.or.ddit.cns.service.CounselingVO">
+	    <![CDATA[
+		SELECT
+		    TRUNC(a.COUNSEL_REQ_DATETIME) AS COUNSEL_REQ_DATETIME,
+		    b.MEM_NAME AS COUNSEL_NAME,
+		    COUNT(*) AS COUNT
+		FROM
+		    COUNSELING a
+		JOIN
+		    MEMBER b ON a.COUNSEL = b.MEM_ID
+		WHERE
+		    a.COUNSEL_REQ_DATETIME BETWEEN TRUNC(#{counselReqDatetime}, 'MM') AND LAST_DAY(#{counselReqDatetime})
+		GROUP BY
+		    TRUNC(a.COUNSEL_REQ_DATETIME),
+		    b.MEM_NAME
+		ORDER BY
+		    TRUNC(a.COUNSEL_REQ_DATETIME),
+		    b.MEM_NAME
+	    ]]>
+	</select>
 </mapper>

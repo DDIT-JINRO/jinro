@@ -37,6 +37,7 @@ public class CounselingVO {
 	private String counselStatusStr;
 	private String crContent;
 	
+	private int count;
 	// 검색 키워드
 	private String keyword;
 	private String status;

@@ -60,4 +60,6 @@ public interface CounselLeaderService {
 
 	CounselingVO selectCounselDetail(Integer counselId);
 
+	List<CounselingVO> selectMonthlyCounselingData(CounselingVO searchVO);
+
 }

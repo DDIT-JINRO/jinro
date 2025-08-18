@@ -94,4 +94,11 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 		return counselingVO;
 	}
 
+	@Override
+	public List<CounselingVO> selectMonthlyCounselingData(
+			CounselingVO searchVO) {
+		// TODO Auto-generated method stub
+		return counselLeaderMapper.selectMonthlyCounselingData(searchVO);
+	}
+
 }

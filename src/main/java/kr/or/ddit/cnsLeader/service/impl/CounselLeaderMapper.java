@@ -35,4 +35,6 @@ public interface CounselLeaderMapper {
 
 	CounselingVO selectCounselDetail(Integer counselId);
 
+	List<CounselingVO> selectMonthlyCounselingData(CounselingVO searchVO);
+
 }

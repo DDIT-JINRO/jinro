@@ -1,5 +1,6 @@
 package kr.or.ddit.cnsLeader.web;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -72,7 +73,6 @@ public class CnsLeaderApiController {
 		counselingVO.setKeyword(keyword);
 		counselingVO.setCurrentPage(currentPage);
 		counselingVO.setSize(size);
-		log.info("counselingVO" + counselingVO);
 		ArticlePage<CounselingVO> articlePage = this.counselLeaderService.selectCounselScheduleList(counselingVO);
 
 		return ResponseEntity.ok(articlePage);
@@ -87,6 +87,26 @@ public class CnsLeaderApiController {
 		}
 		return ResponseEntity.ok(counselingVO);
 
+	}
+	
+	@GetMapping("/counselingLd/monthly-counts.do")
+	public ResponseEntity<List<CounselingVO>> getMonthlyCounselingCounts(
+			Principal principal,
+			@RequestParam("counselReqDatetime") @DateTimeFormat(pattern = "yyyy-MM") Date counselReqDatetime
+			) {
+	    if (principal == null || principal.getName().equals("anonymousUser")) {
+	        return ResponseEntity.status(401).build(); // Unauthorized
+	    }
+	    String counselorStr = principal.getName();
+	    int counselor = Integer.parseInt(counselorStr);
+	    
+	    // 이 객체를 Mapper로 넘겨서 해당 상담사의 월별 상담 데이터를 조회
+	    CounselingVO searchVO = new CounselingVO();
+	    searchVO.setCounsel(counselor);
+	    searchVO.setCounselReqDatetime(counselReqDatetime);
+	    List<CounselingVO> counselingList = counselLeaderService.selectMonthlyCounselingData(searchVO);
+
+	    return ResponseEntity.ok(counselingList);
 	}
 
 }
