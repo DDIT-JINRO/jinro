@@ -1,24 +1,24 @@
 document.addEventListener("DOMContentLoaded", function() {
-	document.querySelector('#file-input').addEventListener('change', function(e) {
+	document.querySelector('.file-uploader__input').addEventListener('change', function(e) {
 		const fileName = e.target.files[0]?.name || '';
-		const fileNameDisplay = document.querySelector('.txt_filename b');
-		const fileNameContainer = document.querySelector('.txt_filename');
+		const fileNameDisplay = document.querySelector('.file-uploader__filename b');
+		const fileNameContainer = document.querySelector('.file-uploader__filename');
 
 		if (fileName) {
 			fileNameDisplay.textContent = fileName;
-			fileNameContainer.classList.add('show');
+			fileNameContainer.classList.add('is-active');
 		} else {
-			fileNameContainer.classList.remove('show');
+			fileNameContainer.classList.remove('is-active');
 		}
 	});
 
 	document.querySelector("#submit-btn").addEventListener("click", async function() {
-		const univNameInput = document.querySelector("#university-name");
+		const univNameInput = document.querySelector("#targetName");
 
 		const univId = univNameInput.dataset.univId;
-		const interviewPosition = document.querySelector("#interview-position").value.trim();
-		const interviewDate = document.querySelector("#interview-date").value.trim();
-		const interviewDetail = document.querySelector("#interview-detail").value.trim();
+		const interviewPosition = document.querySelector("#application").value.trim();
+		const interviewDate = document.querySelector("#interviewDate").value.trim();
+		const interviewDetail = document.querySelector("#interviewContent").value.trim();
 		const interviewRating = window.getInterviewRating();
 		const files = document.querySelector("#file-input").files;
 
@@ -49,14 +49,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		// FormData 생성
 		const formData = new FormData();
-		formData.append('irType', 'G02001')
+		formData.append('irType', 'G02001');
 		formData.append('targetId', univId);
 		formData.append('irContent', interviewDetail);
 		formData.append('irRating', interviewRating);
 		formData.append('irApplication', interviewPosition);
 		formData.append('irInterviewAt', new Date(interviewDate));
-
-		// 파일 추가
 		formData.append('file', files[0]);
 
 		try {
@@ -90,9 +88,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 별점 평가 기능
 document.addEventListener('DOMContentLoaded', function() {
-	const starRating = document.getElementById('university-rating');
-	const ratingText = document.getElementById('rating-text');
-	const stars = starRating.querySelectorAll('.star');
+	const starRating = document.getElementById('rating');
+	const ratingText = starRating.querySelector('.rating-input__text');
+	const stars = starRating.querySelectorAll('.rating-input__star');
 
 	// 별점 설명 텍스트
 	const ratingTexts = {
@@ -107,14 +105,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	let currentRating = 0;
 
 	// 별 클릭 이벤트
-	stars.forEach((star, index) => {
-		// 클릭 이벤트
+	stars.forEach((star) => {
 		star.addEventListener('click', function() {
 			const rating = parseInt(this.dataset.value);
 			setRating(rating);
 		});
-
-		// 마우스 호버 이벤트
 		star.addEventListener('mouseenter', function() {
 			const rating = parseInt(this.dataset.value);
 			highlightStars(rating, true);
@@ -139,13 +134,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 별 하이라이트 함수
 	function highlightStars(rating, isHover) {
 		stars.forEach((star, index) => {
-			star.classList.remove('active', 'temp-active');
+			star.classList.remove('is-active', 'is-hover');
 
 			if (index < rating) {
 				if (isHover) {
-					star.classList.add('temp-active');
+					star.classList.add('is-hover');
 				} else {
-					star.classList.add('active');
+					star.classList.add('is-active');
 				}
 			}
 		});
@@ -156,9 +151,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		ratingText.textContent = ratingTexts[rating];
 
 		if (rating > 0) {
-			ratingText.classList.add('selected');
+			ratingText.classList.add('is-selected');
 		} else {
-			ratingText.classList.remove('selected');
+			ratingText.classList.remove('is-selected');
 		}
 	}
 
@@ -170,45 +165,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // textarea 글자수 카운터 기능
 document.addEventListener('DOMContentLoaded', function() {
-	const textarea = document.getElementById('interview-detail');
+	const textarea = document.getElementById('interviewContent');
 	const maxLength = 300; // 최대 글자수 설정
 
 	// 글자수 카운터 HTML 생성
 	const counterHTML = `
         <div class="char-counter">
-            <span class="current-count">0</span><span class="unit">자</span>
+            <span class="char-counter__current">0</span><span class="unit">자</span>
             <span class="separator">/</span>
             <span>최대&nbsp;</span><span class="max-count">${maxLength}</span><span class="unit">자</span>
         </div>
     `;
 
 	// textarea 부모 요소에 textarea-container 클래스 추가
-	const parentDiv = textarea.closest('.input-group');
+	const parentDiv = textarea.closest('.input-group--textarea');
 	if (parentDiv) {
-		parentDiv.classList.add('textarea-container');
-		// 카운터를 textarea 다음에 추가
 		parentDiv.insertAdjacentHTML('beforeend', counterHTML);
 	}
 
 	// 글자수 카운터 요소들 선택
 	const counter = parentDiv.querySelector('.char-counter');
-	const currentCount = counter.querySelector('.current-count');
+	const currentCount = counter.querySelector('.char-counter__current');
 
 	// 글자수 업데이트 함수
 	function updateCounter() {
 		const currentLength = textarea.value.length;
 		currentCount.textContent = currentLength;
-
-		// 글자수에 따른 스타일 변경
-		counter.classList.remove('warning', 'error');
 	}
 
 	// 이벤트 리스너 등록
 	textarea.addEventListener('input', updateCounter);
-	textarea.addEventListener('paste', function() {
-		// paste 이벤트는 약간의 지연 후 실행
-		setTimeout(updateCounter, 10);
-	});
+	textarea.addEventListener('paste', () => setTimeout(updateCounter, 10));
 
 	// 초기 글자수 설정
 	updateCounter();
@@ -218,18 +205,18 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
 	const url = "/ertds/univ/uvivfb/selectUniversityList.do";
 
-	const modal = document.querySelector('#modal-overlay');
-	const searchBtn = document.querySelector('#university-search');
-	const closeBtn = document.querySelector('.modal-close-btn');
-	const cancelBtn = document.querySelector('#modal-cancel-btn');
-	const confirmBtn = document.querySelector('#modal-confirm-btn');
-	const searchInput = document.querySelector('#university-search-input');
-	const searchButton = document.querySelector('#search-btn');
-	const universityList = document.querySelector('#university-list');
-	const prevPageBtn = document.querySelector('#prev-page');
-	const nextPageBtn = document.querySelector('#next-page');
-	const pageInfo = document.querySelector('#page-info');
-	const universityNameInput = document.querySelector('#university-name');
+	const modal            = document.querySelector('#searchModal');
+	const searchBtn        = document.querySelector('#open-search-modal');
+	const closeBtn         = modal.querySelector('.search-modal__close-button');
+	const cancelBtn        = modal.querySelector('#modalCancelBtn');
+	const confirmBtn       = modal.querySelector('#modalConfirmBtn');
+	const searchInput      = modal.querySelector('#searchInput');
+	const searchButton     = modal.querySelector('#searchBtn');
+	const universityList   = modal.querySelector('#searchResultList');
+	const prevPageBtn      = modal.querySelector('#prevPage');
+	const nextPageBtn      = modal.querySelector('#nextPage');
+	const pageInfo         = modal.querySelector('#pageInfo');
+	const universityNameInput = document.querySelector('#targetName');
 
 	let currentPage = 1;
 	let totalPages = 1;
@@ -239,14 +226,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// 모달 열기
 	searchBtn.addEventListener('click', function() {
-		modal.classList.add('show');
+		modal.classList.add('is-active');
 		searchInput.focus();
 		loadUniversities('');
 	});
 
 	// 모달 닫기
 	function closeModal() {
-		modal.classList.remove('show');
+		modal.classList.remove('is-active');
 		resetModal();
 	}
 
@@ -316,26 +303,22 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 
 		universityList.innerHTML = pageUniversities.map(university => `
-            <li class="university-list-item" data-univ-id="${university.univId}" data-univ-name="${university.univName}">
-                <div class="university-name">${university.univName}</div>
-                <div class="university-info">${university.univCampus} · ${university.univRegion}</div>
-            </li>
-        `).join('');
-
+		    <li class="search-modal__list-item" data-univ-id="${university.univId}" data-univ-name="${university.univName}">
+		        <div class="search-modal__list-item-name">${university.univName}</div>
+		        <div class="search-modal__list-item-info">${university.univCampus} · ${university.univRegion}</div>
+		    </li>
+		`).join('');
+		
 		// 기업 선택 이벤트 추가
-		document.querySelectorAll('.university-list-item').forEach(item => {
+		document.querySelectorAll('.search-modal__list-item').forEach(item => {
 			item.addEventListener('click', function() {
-				// 이전 선택 제거
-				document.querySelectorAll('.university-list-item').forEach(i => i.classList.remove('selected'));
-
-				// 현재 항목 선택
-				this.classList.add('selected');
-
+				document.querySelectorAll('.search-modal__list-item').forEach(i => i.classList.remove('is-selected'));
+				this.classList.add('is-selected');
+				
 				selectedUniversity = {
 					univId: this.dataset.univId,
 					univName: this.dataset.univName
 				};
-
 				confirmBtn.disabled = false;
 			});
 		});
