@@ -11,43 +11,51 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/prg/ctt/cttList.do">공모전</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/prg/act/vol/volList.do">대외활동</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/prg/std/stdGroupList.do">스터디그룹</a></div>
+		<div class="channel-sub-section-item">
+			<a href="/prg/ctt/cttList.do">공모전</a>
+		</div>
+		<!-- 중분류 -->
+		<div class="channel-sub-section-item">
+			<a href="/prg/act/vol/volList.do">대외활동</a>
+		</div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/prg/std/stdGroupList.do">스터디그룹</a>
+		</div>
 	</div>
 </section>
 <div>
+
 	<div class="public-wrapper">
 		<div class="public-wrapper-main">
-		<h3>스터디그룹 소개 및 채팅방 개설</h3>
+			<h3>스터디그룹 소개 및 채팅방 개설</h3>
 			<div class="create-wrapper">
 				<div class="form-group">
-					<label for="post-title">게시글 제목</label>
-					<input type="text" placeholder="제목을 입력하세요" class="title-input" id="post-title"/>
+					<label for="post-title">게시글 제목</label> <input type="text"
+						placeholder="제목을 입력하세요" class="title-input" id="post-title" />
 
 					<div class="study-info-grid">
 						<div class="custom-select">
-						<label for="gender">성별 제한</label>
+							<label for="gender">성별 제한</label>
 							<div class="custom-select__label">성별제한 없음</div>
-						  	<ul class="custom-select__options">
-						    	<li data-value="all">성별제한 없음</li>
-						    	<li data-value="men">남자만</li>
-						    	<li data-value="women">여자만</li>
-						  	</ul>
-						  	<select id="gender" name="gender" class="visually-hidden">
-						    	<option value="all">성별제한 없음</option>
-						    	<option value="men">남자만</option>
-						    	<option value="women">여자만</option>
-						  	</select>
+							<ul class="custom-select__options">
+								<li data-value="all">성별제한 없음</li>
+								<li data-value="men">남자만</li>
+								<li data-value="women">여자만</li>
+							</ul>
+							<select id="gender" name="gender" class="visually-hidden">
+								<option value="all">성별제한 없음</option>
+								<option value="men">남자만</option>
+								<option value="women">여자만</option>
+							</select>
 						</div>
 						<div class="custom-select">
 							<label for="region">지역 선택</label>
 							<div class="custom-select__label">지역 선택</div>
-						  	<ul class="custom-select__options">
-							  	<c:forEach var="region" items="${regionList }">
-							  		<li data-value="${region.key }">${region.value }</li>
-							  	</c:forEach>
-						  	</ul>
+							<ul class="custom-select__options">
+								<c:forEach var="region" items="${regionList }">
+									<li data-value="${region.key }">${region.value }</li>
+								</c:forEach>
+							</ul>
 							<select name="region" class="visually-hidden" id="region">
 								<option value="">지역 선택</option>
 								<c:forEach var="region" items="${regionList }">
@@ -58,14 +66,14 @@
 						<div class="custom-select">
 							<label for="capacity">인원 제한</label>
 							<div class="custom-select__label">인원 선택</div>
-						  	<ul class="custom-select__options">
-						    	<li data-value="2">2명</li>
-						    	<li data-value="3">3명</li>
-						    	<li data-value="5">5명</li>
-						    	<li data-value="10">10명</li>
-						    	<li data-value="15">15명</li>
-						    	<li data-value="20">20명</li>
-						  	</ul>
+							<ul class="custom-select__options">
+								<li data-value="2">2명</li>
+								<li data-value="3">3명</li>
+								<li data-value="5">5명</li>
+								<li data-value="10">10명</li>
+								<li data-value="15">15명</li>
+								<li data-value="20">20명</li>
+							</ul>
 							<select name="capacity" class="visually-hidden" id="capacity">
 								<option value="">인원 선택</option>
 								<option value="2">2명</option>
@@ -80,66 +88,69 @@
 						<div class="custom-select">
 							<label for="interest">관심 분야</label>
 							<div class="custom-select__label">선택하세요</div>
-						  	<ul class="custom-select__options">
-							    <!-- optgroup 루프 -->
-							    <li class="optgroup-label">학업</li>
-							    <li data-value="study.general">공부</li>
-							    <li data-value="study.exam">수능준비</li>
-							    <li data-value="study.assignment">과제</li>
-							    <li data-value="study.etc">기타</li>
+							<ul class="custom-select__options">
+								<!-- optgroup 루프 -->
+								<li class="optgroup-label">학업</li>
+								<li data-value="study.general">공부</li>
+								<li data-value="study.exam">수능준비</li>
+								<li data-value="study.assignment">과제</li>
+								<li data-value="study.etc">기타</li>
 
-							    <li class="optgroup-label">진로</li>
-							    <li data-value="career.path">진로</li>
-							    <li data-value="career.admission">진학</li>
-							    <li data-value="career.etc">기타</li>
+								<li class="optgroup-label">진로</li>
+								<li data-value="career.path">진로</li>
+								<li data-value="career.admission">진학</li>
+								<li data-value="career.etc">기타</li>
 
-							    <li class="optgroup-label">취업</li>
-							    <li data-value="job.prepare">취업준비</li>
-							    <li data-value="job.concern">취업고민</li>
-							    <li data-value="job.etc">기타</li>
+								<li class="optgroup-label">취업</li>
+								<li data-value="job.prepare">취업준비</li>
+								<li data-value="job.concern">취업고민</li>
+								<li data-value="job.etc">기타</li>
 
-							    <li class="optgroup-label">기타</li>
-							    <li data-value="social.neighbor">동네친구</li>
-							    <li data-value="social.talk">잡담</li>
-							    <li data-value="social.etc">기타</li>
-						  	</ul>
+								<li class="optgroup-label">기타</li>
+								<li data-value="social.neighbor">동네친구</li>
+								<li data-value="social.talk">잡담</li>
+								<li data-value="social.etc">기타</li>
+							</ul>
 
-						  	<!-- 실제 폼 전송용 select -->
-						  	<select name="tool" class="visually-hidden" id="interest">
-							    <optgroup label="학업">
-							    	<option value="study.general">공부</option>
-							      	<option value="study.exam">수능준비</option>
-							      	<option value="study.assignment">과제</option>
-							      	<option value="study.etc">기타</option>
-							    </optgroup>
-						    	<optgroup label="진로">
-							      	<option value="career.path">진로</option>
-							      	<option value="career.admission">진학</option>
-							      	<option value="career.etc">기타</option>
-							    </optgroup>
-						    	<optgroup label="취업">
-							      	<option value="job.prepare">취업준비</option>
-							      	<option value="job.concern">취업고민</option>
-							      	<option value="job.etc">기타</option>
-							    </optgroup>
-						    	<optgroup label="기타">
-							      	<option value="social.neighbor">동네친구</option>
-							      	<option value="social.talk">잡담</option>
-							      	<option value="social.etc">기타</option>
-							    </optgroup>
-						  	</select>
+							<!-- 실제 폼 전송용 select -->
+							<select name="tool" class="visually-hidden" id="interest">
+								<optgroup label="학업">
+									<option value="study.general">공부</option>
+									<option value="study.exam">수능준비</option>
+									<option value="study.assignment">과제</option>
+									<option value="study.etc">기타</option>
+								</optgroup>
+								<optgroup label="진로">
+									<option value="career.path">진로</option>
+									<option value="career.admission">진학</option>
+									<option value="career.etc">기타</option>
+								</optgroup>
+								<optgroup label="취업">
+									<option value="job.prepare">취업준비</option>
+									<option value="job.concern">취업고민</option>
+									<option value="job.etc">기타</option>
+								</optgroup>
+								<optgroup label="기타">
+									<option value="social.neighbor">동네친구</option>
+									<option value="social.talk">잡담</option>
+									<option value="social.etc">기타</option>
+								</optgroup>
+							</select>
 						</div>
 					</div>
-					<label for="chat-title">채팅방 제목</label>
-					<input type="text" placeholder="채팅방 제목을 입력하세요"	class="chat-title-input" id="chatTitle"/>
-					<label for="description">스터디 소개글</label>
-					<textarea class="desc-textarea" placeholder="스터디 소개글을 작성하세요" id="description"></textarea>
+					<label for="chat-title">채팅방 제목</label> <input type="text"
+						placeholder="채팅방 제목을 입력하세요" class="chat-title-input"
+						id="chatTitle" /> <label for="description">스터디 소개글</label>
+					<textarea class="desc-textarea" placeholder="스터디 소개글을 작성하세요"
+						id="description"></textarea>
 				</div>
 				<div class="btn-area">
 					<button id="btnCancel" class="btn-cancel">취소</button>
 					<button id="btnSubmit" class="btn-submit">등록</button>
 				</div>
 			</div>
+				<button id="autoCompleteBtn" type="button" class="btn-submit" 
+			style="position: absolute; top: 15px; right: 15px;">자동완성</button>
 		</div>
 	</div>
 </div>
