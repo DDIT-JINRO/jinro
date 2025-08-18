@@ -1,35 +1,92 @@
 /**
- * 
- */
+ * */
 
 const text = "관심 진로와 관련된 유튜브 콘텐츠를 한눈에 확인해보세요.";
-	const target = document.getElementById("typing-js");
+const target = document.getElementById("typing-js");
 
-	let index = 0;
-	let isDeleting = false;
+let index = 0;
+let isDeleting = false;
 
-	function typingLoop() {
-		if (isDeleting) {
-			target.textContent = text.substring(0, index--);
-		} else {
-			target.textContent = text.substring(0, index++);
-		}
 
-		if (!isDeleting && index === text.length + 1) {
-			isDeleting = true;
-			setTimeout(typingLoop, 1500); // 타이핑 다 끝난 후 멈추는 시간
-			return;
-		}
 
-		if (isDeleting && index === 0) {
-			isDeleting = false;
-		}
-
-		const speed = isDeleting ? 50 : 100; // 지울 때는 더 빠르게
-		setTimeout(typingLoop, speed);
+function typingLoop() {
+	if (isDeleting) {
+		target.textContent = text.substring(0, index--);
+	} else {
+		target.textContent = text.substring(0, index++);
+	}
+	if (!isDeleting && index === text.length + 1) {
+		isDeleting = true;
+		setTimeout(typingLoop, 1500); // 타이핑 다 끝난 후 멈추는 시간
+		return;
 	}
 
-	typingLoop();
+	if (isDeleting && index === 0) {
+		isDeleting = false;
+	}
+
+	const speed = isDeleting ? 50 : 100; // 지울 때는 더 빠르게
+	setTimeout(typingLoop, speed);
+}
+
+typingLoop();
+
+// --- 슬라이더 스크립트 시작 ---
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+const totalSlides = slides.length;
+
+function showSlide(index) {
+	slides.forEach((slide, i) => {
+		slide.style.transform = `translateX(-${index * 100}%)`;
+	});
+	dots.forEach((dot, i) => {
+		dot.classList.remove('active');
+	});
+	if (dots[index]) {
+		dots[index].classList.add('active');
+	}
+	currentSlide = index;
+}
+
+
+function nextSlide() {
+	currentSlide = (currentSlide + 1) % totalSlides;
+	showSlide(currentSlide);
+}
+
+function prevSlide() {
+	currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+	showSlide(currentSlide);
+}
+
+// 이벤트 리스너
+if (dots) {
+	dots.forEach(dot => {
+		dot.addEventListener('click', (e) => {
+			const index = parseInt(e.target.dataset.slideIndex);
+			showSlide(index);
+		});
+	});
+}
+
+// 자동 슬라이딩
+let slideInterval = setInterval(nextSlide, 3000); 
+
+// 마우스 오버 시 자동 슬라이딩 멈춤
+const sliderContainer = document.querySelector('.slider-container');
+if (sliderContainer) {
+	sliderContainer.addEventListener('mouseenter', () => {
+		clearInterval(slideInterval);
+	});
+
+	// 마우스 이탈 시 자동 슬라이딩 다시 시작
+	sliderContainer.addEventListener('mouseleave', () => {
+		slideInterval = setInterval(nextSlide, 5000);
+	});
+}
+// --- 슬라이더 스크립트 끝 ---
 
 document.addEventListener('DOMContentLoaded', function() {
 	fn_init();
@@ -41,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const fn_init = () => {
 	const banner = document.querySelector('.main-loadmap-banner');
-	banner.classList.add('animate-in');
+	// banner.classList.add('animate-in'); // 이 부분을 주석 처리하거나 삭제하여 슬라이더와 충돌하지 않도록 했습니다.
 	
 	// 로드맵 바로가기 버튼
 	const roadmap = document.querySelector('.roadmapBtn');
@@ -197,4 +254,3 @@ const fn_TopsWidget = () =>{
 
 	widgets.forEach(initWidget);
 }
-

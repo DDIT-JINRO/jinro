@@ -49,25 +49,89 @@
 	  </section>
 	</div>
 
-	<section class="main-loadmap-banner">
-		<div class="banner-inner">
-			<div class="banner-left">
-				<img alt="" src="/images/logo.png">
-				<div class="main-title-banner">미래를 여는 길</div>
-				<p>
-					진로와 진학, 취업을 위한 종합 정보 제공<br /> 미래를 설계하는 데 필요한 모든 것
-				</p>
-				<button class="roadmapBtn">로드맵 바로가기</button>
+	<section class="main-loadmap-banner slider-container">
+		<div class="slides">
+			<div class="slide">
+				<div class="banner-inner">
+					<div class="banner-left">
+						<img alt="" src="/images/logo.png">
+						<div class="main-title-banner">미래를 여는 길</div>
+						<p>
+							진로와 진학, 취업을 위한 종합 정보 제공<br /> 미래를 설계하는 데 필요한 모든 것
+						</p>
+						<button class="roadmapBtn">로드맵 바로가기</button>
+					</div>
+					<div class="banner-right floating-icons">
+						<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
+						<img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> 
+						<img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> 
+						<img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> 
+						<img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> 
+						<img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> 
+						<img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> 
+						<img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
+					</div>
+				</div>
 			</div>
-			<div class="banner-right floating-icons">
-				<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
-				<img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> 
-				<img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> 
-				<img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> 
-				<img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> 
-				<img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> 
-				<img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> 
-				<img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
+			<c:if test="${memId eq 'anonymousUser' or age eq 'minor'}">
+			<div class="slide">
+				<div class="banner-inner">
+					<div class="banner-left">
+						<img alt="" src="/images/logo.png">
+						<div class="main-title-banner">미래를 여는 길</div>
+						<p>
+							승호
+						</p>
+						<a href="/ertds/univ/uvsrch/selectUnivList.do" class="BtnData">대학 바로가기</a>
+					</div>
+					<div class="banner-right floating-icons">
+						<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
+						<img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> 
+						<img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> 
+						<img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> 
+						<img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> 
+						<img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> 
+						<img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> 
+						<img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
+					</div>
+				</div>
+			</div>
+			</c:if>
+			<c:if test="${memId eq 'anonymousUser' or age eq 'adult'}">
+			    <div class="slide">
+			        <div class="banner-inner">
+			            <div class="banner-left">
+			                <img alt="" src="/images/logo.png">
+			                <div class="main-title-banner">미래를 여는 길</div>
+			                <p>
+			                    빼이
+			                </p>
+			                <a href="/pse/cr/crl/selectCareerList.do" class="BtnData">직업 바로가기</a>
+			            </div>
+			            <div class="banner-right floating-icons">
+			                <img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
+			                <img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> 
+			                <img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> 
+			                <img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> 
+			                <img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> 
+			                <img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> 
+			                <img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> 
+			                <img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
+			            </div>
+			        </div>
+			    </div>
+			</c:if>
+		</div>
+
+		<div class="slider-controls">
+			<div class="dots-container">
+				<span class="dot active" data-slide-index="0"></span>
+				<c:if test="${memId eq 'anonymousUser' or age eq 'minor'}">
+					<span class="dot" data-slide-index="1"></span>
+				</c:if>
+				<c:if test="${memId eq 'anonymousUser' or age eq 'adult'}">
+					<span class="dot" data-slide-index="2"></span>
+				</c:if>
 			</div>
 		</div>
 	</section>

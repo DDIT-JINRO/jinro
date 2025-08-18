@@ -6,12 +6,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.admin.las.service.ContentStatsService;
+import kr.or.ddit.main.service.mainService;
+
 
 @Controller
 @RequestMapping("/")
@@ -20,9 +23,23 @@ public class MainController {
 	@Autowired
 	private ContentStatsService contentStatsService;
 
+	@Autowired
+	private mainService mainService;
+	
 	@GetMapping
-	public String main() {
-
+	public String main(@AuthenticationPrincipal String memId, Model model) {
+		
+		if(memId!="anonymousUser") {
+			String data =mainService.getAge(memId);
+			System.out.println(data);
+			System.out.println(data);
+			System.out.println(data);
+			System.out.println(data);
+			System.out.println(data);
+			model.addAttribute("age", data);
+		}
+		
+		model.addAttribute("memId", memId);
 		return "content/main";
 	}
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.main.service.impl.MainMapper">
+
+	<select id="getAge" parameterType="String" resultType="java.util.Date">
+		SELECT MEM_BIRTH
+		FROM MEMBER
+		WHERE MEM_ID = #{memId}
+	</select>
+</mapper>
