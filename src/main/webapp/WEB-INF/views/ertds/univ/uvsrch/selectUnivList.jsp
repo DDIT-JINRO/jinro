@@ -52,7 +52,6 @@
 								<div class="search-filter__options">
 									<c:forEach var="region" items="${codeVORegionList}">
 										<label class="search-filter__option">
-											<!-- checked 속성 추가 -->
 											<input type="checkbox" name="regionIds" value="${region.ccId}" <c:forEach var="submittedRegion" items="${paramValues.regionIds}">
 							                        <c:if test="${region.ccId eq submittedRegion}">checked</c:if>
 							                    </c:forEach>>
@@ -95,49 +94,7 @@
 									<label class="search-filter__group-title">선택된 필터</label>
 									<button type="button" class="search-filter__reset-button">초기화</button>
 								</div>
-								<div class="search-filter__selected-tags">
-									<!-- 지역 필터 태그 -->
-									<c:if test="${not empty paramValues.regionIds}">
-										<c:forEach var="submittedRegion" items="${paramValues.regionIds}">
-											<c:forEach var="region" items="${codeVORegionList}">
-												<c:if test="${region.ccId eq submittedRegion}">
-													<span class="search-filter__tag" data-group="regionIds" data-value="${submittedRegion}">
-														대학 지역 > ${region.ccEtc}
-														<button type="button" class="search-filter__tag-remove">×</button>
-													</span>
-												</c:if>
-											</c:forEach>
-										</c:forEach>
-									</c:if>
-
-									<!-- 대학 유형 필터 태그 -->
-									<c:if test="${not empty paramValues.typeIds}">
-										<c:forEach var="submittedType" items="${paramValues.typeIds}">
-											<c:forEach var="type" items="${codeVOUniversityTypeList}">
-												<c:if test="${type.ccId eq submittedType}">
-													<span class="search-filter__tag" data-group="typeIds" data-value="${submittedType}">
-														대학 유형 > ${type.ccName}
-														<button type="button" class="search-filter__tag-remove">×</button>
-													</span>
-												</c:if>
-											</c:forEach>
-										</c:forEach>
-									</c:if>
-
-									<!-- 설립 유형 필터 태그 -->
-									<c:if test="${not empty paramValues.gubunIds}">
-										<c:forEach var="submittedGubun" items="${paramValues.gubunIds}">
-											<c:forEach var="gubun" items="${codeVOUniversityGubunList}">
-												<c:if test="${gubun.ccId eq submittedGubun}">
-													<span class="search-filter__tag" data-group="gubunIds" data-value="${submittedGubun}">
-														설립 유형 > ${gubun.ccName}
-														<button type="button" class="search-filter__tag-remove">×</button>
-													</span>
-												</c:if>
-											</c:forEach>
-										</c:forEach>
-									</c:if>
-								</div>
+								<div class="search-filter__selected-tags"></div>
 							</div>
 							<button type="submit" class="search-filter__submit-button">검색</button>
 						</div>
