@@ -4,16 +4,10 @@
 <head>
 <link rel="stylesheet" href="/css/admin/admDashboard.css">
 <title>관리자 메인</title>
-<script>
-	
-</script>
-<style>
-</style>
-
 </head>
 <%@ include file="/WEB-INF/views/include/admin/sidebar.jsp"%>
-<body>
 
+<body>
 	<!-- 메인 콘텐츠 영역 -->
 	<div class="main-content">
 		<div id="content">
@@ -21,33 +15,27 @@
 			<div class="dashboard-1 overflow-wrap">
 				<div class="dashboard-1-1 overflow-wrap">
 					<div class="template-panel dashboard-1-1-1 overflow-wrap">
-						<div class="middleTitle">실시간 이용자</div>
+						<div class="public-card-title">실시간 이용자</div>
 						<img class="image1-1-1-1" alt="" src="/images/admin/admin-image1.png">
-						<div class="userCnt-1-1-1">123</div>
-						<div class="increase-1-1-1">
-							<span style="color: rgba(10, 207, 151, 1); margin-right: 5px;">&#9650;</span>
-							5.27%
-							<div class="increase-1-1-1-p">Since last week</div>
-						</div>
+						<div class="userCnt-1-1-1" id="liveUserCount"></div>
 					</div>
 					<div class="template-panel dashboard-1-1-1 overflow-wrap">
-						<div class="middleTitle">당월 이용자</div>
+						<div class="public-card-title">당월 이용자</div>
 						<img class="image1-1-1-1" alt="" src="/images/admin/admin-image2.png">
-						<div class="userCnt-1-1-1">456</div>
+						<div class="userCnt-1-1-1" id="monthUserCount"></div>
 						<div class="increase-1-1-1-red">
-							<span style="color: rgba(250, 92, 124, 1); margin-right: 5px;">&#9660;</span>
-							5.27%
+							<span class="public-span-decrease" id="monthUserRate"></span>
+
 							<div class="increase-1-1-1-p">Since last month</div>
 						</div>
 					</div>
 					<div class="template-panel dashboard-1-1-1 overflow-wrap" style="margin-bottom: 0;">
-						<div class="middleTitle">전체 이용자</div>
+						<div class="public-card-title">전체 이용자</div>
 						<img class="image1-1-1-1" alt="" src="/images/admin/admin-image1.png">
-						<div class="userCnt-1-1-1">1,456</div>
+						<div class="userCnt-1-1-1" id="allUserCount">1,456</div>
 						<div class="increase-1-1-1">
-							<span style="color: rgba(10, 207, 151, 1); margin-right: 5px;">&#9650;</span>
-							5.27%
-							<div class="increase-1-1-1-p">Since last week</div>
+							<span class="public-span-increase" id="allUserRate"></span>
+							<div class="increase-1-1-1-p">Since last month</div>
 						</div>
 					</div>
 				</div>
@@ -85,7 +73,11 @@
 					</div>
 				</div>
 				<div class="dashboard-2-2 template-panel">
-					<div class="middleTitlePp">뭐넣지</div>
+					<div class="middleTitlePp">컨텐츠 이용 통계</div>
+					<div class="flex gap10 endflex btn-group">
+						<button class="public-toggle-button active">청소년</button>
+						<button class="public-toggle-button">청년</button>
+					</div>
 				</div>
 			</div>
 
@@ -94,4 +86,5 @@
 	<div id="scriptContainer"></div>
 </body>
 <script src="/js/include/admin/dashboard.js"></script>
+
 </html>

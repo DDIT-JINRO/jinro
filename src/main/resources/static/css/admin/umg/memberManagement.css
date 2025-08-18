@@ -1,6 +1,11 @@
 @charset "UTF-8";
 
-p {
+.member-1 {
+	margin-bottom: 20px;
+}
+
+
+/* p {
 	margin: 5px 0;
 }
 
@@ -20,7 +25,7 @@ p {
 	font-size: 12px;
 }
 
-/********************************************* 테이블 칸 지정 ***********************************/
+******************************************** 테이블 칸 지정 **********************************
 .body-id {
 	min-width: 30px;
 }
@@ -56,7 +61,7 @@ p {
 .body-point {
 	min-width: 70px;
 }
-/*********************************************테이블 칸 지정 끝****************************************/
+********************************************테이블 칸 지정 끝***************************************
 .gap {
 	gap: 20px;
 }
@@ -97,11 +102,11 @@ p {
 	font-weight: 600;
 }
 
-/* 추가ㅏ된*/
+추가ㅏ된
 .member-form-left, .member-form-right, .member-form-extra {
     display: flex;
     flex-direction: column;
-    gap: 6.5px; /*간격 조절 라벨,인풋사이*/
+    gap: 6.5px; 간격 조절 라벨,인풋사이
 }
 
 .memberManagementLeft {
@@ -132,7 +137,7 @@ p {
 	margin-top: 10px;
 	padding-bottom: 20px;
 	display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3개의 열을 동일한 너비로 설정 */
+    grid-template-columns: repeat(3, 1fr); 3개의 열을 동일한 너비로 설정
     gap: 30px;
     box-sizing: border-box;
 }
@@ -232,7 +237,7 @@ p {
 }
 
 .add-btn {
-	grid-column: 1 / 4; /* 첫 번째 열부터 네 번째 열의 시작점까지 차지 */
+	grid-column: 1 / 4; 첫 번째 열부터 네 번째 열의 시작점까지 차지
     padding: 12px;
     background-color: #DCDEFC;
     color: black;
@@ -244,7 +249,7 @@ p {
     transition: background-color 0.2s;
 }
 
-/*****************************************/
+***************************************
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -310,15 +315,15 @@ table th:last-child {
 	border-radius: 4px;
 }
 
-/* memberManagement.css 파일에 추가 또는 수정 */
+memberManagement.css 파일에 추가 또는 수정
 
-/* 회원 상세 상자 */
+회원 상세 상자
 #member-detail-box {
 	display: flex;
-	flex-direction: column; /* 세로 방향으로 정렬 */
+	flex-direction: column; 세로 방향으로 정렬
 }
 
-/* 프로필 이미지와 기본 정보 영역 */
+프로필 이미지와 기본 정보 영역
 .member-header-section {
 	margin-top: 20px;
 	display: flex;
@@ -330,7 +335,7 @@ table th:last-child {
 	font-size: 12px;
 }
 
-/* 프로필 이미지 */
+프로필 이미지
 .member-profile img {
 	width: 150px;
 	height: 150px;
@@ -340,14 +345,14 @@ table th:last-child {
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* 회원 정보 그리드 레이아웃 */
+회원 정보 그리드 레이아웃
 .member-info-grid {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr); /* 2열 그리드 */
+	grid-template-columns: repeat(2, 1fr); 2열 그리드
 	gap: 20px;
 }
 
-/* 각 정보 필드 (이름, 닉네임 등) */
+각 정보 필드 (이름, 닉네임 등)
 .info-field {
 	display: flex;
 	flex-direction: column;
@@ -357,7 +362,7 @@ table th:last-child {
 	font-weight: bold;
 	color: black;
 	margin-bottom: 3px;
-	background-color: #DCDEFC; /* 배경색으로 강조 */
+	background-color: #DCDEFC; 배경색으로 강조
 	padding: 3px 5px;
 	border-radius: 8px;
 	font-size: 10px;
@@ -372,7 +377,7 @@ table th:last-child {
 	box-sizing: border-box;
 }
 
-/* 경고/정지, 관심 분야 영역 */
+경고/정지, 관심 분야 영역
 .member-penalty-section, .member-interests-section {
 	border-top: 1px solid #eee;
 	margin-top: 10px;
@@ -382,7 +387,7 @@ table th:last-child {
 	margin-bottom: 20px;
 }
 
-/* 관심 키워드 스타일 */
+관심 키워드 스타일
 #mem-interests span {
 	background-color: #07223D;
 	color: white;
@@ -393,16 +398,16 @@ table th:last-child {
 	display: inline-block;
 }
 
-/* 버튼 그룹 */
+버튼 그룹
 .button-group {
 	display: flex;
 	gap: 10px;
-	justify-content: flex-end; /* 오른쪽 정렬 */
+	justify-content: flex-end; 오른쪽 정렬
 	padding-top: 5px;
 	border-top: 1px solid #eee;
 }
 
-/* 수정, 경고, 정지 버튼 스타일 */
+수정, 경고, 정지 버튼 스타일
 .btn-modify {
 	background-color: rgb(220, 222, 252);;
 	color: black;
@@ -449,7 +454,7 @@ table th:last-child {
 	margin-bottom: 20px;
 }
 
-/****************/
+************** */
 
 
 

@@ -12,9 +12,9 @@ body {
 
 .template-panel {
 	background: #fff;
+	padding: 24px;
 	border-radius: 12px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-	padding: 20px;
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
@@ -34,16 +34,19 @@ body {
 	box-sizing: border-box;
 }
 
-@keyframes slideInFromTop {from { transform:translateY(-20px);
-	opacity: 0;
+@keyframes slideInFromTop {
+	from {
+		transform: translateY(-20px);
+		opacity: 0;
+	}
+
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
 }
 
-to {
-	transform: translateY(0);
-	opacity: 1;
-}
-
-}
 .template-panel {
 	animation: slideInFromTop 0.5s ease-out;
 }
@@ -61,44 +64,56 @@ to {
 }
 
 .filter-box {
- display: flex; /* Arrange elements in a row */
- align-items: center; /* Vertically align items in the center */
- padding: 10px; /* Add some padding around the box */
- border-radius: 5px; /* Optional: Rounded corners */
- border: 1px solid #ccc; /* Optional: Border for the box */
- background-color: #f9f9f9; /* Optional: Background color */
+	display: flex;
+	/* Arrange elements in a row */
+	align-items: center;
+	/* Vertically align items in the center */
+	padding: 10px;
+	/* Add some padding around the box */
+	border-radius: 5px;
+	/* Optional: Rounded corners */
+	border: 1px solid #ccc;
+	/* Optional: Border for the box */
+	background-color: #f9f9f9;
+	/* Optional: Background color */
 }
 
 .filter-box select {
- padding: 8px;
- border: 1px solid #ddd;
- border-radius: 3px;
- margin-right: 10px; /* Space between select and input */
- font-size: 14px;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	margin-right: 10px;
+	/* Space between select and input */
+	font-size: 14px;
 }
 
 .filter-box input {
- padding: 8px;
- border: 1px solid #ddd;
- border-radius: 3px;
- margin-right: 10px; /* Space between input and button */
- font-size: 14px;
- flex-grow: 1; /* Allow input to take up remaining space */
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	margin-right: 10px;
+	/* Space between input and button */
+	font-size: 14px;
+	flex-grow: 1;
+	/* Allow input to take up remaining space */
 }
 
 .filter-box button.btn-save {
- padding: 8px 15px;
- border: none;
- border-radius: 3px;
- background-color: #6759ff; /* Example: Purple color like in the image */
- color: white;
- font-size: 14px;
- cursor: pointer;
+	padding: 8px 15px;
+	border: none;
+	border-radius: 3px;
+	background-color: #6759ff;
+	/* Example: Purple color like in the image */
+	color: white;
+	font-size: 14px;
+	cursor: pointer;
 }
 
 .filter-box button.btn-save:hover {
- background-color: #5243cd; /* Darker shade on hover */
+	background-color: #5243cd;
+	/* Darker shade on hover */
 }
+
 /**************** 공통 부분 끝 *******************/
 
 /**************** dashboard-1 시작 *******************/
@@ -112,7 +127,7 @@ to {
 }
 
 .dashboard-1-1-1 {
-	width: 400px;
+	width: 390px;
 	height: 150px;
 	padding: 24px;
 	margin-bottom: 20px;
@@ -152,7 +167,7 @@ to {
 }
 
 .dashboard-1-2 {
-	width: 1185px;
+	width: 1195px;
 	height: 490px;
 }
 
@@ -173,10 +188,12 @@ to {
 .dash2Flex {
 	gap: 20px;
 	display: flex;
+	margin-bottom: 20px;
 }
 
 .dashboard-2-1 {
-	margin-top: 20px; overflow-x : auto;
+	margin-top: 20px;
+	overflow-x: auto;
 	display: flex;
 	align-content: center;
 	justify-content: center;
@@ -207,19 +224,23 @@ to {
 }
 
 .stats-container {
-	display: flex; /* 항목들을 가로로 나란히 정렬 */
-	gap: 60px; /* 항목 사이의 간격 */
+	display: flex;
+	/* 항목들을 가로로 나란히 정렬 */
+	gap: 60px;
+	/* 항목 사이의 간격 */
 	padding: 20px;
 	background-color: #fff;
 	border-radius: 12px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-	width: fit-content; /* 내용물에 맞게 너비 조절 */
+	width: fit-content;
+	/* 내용물에 맞게 너비 조절 */
 }
 
 /* 각 통계 항목 (Current Week, Previous Week) */
 .stat-item {
 	display: flex;
-	flex-direction: column; /* 제목과 값을 세로로 정렬 */
+	flex-direction: column;
+	/* 제목과 값을 세로로 정렬 */
 	margin-right: 40px;
 }
 
@@ -242,11 +263,11 @@ to {
 }
 
 .dot-current {
-	background-color: #8e6ee4; /* 보라색 */
+	background-color: #FF4560;
 }
 
 .dot-previous {
-	background-color: #00e396; /* 초록색 */
+	background-color: #727CF5;
 }
 
 /* 금액 텍스트 스타일 */
@@ -255,6 +276,7 @@ to {
 	font-weight: 600;
 	color: #3e4c59;
 }
+
 /**************** dashboard-2 끝 *******************/
 
 /**************** dashboard-3 시작 *******************/
@@ -268,3 +290,111 @@ to {
 	width: 520px;
 	height: 400px;
 }
+
+/************************************************* 공용 css ******************************************************************************/
+.flex {
+	display: flex;
+}
+
+.gap {
+	gap: 20px;
+}
+
+.gap10 {
+	gap: 10px;
+}
+
+.endflex {
+	justify-content: flex-end;
+}
+
+.public-countCard {
+	width: 390px;
+	height: 150px;
+}
+
+.public-span-increase {
+	color: rgba(10, 207, 151, 1);
+	margin-right: 5px;
+
+}
+
+.public-span-decrease {
+	color: rgba(250, 92, 124, 1);
+	margin-right: 5px;
+}
+
+.public-card-title {
+	color: gray;
+	font-size: 14px;
+	margin: 0;
+	font-weight: 600;
+}
+
+.public-card-icon {
+	width: 40px;
+	position: absolute;
+	right: 1.5rem;
+}
+
+.public-card-count {
+	font-size: 35px;
+	font-weight: 700;
+	color: gray;
+	margin-bottom: .60rem !important;
+}
+
+.public-span-space {
+	display: flex;
+	font-size: 15px;
+	font-weight: 600;
+	color: rgba(10, 207, 151, 1);
+}
+
+.public-span-since {
+	margin-left: 10px;
+	color: #8a969c;
+	font-weight: 400;
+}
+
+
+.public-toggle-button {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555555;
+  background-color: #EDF2F9;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  padding: 7px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+}
+
+.public-toggle-button.active {
+  color: #ffffff; /* 하얀색 폰트 */
+  background-color: #727cf5; /* 보라색 배경 */
+}
+
+.public-toggle-button:hover {
+  background-color: #d0d0d0;
+}
+
+/****************************** 공용 색상 css ****************************/
+
+.color-white {
+	color: white;
+}
+
+.back-color-green {
+	background-color: #0ACF97;
+}
+
+.back-color-purple {
+	background-color: #727CF5;
+}
+

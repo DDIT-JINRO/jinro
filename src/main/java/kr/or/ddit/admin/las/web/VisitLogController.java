@@ -39,5 +39,4 @@ public class VisitLogController {
 	public void aiSelfIntroVisitLog(@AuthenticationPrincipal String memId) {
 		visitLogService.insertPageLog(memId, "자기소개서AI요청", "/aiSelfIntro", null);
 	}
-
 }
