@@ -67,7 +67,10 @@
 }
 
 .accordion-list__col--author {
-	flex: 1;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
 
 .accordion-list__col--date {
@@ -131,7 +134,10 @@
 }
 
 .card-actions__button {
-	padding: 6px 12px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	padding: 6px 13px;
 	border: 1px solid;
 	border-radius: 6px;
 	font-size: 13px;
