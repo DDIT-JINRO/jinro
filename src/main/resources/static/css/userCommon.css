@@ -881,6 +881,7 @@ html, body {
 
 /* 리스트 아이템 */
 .content-list__item {
+    padding: 20px 24px;
 	display: flex;
 	align-items: center;
 	border: 1px solid #e5e7eb;
@@ -894,13 +895,13 @@ html, body {
 }
 
 .content-list__title {
-	margin: 0 0 8px 0;
+	margin: 0;
 	font-size: 1.1rem;
 	font-weight: 600;
 }
 
 .content-list__snippet {
-	margin: 0;
+	margin: 8px 0 0 0;
 	font-size: 0.85rem;
 	color: #4b5563;
 	line-height: 1.6;
