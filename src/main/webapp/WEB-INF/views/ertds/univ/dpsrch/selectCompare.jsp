@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/pse/cr/cco/careerComparsionView.css">
+<link rel="stylesheet" href="/css/common/comparsionView.css">
 
 <section class="channel">
 	<div class="channel-title">
