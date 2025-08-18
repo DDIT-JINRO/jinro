@@ -63,79 +63,95 @@ document.addEventListener('DOMContentLoaded', function() {
 			allUserRate.classList.remove('public-span-increase', 'public-span-decrease');
 		}
 
-		// 1. 여기서 데이터를 추출합니다.
+		
 		const totalUsersData = chartData.monthlyChart.map(item => item.CUMULATIVE_USER_COUNT);
 		const newUsersData = chartData.newUserChart.map(item => item.MONTHLY_USER_COUNT);
 		const secessionUsersData = chartData.secessionChart.map(item => item.MONTHLY_DELETION_COUNT);
 
-		// 2. 월 라벨도 동적으로 추출할 수 있습니다.
+		
 		const monthLabels = chartData.monthlyChart.map(item => item.MONTH);
 
 		const ctxUser = document.getElementById('lineChart');
 		if (ctxUser) {
-			new Chart(ctxUser, {
-				type: 'line',
-				data: {
-					// 3. 동적으로 생성된 라벨을 사용합니다.
-					labels: monthLabels,
-
-					datasets: [
-						{
-							label: '총 활성 사용자',
-							data: totalUsersData, // 동적 데이터
-							fill: true,
-							borderColor: 'rgb(114, 124, 245)',
-							backgroundColor: 'rgba(114, 124, 245, 0.2)',
-							tension: 0.4,
-							pointRadius: 4,
-							pointBackgroundColor: 'rgb(114, 124, 245)'
-						},
-						{
-							label: '신규 유입',
-							data: newUsersData, // 동적 데이터
-							fill: true,
-							borderColor: 'rgb(0, 200, 150)',
-							backgroundColor: 'rgba(0, 200, 150, 0.2)',
-							tension: 0.4,
-							pointRadius: 4,
-							pointBackgroundColor: 'rgb(0, 200, 150)'
-						},
-						{
-							label: '이탈자',
-							data: secessionUsersData, // 동적 데이터
-							fill: true,
-							borderColor: 'rgb(255, 99, 132)',
-							backgroundColor: 'rgba(255, 99, 132, 0.2)',
-							tension: 0.4,
-							pointRadius: 4,
-							pointBackgroundColor: 'rgb(255, 99, 132)'
-						}
-					]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						title: { display: false },
-						legend: {
-							display: true,
-							position: 'bottom',
-							labels: { padding: 20 }
-						}
-					},
-					scales: {
-						y: {
-							beginAtZero: true,
-							grid: { color: 'rgba(0, 0, 0, 0.05)', drawBorder: false }
-						},
-						x: {
-							grid: { display: false, drawBorder: false }
-						}
-					}
-				}
-			});
-		}
-	})
+		    new Chart(ctxUser, {
+		        type: 'line',
+		        data: {
+		            labels: monthLabels,
+		            datasets: [
+		                {
+		                    label: '총 활성 사용자',
+		                    data: totalUsersData,
+		                    fill: true,
+		                    borderColor: 'rgb(114, 124, 245)',
+							
+		                    tension: 0.4,
+		                    pointRadius: 4,
+		                    pointBackgroundColor: 'rgb(114, 124, 245)',
+		                    // --- 이 부분을 그라데이션 함수로 다시 수정 ---
+		                    backgroundColor: function(context) {
+		                        const chart = context.chart;
+		                        const { ctx, chartArea } = chart;
+		                        if (!chartArea) {
+		                            return null;
+		                        }
+		                        const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+		                        gradient.addColorStop(0, 'rgba(114, 124, 245, 0.5)'); // 위쪽 색상
+		                        gradient.addColorStop(1, 'rgba(114, 124, 245, 0)');  // 아래쪽 색상 (투명)
+		                        return gradient;
+		                    }
+		                    // --- 여기까지 수정 ---
+		                },
+		                {
+		                    label: '신규 유입',
+		                    data: newUsersData,
+		                    fill: true,
+		                    borderColor: 'rgb(0, 200, 150)',
+		                    backgroundColor: 'rgba(0, 200, 150, 0.2)',
+		                    tension: 0.4,
+		                    pointRadius: 4,
+		                    pointBackgroundColor: 'rgb(0, 200, 150)'
+		                },
+		                {
+		                    label: '이탈자',
+		                    data: secessionUsersData,
+		                    fill: true,
+		                    borderColor: 'rgb(255, 99, 132)',
+		                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+		                    tension: 0.4,
+		                    pointRadius: 4,
+		                    pointBackgroundColor: 'rgb(255, 99, 132)'
+		                }
+		            ]
+		        },
+		        options: {
+		            responsive: true,
+		            maintainAspectRatio: false,
+		            plugins: {
+		                title: { display: false },
+		                legend: {
+		                    display: true,
+		                    position: 'bottom',
+		                    labels: { padding: 20 }
+		                }
+		            },
+		            scales: {
+		                y: {
+		                    beginAtZero: true,
+		                    grid: { color: 'rgba(0, 0, 0, 0.05)', drawBorder: false }
+		                },
+		                x: {
+		                    grid: { display: false, drawBorder: false }
+		                }
+		            }
+		        }
+		    });
+		} // 월별 이용자 통계 종료 괄호
+	}) // 카운트카드 데이터, 월별 이용자 통계 axios 종료 괄호
+	
+	axios.get('/admin/chart/getContentsUseChart.do').then(res => {
+		console.log("contentChart : ", res);
+	}) // 컨텐츠 이용 통계 axois 종료 괄호
+	
 })
 
 function formatNumberWithCommasByAdminDashboard(num) {
@@ -170,7 +186,7 @@ const data = {
 };
 
 new Chart(ctxPayment, {
-	type: 'bar',
+	type: 'line',
 	data: data,
 	options: {
 		responsive: true,
@@ -220,3 +236,54 @@ new Chart(ctxPayment, {
 		}
 	}
 });
+
+const ctxDoughnut = document.getElementById('nestedDoughnutChart');
+if (ctxDoughnut) {
+    new Chart(ctxDoughnut, {
+        type: 'doughnut',
+        data: {
+            labels: ['월드컵', '로드맵', '심리검사', '모의면접', 'AI 피드백'],
+            datasets: [{
+                label: '컨텐츠 이용 현황',
+                data: [320, 210, 450, 180, 290],
+                backgroundColor: [
+                    'rgba(128, 90, 213, 0.8)',
+                    'rgba(157, 128, 228, 0.8)',
+                    'rgba(106, 90, 205, 0.8)',
+                    'rgba(183, 161, 237, 0.8)',
+                    'rgba(85, 60, 180, 0.8)'
+                ],
+                borderWidth: 0,
+                hoverOffset: 20
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            
+            // --- 여기에 layout.padding 추가 ---
+            layout: {
+                padding: {
+                    top: 25,
+                    bottom: 25,
+                    left: 25,
+                    right: 25
+                }
+            },
+            // --- 여기까지 ---
+
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        color: '#555',
+                        padding: 25,
+                        font: { size: 14 }
+                    }
+                }
+            }
+        }
+    });
+}

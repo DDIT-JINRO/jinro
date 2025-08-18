@@ -34,19 +34,16 @@ body {
 	box-sizing: border-box;
 }
 
-@keyframes slideInFromTop {
-	from {
-		transform: translateY(-20px);
-		opacity: 0;
-	}
-
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
-
+@keyframes slideInFromTop {from { transform:translateY(-20px);
+	opacity: 0;
 }
 
+to {
+	transform: translateY(0);
+	opacity: 1;
+}
+
+}
 .template-panel {
 	animation: slideInFromTop 0.5s ease-out;
 }
@@ -175,7 +172,7 @@ body {
 
 /**************** dashboard-2 시작 *******************/
 .middleTitlePp {
-	color: #7C7CF5;
+	color: gray;
 	font-size: 14px;
 	margin: 0;
 	font-weight: 600;
@@ -205,7 +202,6 @@ body {
 
 .dashboard-2-2 {
 	width: 500px;
-	background-color: #DCDEFC;
 }
 
 .dashboard-profileImg {
@@ -316,7 +312,6 @@ body {
 .public-span-increase {
 	color: rgba(10, 207, 151, 1);
 	margin-right: 5px;
-
 }
 
 .public-span-decrease {
@@ -357,35 +352,33 @@ body {
 	font-weight: 400;
 }
 
-
 .public-toggle-button {
-  font-size: 14px;
-  font-weight: bold;
-  color: #555555;
-  background-color: #EDF2F9;
-  border: none;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  padding: 7px 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  height: fit-content;
+	font-size: 14px;
+	font-weight: bold;
+	color: #555555;
+	background-color: #EDF2F9;
+	border: none;
+	border-radius: 2px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	padding: 7px 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: fit-content;
+	height: fit-content;
 }
 
 .public-toggle-button.active {
-  color: #ffffff; /* 하얀색 폰트 */
-  background-color: #727cf5; /* 보라색 배경 */
+	color: #ffffff; /* 하얀색 폰트 */
+	background-color: #727cf5; /* 보라색 배경 */
 }
 
 .public-toggle-button:hover {
-  background-color: #d0d0d0;
+	background-color: #d0d0d0;
 }
 
 /****************************** 공용 색상 css ****************************/
-
 .color-white {
 	color: white;
 }
@@ -398,3 +391,12 @@ body {
 	background-color: #727CF5;
 }
 
+/***************************** 콘텐츠 이용 통계 도넛 ***************************************/
+.chart-container-doughnut {
+	margin-top: auto;
+	position: relative;
+	height: 350px; /* 도넛 차트 높이 조절 */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
