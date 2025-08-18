@@ -1,27 +1,27 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/ertds/qlfexm/selectQlfexmList.css">
-<!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
-	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
-		<!-- 대분류 -->
-		<div class="channel-title-text">진학 정보</div> 
+		<div class="channel-title-text">진학 정보</div>
 	</div>
 	<div class="channel-sub-sections">
+		<div class="channel-sub-section-item">
+			<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
+		</div>
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a></div> <!-- 중분류 -->
-		<div class="channel-sub-section-item"><a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a></div>
-		<div class="channel-sub-section-itemIn"><a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a></div>
+		<div class="channel-sub-section-item">
+			<a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a>
+		</div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a>
+		</div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
 
-		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			<!-- 검색 기능 -->
 			<form method="get" action="/ertds/qlfexm/selectQlfexmList.do">
 				<div class="com-default-search">
 					<input type="search" name="keyword" placeholder="검정고시 내에서 검색">
@@ -34,8 +34,8 @@
 			</form>
 			<p id="getAllNotice">총 ${getTotal}건</p>
 			<div class="result-list-wrapper">
-				<div class="list-header" >
-					<div class="header-item" style="padding-left: 20px; ">번호</div>
+				<div class="list-header">
+					<div class="header-item" style="padding-left: 20px;">번호</div>
 					<div class="header-item">제목</div>
 					<div class="header-item">교육기관</div>
 					<div class="header-item">작성일</div>
@@ -43,38 +43,32 @@
 				</div>
 				<div class="data-list">
 					<c:forEach var="item" items="${articlePage.content}">
-					    <div class="data-item" data-exam-id="${item.examId}">
-					        <div class="data-no">${item.examId}</div>
-					        <div>${item.examTitle}</div>
-					        <div style="padding-left: 20px; text-align: center;">${item.examAreaCode}</div>
-					        <div style="text-align: center;">
-					            <fmt:formatDate value="${item.examNotiDate}" pattern="yyyy.MM.dd" />
-					        </div>
-					    </div>
+						<div class="data-item" data-exam-id="${item.examId}">
+							<div class="data-no">${item.examId}</div>
+							<div>${item.examTitle}</div>
+							<div style="padding-left: 20px; text-align: center;">${item.examAreaCode}</div>
+							<div style="text-align: center;">
+								<fmt:formatDate value="${item.examNotiDate}" pattern="yyyy.MM.dd" />
+							</div>
+						</div>
 					</c:forEach>
 				</div>
 			</div>
 			<div class="card-footer clearfix">
 				<ul class="pagination">
-					<!-- Previous -->
-					<li><a
-						href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&gubun=${param.gubun}"
-						class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
-							← Previous </a></li>
-			
-					<!-- Page Numbers -->
-					<c:forEach var="pNo" begin="${articlePage.startPage}"
-						end="${articlePage.endPage}">
-						<li><a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&gubun=${param.gubun}"
-							class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
-								${pNo} </a></li>
+					<li>
+						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&gubun=${param.gubun}" class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>"> ← Previous </a>
+					</li>
+
+					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
+						<li>
+							<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&gubun=${param.gubun}" class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>"> ${pNo} </a>
+						</li>
 					</c:forEach>
-			
-					<!-- Next -->
-					<li><a
-						href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&gubun=${param.gubun}"
-						class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
-							Next → </a></li>
+
+					<li>
+						<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&gubun=${param.gubun}" class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>"> Next → </a>
+					</li>
 				</ul>
 			</div>
 		</div>
