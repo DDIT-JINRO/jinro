@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/empt/ivfb/updateInterviewFeedbackView.css">
+<link rel="stylesheet" href="/css/common/insertInterviewFeedbackView.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel" data-error-message="${errorMessage}">
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
@@ -28,90 +28,63 @@
 <div>
 	<div class="public-wrapper">
 		<div class="public-wrapper-main">
-			<div class="section-header">
-				<h2>면접 후기 수정</h2>
-				<p>작성해주신 면접 후기는 익명으로 등록됩니다.</p>
-			</div>
-			<div class="Insert-write">
-				<div class="info-input-section">
-					<div class="input-header">
-						<h3 class="file-label">기본정보 입력</h3>
-						<span class="required-info-text">※는 필수입력정보입니다</span>
-					</div>
-					<input type="text" value="${interviewReview.irId}" hidden="hidden" id="ir-id">
-					<table class="info-input-table">
-						<tbody>
-							<tr>
-								<th>
-									<label for="companyName">
-										기업명
-									</label>
-								</th>
-								<td>
-									<span>${interviewReview.targetName}</span>
-								</td>
-							</tr>
-							<tr>
-								<th>
-									<label for="interview-position">
-										직무직업
-									</label>
-								</th>
-								<td>
-									<span>${interviewReview.irApplication}</span>
-								</td>
-							</tr>
-							<tr>
-								<th>
-									면접 일자
-								</th>
-								<td>
-									<span><fmt:formatDate value="${interviewReview.irInterviewAt}" pattern="yyyy.MM.dd"/></span>
-								</td>
-							</tr>
-							<tr>
-							    <th>
-							        기업 평가
-							        <span class="required">*</span>
-							    </th>
-							    <td>
-									<div class="star-rating-container">
-							            <div class="star-rating" id="company-rating" data-rating="${interviewReview.irRating}">
-							                <span class="star" data-value="1">★</span>
-							                <span class="star" data-value="2">★</span>
-							                <span class="star" data-value="3">★</span>
-							                <span class="star" data-value="4">★</span>
-							                <span class="star" data-value="5">★</span>
-							            </div>
-							            <span class="rating-text" id="rating-text">평가해주세요</span>
-							        </div>
-							        <div class="rating-descriptions">
-							            면접 과정, 분위기, 기업 대응 등을 종합적으로 평가해주세요
-							        </div>
-							    </td>
-							</tr>
-							<tr>
-								<th>
-									면접 후기
-									<span class="required">*</span>
-								</th>
-							    <td>
-							        <div class="input-group textarea-container">
-							            <textarea id="interview-detail" 
-							                      placeholder="서류 합격 후 어떤 전형과 면접을 경험하셨나요?&#13;&#10;(사실이 아닌 비방이나 개인적인 의견은 등록이 거절될 수 있습니다.)" 
-							                      rows="5"
-							                      maxlength="300"
-							                      required="required"
-							                      >${interviewReview.irContent}</textarea>
-							        </div>
-							    </td>
-							</tr>
-						</tbody>
-					</table>
+			<div class="feedback-form">
+				<div class="feedback-form__header">
+					<h2 class="feedback-form__main-title">면접 후기 수정</h2>
+					<p class="feedback-form__subtitle">작성해주신 면접 후기는 닉네임으로 등록됩니다.</p>
 				</div>
-				<div class="button-group">
-					<button class="cancel-btn" id="back-btn">목록</button>
-					<button class="submit-btn" id="submit-btn">수정</button>
+				<div class="feedback-form__body">
+					<div class="feedback-form__group">
+						<div class="feedback-form__group-header">
+							<h3 class="feedback-form__group-title">기본정보 입력</h3>
+							<span class="feedback-form__required-info">※는 필수입력정보입니다</span>
+						</div>
+						<input type="hidden" value="${interviewReview.irId}" id="ir-id">
+						<table class="feedback-form__table">
+							<tbody>
+								<tr>
+									<th><label>기업명</label></th>
+									<td><span class="feedback-form__readonly-text">${interviewReview.targetName}</span></td>
+								</tr>
+								<tr>
+									<th><label>직무직업</label></th>
+									<td><span class="feedback-form__readonly-text">${interviewReview.irApplication}</span></td>
+								</tr>
+								<tr>
+									<th><label>면접 일자</label></th>
+									<td><span class="feedback-form__readonly-text"><fmt:formatDate value="${interviewReview.irInterviewAt}" pattern="yyyy.MM.dd"/></span></td>
+								</tr>
+								<tr>
+									<th>기업 평가 <span class="feedback-form__required">*</span></th>
+									<td>
+										<div class="rating-input" id="rating" data-rating="${interviewReview.irRating}">
+											<div class="rating-input__stars">
+												<span class="rating-input__star" data-value="1">★</span>
+												<span class="rating-input__star" data-value="2">★</span>
+												<span class="rating-input__star" data-value="3">★</span>
+												<span class="rating-input__star" data-value="4">★</span>
+												<span class="rating-input__star" data-value="5">★</span>
+											</div>
+											<span class="rating-input__text" id="rating-text">평가해주세요</span>
+										</div>
+										<p class="feedback-form__notice">면접 과정, 분위기, 기업 대응 등을 종합적으로 평가해주세요</p>
+									</td>
+								</tr>
+								<tr>
+									<th>면접 후기 <span class="feedback-form__required">*</span></th>
+									<td>
+										<div class="input-group input-group--textarea">
+											<textarea id="interview-detail" class="input-group__textarea" placeholder="서류 합격 후 어떤 전형과 면접을 경험하셨나요?&#13;&#10;(사실이 아닌 비방이나 개인적인 의견은 등록이 거절될 수 있습니다.)" rows="5" maxlength="300" required>${interviewReview.irContent}</textarea>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="feedback-form__actions">
+						<button class="feedback-form__button feedback-form__button--cancel" id="back-btn">목록</button>
+						<button class="feedback-form__button feedback-form__button--submit" id="submit-btn">수정</button>
+					</div>
 				</div>
 			</div>
 		</div>
