@@ -25,7 +25,7 @@ var calendarInstance = null; // 전역 변수로 선언
 		calendarInstance = new FullCalendar.Calendar(calendarEl, {
 			locale: 'ko',
 			initialView: 'dayGridMonth',
-
+			displayEventTime: false,
 			// 헤더 툴바의 버튼 위치 조정
 			headerToolbar: {
 				left: 'prev', // 이전 달 버튼을 왼쪽 끝으로
@@ -84,7 +84,6 @@ var calendarInstance = null; // 전역 변수로 선언
 								    assignedColors[counselorName] = colorPalette[colorIndex % colorPalette.length];
 								    colorIndex++;
 								}
-								
 				                events.push({
 				                    title: `${item.counselName}: ${item.count}건`,
 				                    start: item.counselReqDatetime,
