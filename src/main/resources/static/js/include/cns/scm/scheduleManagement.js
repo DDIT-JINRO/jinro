@@ -34,7 +34,6 @@ var currentViewMonth = null;
 			                 const month = (today.getMonth() + 1).toString().padStart(2, '0');
 			                 currentViewMonth = `${year}-${month}`;
 			            }
-
 			            axios.get('/api/cns/counseling/monthly-counts.do', {
 			                params: {
 			                    counselReqDatetime: currentViewMonth // 정확한 YYYY-MM 형식 전달
@@ -78,13 +77,30 @@ var currentViewMonth = null;
 			},
 			// 월이 변경될 때마다 호출되는 이벤트
 			datesSet: function(info) {
+
 				let currentDate = new Date();
 				let year = currentDate.getFullYear();
 				let month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
 				let day = currentDate.getDate().toString().padStart(2, '0');
-
 				let todayStr = `${year}-${month}-${day}`;
+				
+				const title = info.view.title;
 
+				   // 정규식을 사용하여 년도와 월을 추출합니다.
+				   const match = title.match(/(\d+)년 (\d+)월/);
+				   if (!match) {
+				       console.error("캘린더 제목에서 날짜를 파싱할 수 없습니다:", title);
+				       return;
+				   }
+
+				   const viewyear = match[1];
+				   const viewmonth = match[2].padStart(2, '0');
+				  	currentViewMonth = `${viewyear}-${viewmonth}`;
+					
+					if (calendarInstance) {
+						calendarInstance.refetchEvents();
+					}
+					
 				// 캘린더가 렌더링될 때, 오늘 날짜로 예약 가능 시간을 바로 불러오도록 수정
 				// 선택된 날짜가 없을 경우에만 실행
 				if (!selectedDate) {
