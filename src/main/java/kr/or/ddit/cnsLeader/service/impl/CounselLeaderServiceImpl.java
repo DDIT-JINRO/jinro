@@ -17,8 +17,6 @@ import kr.or.ddit.util.file.service.FileService;
 @Service
 public class CounselLeaderServiceImpl implements CounselLeaderService {
 
-	private static final CounselingVO CounselingVO = null;
-
 	@Autowired
 	CounselLeaderMapper counselLeaderMapper;
 

@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			selectedDate = info.dateStr;
 			document.getElementById('selectedDateText').textContent = selectedDate + "의 예약 가능한 시간";
-			console.log("1counselorName",selectedCounselorId);
 			fetchAvailableTimes(selectedCounselorId, selectedDate, memId);
 		},
 
@@ -64,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				} else {
 					document.getElementById('selectedDateText').textContent = selectedDate + "의 예약 가능한 시간";
 				}
-				console.log("2counselorName",selectedCounselorId);
 				fetchAvailableTimes(selectedCounselorId, selectedDate, memId);
 
 				// 캘린더 초기 로드 시 오늘 날짜에 시각적 효과 추가

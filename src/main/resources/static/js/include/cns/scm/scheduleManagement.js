@@ -285,7 +285,6 @@ function statusBtn(status, id, method, date, url ,memId) {
 			});
 			
 			const payId = payVO.data.payId;
-			console.log("patId",payId);
 			await axios.get('/api/cns/updateCounselStatus.do', {
 				params: {
 					counselId: id,
