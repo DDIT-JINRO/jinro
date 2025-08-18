@@ -259,7 +259,7 @@ to {
 }
 
 .dot-current {
-	background-color: #727CF5;
+	background-color: gray;
 }
 
 .dot-previous {
@@ -378,6 +378,21 @@ to {
 	background-color: #d0d0d0;
 }
 
+.arrow {
+    margin-left: 10px; /* 숫자와의 여백 */
+    font-weight: bold;
+}
+
+/* 상승 화살표 색상 */
+.arrow.increase {
+    color: rgba(10, 207, 151, 1);
+}
+
+/* 하락 화살표 색상 */
+.arrow.decrease {
+    color: #FA5C7C;
+}
+
 /****************************** 공용 색상 css ****************************/
 .color-white {
 	color: white;
@@ -400,3 +415,7 @@ to {
 	justify-content: center;
 	align-items: center;
 }
+
+
+
+

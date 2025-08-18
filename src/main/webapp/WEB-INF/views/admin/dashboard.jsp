@@ -62,7 +62,7 @@
 						<div class="stat-item">
 							<div class="stat-title">예상 결제금액</div>
 							<div class="stat-value-wrapper">
-								<span class="stat-dot dot-previous"></span>
+								<span class="stat-dot dot-current"></span>
 								<span class="stat-value" id="estimatedCurrentRevenue"></span>
 							</div>
 						</div>

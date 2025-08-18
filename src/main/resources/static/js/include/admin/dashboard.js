@@ -118,15 +118,16 @@ document.addEventListener('DOMContentLoaded', function() {
 				data: {
 					labels: labels,
 					datasets: [{
-						label: '구독자 수',
-						data: subscriberData,
+						label: '전체 사용자수',
+						data: totalUsersData,
 						borderColor: '#8e6ee4',
 						backgroundColor: 'rgba(142, 110, 228, 0.2)',
 						fill: true,
 						tension: 0.4
 					}, {
-						label: '전체 사용자수',
-						data: totalUsersData,
+
+						label: '구독자 수',
+						data: subscriberData,
 						borderColor: '#00e396',
 						backgroundColor: 'rgba(0, 227, 150, 0.2)',
 						fill: true,
@@ -214,22 +215,43 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	axios.get('/admin/las/payment/revenue-summary').then(res => {
+	    const avgPreviousRevenue = res.data.avgPreviousRevenue;
+	    const estimatedCurrentRevenue = res.data.estimatedCurrentRevenue;
+	    const spanAvgPreviousRevenue = document.getElementById('avgPreviousRevenue');
+	    const spanEstimatedCurrentRevenue = document.getElementById('estimatedCurrentRevenue');
 
-		const avgPreviousRevenue = res.data.avgPreviousRevenue;
-		const estimatedCurrentRevenue = res.data.estimatedCurrentRevenue;
-		const spanAvgPreviousRevenue = document.getElementById('avgPreviousRevenue');
-		const spanEstimatedCurrentRevenue = document.getElementById('estimatedCurrentRevenue');
-		
-		spanAvgPreviousRevenue.innerHTML = `${formatNumberWithCommasByAdminDashboard(avgPreviousRevenue)}원`;
-		spanEstimatedCurrentRevenue.innerHTML = `${formatNumberWithCommasByAdminDashboard(estimatedCurrentRevenue)}원`;
+	    spanAvgPreviousRevenue.textContent = `${formatNumberWithCommasByAdminDashboard(avgPreviousRevenue)}원`;
 
+	    const valueWrapper = spanEstimatedCurrentRevenue.parentElement;
+
+	    const existingArrow = valueWrapper.querySelector('.arrow');
+	    if (existingArrow) {
+	        existingArrow.remove();
+	    }
+
+	    spanEstimatedCurrentRevenue.textContent = `${formatNumberWithCommasByAdminDashboard(estimatedCurrentRevenue)}원`;
+
+	    if (estimatedCurrentRevenue > avgPreviousRevenue) {
+	        const arrowSpan = document.createElement('span');
+	        arrowSpan.className = 'arrow increase';
+	        arrowSpan.innerHTML = '&#9650;'; // 상승 화살표
+	        // --- 수정: 숫자(span) 뒤에 화살표를 추가합니다. ---
+	        valueWrapper.appendChild(arrowSpan);
+
+	    } else if (estimatedCurrentRevenue < avgPreviousRevenue) {
+	        const arrowSpan = document.createElement('span');
+	        arrowSpan.className = 'arrow decrease';
+	        arrowSpan.innerHTML = '&#9660;'; // 하락 화살표
+	        // --- 수정: 숫자(span) 뒤에 화살표를 추가합니다. ---
+	        valueWrapper.appendChild(arrowSpan);
+	    }
 	});
 
-	// 초기 로드 시 10대 차트 표시 및 버튼 활성화
+
 	updateDoughnutChart('teen');
 	setActiveButton(teenBtn);
 
-	// 버튼 클릭 이벤트
+
 	youthBtn.addEventListener('click', function() {
 		updateDoughnutChart('youth');
 		setActiveButton(this);
