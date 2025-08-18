@@ -634,6 +634,7 @@ html, body {
 }
 
 .search-filter__select-wrapper {
+	min-width: 120px;
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -958,6 +959,87 @@ html, body {
 	font-size: 1.1rem;
 	border: 1px dashed #e5e7eb;
 	border-radius: 8px;
+}
+
+/* ==========================================================================
+   아코디언 리스트
+   ========================================================================== */
+.accordion-list__item {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background-color: #fff;
+    overflow: hidden; /* 애니메이션을 위해 추가 */
+    transition: box-shadow 0.2s ease;
+}
+.accordion-list__item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.accordion-list__item-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.accordion-list__item-header:hover {
+    background-color: #f9fafb;
+}
+.accordion-list__item-header.is-active {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.accordion-list__toggle-icon {
+   	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 4px;
+	transition: transform 0.2s ease;
+	color: #656d76;
+}
+.accordion-list__toggle-icon.is-active {
+    transform: rotate(180deg);
+}
+
+.accordion-list__item-content {
+	padding: 0 20px;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease, padding 0.3s ease-in-out;;
+    overflow: hidden;
+}
+
+.accordion-list__item-content.is-active {
+    padding: 20px;
+    grid-template-rows: 1fr;
+}
+
+.accordion-list__content-body {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.accordion-list__col {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 0.95rem;
+}
+
+.accordion-list__col--toggle {
+	flex: 0 0 30px;
+	justify-content: flex-end;
+}
+
+.badge--my-post {
+	background-color: #fef3c7;
+	border: 1px solid #f59e0b;
+	color: #92400e;
+	padding: 3px 8px;
+	border-radius: 8px;
+	font-size: 11px;
+	font-weight: 600;
 }
 
 /* ==========================================================================
