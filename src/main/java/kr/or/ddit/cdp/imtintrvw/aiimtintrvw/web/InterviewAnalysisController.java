@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.AnalysisService;
 import kr.or.ddit.cdp.imtintrvw.aiimtintrvw.service.dto.AnalysisResponse;
+import kr.or.ddit.mpg.pay.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,12 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 public class InterviewAnalysisController {
 
 	private final AnalysisService analysisService;
+	private final PaymentService paymentService;
 
 	/**
 	 * 면접 분석 메인 엔드포인트 (프론트엔드 연동)
 	 */
 	@PostMapping("/analyze-interview")
-	public ResponseEntity<?> analyzeInterview(@RequestBody Map<String, Object> requestData) {
+	public ResponseEntity<?> analyzeInterview(@RequestBody Map<String, Object> requestData, @AuthenticationPrincipal String memId) {
 		String sessionId = null;
 
 		try {
@@ -63,6 +66,9 @@ public class InterviewAnalysisController {
 									analysisResult.getSummary().getRecommendation()),
 							"scores", Map.of("communication", analysisResult.getScores().getCommunication(), "appearance", analysisResult.getScores().getAppearance(), "content",
 									analysisResult.getScores().getContent(), "overall", analysisResult.getScores().getOverall()));
+			// 분석 완료후 응답 직전 횟수 차감
+			boolean isSuccess = paymentService.minusPayMockCnt(memId);
+			if(!isSuccess) throw new Exception("모의면접 유료 횟수 차감 중 오류발생");
 
 			return ResponseEntity.ok(response);
 

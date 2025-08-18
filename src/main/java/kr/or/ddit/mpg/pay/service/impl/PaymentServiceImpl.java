@@ -36,7 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Autowired
 	private PayMemberMapper payMemberMapper;
-	
+
 	@Autowired
 	private SubscriptionMapper subscriptionMapper;
 
@@ -104,7 +104,7 @@ public class PaymentServiceImpl implements PaymentService {
 			int subId = requestDto.getSubId();
 			SubscriptionVO product = subscriptionMapper.selectProductById(subId);
 			payment.setPayAmount(product.getSubPrice());
-			
+
 			if (subId == 1) { // BASIC 상품
 				payment.setPayResumeCnt(3);
 				payment.setPayCoverCnt(3);
@@ -212,10 +212,10 @@ public class PaymentServiceImpl implements PaymentService {
 		        if (originalSub != null) {
 		            memberSubscriptionMapper.reactivateSubscriptionById(originalSub.getMsId());
 		        }
-		        
+
 		        return true; // 예약 건 삭제에 성공했으므로 true 반환
 		    }
-		 
+
 		return false;
 	}
 
@@ -252,7 +252,7 @@ public class PaymentServiceImpl implements PaymentService {
 					payment.setImpUid((String) result.get("imp_uid"));
 					payment.setMerchantUid(newMerchantUid);
 					payment.setPayAmount(amount);
-					
+
 					// 5. 구독 상품에 따라 기능 횟수 설정
 					int subId = memberSubscriptionVO.getSubId();
 					if (subId == 1) { // BASIC 상품
@@ -288,11 +288,27 @@ public class PaymentServiceImpl implements PaymentService {
 			}
 		}
 	}
-	
+
 	//내일이 결제일인 구독 목록을 DB에서 조회
 	@Override
 	public List<MemberSubscriptionVO> findSubscriptionsDueTomorrow() {
 		// TODO Auto-generated method stub
 		return memberSubscriptionMapper.findSubscriptionsDueTomorrow();
+	}
+
+	@Override
+	public boolean minusPayMockCnt(String memId) {
+		try {
+			int memIdInt =Integer.parseInt(memId);
+			// 회원번호로 구독정보
+			MemberSubscriptionVO subs = selectByMemberId(memIdInt);
+			// 구독정보로 결제정보
+			PaymentVO paymentVO = paymentMapper.selectLastSubcription(subs);
+			// 결제정보로
+			return paymentMapper.minusPayMockCnt(paymentVO.getPayId()) > 0 ? true : false;
+		} catch (Exception e) {
+			log.error("모의면접 구독 횟수 차감중 오류 발생 : "+e.getMessage());
+			return false;
+		}
 	}
 }

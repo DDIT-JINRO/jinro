@@ -16,7 +16,7 @@
 		<result property="merchantUid" column="MERCHANT_UID" />
 		<result property="subName" column="SUB_NAME" />
 	</resultMap>
-	 
+
 	<!--  새로운 결제 정보를 데이터베이스에 삽입.
 	public int insertPayment(PaymentVO paymentVO); -->
 	<insert id="insertPayment" parameterType="kr.or.ddit.mpg.pay.service.PaymentVO">
@@ -34,7 +34,7 @@
             ,PAY_CONSULT_CNT
             ,PAY_MOCK_CNT
             ,MERCHANT_UID
-        ) 
+        )
         VALUES (
             #{payId}
            ,#{msId}
@@ -48,13 +48,13 @@
            ,#{merchantUid}
         )
 	</insert>
-	
-	<!-- 
+
+	<!--
 	//전체 결제 내역 조회 (구독 결제 내역 표시)
 	public List<PaymentVO> selectPaymentHistory(int memId);
 	 -->
 	 <select id="selectPaymentHistory" parameterType="int" resultMap="paymentMap">
-	    SELECT	
+	    SELECT
 				p.PAY_ID
 	           ,p.PAY_DATE
 	           ,p.PAY_AMOUNT
@@ -65,19 +65,19 @@
 	           ,p.PAY_MOCK_CNT
 	           ,p.MERCHANT_UID
 	           ,s.SUB_NAME
-        FROM	
+        FROM
         		PAYMENT p
-        JOIN	
+        JOIN
         		MEMBER_SUBSCRIPTION ms ON (p.MS_ID = ms.MS_ID)
-        JOIN	
+        JOIN
         		SUBSCRIBE s ON (ms.SUB_ID = s.SUB_ID)
-        WHERE	
+        WHERE
         		MEM_ID = #{memId}
         ORDER BY
         		p.PAY_DATE DESC
 	</select>
-	
-	<!-- 
+
+	<!--
 	// 구독 월간 기능 횟수 초기화
 	public int resetUsageCounts()
 	 -->
@@ -88,5 +88,29 @@
 			   ,PAY_CONSULT_CNT = 0
 			   ,PAY_MOCK_CNT = 0
 		WHERE	TRUNC(ADD_MONTHS(PAY_DATE, 1) + 1) = TRUNC(SYSDATE)
-	</update> 
+	</update>
+
+	<update id="minusPayMockCnt" parameterType="int">
+		UPDATE PAYMENT
+		   SET PAY_CONSULT_CNT = PAY_CONSULT_CNT - 1
+		 WHERE PAY_ID = #{payId}
+		   AND PAY_CONSULT_CNT > 0
+	</update>
+
+	<!-- 가장 최근 결제 정보 불러오기 -->
+	<select id="selectLastSubcription" parameterType="kr.or.ddit.mpg.pay.service.MemberSubscriptionVO" resultType="kr.or.ddit.mpg.pay.service.PaymentVO">
+		SELECT
+		    pay_id,
+		    ms_id,
+		    pay_date,
+		    pay_consult_cnt
+		FROM
+		    payment
+		WHERE
+		    ms_id = #{msId}
+		ORDER BY
+		    pay_id DESC
+		FETCH FIRST 1 ROW ONLY
+	</select>
+
 </mapper>
