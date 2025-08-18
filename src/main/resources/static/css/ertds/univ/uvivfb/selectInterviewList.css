@@ -69,12 +69,10 @@
 }
 
 .accordion-list__col--date {
-	text-align: center;
 	flex: 1;
 }
 
 .accordion-list__col--rating {
-	text-align: center;
 	flex: 1;
 }
 

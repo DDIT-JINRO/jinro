@@ -1025,6 +1025,7 @@ html, body {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	font-size: 0.95rem;
+	text-align: center;
 }
 
 .accordion-list__col--toggle {
