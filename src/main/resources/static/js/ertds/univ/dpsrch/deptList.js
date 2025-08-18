@@ -1,24 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
 	// 토글 버튼
-	const toggleButton = document.getElementById('com-accordion-toggle');
+	const toggleButton = document.querySelector('.search-filter__accordion-header');
 
 	// 필터 패널 
-	const panel = document.getElementById('com-accordion-panel');
+	const panel = document.querySelector('.search-filter__accordion-panel');
 
 	// 필터 키워드
-	const filterCheckboxes = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
+	const allCheckboxGroups = {
+	    lClassIds: document.querySelectorAll('.search-filter__option input[type="checkbox"][name="lClassIds"]')
+	};
 
 	// 선택 필터 영역
-	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
+	const selectedFiltersContainer = document.querySelector('.search-filter__selected-tags');
 
 	// 초기화 버튼
-	const resetButton = document.querySelector('.com-filter-reset-btn');
+	const resetButton = document.querySelector('.search-filter__reset-button');
 
 	// 디테일 페이지로 이동
-	document.querySelectorAll('.univDept-item').forEach(dept => {
+	document.querySelectorAll('.content-list__item').forEach(dept => {
 		dept.addEventListener('click', (e) => {
 			// 북마크 버튼 눌렀을 때에는 디테일 페이지로 넘어가지 않도록 방지
-			if (e.target.closest('.bookmark-btn') || e.target.closest('.select-btn')) {
+			if (e.target.closest('.bookmark-button') || e.target.closest('.compare-button')) {
 				return;
 			}
 			location.href = '/ertds/univ/dpsrch/selectDetail.do?uddId=' + dept.dataset.univdeptId;
@@ -28,82 +30,76 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 아코디언 코드
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
-			this.classList.toggle('active');
-			panel.classList.toggle('open');
-
-			if (panel.style.maxHeight) {
-				panel.style.maxHeight = null;
-			} else {
-				panel.style.maxHeight = panel.scrollHeight + 'px';
-			}
+			this.classList.toggle('is-active');
+			panel.classList.toggle('is-open');
 		});
 	}
 
 	// 필터 태그 추가
-	const createFilterTag = (text) => {
-		const filterTag = `<span class="com-selected-filter" data-filter="${text}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
+	const updateSelectedFiltersDisplay = () => {
+		if (!selectedFiltersContainer) return;
+	    selectedFiltersContainer.innerHTML = '';
+	    
+	    Object.keys(allCheckboxGroups).forEach(groupName => {
+	        const checkboxList = allCheckboxGroups[groupName];
+	        const selectedCheckboxes = Array.from(checkboxList).filter(checkBox => checkBox.checked);
 
-		selectedFiltersContainer.innerHTML += filterTag;
+	        selectedCheckboxes.forEach(checkbox => {
+	            const labelText = checkbox.nextElementSibling.textContent;
+	            let groupLabel = '계열';
+	            
+	            const tagHTML = `<span class="search-filter__tag" data-group="${groupName}" data-value="${checkbox.value}">${groupLabel} > ${labelText}<button type="button" class="search-filter__tag-remove">×</button></span>`;
+	            selectedFiltersContainer.insertAdjacentHTML('beforeend', tagHTML);
+	        });
+	    });
 	};
+	
+	Object.values(allCheckboxGroups).forEach(checkboxList => {
+	    checkboxList.forEach(checkbox => {
+	        checkbox.addEventListener('change', updateSelectedFiltersDisplay);
+	    });
+	});
 
 	// 필터 태그 삭제
-	const removeFilterTag = (text) => {
-		const tagToRemove = selectedFiltersContainer.querySelector(`[data-filter="${text}"]`);
-		if (tagToRemove) {
-			selectedFiltersContainer.removeChild(tagToRemove);
-		}
-	};
+	if (selectedFiltersContainer) {
+		selectedFiltersContainer.addEventListener('click', (e) => {
+			if (e.target.classList.contains('search-filter__tag-remove')) {
+				const tag = e.target.closest('.search-filter__tag');
+				const groupName = tag.dataset.group;
+	            const value = tag.dataset.value;
 
-	// 체크박스 변경 시 이벤트 처리
-	filterCheckboxes.forEach(checkbox => {
-		checkbox.addEventListener('change', (e) => {
-			const labelText = e.target.nextElementSibling.textContent;
-			if (e.target.checked) {
-				createFilterTag(labelText);
-			} else {
-				removeFilterTag(labelText);
+		        const checkboxToUncheck = Array.from(allCheckboxGroups[groupName]).find(checkbox => checkbox.value === value);
+
+		        if (checkboxToUncheck) {
+		            checkboxToUncheck.checked = false;
+		        }
+				updateSelectedFiltersDisplay();
 			}
 		});
-	});
-
-	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
-	selectedFiltersContainer.addEventListener('click', (e) => {
-		if (e.target.classList.contains('com-remove-filter')) {
-			const tag = e.target.closest('.com-selected-filter');
-			const filterText = tag.dataset.filter;
-
-			// 연결된 체크박스 찾아서 해제
-			const checkboxToUncheck = Array.from(filterCheckboxes).find(
-				cb => cb.nextElementSibling.textContent === filterText
-			);
-			if (checkboxToUncheck) {
-				checkboxToUncheck.checked = false;
-			}
-
-			// 태그 삭제
-			tag.remove();
-		}
-	});
+	}
 
 	// 초기화 버튼 클릭 시 이벤트 처리
 	if (resetButton) {
 		resetButton.addEventListener('click', () => {
-			filterCheckboxes.forEach(checkbox => {
-				checkbox.checked = false;
+			Object.values(allCheckboxGroups).forEach(checkboxList => {
+				checkboxList.forEach(checkbox => {
+					checkbox.checked = false;
+				});
 			});
-
-			selectedFiltersContainer.innerHTML = '';
+			updateSelectedFiltersDisplay();
 		});
 	}
 	
 	// 이벤트 추가
-	document.querySelectorAll('.bookmark-btn').forEach(button => {
+	document.querySelectorAll('.bookmark-button').forEach(button => {
 		button.addEventListener('click', function(event) {
 			event.preventDefault();
 			// 함수 전달
 			handleBookmarkToggle(this);
 		});
 	});
+	
+	updateSelectedFiltersDisplay();
 });
 
 const handleBookmarkToggle = (button) => {
@@ -116,7 +112,7 @@ const handleBookmarkToggle = (button) => {
 	const bmTargetId = button.dataset.targetId;
 
 	// 현재 버튼이 'active' 클래스를 가지고 있는지 확인
-	const isBookmarked = button.classList.contains('active');
+	const isBookmarked = button.classList.contains('is-active');
 
 	const data = {
 		bmCategoryId: bmCategoryId,
@@ -141,7 +137,7 @@ const handleBookmarkToggle = (button) => {
 		.then(data => {
 			if (data.success) {
 				alert(data.message);
-				button.classList.toggle('active');
+				button.classList.toggle('is-active');
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');
 			}
@@ -155,20 +151,19 @@ const handleBookmarkToggle = (button) => {
 
 // 비교 팝업
 document.addEventListener('DOMContentLoaded', function() {
-    const popup = document.querySelector(".dept-compare-popup");
-    const compareListContainer = document.querySelector(".compare-list");
-    const closeBtn = document.querySelector(".btn-close-popup");
-    const resetBtn = document.querySelector(".btn-clear-all");
-    const submitBtn = document.querySelector(".btn-view-results");
-    const selectButtons = document.querySelectorAll(".select-btn input");
+	const popup = document.querySelector(".compare-popup--dept");
+	const compareListContainer = document.querySelector(".compare-popup__list");
+	const closeBtn = document.querySelector(".compare-popup__close-button");
+	const resetBtn = document.querySelector(".compare-popup__button--clear");
+	const submitBtn = document.querySelector(".compare-popup__button--submit");
+	const selectButtons = document.querySelectorAll(".compare-button input");
+	const floatingBar = document.querySelector(".floating-bar");
 
-    const floatBtnContainer = document.querySelector(".right-fixed-bar");
+	if (!floatingBar || !popup) return;
+	
+    const popupOpenBtn = `<button type="button" class="compare-float-button__button">비교</button>`;
 
-    const popupOpenBtn = `
-        <button type="button" class="open-popup-btn">비교</button>
-    `;
-
-    floatBtnContainer.insertAdjacentHTML('beforeend', popupOpenBtn);
+    floatingBar.insertAdjacentHTML('beforeend', popupOpenBtn);
 
     // 기존 데이터 가져오기
     const initialCompareList = getCompareList();
@@ -205,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 직업 카드 삭제
     compareListContainer.addEventListener('click', function(event) {
-        const target = event.target.closest(".btn-remove-item");
+        const target = event.target.closest(".compare-card__remove-button");
         if (target) {
             const uddId = target.dataset.removeItem;
             deleteCompareCard(uddId);
@@ -222,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         compareListContainer.innerHTML = "";
-        sessionStorage.removeItem("compareList");
+        sessionStorage.removeItem("deptCompareList");
         popup.classList.remove('is-open');
     });
 
@@ -243,14 +238,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 		
-		sessionStorage.removeItem("compareList");
+		sessionStorage.removeItem("deptCompareList");
         const queryString = uddIds.map(id => `uddIds=${id}`).join('&');
         window.location.href = `/ertds/univ/dpsrch/selectCompare.do?${queryString}`;
     });
 
     // 팝업 열기 버튼
     document.addEventListener('click', function(event) {
-        const target = event.target.closest(".open-popup-btn");
+        const target = event.target.closest(".compare-float-button__button");
 
         if (target) {
             popup.classList.add('is-open');
@@ -260,19 +255,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 세션에 비교 목록 가져오기
 const getCompareList = () => {
-    const compareList = sessionStorage.getItem('compareList');
+    const compareList = sessionStorage.getItem('deptCompareList');
     return compareList ? JSON.parse(compareList) : {};
 }
 
 // 세션에 저장하기
 const saveCompareList = (compareList) => {
-    sessionStorage.setItem('compareList', JSON.stringify(compareList));
+    sessionStorage.setItem('deptCompareList', JSON.stringify(compareList));
 }
 
 // 비교 카드 생성하기
 const createCompareCard = (button, compareListContainer) => {
-    const popup = document.querySelector(".dept-compare-popup");
-
     const deptData = {
         uddId: button.value,
         deptName: button.dataset.deptName,
@@ -291,47 +284,32 @@ const createCompareCard = (button, compareListContainer) => {
 
     compareList[deptData.uddId] = deptData;
     saveCompareList(compareList);
-
     renderCompareItem(deptData, compareListContainer);
-
-    if(!popup.classList.contains('is-open')) {
-        popup.classList.add('is-open');
-    }
 }
 
 const renderCompareItem = (deptData, container) => {
-    const compareItemHtml = `
-        <div class="compare-item-card" id="compare-card-${deptData.uddId}" data-job-code=${deptData.uddId}>
-            <div class="card-header">
-                <h3 class="card-title">${deptData.deptName}</h3>
-                <button type="button" class="btn-remove-item" aria-label="삭제" data-remove-item="${deptData.uddId}">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
-                        <path d="M2.22 2.22a.75.75 0 0 1 1.06 0L8 6.94l4.72-4.72a.75.75 0 1 1 1.06 1.06L9.06 8l4.72 4.72a.75.75 0 1 1-1.06 1.06L8 9.06l-4.72 4.72a.75.75 0 0 1-1.06-1.06L6.94 8 2.22 3.28a.75.75 0 0 1 0-1.06Z" />
-                    </svg>
-                </button>
-            </div>
-            <div class="card-metrics">
-                <div class="metric">
-                    <div class="metric-text">
-                        <span class="metric-label">입학경쟁률</span>
-                        <span class="metric-value">${deptData.deptAdmission}</span>
-                    </div>
-                </div>
-                <div class="metric">
-                    <div class="metric-text">
-                        <span class="metric-label">취업률</span>
-                        <span class="metric-value">${deptData.deptEmp}%</span>
-                    </div>
-                </div>
-                <div class="metric">
-                    <div class="metric-text">
-                        <span class="metric-label">첫월급 평균</span>
-                        <span class="metric-value">${deptData.deptSalary}만원</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
+	const compareItemHtml = `
+	    <div class="compare-card" id="compare-card-${deptData.uddId}" data-dept-id="${deptData.uddId}">
+	        <div class="compare-card__header">
+	            <h3 class="compare-card__title">${deptData.deptName}</h3>
+	            <button type="button" class="compare-card__remove-button" aria-label="삭제" data-remove-item="${deptData.uddId}">×</button>
+	        </div>
+	        <div class="compare-card__metrics">
+	            <div class="compare-card__metric">
+	                <span class="compare-card__metric-label">입학경쟁률</span>
+	                <span class="compare-card__metric-value">${deptData.deptAdmission}</span>
+	            </div>
+	            <div class="compare-card__metric">
+	                <span class="compare-card__metric-label">취업률</span>
+	                <span class="compare-card__metric-value">${deptData.deptEmp}%</span>
+	            </div>
+	            <div class="compare-card__metric">
+	                <span class="compare-card__metric-label">첫월급 평균</span>
+	                <span class="compare-card__metric-value">${deptData.deptSalary}만원</span>
+	            </div>
+	        </div>
+	    </div>
+	`;
     container.innerHTML += compareItemHtml;
 }
 
@@ -351,6 +329,6 @@ const deleteCompareCard = (itemId) => {
     saveCompareList(compareList);
 
     if (Object.keys(compareList).length === 0) {
-        document.querySelector(".dept-compare-popup").classList.remove('is-open');
+        document.querySelector(".compare-popup--dept").classList.remove('is-open');
     };
 }
