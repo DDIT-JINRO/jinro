@@ -51,20 +51,27 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function toggleCard(header) {
-	const card = header.closest('.accordion-list__item');
-	const content = card.querySelector('.accordion-list__item-content');
-	const toggle = header.querySelector('.accordion-list__toggle-icon');
+	const currentCard = header.closest('.accordion-list__item');
+	const currentContent = currentCard.querySelector('.accordion-list__item-content');
+	const currentToggle = header.querySelector('.accordion-list__toggle-icon');
+	const isOpening = !currentContent.classList.contains('is-active');
 
-	const isActive = content.classList.contains('is-active');
+	document.querySelectorAll('.accordion-list__item').forEach(item => {
+	    if (item !== currentCard) {
+	        item.querySelector('.accordion-list__item-content').classList.remove('is-active');
+	        item.querySelector('.accordion-list__item-header').classList.remove('is-active');
+	        item.querySelector('.accordion-list__toggle-icon').classList.remove('is-active');
+	    }
+	});
 
-	if (isActive) {
-	    content.classList.remove('is-active');
-	    header.classList.remove('is-active');
-	    toggle.classList.remove('is-active');
-	} else {
-	    content.classList.add('is-active');
+	if (isOpening) {
+	    currentContent.classList.add('is-active');
 	    header.classList.add('is-active');
-	    toggle.classList.add('is-active');
+	    currentToggle.classList.add('is-active');
+	} else {
+	    currentContent.classList.remove('is-active');
+	    header.classList.remove('is-active');
+	    currentToggle.classList.remove('is-active');
 	}
 }
 
