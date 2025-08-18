@@ -254,9 +254,6 @@
 		<button type="button" class="compare-popup__button compare-popup__button--submit">직업 비교하기</button>
 	</footer>
 </aside>
-
-<div class="compare-float-button"></div>
-
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 <script src="/js/pse/cr/crl/selectCareerList.js"></script>
