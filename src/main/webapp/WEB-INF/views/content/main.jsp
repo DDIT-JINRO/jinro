@@ -78,9 +78,10 @@
 				<div class="banner-inner">
 					<div class="banner-left">
 						<img alt="" src="/images/logo.png">
-						<div class="main-title-banner">미래를 여는 길</div>
+						<div class="main-title-banner">꿈을 찾는 길</div>
 						<p>
-							승호
+							대학에 꿈을 가진 청소년에게<br>
+							미래를 설계하는데 필요한 대학 비교 페이지
 						</p>
 						<a href="/ertds/univ/uvsrch/selectUnivList.do" class="BtnData">대학 바로가기</a>
 					</div>
@@ -102,9 +103,10 @@
 			        <div class="banner-inner">
 			            <div class="banner-left">
 			                <img alt="" src="/images/logo.png">
-			                <div class="main-title-banner">미래를 여는 길</div>
+			                <div class="main-title-banner">꿈이 현실이 되는 길</div>
 			                <p>
-			                    빼이
+								꿈을 향해 달려가는 멋진 어른에게<br>
+								진로를 설계하는데 필요한 직업 비교 페이지
 			                </p>
 			                <a href="/pse/cr/crl/selectCareerList.do" class="BtnData">직업 바로가기</a>
 			            </div>
