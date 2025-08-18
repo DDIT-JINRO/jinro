@@ -92,11 +92,9 @@ public class AdminCommonChartServiceImpl implements AdminCommonChartService {
 	}
 
 	@Override
-	public Map<String, Object> getContentsUseChart() {
+	public List<Map<String, Object>> getContentsUseChart(String param) {
 		
-		adminDashBoardMapper.getContentsUseChart()
-		
-		return null;
+		return adminDashBoardMapper.getContentsUseChart(param);
 	}
 
 }

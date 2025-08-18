@@ -124,4 +124,33 @@
 		ORDER BY
 		    "MONTH"
 	</select>
+	
+	<select id="getContentsUseChart" parameterType="String" resultType="map">
+		WITH category AS (
+		    SELECT '/roadmap' AS pl_url, '로드맵' AS title FROM dual UNION ALL
+		    SELECT '/worldcup', '월드컵' FROM dual UNION ALL
+		    SELECT '/careerAptitudeTest', '심리검사' FROM dual UNION ALL
+		    SELECT '/aiImitaionInterview', '모의면접' FROM dual UNION ALL
+		    SELECT '/aiResume', 'AI 피드백' FROM dual UNION ALL
+		    SELECT '/aiSelfIntro', 'AI 피드백' FROM dual
+		),
+		filtered AS (
+		    SELECT p.pl_url
+		    FROM page_log p
+		    JOIN member m ON m.mem_id = p.mem_id
+		    <if test="param == 'teen'">
+		    WHERE FLOOR(MONTHS_BETWEEN(p.pl_created_at, m.mem_birth)/12) &gt;= 19
+		    </if>
+		    <if test="param == 'youth'">
+		    WHERE FLOOR(MONTHS_BETWEEN(p.pl_created_at, m.mem_birth)/12) &lt; 19
+		    </if>
+		)
+		SELECT c.title as "title",
+		       NVL(COUNT(f.pl_url), 0) AS "cnt"
+		FROM category c
+		LEFT JOIN filtered f
+		  ON f.pl_url = c.pl_url
+		GROUP BY c.title
+		ORDER BY c.title
+	</select>
 </mapper>

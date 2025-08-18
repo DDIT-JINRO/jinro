@@ -1,7 +1,5 @@
 package kr.or.ddit.admin.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,11 +26,9 @@ public class AdminDashBoard {
 	}
 	
 	@GetMapping("/getContentsUseChart.do")
-	public Map<String, Object> getContentsUseChart(String param) {
+	public List<Map<String, Object>> getContentsUseChart(String param) {
 		
-		log.info(param);
-		
-		return adminCommonChartService.getContentsUseChart();
+		return adminCommonChartService.getContentsUseChart(param);
 	}
 	
 }

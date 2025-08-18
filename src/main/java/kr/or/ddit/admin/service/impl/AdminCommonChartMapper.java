@@ -27,4 +27,6 @@ public interface AdminCommonChartMapper {
 
 	List<Map<String, Object>> getSecessionData();
 
+	List<Map<String, Object>> getContentsUseChart(String param);
+
 }

@@ -55,7 +55,7 @@
 							<div class="stat-title">월평균 결제금액</div>
 							<div class="stat-value-wrapper">
 								<span class="stat-dot dot-current"></span>
-								<span class="stat-value">58,254원</span>
+								<span class="stat-value" id="avgPreviousRevenue"></span>
 							</div>
 						</div>
 
@@ -63,7 +63,7 @@
 							<div class="stat-title">예상 결제금액</div>
 							<div class="stat-value-wrapper">
 								<span class="stat-dot dot-previous"></span>
-								<span class="stat-value">69,524원</span>
+								<span class="stat-value" id="estimatedCurrentRevenue"></span>
 							</div>
 						</div>
 
@@ -75,8 +75,8 @@
 				<div class="dashboard-2-2 template-panel">
 					<div class="middleTitlePp">컨텐츠 이용 통계</div>
 					<div class="flex gap10 endflex btn-group">
-						<button class="public-toggle-button active">청소년</button>
-						<button class="public-toggle-button">청년</button>
+						<button class="public-toggle-button active" id="teenBtn">청소년</button>
+						<button class="public-toggle-button" id="youthBtn">청년</button>
 					</div>
 					<div class="chart-container-doughnut">
 						<canvas id="nestedDoughnutChart"></canvas>
