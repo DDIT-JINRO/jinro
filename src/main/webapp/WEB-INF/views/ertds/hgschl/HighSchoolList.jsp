@@ -19,6 +19,9 @@
 </section>
 <div>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<h3 class="page-title-bar__title">고등학교 정보</h3>
+		</div>
 		<div class="public-wrapper-main">
 			<form method="get" action="/ertds/hgschl/selectHgschList.do">
 				<div class="search-filter__bar">
