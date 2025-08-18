@@ -331,6 +331,8 @@ function startMockInterview() {
             validateInterviewSettings(selectedValue)
                 .then(interviewSettings => {
                     openMockInterviewPopup(interviewSettings);
+					// 정상적으로 팝업 오픈 후에 로그찍기
+					axios.post('/admin/las/aiImitaionInterviewVisitLog.do');
                 })
                 .catch(error => {
                     console.error('❌ 면접 설정 검증 실패:', error);
