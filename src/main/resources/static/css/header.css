@@ -45,6 +45,8 @@ body {
 	height: 90px;
 	background-color: white;
 	font-family: 'Noto Sans KR', sans-serif;
+	position: relative;
+	z-index: 1000;
 }
 
 .public-topbar-left {
@@ -73,6 +75,7 @@ body {
 	display: flex;
 	margin: 5px 0 0 0;
 	padding: 0;
+	position: relative;
 }
 
 .public-topbar-center .public-nav-menu :hover {
@@ -83,16 +86,66 @@ body {
 	gap: 85px;
 }
 
+.public-topbar-center .public-nav-menu li {
+	position: relative;
+}
+
 .public-topbar-center .public-nav-menu li a {
 	text-decoration: none;
 	color: #626262;
 	font-size: 18px;
 	font-weight: bold;
+	display: block;
+	padding: 10px 0;
+	transition: color 0.3s ease;
+}
+
+/* 수정: 호버 효과 개선 */
+.public-topbar-center .public-nav-menu li:hover > a {
+	color: #848EFB;
 }
 
 .public-topbar-right {
 	display: flex;
 	gap: 26px;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.dropdown-submenu {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	background: white;
+	min-width: 140px;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	padding: 15px 0;
+	text-align: center;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.3s ease;
+	z-index: 1001;
+}
+
+.public-nav-menu li:hover .dropdown-submenu {
+	opacity: 1;
+	visibility: visible;
+	transform: translateX(-50%) translateY(0);
+}
+
+.dropdown-submenu a {
+	color: #333 !important;
+	font-size: 14px !important;
+	font-weight: 500 !important;
+	padding: 8px 20px !important;
+	display: block;
+	transition: all 0.2s ease;
+}
+
+.dropdown-submenu a:hover {
+	background-color: #f8f9ff;
+	color: #848EFB !important;
 }
 
 .icon-btn {
