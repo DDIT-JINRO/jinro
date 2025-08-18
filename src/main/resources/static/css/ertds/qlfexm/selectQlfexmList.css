@@ -1,165 +1,111 @@
 @charset "UTF-8";
 
-/* ==============================
-   검색창
-   ============================== */
-.com-select-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    /* 우측 구분선 */
-    border-right: 2px solid #e5e7eb;
+/* ==========================================================================
+   페이지 레이아웃: Content List 4열 구조 재정의
+   ========================================================================== */
+.content-list__total-count {
+	font-size: 0.9rem;
+	color: #6b7280;
+	margin-bottom: 15px;
+	text-align: right;
 }
 
-/* 검색창 select 박스 스타일 */
-.com-status-filter {
-    /* 기본 select 스타일 초기화 */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: transparent;
-    border: none;
-    padding: 0 36px 0 16px; 
-    font-size: 1rem;
-    color: #4b5563;
-    height: 100%;
-}
-.com-status-filter:focus {
-    outline: none;
-}
-/* IE 브라우저용 화살표 숨기기 */
-.com-status-filter::-ms-expand {
-    display: none;
-}
-
-/* 커스텀 화살표 아이콘 */
-.com-select-arrow {
-    position: absolute;
-    right: 12px;
-    width: 20px;
-    height: 20px;
-    color: #6b7280;
-    pointer-events: none; /* 화살표가 select 클릭을 방해하지 않도록 */
-}
-
-/* 1. 기본 검색창 스타일 */
-.com-default-search {
-    display: flex;
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 12px;
-    background-color: #fff;
-}
-
-.com-default-search input {
-    width: 100%;
-    border: none;
-    padding: 12px 16px;
-    font-size: 1rem;
-}
-
-.com-default-search input:focus {
-    outline: none;
-}
-
-.com-default-search .com-search-btn {
-    background: none;
-    border: none;
-    padding: 0 16px;
-    cursor: pointer;
-    color: #6b7280;
-}
-
-/* ==============================
-   테이블 스타일
-   ============================== */
-.result-list-wrapper {
-	margin-top: 40px;
-}
-
-/* 리스트 헤더 (목록 제목) */
-.list-header {
-	display: grid;
-	grid-template-columns: 1fr 3fr 1.3fr 1.5fr;
-	align-items: center; /* 세로 중앙 정렬 */
-	padding: 12px 30px; /* school-item과 동일한 패딩 */
-	/* school-item과 동일한 카드 스타일 적용 */
-	background-color: #fff;
-	border: 1px solid #e9ecef;
-	border-radius: 12px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-	text-align: center;
-	/* 헤더이므로 글씨는 조금 더 진하게 유지 */
-	font-weight: 600;
-	font-size: 16px;
-    color: #4b5563;
-}
-
-.list-header .header-item:first-child {
-	text-align: left;
-}
-
-.data-list {
+.content-list__header, .content-list__item {
 	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	background-color: transparent;
-	border: none;
-	padding: 0;
-	margin-top: 12px; 
+	align-items: center;
+	gap: 20px;
 }
 
-.data-item {
-	display: grid;
-	grid-template-columns: 1fr 3fr 1.3fr 1.5fr;
-	padding: 15px 20px;
-	background-color: #fff;
-	border: 1px solid #e9ecef;
-	border-radius: 12px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-	color: #333;
-	cursor: pointer;
-	transition: box-shadow 0.2s ease, transform 0.2s ease;
+.content-list__header {
+	padding: 12px 24px;
+}
+
+.content-list__item {
+	padding: 20px 24px;
 	text-decoration: none;
-	text-align: left;
 }
 
-
-.data-item:hover {
-	transform: translateY(-3px);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.content-list__title {
+	font-size: 1rem;	
 }
 
-
-.data-item a {
-	text-decoration: none;
-	color: #333;
-}
-
-/* ==============================
-   번호 스타일 (뱃지처럼)
-   ============================== */
-.data-no {
-	max-width:15%;
-	background: linear-gradient(to right, #e4f3ff, #d7e9fb);
-	color: #007bff;
-	font-weight: bold;
+.content-list__col {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	text-align: center;
-	padding: 8px 14px;
+	font-size: 0.95rem;
+	color: #374151;
+}
+
+/* --- 각 컬럼 너비 지정 --- */
+.content-list__col--no {
+	flex: 0 0 80px;
+}
+
+.content-list__col--title {
+	flex: 3;
+	justify-content: flex-start;
+}
+
+.content-list__header .content-list__col--title {
+	justify-content: center;
+}
+
+.content-list__col--agency {
+	flex: 1;
+}
+
+.content-list__col--date {
+	flex: 1;
+}
+
+/* --- 페이지 전용 컴포넌트 --- */
+.badge--number {
+	background-color: #eef2ff;
+	color: #4338ca;
+	font-weight: 600;
+	text-align: center;
+	padding: 6px 12px;
 	border-radius: 20px;
 	display: inline-block;
-	min-width: 40px;
+	min-width: 30px;
 	font-size: 13px;
-	line-height: 1.2; /* 세로 정렬 안정화 */
-	left: 10px;
 }
 
-/* ==============================
-   제목 좌측 정렬 여유
-   ============================== */
-td:nth-child(2) {
-	text-align: left;
-	padding-left: 16px;
+/* ==========================================================================
+   반응형 스타일
+   ========================================================================== */
+@media ( max-width : 768px) {
+	.content-list__header {
+		display: none;
+	}
+	.content-list__item {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
+	}
+	.content-list__col {
+		width: 100%;
+		justify-content: flex-start;
+		padding: 5px 0;
+		border-bottom: 1px dashed #eee;
+	}
+	.content-list__item .content-list__col:last-child {
+		border-bottom: none;
+	}
+	.content-list__col::before {
+		content: attr(data-label);
+		font-weight: 600;
+		color: #6b7280;
+		width: 80px;
+		flex-shrink: 0;
+	}
+	.content-list__col--title::before {
+		display: none;
+	}
+	.content-list__col--title {
+		border-bottom: none;
+		padding-bottom: 5px;
+	}
 }

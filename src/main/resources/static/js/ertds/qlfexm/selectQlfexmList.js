@@ -1,10 +1,9 @@
-document.addEventListener('DOMContentLoaded', function () {
-  var items = document.querySelectorAll('.data-item');
+document.addEventListener('DOMContentLoaded', function() {
 
-  for (var i = 0; i < items.length; i++) {
-    items[i].addEventListener('click', function () {
-      var examId = this.getAttribute('data-exam-id');
-      window.location.href = '/ertds/qlfexm/selectQlfexmDetail.do?examId=' + examId;
-    });
-  }
+	// 디테일 페이지로 이동
+	document.querySelectorAll('.content-list__item').forEach(exam => {
+		exam.addEventListener('click', () => {
+			location.href = '/ertds/qlfexm/selectQlfexmDetail.do?examId=' + exam.dataset.examId;
+		});
+	});
 });
