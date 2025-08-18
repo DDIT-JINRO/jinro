@@ -263,11 +263,11 @@ body {
 }
 
 .dot-current {
-	background-color: #FF4560;
+	background-color: #727CF5;
 }
 
 .dot-previous {
-	background-color: #727CF5;
+	background-color: #FF4560;
 }
 
 /* 금액 텍스트 스타일 */
