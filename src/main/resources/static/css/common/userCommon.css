@@ -1119,6 +1119,269 @@ html, body {
 }
 
 /* ==========================================================================
+   게시글 상세 - 공통 스타일 (userCommon.css에 추가)
+   ========================================================================== */
+.detail__header-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 40px;
+    gap: 20px;
+}
+
+/* 상세 헤더 */
+.detail__header {
+	display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.detail__badge {
+    background: #e8f4f8;
+    color: #2196f3;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 6px 15px;
+    border-radius: 15px;
+    min-width: 40px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.detail__title {
+	font-size: 18px;
+	font-weight: 600;
+	flex: 1;
+	color: #333;
+	word-break: break-word;
+	margin: 0;
+	line-height: 1.4;
+}
+
+/* 상세 메타 정보 */
+.detail__meta {
+    font-size: 13px;
+    color: #888;
+}
+
+.detail__meta-item {
+	display: inline;
+}
+
+.detail__meta-item:not(:last-child)::after {
+	content: " | ";
+	margin: 0 8px;
+}
+
+/* 상세 구분선 */
+.detail__divider {
+	border: none;
+	border-top: 1px solid #f0f0f0;
+	margin: 0 -40px 20px;
+}
+
+/* 상세 본문 */
+.detail__content {
+	flex: 1;
+	line-height: 1.8;
+	color: #333;
+	word-break: break-word;
+}
+
+/* 상세 액션 버튼들 */
+.detail__actions {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 30px;
+	flex-wrap: wrap;
+}
+
+.detail__action-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 10px 20px;
+	background-color: #6c7ae0;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	min-width: 80px;
+}
+
+.detail__action-button:hover {
+	background-color: #5a6fd8;
+}
+
+.detail__action-button--secondary {
+	background-color: #f8f9fa;
+	color: #6c7ae0;
+	border: 1px solid #e0e0e0;
+}
+
+.detail__action-button--secondary:hover {
+	background-color: #f0f1f3;
+}
+
+.detail__action-button--danger {
+	background-color: #dc3545;
+}
+
+.detail__action-button--danger:hover {
+	background-color: #c82333;
+}
+
+/* 목록으로 돌아가기 버튼 */
+.detail__back-to-list {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+.detail__back-to-list .detail__action-button {
+	min-width: 100px;
+	padding: 10px 30px;
+	background-color: #6c757d;
+	color: #fff;
+}
+
+.detail__back-to-list .detail__action-button:hover {
+	background-color: #5a6268;
+}
+
+/* 첨부파일 섹션 */
+.detail__attachments {
+	border-top: 1px solid #eee;
+	padding-top: 16px;
+	margin-top: 16px;
+}
+
+.detail__attachments-title {
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
+	margin-bottom: 12px;
+}
+
+.detail__attachments-list {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.detail__attachment-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	background-color: #f8f9fa;
+	border-radius: 6px;
+	border: 1px solid #e9ecef;
+}
+
+.detail__attachment-icon {
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
+}
+
+.detail__attachment-name {
+	flex: 1;
+	font-size: 14px;
+	color: #333;
+	text-decoration: none;
+}
+
+.detail__attachment-name:hover {
+	color: #007bff;
+	text-decoration: underline;
+}
+
+.detail__attachment-size {
+	font-size: 12px;
+	color: #666;
+}
+
+/* 상세 정보 그룹 */
+.detail__info-group {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	margin-bottom: 8px;
+}
+
+.detail__info-label {
+	font-weight: bold;
+	color: #222;
+	min-width: 80px;
+	flex-shrink: 0;
+}
+
+.detail__info-value {
+	flex: 1;
+	color: #333;
+}
+
+/* 상세 태그 */
+.detail__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 16px;
+}
+
+.detail__tag {
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 12px;
+	background-color: #f1f3f4;
+	color: #5f6368;
+	border-radius: 16px;
+	font-size: 12px;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.detail__tag:hover {
+	background-color: #e8eaed;
+	color: #202124;
+}
+
+/* 상세 상태 뱃지 */
+.detail__status-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 8px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.detail__status-badge--active {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.detail__status-badge--inactive {
+	background-color: #f8d7da;
+	color: #721c24;
+}
+
+.detail__status-badge--pending {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+/* ==========================================================================
    반응형 스타일
    ========================================================================== */
 @media (max-width: 1024px) {
@@ -1378,5 +1641,33 @@ html, body {
 	.pagination__link {
 		font-size: 0.8rem;
         padding: 6px 12px;
+	}
+	
+	.detail__header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+	}
+	
+	.detail__badge {
+		align-self: flex-start;
+	}
+	
+	.detail__title {
+		font-size: 16px;
+	}
+	
+	.detail__divider {
+		margin: 0 -20px 16px;
+	}
+	
+	.detail__actions {
+		flex-direction: column;
+		gap: 8px;
+	}
+	
+	.detail__action-button {
+		width: 100%;
+		justify-content: center;
 	}
 }

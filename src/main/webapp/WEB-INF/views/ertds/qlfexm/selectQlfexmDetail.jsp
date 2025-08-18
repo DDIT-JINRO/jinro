@@ -24,25 +24,33 @@
 	</div>
 
 	<div class="public-wrapper-main">
-		<div class="detail-box">
-			<div class="detail-title">
-				<span class="num">
+		<div class="detail__header-wrapper">
+			<div class="detail__header">
+				<span class="detail__badge">
 					<fmt:formatNumber value="${qualficationExamVO.examId}" pattern="000" />
 				</span>
-				&nbsp;
-				<span style="font-size: 20px; font-weight: bold;">${qualficationExamVO.examTitle}</span>
+				<h1 class="detail__title">${qualficationExamVO.examTitle}</h1>
 			</div>
-			<div class="detail-meta">
-				번호: ${qualficationExamVO.examId} | 교육기관: ${qualficationExamVO.examAreaCode} | 작성일:
-				<fmt:formatDate value="${qualficationExamVO.examNotiDate}" pattern="yyyy-MM-dd" />
+			<div class="detail__meta">
+				<span class="detail__meta-item">번호: ${qualficationExamVO.examId}</span>
+				<span class="detail__meta-item">교육기관: ${qualficationExamVO.examAreaCode}</span>
+				<span class="detail__meta-item">
+					작성일:
+					<fmt:formatDate value="${qualficationExamVO.examNotiDate}" pattern="yyyy-MM-dd" />
+				</span>
 			</div>
-			<hr class="detail-divider" />
-			<div class="detail-content">${qualficationExamVO.examContent}</div>
 		</div>
-		<div class="goList">
-			<a href="/ertds/qlfexm/selectQlfexmList.do">목 록</a>
+			<hr class="detail__divider" />
+			
+		<div class="detail__content">
+			<div class="exam-notice notice-content">${qualficationExamVO.examContent}</div>
+		</div>
+		
+		<div class="detail__back-to-list">
+			<a href="/ertds/qlfexm/selectQlfexmList.do" class="detail__action-button">목 록</a>
 		</div>
 	</div>
+
 </div>
 
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
