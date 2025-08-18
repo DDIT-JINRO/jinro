@@ -1,433 +1,96 @@
-.com-select-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    /* 우측 구분선 */
-    border-right: 2px solid #e5e7eb;
+@charset "UTF8";
+
+/* ==========================================================================
+   페이지 레이아웃: Content List 6열 구조 재정의
+   ========================================================================== */
+.content-list__total-count {
+	font-size: 0.9rem;
+	color: #6b7280;
+	margin-bottom: 15px;
+	text-align: right;
 }
 
-/* 검색창 select 박스 스타일 */
-.com-status-filter {
-    /* 기본 select 스타일 초기화 */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: transparent;
-    border: none;
-    padding: 0 36px 0 16px; /* 오른쪽 패딩으로 화살표 공간 확보 */
-    font-size: 1rem;
-    color: #4b5563;
-    cursor: pointer;
-    height: 100%;
-}
-.com-status-filter:focus {
-    outline: none;
-}
-/* IE 브라우저용 화살표 숨기기 */
-.com-status-filter::-ms-expand {
-    display: none;
-}
-
-/* 커스텀 화살표 아이콘 */
-.com-select-arrow {
-    position: absolute;
-    right: 12px;
-    width: 20px;
-    height: 20px;
-    color: #6b7280;
-    pointer-events: none; /* 화살표가 select 클릭을 방해하지 않도록 */
-}
-
-/* 1. 기본 검색창 스타일 */
-.com-default-search {
-    display: flex;
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 12px;
-    background-color: #fff;
-}
-
-.com-default-search input {
-    width: 100%;
-    border: none;
-    padding: 12px 16px;
-    font-size: 1rem;
-}
-
-.com-default-search input:focus {
-    outline: none;
-}
-
-.com-default-search .com-search-btn {
-    background: none;
-    border: none;
-    padding: 0 16px;
-    cursor: pointer;
-    color: #6b7280;
-}
-
-/* 2. 아코디언 상세 필터 스타일 */
-.com-accordion-filter {
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    background-color: #fff;
-    margin-bottom: 40px;
-    overflow: hidden; /* 아코디언 애니메이션을 위해 추가 */
-}
-
-.com-accordion-header {
-    width: 100%;
-    padding: 12px 20px;
-    background-color: #fff;
-    border: none;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #4b5563;
-}
-
-.com-accordion-header .com-arrow-icon {
-    transition: transform 0.3s ease;
-    font-size: 0.8rem;
-}
-
-.com-accordion-header.active .com-arrow-icon {
-    transform: rotate(0deg); /* active일 때(열렸을 때) 원상태 */
-}
-
-.com-accordion-header:not(.active) .com-arrow-icon {
-    transform: rotate(180deg); /* active가 아닐 때(닫혔을 때) 회전 */
-}
-
-/* 아코디언 내부 패널 */
-.com-accordion-panel {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    background-color: #f9fafb;
-    padding: 0 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    border-top: 1px solid #e5e7eb;
-}
-
-.com-accordion-panel.open {
-    padding: 24px; /* 열릴 때만 패딩 적용 */
-}
-
-.com-button-container {
+.content-list__header, .content-list__item {
 	display: flex;
-	justify-content: space-between;
+	align-items: center;
+	gap: 15px;
 }
 
-.com-filter-reset-btn {
-    width: auto;
-    padding: 5px 15px;
-    background-color: #f3f4f6;
-    color: #4b5563;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
+.content-list__item {
+	padding: 20px 24px;
 }
 
-.com-filter-title {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #374151;
-    margin: 12px;
+.content-list__col {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.com-filter-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+.content-list__col--univ-name {
+	flex: 1.8;
+	justify-content: flex-start;
+}
+	
+.content-list__col--region {
+	flex: 0.8;
 }
 
-.com-filter-item {
-    display: inline-flex;
-    cursor: pointer;
+.content-list__col--type {
+	flex: 0.6;
 }
 
-.com-filter-item span:hover {
-    background-color: #f0f0ff;
+.content-list__col--gubun {
+	flex: 0.5;
 }
 
-.com-filter-item input { display: none; }
-.com-filter-item span {
-    padding: 8px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 20px;
-    background-color: #fff;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
+.content-list__col--dept-count {
+	flex: 0.5;
 }
 
-.com-filter-item input:checked + span {
-    background-color: #eef2ff;
-    border-color: #818cf8;
-    color: #4338ca;
-    font-weight: 500;
+.content-list__col--bookmark {
+	flex: 0 0 80px;
 }
 
-.com-selected-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    min-height: 38px; /* 필터가 없을 때도 높이 유지 */
-}
+/* ==========================================================================
+   반응형 스타일
+   ========================================================================== */
+@media ( max-width : 768px) {
+	.content-list__header {
+		display: none;
+	}
+	.content-list__item {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
+	}
+	.content-list__col {
+		width: 100%;
+		justify-content: flex-start;
+		padding: 5px 0;
+		border-bottom: 1px dashed #eee;
+	}
+	.content-list__item .content-list__col:last-child {
+		border-bottom: none;
+	}
 
-.com-selected-filter {
-    font-size: 0.9rem;
-    background-color: #eef6ff;
-    color: #1f5ea9;
-    padding: 9px 15px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid #c4defc;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-    transition: background-color 0.2s, border 0.2s;
-}
+	.content-list__col::before {
+		content: attr(data-label);
+		font-weight: 600;
+		color: #6b7280;
+		width: 80px;
+		flex-shrink: 0;
+	}
 
-.com-remove-filter {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #38bdf8;
-    font-weight: bold;
-    padding: 0;
-}
-
-.com-submit-search-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #7881f5;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 12px;
-}
-
-
-/* 기업 목록 전체 컨테이너 */
-.company-list {
-    margin-top: 20px;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-/* 기업 목록 헤더 (기업이미지, 기업명 등) */
-.company-list > .accordion-header { /* 직접 자식인 accordion-header에만 적용 */
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    background-color: #f3f4f6; /* 회색 배경 */
-    font-weight: 600;
-    color: #4b5563;
-    border-bottom: 1px solid #e5e7eb;
-    gap: 10px; /* 항목 간 간격 */
-    margin-bottom: 10px;
-    border-radius: 10px; 
-}
-
-/* 개별 기업 항목 */
-.univ-item {
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    background-color: #fff;
-    margin-bottom: 10px;
-}
-
-/* 각 기업 항목의 헤더 (펼치기/접기 버튼 포함) */
-.univ-item .accordion-header {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.univ-item .accordion-header:hover {
-    background-color: #f9fafb;
-}
-
-/* 기업 정보 각 항목 (이미지, 이름, 번호 등) */
-.company-info-item {
-    padding: 0 3px; /* 내부 패딩 */
-    display: flex;
-    align-items: center;
-    white-space: nowrap; /* 내용이 길어져도 줄바꿈 방지 */
-    overflow: hidden; /* 넘치는 내용 숨김 */
-    text-overflow: ellipsis; /* 넘치는 내용 ... 처리 */
-    font-size: 0.95rem;
-    color: #374151;
-}
-
-/* 기업 이미지 */
-.company-image {
-    width: 60px; /* 이미지 크기 조정 */
-    height: 60px;
-    object-fit: contain; /* 비율 유지하며 컨테이너에 맞춤 */
-    border-radius: 4px; /* 살짝 둥근 모서리 */
-    border: 1px solid #e5e7eb;
-    background-color: #fff;
-    padding: 3px;
-}
-
-/* 홈페이지 링크 스타일 */
-.company-info-item a {
-    color: #4f46e5; /* 링크 색상 */
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.company-info-item a:hover {
-    text-decoration: underline;
-}
-
-/* 북마크 아이콘 */
-/* 북마크 버튼 기본 스타일 */
-.bookmark-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-/* 비활성 아이콘은 기본적으로 숨깁니다. */
-.bookmark-btn .icon-inactive {
-    display: none;
-}
-
-/* 활성 아이콘은 기본적으로 보입니다. */
-.bookmark-btn .icon-active {
-    display: inline-block;
-}
-
-.bookmark-btn span img {
-    width: 30px;
-    height: 30px;
-}
-
-/* .active 클래스가 없는 경우 (비활성화 상태) */
-.bookmark-btn:not(.active) .icon-active {
-    display: none; /* 활성 아이콘을 숨깁니다. */
-}
-
-.bookmark-btn:not(.active) .icon-inactive {
-    display: inline-block; /* 비활성 아이콘을 보여줍니다. */
-}
-
-/* 펼치기/접기 아이콘 */
-.toggle-icon {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #6b7280;
-    transition: transform 0.3s ease;
-}
-
-/* 아코디언 내용 부분 (기본적으로 숨김) */
-.accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-    background-color: #fefefe;
-    border-top: 1px solid #f3f4f6; /* 내용과 헤더 사이 구분선 */
-    padding: 0 20px; /* 초기 패딩 0 */
-}
-
-/* 아코디언 내용이 열렸을 때 */
-.univ-item.open .accordion-content {
-    max-height: 500px; /* 충분히 큰 값으로 설정하여 내용이 다 보이도록 */
-    padding: 20px; /* 열릴 때 패딩 적용 */
-    border-radius: 10px;
-}
-
-/* 아코디언 내용 내부 섹션 */
-.company-description-section,
-.company-review-section, /* 현재 JSP에서 주석 처리되어 있지만, 스타일은 남겨둠 */
-.company-address-section,
-.company-hiring-status-section {
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px dashed #e0e0e0; /* 섹션 구분선 */
-}
-
-.company-hiring-status-section {
-    border-bottom: none; /* 마지막 섹션은 구분선 없음 */
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.accordion-content h4 {
-    font-size: 1rem;
-    color: #1f2937;
-    margin-bottom: 8px;
-    font-weight: 600;
-    border-left: 4px solid #7881f5; /* 강조를 위한 왼쪽 보더 */
-    padding-left: 8px;
-}
-
-.accordion-content p {
-    font-size: 0.9rem;
-    color: #4b5563;
-    line-height: 1.6;
-}
-
-/* 총 건수 표시 */
-p:first-of-type { /* 이 부분이 '총 10건'을 의미하는 것으로 가정 */
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin-bottom: 15px;
-    padding-right: 10px;
-}
-
-
-/* 홈페이지 링크 스타일 */
-.company-info-item .homepage-link {
-    display: inline-block; /* span과 같은 인라인 요소에 패딩과 보더를 적용하기 위함 */
-    padding: 8px 16px; /* 필터 태그와 유사한 패딩 */
-    border: 1px solid #d1d5db; /* 필터 태그와 유사한 보더 */
-    border-radius: 20px; /* 동그란 모양 */
-    background-color: #f3f4f6; /* 약간의 배경색 */
-    font-size: 0.9rem; /* 글자 크기 조정 */
-    color: #4b5563; /* 글자 색상 */
-    text-decoration: none; /* 밑줄 제거 */
-    transition: all 0.2s ease; /* 호버 효과를 위한 전환 */
-    white-space: nowrap; /* 줄바꿈 방지 */
-    text-decoration: none;
-}
-
-.company-info-item .homepage-link:hover {
-    background-color: #eef2ff; /* 호버 시 배경색 변경 */
-    border-color: #818cf8; /* 호버 시 보더 색상 변경 */
-    color: #4338ca; /* 호버 시 글자 색상 변경 */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* 약간의 그림자 효과 */
-    text-decoration: none;
-}
-
-/* 추가적으로, 홈페이지 링크가 없는 경우를 대비한 스타일 */
-.company-info-item .no-homepage {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    color: #9ca3af; /* 비활성화된 느낌의 색상 */
-    background-color: #f9fafb;
-    border: 1px dashed #e0e0e0;
-    border-radius: 20px;
-    cursor: default;
-    white-space: nowrap;
+	.content-list__col--univ-name::before, .content-list__col--bookmark::before
+		{
+		display: none;
+	}
+	.content-list__col--univ-name {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+	.content-list__col--bookmark {
+		align-self: center;
+		padding-top: 10px;
+	}
 }
