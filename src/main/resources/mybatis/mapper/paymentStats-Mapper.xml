@@ -331,7 +331,7 @@
 	대시보드 상단 숫자 통계 (평균매출 vs 예상매출)
 	public Map<String, Object> getRevenueSummaryForDashboard();
 	 -->
-	<select id="selectRevenueSummaryForDashboard" resultType="map">
+	<select id="getRevenueSummaryForDashboard" resultType="map">
 		<![CDATA[
 	    SELECT
 	        -- 1. 이전달까지의 월평균 매출
