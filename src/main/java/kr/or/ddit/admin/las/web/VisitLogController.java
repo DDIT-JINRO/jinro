@@ -40,4 +40,9 @@ public class VisitLogController {
 		visitLogService.insertPageLog(memId, "자기소개서AI요청", "/aiSelfIntro", null);
 	}
 
+	@PostMapping("/las/aiImitaionInterviewVisitLog.do")
+	public void aimitaionInterviewVisitLog(@AuthenticationPrincipal String memId) {
+		visitLogService.insertPageLog(memId, "모의면접", "/aiImitaionInterview", null);
+	}
+
 }
