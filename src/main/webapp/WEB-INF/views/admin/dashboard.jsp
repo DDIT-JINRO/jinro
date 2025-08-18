@@ -32,7 +32,7 @@
 					<div class="template-panel dashboard-1-1-1 overflow-wrap" style="margin-bottom: 0;">
 						<div class="public-card-title">전체 이용자</div>
 						<img class="image1-1-1-1" alt="" src="/images/admin/admin-image1.png">
-						<div class="userCnt-1-1-1" id="allUserCount">1,456</div>
+						<div class="userCnt-1-1-1" id="allUserCount"></div>
 						<div class="increase-1-1-1">
 							<span class="public-span-increase" id="allUserRate"></span>
 							<div class="increase-1-1-1-p">Since last month</div>

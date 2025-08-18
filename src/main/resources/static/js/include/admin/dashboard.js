@@ -2,12 +2,47 @@ let doughnutChart = null;
 
         document.addEventListener('DOMContentLoaded', function() {
             
-            /************************ 월별 사용자 통계 *******************************/
+            /************************ 월별 사용자 통계 및 카드 데이터 *******************************/
             axios.get('/admin/chart/getAdminDashboard.do').then(res => {
                 const chartData = res.data;
-
-                // --- 카드 데이터 UI 업데이트 (생략) ---
+                console.log(chartData);
                 
+                // --- 카드 데이터 UI 업데이트 ---
+                const liveUserCount = document.getElementById('liveUserCount');
+                const monthUserCount = document.getElementById('monthUserCount');
+                const allUserCount = document.getElementById('allUserCount');
+                liveUserCount.innerHTML = formatNumberWithCommasByAdminDashboard(chartData.liveUserCount);
+                monthUserCount.innerHTML = formatNumberWithCommasByAdminDashboard(chartData.monthUserCount);
+                allUserCount.innerHTML = formatNumberWithCommasByAdminDashboard(chartData.allUserCount);
+                
+                const monthUserRate = document.getElementById('monthUserRate');
+                const allUserRate = document.getElementById('allUserRate');
+                if (chartData.monthUserCountStatus === "increase") {
+                    monthUserRate.innerHTML = `&#9650;&nbsp;${chartData.monthUserCountRate}%`;
+                    monthUserRate.classList.add('public-span-increase');
+                    monthUserRate.classList.remove('public-span-decrease');
+                } else if (chartData.monthUserCountStatus === "decrease") {
+                    monthUserRate.innerHTML = `&#9660;&nbsp;${chartData.monthUserCountRate}%`;
+                    monthUserRate.classList.add('public-span-decrease');
+                    monthUserRate.classList.remove('public-span-increase');
+                } else {
+                    monthUserRate.innerHTML = `${chartData.monthUserCountRate}%`;
+                    monthUserRate.classList.remove('public-span-increase', 'public-span-decrease');
+                }
+                if (chartData.allUserCountStatus === "increase") {
+                    allUserRate.innerHTML = `&#9650;&nbsp;${chartData.allUserCountRate}%`;
+                    allUserRate.classList.add('public-span-increase');
+                    allUserRate.classList.remove('public-span-decrease');
+                } else if (chartData.allUserCountStatus === "decrease") {
+                    allUserRate.innerHTML = `&#9660;&nbsp;${chartData.allUserCountRate}%`;
+                    allUserRate.classList.add('public-span-decrease');
+                    allUserRate.classList.remove('public-span-increase');
+                } else {
+                    allUserRate.innerHTML = `${chartData.allUserCountRate}%`;
+                    allUserRate.classList.remove('public-span-increase', 'public-span-decrease');
+                }
+                
+                // --- 월별 사용자 통계 차트 생성 ---
                 const totalUsersData = chartData.monthlyChart.map(item => item.CUMULATIVE_USER_COUNT);
                 const newUsersData = chartData.newUserChart.map(item => item.MONTHLY_USER_COUNT);
                 const secessionUsersData = chartData.secessionChart.map(item => item.MONTHLY_DELETION_COUNT);
@@ -178,9 +213,9 @@ let doughnutChart = null;
                 });
             }
 
-            // 초기 로드 시 10대 차트 표시
+            // 초기 로드 시 10대 차트 표시 및 버튼 활성화
             updateDoughnutChart('teen');
-            document.getElementById('teenBtn').classList.add('active'); // 10대 버튼 활성화
+            setActiveButton(teenBtn);
 
             // 버튼 클릭 이벤트
             youthBtn.addEventListener('click', function() {
@@ -193,6 +228,7 @@ let doughnutChart = null;
                 setActiveButton(this);
             });
             
+            // 버튼 활성화 상태 관리 함수
             function setActiveButton(activeBtn) {
                  const buttons = activeBtn.parentElement.querySelectorAll('.public-toggle-button');
                  buttons.forEach(btn => btn.classList.remove('active'));
