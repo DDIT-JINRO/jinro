@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 const cardData = {
 	student: [{
@@ -93,12 +93,13 @@ function renderCards(type) {
 renderCards("student");
 
 function startTest(type, title) {
-		
-	axios.post("/pse/cat/test/start", {
-		type: type
+
+	axios.post("/admin/las/careerAptitudeTest.do", {
+		type: type,
+		title: title,
 	})
 		.then(response => {
-			
+
 			const width = 1000;
 			const height = 800;
 			const left = window.screenX + (window.outerWidth - width) / 2;

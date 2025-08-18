@@ -1,8 +1,11 @@
 package kr.or.ddit.admin.las.web;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,6 +46,14 @@ public class VisitLogController {
 	@PostMapping("/las/aiImitaionInterviewVisitLog.do")
 	public void aimitaionInterviewVisitLog(@AuthenticationPrincipal String memId) {
 		visitLogService.insertPageLog(memId, "모의면접", "/aiImitaionInterview", null);
+	}
+
+	@PostMapping("/las/careerAptitudeTest.do")
+	public void careerAptitudeTest(@AuthenticationPrincipal String memId, @RequestBody Map<String, Object> param) {
+		int type = (int) param.get("type");
+		String title = (String) param.get("title");
+		String plTitle = "심리검사"+"-"+type+"-"+title;
+		visitLogService.insertPageLog(memId, plTitle, "/careerAptitudeTest", null);
 	}
 
 }
