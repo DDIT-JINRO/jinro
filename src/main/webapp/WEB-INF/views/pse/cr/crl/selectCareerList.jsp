@@ -123,6 +123,15 @@
 				</c:when>
 				<c:otherwise>
 					<div class="content-list">
+					    <div class="content-list__header">
+				        	<span class="content-list__header-col content-list__header-col--main">직업명</span>
+					        <span class="content-list__header-col content-list__header-col--meta">직업 정보</span>
+					        <div class="content-list__actions">
+						        <span class="content-list__header-col content-list__header-col--bookmark">북마크</span>
+						        <span class="content-list__header-col content-list__header-col--compare">비교</span>
+					        </div>
+					    </div>
+
 						<c:forEach var="jobs" items="${articlePage.content}">
 							<div class="content-list__item" data-job-id="${jobs.jobCode}">
 								<div class="content-list__main-info">
@@ -168,15 +177,11 @@
 										</span>
 									</button>
 									<label class="compare-button">
-										<input type="checkbox" id="compare-btn${jobs.jobCode}" name="jobLcls" value="${jobs.jobCode}" data-job-name="${jobs.jobName}" data-job-sal="${jobs.averageSal}"
-											data-job-prospect="${jobs.prospect}" data-job-satis="${jobs.jobSatis}"
-										/>
+										<input type="checkbox" id="compare-btn${jobs.jobCode}" name="jobLcls" value="${jobs.jobCode}" data-job-name="${jobs.jobName}" data-job-sal="${jobs.averageSal}" data-job-prospect="${jobs.prospect}" data-job-satis="${jobs.jobSatis}" />
 										<span>
 											비교
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
-												<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.052-.143z"
-													clip-rule="evenodd"
-												/></svg>
+												<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.052-.143z" clip-rule="evenodd" /></svg>
 										</span>
 									</label>
 								</div>

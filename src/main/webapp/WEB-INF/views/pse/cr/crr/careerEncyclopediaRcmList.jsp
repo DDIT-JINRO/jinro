@@ -120,6 +120,15 @@
 					</c:when>
 					<c:otherwise>
 						<div class="content-list">
+							<div class="content-list__header">
+								<span class="content-list__header-col content-list__header-col--main">직업명</span>
+								<span class="content-list__header-col content-list__header-col--meta">직업 정보</span>
+						        <div class="content-list__actions">
+							        <span class="content-list__header-col content-list__header-col--bookmark">북마크</span>
+							        <span class="content-list__header-col content-list__header-col--compare">비교</span>
+						        </div>
+							</div>
+
 							<c:forEach var="jobs" items="${articlePage.content}">
 								<div class="content-list__item" data-job-id="${jobs.jobCode}">
 									<div class="content-list__main-info">

@@ -1,11 +1,47 @@
 @charset "UTF-8";
 
 /* ==========================================================================
+   컨텐츠 아이템 정의
+   ========================================================================== */
+.content-list__item {
+	padding: 24px;
+}
+
+.content-list__header-col--main,
+.content-list__main-info {
+	flex: 1 1 50%;
+	padding-right: 20px;
+}
+.content-list__header-col--meta,
+.content-list__meta-group {
+	flex: 0 0 350px;
+	gap: 20px;
+}
+.content-list__header-col--actions,
+.content-list__actions {
+	flex: 0 0 135px;
+	gap: 15px;
+}
+
+.content-list__header-col--bookmark {
+	width: 70px;
+}
+
+.content-list__header-col--compare {
+	width: 75px;
+}
+
+.bookmark-button {
+	width: 70px;
+}
+   
+/* ==========================================================================
    직업 비교 버튼
    ========================================================================== */
 .compare-button {
 	display: inline-flex;
 	cursor: pointer;
+	width: 75px;
 }
 .compare-button span:hover {
 	background-color: #f0f0ff;
@@ -218,12 +254,42 @@
    반응형 스타일
    ========================================================================== */
 @media (max-width: 768px) {
+	/* 컨텐츠 아이템 정의 */
+	.content-list__header {
+		display: none;
+	}
+	.content-list__item {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
+	}
+	.content-list__main-info,
+	.content-list__meta-group,
+	.content-list__actions {
+		flex: auto;
+		width: 100%;
+        padding-right: 0;
+	}
+	.content-list__meta-group {
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+	.content-list__meta-item {
+		width: auto;
+		flex: 1 1 45%;
+		justify-content: flex-start;
+	}
+	.content-list__actions {
+		justify-content: flex-end;
+	}
+	
 	.compare-float-button__button {
 	    width: 50px;
 	    font-size: 0.7rem;
 	    padding: 5px;
 	}
 	
+	/* 비교 팝업 */
 	.compare-popup {
 		width: 95%; 
 		max-width: 380px;
