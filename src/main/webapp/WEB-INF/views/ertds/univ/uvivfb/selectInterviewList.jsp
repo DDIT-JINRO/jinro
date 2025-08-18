@@ -128,7 +128,7 @@
 									<div class="detail-item">
 										<div class="detail-label">평점</div>
 										<div class="detail-value">
-											<span class="stars" style="color: #ffd700;">
+											<span class="rating__stars">
 												<c:forEach begin="1" end="5" var="i">
 													<c:choose>
 														<c:when test="${i <= content.irRating}">★</c:when>
