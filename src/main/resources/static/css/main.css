@@ -452,7 +452,7 @@ body {
   gap: 14px;
   font-family: 'Noto Sans KR', sans-serif;
   position: relative;
-  z-index: 1000;
+  z-index: 5;
 }
 
 .trend-widget{
