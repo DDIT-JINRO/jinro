@@ -92,9 +92,9 @@
 
 	<update id="minusPayMockCnt" parameterType="int">
 		UPDATE PAYMENT
-		   SET PAY_CONSULT_CNT = PAY_CONSULT_CNT - 1
+		   SET PAY_MOCK_CNT = PAY_MOCK_CNT - 1
 		 WHERE PAY_ID = #{payId}
-		   AND PAY_CONSULT_CNT > 0
+		   AND PAY_MOCK_CNT > 0
 	</update>
 
 	<!-- 가장 최근 결제 정보 불러오기 -->
