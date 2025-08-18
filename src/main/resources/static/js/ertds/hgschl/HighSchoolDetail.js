@@ -4,14 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	let currentMarker = null;
 	let currentInfoWindow = null;
 
-	// 1. JSP의 data-* 속성에서 데이터 읽어오기
 	const container = document.getElementById('highSchoolDetailContainer');
+	if (!container) return;
+
 	const highSchoolData = {
 		hsName: container.dataset.hsName,
 		hsAddr: container.dataset.hsAddr,
 		hsTel: container.dataset.hsTel,
-		hsLat: parseFloat(container.dataset.hsLat), // 숫자로 변환
-		hsLot: parseFloat(container.dataset.hsLot)  // 숫자로 변환
+		hsLat: parseFloat(container.dataset.hsLat),
+		hsLot: parseFloat(container.dataset.hsLot)
 	};
 
 	const mapContainer = document.getElementById('map');
@@ -20,28 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (mapContainer) {
 		kakao.maps.load(() => {
 			let initialPosition, initialLevel;
-
-			// 위치 정보가 있으면 학교 위치로, 없으면 기본 위치(대전 시청)로 설정
 			if (highSchoolData.hsLat && highSchoolData.hsLot) {
 				initialPosition = new kakao.maps.LatLng(highSchoolData.hsLat, highSchoolData.hsLot);
-				initialLevel = 3; // 확대 레벨
+				initialLevel = 3;
 			} else {
-				initialPosition = new kakao.maps.LatLng(36.3504, 127.3845);
-				initialLevel = 7; // 축소 레벨
-				mapContainer.innerHTML = '<div style="text-align:center; padding-top: 120px; color: #6c757d;">위치 정보가 없습니다.</div>';
+				initialPosition = new kakao.maps.LatLng(36.3504, 127.3845); // 대전 시청
+				initialLevel = 7;
+				mapContainer.innerHTML = '<div style="text-align:center; padding: 120px 0; color: #6c757d;">위치 정보가 없습니다.</div>';
 			}
 
-			const mapOption = {
-				center: initialPosition,
-				level: initialLevel
-			};
+			const mapOption = { center: initialPosition, level: initialLevel };
 			map = new kakao.maps.Map(mapContainer, mapOption);
 
-			// 위치 정보가 있을 때만 마커와 인포윈도우 표시
 			if (highSchoolData.hsLat && highSchoolData.hsLot) {
 				currentMarker = new kakao.maps.Marker({ position: initialPosition });
 				currentMarker.setMap(map);
-
 				const iwContent = `<div style="padding:5px; font-size:14px;"><b>${highSchoolData.hsName}</b></div>`;
 				currentInfoWindow = new kakao.maps.InfoWindow({ content: iwContent });
 				currentInfoWindow.open(map, currentMarker);
@@ -56,10 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	// PDF 내용을 생성하는 함수
 	function generatePdfContent() {
 		// 현재 페이지의 데이터 가져오기
-		const schoolName = document.querySelector('.school-summary-box h2').textContent;
-		const summaryItems = document.querySelectorAll('.summary-info-list li');
-		const detailRows = document.querySelectorAll('.details-table tr');
-		const deptItems = document.querySelectorAll('.dept-list li');
+		const schoolName = document.querySelector('.detail-header__title').textContent;
+		const summaryItems = document.querySelectorAll('.detail-header__meta-item');
+		const detailRows = document.querySelectorAll('.info-table tr');
+		const deptItems = document.querySelectorAll('.tag-list__item');
 
 		let summaryHtml = '';
 		summaryItems.forEach(item => {
@@ -68,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		let detailsHtml = '';
 		detailRows.forEach(row => {
-			// innerHTML을 사용하여 링크(<a>) 태그도 그대로 복사
 			detailsHtml += `<tr><th>${row.cells[0].textContent}</th><td>${row.cells[1].innerHTML}</td></tr>`;
 		});
 
