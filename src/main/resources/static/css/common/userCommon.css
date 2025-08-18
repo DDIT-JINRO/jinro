@@ -399,7 +399,7 @@ html, body {
 	padding: 40px 0;
 	background: rgba(132, 142, 251, 0.3);
 	backdrop-filter: blur(10px);
-	z-index: 1000;
+	z-index: 1001;
 	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 	color: black;
 	opacity: 1;
