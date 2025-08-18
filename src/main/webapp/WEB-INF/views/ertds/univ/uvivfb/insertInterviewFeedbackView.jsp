@@ -88,7 +88,7 @@
 									<th>면접 후기 <span class="feedback-form__required">*</span></th>
 									<td>
 										<div class="input-group input-group--textarea">
-											<textarea id="interviewContent" class="input-group__textarea" placeholder="서류 합격 후 어떤 전형과 면접을 경험하셨나요?" rows="5" maxlength="300" required></textarea>
+											<textarea id="interviewContent" class="input-group__textarea" placeholder="서류 합격 후 어떤 전형과 면접을 경험하셨나요?&#13;&#10;(사실이 아닌 비방이나 개인적인 의견은 등록이 거절될 수 있습니다.)" rows="5" maxlength="300" required></textarea>
 										</div>
 									</td>
 								</tr>
