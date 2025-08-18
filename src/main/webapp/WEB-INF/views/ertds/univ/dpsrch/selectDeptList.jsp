@@ -125,15 +125,15 @@
 			</div>
 
 			<!-- 페이징 -->
+			<!-- 페이징 -->
 			<div class="pagination">
 				<c:url var="prevUrl" value="${articlePage.url}">
 					<c:param name="currentPage" value="${articlePage.startPage - 5}" />
-					<c:forEach var="p" items="${param}">
-						<c:if test="${p.key ne 'currentPage'}">
-							<c:forEach var="v" items="${p.value}">
-								<c:param name="${p.key}" value="${v}" />
-							</c:forEach>
-						</c:if>
+					<c:if test="${not empty param.keyword}">
+						<c:param name="keyword" value="${param.keyword}" />
+					</c:if>
+					<c:forEach var="lClassId" items="${paramValues.lClassIds}">
+						<c:param name="lClassIds" value="${lClassId}" />
 					</c:forEach>
 				</c:url>
 				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
@@ -141,12 +141,11 @@
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 					<c:url var="pageUrl" value="${articlePage.url}">
 						<c:param name="currentPage" value="${pNo}" />
-						<c:forEach var="p" items="${param}">
-							<c:if test="${p.key ne 'currentPage'}">
-								<c:forEach var="v" items="${p.value}">
-									<c:param name="${p.key}" value="${v}" />
-								</c:forEach>
-							</c:if>
+						<c:if test="${not empty param.keyword}">
+							<c:param name="keyword" value="${param.keyword}" />
+						</c:if>
+						<c:forEach var="lClassId" items="${paramValues.lClassIds}">
+							<c:param name="lClassIds" value="${lClassId}" />
 						</c:forEach>
 					</c:url>
 					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
@@ -154,12 +153,11 @@
 
 				<c:url var="nextUrl" value="${articlePage.url}">
 					<c:param name="currentPage" value="${articlePage.startPage + 5}" />
-					<c:forEach var="p" items="${param}">
-						<c:if test="${p.key ne 'currentPage'}">
-							<c:forEach var="v" items="${p.value}">
-								<c:param name="${p.key}" value="${v}" />
-							</c:forEach>
-						</c:if>
+					<c:if test="${not empty param.keyword}">
+						<c:param name="keyword" value="${param.keyword}" />
+					</c:if>
+					<c:forEach var="lClassId" items="${paramValues.lClassIds}">
+						<c:param name="lClassIds" value="${lClassId}" />
 					</c:forEach>
 				</c:url>
 				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
