@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminCommonChartServiceImpl implements AdminCommonChartService {
 
 	@Autowired
-	AdminCommonChartMapper adminDashBoardMapper;
+	private AdminCommonChartMapper adminDashBoardMapper;
 
 	@Override
 	public Map<String, Object> getAdminDashboard() {
@@ -62,7 +62,7 @@ public class AdminCommonChartServiceImpl implements AdminCommonChartService {
 		return map;
 	}
 
-	public static Map<String, Object> calculateGrowthRate(int currentCount, int previousCount) {
+	public Map<String, Object> calculateGrowthRate(int currentCount, int previousCount) {
 
 		double percentageChange = 0.0;
 		String status = "equal";

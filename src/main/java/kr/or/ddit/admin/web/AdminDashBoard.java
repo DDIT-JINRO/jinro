@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminDashBoard {
 	
 	@Autowired
-	AdminCommonChartService adminCommonChartService;
+	private AdminCommonChartService adminCommonChartService;
 	
 	@GetMapping("/getAdminDashboard.do")
 	public Map<String, Object> getAdminDashboard() {

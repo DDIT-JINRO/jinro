@@ -6,13 +6,13 @@ import lombok.Data;
 public class AdminCommonChartVO {
 	
 	// 당월 이용자 전체 수
-	int thisMonthUserCount;
+	private int thisMonthUserCount;
 	// 저번달 이용자 전체 수
-	int lastMonthUserCount;
+	private int lastMonthUserCount;
 	
 	// 당월 기준 전체 인원수
-	int thisMonthTotalCount;
+	private int thisMonthTotalCount;
 	// 지난달 전체 인원수
-	int lastMonthTotalCount;
+	private int lastMonthTotalCount;
 	
 }
