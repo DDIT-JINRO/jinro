@@ -136,6 +136,6 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/js/com/fullcalendar.global.min.js"></script>
+<script type="text/javascript" src="/js/com/index.global.min.js"></script>
 <script type="text/javascript"
 	src="/js/include/cnsLeader/scm/scheduleManagement.js"></script>

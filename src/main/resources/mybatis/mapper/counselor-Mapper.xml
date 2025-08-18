@@ -468,4 +468,18 @@
 			WHERE PAY_ID = #{payId}
 	</update>
 
+	<select id="selectMonthlyCounselingData" parameterType="kr.or.ddit.cns.service.CounselingVO" resultType="kr.or.ddit.cns.service.CounselingVO">
+	    <![CDATA[
+	    
+	    SELECT
+		    COUNSEL_ID,
+		    COUNSEL_REQ_DATETIME,
+		    COUNSEL_STATUS
+		FROM
+		    COUNSELING
+		WHERE
+		    counsel_req_datetime BETWEEN #{counselReqDatetime} AND LAST_DAY(#{counselReqDatetime})
+		    AND counsel = #{counsel}
+	    ]]>
+	</select>
 </mapper>

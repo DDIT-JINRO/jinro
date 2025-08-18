@@ -120,7 +120,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type="text/javascript" src="/js/com/fullcalendar.global.min.js"></script>
+<script type="text/javascript" src="/js/com/index.global.min.js"></script>
 
 <script type="text/javascript"
 	src="/js/include/cns/scm/scheduleManagement.js"></script>
