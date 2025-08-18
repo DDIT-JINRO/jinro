@@ -147,8 +147,19 @@
 								</div>
 								<c:if test="${pageContext.request.userPrincipal.principal == content.memId}">
 									<div class="card-actions">
-										<button type="button" class="card-actions__button card-actions__button--edit" data-mem-id="${content.memId}" data-ir-id="${content.irId}">수정</button>
-										<button type="button" class="card-actions__button card-actions__button--delete" data-ir-id="${content.irId}">삭제</button>
+										<button type="button" class="card-actions__button card-actions__button--edit" data-mem-id="${content.memId}" data-ir-id="${content.irId}">
+										<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+			                                <path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z" />
+			                            </svg>
+										수정
+										</button>
+										<button type="button" class="card-actions__button card-actions__button--delete" data-ir-id="${content.irId}">
+										<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+			                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+			                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+			                            </svg>
+										삭제
+										</button>
 									</div>
 								</c:if>
 							</div>
