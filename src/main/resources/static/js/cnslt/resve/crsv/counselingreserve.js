@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			selectedDate = info.dateStr;
 			document.getElementById('selectedDateText').textContent = selectedDate + "의 예약 가능한 시간";
+			console.log("1counselorName",selectedCounselorId);
 			fetchAvailableTimes(selectedCounselorId, selectedDate, memId);
 		},
 
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				} else {
 					document.getElementById('selectedDateText').textContent = selectedDate + "의 예약 가능한 시간";
 				}
+				console.log("2counselorName",selectedCounselorId);
 				fetchAvailableTimes(selectedCounselorId, selectedDate, memId);
 
 				// 캘린더 초기 로드 시 오늘 날짜에 시각적 효과 추가
@@ -79,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	counselorSelect.addEventListener('change', function() {
 		selectedCounselorId = this.value;
 
-		calendar.today();
+		fetchAvailableTimes(selectedCounselorId,selectedDate,memId)
 	});
 
 	// 이 코드를 DOMContentLoaded 안으로 옮겼습니다.
@@ -123,6 +125,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 
 			if (selectedDate && selectedTime) {
+				const selectedOption = counselorSelect.options[counselorSelect.selectedIndex];
+				const counselorName = selectedOption.text;
 				const isConfirmed = confirm("상담사: " + counselorName + "\n날짜: " + selectedDate + "\n시간: " + selectedTime + "\n\n이대로 예약하시겠습니까?");
 				if (isConfirmed) {
 					axios.get('/cnslt/resve/checkSubscription', {
