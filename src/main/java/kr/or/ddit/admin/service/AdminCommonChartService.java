@@ -6,4 +6,6 @@ public interface AdminCommonChartService {
 
 	Map<String, Object> getAdminDashboard();
 
+	Map<String, Object> getContentsUseChart();
+
 }

@@ -1,5 +1,8 @@
 package kr.or.ddit.admin.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,14 @@ public class AdminDashBoard {
 	public Map<String, Object> getAdminDashboard() {
 		
 		return adminCommonChartService.getAdminDashboard();
+	}
+	
+	@GetMapping("/getContentsUseChart.do")
+	public Map<String, Object> getContentsUseChart(String param) {
+		
+		log.info(param);
+		
+		return adminCommonChartService.getContentsUseChart();
 	}
 	
 }

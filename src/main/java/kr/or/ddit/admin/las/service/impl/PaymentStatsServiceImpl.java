@@ -76,4 +76,18 @@ public class PaymentStatsServiceImpl implements PaymentStatsService {
 
 		return paymentStatsMapper.selectNewRevenueRateStats();
 	}
+
+    // 대시보드 상단 숫자 통계 (평균매출 vs 예상매출)
+	@Override
+	public Map<String, Object> getRevenueSummaryForDashboard() {
+ 
+		return paymentStatsMapper.getRevenueSummaryForDashboard();
+	}
+
+    // 대시보드 하단 그래프 통계 (전체사용자 vs 구독자)
+	@Override
+	public List<Map<String, Object>> getMonthlyUserStatsForDashboard() {
+
+		return paymentStatsMapper.getMonthlyUserStatsForDashboard();
+	}
 }
