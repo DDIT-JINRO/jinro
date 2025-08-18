@@ -31,4 +31,10 @@ public interface PaymentStatsService {
 
 	// 총 구독 결제 대비하여 신규 구독 결제 비율 - 대시보드용
 	public List<Map<String, Object>> selectNewRevenueRateStats();
+	
+	// 대시보드 상단 숫자 통계 (평균매출 vs 예상매출)
+	public Map<String, Object> getRevenueSummaryForDashboard();
+	
+	// 대시보드 하단 그래프 통계 (전체사용자 vs 구독자)
+	public List<Map<String, Object>> getMonthlyUserStatsForDashboard();
 }
