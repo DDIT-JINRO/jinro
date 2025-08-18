@@ -21,111 +21,156 @@
 	<div class="public-wrapper">
 		<div class="public-wrapper-main">
 			<form method="get" action="/ertds/hgschl/selectHgschList.do">
-				<div class="main-search-container">
-					<div class="main-search-input-wrapper">
-						<i class="icon-search"></i>
-						<input type="text" name="keyword" class="main-search-input" placeholder="검색어를 입력하세요." value="${checkedFilters.keyword}">
+				<div class="search-filter__bar">
+					<div class="search-filter__input-wrapper">
+						<input class="search-filter__input" type="search" name="keyword" placeholder="고등학교명으로 검색" value="${checkedFilters.keyword}">
+						<button class="search-filter__button" type="submit">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+								<path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" /></svg>
+						</button>
 					</div>
-					<button type="submit" class="main-search-btn">검색</button>
 				</div>
-
-				<div class="search-filter-box">
-					<div class="filter-toggle-bar" id="filter-toggle-btn">
+				<div class="search-filter__accordion">
+					<button type="button" class="search-filter__accordion-header">
 						<span>상세검색</span>
-					</div>
-
-					<div class="filter-content" id="filter-content">
-						<div class="filter-row">
-							<div class="filter-label-title">지역</div>
-							<div class="filter-controls">
-								<c:forEach var="region" items="${regionList}">
-									<label class="filter-item">
-										<input type="checkbox" name="regionFilter" value="${region.ccId}" data-label="지역" data-name="${region.ccName}" <c:if test="${fn:contains(checkedFilters.regionFilter, region.ccId)}">checked</c:if> />
-										<span>${region.ccName}</span>
-									</label>
-								</c:forEach>
+						<span class="search-filter__accordion-arrow">▲</span>
+					</button>
+					<div class="search-filter__accordion-panel">
+						<div class="search-filter__accordion-content">
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">지역</label>
+								<div class="search-filter__options">
+									<c:forEach var="region" items="${regionList}">
+										<label class="search-filter__option">
+											<input type="checkbox" name="regionFilter" value="${region.ccId}" <c:forEach var="checkedRegion" items="${paramValues.regionFilter}">
+                                        <c:if test="${checkedRegion eq region.ccId}">checked</c:if>
+                                    </c:forEach>>
+											<span>${region.ccName}</span>
+										</label>
+									</c:forEach>
+								</div>
 							</div>
-						</div>
-
-						<div class="filter-row">
-							<div class="filter-label-title">학교 유형</div>
-							<div class="filter-controls">
-								<c:forEach var="sType" items="${schoolTypeList}">
-									<label class="filter-item">
-										<input type="checkbox" name="schoolType" value="${sType.ccId}" data-label="학교 유형" data-name="${sType.ccName}" <c:if test="${fn:contains(checkedFilters.schoolType, sType.ccId)}">checked</c:if> />
-										<span>${sType.ccName}</span>
-									</label>
-								</c:forEach>
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">학교 유형</label>
+								<div class="search-filter__options">
+									<c:forEach var="sType" items="${schoolTypeList}">
+										<label class="search-filter__option">
+											<input type="checkbox" name="schoolType" value="${sType.ccId}" <c:forEach var="checkedSType" items="${paramValues.schoolType}">
+                                        <c:if test="${checkedSType eq sType.ccId}">checked</c:if>
+                                    </c:forEach>>
+											<span>${sType.ccName}</span>
+										</label>
+									</c:forEach>
+								</div>
 							</div>
-						</div>
-
-						<div class="filter-row">
-							<div class="filter-label-title">공학 여부</div>
-							<div class="filter-controls">
-								<c:forEach var="cType" items="${coedTypeList}">
-									<label class="filter-item">
-										<input type="checkbox" name="coedTypeFilter" value="${cType.ccId}" data-label="공학 여부" data-name="${cType.ccName}" <c:if test="${fn:contains(checkedFilters.coedTypeFilter, cType.ccId)}">checked</c:if> />
-										<span>${cType.ccName}</span>
-									</label>
-								</c:forEach>
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">공학 여부</label>
+								<div class="search-filter__options">
+									<c:forEach var="cType" items="${coedTypeList}">
+										<label class="search-filter__option">
+											<input type="checkbox" name="coedTypeFilter" value="${cType.ccId}" <c:forEach var="checkedCType" items="${paramValues.coedTypeFilter}">
+                                        <c:if test="${checkedCType eq cType.ccId}">checked</c:if>
+                                    </c:forEach>>
+											<span>${cType.ccName}</span>
+										</label>
+									</c:forEach>
+								</div>
 							</div>
-						</div>
-
-						<div class="filter-row">
-							<div class="filter-label-title selected-filter-label">필터 조건</div>
-							<div class="selected-filters" id="selected-filters-container"></div>
+							<div class="search-filter__group">
+								<div class="search-filter__group-header">
+									<label class="search-filter__group-title">선택된 필터</label>
+									<button type="button" class="search-filter__reset-button">초기화</button>
+								</div>
+								<div class="search-filter__selected-tags"></div>
+							</div>
+							<button type="submit" class="search-filter__submit-button">검색</button>
 						</div>
 					</div>
 				</div>
 			</form>
 
-			<div class="result-list-wrapper">
-				<div class="list-header">
-					<div class="header-item">대학명</div>
-					<div class="header-item">공학여부</div>
-					<div class="header-item">학교유형</div>
-					<div class="header-item">설립유형</div>
-					<div class="header-item">지역</div>
+			<div class="content-list">
+				<div class="content-list__header">
+					<span class="content-list__col content-list__col--school-name">학교명</span>
+					<span class="content-list__col content-list__col--coed">공학여부</span>
+					<span class="content-list__col content-list__col--type">학교유형</span>
+					<span class="content-list__col content-list__col--found">설립유형</span>
+					<span class="content-list__col content-list__col--region">지역</span>
 				</div>
-				<div class="highschool-list">
-					<c:forEach var="school" items="${articlePage.content}">
-						<div class="school-item">
-							<a href="/ertds/hgschl/selectHgschDetail.do?hsId=${school.hsId}" class="school-name">${school.hsName}</a>
-							<div>${school.hsCoeduType}</div>
-							<div>${school.hsTypeName}</div>
-							<div>${school.hsFoundType}</div>
-							<div>${school.hsRegion}</div>
+				<c:forEach var="school" items="${articlePage.content}">
+					<div class="content-list__item" data-hs-id="${school.hsId}">
+						<div class="content-list__col content-list__col--school-name" data-label="학교명">
+							<h3 class="content-list__title">${school.hsName}</h3>
 						</div>
-					</c:forEach>
-					<c:if test="${articlePage.total == 0}">
-						<div style="text-align: center; padding: 50px;">검색 결과가 없습니다.</div>
+						<div class="content-list__col content-list__col--coed" data-label="공학여부">${school.hsCoeduType}</div>
+						<div class="content-list__col content-list__col--type" data-label="학교유형">${school.hsTypeName}</div>
+						<div class="content-list__col content-list__col--found" data-label="설립유형">${school.hsFoundType}</div>
+						<div class="content-list__col content-list__col--region" data-label="지역">${school.hsRegion}</div>
+					</div>
+				</c:forEach>
+				<c:if test="${articlePage.total == 0}">
+					<p class="content-list__no-results">검색 결과가 없습니다.</p>
+				</c:if>
+			</div>
+
+			<div class="pagination">
+				<c:url var="prevUrl" value="${articlePage.url}">
+					<c:param name="currentPage" value="${articlePage.startPage - 5}" />
+					<c:if test="${not empty param.keyword}">
+						<c:param name="keyword" value="${param.keyword}" />
 					</c:if>
-				</div>
-			</div>
-
-
-			<div class="card-footer clearfix">
-				<ul class="pagination">
-					<li>
-						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}<c:forEach var='region' items='${paramValues.regionFilter}'>&regionFilter=${region}</c:forEach><c:forEach var='sType' items='${paramValues.schoolType}'>&schoolType=${sType}</c:forEach><c:forEach var='cType' items='${paramValues.coedTypeFilter}'>&coedTypeFilter=${cType}</c:forEach>" class="${articlePage.startPage < 6 ? 'disabled' : ''}"> ← Previous </a>
-					</li>
-
-					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
-						<li>
-							<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}<c:forEach var='region' items='${paramValues.regionFilter}'>&regionFilter=${region}</c:forEach><c:forEach var='sType' items='${paramValues.schoolType}'>&schoolType=${sType}</c:forEach><c:forEach var='cType' items='${paramValues.coedTypeFilter}'>&coedTypeFilter=${cType}</c:forEach>" class="${pNo == articlePage.currentPage ? 'active' : ''}"> ${pNo} </a>
-						</li>
+					<c:forEach var="regionValue" items="${paramValues.regionFilter}">
+						<c:param name="regionFilter" value="${regionValue}" />
 					</c:forEach>
+					<c:forEach var="schoolTypeValue" items="${paramValues.schoolType}">
+						<c:param name="schoolType" value="${schoolTypeValue}" />
+					</c:forEach>
+					<c:forEach var="coedTypeValue" items="${paramValues.coedTypeFilter}">
+						<c:param name="coedTypeFilter" value="${coedTypeValue}" />
+					</c:forEach>
+				</c:url>
+				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
 
-					<li>
-						<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}<c:forEach var='region' items='${paramValues.regionFilter}'>&regionFilter=${region}</c:forEach><c:forEach var='sType' items='${paramValues.schoolType}'>&schoolType=${sType}</c:forEach><c:forEach var='cType' items='${paramValues.coedTypeFilter}'>&coedTypeFilter=${cType}</c:forEach>" class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : ''}"> Next → </a>
-					</li>
-				</ul>
+				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
+					<c:url var="pageUrl" value="${articlePage.url}">
+						<c:param name="currentPage" value="${pNo}" />
+						<c:if test="${not empty param.keyword}">
+							<c:param name="keyword" value="${param.keyword}" />
+						</c:if>
+						<c:forEach var="regionValue" items="${paramValues.regionFilter}">
+							<c:param name="regionFilter" value="${regionValue}" />
+						</c:forEach>
+						<c:forEach var="schoolTypeValue" items="${paramValues.schoolType}">
+							<c:param name="schoolType" value="${schoolTypeValue}" />
+						</c:forEach>
+						<c:forEach var="coedTypeValue" items="${paramValues.coedTypeFilter}">
+							<c:param name="coedTypeFilter" value="${coedTypeValue}" />
+						</c:forEach>
+					</c:url>
+					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
+				</c:forEach>
+
+				<c:url var="nextUrl" value="${articlePage.url}">
+					<c:param name="currentPage" value="${articlePage.startPage + 5}" />
+					<c:if test="${not empty param.keyword}">
+						<c:param name="keyword" value="${param.keyword}" />
+					</c:if>
+					<c:forEach var="regionValue" items="${paramValues.regionFilter}">
+						<c:param name="regionFilter" value="${regionValue}" />
+					</c:forEach>
+					<c:forEach var="schoolTypeValue" items="${paramValues.schoolType}">
+						<c:param name="schoolType" value="${schoolTypeValue}" />
+					</c:forEach>
+					<c:forEach var="coedTypeValue" items="${paramValues.coedTypeFilter}">
+						<c:param name="coedTypeFilter" value="${coedTypeValue}" />
+					</c:forEach>
+				</c:url>
+				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
 			</div>
-
 		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script src="/js/ertds/hgschl/HighSchoolist.js"></script>
+<script src="/js/ertds/hgschl/HighSchoolList.js"></script>
