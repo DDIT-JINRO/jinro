@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,6 +74,11 @@ public class ContentStatsController {
 	@GetMapping("/roadmap/create-complete/daily")
 	public List<Map<String, Object>> roadmapCreateCompleteDaily(Map<String, Object> param){
 		return contentStatsService.roadmapCreateCompleteDaily(param);
+	}
+
+	@GetMapping("/community/top5/main")
+	public List<Map<String, Object>> communityTop5Main(@AuthenticationPrincipal String memId){
+		return contentStatsService.selectCommunityTop5PostsByMemBirth(memId);
 	}
 
 }

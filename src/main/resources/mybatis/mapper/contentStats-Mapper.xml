@@ -928,4 +928,33 @@
 	  ORDER BY dt, feature
 	</select>
 
+	<select id="selectCommunityTop5PostsByMemBirth" resultType="map" parameterType="map">
+		SELECT
+			<choose>
+				<when test="ccId!=null and ccId!=''">
+		       BOARD_TITLE AS TARGETNAME
+				</when>
+				<otherwise>
+				CASE WHEN CC_ID = 'G09001'
+					 THEN '(청소년) '||BOARD_TITLE
+				ELSE '(청년) '||BOARD_TITLE
+				END AS TARGETNAME
+				</otherwise>
+		    </choose>
+		     , CASE WHEN CC_ID = 'G09001'
+		     		THEN '/comm/peer/teen/teenDetail.do?boardId='||BOARD_ID
+		       ELSE '/comm/peer/youth/youthDetail.do?boardId='||BOARD_ID
+		       END AS TARGET_URL
+		  FROM BOARD
+		 WHERE BOARD_DEL_YN = 'N'
+		   AND CC_ID IN ('G09001', 'G09006')
+   	      <if test="from != null and from != ''">AND BOARD_CREATED_AT &gt;= TRUNC(TO_DATE(#{from}, 'YYYY-MM-DD'))</if>
+	      <if test="to   != null and to   != ''">AND BOARD_CREATED_AT &lt;  TRUNC(TO_DATE(#{to}, 'YYYY-MM-DD')) + 1</if>
+		  <if test="ccId!=null and ccId!=''">
+		  AND CC_ID = #{ccId}
+		 </if>
+		 ORDER BY BOARD_CNT DESC
+		 FETCH FIRST 5 ROWS ONLY
+	</select>
+
 </mapper>
