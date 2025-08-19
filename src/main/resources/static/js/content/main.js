@@ -30,63 +30,104 @@ function typingLoop() {
 }
 
 typingLoop();
-
 // --- 슬라이더 스크립트 시작 ---
-let currentSlide = 0;
+const slidesContainer = document.querySelector('.slides');
 const slides = document.querySelectorAll('.slide');
 const dots = document.querySelectorAll('.dot');
+const nextBtn = document.getElementById("next-btn");
+const prevBtn = document.getElementById("prev-btn");
+
+let currentSlide = 1; // 클론 때문에 1번부터 시작
 const totalSlides = slides.length;
 
+// --- 클론 추가 ---
+const firstClone = slides[0].cloneNode(true);
+const lastClone = slides[totalSlides - 1].cloneNode(true);
+firstClone.id = "first-clone";
+lastClone.id = "last-clone";
+
+slidesContainer.appendChild(firstClone);
+slidesContainer.insertBefore(lastClone, slidesContainer.firstChild);
+
+const allSlides = document.querySelectorAll('.slide');
+const totalAllSlides = allSlides.length;
+
+// 초기 위치
+slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+// --- 슬라이드 이동 함수 ---
 function showSlide(index) {
-	slides.forEach((slide, i) => {
-		slide.style.transform = `translateX(-${index * 100}%)`;
-	});
-	dots.forEach((dot, i) => {
-		dot.classList.remove('active');
-	});
-	if (dots[index]) {
-		dots[index].classList.add('active');
-	}
-	currentSlide = index;
+    slidesContainer.style.transition = "transform 0.5s ease-in-out";
+    slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+    currentSlide = index;
+
+    // dot 업데이트
+    dots.forEach(dot => dot.classList.remove('active'));
+    let dotIndex = index - 1; // 클론 때문에 보정
+    if (dotIndex < 0) dotIndex = totalSlides - 1;
+    if (dotIndex >= totalSlides) dotIndex = 0;
+    if (dots[dotIndex]) dots[dotIndex].classList.add("active");
 }
 
+// --- transition 끝나면 클론 보정 ---
+slidesContainer.addEventListener("transitionend", () => {
+    if (allSlides[currentSlide].id === "first-clone") {
+        slidesContainer.style.transition = "none";
+        currentSlide = 1;
+        slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+    if (allSlides[currentSlide].id === "last-clone") {
+        slidesContainer.style.transition = "none";
+        currentSlide = totalSlides;
+        slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+});
 
+// --- 다음/이전 버튼 ---
 function nextSlide() {
-	currentSlide = (currentSlide + 1) % totalSlides;
-	showSlide(currentSlide);
+    if (currentSlide >= totalAllSlides - 1) return;
+    currentSlide++;
+    showSlide(currentSlide);
 }
 
 function prevSlide() {
-	currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-	showSlide(currentSlide);
+    if (currentSlide <= 0) return;
+    currentSlide--;
+    showSlide(currentSlide);
 }
 
-// 이벤트 리스너
+if (nextBtn) nextBtn.addEventListener("click", nextSlide);
+if (prevBtn) prevBtn.addEventListener("click", prevSlide);
+
+// --- dot 클릭 이벤트 ---
 if (dots) {
-	dots.forEach(dot => {
-		dot.addEventListener('click', (e) => {
-			const index = parseInt(e.target.dataset.slideIndex);
-			showSlide(index);
-		});
-	});
+    dots.forEach(dot => {
+        dot.addEventListener("click", e => {
+            const slideIndex = parseInt(e.target.dataset.slideIndex);
+            currentSlide = slideIndex + 1; // 클론 때문에 +1
+            showSlide(currentSlide);
+        });
+    });
 }
 
-// 자동 슬라이딩
-let slideInterval = setInterval(nextSlide, 3000); 
+// --- 자동 슬라이드 ---
+let slideInterval = setInterval(nextSlide, 5000);
+function pauseSlide() { clearInterval(slideInterval); }
+function resumeSlide() { slideInterval = setInterval(nextSlide, 5000); }
 
-// 마우스 오버 시 자동 슬라이딩 멈춤
-const sliderContainer = document.querySelector('.slider-container');
-if (sliderContainer) {
-	sliderContainer.addEventListener('mouseenter', () => {
-		clearInterval(slideInterval);
-	});
-
-	// 마우스 이탈 시 자동 슬라이딩 다시 시작
-	sliderContainer.addEventListener('mouseleave', () => {
-		slideInterval = setInterval(nextSlide, 5000);
-	});
+if (nextBtn) {
+    nextBtn.addEventListener("mouseenter", pauseSlide);
+    nextBtn.addEventListener("mouseleave", resumeSlide);
 }
+if (prevBtn) {
+    prevBtn.addEventListener("mouseenter", pauseSlide);
+    prevBtn.addEventListener("mouseleave", resumeSlide);
+}
+
+// 초기 슬라이드 표시
+showSlide(currentSlide);
 // --- 슬라이더 스크립트 끝 ---
+
 
 document.addEventListener('DOMContentLoaded', function() {
 	fn_init();

@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.admin.las.service.ContentStatsService;
-import kr.or.ddit.main.service.mainService;
+import kr.or.ddit.comm.peer.teen.service.TeenCommService;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @Controller
 @RequestMapping("/")
 public class MainController {
@@ -24,19 +26,15 @@ public class MainController {
 	private ContentStatsService contentStatsService;
 
 	@Autowired
-	private mainService mainService;
+	private TeenCommService teenCommService;
 	
 	@GetMapping
 	public String main(@AuthenticationPrincipal String memId, Model model) {
 		
 		if(memId!="anonymousUser") {
-			String data =mainService.getAge(memId);
-			System.out.println(data);
-			System.out.println(data);
-			System.out.println(data);
-			System.out.println(data);
-			System.out.println(data);
-			model.addAttribute("age", data);
+			Boolean isTeen = teenCommService.isTeen(memId); 
+			
+			model.addAttribute("isTeen",isTeen);
 		}
 		
 		model.addAttribute("memId", memId);

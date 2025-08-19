@@ -50,7 +50,9 @@
 	</div>
 
 	<section class="main-loadmap-banner slider-container">
+			<button class="prev-btn" id="prev-btn">‹</button>
 		<div class="slides">
+			
 			<div class="slide">
 				<div class="banner-inner">
 					<div class="banner-left">
@@ -73,17 +75,20 @@
 					</div>
 				</div>
 			</div>
-			<c:if test="${memId eq 'anonymousUser' or age eq 'minor'}">
+			
+			
+			<c:if test="${memId eq 'anonymousUser' or isTeen eq 'true'}">
 			<div class="slide">
+				
 				<div class="banner-inner">
 					<div class="banner-left">
 						<img alt="" src="/images/logo.png">
 						<div class="main-title-banner">꿈을 찾는 길</div>
 						<p>
 							대학에 꿈을 가진 청소년에게<br>
-							미래를 설계하는데 필요한 대학 비교 페이지
+							미래를 설계하는데 필요한 학과 비교 페이지
 						</p>
-						<a href="/ertds/univ/uvsrch/selectUnivList.do" class="BtnData">대학 바로가기</a>
+						<a href="/ertds/univ/dpsrch/selectDeptList.do" class="BtnData">학과비교 바로가기</a>
 					</div>
 					<div class="banner-right floating-icons">
 						<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
@@ -98,7 +103,7 @@
 				</div>
 			</div>
 			</c:if>
-			<c:if test="${memId eq 'anonymousUser' or age eq 'adult'}">
+			<c:if test="${memId eq 'anonymousUser' or isTeen eq 'false'}">
 			    <div class="slide">
 			        <div class="banner-inner">
 			            <div class="banner-left">
@@ -108,7 +113,7 @@
 								꿈을 향해 달려가는 멋진 어른에게<br>
 								진로를 설계하는데 필요한 직업 비교 페이지
 			                </p>
-			                <a href="/pse/cr/crl/selectCareerList.do" class="BtnData">직업 바로가기</a>
+			                <a href="/pse/cr/crl/selectCareerList.do" class="BtnData">직업비교 바로가기</a>
 			            </div>
 			            <div class="banner-right floating-icons">
 			                <img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
@@ -124,14 +129,14 @@
 			    </div>
 			</c:if>
 		</div>
-
+		<button class="next-btn" id="next-btn">›</button>
 		<div class="slider-controls">
 			<div class="dots-container">
 				<span class="dot active" data-slide-index="0"></span>
-				<c:if test="${memId eq 'anonymousUser' or age eq 'minor'}">
+				<c:if test="${memId eq 'anonymousUser' or isTeen eq 'true'}">
 					<span class="dot" data-slide-index="1"></span>
 				</c:if>
-				<c:if test="${memId eq 'anonymousUser' or age eq 'adult'}">
+				<c:if test="${memId eq 'anonymousUser' or isTeen eq 'false'}">
 					<span class="dot" data-slide-index="2"></span>
 				</c:if>
 			</div>
