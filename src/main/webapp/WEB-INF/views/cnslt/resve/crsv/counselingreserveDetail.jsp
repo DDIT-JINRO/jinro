@@ -69,10 +69,12 @@
 	            
 	            <button type="submit" id="submitBtn">예약 확정</button>
 	        </form>
+	        <button id="autoCompleteBtn" type="button" class="btn-submit" 
+			style="position: absolute; top: 15px; right: 15px;">자동완성</button>
 		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script src=""></script>
+<script src="/js/cnslt/resve/crsv/counselingreserveDetail.js"></script>

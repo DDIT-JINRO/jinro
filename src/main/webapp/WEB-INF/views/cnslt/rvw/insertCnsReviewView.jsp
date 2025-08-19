@@ -131,6 +131,8 @@
 					<button class="submit-btn" id="submit-btn">등록</button>
 				</div>
 			</div>
+	        <button id="autoCompleteBtn" type="button" class="btn-submit" 
+			style="position: absolute; top: 15px; right: 15px;">자동완성</button>
 		</div>
 	</div>
 

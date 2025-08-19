@@ -187,10 +187,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	if (deleteButton) {
 		deleteButton.addEventListener("click", function() {
 			const resumeId = document.querySelector("#resumeId").value;
-			
-			console.log("asd");
-			console.log(resumeId);
-			
+
 			if (!resumeId || resumeId === "0") {
 				alert("삭제할 이력서가 없습니다.");
 				return;
@@ -198,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 			if (!confirm("정말 삭제하시겠습니까?")) return;
 
-			axios.post("/cdp/rsm/rsm/deleteResume.do",{resumeId:resumeId})
+			axios.post("/cdp/rsm/rsm/deleteResume.do", { resumeId: resumeId })
 				.then(response => {
 					if (response.data.status === 'success') {
 						alert("이력서가 삭제되었습니다.");
@@ -483,6 +480,16 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 });
+
+// 자동완성 기능 추가
+document.addEventListener('DOMContentLoaded', function() {
+	//자동완성 기능 추가
+	const autoCompleteBtn = document.getElementById('autoCompleteBtn');
+	if (autoCompleteBtn) {
+		autoCompleteBtn.addEventListener('click', autoCompleteHandler);
+	}
+})
+
 // `sanitizeHtmlToXHTML` 함수는 이 이벤트 리스너 밖에 정의되어 있어야 합니다.
 function sanitizeHtmlToXHTML(html) {
 	return html
@@ -677,3 +684,106 @@ function createDeleteButton(inputElement) {
 	return deleteButton;
 }
 
+
+// 자동완성 핸들러
+function autoCompleteHandler() {
+	// 1. 일반 텍스트 입력 필드 자동 완성
+	document.getElementById('resumeTitle').value = 'AI 이력서 초안 (개발 직무)';
+	document.getElementById('name').value = '홍길동';
+	document.getElementById('dob').value = '2000-01-01';
+	document.getElementById('email').value = 'hong.gildong@example.com';
+	document.getElementById('mobile-phone').value = '01012345678';
+
+	// 2. 주소 필드 자동 완성
+	document.getElementById('address').value = '대전광역시 유성구 대학로 99';
+	document.getElementById('address-detail').value = '카이스트로 234';
+
+	// 3. 성별 필드 자동 선택
+	document.getElementById('gender').value = 'male';
+
+	// 4. 사진 미리보기 자동 적용 (파일을 직접 로드하는 방식)
+	const photoInput = document.getElementById('photo-upload');
+	const photoPreview = document.getElementById('photo-preview');
+	const uploadPlaceholder = document.querySelector('.upload-placeholder');
+
+	// 서버에 있는 이미지의 경로를 직접 지정합니다.
+	const imageUrl = '/images/main/charactor4.png'; // .jpg 파일 경로
+
+	// 이미지를 가져와서 File 객체로 변환
+	fetch(imageUrl)
+		.then(response => response.blob())
+		.then(blob => {
+			// 파일명과 MIME 타입을 .jpg에 맞춰서 수정
+			const file = new File([blob], 'charactor4.png', { type: 'image/png' });
+
+			// File 객체를 photo-upload input에 할당
+			const dataTransfer = new DataTransfer();
+			dataTransfer.items.add(file);
+			photoInput.files = dataTransfer.files;
+
+			// 미리보기 업데이트
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				photoPreview.src = e.target.result;
+				photoPreview.style.display = 'block';
+				if (uploadPlaceholder) {
+					uploadPlaceholder.classList.add('hidden');
+				}
+			};
+			reader.readAsDataURL(file);
+		})
+		.catch(error => console.error('이미지 로드 중 오류 발생:', error));
+
+	// 5. 추가 항목 (학력, 자격증, 대외활동) 자동 완성
+
+	// 학력 항목 불러오기
+	document.getElementById('load-education').click();
+	setTimeout(() => { document.getElementById('add-education').click(); }, 100);
+
+	// 자격증 항목 불러오기
+	document.getElementById('load-certificate').click();
+	setTimeout(() => { document.getElementById('add-certificate').click(); }, 100);
+
+	// 대외활동 항목 불러오기
+	document.getElementById('load-activities').click();
+	setTimeout(() => { document.getElementById('add-activities').click(); }, 100);
+
+	// 희망 직무 및 스킬 추가 버튼을 한 번씩 더 누르기
+	setTimeout(() => {
+		document.getElementById('add-job').click();
+		document.getElementById('add-skill').click();
+	}, 500);
+
+	setTimeout(() => {
+		// 학력 필드 채우기
+		const educationLevels = document.querySelectorAll('.education-input-container select');
+		const educationSchools = document.querySelectorAll('.education-input-container input[name="education"]');
+
+		// 첫 번째 항목 (초기 렌더링된 항목)
+		if (educationLevels[0]) educationLevels[0].value = '대학교';
+		if (educationSchools[0]) educationSchools[0].value = '서울대학교';
+
+		// 두 번째 항목 (자동완성으로 추가된 항목)
+		if (educationLevels[1]) educationLevels[1].value = '고등학교';
+		if (educationSchools[1]) educationSchools[1].value = '대덕고등학교';
+
+		// 자격증 필드 채우기
+		const certificateInputs = document.querySelectorAll('.form-certificate input[name="certificate"]');
+		if (certificateInputs[0]) certificateInputs[0].value = '정보처리기사';
+		if (certificateInputs[1]) certificateInputs[1].value = '정보보안기사';
+
+		// 대외활동 필드 채우기
+		const activitiesInputs = document.querySelectorAll('.form-activities input[name="activities"]');
+		if (activitiesInputs[0]) activitiesInputs[0].value = 'AI 컨퍼런스 서포터즈 활동';
+		if (activitiesInputs[1]) activitiesInputs[1].value = '캡스톤 디자인 프로젝트';
+
+		// 희망 직무 및 스킬 내용 채우기 (기존 로직 유지)
+		const desiredJobs = document.querySelectorAll('.desired-job');
+		if (desiredJobs[0]) desiredJobs[0].value = '웹 개발자';
+		if (desiredJobs[1]) desiredJobs[1].value = '백엔드 개발자';
+
+		const skills = document.querySelectorAll('input[name="skills"]');
+		if (skills[0]) skills[0].value = 'JavaScript, React, Spring Framework';
+		if (skills[1]) skills[1].value = 'Java, Python';
+	}, 500);
+}

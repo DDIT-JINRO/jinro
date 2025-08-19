@@ -742,3 +742,30 @@
         min-width: auto;
     }
 }
+
+
+/* 자동완성 버튼 위치 조정 */
+.public-wrapper-main {
+  /* 이 속성을 추가해서 버튼의 기준점을 만들어줍니다 */
+  position: relative;
+}
+#autoCompleteBtn {
+  right: 15px; 
+  top: 15px; /* 상단에서 15px 떨어진 곳에 배치합니다. */
+  position: absolute;
+  width: 90px;
+  height: 35px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: #007bff;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, transform 0.2s;
+}
+#autoCompleteBtn:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}

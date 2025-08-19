@@ -308,3 +308,31 @@
   font-size: 12px;
   color: #E53E3E;
 }
+
+.public-wrapper {
+  /* 이 속성을 추가해서 버튼의 기준점을 만들어줍니다 */
+  position: relative;
+}
+/* 자동완성 버튼 위치 조정 */
+#autoCompleteBtn {
+    position: absolute;
+    right: 250px; /* create-wrapper의 padding 값과 동일하게 설정 */
+    top: 50%; /* 수직 중앙 정렬을 위해 상단에서 50% 위치 */
+    transform: translateY(-50%);
+    width: 90px;
+    height: 35px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: #007bff;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+#autoCompleteBtn:hover {
+    background: #0056b3;
+    transform: translateY(-50%) scale(1.05);
+}

@@ -94,7 +94,41 @@ document.addEventListener('DOMContentLoaded', function() {
 				alert("PDF 미리보기 중 오류가 발생했습니다: " + err.message);
 			});
 	});
+
+	//자동완성 버튼 이벤트 리스너 추가
+	const autoCompleteBtn = document.getElementById('autoCompleteBtn');
+	if (autoCompleteBtn) {
+		autoCompleteBtn.addEventListener('click', autoCompleteHandler);
+	}
 });
+
+function autoCompleteHandler() {
+	//제목 입력 필드 자동완성
+	const titleInput = document.querySelector('.section-title .title-input');
+	if (titleInput && titleInput.value.trim() == '새 면접 질문' || titleInput.value.trim() == '') {
+		titleInput.value = '나의 모의면접 질문 초안';
+	}
+
+	// 답변 입력 필드 자동완성
+	const sampleAnswersArray = [
+		`경비 및 청소 업무는 시설의 안전과 쾌적한 환경을 유지하는 데 필수적이라고 생각합니다. 따라서 저는 **'책임감과 세심함'**을 가장 중요하게 생각합니다. 맡은 구역에 대한 책임감을 가지고 작은 부분도 놓치지 않는 세심함으로 업무를 수행하겠습니다.`,
+		`이전 직장에서 야간 순찰 중 정전이 발생한 적이 있습니다. 당황하지 않고 매뉴얼에 따라 비상 발전기를 가동하고, 입주민들에게 상황을 안내하며 혼란을 최소화했습니다. 이 경험을 통해 어떤 돌발 상황에서도 침착하게 대응하는 능력을 길렀습니다.`,
+		`이전 건물에서 경비 업무를 할 때, 순찰 시간을 최적화하기 위해 CCTV 사각지대와 주요 동선을 분석하여 순찰 경로를 재조정했습니다. 그 결과, 순찰 시간을 20% 단축하면서도 보안 수준은 더욱 강화할 수 있었습니다. 이처럼 데이터를 활용하여 효율적인 업무 방식을 찾는 데 강점이 있습니다.`
+	];
+
+	const qaBlocks = document.querySelectorAll('.qa-block');
+	qaBlocks.forEach((block, index) => {
+		const answerTextarea = block.querySelector('textarea[name="idAnswerList"]');
+
+		// 배열의 인덱스를 사용해 순서대로 답변을 할당합니다.
+		if (answerTextarea && sampleAnswersArray[index]) {
+			answerTextarea.value = sampleAnswersArray[index];
+
+			// 글자 수 카운트 함수를 호출하여 업데이트합니다.
+			countChars(answerTextarea, index);
+		}
+	});
+}
 
 function sanitizeHtmlToXHTML(html) {
 	return html

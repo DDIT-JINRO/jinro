@@ -110,6 +110,12 @@ document.addEventListener('DOMContentLoaded', function(){
 		  if (!wrapper.contains(e.target)) options.style.display = 'none';
 		});
 	})
+	
+	//자동완성 기능 추가
+	const autoCompleteBtn = document.getElementById('autoCompleteBtn');
+	if(autoCompleteBtn){
+		autoCompleteBtn.addEventListener('click', autoCompleteHandler);
+	}
 })
 
 // 에러메시지 삭제
@@ -119,5 +125,41 @@ function clearErrors() {
     const msg = group.querySelector('.error-message');
     if (msg) group.removeChild(msg);
   });
+}
 
+// 토글형 드롭다운을 업데이트하는 헬퍼함수
+function updateCustomSelect(selectId, valueToSelect, textToDisplay){
+	const customSelectWrapper = document.getElementById(selectId).closest('.custom-select');
+	const label = customSelectWrapper.querySelector('.custom-select__label');
+	const select = customSelectWrapper.querySelector('select');
+	
+	label.textContent = textToDisplay;
+	select.value = valueToSelect;
+}
+
+// 자동완성 핸들러
+function autoCompleteHandler(){
+	// 텍스트 입력 필드 자동완성
+	document.getElementById('post-title').value = "AI 모의 면접 스터디";
+	document.getElementById('chatTitle').value = "AI 면접 같이 준비해요!";
+	document.getElementById('description').value = 	`안녕하세요! AI 면접 준비를 함께 할 스터디 그룹원을 모집합니다.
+	- 목표: AI 모의 면접 실전 연습 및 피드백
+	- 활동 내용:
+	  - 주 2회, 1시간씩 AI 면접 시뮬레이션
+	  - 서로 답변 피드백 및 개선점 토의
+	- 대상: AI 면접 경험이 없거나, 실전 감각을 익히고 싶은 분
+	부담 없이 편하게 지원해주세요. 열정 있는 분들의 많은 참여 기다립니다!`;
+	
+	// 커스텀 셀렉트 자동완성
+	// 성별 제한 : "성별제한 없음" (값: "all")
+	updateCustomSelect('gender', 'all', '성별제한 없음');
+	
+	// 지역 : "대전" ( 값: "G23006") 공통코드
+	updateCustomSelect('region' , 'G23006', '대전');
+	
+	// 인원제한 "10명" ( 값: "10")
+	updateCustomSelect('capacity', '10', '10명');
+	
+	// 관심 분야: "취업준비" (값: "job.prepare")
+	updateCustomSelect('interest', 'job.prepare', '취업준비');
 }
