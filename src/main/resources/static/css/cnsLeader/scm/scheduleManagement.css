@@ -20,6 +20,14 @@ h3 {
     height: inherit;
 }
 
+.top-row .template-panel:first-child {
+  flex: 1.5; /* 상담 리스트 패널의 너비 비율을 1로 설정 */
+}
+
+.top-row .template-panel:last-child {
+  flex: 2; /* 달력 패널의 너비 비율을 2로 설정 */
+}
+
 .template-container {
     flex-direction: column;
 }
@@ -140,22 +148,21 @@ p {
 
 /* 사용자 정의 스타일: 선택된 날짜에 대한 파란색 하이라이트 */
 .fc-day.selected {
-	background-color: #2E8B57; 
-	border: 2px solid #2E8B57 ; 
+	background-color: #e0f7fa; 
+	border: 2px solid rgb(128, 255, 128) ; 
 }
 
 /* 오늘 날짜가 선택되었을 경우의 스타일 */
 .fc-day-today.selected {
 	background-color: #e0f7fa  !important; 
-	border: 2px solid #2E8B57;
+	border: 2px solid rgb(128, 255, 128);
 }
 /* FullCalendar 컨테이너 스타일 */
 #calendar {
-	height: 90%;
+	height: 100%;
 	width: 100%; /* 화면 너비의 100%를 차지하도록 설정 */
 	max-width: none; /* 최대 너비 제한 해제 */
 	margin: 0px auto;
-	margin-bottom: 20px;
 	padding: 0; /* 내부 패딩을 0으로 설정 */
 }
 
@@ -201,6 +208,11 @@ p {
 }
 .fc-daygrid-day-events:hover::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.2); /* 마우스를 올리면 보이게 */
+}
+
+.fc-scrollgrid-sync-table{
+	width: 100%;
+	height: 100%;
 }
 
 /*___________________ 페이지 네이션_______________ 

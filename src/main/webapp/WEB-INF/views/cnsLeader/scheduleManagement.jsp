@@ -158,5 +158,7 @@
 </body>
 </html>
 <script type="text/javascript" src="/js/com/index.global.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.min.js"></script>
 <script type="text/javascript"
 	src="/js/include/cnsLeader/scm/scheduleManagement.js"></script>

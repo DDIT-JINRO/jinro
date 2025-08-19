@@ -18,14 +18,14 @@
 
 /* 사용자 정의 스타일: 선택된 날짜에 대한 파란색 하이라이트 */
 .fc-day.selected {
-	background-color: #2E8B57; 
-	border: 2px solid #2E8B57 ; 
+	background-color: rgb(149, 223, 108); 
+	border: 2px solid rgb(128, 255, 128); 
 }
 
 /* 오늘 날짜가 선택되었을 경우의 스타일 */
 .fc-day-today.selected {
 	background-color: #F39C12  !important; 
-	border: 2px solid #2E8B57 ; 
+	border: 2px solid rgb(128, 255, 128) ; 
 }
 /* FullCalendar 컨테이너 스타일 */
 #calendar {
