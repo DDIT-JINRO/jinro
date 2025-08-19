@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/cdp/rsm/rsm/resumeList.css">
+<link rel="stylesheet" href="/css/common/listCard.css">
 
 <section class="channel">
 	<div class="channel-title">
@@ -40,7 +40,6 @@
 					</button>
 				</div>
 			</div>
-
 			<div class="search-filter__accordion">
 				<button type="button" class="search-filter__accordion-header" id="search-filter-toggle">
 					<span>필터</span>
@@ -72,22 +71,22 @@
 		</form>
 
 		<div class="content-list__total-count">총 ${articlePage.total}건</div>
-		
+
 		<div class="content-list">
 			<c:choose>
 				<c:when test="${not empty articlePage.content}">
 					<c:forEach var="resume" items="${articlePage.content}">
-						<div class="content-list__item">
-							<div class="resume-card__info">
-								<h3 class="resume-card__title">${resume.resumeTitle}</h3>
-								<div class="resume-card__meta">
-									<div class="resume-card__meta-item">
-										<span class="resume-card__meta-label">수정일:</span>
-										<fmt:formatDate value="${resume.updatedAt}" pattern="yyyy. MM. dd (E) HH:mm" />
+						<div class="list-card">
+							<div class="list-card__info">
+								<h3 class="list-card__title">${resume.resumeTitle}</h3>
+								<div class="list-card__meta">
+									<div class="list-card__meta-item">
+										<span class="list-card__meta-label">수정일:</span>
+										<fmt:formatDate value="${resume.updatedAt}" pattern="yyyy.MM.dd (E) HH:mm" />
 									</div>
-									<div class="resume-card__meta-item">
-										<span class="resume-card__meta-label">상태:</span>
-										<span class="resume-card__status <c:choose><c:when test='${resume.resumeIsTemp eq \"N\"}'>resume-card__status--completed</c:when><c:otherwise>resume-card__status--draft</c:otherwise></c:choose>">
+									<div class="list-card__meta-item">
+										<span class="list-card__meta-label">상태:</span>
+										<span class="list-card__status <c:choose><c:when test='${resume.resumeIsTemp eq \"N\"}'>list-card__status--completed</c:when><c:otherwise>list-card__status--draft</c:otherwise></c:choose>">
 											<c:choose>
 												<c:when test="${resume.resumeIsTemp eq 'N'}">완료</c:when>
 												<c:when test="${resume.resumeIsTemp eq 'Y'}">임시 저장</c:when>
@@ -97,8 +96,8 @@
 									</div>
 								</div>
 							</div>
-							<div class="resume-card__actions">
-								<a class="resume-card__edit-button" href="/cdp/rsm/rsm/resumeWriter.do?resumeId=${resume.resumeId}"> 이력서 수정하기 </a>
+							<div class="list-card__actions">
+								<a class="list-card__edit-button" href="/cdp/rsm/rsm/resumeWriter.do?resumeId=${resume.resumeId}"> 이력서 수정하기 </a>
 							</div>
 						</div>
 					</c:forEach>
@@ -114,10 +113,10 @@
 				</c:otherwise>
 			</c:choose>
 		</div>
-		
+
 		<sec:authorize access="isAuthenticated()">
-			<div class="resume-list__header">
-				<a href="/cdp/rsm/rsm/resumeWriter.do" class="resume-list__create-button"> 이력서 작성하기 </a>
+			<div class="list__footer">
+				<a href="/cdp/rsm/rsm/resumeWriter.do" class="list__create-button"> 이력서 작성하기 </a>
 			</div>
 		</sec:authorize>
 
@@ -126,13 +125,11 @@
 				<li>
 					<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="pagination__link <c:if test='${articlePage.startPage < 6}'>pagination__link--disabled</c:if>"> ← Previous </a>
 				</li>
-
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 					<li>
 						<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="pagination__link <c:if test='${pNo == articlePage.currentPage}'>pagination__link--active</c:if>"> ${pNo} </a>
 					</li>
 				</c:forEach>
-
 				<li>
 					<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="pagination__link <c:if test='${articlePage.endPage >= articlePage.totalPages}'>pagination__link--disabled</c:if>"> Next → </a>
 				</li>
