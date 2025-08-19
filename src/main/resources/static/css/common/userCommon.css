@@ -843,6 +843,7 @@ html, body {
 	display: flex;
     flex-direction: column;
     gap: 16px;
+    margin-bottom: 40px;
 }
 
 .content-list__total-count {
@@ -1052,7 +1053,6 @@ html, body {
 	list-style: none;
 	padding: 0;
 	gap: 4px;
-	margin-top: 40px;
 }
 
 .pagination__link {
