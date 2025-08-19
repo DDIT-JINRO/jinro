@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.admin.las.service.ContentStatsService;
 import kr.or.ddit.comm.peer.teen.service.TeenCommService;
-import lombok.extern.slf4j.Slf4j;
 
 
-@Slf4j
 @Controller
 @RequestMapping("/")
 public class MainController {
