@@ -131,7 +131,7 @@ var calendarInstance = null; // 전역 변수로 선언
 
 	// 전역 변수로 페이지 정보와 항목 수를 관리합니다.
 	let currentPage = 1;
-	const pageSize = 5;
+	const pageSize = 3;
 
 	/**
 	 * 특정 날짜의 상담 스케줄을 비동기로 불러와 테이블에 표시하고 페이징을 처리합니다.
@@ -167,18 +167,17 @@ var calendarInstance = null; // 전역 변수로 선언
 					if (countEl) countEl.textContent = 0;
 				} else {
 					// `fetchCounselingLog`처럼 시작 번호를 계산
-					let startNumber = (page - 1) * pageSize + 1;
+					// 번호는 시작 번호부터 1씩 증가
+					let cnt = (page-1) * pageSize +1;
 
 					let rows = schedules.map((item, idx) => {
 						const counselReqDate = new Date(item.counselReqDatetime);
 						const formattedDate = `${counselReqDate.getFullYear()}-${(counselReqDate.getMonth() + 1).toString().padStart(2, '0')}-${counselReqDate.getDate().toString().padStart(2, '0')} ${counselReqDate.getHours().toString().padStart(2, '0')}:${counselReqDate.getMinutes().toString().padStart(2, '0')}`;
 
-						// 번호는 시작 번호부터 1씩 증가
-						const rowNumber = startNumber + idx;
 
 						return `
 	                    <tr onclick="counselDetail(${item.counselId})">
-	                        <td>${rowNumber}</td>
+	                        <td>${cnt++}</td>
 	                        <td>${item.memName}</td>
 	                        <td>${formattedDate}</td>
 	                        <td>${item.counselName || '미정'}</td>
@@ -213,20 +212,20 @@ var calendarInstance = null; // 전역 변수로 선언
 		initCalendar();
 	}, 100);
 
+
+})();
 	function renderPagination({ startPage, endPage, currentPage, totalPages, counselReqDatetime }) {
-		let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
+		let html = `<a href="#" data-page="${startPage - 1}" onclick="selectCounselSchedules('${counselReqDatetime}',${startPage - 1})" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 
 		for (let p = startPage; p <= endPage; p++) {
 			html += `<a href="#" onclick="selectCounselSchedules('${counselReqDatetime}',${p})" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
 		}
 
-		html += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
+		html += `<a href="#" data-page="${endPage + 1}" onclick="selectCounselSchedules('${counselReqDatetime}',${endPage + 1})" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
 
 		const footer = document.querySelector('.panel-footer.pagination');
 		if (footer) footer.innerHTML = html;
 	}
-
-})();
 
 // 상담 상세 정보 조회 함수
 function counselDetail(counselId) {

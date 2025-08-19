@@ -63,7 +63,6 @@ p {
 	border: 1px solid #ddd; /* 테이블 외곽선 */
 	border-radius: 4px;
 	overflow: auto; /* 테이블 내용이 wrapper 밖으로 넘치면 숨김 */
-	margin-bottom: 20px; /* 하단 간격 추가 */
 }
 
 table {
@@ -234,4 +233,9 @@ colgroup col:nth-child(5) {
 /* 캘린더 버튼 크기 줄이기 */
 .fc .fc-button {
 	padding: 0; /* 버튼 내부 패딩을 줄입니다. */
+}
+
+/* 페이지 네이션*/
+.pagination {
+    padding: 10px 0 0 0;
 }
