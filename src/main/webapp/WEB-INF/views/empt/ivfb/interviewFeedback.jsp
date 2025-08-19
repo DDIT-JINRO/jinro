@@ -63,18 +63,18 @@
 				<c:forEach var="content" items="${articlePage.content}">
 					<div class="accordion-list__item">
 						<div class="accordion-list__item-header">
-							<div class="accordion-list__col accordion-list__col--company-name" data-label="기업명">${content.targetName}</div>
-							<div class="accordion-list__col accordion-list__col--meta">
-								<div class="accordion-list__col accordion-list__col--author" data-label="작성자">
+							<div class="accordion-list__col accordion-list__company-name" data-label="기업명">${content.targetName}</div>
+							<div class="accordion-list__col accordion-list__meta">
+								<div class="accordion-list__col accordion-list__author" data-label="작성자">
 									<c:if test="${pageContext.request.userPrincipal.principal == content.memId}">
 										<span class="badge--my-post">내 글</span>
 									</c:if>
 									<c:if test="${pageContext.request.userPrincipal.principal != content.memId}">${content.memNickname}</c:if>
 								</div>
-								<div class="accordion-list__col accordion-list__col--date" data-label="작성일">
+								<div class="accordion-list__col accordion-list__date" data-label="작성일">
 									<fmt:formatDate value="${content.irModAt}" pattern="yyyy.MM.dd" />
 								</div>
-								<div class="accordion-list__col accordion-list__col--rating" data-label="평점">
+								<div class="accordion-list__col accordion-list__rating" data-label="평점">
 									<span class="rating__stars">
 										<c:forEach begin="1" end="5" var="i">
 											<c:choose>

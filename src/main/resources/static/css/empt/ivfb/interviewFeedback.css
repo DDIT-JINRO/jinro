@@ -86,6 +86,35 @@
 	justify-content: flex-end;
 }
 
+.accordion-list__company-name {
+	flex: 1.5;
+	justify-content: flex-start;
+	text-align: left;
+	font-weight: 600;
+}
+
+.accordion-list__meta {
+	flex: 2;
+	display: flex;
+	justify-content: space-between;
+	gap: 15px;
+}
+
+.accordion-list__author {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.accordion-list__date {
+	flex: 1;
+}
+
+.accordion-list__rating {
+	flex: 1;
+}
+
 /* --- 펼쳐진 내용 스타일 --- */
 .detail-grid {
 	display: grid;

@@ -33,9 +33,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	text-align: center;
-	font-size: 0.95rem;
-	color: #374151;
 }
 
 /* --- 각 컬럼 너비 지정 --- */
