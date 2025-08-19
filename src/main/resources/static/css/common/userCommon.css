@@ -843,6 +843,13 @@ html, body {
     gap: 16px;
 }
 
+.content-list__total-count {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 15px;
+    text-align: right;
+}
+
 .content-list__header {
 	display: flex; /* 내부 정렬을 위해 flex는 유지 */
 	align-items: center;
@@ -1650,5 +1657,18 @@ html, body {
 	.detail__action-button {
 		width: 100%;
 		justify-content: center;
+	}
+	
+	/* 아코디언 반응형 */
+	.accordion-list__item-header {
+		padding: 16px 20px;
+	}
+	
+	.accordion-list__col {
+		font-size: 0.9rem;
+	}
+	
+	.accordion-list__item-content.is-active {
+		padding: 16px 20px;
 	}
 }
