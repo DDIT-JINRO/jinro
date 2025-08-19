@@ -378,3 +378,78 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	});
 });
+
+
+
+// 자동완성 추가 기능
+document.addEventListener('DOMContentLoaded', function() {
+	// 자동완성 기능 추가
+	const autoCompleteBtn = document.getElementById('autoCompleteBtn');
+	if (autoCompleteBtn) {
+		autoCompleteBtn.addEventListener('click', autoCompleteHandler);
+	}
+})
+
+// 자동완성 핸들러
+function autoCompleteHandler(){
+	// 1. 과거 상담내역 검색 버튼을 클릭하여 모달을 엽니다
+	document.getElementById('counsel-search').click();
+	
+	// 2. 모달이 열리는 데 약간의 시간이 필요하므로 setTimeout을 사용
+	setTimeout(function(){
+		//모달에서 '최미혜' 상담 내역을 찾아서 클릭
+		const counselorName = '최미혜';
+		const counselorListItems = document.querySelectorAll('.counsel-list-item');
+		let selectedItem = null;
+		counselorListItems.forEach(item => {
+			if(item.querySelector('.counsel-name').textContent.trim() === counselorName){
+				item.click(); // 상담내역 선택
+				selectedItem = item;
+			}
+		});
+		
+		if(selectedItem){
+			// '선택' 버튼을 클릭하여 선택한 정보를 본문 폼으로 옮깁니다.
+			document.getElementById('modal-confirm-btn').click();
+		}
+		
+		// 3. 모달이 닫히고 폼 필드가 채워지는 데 약간의 시간이 필요 
+		setTimeout(function(){
+			//별점 자동선택 (5점 만점)
+			const ratingStars = document.querySelectorAll('#cr-rate .star');
+			if(ratingStars.length>4){
+				ratingStars[4].click();
+			}
+			
+			//후기내용 자동완성
+			const reviewContent = `상담사님과 함께 진로에 대한 깊이 있는 대화를 나누며 명확한 목표를 세울 수 있었습니다.\n제 강점과 약점을 객관적으로 파악하고, 앞으로 나아가야 할 방향을 구체적으로 설정하는 데 큰 도움이 되었습니다. \n상담 내내 편안한 분위기를 조성해주셔서 감사드립니다.`;
+			document.getElementById('cr-content'). value = reviewContent;
+			
+			//공개여부 '공개'로 선택
+			document.querySelector('input[name="cr-public"][value="Y"]');
+			
+			
+		}, 500); // 500ms 지연
+		
+	}, 500); // 500ms 지연
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
