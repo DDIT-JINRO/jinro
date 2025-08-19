@@ -128,7 +128,7 @@
 .ai-start {
 	margin-left: auto;
 	display: flex;
-	gap: 10px;
+	flex-direction: column;
 }
 
 .btn {
@@ -250,4 +250,13 @@
   color:#202427;
   border-left:4px solid #848efb;
   padding-left:8px;
+}
+
+.powered-by-text {
+    font-family: 'IBM Plex Sans KR';
+    font-size: 11px;
+    color: #888;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    align-self: center;
 }

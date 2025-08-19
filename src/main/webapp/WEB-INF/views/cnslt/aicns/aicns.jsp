@@ -118,6 +118,7 @@
 					<span class="ai-badge">선택한 주제는 상담 종료까지 변경할 수 없습니다. 시작 전 주제를 꼭 확인해 주세요.</span>
 					<div class="ai-start">
 						<button type="button" class="btn" id="btnStart" disabled>상담시작하기</button>
+						<span class="powered-by-text">Powered by Gemini</span>
 					</div>
 				</div>
 			</div>
