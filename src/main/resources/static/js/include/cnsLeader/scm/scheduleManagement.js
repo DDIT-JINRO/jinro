@@ -88,11 +88,11 @@ var calendarInstance = null; // 전역 변수로 선언
 				                    title: `${item.counselName}: ${item.count}건`,
 				                    start: item.counselReqDatetime,
 				                    color: assignedColors[counselorName],
-				                    textColor: 'black'
+				                    textColor: 'black',
+									display: 'block' // 배경색으로 표시
 				                });
 				            });
 				        }
-
 				        calendarInstance.setOption('events', events);
 						
 				    })

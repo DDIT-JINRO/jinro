@@ -11,22 +11,21 @@
 }
 
 /* ------------------ FullCalendar 영역 스타일 수정 ------------------ */
-/* FullCalendar 기본 스타일: 오늘 날짜의 노란색 하이라이트를 제거하거나 조정 */
 .fc-day-today {
-	background-color: transparent; /* 기본 노란색 배경 제거 */
+	background-color: blue; /* 기본 노란색 배경 제거 */
 	border: none; /* 기본 테두리 제거 */
 }
 
 /* 사용자 정의 스타일: 선택된 날짜에 대한 파란색 하이라이트 */
 .fc-day.selected {
-	background-color: #e0f7fa; /* 연한 하늘색 배경 */
-	border: 2px solid #00acc1; /* 테두리 강조 */
+	background-color: #2E8B57; 
+	border: 2px solid #2E8B57 ; 
 }
 
 /* 오늘 날짜가 선택되었을 경우의 스타일 */
 .fc-day-today.selected {
-	background-color: #e0f7fa !important; /* 선택된 날짜와 동일한 배경색 */
-	border: 2px solid #00acc1; /* 선택된 날짜와 동일한 테두리 */
+	background-color: #F39C12  !important; 
+	border: 2px solid #2E8B57 ; 
 }
 /* FullCalendar 컨테이너 스타일 */
 #calendar {
@@ -62,7 +61,7 @@
     color: black; /* 원하는 색상으로 변경 */
 }
 .fc .fc-bg-event {
-    opacity: 0.7;
+    opacity: 0.4;
 }
 /* ──────────────────────────────────────────────────────────
    리스트 테이블
@@ -203,14 +202,13 @@
 
 .counsel-info-summary .info-label {
 	font-weight: bold;
-	color: #555;
+	color: black;
 }
 
 .counsel-detail-content {
 	display: flex;
 	padding: 10px;
 	gap: 20px;
-	height: 90%;
 	box-sizing: border-box;
 }
 
@@ -242,6 +240,7 @@
 
 .info-label {
 	font-weight: bold;
+    font-size: large;
 }
 
 .button-group {

@@ -128,11 +128,11 @@
 									class="info-value-counselMethodStr"></span>
 							</div>
 							<div class="info-item">
-								<span class="info-label">상담 예약일 : </span> <span
+								<span class="info-label">상담 예약일</span> <span
 									class="info-value-counselReqDate"></span>
 							</div>
 							<div class="info-item">
-								<span class="info-label">상담 예약시간 : </span> <span
+								<span class="info-label">상담 예약시간</span> <span
 									class="info-value-counselReqtime"></span>
 							</div>
 							<div class="info-item">

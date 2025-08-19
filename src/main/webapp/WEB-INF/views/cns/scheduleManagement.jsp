@@ -77,23 +77,23 @@
 
 						<div class="counsel-info-summary">
 							<div class="info-item">
-								<span class="info-label">상담 분야</span> <span class="info-value"
+								<span class="info-label">상담 분야: </span> <span class="info-value"
 									id="counselCategory"></span>
 							</div>
 							<div class="info-item">
-								<span class="info-label">상담 방법</span> <span class="info-value"
+								<span class="info-label">상담 방법: </span> <span class="info-value"
 									id="counselMethod"></span>
 							</div>
 							<div class="info-item">
-								<span class="info-label">상담 예약일</span> <span class="info-value"
+								<span class="info-label">상담 예약일: : </span> <span class="info-value"
 									id="counselReqDate"></span>
 							</div>
 							<div class="info-item">
-								<span class="info-label">상담 예약시간</span> <span class="info-value"
+								<span class="info-label">상담 예약시간: </span> <span class="info-value"
 									id="counselReqTime"></span>
 							</div>
 							<div class="info-item">
-								<span class="info-label">상담 상태</span> <span class="info-value"
+								<span class="info-label">상담 상태: </span> <span class="info-value"
 									id="counselStatus"></span>
 							</div>
 						</div>
