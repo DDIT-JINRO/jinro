@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.admin.las.service.ContentStatsService;
 import kr.or.ddit.comm.peer.teen.service.TeenCommService;
+import kr.or.ddit.prg.ctt.service.ContestService;
+
 
 
 @Controller
@@ -22,6 +24,9 @@ public class MainController {
 
 	@Autowired
 	private ContentStatsService contentStatsService;
+
+	@Autowired
+	private ContestService contestService;
 
 	@Autowired
 	private TeenCommService teenCommService;
@@ -49,5 +54,11 @@ public class MainController {
 	@ResponseBody
 	public List<Map<String, Object>> communityTop5Main(@AuthenticationPrincipal String memId){
 		return contentStatsService.selectCommunityTop5PostsByMemBirth(memId);
+	}
+
+	@GetMapping("/contest-banner")
+	@ResponseBody
+	public List<Map<String, Object>> contestBanner(@AuthenticationPrincipal String memId){
+		return contestService.contestBanner(memId);
 	}
 }
