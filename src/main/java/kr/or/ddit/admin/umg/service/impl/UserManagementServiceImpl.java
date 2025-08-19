@@ -1,6 +1,7 @@
 package kr.or.ddit.admin.umg.service.impl;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -265,6 +266,96 @@ public class UserManagementServiceImpl implements UserManagementService {
 		int res = userManagementMapper.reportModify(reportVO);
 
 		return res;
+	}
+
+	@Override
+	public Map<String, Object> getDailyUserStats() {
+	    Map<String, Object> stats = new HashMap<>();
+	    
+	    // 1. 일일 사용자 현황
+	    int todayActiveUsers = userManagementMapper.getDailyActiveUsers();
+	    int yesterdayActiveUsers = userManagementMapper.getYesterdayActiveUsers();
+	    
+	    // 전날 대비 일일 사용자 증감률 계산
+	    Map<String, Object> userGrowth = calculateGrowthRate(todayActiveUsers, yesterdayActiveUsers);
+	    
+	    // 2. 일일 평균 홈페이지 이용 현황
+	    Double todayAvgUsageTime = userManagementMapper.getDailyAverageUsageTime();
+	    Double yesterdayAvgUsageTime = userManagementMapper.getYesterdayAverageUsageTime();
+	    
+	    if (todayAvgUsageTime == null) todayAvgUsageTime = 0.0;
+	    if (yesterdayAvgUsageTime == null) yesterdayAvgUsageTime = 0.0;
+	    
+	    // 전날 대비 평균 이용시간 증감률 계산
+	    Map<String, Object> usageTimeGrowth = calculateGrowthRate(
+	        todayAvgUsageTime.intValue(), 
+	        yesterdayAvgUsageTime.intValue()
+	    );
+	    
+	    // 3. 현재 온라인 사용자 수
+	    int currentOnlineUsers = userManagementMapper.getCurrentOnlineUsers();
+	    
+	    stats.put("dailyActiveUsers", todayActiveUsers);
+	    stats.put("dailyActiveUsersRate", userGrowth.get("percentage"));
+	    stats.put("dailyActiveUsersStatus", userGrowth.get("status"));
+	    
+	    stats.put("avgUsageTimeMinutes", Math.round(todayAvgUsageTime));
+	    stats.put("avgUsageTimeRate", usageTimeGrowth.get("percentage"));
+	    stats.put("avgUsageTimeStatus", usageTimeGrowth.get("status"));
+	    
+	    stats.put("currentOnlineUsers", currentOnlineUsers);
+	    
+	    return stats;
+	}
+	
+	private Map<String, Object> calculateGrowthRate(int currentCount, int previousCount) {
+	    double percentageChange = 0.0;
+	    String status = "equal";
+
+	    if (previousCount > 0) {
+	        percentageChange = ((double) (currentCount - previousCount) / previousCount) * 100;
+
+	        if (percentageChange > 0) {
+	            status = "increase";
+	        } else if (percentageChange < 0) {
+	            status = "decrease";
+	        }
+	    } else if (currentCount > 0) {
+	        status = "new_entry";
+	        percentageChange = 100.0;
+	    }
+
+	    DecimalFormat df = new DecimalFormat("#.##");
+	    String formattedPercentage = df.format(Math.abs(percentageChange));
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("percentage", formattedPercentage);
+	    result.put("status", status);
+
+	    return result;
+	}
+
+	@Override
+	public ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus) {
+	    int startNo = (currentPage - 1) * size + 1;
+	    int endNo = currentPage * size;
+
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("keyword", keyword);
+	    map.put("activityStatus", activityStatus);
+	    map.put("currentPage", currentPage);
+	    map.put("startNo", startNo);
+	    map.put("endNo", endNo);
+
+	    // 활동 상태가 포함된 회원 리스트
+	    List<MemberVO> list = userManagementMapper.getMemberActivityList(map);
+	    
+	    // 총 건수
+	    int total = userManagementMapper.getAllMemberActivityList(map);
+	    
+	    ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword);
+
+	    return articlePage;
 	}
 
 }

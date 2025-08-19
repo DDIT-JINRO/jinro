@@ -232,4 +232,194 @@
 
 		]]>
 	</select>
+	
+	<!-- 1. 일일 사용자 현황 (오늘 로그인한 고유 사용자 수) -->
+	<select id="getDailyActiveUsers" resultType="int">
+	    SELECT COUNT(DISTINCT MEM_ID)
+	    FROM LOGIN_LOG
+	    WHERE TRUNC(LL_CREATED_AT) = TRUNC(SYSDATE)
+	    AND LL_STATUS = 'I'
+	</select>
+	
+	<!-- 2. 일일 평균 홈페이지 이용 현황 (분 단위) -->
+	<select id="getDailyAverageUsageTime" resultType="double">
+	    WITH SESSION_TIMES AS (
+	        SELECT 
+	            MEM_ID,
+	            LL_CREATED_AT AS LOGIN_TIME,
+	            LEAD(LL_CREATED_AT) OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT) AS LOGOUT_TIME,
+	            LL_STATUS,
+	            LEAD(LL_STATUS) OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT) AS NEXT_STATUS
+	        FROM LOGIN_LOG
+	        WHERE TRUNC(LL_CREATED_AT) = TRUNC(SYSDATE)
+	    )
+	    SELECT NVL(AVG((LOGOUT_TIME - LOGIN_TIME) * 24 * 60), 0) AS avg_minutes
+	    FROM SESSION_TIMES
+	    WHERE LL_STATUS = 'I' 
+	    AND NEXT_STATUS = 'O'
+	    AND LOGOUT_TIME IS NOT NULL
+	</select>
+	
+	<!-- 3. 현재 온라인 사용자 수 -->
+	<select id="getCurrentOnlineUsers" resultType="int">
+	    WITH LAST_LOG AS (
+	        SELECT 
+	            MEM_ID,
+	            LL_STATUS,
+	            ROW_NUMBER() OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT DESC) AS rn
+	        FROM LOGIN_LOG
+	    )
+	    SELECT COUNT(*)
+	    FROM LAST_LOG
+	    WHERE rn = 1 
+	    AND LL_STATUS = 'I'
+	</select>
+	
+	<!-- 4. 활동 상태가 포함된 전체 회원 리스트 -->
+	<select id="getMemberActivityList" resultType="kr.or.ddit.main.service.MemberVO">
+	    SELECT * FROM (
+	        SELECT ROWNUM AS RNUM, B.*
+	        FROM (
+	            SELECT 
+	                M.MEM_ID,
+	                M.MEM_EMAIL,
+	                M.MEM_NICKNAME,
+	                M.MEM_NAME,
+	                M.MEM_ROLE,
+	                M.CREATED_AT,
+	                M.DEL_YN,
+	                CASE 
+	                    WHEN P.MEM_ID IS NOT NULL THEN 'SUSPENDED'
+	                    WHEN L.LL_STATUS = 'I' THEN 'ONLINE'
+	                    WHEN L.LL_STATUS = 'O' THEN 'OFFLINE'
+	                    ELSE 'NEVER_LOGIN'
+	                END AS ACTIVITY_STATUS,
+	                L.LL_CREATED_AT AS LAST_ACTIVITY_TIME
+	            FROM MEMBER M
+	            LEFT JOIN (
+	                SELECT 
+	                    MEM_ID,
+	                    LL_STATUS,
+	                    LL_CREATED_AT,
+	                    ROW_NUMBER() OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT DESC) AS rn
+	                FROM LOGIN_LOG
+	            ) L ON M.MEM_ID = L.MEM_ID AND L.rn = 1
+	            LEFT JOIN (
+	                SELECT DISTINCT MEM_ID
+	                FROM MEMBER_PENALTY
+	                WHERE MP_TYPE = 'G14002'
+	                AND MP_COMPLETE_AT > SYSDATE
+	            ) P ON M.MEM_ID = P.MEM_ID
+	            <where>
+	                M.DEL_YN = 'N'
+	                AND M.MEM_ROLE = 'R01001'
+	                <if test="keyword != null and keyword != ''">
+	                    AND (UPPER(M.MEM_NAME) LIKE '%' || UPPER(#{keyword}) || '%' 
+	                    OR UPPER(M.MEM_NICKNAME) LIKE '%' || UPPER(#{keyword}) || '%' 
+	                    OR UPPER(M.MEM_EMAIL) LIKE '%' || UPPER(#{keyword}) || '%')
+	                </if>
+	                <if test="activityStatus != null and activityStatus != ''">
+	                    <if test="activityStatus == 'SUSPENDED'">
+	                        AND P.MEM_ID IS NOT NULL
+	                    </if>
+	                    <if test="activityStatus == 'ONLINE'">
+	                        AND L.LL_STATUS = 'I'
+	                        AND P.MEM_ID IS NULL
+	                    </if>
+	                    <if test="activityStatus == 'OFFLINE'">
+	                        AND L.LL_STATUS = 'O'
+	                        AND P.MEM_ID IS NULL
+	                    </if>
+	                    <if test="activityStatus == 'NEVER_LOGIN'">
+	                        AND L.LL_STATUS IS NULL
+	                        AND P.MEM_ID IS NULL
+	                    </if>
+	                </if>
+	            </where>
+	            ORDER BY 
+	                CASE 
+	                    WHEN P.MEM_ID IS NOT NULL THEN 0
+	                    WHEN L.LL_STATUS = 'I' THEN 1 
+	                    WHEN L.LL_STATUS = 'O' THEN 2 
+	                    ELSE 3 
+	                END,
+	                NVL(L.LL_CREATED_AT, TO_DATE('1900-01-01', 'YYYY-MM-DD')) DESC
+	        ) B
+	        WHERE ROWNUM <![CDATA[<=]]> #{endNo}
+	    )
+	    WHERE RNUM <![CDATA[>=]]> #{startNo}
+	</select>
+	
+	<!-- 5. 활동 상태 회원 리스트 총 건수 -->
+	<select id="getAllMemberActivityList" resultType="int">
+	    SELECT COUNT(*)
+	    FROM MEMBER M
+	    LEFT JOIN (
+	        SELECT 
+	            MEM_ID,
+	            LL_STATUS,
+	            LL_CREATED_AT,
+	            ROW_NUMBER() OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT DESC) AS rn
+	        FROM LOGIN_LOG
+	    ) L ON M.MEM_ID = L.MEM_ID AND L.rn = 1
+	    LEFT JOIN (
+	        SELECT DISTINCT MEM_ID
+	        FROM MEMBER_PENALTY
+	        WHERE MP_TYPE = 'G14002'
+	        AND MP_COMPLETE_AT > SYSDATE
+	    ) P ON M.MEM_ID = P.MEM_ID
+	    <where>
+	        M.DEL_YN = 'N'
+	        AND M.MEM_ROLE = 'R01001'
+	        <if test="keyword != null and keyword != ''">
+	            AND (UPPER(M.MEM_NAME) LIKE '%' || UPPER(#{keyword}) || '%' 
+	            OR UPPER(M.MEM_NICKNAME) LIKE '%' || UPPER(#{keyword}) || '%' 
+	            OR UPPER(M.MEM_EMAIL) LIKE '%' || UPPER(#{keyword}) || '%')
+	        </if>
+	        <if test="activityStatus != null and activityStatus != ''">
+	            <if test="activityStatus == 'SUSPENDED'">
+	                AND P.MEM_ID IS NOT NULL
+	            </if>
+	            <if test="activityStatus == 'ONLINE'">
+	                AND L.LL_STATUS = 'I'
+	                AND P.MEM_ID IS NULL
+	            </if>
+	            <if test="activityStatus == 'OFFLINE'">
+	                AND L.LL_STATUS = 'O'
+	                AND P.MEM_ID IS NULL
+	            </if>
+	            <if test="activityStatus == 'NEVER_LOGIN'">
+	                AND L.LL_STATUS IS NULL
+	                AND P.MEM_ID IS NULL
+	            </if>
+	        </if>
+	    </where>
+	</select>
+	
+	<!-- 6. 어제 로그인한 고유 사용자 수 -->
+	<select id="getYesterdayActiveUsers" resultType="int">
+	    SELECT COUNT(DISTINCT MEM_ID)
+	    FROM LOGIN_LOG
+	    WHERE TRUNC(LL_CREATED_AT) = TRUNC(SYSDATE) - 1
+	    AND LL_STATUS = 'I'
+	</select>
+	
+	<!-- 7. 어제 평균 홈페이지 이용 시간 (분 단위) -->
+	<select id="getYesterdayAverageUsageTime" resultType="double">
+	    WITH SESSION_TIMES AS (
+	        SELECT 
+	            MEM_ID,
+	            LL_CREATED_AT AS LOGIN_TIME,
+	            LEAD(LL_CREATED_AT) OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT) AS LOGOUT_TIME,
+	            LL_STATUS,
+	            LEAD(LL_STATUS) OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT) AS NEXT_STATUS
+	        FROM LOGIN_LOG
+	        WHERE TRUNC(LL_CREATED_AT) = TRUNC(SYSDATE) - 1
+	    )
+	    SELECT NVL(AVG((LOGOUT_TIME - LOGIN_TIME) * 24 * 60), 0) AS avg_minutes
+	    FROM SESSION_TIMES
+	    WHERE LL_STATUS = 'I' 
+	    AND NEXT_STATUS = 'O'
+	    AND LOGOUT_TIME IS NOT NULL
+	</select>
 </mapper>

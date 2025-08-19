@@ -19,7 +19,6 @@ import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.alarm.service.AlarmService;
 import kr.or.ddit.util.alarm.service.AlarmType;
 import kr.or.ddit.util.alarm.service.AlarmVO;
-import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -28,13 +27,13 @@ import lombok.extern.slf4j.Slf4j;
 public class UserManagementController {
 
 	@Autowired
-	UserManagementService userManagementService;
+	private UserManagementService userManagementService;
+	
 	@Autowired
-	MemberJoinService memberJoinService;
+	private MemberJoinService memberJoinService;
+	
 	@Autowired
-	FileService fileService;
-	@Autowired
-	AlarmService alarmService;
+	private AlarmService alarmService;
 
 	@GetMapping("/getMemberList.do")
 	public ArticlePage<MemberVO> getMemberList(
@@ -146,6 +145,21 @@ public class UserManagementController {
 	public int reportModify(ReportVO reportVO) {
 
 		return userManagementService.reportModify(reportVO);
+	}
+	
+	@GetMapping("/getDailyUserStats.do")
+	public Map<String, Object> getDailyUserStats() {
+	    return userManagementService.getDailyUserStats();
+	}
+
+	@GetMapping("/getMemberActivityList.do")
+	public ArticlePage<MemberVO> getMemberActivityList(
+	        @RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+	        @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+	        @RequestParam(value = "keyword", required = false) String keyword,
+	        @RequestParam(value = "activityStatus", required = false) String activityStatus) {
+	    
+	    return userManagementService.getMemberActivityList(currentPage, size, keyword, activityStatus);
 	}
 
 }

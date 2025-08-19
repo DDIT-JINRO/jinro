@@ -30,5 +30,9 @@ public interface UserManagementService {
 	int submitPenalty(MemberPenaltyVO memberPenaltyVO, MultipartFile[] evidenceFiles);
 
 	int insertUserByAdmin(MemberVO memberVO, MultipartFile profileImage);
+	
+	Map<String, Object> getDailyUserStats();
+	
+	ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus);
 
 }

@@ -57,4 +57,17 @@ public interface UserManagementMapper {
 
 	void updateMemDelYn(int memId);
 
+	int getDailyActiveUsers();
+	
+	Double getDailyAverageUsageTime();
+	
+	int getCurrentOnlineUsers();
+	
+	List<MemberVO> getMemberActivityList(Map<String, Object> map);
+	
+	int getAllMemberActivityList(Map<String, Object> map);
+	
+	int getYesterdayActiveUsers();
+	
+	Double getYesterdayAverageUsageTime();
 }
