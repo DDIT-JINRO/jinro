@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded',function(){
 	const newBtn = document.getElementById('btnNewMsg');
 	const topicBadge = document.getElementById('topicBadge');
 
+	if(errorB.dataset.message && errorB.dataset.message!=''){
+		alert(errorB.dataset.message);
+		window.close();
+	}
+
 	const sid = new URLSearchParams(location.search).get('sid');
 	if(!sid){ alert('세션 정보가 없습니다. 창을 닫습니다.'); window.close(); }
 
@@ -17,10 +22,48 @@ document.addEventListener('DOMContentLoaded',function(){
 	let autoScroll = true;
 
 	/* ========= Helpers ========= */
+	// 종료 송신 함수
+	function sendClose() {
+	  if (!sid) return;
+	  const payload = JSON.stringify({ sid });
+
+	  // 우선권: beforeunload에서도 동작하는 sendBeacon
+	  if (navigator.sendBeacon) {
+	    const blob = new Blob([payload], { type: 'application/json' });
+	    navigator.sendBeacon('/ai/session/close', blob);
+	  } else {
+	    // 폴백: keepalive fetch (일부 브라우저에서만 보장)
+	    fetch('/ai/session/close', {
+	      method: 'POST',
+	      headers: { 'Content-Type': 'application/json' },
+	      body: payload,
+	      keepalive: true
+	    }).catch(() => {});
+	  }
+	}
+
+	// 3) 팝업이 닫힐 때 자동 호출 (중복 방지 once)
+	window.addEventListener('pagehide', sendClose, { once: true });
+	window.addEventListener('beforeunload', sendClose, { once: true });
+
+	const endBtn = document.getElementById('btn-close');
+	if (endBtn) {
+	  endBtn.addEventListener('click', () => {
+	    sendClose();
+	    window.close();
+	  });
+	}
+
+	function showError(msg){
+	  errorB.textContent = msg;
+	  errorB.style.display = 'block';
+	  setTimeout(()=> errorB.style.display='none', 4200);
+	}
+
 	const nowStr = () => {
 		const d = new Date();
 		const p = n => String(n).padStart(2, '0');
-		return `${String(d.getFullYear()).slice(-2)}.${p(d.getMonth() + 1)}.${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+		return `${String(d.getFullYear()).slice(-2)}.${p(d.getMonth() + 1)}.${p(d.getDate())}. ${p(d.getHours())}:${p(d.getMinutes())}`;
 	};
 
 	const roleIcon = role => role === 'mine' ? '👤' : '🤖';

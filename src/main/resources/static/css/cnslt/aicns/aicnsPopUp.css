@@ -49,7 +49,7 @@
       border:1px solid var(--line);
     }
     .bubble{
-      max-width:min(740px, 78vw);
+      max-width:min(525px, 78vw);
       padding:10px 12px; border-radius:16px; background:var(--ai);
       border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.03);
       position:relative;

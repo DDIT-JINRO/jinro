@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,11 +18,16 @@
 			<div class="title">AI 상담</div>
 			<span class="badge" id="topicBadge" data-topic="${topic }">주제: ${topicKr}</span> <span class="sep" aria-hidden="true"></span>
 			<div class="note">대화는 저장되지 않습니다 · 팝업 종료 시 복구 불가</div>
-			<button class="btn-ghost" onclick="window.close()">창 닫기</button>
+			<button class="btn-ghost" id="btn-close">창 닫기</button>
 		</header>
 
 		<!-- ERROR BAR -->
-		<div class="errorbar" id="errorBar"></div>
+		<div class="errorbar" id="errorBar"
+		<c:if test="${errorMessage!=null and errorMessage!=''}">
+		 data-message="${errorMessage }"
+		 </c:if>
+		 >
+		</div>
 
 		<!-- CHAT AREA -->
 		<main id="chat" class="chat" aria-live="polite" aria-label="대화 내용">
