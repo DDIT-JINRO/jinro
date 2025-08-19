@@ -328,7 +328,7 @@ const fn_ContestBanner = async () =>{
 	const slideContainer = document.querySelector('.main-slides');
 	const banners = datas.map(d =>
 		`
-		<a href="${d.contestUrl}">
+		<a href="${d.contestUrl}" data-title="${d.contestTitle}">
 			<img src="${d.filePath}" alt="${d.contestTitle.slice(1,6)}.." title="${d.contestTitle}">
 		</a>
 		`
