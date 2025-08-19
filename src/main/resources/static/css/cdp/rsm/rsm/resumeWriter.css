@@ -370,7 +370,7 @@ body {
 	content: "\f02d"; /* Font Awesome 책 아이콘 (자료를 불러오는 느낌) */
 	font-family: 'Font Awesome 6 Free'; /* Font Awesome 폰트 지정 */
 	font-weight: 900; /* Solid 아이콘을 위해 */
-	color: #6c75ff; /* 아이콘 색상 */
+	color: #7881f5; /* 아이콘 색상 */
 	font-size: 1.5em; /* 아이콘 크기 */
 	margin-bottom: 10px; /* 아이콘과 버튼 사이 간격 */
 	text-align: center; /* 아이콘 중앙 정렬 */
@@ -378,7 +378,7 @@ body {
 }
 
 .load-button-group button {
-	background-color: #6c75ff; /* 버튼 배경색 (회색 계열) */
+	background-color: #7881f5; /* 버튼 배경색 (회색 계열) */
 	color: white;
 	padding: 8px 15px; /* 버튼 패딩 */
 	border: none;

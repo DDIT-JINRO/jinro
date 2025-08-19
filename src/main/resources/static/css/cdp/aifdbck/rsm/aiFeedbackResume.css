@@ -494,7 +494,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 
 /* 부트스트랩의 .text-primary 클래스를 흉내 냅니다. */
 .text-primary {
-	color: #6c75ff; /* 스피너의 색상 */
+	color: #7881f5; /* 스피너의 색상 */
 }
 
 /* 부트스트랩의 .text-center 클래스를 흉내 냅니다. */

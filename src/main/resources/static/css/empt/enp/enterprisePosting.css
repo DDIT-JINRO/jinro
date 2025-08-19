@@ -136,7 +136,7 @@
 	color: #333;
 	margin: 0 0 12px 0;
 	padding: 8px 0 8px 12px;
-	border-left: 4px solid #6c75ff;
+	border-left: 4px solid #7881f5;
 }
 
 /* 섹션 컨테이너 */
@@ -265,7 +265,7 @@
 .review-rating-text {
 	font-size: 0.9rem;
 	font-weight: 600;
-	color: #6c75ff;
+	color: #7881f5;
 	margin-left: 4px;
 	white-space: nowrap;
 }
