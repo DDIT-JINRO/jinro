@@ -1,176 +1,187 @@
-.resume-writer {
-	width: 230px;
-	height: 49px;
-	border: 2px solid #848EFB;
-	border-radius: 5px;
-	background: #fff;
-	font-size: 18px;
-	font-weight: 500;
-	color: #848EFB;
-	text-align: center;
-	text-decoration: none;
+/* ==========================================================================
+   이력서 리스트 페이지 전용 스타일
+   ========================================================================== */
+
+/* 이력서 리스트 섹션 */
+.resume-list {
+	margin-bottom: 40px;
+}
+
+.resume-list__header {
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
-	float: right;
-	margin-right: 30px;
+	margin-bottom: 20px;
 }
 
-.resume-writer:hover {
-	background-color: #848EFB;
-	color: white;
-	cursor: pointer; /* 마우스 오버 시 커서 변경 */
-}
-
-.public-wrapper-main::after {
-	content: "";
-	display: block;
-	clear: both;
-}
-
-.resume-list-section {
-	width: 1160px;
-	margin: 60px auto;
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-}
-
-.resume-list-header {
-	font-family: 'Noto Sans KR';
-	font-size: 18px;
+.resume-list__total-count {
+	font-size: 16px;
 	font-weight: 500;
-	color: #000;
+	color: #374151;
 }
 
+.resume-list__create-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 24px;
+	background-color: #fff;
+	color: #7881f5;
+	border: 2px solid #7881f5;
+	border-radius: 6px;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+.resume-list__create-button:hover {
+	background-color: #7881f5;
+	color: #fff;
+}
+
+/* 이력서 카드 */
 .resume-card {
 	display: flex;
-	width: 88%;
 	justify-content: space-between;
 	align-items: center;
-	padding: 20px 30px;
-	border: 2px solid #848EFB;
+	padding: 24px;
+	border: 1px solid #e5e7eb;
 	border-radius: 10px;
-	height: 80px;
+	background-color: #fff;
+	margin-bottom: 16px;
+	transition: all 0.2s ease;
 }
 
-.resume-title-section {
+.resume-card:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	border-color: #d1d5db;
+}
+
+.resume-card__info {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 12px;
+	flex: 1;
 }
 
-.resume-title {
-	font-family: 'Noto Sans KR';
-	font-size: 24px;
-	font-weight: 700;
-	color: #000;
+.resume-card__title {
+	font-size: 20px;
+	font-weight: 600;
+	color: #111827;
+	margin: 0;
+	line-height: 1.3;
 }
 
-.resume-meta {
+.resume-card__meta {
 	display: flex;
 	gap: 20px;
+	flex-wrap: wrap;
 }
 
-.resume-questions, .resume-date {
-	font-family: 'Noto Sans KR';
-	font-size: 16px;
-	color: #626262;
+.resume-card__meta-item {
+	font-size: 14px;
+	color: #6b7280;
+	display: flex;
+	align-items: center;
+	gap: 4px;
 }
 
-.resume-edit-button {
-	width: 228px;
-	height: 47px;
-	border: 2px solid #848EFB;
-	border-radius: 5px;
-	background: #fff;
-	font-family: 'IBM Plex Sans KR';
+.resume-card__meta-label {
+	font-weight: 500;
+}
+
+.resume-card__status {
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 12px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.resume-card__status--completed {
+	background-color: #eef2ff;
+	color: #4338ca;
+}
+
+.resume-card__status--draft {
+	background-color: #fef3c7;
+	color: #92400e;
+}
+
+.resume-card__actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.resume-card__edit-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 20px;
+	background-color: #fff;
+	color: #7881f5;
+	border: 1px solid #7881f5;
+	border-radius: 6px;
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: 500;
+	transition: all 0.2s ease;
+	white-space: nowrap;
+}
+
+.resume-card__edit-button:hover {
+	background-color: #7881f5;
+	color: #fff;
+}
+
+/* 빈 상태 */
+.resume-list__empty {
+	text-align: center;
+	padding: 60px 20px;
+	color: #6b7280;
+}
+
+.resume-list__empty-title {
 	font-size: 18px;
 	font-weight: 500;
-	color: #848EFB;
-	text-align: center;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-decoration: none;
+	margin-bottom: 8px;
+	color: #374151;
 }
 
-.resume-edit-button:hover {
-	background-color: #848EFB;
-	color: white;
+.resume-list__empty-description {
+	font-size: 14px;
+	margin-bottom: 24px;
 }
 
-.resume-list-footer {
-	display: flex;
-	justify-content: flex-end;
-}
-
-.resume-list-btn {
-	width: 200px;
-	height: 50px;
-	background: #848EFB;
-	border-radius: 5px;
-	color: white;
-	font-family: 'IBM Plex Sans KR';
-	font-size: 20px;
-	font-weight: 500;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-decoration: none;
-}
-
-/* 검색창 및 필터링 섹션 */
-.resume-search-filter {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 30px;
-	padding: 15px;
-	background-color: #fff;
-	border-radius: 10px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* 검색 입력창 */
-.resume-search-input {
-	width: 66%; /* 검색 입력창 넓이를 조정 */
-	padding: 16px 16px;
-	font-size: 16px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	outline: none;
-	transition: border-color 0.3s ease;
-}
-
-.resume-search-input:focus {
-	border-color: #848EFB;
-	box-shadow: 0 0 0 2px rgba(132, 142, 251, 0.2);
-}
-
-/* 상태 셀렉트박스 */
-.resume-status-select {
-	width: 19%;
-	padding: 12px;
-	font-size: 16px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	background-color: #fff;
-	margin-left: 10px;
-}
-
-/* 검색 버튼 */
-.resume-search-btn {
-	padding: 12px 20px;
-	font-size: 16px;
-	background-color: #848EFB;
-	color: white;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-}
-
-.resume-search-btn:hover {
-	background-color: #5a3fdb;
+/* 반응형 디자인 */
+@media ( max-width : 768px) {
+	.resume-list__header {
+		flex-direction: column;
+		gap: 16px;
+		align-items: stretch;
+	}
+	.resume-list__create-button {
+		width: 100%;
+		justify-content: center;
+	}
+	.resume-card {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 16px;
+		padding: 20px;
+	}
+	.resume-card__meta {
+		gap: 12px;
+	}
+	.resume-card__actions {
+		justify-content: stretch;
+	}
+	.resume-card__edit-button {
+		width: 100%;
+		justify-content: center;
+	}
 }
