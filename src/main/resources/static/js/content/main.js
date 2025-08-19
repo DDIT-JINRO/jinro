@@ -1,5 +1,6 @@
 /**
- * */
+ *
+ */
 
 const text = "관심 진로와 관련된 유튜브 콘텐츠를 한눈에 확인해보세요.";
 const target = document.getElementById("typing-js");
@@ -156,12 +157,16 @@ showSlide(currentSlide);
 document.addEventListener('DOMContentLoaded', function() {
 	fn_init();
 	fn_TopsWidget();
+	fn_ContestBanner();
     if(memId && memId !='anonymousUser') {
     	roadmapPopup();
 	}
 });
 
-const fn_init = () => {	
+const fn_init = () => {
+	const banner = document.querySelector('.main-loadmap-banner');
+	banner.classList.add('animate-in');
+
 	// 로드맵 바로가기 버튼
 	const roadmap = document.querySelector('.roadmapBtn');
 	roadmap.addEventListener("click", () => {
@@ -170,20 +175,20 @@ const fn_init = () => {
 			location.href = "/login";
 		} else {
 			const roadmapUrl = 'http://localhost:5173/roadmap';
-			
+
 			const width  = 1084;
 			const height = 736;
 			const screenWidth  = window.screen.width;
 			const screenHeight = window.screen.height;
             const left = Math.floor((screenWidth - width) / 2);
             const top  = Math.floor((screenHeight - height) / 2);
-			
+
             axios.post("/admin/las/roadMapVisitLog.do");
-            
-			window.open(roadmapUrl, 'Roadmap', `width=${width}, height=${height}, left=${left}, top=${top}`);
+
+			window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
 		}
 	});
-	
+
 	const worldcup = document.getElementById('worldcupBtn')
 	worldcup.addEventListener("click", () => {
 		if(!memId || memId=='anonymousUser') {
@@ -192,32 +197,32 @@ const fn_init = () => {
 		} else {
 			axios.post("/admin/las/worldCupVisitLog.do")
 			const worldcupUrl = 'http://localhost:5173/worldcup';
-			
+
 			const width  = 1200;
 			const height = 800;
 			const screenWidth  = window.screen.width;
 			const screenHeight = window.screen.height;
 			const left = Math.floor((screenWidth - width) / 2);
 			const top  = Math.floor((screenHeight - height) / 2);
-			
-			window.open(worldcupUrl, 'worldcup', `width=${width}, height=${height}, left=${left}, top=${top}`);
+
+			window.open(worldcupUrl, 'worldcup', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
 		}
 	});
 }
 
 const roadmapPopup = () => {
 	const popupCookie = getCookie('popup');
-	
+
 	if(popupCookie != 'done') {
 		const roadmapUrl = 'http://localhost:5173/roadmap';
-	
+
 		const width  = 1084;
 		const height = 736;
 		const screenWidth  = window.screen.width;
 		const screenHeight = window.screen.height;
 		const left = Math.floor((screenWidth - width) / 2);
 		const top  = Math.floor((screenHeight - height) / 2);
-	
+
 		window.open(roadmapUrl, 'Roadmap', `width=${width}, height=${height}, left=${left}, top=${top}`);
 	}
 };
@@ -235,18 +240,19 @@ const getCookie = (name) => {
 	return null;
 };
 
+// fetch 함수화
+const fetchJSON = async (url) => {
+  try{
+    const res = await fetch(url, { headers: { 'Accept': 'application/json' }});
+    if(!res.ok) return [];
+    return await res.json();
+  }catch(e){ return []; }
+};
+
 const fn_TopsWidget = () =>{
 	// 컨텐츠 4종류 요소 배열로 받음
 	const widgets = Array.from(document.querySelectorAll('.trend-widget'));
 
-	// fetch 함수화
-	const fetchJSON = async (url) => {
-	  try{
-	    const res = await fetch(url, { headers: { 'Accept': 'application/json' }});
-	    if(!res.ok) return [];
-	    return await res.json();
-	  }catch(e){ return []; }
-	};
 
 	// 위젯 로딩 함수
 	const initWidget = async (section) => {
@@ -315,4 +321,17 @@ const fn_TopsWidget = () =>{
 	};
 
 	widgets.forEach(initWidget);
+}
+
+const fn_ContestBanner = async () =>{
+	const datas = await fetchJSON('/contest-banner')
+	const slideContainer = document.querySelector('.main-slides');
+	const banners = datas.map(d =>
+		`
+		<a href="${d.contestUrl}" data-title="${d.contestTitle}">
+			<img src="${d.filePath}" alt="${d.contestTitle.slice(1,6)}.." title="${d.contestTitle}">
+		</a>
+		`
+	).join('');
+	slideContainer.innerHTML = banners + banners;
 }

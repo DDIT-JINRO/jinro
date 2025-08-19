@@ -1,6 +1,7 @@
 package kr.or.ddit.prg.ctt.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -32,4 +33,7 @@ public interface ContestMapper {
 
 	// delete
 	public int deleteContest(String contestId);
+
+	// 메인화면 배너용 공모전,대외활동 조회
+	public List<Map<String, Object>> selectContestBanner(Map<String, Object> param);
 }
