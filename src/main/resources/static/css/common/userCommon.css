@@ -637,6 +637,7 @@ html, body {
 	color: #4b5563;
 	cursor: pointer;
 	height: 100%;
+	width: 100%;
 }
 
 .search-filter__select:focus {
