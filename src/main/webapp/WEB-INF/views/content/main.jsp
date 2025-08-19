@@ -163,10 +163,12 @@
 			<p class="main-event-title">Career Path</p>
 		</div>
 		<div class="center-jr">
-			<p class="main-event-sub">우리는</p>
-			<p class="main-event-sub-bold">&nbsp진로와 진학,</p>
-			<p class="main-event-sub-bold">&nbsp취업</p>
-			<p class="main-event-sub">의 모든 과정을 지원합니다. 자신의 꿈을 이룰 수 있도록 다양한 정보를 제공합니다</p>
+			<p class="main-event-sub-bold">도전</p>
+			<p class="main-event-sub">하는 순간,&nbsp;</p>
+			<p class="main-event-sub-bold">성장</p>
+			<p class="main-event-sub">의 기회가 시작됩니다.</p>
+			<p class="main-event-sub-bold">공모전·대외활동·인턴십</p>
+			<p class="main-event-sub">을 통해 새로운 길을 열어보세요.</p>
 		</div>
 		<div class="main-slider">
 			<div class="main-slides">

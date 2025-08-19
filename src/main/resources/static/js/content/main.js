@@ -325,5 +325,13 @@ const fn_TopsWidget = () =>{
 
 const fn_ContestBanner = async () =>{
 	const datas = await fetchJSON('/contest-banner')
-	console.log(datas);
+	const slideContainer = document.querySelector('.main-slides');
+	const banners = datas.map(d =>
+		`
+		<a href="${d.contestUrl}">
+			<img src="${d.filePath}" alt="${d.contestTitle.slice(1,6)}.." title="${d.contestTitle}">
+		</a>
+		`
+	).join('');
+	slideContainer.innerHTML = banners + banners;
 }

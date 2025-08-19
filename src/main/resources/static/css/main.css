@@ -10,7 +10,7 @@ body {
 	gap: 50px;
 }
 
-@keyframes slideDownFade { 
+@keyframes slideDownFade {
 	0% { opacity: 0; transform: translateY(-50px); }
 	100% { opacity : 1; transform : translateY( 0 ); }
 }
@@ -184,7 +184,7 @@ body {
 	animation-delay: 0.9s;
 }
 
-@keyframes floatUpDown { 
+@keyframes floatUpDown {
 	0% { transform: translateY(0px); }
 	50% { transform : translateY( -15px ); }
 	100% { transform : translateY( 0px ); }
@@ -243,7 +243,7 @@ body {
 .main-slides {
 	display: flex;
 	gap: 60px;
-	animation: slideAnimation 20s linear infinite;
+	animation: slideAnimation 30s linear infinite;
 }
 
 .main-slides a img {
@@ -252,9 +252,54 @@ body {
 }
 
 /* 애니메이션 - 왼쪽으로 슬라이드 */
-@keyframes slideAnimation { 
+@keyframes slideAnimation {
 	0% { transform: translateX(0); }
-	100% { transform : translateX( -2000px ); } /* (이미지 4개 * 600px) */
+	100% { transform : translateX(-50%); } /* (이미지 4개 * 600px) */
+}
+
+.main-slider:hover .main-slides { /* .banner는 바깥 래퍼 */
+  animation-play-state: paused;
+}
+
+.main-slides a {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  transition: transform .35s ease;
+}
+
+.main-slides a img {
+  display: block;
+  height: 345px;
+  border-radius: 10px;            /* 선택 */
+  box-shadow: 0 2px 10px rgba(0,0,0,.08); /* 선택 */
+  object-fit: cover;
+  transform: translateZ(0);       /* GPU 힌트 */
+  transition: transform .45s ease, filter .45s ease;
+  will-change: transform, filter;
+}
+
+.main-slides a:hover img {
+  transform: scale(1.03);
+  filter: brightness(1.05) contrast(1.03);
+}
+
+.main-slides a:hover {
+  transform: translateY(-2px);    /* 카드가 살짝 뜨는 느낌 */
+}
+
+.main-slides a::before,
+.main-slides a::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  transition: opacity .45s ease;
+  opacity: 0;
+}
+
+.main-slides a:hover::before,
+.main-slides a:hover::after {
+  opacity: 1;
 }
 
 /************       contentsSection           *************/
@@ -283,7 +328,7 @@ body {
 	width: 600px;
 	height: 300px;
 	margin: 0 auto 83px auto;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);	
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 	z-index: 1;
 }
