@@ -56,4 +56,13 @@ public class VisitLogController {
 		visitLogService.insertPageLog(memId, plTitle, "/careerAptitudeTest", null);
 	}
 
+	@PostMapping("/las/aiCounselVisitLog.do")
+	public void aiCounselVisitLog(@AuthenticationPrincipal String memId, @RequestBody Map<String, Object> param) {
+		String cnsType = (String) param.get("cnsType");
+		// 상담목적코드같이 기록
+		// G07001:취업상담, G07002:학업상담, G07003:심리상담
+		String plTitle = "AI상담"+"-"+cnsType;
+		visitLogService.insertPageLog(memId, plTitle, "/aiCounseling", null);
+	}
+
 }

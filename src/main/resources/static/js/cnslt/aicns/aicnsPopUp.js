@@ -10,13 +10,31 @@ document.addEventListener('DOMContentLoaded',function(){
 	const newBtn = document.getElementById('btnNewMsg');
 	const topicBadge = document.getElementById('topicBadge');
 
+	const sid = new URLSearchParams(location.search).get('sid');
+	if (!sid) { alert('세션 정보가 없습니다. 창을 닫습니다.'); closeOrFallback(); }
+
 	if(errorB.dataset.message && errorB.dataset.message!=''){
+		// 서버에서 넘긴 오류메시지 있을경우 출력 후 윈도우 닫거나 뒤로가기
 		alert(errorB.dataset.message);
 		closeOrFallback();
+	}else{
+		// 오류없으면 페이지 로그 기록
+		const data = {};
+		switch (topicBadge.dataset.topic){
+			case "MIND":
+				data.cnsType = "G07003";
+				break;
+			case "STUDY":
+				data.cnsType = "G07002";
+				break;
+			case "JOB":
+				data.cnsType = "G07001";
+				break;
+		}
+		axios.post('/admin/las/aiCounselVisitLog.do', data)
 	}
 
-	const sid = new URLSearchParams(location.search).get('sid');
-	if(!sid){ alert('세션 정보가 없습니다. 창을 닫습니다.'); closeOrFallback(); }
+
 
 	let pending = false;
 	let autoScroll = true;

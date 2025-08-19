@@ -48,8 +48,6 @@ public class AICounselingController {
 		if(errorMessage!=null) {
 			model.addAttribute("errorMessage",errorMessage);
 		}
-
-		// 로그 기록
 		return "cnslt/aicns/aicnsPopUp";
 	}
 
