@@ -1,98 +1,115 @@
 // /js/cdp/imtintrvw/intrvwqestnmn/interviewQuestionWriting.js
 
 function countChars(textarea, index) {
-	const cnt = document.getElementById('charCount-' + index);
-	if (cnt) cnt.textContent = textarea.value.length;
+	const length = textarea.value.length;
+	const counter = document.getElementById("charCount-" + index);
+	if (counter) {
+		counter.textContent = length;
+	}
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-	// 초기 글자수 반영
-	document.querySelectorAll('textarea[name="idAnswerList"]').forEach((ta, i) => {
-		const cnt = document.getElementById('charCount-' + i);
-		if (cnt) cnt.textContent = ta.value.length;
-	});
-
-	// 임시저장 → 상태만 "작성중"으로 바꾸고 submit
-	const btnTemp = document.getElementById('btnTemp') || document.querySelector('.btn-temp-save');
-	if (btnTemp) {
-		btnTemp.addEventListener('click', function() {
-			const status = document.getElementById('idlStatus');
-			if (status) status.value = '작성중';
-			this.closest('form').submit();
-		});
-	}
-
-	// 삭제 (수정모드에서만 보임)
-	const btnDelete = document.getElementById('btnDelete') || document.querySelector('.btn-delete');
-	if (btnDelete) {
-		btnDelete.addEventListener('click', function() {
-			if (confirm('이 면접 질문 세트를 삭제할까요?')) {
-				const delForm = document.getElementById('deleteForm');
-				if (delForm) delForm.submit();
-			}
-		});
-	}
-});
-document.addEventListener('DOMContentLoaded', () => {
-	const form = document.querySelector('form');
-	if (form) {
-		form.addEventListener('submit', () => {
-			document.querySelectorAll('button').forEach(b => b.disabled = true);
-		});
-	}
-});
 document.addEventListener('DOMContentLoaded', function() {
-	const previewBtn = document.querySelector(".btn-preview");
-	if (!previewBtn) return;
+	const mainForm = document.querySelector('.selfintro-write-form');
+	if (!mainForm) return;
 
-	previewBtn.addEventListener("click", () => {
-		const originalForm = document.querySelector("form[action='/cdp/imtintrvw/intrvwqestnmn/save']");
-		const clonedForm = originalForm.cloneNode(true);
+	// 1. 임시저장 버튼 이벤트
+	const btnTempSave = mainForm.querySelector('.btn-temp-save');
+	if (btnTempSave) {
+		btnTempSave.addEventListener('click', function() {
+			document.getElementById('idlStatus').value = '작성중';
+			mainForm.submit();
+		});
+	}
 
-		const originalInputs = originalForm.querySelectorAll("input, textarea");
-		const clonedInputs = clonedForm.querySelectorAll("input, textarea");
-
-		clonedInputs.forEach((clonedEl, i) => {
-			const originalEl = originalInputs[i];
-			if (clonedEl.tagName === "TEXTAREA") {
-				clonedEl.innerHTML = originalEl.value;
-			} else if (clonedEl.type === "checkbox" || clonedEl.type === "radio") {
-				clonedEl.checked = originalEl.checked;
-			} else {
-				clonedEl.setAttribute("value", originalEl.value);
+	// 2. 삭제 버튼 이벤트
+	const btnDelete = mainForm.querySelector(".btn-delete");
+	if (btnDelete) {
+		btnDelete.addEventListener("click", () => {
+			if (confirm("정말 삭제하시겠습니까?")) {
+				mainForm.action = "/cdp/imtintrvw/intrvwqestnmn/delete.do";
+				mainForm.submit();
 			}
 		});
+	}
 
-		clonedForm.querySelector(".section-title")?.remove();
-		clonedForm.querySelector(".btn-group")?.remove();
-		clonedForm.querySelectorAll(".char-count")?.forEach(e => e.remove());
+	// 3. 미리보기 버튼 이벤트
+	const btnPreview = mainForm.querySelector(".btn-preview");
+	if (btnPreview) {
+		btnPreview.addEventListener("click", () => {
+			const clonedForm = mainForm.cloneNode(true);
 
-		const xhtmlContent = sanitizeHtmlToXHTML(clonedForm.outerHTML);
-
-		// [수정] selfIntroWriting.css 대신 interviewQuestionWriting.css를 가져옵니다.
-		fetch("/css/cdp/imtintrvw/intrvwqestnmn/interviewQuestionWriting.css")
-			.then(res => res.text())
-			.then(cssContent => {
-				const formData = new FormData();
-				formData.append("htmlContent", xhtmlContent);
-				formData.append("cssContent", cssContent);
-
-				return fetch("/pdf/preview", { method: "POST", body: formData });
-			})
-			.then(response => {
-				if (!response.ok) throw new Error("미리보기 요청 실패");
-				return response.blob();
-			})
-			.then(blob => {
-				const url = URL.createObjectURL(blob);
-				const pdfUrlWithZoom = url + "#zoom=75";
-				const windowFeatures = `width=900,height=700,left=${(screen.width - 900) / 2},top=${(screen.height - 700) / 2},scrollbars=yes,resizable=yes`;
-				window.open(pdfUrlWithZoom, "pdfPreview", windowFeatures);
-			})
-			.catch(err => {
-				console.error("미리보기 오류:", err);
-				alert("PDF 미리보기 중 오류가 발생했습니다: " + err.message);
+			// 현재 입력된 값을 복제된 폼에 반영
+			const originalInputs = mainForm.querySelectorAll("input, textarea");
+			const clonedInputs = clonedForm.querySelectorAll("input, textarea");
+			clonedInputs.forEach((clonedEl, i) => {
+				const originalEl = originalInputs[i];
+				if (clonedEl.tagName === "TEXTAREA") {
+					clonedEl.innerHTML = originalEl.value;
+				} else {
+					clonedEl.setAttribute("value", originalEl.value);
+				}
 			});
+
+			// 미리보기에 불필요한 요소 제거
+			const titleSection = clonedForm.querySelector(".form-section");
+			if (titleSection) {
+				const titleInput = titleSection.querySelector('input[name="idlTitle"]');
+				if (titleInput && titleInput.value.trim()) {
+					const titleDiv = document.createElement('div');
+					titleDiv.className = 'preview-title';
+					titleDiv.textContent = titleInput.value;
+					titleSection.innerHTML = '';
+					titleSection.appendChild(titleDiv);
+				} else {
+					titleSection.remove();
+				}
+			}
+
+			clonedForm.querySelector(".form-actions")?.remove();
+			clonedForm.querySelectorAll(".char-counter")?.forEach(e => e.remove());
+			clonedForm.querySelectorAll(".qa-card__number")?.forEach(e => e.remove());
+
+			const xhtmlContent = sanitizeHtmlToXHTML(clonedForm.outerHTML);
+
+			// 미리보기에 사용할 CSS 파일 경로를 정확히 지정
+			fetch("/css/cdp/imtintrvw/intrvwqestnmn/interviewQuestionWriting.css")
+				.then(res => res.text())
+				.then(cssContent => {
+					const formData = new FormData();
+					formData.append("htmlContent", xhtmlContent);
+
+					const previewCss = cssContent + `
+						@media print {
+							.preview-title {
+								font-size: 18px !important; font-weight: 600 !important; margin-bottom: 20px !important;
+								text-align: center !important; border-bottom: 2px solid #7881f5 !important;
+							}
+							.qa-card { page-break-inside: avoid; }
+						}
+					`;
+					formData.append("cssContent", previewCss);
+
+					return fetch("/pdf/preview", { method: "POST", body: formData });
+				})
+				.then(response => {
+					if (!response.ok) throw new Error("미리보기 요청에 실패했습니다.");
+					return response.blob();
+				})
+				.then(blob => {
+					const url = URL.createObjectURL(blob);
+					const windowFeatures = `width=900,height=700,left=${(screen.width - 900) / 2},top=${(screen.height - 700) / 2}`;
+					window.open(url + "#zoom=75", "pdfPreview", windowFeatures);
+				})
+				.catch(err => {
+					console.error("미리보기 오류:", err);
+					alert("PDF 미리보기를 생성하는 중 오류가 발생했습니다: " + err.message);
+				});
+		});
+	}
+
+	const textareas = mainForm.querySelectorAll("textarea[name='idAnswerList']");
+	textareas.forEach((ta, i) => {
+		countChars(ta, i);
 	});
 
 	//자동완성 버튼 이벤트 리스너 추가
