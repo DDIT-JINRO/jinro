@@ -15,7 +15,7 @@ public class CounselorMoveController {
 	@GetMapping
 	public String movePage() {
 
-		return "cns/dashboard";
+		return "cns/scheduleManagement";
 	}
 	
 	// counselor의 move페이지의 jsp로 forward

@@ -81,4 +81,6 @@ public interface CounselorService {
 
 	public String updateCounselStatus(CounselingVO counselingVO, Integer payId);
 
+	public List<CounselingVO> selectMonthlyCounselingData(CounselingVO searchVO);
+
 }

@@ -25,4 +25,6 @@ public interface ContentStatsService {
 	List<Map<String,Object>> roadmapCreateCompleteSummary(Map<String,Object> param);
 
 	List<Map<String,Object>> roadmapCreateCompleteDaily(Map<String,Object> param);
+
+	List<Map<String, Object>> selectCommunityTop5PostsByMemBirth(String memId);
 }

@@ -33,6 +33,7 @@ const text = "관심 진로와 관련된 유튜브 콘텐츠를 한눈에 확인
 
 document.addEventListener('DOMContentLoaded', function() {
 	fn_init();
+	fn_TopsWidget();
     if(memId && memId !='anonymousUser') {
     	roadmapPopup();
 	}
@@ -114,3 +115,86 @@ const getCookie = (name) => {
 
 	return null;
 };
+
+const fn_TopsWidget = () =>{
+	// 컨텐츠 4종류 요소 배열로 받음
+	const widgets = Array.from(document.querySelectorAll('.trend-widget'));
+
+	// fetch 함수화
+	const fetchJSON = async (url) => {
+	  try{
+	    const res = await fetch(url, { headers: { 'Accept': 'application/json' }});
+	    if(!res.ok) return [];
+	    return await res.json();
+	  }catch(e){ return []; }
+	};
+
+	// 위젯 로딩 함수
+	const initWidget = async (section) => {
+	  const endpoint = section.dataset.endpoint;	// jsp 요소에 삽입해둔 fetch url
+	  const roller  = section.querySelector('.trend-roller');	// 순위별로 번갈아가며 출력될 요소
+	  const viewport= section.querySelector('.trend-viewport'); // 순위별로 번갈아가며 출력될 요소 컨테이너
+	  const panel   = section.querySelector('.trend-panel');	// 순위전체 목록이 들어갈 요소
+
+	  let items = (await fetchJSON(endpoint)).slice(0,5).map((x,i)=>({
+	    rank: i+1,
+	    text: x.TARGETNAME || '제목 없음',
+	    href: x.TARGET_URL  || '#'
+	  }));
+
+	  // 데이터 없을 때 기본 표시 방지
+	  if(items.length === 0){
+	    roller.innerHTML = `<li class="trend-item"><span class="trend-text">데이터가 없습니다</span></li>`;
+	    button.disabled = true;
+	    return;
+	  }
+
+	  // ① 롤러(한 줄) 렌더
+	  let idx = 0;	// setTimeout에서 idx 값 변화 시키면서 렌더링함
+	  const renderRoller = () => {
+	    const it = items[idx % items.length];
+	    roller.innerHTML = `
+	      <li class="trend-item">
+	        <span class="trend-rank">${it.rank}</span>
+	        <a class="trend-text" href="${it.href}" title="${it.text}">${it.text}</a>
+	      </li>`;
+	  };
+	  renderRoller();
+
+	  // ② 패널(전체) 렌더
+	  const renderPanel = () => {
+	    panel.innerHTML = items.map(it => `
+	      <a class="panel-item" href="${it.href}">
+	        <span class="panel-rank">${it.rank}</span>
+	        <span class="panel-text">${it.text}</span>
+	      </a>`).join('');
+	  };
+	  renderPanel();
+
+	  // ③ 순환 타이머
+	  let hovering = false, focused = false, timer = null;
+	  const tick = () => {
+	    if(hovering || focused || items.length === 0) return;
+	    idx = (idx + 1) % items.length;
+	    renderRoller();
+	  };
+	  const start = () => { stop(); timer = setInterval(tick, 2300); };	// 순위변화 시간 조절
+	  const stop  = () => { if(timer) clearInterval(timer); timer = null; };
+	  start();
+
+	  // ④ 인터랙션 (hover/버튼/포커스)
+	  const openPanel = () => { panel.classList.remove('hidden'); };
+	  const closePanel= () => { panel.classList.add('hidden'); };
+
+	  section.addEventListener('mouseenter', ()=>{ hovering = true; openPanel(); });
+	  section.addEventListener('mouseleave', ()=>{ hovering = false; closePanel(); });
+	  viewport.addEventListener('focusin',  ()=>{ focused = true; });
+	  viewport.addEventListener('focusout', ()=>{ focused = false; });
+
+	  // 페이지 이탈 시 정리
+	  window.addEventListener('beforeunload', stop);
+	};
+
+	widgets.forEach(initWidget);
+}
+

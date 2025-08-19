@@ -216,4 +216,10 @@ public class CounselorServiceImpl implements CounselorService {
 		return counselorMapper.plusPayConsultCnt(payId);
 	}
 
+	@Override
+	public List<CounselingVO> selectMonthlyCounselingData(CounselingVO searchVO) {
+		// TODO Auto-generated method stub
+		return counselorMapper.selectMonthlyCounselingData(searchVO);
+	}
+
 }

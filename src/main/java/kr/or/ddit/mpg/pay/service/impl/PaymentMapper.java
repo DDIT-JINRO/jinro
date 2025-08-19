@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
 import kr.or.ddit.mpg.pay.service.PaymentVO;
 
 
@@ -15,7 +16,7 @@ public interface PaymentMapper {
 
 	/**
 	 * 새로운 결제 정보를 데이터베이스에 삽입합니다.
-	 * 
+	 *
 	 * @param payment 삽입할 Payment VO/엔티티 객체
 	 * @return 삽입된 행의 수
 	 */
@@ -26,5 +27,9 @@ public interface PaymentMapper {
 
 	// 구독 월간 기능 횟수 초기화
 	public int resetUsageCounts();
+
+	public int minusPayMockCnt(int payId);
+
+	public PaymentVO selectLastSubcription(MemberSubscriptionVO memberSubscriptionVO);
 
 }

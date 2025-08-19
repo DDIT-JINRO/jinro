@@ -442,3 +442,147 @@ body {
 	justify-content: center;
 	text-align: center;
 }
+
+/* ===== Trending Strip ===== */
+.trending-strip{
+  width: 1160px;
+  margin: 10px auto; /* 헤더 아래 살짝 붙게 */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  position: relative;
+  z-index: 5;
+}
+
+.trend-widget{
+  position: relative;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  transition: transform .2s ease, box-shadow .2s ease;
+  overflow: visible;
+  min-height: 60px;
+}
+.trend-widget:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+}
+
+.trend-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:6px;
+  color: #626262;
+}
+.trend-title{
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing:.2px;
+  z-index: 3000;
+}
+.trend-expand-btn{
+  border: 0;
+  background: #f6f7ff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.trend-expand-btn:focus{
+  outline: 2px solid #6c75ff;
+  outline-offset: 2px;
+}
+
+.trend-viewport{
+  position: relative;
+  height: 28px;           /* 한 줄 높이 */
+  overflow: hidden;       /* 롤링 클리핑 */
+}
+.trend-roller{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.trend-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  height:28px;
+  line-height:28px;
+  white-space:nowrap;
+  transform: translateY(0);
+  transition: transform .35s ease;
+  font-size: 13px;
+}
+.trend-rank{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width: 20px;
+  height:20px;
+  border-radius:4px;
+  background:#626262;
+  color:#fff;
+  font-weight:700;
+  font-size: 12px;
+}
+.trend-text{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  color: #626262;
+}
+
+.trend-panel{
+  position:absolute;
+  inset: 0;
+  background:#fff;
+  padding: 46px 16px 14px 14px; /* 헤더 버튼 위 겹치지 않게 top padding */
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:8px;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.14);
+  min-height: max-content;
+  z-index: 2000;
+}
+.trend-panel.hidden{ display:none; }
+
+.trend-panel .panel-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 6px;
+  border-radius:8px;
+  transition: background .15s ease;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.trend-widget a{
+	text-decoration: none;
+	color: #626262;
+}
+
+.trend-widget a:visited{
+	text-decoration: none;
+	color: #626262;
+}
+
+.trend-panel .panel-item:hover{ background:#f7f8ff; }
+
+.trend-panel .panel-rank{
+  width: 24px; height:24px; border-radius:6px;
+  background:#6c75ff; color:#fff; font-weight:800;
+  display:flex; align-items:center; justify-content:center; font-size:12px;
+}
+
+/* 접근성 & 사용자 선호 */
+@media (prefers-reduced-motion: reduce){
+  .trend-item{ transition:none !important; }
+}
+

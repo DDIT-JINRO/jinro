@@ -29,4 +29,12 @@ public interface CounselLeaderMapper {
 
 	List<CounselingVO> selectRequestedCounselBetweenVacation(VacationVO vacationVO);
 
+	List<CounselingVO> selectCounselScheduleList(CounselingVO counselingVO);
+
+	int selectCounselTotal(CounselingVO counselingVO);
+
+	CounselingVO selectCounselDetail(Integer counselId);
+
+	List<CounselingVO> selectMonthlyCounselingData(CounselingVO searchVO);
+
 }

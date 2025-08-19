@@ -1,9 +1,6 @@
-// FullCalendar가 이미 로드되어 있는지 확인
-if (typeof FullCalendar !== 'undefined') {
-
-	let calendarInstance = null; // 전역 변수로 선언
-	let selectedDate = null;
-
+var calendarInstance = null; // 전역 변수로 선언
+var selectedDate = null;
+var currentViewMonth = null; 
 	function initCalendar() {
 		var calendarEl = document.getElementById('calendar');
 		if (!calendarEl) {
@@ -28,6 +25,44 @@ if (typeof FullCalendar !== 'undefined') {
 				right: 'next' // '오늘' 버튼과 다음 달 버튼을 오른쪽 끝으로
 			},
 			height: '90%',
+			events: function(fetchInfo, successCallback, failureCallback) {
+			            // datesSet에서 설정된 정확한 월을 사용
+			            if (!currentViewMonth) {
+			                 // 초기 로딩 시 currentViewMonth가 없으면 오늘 날짜를 기준으로 설정
+			                 const today = new Date();
+			                 const year = today.getFullYear();
+			                 const month = (today.getMonth() + 1).toString().padStart(2, '0');
+			                 currentViewMonth = `${year}-${month}`;
+			            }
+			            axios.get('/api/cns/counseling/monthly-counts.do', {
+			                params: {
+			                    counselReqDatetime: currentViewMonth // 정확한 YYYY-MM 형식 전달
+			                }
+			            })
+			            .then(response => {
+			                const data = response.data;
+			                const eventCounts = {}; 
+
+			                data.forEach(item => {
+			                    const dateStr = new Date(item.counselReqDatetime).toISOString().slice(0, 10);
+			                    eventCounts[dateStr] = (eventCounts[dateStr] || 0) + 1;
+			                });
+
+			                const events = Object.keys(eventCounts).map(dateStr => {
+			                    return {
+			                        title: `${eventCounts[dateStr]}건`,
+			                        start: dateStr,
+			                        display: 'background'
+			                    };
+			                });
+			                
+			                successCallback(events);
+			            })
+			            .catch(error => {
+			                console.error("월별 상담 데이터 로드 실패:", error);
+			                failureCallback(error);
+			            });
+			        },
 			dateClick: function(info) {
 				const prevSelected = document.querySelector('.fc-day.selected');
 				if (prevSelected) {
@@ -42,13 +77,30 @@ if (typeof FullCalendar !== 'undefined') {
 			},
 			// 월이 변경될 때마다 호출되는 이벤트
 			datesSet: function(info) {
+
 				let currentDate = new Date();
 				let year = currentDate.getFullYear();
 				let month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
 				let day = currentDate.getDate().toString().padStart(2, '0');
-
 				let todayStr = `${year}-${month}-${day}`;
+				
+				const title = info.view.title;
 
+				   // 정규식을 사용하여 년도와 월을 추출합니다.
+				   const match = title.match(/(\d+)년 (\d+)월/);
+				   if (!match) {
+				       console.error("캘린더 제목에서 날짜를 파싱할 수 없습니다:", title);
+				       return;
+				   }
+
+				   const viewyear = match[1];
+				   const viewmonth = match[2].padStart(2, '0');
+				  	currentViewMonth = `${viewyear}-${viewmonth}`;
+					
+					if (calendarInstance) {
+						calendarInstance.refetchEvents();
+					}
+					
 				// 캘린더가 렌더링될 때, 오늘 날짜로 예약 가능 시간을 바로 불러오도록 수정
 				// 선택된 날짜가 없을 경우에만 실행
 				if (!selectedDate) {
@@ -65,6 +117,7 @@ if (typeof FullCalendar !== 'undefined') {
 					}
 				}
 			}
+
 		});
 		calendarInstance.render();
 	}
@@ -104,13 +157,10 @@ if (typeof FullCalendar !== 'undefined') {
 				console.error("상담 데이터 로드 실패:", error);
 			});
 	}
-
 	// 비동기 로딩된 JSP에서도 바로 실행
-	initCalendar();
-
-} else {
-	console.error("FullCalendar 라이브러리가 로드되지 않았습니다.");
-}
+	setTimeout(function() {
+	    initCalendar();
+	}, 100);
 
 // 나이 반환
 function calculateAge(birthDate) {
@@ -235,7 +285,6 @@ function statusBtn(status, id, method, date, url ,memId) {
 			});
 			
 			const payId = payVO.data.payId;
-			console.log("patId",payId);
 			await axios.get('/api/cns/updateCounselStatus.do', {
 				params: {
 					counselId: id,

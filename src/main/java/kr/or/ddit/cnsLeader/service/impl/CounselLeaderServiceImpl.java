@@ -29,7 +29,8 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 		List<CounselingVO> list = counselLeaderMapper.selectCounselLogList(counselingVO);
 		int total = counselLeaderMapper.selectTotalCounselLogList(counselingVO);
 
-		ArticlePage<CounselingVO> articlePage = new ArticlePage<>(total, counselingVO.getCurrentPage(), counselingVO.getSize(), list, counselingVO.getKeyword());
+		ArticlePage<CounselingVO> articlePage = new ArticlePage<>(total, counselingVO.getCurrentPage(),
+				counselingVO.getSize(), list, counselingVO.getKeyword());
 		return articlePage;
 	}
 
@@ -44,7 +45,8 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 		List<VacationVO> list = this.counselLeaderMapper.selectVacationList(vacationVO);
 		int total = this.counselLeaderMapper.selectTotalVationList(vacationVO);
 
-		ArticlePage<VacationVO> articlePage = new ArticlePage<>(total, vacationVO.getCurrentPage(), vacationVO.getSize(), list, vacationVO.getKeyword());
+		ArticlePage<VacationVO> articlePage = new ArticlePage<>(total, vacationVO.getCurrentPage(),
+				vacationVO.getSize(), list, vacationVO.getKeyword());
 		return articlePage;
 	}
 
@@ -64,7 +66,7 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 		int result = this.counselLeaderMapper.updateVacation(vacationVO);
 		vacationVO = this.counselLeaderMapper.vacationDetail(vacationVO.getVaId());
 		this.counselLeaderMapper.rejectRequestedCounselForVacation(vacationVO);
-		return result > 0 ? true : false ;
+		return result > 0 ? true : false;
 	}
 
 	@Override
@@ -72,6 +74,29 @@ public class CounselLeaderServiceImpl implements CounselLeaderService {
 		VacationVO vacationVO = this.counselLeaderMapper.vacationDetail(vaId);
 		List<CounselingVO> list = this.counselLeaderMapper.selectRequestedCounselBetweenVacation(vacationVO);
 		return list;
+	}
+
+	@Override
+	public ArticlePage<CounselingVO> selectCounselScheduleList(CounselingVO counselingVO) {
+		int total = this.counselLeaderMapper.selectCounselTotal(counselingVO);
+		List<CounselingVO> list = this.counselLeaderMapper.selectCounselScheduleList(counselingVO);
+
+		ArticlePage<CounselingVO> articlePage = new ArticlePage<>(total, counselingVO.getCurrentPage(),
+				counselingVO.getSize(), list, counselingVO.getKeyword());
+		return articlePage;
+	}
+
+	@Override
+	public CounselingVO selectCounselDetail(Integer counselId) {
+		CounselingVO counselingVO = this.counselLeaderMapper.selectCounselDetail(counselId);
+		return counselingVO;
+	}
+
+	@Override
+	public List<CounselingVO> selectMonthlyCounselingData(
+			CounselingVO searchVO) {
+		// TODO Auto-generated method stub
+		return counselLeaderMapper.selectMonthlyCounselingData(searchVO);
 	}
 
 }
