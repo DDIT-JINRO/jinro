@@ -18,8 +18,8 @@
 	<div class="main-content">
 		<div id="content">
 			<h3>스케줄 관리</h3>
-
-			<div class="topBox" style="margin-bottom: 10px">
+		<div class="template-container">
+			<div class="top-row">
 				<div class="template-panel topheader">
 					<div class="panel-header" id="counselListHeader"
 						style="cursor: pointer; text-decoration: none">상담 리스트</div>
@@ -60,7 +60,7 @@
 							</tbody>
 						</table>
 					</div>
-					<div style="margin-top: 10px; text-align: center;">
+					<div>
 						<div class="card-footer clearfix">
 							<div class="panel-footer pagination"></div>
 						</div>
@@ -76,8 +76,9 @@
 					<input type="hidden" id="counselReqDatetimeInput"
 						name="counselReqDatetime">
 				</div>
-			</div>
-			<div class="template-panel bottomBox">
+			    </div>
+				
+			<div class="template-panel bottom-box">
 				<div class="panel-header" id="calenderHeader"
 					style="cursor: pointer; text-decoration: none">스케줄 관리</div>
 				<div class="bottom-content-wrapper">
@@ -153,6 +154,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 </body>
 </html>
 <script type="text/javascript" src="/js/com/index.global.min.js"></script>

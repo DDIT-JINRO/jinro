@@ -127,12 +127,12 @@
 				</div>
 			</div>
 
+		</form>
 			<div class="panel-footer button-group">
 				<button type="button" onclick="resetAfterConfirm()" class="btn btn-reset">초기화</button>
 				<button  type="button" onclick="updateConfirmation('reject')" class="btn btn-save"  id="btn-save">반려</button>
 				<button  type="button" onclick="updateConfirmation('confirm')" class="btn btn-confirm"  id="btn-confirm">승인</button>
 			</div>
-		</form>
 	</div>
 </div>
 <script type="text/javascript" src="/js/include/cnsLeader/csm/counselingLogManagement.js"></script>

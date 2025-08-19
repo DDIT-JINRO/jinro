@@ -131,7 +131,7 @@ var calendarInstance = null; // 전역 변수로 선언
 
 	// 전역 변수로 페이지 정보와 항목 수를 관리합니다.
 	let currentPage = 1;
-	const pageSize = 3;
+	const pageSize = 5;
 
 	/**
 	 * 특정 날짜의 상담 스케줄을 비동기로 불러와 테이블에 표시하고 페이징을 처리합니다.

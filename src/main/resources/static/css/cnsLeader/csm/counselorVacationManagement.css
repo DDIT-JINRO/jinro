@@ -1,49 +1,6 @@
 @charset "UTF-8";
-/* ──────────────────────────────────────────────────────────
-   필터박스 (오른쪽 정렬)
-──────────────────────────────────────────────────────────*/
-.filter-box {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	justify-content: flex-end;
-	width: 100%;
-	margin-bottom: 12px;
-}
-
-.filter-box select,
-.filter-box input[type="text"] {
-	padding: 6px 10px;
-	font-size: 14px;
-	border: 1px solid #ccc;
-	border-radius: 6px;
-	outline: none;
-	box-sizing: border-box;
-}
-
-.filter-box input[type="text"] {
-	flex: 1;
-}
-
-.filter-box .btn-confirm,
-.filter-box .btn-save {
-	padding: 6px 14px;
-	background: #07223D;
-	color: #fff;
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
-	font-size: 14px;
-	margin-left: auto;
-}
-
-.filter-box .btn-confirm:hover,
-.filter-box .btn-save:hover {
-	background: #07223D;
-}
-
-.filter-box p{
-	margin: 0;
+.template-container{
+	flex-direction: row;
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -54,40 +11,6 @@
 	overflow-y: auto;
 }
 
-.template-panel table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 8px;
-	font-size: 14px;
-}
-
-.template-panel th,
-.template-panel td {
-	padding: 10px;
-	text-align: left;
-}
-
-.template-panel thead th {
-	background: #fafafa;
-	font-weight: 600;
-	border-bottom: 2px solid #e0e0e0;
-}
-
-.template-panel tbody tr {
-	transition: background 0.2s;
-}
-
-.template-panel tbody tr:nth-child(odd) {
-	background: #fff;
-}
-
-.template-panel tbody tr:nth-child(even) {
-	background: #fcfcfc;
-}
-
-.template-panel tbody tr:hover {
-	background: #f0f8ff;
-}
 
 /* ──────────────────────────────────────────────────────────
    기본정보 테이블 (오른쪽 패널)
