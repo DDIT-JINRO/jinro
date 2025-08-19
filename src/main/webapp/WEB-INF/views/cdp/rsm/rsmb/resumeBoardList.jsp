@@ -1,28 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/cdp/rsm/rsmb/resumeBoardList.css">
-<!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
-	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
-		<!-- 대분류 -->
 		<div class="channel-title-text">경력관리</div>
 	</div>
-	<!-- 중분류 -->
 	<div class="channel-sub-sections">
-		<div class="channel-sub-section-itemIn"><a href="/cdp/rsm/rsm/resumeList.do">이력서</a></div>
-		<div class="channel-sub-section-item"><a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a></div>
-		<div class="channel-sub-section-item"><a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a></div>
-		<div class="channel-sub-section-item"><a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a></div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의면접</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>
+		</div>
 	</div>
 </section>
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-		    <a class="tab" href="/cdp/rsm/rsm/resumeList.do">이력서</a>
-		    <a class="tab active" href="/cdp/rsm/rsmb/resumeBoardList.do">이력서 템플릿 게시판</a>
-  		</div>
+			<a class="tab" href="/cdp/rsm/rsm/resumeList.do">이력서</a>
+			<a class="tab active" href="/cdp/rsm/rsmb/resumeBoardList.do">이력서 템플릿 게시판</a>
+		</div>
 		<div class="public-wrapper-main">
 			<div class="teenListTop">
 				<button id=btnWrite>글작성</button>
@@ -73,15 +76,15 @@
 							</div>
 							<div id="cnt">${commBoardVO.boardCnt}</div>
 							<div class="item-action">
-							    <button class="bookmark-btn ${commBoardVO.isBookmark == commBoardVO.boardId ? 'active' : ''}" data-category-id="G03005" data-target-id="${commBoardVO.boardId}">
-							        <span class="icon-active">
-							            <img src="/images/bookmark-btn-active.png" alt="활성 북마크">
-							        </span>
-							        
-							        <span class="icon-inactive">
-							            <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
-							        </span>
-							    </button>
+								<button class="bookmark-btn ${commBoardVO.isBookmark == commBoardVO.boardId ? 'active' : ''}" data-category-id="G03005" data-target-id="${commBoardVO.boardId}">
+									<span class="icon-active">
+										<img src="/images/bookmark-btn-active.png" alt="활성 북마크">
+									</span>
+
+									<span class="icon-inactive">
+										<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+									</span>
+								</button>
 							</div>
 						</div>
 					</div>
@@ -98,17 +101,17 @@
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 					<li>
 						<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="page-num
-								<c:if test='${pNo == articlePage.currentPage}'>
-									active
-								</c:if>"> ${pNo} </a>
+						<c:if test='${pNo == articlePage.currentPage}'>
+							active
+						</c:if>"> ${pNo} </a>
 					</li>
 				</c:forEach>
 
 				<li>
 					<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="
-							<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
-								disabled
-							</c:if>"> Next → </a>
+					<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
+						disabled
+					</c:if>"> Next → </a>
 				</li>
 			</ul>
 		</div>
