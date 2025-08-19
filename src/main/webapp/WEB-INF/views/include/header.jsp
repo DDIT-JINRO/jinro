@@ -45,27 +45,66 @@
 				</li>
 				<li class="main-nav__item">
 					<a href="/pse/cat/careerAptitudeTest.do" class="main-nav__link">진로</a>
+					<div class="dropdown-submenu">
+						<a href="/pse/cat/careerAptitudeTest.do">진로 심리검사</a>
+						<a href="/pse/cr/crl/selectCareerList.do">직업백과</a>
+					</div>
 				</li>
 				<li class="main-nav__item">
 					<a href="/ertds/univ/uvsrch/selectUnivList.do" class="main-nav__link">진학</a>
+					<div class="dropdown-submenu">
+						<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
+						<a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a>
+						<a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a>
+					</div>
 				</li>
 				<li class="main-nav__item">
 					<a href="/empt/ema/employmentAdvertisement.do" class="main-nav__link">취업</a>
+					<div class="dropdown-submenu">
+						<a href="/empt/ema/employmentAdvertisement.do">채용공고</a>
+						<a href="/empt/enp/enterprisePosting.do">기업정보</a>
+						<a href="/empt/ivfb/interViewFeedback.do">면접후기</a>
+						<a href="/empt/cte/careerTechnicalEducation.do">직업교육</a>
+					</div>
 				</li>
 				<li class="main-nav__item main-nav__item--priority-low">
 					<a href="/cdp/rsm/rsm/resumeList.do" class="main-nav__link">경력관리</a>
+					<div class="dropdown-submenu">
+						<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
+						<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
+						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의 면접</a>
+						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>
+					</div>
 				</li>
 				<li class="main-nav__item">
 					<a href="/cnslt/resve/crsv/reservation.do" class="main-nav__link">상담</a>
+					<div class="dropdown-submenu">
+						<a href="/cnslt/resve/crsv/reservation.do">상담 예약</a>
+						<a href="/cnslt/rvw/cnsReview.do">상담 후기</a>
+					</div>
 				</li>
 				<li class="main-nav__item main-nav__item--priority-low">
 					<a href="/prg/ctt/cttList.do" class="main-nav__link">프로그램</a>
+					<div class="dropdown-submenu">
+						<a href="/prg/ctt/cttList.do">공모전</a>
+						<a href="/prg/act/vol/volList.do">대외활동</a>
+						<a href="/prg/std/stdGroupList.do">스터디그룹</a>
+					</div>
 				</li>
 				<li class="main-nav__item">
 					<a href="/comm/peer/teen/teenList.do" class="main-nav__link">커뮤니티</a>
+					<div class="dropdown-submenu">
+						<a href="/comm/peer/teen/teenList.do">또래 게시판</a>
+						<a href="/comm/path/pathList.do">진로/진학 게시판</a>
+					</div>
 				</li>
 				<li class="main-nav__item main-nav__item--priority-low">
 					<a href="/csc/not/noticeList.do" class="main-nav__link">고객센터</a>
+					<div class="dropdown-submenu">
+						<a href="/csc/not/noticeList.do">공지사항</a>
+						<a href="/csc/faq/faqList.do">FAQ</a>
+						<a href="/csc/inq/inqryList.do">1:1 문의</a>
+					</div>
 				</li>
 			</ul>
 		</div>
@@ -112,66 +151,27 @@
 			<ul class="mobile-nav-panel__menu">
 				<li>
 					<a href="/pse/cat/careerAptitudeTest.do">진로</a>
-					<div class="dropdown-submenu">
-						<a href="/pse/cat/careerAptitudeTest.do">진로 심리검사</a>
-						<a href="/pse/cr/crl/selectCareerList.do">직업백과</a>
-					</div>
 				</li>
 				<li>
 					<a href="/ertds/univ/uvsrch/selectUnivList.do">진학</a>
-					<div class="dropdown-submenu">
-						<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
-						<a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a>
-						<a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a>
-					</div>
 				</li>
 				<li>
 					<a href="/empt/ema/employmentAdvertisement.do">취업</a>
-					<div class="dropdown-submenu">
-						<a href="/empt/ema/employmentAdvertisement.do">채용공고</a>
-						<a href="/empt/enp/enterprisePosting.do">기업정보</a>
-						<a href="/empt/ivfb/interViewFeedback.do">면접후기</a>
-						<a href="/empt/cte/careerTechnicalEducation.do">직업교육</a>
-					</div>
 				</li>
 				<li>
 					<a href="/cdp/rsm/rsm/resumeList.do">경력관리</a>
-					<div class="dropdown-submenu">
-						<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
-						<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
-						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의 면접</a>
-						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>
-					</div>
 				</li>
 				<li>
 					<a href="/cnslt/resve/crsv/reservation.do">상담</a>
-					<div class="dropdown-submenu">
-						<a href="/cnslt/resve/crsv/reservation.do">상담 예약</a>
-						<a href="/cnslt/rvw/cnsReview.do">상담 후기</a>
-					</div>
 				</li>
 				<li>
 					<a href="/prg/ctt/cttList.do">프로그램</a>
-					<div class="dropdown-submenu">
-						<a href="/prg/ctt/cttList.do">공모전</a>
-						<a href="/prg/act/vol/volList.do">대외활동</a>
-						<a href="/prg/std/stdGroupList.do">스터디그룹</a>
-					</div>
 				</li>
 				<li>
 					<a href="/comm/peer/teen/teenList.do">커뮤니티</a>
-					<div class="dropdown-submenu">
-						<a href="/comm/peer/teen/teenList.do">또래 게시판</a>
-						<a href="/comm/path/pathList.do">진로/진학 게시판</a>
-					</div>
 				</li>
 				<li>
 					<a href="/csc/not/noticeList.do">고객센터</a>
-					<div class="dropdown-submenu">
-						<a href="/csc/not/noticeList.do">공지사항</a>
-						<a href="/csc/faq/faqList.do">FAQ</a>
-						<a href="/csc/inq/inqryList.do">1:1 문의</a>
-					</div>
 				</li>
 			</ul>
 			<div class="mobile-nav-panel__user-actions">
