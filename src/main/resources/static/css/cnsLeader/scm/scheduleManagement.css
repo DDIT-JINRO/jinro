@@ -41,6 +41,9 @@ h3 {
 .template-panel.topheader .panel-footer.pagination {
     margin-top: auto; /* 이 속성이 페이징 영역을 아래로 밀어냅니다. */
 }
+.card-footer {
+    margin-top: auto;
+}
 /* ──────────────────────────────────────────────────────────
    필터 영역
 ──────────────────────────────────────────────────────────*/

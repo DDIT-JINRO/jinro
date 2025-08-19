@@ -60,11 +60,9 @@
 							</tbody>
 						</table>
 					</div>
-					<div>
 						<div class="card-footer clearfix">
 							<div class="panel-footer pagination"></div>
 						</div>
-					</div>
 				</div>
 				<div class="template-panel topheader">
 					<div class="panel-header" id="calenderHeader"
