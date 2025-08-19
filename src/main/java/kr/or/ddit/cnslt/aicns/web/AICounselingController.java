@@ -17,10 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kr.or.ddit.cnslt.aicns.service.AICounselingService;
-import kr.or.ddit.cnslt.resve.crsv.service.CounselingReserveService;
-import kr.or.ddit.mpg.pay.service.MemberSubscriptionVO;
-import kr.or.ddit.mpg.pay.service.PaymentService;
-import kr.or.ddit.mpg.pay.service.PaymentVO;
 
 @Controller
 @RequestMapping("/cnslt/aicns")

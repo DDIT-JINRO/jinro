@@ -138,7 +138,7 @@
 	padding: 11px 18px;
 	font-weight: 800;
 	cursor: pointer;
-	background: #202427;
+	background: #6a82fb;
 	color: #fff;
 	transition: all .15s ease;
 	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
@@ -158,6 +158,12 @@
 
 .btn:hover:not(:disabled) {
 	transform: translateY(-1px);
+	background-color: #5a6cdb;
+}
+
+.btn.secondary:hover:not(:disabled) {
+	background: #d8dee4;
+	opacity: 1.2;
 }
 
 /* ===== Modal ===== */
