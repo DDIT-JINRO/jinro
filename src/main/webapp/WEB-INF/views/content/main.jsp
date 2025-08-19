@@ -110,7 +110,7 @@
 			                <img alt="" src="/images/logo.png">
 			                <div class="main-title-banner">꿈이 현실이 되는 길</div>
 			                <p>
-								꿈을 향해 달려가는 멋진 어른에게<br>
+								꿈을 향해 달려가는 멋진 청년에게<br>
 								진로를 설계하는데 필요한 직업 비교 페이지
 			                </p>
 			                <a href="/pse/cr/crl/selectCareerList.do" class="BtnData">직업비교 바로가기</a>
@@ -131,15 +131,31 @@
 		</div>
 		<button class="next-btn" id="next-btn">›</button>
 		<div class="slider-controls">
-			<div class="dots-container">
-				<span class="dot active" data-slide-index="0"></span>
-				<c:if test="${memId eq 'anonymousUser' or isTeen eq 'true'}">
-					<span class="dot" data-slide-index="1"></span>
-				</c:if>
-				<c:if test="${memId eq 'anonymousUser' or isTeen eq 'false'}">
-					<span class="dot" data-slide-index="2"></span>
-				</c:if>
-			</div>
+		    <div class="dots-container">
+		        <!-- 첫 번째 dot (항상 표시) -->
+		        <span class="dot active" data-slide-index="0"></span>
+		        
+		        <!-- 두 번째 dot -->
+		        <c:choose>
+		            <c:when test="${memId eq 'anonymousUser'}">
+		                <!-- 비로그인: 학과비교 -->
+		                <span class="dot" data-slide-index="1"></span>
+		            </c:when>
+		            <c:when test="${isTeen eq 'true'}">
+		                <!-- 로그인 + 청소년: 학과비교 -->
+		                <span class="dot" data-slide-index="1"></span>
+		            </c:when>
+		            <c:when test="${isTeen eq 'false'}">
+		                <!-- 로그인 + 성인: 직업비교 -->
+		                <span class="dot" data-slide-index="1"></span>
+		            </c:when>
+		        </c:choose>
+		        
+		        <!-- 세 번째 dot (비로그인 사용자만) -->
+		        <c:if test="${memId eq 'anonymousUser'}">
+		            <span class="dot" data-slide-index="2"></span>
+		        </c:if>
+		    </div>
 		</div>
 	</section>
 	<section class="main-event-banner">
