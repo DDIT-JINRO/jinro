@@ -699,11 +699,11 @@ html, body {
 .search-filter__accordion-header .search-filter__accordion-arrow {
 	transition: transform 0.3s ease;
 	font-size: 0.8rem;
+	transform: rotate(180deg);
 }
 
-.search-filter__accordion-header.is-active .search-filter__accordion-arrow
-	{
-	transform: rotate(180deg);
+.search-filter__accordion-header.is-active .search-filter__accordion-arrow {
+	transform: rotate(0deg);
 }
 
 .search-filter__accordion-panel {
