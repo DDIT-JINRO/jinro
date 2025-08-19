@@ -1,27 +1,5 @@
 @charset "UTF-8";
 
-/* ──────────────────────────────────────────────────────────
-   컨테이너 & 패널 공통
-──────────────────────────────────────────────────────────*/
-.template-container {
-	display: flex;
-	gap: 24px;
-	height: 90vh;
-	box-sizing: border-box;
-}
-
-.template-panel {
-	background: #fff;
-	border: 1px solid #e0e0e0;
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-	padding: 20px;
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	min-width: 0;
-}
-
 .template-panel.list-panel {
 	display: flex;
 	flex-direction: column;
@@ -78,23 +56,14 @@
     /* 날짜와 요일 모두 숨기기 */
     visibility: hidden;
 }
-.fc-event-title {
-	color: black ;
+.template-panel #calendar .fc-event-title {
+    font-size: 1.2rem; /* 원하는 크기로 변경 */
+    font-weight: bold; /* 폰트 굵게 */
+    color: black; /* 원하는 색상으로 변경 */
 }
-/* ──────────────────────────────────────────────────────────
-   패널 헤더
-──────────────────────────────────────────────────────────*/
-.panel-header {
-	background: #07223D;
-	color: #fff;
-	font-size: 18px;
-	font-weight: 600;
-	padding: 12px 16px;
-	border-radius: 8px 8px 0 0;
-	margin: -20px -20px 16px;
-	box-sizing: border-box;
+.fc .fc-bg-event {
+    opacity: 0.7;
 }
-
 /* ──────────────────────────────────────────────────────────
    리스트 테이블
 ──────────────────────────────────────────────────────────*/
@@ -215,165 +184,6 @@
 	color: #fff;
 	margin-left: auto;
 }
-/* ──────────────────────────────────────────────────────────
-   하단 페이지네이션 고정
-──────────────────────────────────────────────────────────*/
-.card-footer {
-	margin-top: auto;
-}
-
-.panel-footer.pagination {
-	display: flex;
-	flex-wrap: nowrap;
-	list-style: none;
-	gap: 0.5rem;
-	justify-content: center;
-	align-items: center;
-	padding: 1rem 0;
-}
-
-.panel-footer.pagination a {
-	padding: 0.4rem 0.75rem;
-	border-radius: 5px;
-	text-decoration: none;
-	color: black;
-	font-weight: 500;
-}
-
-.panel-footer.pagination a:hover {
-	background-color: #f0f0f0;
-}
-
-.panel-footer.pagination .active {
-	background-color: #2C2C2C;
-	color: white;
-	pointer-events: none;
-}
-
-.panel-footer.pagination .disabled {
-	color: #757575;
-	pointer-events: none;
-}
-
-/* ──────────────────────────────────────────────────────────
-   CKEditor 개선: label 포함 정렬 및 너비 고정
-──────────────────────────────────────────────────────────*/
-.template-panel form .noticeFormGroup, .template-panel form>div.ck-row {
-	display: flex;
-	align-items: flex-start;
-	margin-bottom: 16px;
-}
-
-.template-panel form>div.ck-row label {
-	width: 100px;
-	font-size: 14px;
-	color: #333;
-	padding-top: 10px;
-}
-
-.template-panel form>div.ck-row .ck-editor {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	min-width: 0;
-}
-
-.template-panel .ck-editor .ck-editor__editable_inline {
-	width: 100%;
-	min-height: 300px;
-	max-height: 320px;
-	overflow-y: auto;
-	box-sizing: border-box;
-	padding: 6px 10px;
-}
-
-.template-panel .ck-editor .ck-content {
-	white-space: pre-wrap;
-	word-wrap: break-word;
-	word-break: break-word;
-	overflow-x: auto;
-}
-
-.template-panel .ck-editor .ck-content pre {
-	white-space: pre;
-	overflow-x: auto;
-}
-
-/* 리스트 스타일 제거 */
-li {
-	list-style-type: none;
-}
-
-/* ──────────────────────────────────────────────────────────
-   기존 첨부파일 리스트 스타일
-──────────────────────────────────────────────────────────*/
-.existing-files {
-	height: 100px;
-	overflow: scroll;
-	list-style: none;
-	padding: 0;
-	margin: 8px 0;
-}
-
-.existing-files li {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 6px 10px;
-	margin-bottom: 4px;
-	border: 1px solid #e0e0e0;
-	border-radius: 6px;
-	background-color: #fafafa;
-	transition: background-color 0.2s ease;
-}
-
-.existing-files li:hover {
-	background-color: #f5f9ff;
-	transform: none;
-}
-
-.existing-files li a {
-	color: #007bff;
-	text-decoration: none;
-	flex-grow: 1;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	font-size: 14px;
-}
-
-.existing-files li a:hover {
-	color: #0056b3;
-	text-decoration: underline;
-}
-
-.existing-files li button {
-	background: #dc3545;
-	border: none;
-	color: #fff;
-	padding: 4px 12px;
-	border-radius: 4px;
-	cursor: pointer;
-	font-size: 12px;
-	transition: background-color 0.2s ease;
-}
-
-.existing-files li button:hover {
-	background: #c82333;
-	transform: none;
-	box-shadow: none;
-}
-
-.noticeFormGroup>div>label, .noticeFormGroup>label {
-	display: block;
-	font-weight: bold;
-	margin-bottom: 4px;
-	font-size: 14px;
-}
-
-#notice-list tr:hover {
-	cursor: pointer;
-}
 
 /* 상세내용 */
 
@@ -396,7 +206,6 @@ li {
 	color: #555;
 }
 
-/* 기존 CSS와 결합하여 사용 */
 .counsel-detail-content {
 	display: flex;
 	padding: 10px;
@@ -440,3 +249,4 @@ li {
 	flex-direction: column;
 	gap: 10px;
 }
+

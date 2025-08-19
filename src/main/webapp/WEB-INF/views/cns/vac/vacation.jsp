@@ -8,7 +8,7 @@
 </script>
 <!-- 제목입니다 -->
 <h3>연차/휴가 신청 및 목록</h3>
-<body>
+<div class="template-container">
 	<div class="template-panel vac-approve-panel">
 		<div class="panel-header">휴가 신청 양식</div>
 		<div class="vac-approve-container">
@@ -117,5 +117,5 @@
 			</div>
 		</div>
 	</div>
-</body>
+</div>
 
