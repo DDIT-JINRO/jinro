@@ -22,143 +22,151 @@
 </section>
 <div>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<h3 class="page-title-bar__title">채용 공고</h3>
+		</div>
+	
 		<div class="public-wrapper-main">
 			<form method="get" action="/empt/ema/employmentAdvertisement.do">
-				<div class="com-default-search">
-					<div class="com-select-wrapper">
-						<svg class="com-select-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-			                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-			            </svg>
+				<div class="search-filter__bar">
+					<div class="search-filter__input-wrapper">
+						<input type="search" name="keyword" class="search-filter__input" placeholder="제목 or 기업명 검색">
+						<button class="search-filter__button" type="submit">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+								<path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+							</svg>
+						</button>
 					</div>
-					<input type="search" name="keyword" placeholder="제목 or 기업명 검색">
-					<button class="com-search-btn" type="submit">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-			                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-			            </svg>
-					</button>
 				</div>
 
-				<div class="com-accordion-filter">
-					<button type="button" class="com-accordion-header" id="com-accordion-toggle">
+				<div class="search-filter__accordion">
+					<button type="button" class="search-filter__accordion-header" id="search-filter-toggle">
 						<span>필터</span>
-						<span class="com-arrow-icon">▲</span>
+						<span class="search-filter__accordion-arrow">▲</span>
 					</button>
-					<div class="com-accordion-panel" id="com-accordion-panel">
-						<div class="com-accordion-content">
-							<div class="com-filter-section">
-								<label class="com-filter-title">직무</label>
-								<div class="com-filter-options">
+					<div class="search-filter__accordion-panel" id="search-filter-panel">
+						<div class="search-filter__accordion-content">
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">직무</label>
+								<div class="search-filter__options">
 									<c:forEach var="hireClass" items="${CodeVOHireClassList}">
-										<label class="com-filter-item">
+										<label class="search-filter__option">
 											<input type="checkbox" name="hireClassCodeNames" value="${hireClass.ccId}">
 											<span>${hireClass.ccName}</span>
 										</label>
 									</c:forEach>
 								</div>
+							</div>
 
-								<label class="com-filter-title">지역</label>
-								<div class="com-filter-options">
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">지역</label>
+								<div class="search-filter__options">
 									<c:forEach var="region" items="${CodeVORegionList}">
-										<label class="com-filter-item">
+										<label class="search-filter__option">
 											<input type="checkbox" name="regions" value="${region.ccId}">
 											<span>${region.ccEtc}</span>
 										</label>
 									</c:forEach>
 								</div>
+							</div>
 
-								<label class="com-filter-title">채용유형</label>
-								<div class="com-filter-options">
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">채용유형</label>
+								<div class="search-filter__options">
 									<c:forEach var="hireType" items="${CodeVOHireTypeList}">
-										<label class="com-filter-item">
+										<label class="search-filter__option">
 											<input type="checkbox" name="hireTypeNames" value="${hireType.ccId}">
 											<span>${hireType.ccName}</span>
 										</label>
 									</c:forEach>
 								</div>
 							</div>
-							<div class="com-filter-section">
-								<div class="com-button-container">
-									<label class="com-filter-title">선택된 필터</label>
-									<button type="button" class="com-filter-reset-btn">초기화</button>
+
+							<div class="search-filter__group">
+								<div class="search-filter__group-header">
+									<label class="search-filter__group-title">선택된 필터</label>
+									<button type="button" class="search-filter__reset-button">초기화</button>
 								</div>
-								<div class="com-selected-filters"></div>
+								<div class="search-filter__selected-tags"></div>
 							</div>
-							<button type="submit" class="com-submit-search-btn">검색</button>
+							<button type="submit" class="search-filter__submit-button">검색</button>
 						</div>
 					</div>
 				</div>
 			</form>
-			<p>총 ${articlePage.total}건</p>
+			<p class="content-list__total-count">총 ${articlePage.total}건</p>
 
-			<div class="hire-list">
-				<div class="accordion-header">
-					<div style="flex: 1;">공고명</div>
-					<div style="flex: 1;">기업명</div>
-					<div style="flex: 1;">고용형태</div>
-					<div style="width: 80px;">북마크</div>
-					<div style="width: 20px;"></div>
+			<div class="content-list">
+				<div class="accordion-list__header">
+					<span class="accordion-list__col accordion-list__col--title">공고명</span>
+					<div class="accordion-list__col accordion-list__col--meta">
+						<span class="accordion-list__col accordion-list__col--company">기업명</span>
+						<span class="accordion-list__col accordion-list__col--type">고용형태</span>
+						<span class="accordion-list__col accordion-list__col--bookmark">북마크</span>
+					</div>
+					<span class="accordion-list__col accordion-list__col--toggle"></span>
 				</div>
 
 				<c:forEach var="hire" items="${articlePage.content}" varStatus="status">
-					<div class="accordion-item">
-						<div class="accordion-header">
-							<div class="hire-info-item" style="flex: 1;">${hire.hireTitle}</div>
-							<div class="hire-info-item" style="flex: 1;">${hire.cpName}</div>
-							<div class="hire-info-item" style="flex: 1;">${hire.hireTypename}</div>
-							<div class="hire-info-item" style="width: 80px;">
-								<div class="item-action">
+					<div class="accordion-list__item">
+						<div class="accordion-list__item-header">
+							<div class="accordion-list__col accordion-list__title">${hire.hireTitle}</div>
+							<div class="accordion-list__col accordion-list__col--meta">
+								<div class="accordion-list__col accordion-list__company">${hire.cpName}</div>
+								<div class="accordion-list__col accordion-list__type">${hire.hireTypename}</div>
+								<div class="accordion-list__col accordion-list__bookmark">
 									<c:set var="isBookmarked" value="false" />
-
 									<c:forEach var="bookmark" items="${bookMarkVOList}">
 										<c:if test="${hire.hireId eq bookmark.bmTargetId}">
 											<c:set var="isBookmarked" value="true" />
 										</c:if>
 									</c:forEach>
-
-									<button class="bookmark-btn ${isBookmarked ? 'active' : ''}" data-category-id="G03003" data-target-id="${fn:escapeXml(hire.hireId)}">
-										<span class="icon-active">
+									<button class="bookmark-button ${isBookmarked ? 'is-active' : ''}" data-category-id="G03003" data-target-id="${fn:escapeXml(hire.hireId)}">
+										<span class="bookmark-button__icon--active">
 											<img src="/images/bookmark-btn-active.png" alt="활성 북마크">
 										</span>
-										<span class="icon-inactive">
+										<span class="bookmark-button__icon--inactive">
 											<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
 										</span>
 									</button>
 								</div>
 							</div>
-							<div class="hire-info-item" style="width: 20px;">
-								<span class="toggle-icon">+</span>
+							<div class="accordion-list__col accordion-list__col--toggle">
+								<div class="accordion-list__toggle-icon">
+									<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+										<path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+									</svg>
+								</div>
 							</div>
 						</div>
-						<div class="accordion-content">
-							<div class="hire-description-section">
-								<h4>채용 내용</h4>
-								<p>${hire.hireDescription}</p>
-							</div>
-							<div class="hire-url-section">
-								<h4>채용 홈페이지</h4>
-								<a href="${hire.hireUrl}" target="_blank" class="homepage-link">홈페이지로 이동하기</a>
-							</div>
-							<div class="hire-date-section">
-								<h4>채용 기간</h4>
-								<div class="date-container">
-									<label>
-										공고 시작일 :
-										<fmt:formatDate value="${hire.hireStartDate}" pattern="yyyy. MM. dd" />
-									</label>
-									<label>
-										공고 마감일 :
-										<span class="deadline-text
-							                <c:choose>
-							                    <c:when test="${hire.dday >= 0 and hire.dday <= 3}">deadline-imminent</c:when>
-							                    <c:when test="${hire.dday < 0}">deadline-passed</c:when>
-							                </c:choose>">
-											<fmt:formatDate value="${hire.hireEndDate}" pattern="yyyy. MM. dd" />
-											<c:choose>
-												<c:when test="${hire.dday >= 0}"> (D-${hire.dday})</c:when>
-												<c:when test="${hire.dday < 0}"> (마감됨)</c:when>
-											</c:choose>
-										</span>
-									</label>
+						<div class="accordion-list__item-content">
+							<div class="accordion-list__content-body">
+								<div class="hire-description-section">
+									<h4>채용 내용</h4>
+									<p>${hire.hireDescription}</p>
+								</div>
+								<div class="hire-url-section">
+									<h4>채용 홈페이지</h4>
+									<a href="${hire.hireUrl}" target="_blank" class="homepage-link">홈페이지로 이동하기</a>
+								</div>
+								<div class="hire-date-section">
+									<h4>채용 기간</h4>
+									<div class="date-container">
+										<label>
+											공고 시작일 :
+											<fmt:formatDate value="${hire.hireStartDate}" pattern="yyyy. MM. dd" />
+										</label>
+										<label>
+											공고 마감일 :
+											<span class="deadline-text <c:choose><c:when test="${hire.dday >= 0 and hire.dday <= 3}">deadline-imminent</c:when><c:when test="${hire.dday < 0}">deadline-passed</c:when></c:choose>">
+												<fmt:formatDate value="${hire.hireEndDate}" pattern="yyyy. MM. dd" />
+												<c:choose>
+													<c:when test="${hire.dday >= 0}"> (D-${hire.dday})</c:when>
+													<c:when test="${hire.dday < 0}"> (마감됨)</c:when>
+												</c:choose>
+											</span>
+										</label>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -166,35 +174,53 @@
 				</c:forEach>
 			</div>
 
-			<!-- 페이징 -->
-			<div class="card-footer clearfix">
-				<ul class="pagination">
-					<!-- Previous -->
-					<li>
-						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${articlePage.keyword}
-						<c:forEach var='hireClassCodeNames' items='${paramValues.hireClassCodeNames}'>&hireClassCodeNames=${hireClassCodeNames}</c:forEach>
-						<c:forEach var='regions' items='${paramValues.regions}'>&regions=${regions}</c:forEach>
-						<c:forEach var='hireTypeNames' items='${paramValues.hireTypeNames}'>&hireTypeNames=${hireTypeNames}</c:forEach>" class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>"> ← Previous </a>
-					</li>
-
-					<!-- Page Numbers -->
-					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
-						<li>
-							<a href="${articlePage.url}?currentPage=${pNo}&keyword=${articlePage.keyword}
-							<c:forEach var='hireClassCodeNames' items='${paramValues.hireClassCodeNames}'>&hireClassCodeNames=${hireClassCodeNames}</c:forEach>
-							<c:forEach var='regions' items='${paramValues.regions}'>&regions=${regions}</c:forEach>
-							<c:forEach var='hireTypeNames' items='${paramValues.hireTypeNames}'>&hireTypeNames=${hireTypeNames}</c:forEach>" class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>"> ${pNo} </a>
-						</li>
+			<div class="pagination">
+				<c:url var="prevUrl" value="${articlePage.url}">
+					<c:param name="currentPage" value="${articlePage.startPage - 5}" />
+					<c:param name="keyword" value="${articlePage.keyword}" />
+					<c:forEach var="hireClassCodeNames" items="${paramValues.hireClassCodeNames}">
+						<c:param name="hireClassCodeNames" value="${hireClassCodeNames}" />
 					</c:forEach>
+					<c:forEach var="regions" items="${paramValues.regions}">
+						<c:param name="regions" value="${regions}" />
+					</c:forEach>
+					<c:forEach var="hireTypeNames" items="${paramValues.hireTypeNames}">
+						<c:param name="hireTypeNames" value="${hireTypeNames}" />
+					</c:forEach>
+				</c:url>
+				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
 
-					<!-- Next -->
-					<li>
-						<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${articlePage.keyword}
-						<c:forEach var='hireClassCodeNames' items='${paramValues.hireClassCodeNames}'>&hireClassCodeNames=${hireClassCodeNames}</c:forEach>
-						<c:forEach var='regions' items='${paramValues.regions}'>&regions=${regions}</c:forEach>
-						<c:forEach var='hireTypeNames' items='${paramValues.hireTypeNames}'>&hireTypeNames=${hireTypeNames}</c:forEach>" class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>"> Next → </a>
-					</li>
-				</ul>
+				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
+					<c:url var="pageUrl" value="${articlePage.url}">
+						<c:param name="currentPage" value="${pNo}" />
+						<c:param name="keyword" value="${articlePage.keyword}" />
+						<c:forEach var="hireClassCodeNames" items="${paramValues.hireClassCodeNames}">
+							<c:param name="hireClassCodeNames" value="${hireClassCodeNames}" />
+						</c:forEach>
+						<c:forEach var="regions" items="${paramValues.regions}">
+							<c:param name="regions" value="${regions}" />
+						</c:forEach>
+						<c:forEach var="hireTypeNames" items="${paramValues.hireTypeNames}">
+							<c:param name="hireTypeNames" value="${hireTypeNames}" />
+						</c:forEach>
+					</c:url>
+					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
+				</c:forEach>
+
+				<c:url var="nextUrl" value="${articlePage.url}">
+					<c:param name="currentPage" value="${articlePage.startPage + 5}" />
+					<c:param name="keyword" value="${articlePage.keyword}" />
+					<c:forEach var="hireClassCodeNames" items="${paramValues.hireClassCodeNames}">
+						<c:param name="hireClassCodeNames" value="${hireClassCodeNames}" />
+					</c:forEach>
+					<c:forEach var="regions" items="${paramValues.regions}">
+						<c:param name="regions" value="${regions}" />
+					</c:forEach>
+					<c:forEach var="hireTypeNames" items="${paramValues.hireTypeNames}">
+						<c:param name="hireTypeNames" value="${hireTypeNames}" />
+					</c:forEach>
+				</c:url>
+				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
 			</div>
 		</div>
 	</div>

@@ -1,31 +1,75 @@
 document.addEventListener('DOMContentLoaded', function() {
-	// 토글 버튼
-	const toggleButton = document.getElementById('com-accordion-toggle');
+	const accordionHeaders = document.querySelectorAll('.accordion-list__item-header');
 
+	accordionHeaders.forEach(header => {
+		header.addEventListener('click', function() {
+			toggleAccordionItem(this);
+		});
+	});
+
+	// 아코디언 토글 함수
+	function toggleAccordionItem(header) {
+		const currentItem = header.closest('.accordion-list__item');
+		const currentContent = currentItem.querySelector('.accordion-list__item-content');
+		const currentToggle = header.querySelector('.accordion-list__toggle-icon');
+		const isOpening = !currentContent.classList.contains('is-active');
+
+		// 다른 열린 아코디언 모두 닫기
+		document.querySelectorAll('.accordion-list__item').forEach(item => {
+			if (item !== currentItem) {
+				item.querySelector('.accordion-list__item-content').classList.remove('is-active');
+				item.querySelector('.accordion-list__item-header').classList.remove('is-active');
+				item.querySelector('.accordion-list__toggle-icon').classList.remove('is-active');
+			}
+		});
+
+		// 현재 아코디언 토글
+		if (isOpening) {
+			currentContent.classList.add('is-active');
+			header.classList.add('is-active');
+			currentToggle.classList.add('is-active');
+			
+			// 하이픈 줄바꿈 로직 적용
+			const descriptionSection = currentItem.querySelector('.hire-description-section p');
+			if (descriptionSection && !descriptionSection.dataset.isProcessed) {
+				const originalText = descriptionSection.textContent;
+				const newHtml = originalText.replace(/-/g, '<br>-');
+				descriptionSection.innerHTML = newHtml;
+				descriptionSection.dataset.isProcessed = true;
+			}
+		} else {
+			currentContent.classList.remove('is-active');
+			header.classList.remove('is-active');
+			currentToggle.classList.remove('is-active');
+		}
+	}
+})
+
+// 기존 필터 관련 코드를 다음으로 교체:
+
+document.addEventListener('DOMContentLoaded', function() {
+	// 필터 아코디언 토글 버튼
+	const toggleButton = document.getElementById('search-filter-toggle');
 	// 필터 패널 
-	const panel = document.getElementById('com-accordion-panel');
-
+	const panel = document.getElementById('search-filter-panel');
 	// 필터 키워드
-	const filterCheckboxes = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
-
+	const filterCheckboxes = document.querySelectorAll('.search-filter__option input[type="checkbox"]');
 	// 선택 필터 영역
-	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
-
+	const selectedFiltersContainer = document.querySelector('.search-filter__selected-tags');
 	// 초기화 버튼
-	const resetButton = document.querySelector('.com-filter-reset-btn');
+	const resetButton = document.querySelector('.search-filter__reset-button');
 
-	// 아코디언 코드
+	// 아코디언 토글 기능
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
-			this.classList.toggle('active');
-			panel.classList.toggle('open');
+			this.classList.toggle('is-active');
+			panel.classList.toggle('is-open');
 		});
 	}
 
 	// 필터 태그 추가
 	const createFilterTag = (text) => {
-		const filterTag = `<span class="com-selected-filter" data-filter="${text}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
-
+		const filterTag = `<span class="search-filter__tag" data-filter="${text}">${text}<button type="button" class="search-filter__tag-remove">×</button></span>`;
 		selectedFiltersContainer.innerHTML += filterTag;
 	};
 
@@ -51,8 +95,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
 	selectedFiltersContainer.addEventListener('click', (e) => {
-		if (e.target.classList.contains('com-remove-filter')) {
-			const tag = e.target.closest('.com-selected-filter');
+		if (e.target.classList.contains('search-filter__tag-remove')) {
+			const tag = e.target.closest('.search-filter__tag');
 			const filterText = tag.dataset.filter;
 
 			// 연결된 체크박스 찾아서 해제
@@ -68,36 +112,27 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	});
 
-
-
 	// 초기화 버튼 클릭 시 이벤트 처리
 	if (resetButton) {
 		resetButton.addEventListener('click', () => {
 			filterCheckboxes.forEach(checkbox => {
 				checkbox.checked = false;
 			});
-
 			selectedFiltersContainer.innerHTML = '';
 		});
 	}
 
-	//페이지 리로드 후에도 필터 유지
+	// 페이지 리로드 후에도 필터 유지
 	const urlParams = new URLSearchParams(window.location.search);
-
-	// 모든 필터 체크박스를 순회하며 URL 파라미터와 매칭
 	filterCheckboxes.forEach(checkbox => {
-		const paramName = checkbox.name; // 예: scaleId, regionId, hiringStatus
-		const paramValue = checkbox.value; // 예: CC001, 1, Y
-
-		// 'hiringStatus'는 단일 선택일 가능성이 높으므로 다르게 처리 (현재 JSP에서는 복수 선택 가능하도록 되어있음)
-		// 여기서는 모든 name에 대해 `getAll`을 사용하여 여러 값을 가져오도록 처리합니다.
+		const paramName = checkbox.name;
+		const paramValue = checkbox.value;
 		const paramValues = urlParams.getAll(paramName);
 
 		if (paramValues.includes(paramValue)) {
 			checkbox.checked = true;
-			// 체크박스가 체크되면 해당 필터 태그를 생성
 			const labelText = checkbox.nextElementSibling.textContent;
-			createFilterTag(labelText, paramName, paramValue);
+			createFilterTag(labelText);
 		}
 	});
 
@@ -110,75 +145,34 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 
-
-	//내용 아코디언
-	const accordionHeaders = document.querySelectorAll('.accordion-item .accordion-header');
-
-	accordionHeaders.forEach(header => {
-		header.addEventListener('click', function() {
-			const accordionItem = this.closest('.accordion-item');
-			const toggleIcon = this.querySelector('.toggle-icon');
-
-			// 이미 열려있는 다른 아코디언 닫기
-			document.querySelectorAll('.accordion-item.open').forEach(item => {
-				if (item !== accordionItem) {
-					item.classList.remove('open');
-					item.querySelector('.toggle-icon').textContent = '+';
-				}
-			});
-
-			// 현재 아코디언 열거나 닫기
-			accordionItem.classList.toggle('open');
-
-			if (accordionItem.classList.contains('open')) {
-				toggleIcon.textContent = '-'; // 유니코드 마이너스 기호
-
-				// === 이곳에 하이픈 줄바꿈 로직을 추가합니다 ===
-				const descriptionSection = accordionItem.querySelector('.hire-description-section p');
-
-				// descriptionSection이 존재하고, 아직 처리되지 않았을 경우에만 실행
-				if (descriptionSection && !descriptionSection.dataset.isProcessed) {
-					const originalText = descriptionSection.textContent;
-
-					// 하이픈(-)을 <br> 태그로 교체
-					const newHtml = originalText.replace(/-/g, '<br>-');
-
-					// HTML로 삽입
-					descriptionSection.innerHTML = newHtml;
-
-					// 중복 처리를 막기 위해 데이터셋 플래그를 설정
-					descriptionSection.dataset.isProcessed = true;
-				}
-				// ============================================
-
-			} else {
-				toggleIcon.textContent = '+';
-			}
-		});
-	});
-
-	//북마크
+	// 북마크
 	// 모든 북마크 버튼
-	const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
+	const bookmarkButtons = document.querySelectorAll('.bookmark-button');
 
 	// 이벤트 추가
 	bookmarkButtons.forEach(button => {
 		button.addEventListener('click', function(event) {
 			event.preventDefault();
+			event.stopPropagation();
 
 			// 함수 전달
 			handleBookmarkToggle(this);
 		});
 	});
-
 });
+
 //북마크
 const handleBookmarkToggle = (button) => {
+	if (memId == "" || memId == "anonymousUser") {
+	    alert("북마크는 로그인 후 이용 하실 수 있습니다.");
+	    return;
+	}
+	
 	const bmCategoryId = button.dataset.categoryId;
 	const bmTargetId = button.dataset.targetId;
 
 	// 현재 버튼이 'active' 클래스를 가지고 있는지 확인
-	const isBookmarked = button.classList.contains('active');
+	const isBookmarked = button.classList.contains('is-active');
 
 	const data = {
 		bmCategoryId: bmCategoryId,
@@ -204,7 +198,7 @@ const handleBookmarkToggle = (button) => {
 			console.log(data);
 			if (data.success) {
 				alert(data.message);
-				button.classList.toggle('active');
+				button.classList.toggle('is-active');
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');
 			}
