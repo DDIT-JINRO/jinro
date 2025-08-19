@@ -4,23 +4,23 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 
-	document.addEventListener('click', function (event) {
+	document.addEventListener('click', function(event) {
 		const likeButton = event.target.closest('.like-button');
 
 		if (!likeButton) {
-		    return; // 클릭된 것이 좋아요 버튼이 아니면 무시
+			return; // 클릭된 것이 좋아요 버튼이 아니면 무시
 		}
 
 		const boardId = likeButton.dataset.boardId;
 		const replyId = likeButton.dataset.replyId;
 		const isReply = replyId !== undefined;
-		
+
 		const likeCountSpanId = isReply ? `reply-like-cnt-${replyId}` : `board-like-cnt-${boardId}`;
 		const likeCountSpan = document.getElementById(likeCountSpanId);
 
 		const originalLikeCount = parseInt(likeCountSpan.textContent);
 		const isCurrentlyLiked = likeButton.classList.contains('liked');
-		
+
 		likeButton.classList.toggle('liked');
 		likeCountSpan.textContent = isCurrentlyLiked ? originalLikeCount - 1 : originalLikeCount + 1;
 
@@ -33,21 +33,21 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 
 		axios.post(url, params)
-		.then(response => {
-	        const serverResult = response.data;
-	        likeCountSpan.textContent = serverResult.likeCnt;
-	        
-	        const serverIsLiked = serverResult.isLiked === 1;
-	        if (likeButton.classList.contains('liked') !== serverIsLiked) {
-	            likeButton.classList.toggle('liked', serverIsLiked);
-		        }
-	    }).catch(error => {
-	        console.error('좋아요 처리 실패:', error);
-	        alert('오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-	        
-	        likeButton.classList.toggle('liked', isCurrentlyLiked);
-	        likeCountSpan.textContent = originalLikeCount;
-	    });
+			.then(response => {
+				const serverResult = response.data;
+				likeCountSpan.textContent = serverResult.likeCnt;
+
+				const serverIsLiked = serverResult.isLiked === 1;
+				if (likeButton.classList.contains('liked') !== serverIsLiked) {
+					likeButton.classList.toggle('liked', serverIsLiked);
+				}
+			}).catch(error => {
+				console.error('좋아요 처리 실패:', error);
+				alert('오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+
+				likeButton.classList.toggle('liked', isCurrentlyLiked);
+				likeCountSpan.textContent = originalLikeCount;
+			});
 	});
 
 	// 게시글 수정버튼 클릭 시 게시글 수정 페이지로 이동 이벤트
@@ -91,18 +91,18 @@ document.addEventListener('DOMContentLoaded', function() {
 				},
 				body: JSON.stringify(data)
 			})
-			.then(resp => {
+				.then(resp => {
 
-				if (!resp.ok) throw new Error('에러');
-				else {
-					alert("성공적으로 삭제되었습니다.")
-					window.location.href = "/cdp/rsm/rsmb/resumeBoardList.do";
-				}
-			})
-			.catch(err => {
-				console.error(err);
-				alert('삭제도중 문제가 발생했습니다.\n관리자측 문의바랍니다.');
-			})
+					if (!resp.ok) throw new Error('에러');
+					else {
+						alert("성공적으로 삭제되었습니다.")
+						window.location.href = "/cdp/rsm/rsmb/resumeBoardList.do";
+					}
+				})
+				.catch(err => {
+					console.error(err);
+					alert('삭제도중 문제가 발생했습니다.\n관리자측 문의바랍니다.');
+				})
 		})
 	}
 
@@ -414,7 +414,7 @@ function submitCreateReply(e) {
 	e.preventDefault();
 	if (!e.target.classList.contains('comment-form')) return false;
 	const formData = new FormData(e.target);
-	
+
 	fetch(e.target.action, {
 		method: "POST",
 		headers: {},
@@ -607,103 +607,103 @@ function modifyReplyCancel(e) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    
-    const fileContainer = document.querySelector('.fileClass');
 
-    if (fileContainer) {
-        fileContainer.addEventListener('click', function(event) {
-            // 클릭된 요소가 미리보기 버튼인지 확인
-            if (event.target.classList.contains('btn-pdf-preview')) {
-                const button = event.target;
-                const pdfUrl = button.dataset.pdfUrl;
-                const targetId = button.dataset.targetId;
-                const previewContainer = document.getElementById(targetId);
+	const fileContainer = document.querySelector('.fileClass');
 
-                // 컨테이너가 현재 보이지 않는 상태라면, 미리보기를 생성하고 보여줌
-                if (previewContainer.style.display !== 'block') {
-                    if (previewContainer.innerHTML === '') {
-                        const iframe = document.createElement('iframe');
-						
+	if (fileContainer) {
+		fileContainer.addEventListener('click', function(event) {
+			// 클릭된 요소가 미리보기 버튼인지 확인
+			if (event.target.classList.contains('btn-pdf-preview')) {
+				const button = event.target;
+				const pdfUrl = button.dataset.pdfUrl;
+				const targetId = button.dataset.targetId;
+				const previewContainer = document.getElementById(targetId);
+
+				// 컨테이너가 현재 보이지 않는 상태라면, 미리보기를 생성하고 보여줌
+				if (previewContainer.style.display !== 'block') {
+					if (previewContainer.innerHTML === '') {
+						const iframe = document.createElement('iframe');
+
 						let cleanPdfUrl = pdfUrl.replace(/\\/g, '/'); // 모든 '\'를 '/'로 변경
 						if (!cleanPdfUrl.startsWith('/')) {
-						    cleanPdfUrl = '/' + cleanPdfUrl; // 경로가 '/'로 시작하지 않으면 추가
+							cleanPdfUrl = '/' + cleanPdfUrl; // 경로가 '/'로 시작하지 않으면 추가
 						}
-                        
-                        const viewerURL = `/js/pdfjs/web/viewer.html?file=${encodeURIComponent(cleanPdfUrl)}#zoom=page-fit`;
-                        
-                        iframe.src = viewerURL;
-                        iframe.title = "PDF 미리보기";
-                        previewContainer.appendChild(iframe);
-                    }
-                    
-                    previewContainer.style.display = 'block';
-                    button.textContent = '미리보기 닫기';
-                
-                // 컨테이너가 이미 보이는 상태라면, 숨김
-                } else {
-                    previewContainer.style.display = 'none';
-                    button.textContent = '미리보기 보기';
-                }
-            }
-        });
-    }
+
+						const viewerURL = `/js/pdfjs/web/viewer.html?file=${encodeURIComponent(cleanPdfUrl)}#zoom=page-fit`;
+
+						iframe.src = viewerURL;
+						iframe.title = "PDF 미리보기";
+						previewContainer.appendChild(iframe);
+					}
+
+					previewContainer.style.display = 'block';
+					button.textContent = '미리보기 닫기';
+
+					// 컨테이너가 이미 보이는 상태라면, 숨김
+				} else {
+					previewContainer.style.display = 'none';
+					button.textContent = '미리보기 보기';
+				}
+			}
+		});
+	}
 });
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    // 모든 북마크 버튼
-    const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
+	// 모든 북마크 버튼
+	const bookmarkButtons = document.querySelectorAll('.bookmark-button');
 
-    // 이벤트 추가
-    bookmarkButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault(); 
-            
-            // 함수 전달
-            handleBookmarkToggle(this);
-        });
-    });
+	// 이벤트 추가
+	bookmarkButtons.forEach(button => {
+		button.addEventListener('click', function(event) {
+			event.preventDefault();
+
+			// 함수 전달
+			handleBookmarkToggle(this);
+		});
+	});
 
 });
 
 const handleBookmarkToggle = (button) => {
-    const bmCategoryId = button.dataset.categoryId;
-    const bmTargetId = button.dataset.targetId;
+	const bmCategoryId = button.dataset.categoryId;
+	const bmTargetId = button.dataset.targetId;
 
-    // 현재 버튼이 'active' 클래스를 가지고 있는지 확인
-    const isBookmarked = button.classList.contains('active');
-    
-    const data = {
-        bmCategoryId: bmCategoryId,
-				bmTargetId: bmTargetId
-    };
+	// 현재 버튼이 'active' 클래스를 가지고 있는지 확인
+	const isBookmarked = button.classList.contains('is-active');
 
-    const apiUrl = isBookmarked ? '/mpg/mat/bmk/deleteBookmark.do' : '/mpg/mat/bmk/insertBookmark.do';
+	const data = {
+		bmCategoryId: bmCategoryId,
+		bmTargetId: bmTargetId
+	};
 
-    fetch(apiUrl, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('서버 응답에 실패했습니다.');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-						alert(data.message);
-            button.classList.toggle('active');
-        } else {
-            alert(data.message || '북마크 처리에 실패했습니다.');
-        }
-    })
-    .catch(error => {
-        // 네트워크 오류나 서버 응답 실패 시
-        console.error('북마크 처리 중 오류 발생:', error);
-        alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-    });
+	const apiUrl = isBookmarked ? '/mpg/mat/bmk/deleteBookmark.do' : '/mpg/mat/bmk/insertBookmark.do';
+
+	fetch(apiUrl, {
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	})
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('서버 응답에 실패했습니다.');
+			}
+			return response.json();
+		})
+		.then(data => {
+			if (data.success) {
+				alert(data.message);
+				button.classList.toggle('is-active');
+			} else {
+				alert(data.message || '북마크 처리에 실패했습니다.');
+			}
+		})
+		.catch(error => {
+			// 네트워크 오류나 서버 응답 실패 시
+			console.error('북마크 처리 중 오류 발생:', error);
+			alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+		});
 }
