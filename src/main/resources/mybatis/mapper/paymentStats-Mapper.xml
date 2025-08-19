@@ -7,12 +7,14 @@
 	public int selectTotalSubscriberCount();
 	 -->
 	<select id="selectTotalSubscriberCount">
+		<![CDATA[
         SELECT
 	        COUNT(DISTINCT MEM_ID)
 	    FROM
 	        MEMBER_SUBSCRIPTION
 	    WHERE
 	        TRUNC(SUB_END_DT) >= TRUNC(SYSDATE)
+	    ]]>
     </select>
  
  	<!-- 
@@ -39,6 +41,7 @@
 	public List<Map<String, Object>> selectRevenueStats(Map<String, Object> params);
 	 --> 
 	<select id="selectRevenueStats" parameterType="map" resultType="map">
+		<![CDATA[
         SELECT
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(p.PAY_DATE, 'YYYY-MM')</when>
@@ -50,7 +53,7 @@
         JOIN MEMBER m ON ms.MEM_ID = m.MEM_ID
         WHERE p.PAY_AMOUNT > 0
           <if test="from != null and from != ''">AND p.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-          <if test="to != null and to != ''">AND p.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+          <if test="to != null and to != ''">AND p.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
           <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
         GROUP BY 
             <choose>
@@ -58,6 +61,7 @@
                 <otherwise>TO_CHAR(p.PAY_DATE, 'YYYY-MM-DD')</otherwise>
             </choose>
         ORDER BY "dt" ASC
+	    ]]>
     </select>
 	
 	<!-- 
@@ -65,6 +69,7 @@
 	public List<Map<String, Object>> selectSubscriberCountStats(Map<String, Object> params);
 	 -->
 	<select id="selectSubscriberCountStats" parameterType="map" resultType="map">
+		<![CDATA[
         SELECT
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -76,7 +81,7 @@
         JOIN MEMBER M ON M.MEM_ID = MS.MEM_ID
         WHERE 1=1
             <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-            <if test="to != null and to != ''">AND P.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
             <if test="gender != null and gender != '' and gender != 'ALL'">AND M.MEM_GEN = #{gender}</if>
         GROUP BY 
             <choose>
@@ -84,6 +89,7 @@
                 <otherwise>TO_CHAR(P.PAY_DATE, 'YYYY-MM-DD')</otherwise>
             </choose>
         ORDER BY "dt" ASC
+	    ]]>
     </select>
 	
 	 <!-- 
@@ -91,6 +97,7 @@
 	public List<Map<String, Object>> selectProductPopularityStats(Map<String, Object> params);
 	  -->
 	<select id="selectProductPopularityStats" parameterType="map" resultType="map">
+		<![CDATA[
         SELECT
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -104,7 +111,7 @@
         JOIN MEMBER M ON M.MEM_ID = MS.MEM_ID
         WHERE 1=1
             <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-            <if test="to != null and to != ''">AND P.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
             <if test="gender != null and gender != '' and gender != 'ALL'">AND M.MEM_GEN = #{gender}</if>
         GROUP BY 
             <choose>
@@ -113,6 +120,7 @@
             </choose>,
             S.SUB_NAME
         ORDER BY "dt", "subName"
+	    ]]>
     </select>
 	
 	<!-- 
@@ -120,6 +128,7 @@
 	public List<Map<String, Object>> selectAiServiceUsageStats(Map<String, Object> params);
 	 -->
 	<select id="selectAiServiceUsageStats" parameterType="map" resultType="map">
+		<![CDATA[
 	    SELECT
 	        <choose>
 	            <when test="period == 'monthly'">TO_CHAR(l.PL_CREATED_AT, 'YYYY-MM')</when>
@@ -141,14 +150,14 @@
 	        l.PL_TITLE IN ('이력서AI요청', '자기소개서AI요청' ,'모의면접AI요청')
 	        
 	        <if test="from != null and from != ''">AND l.PL_CREATED_AT >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	        <if test="to != null and to != ''">AND l.PL_CREATED_AT &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	        <if test="to != null and to != ''">AND l.PL_CREATED_AT < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
 	        
 	        <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
 	        
 	        <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
 	          AND m.MEM_BIRTH IS NOT NULL
 	          AND CASE
-	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) &lt; 20 THEN '10대'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) < 20 THEN '10대'
 	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 29 THEN '20대'
 	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 30 AND 39 THEN '30대'
 	                ELSE '40대 이상'
@@ -162,6 +171,7 @@
 	        </choose>
 	        
 	    ORDER BY "dt" ASC
+	    ]]>
 	</select>
 
 	<!-- 
@@ -169,10 +179,11 @@
 	public List<Map<String, Object>> selectDailyRevenueForDashboard();
 	 -->	
 	<select id="selectDailyRevenueForDashboard" resultType="map">
+		<![CDATA[
 	    WITH DATES AS (
 	      SELECT TRUNC(SYSDATE) - LEVEL + 1 AS "dt"
 	      FROM DUAL
-	      CONNECT BY LEVEL &lt;= 7
+	      CONNECT BY LEVEL <= 7
 	    ),
 	    REVENUE AS (
 	        SELECT
@@ -189,6 +200,7 @@
 	    FROM DATES D
 	    LEFT JOIN REVENUE R ON D."dt" = R."dt"
 	    ORDER BY D."dt" ASC
+	    ]]>
 	</select>
 	
 	<!-- 
@@ -196,6 +208,7 @@
 	public List<Map<String, Object>> selectNewUserRevenueRate();
 	 -->	
 	<select id="selectNewUserRevenueRate" parameterType="map" resultType="map">
+		<![CDATA[
 	    WITH NEW_MEMBERS AS (
 	        SELECT
 	            <choose>
@@ -206,7 +219,7 @@
 	        FROM MEMBER
 	        WHERE 1=1
 	            <if test="from != null and from != ''">AND CREATED_AT >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	            <if test="to != null and to != ''">AND CREATED_AT &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	            <if test="to != null and to != ''">AND CREATED_AT < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
 	        GROUP BY 
 	            <choose>
 	                <when test="period == 'monthly'">TO_CHAR(CREATED_AT, 'YYYY-MM')</when>
@@ -230,7 +243,7 @@
 	                WHERE MS2.MEM_ID = MS.MEM_ID
 	            )
 	            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	            <if test="to != null and to != ''">AND P.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
 	        GROUP BY
 	            <choose>
 	                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -248,6 +261,7 @@
 	    FROM NEW_MEMBERS d
 	    LEFT JOIN NEW_SUBS s ON d."dt" = s."dt"
 	    ORDER BY d."dt" ASC
+	    ]]>
 	</select>
 	
 	
@@ -257,6 +271,7 @@
 	public List<Map<String, Object>> selectNewRevenueRateStats();
 	 -->	
 	<select id="selectNewRevenueRateStats" parameterType="map" resultType="map">
+		<![CDATA[
 	    WITH TOTAL_REVENUE AS (
 	        SELECT
 	            <choose>
@@ -267,7 +282,7 @@
 	        FROM PAYMENT P
 	        WHERE 1=1
 	            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	            <if test="to != null and to != ''">AND P.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
 	        GROUP BY 
 	            <choose>
 	                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -291,7 +306,7 @@
 	                WHERE MS2.MEM_ID = MS.MEM_ID
 	            )
 	            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	            <if test="to != null and to != ''">AND P.PAY_DATE &lt; TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
 	        GROUP BY
 	            <choose>
 	                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -309,5 +324,80 @@
 	    FROM TOTAL_REVENUE d
 	    LEFT JOIN NEW_SUB_REVENUE s ON d."dt" = s."dt"
 	    ORDER BY d."dt" ASC
+	    ]]>
+	</select>
+	
+	<!-- 
+	대시보드 상단 숫자 통계 (평균매출 vs 예상매출)
+	public Map<String, Object> getRevenueSummaryForDashboard();
+	 -->
+	<select id="getRevenueSummaryForDashboard" resultType="map">
+		<![CDATA[
+	    SELECT
+	        -- 1. 이전달까지의 월평균 매출
+	        -- (올해 1월~지난달 총매출 / 지난달까지의 개월 수)
+	        (
+	            SELECT
+	                CASE
+	                    -- 현재가 1월이 아닐 때만 계산
+	                    WHEN EXTRACT(MONTH FROM SYSDATE) > 1 THEN 
+	                        ROUND(SUM(PAY_AMOUNT) / (EXTRACT(MONTH FROM SYSDATE) - 1))
+	                    ELSE 0
+	                END
+	            FROM PAYMENT
+	            WHERE PAY_DATE >= TRUNC(SYSDATE, 'YY') -- 올해 1월 1일
+	              AND PAY_DATE < TRUNC(SYSDATE, 'MM')   -- 이번 달 1일 전까지
+	        ) AS "avgPreviousRevenue",
+	        
+	        -- 2. 이번달 예상 매출
+	        -- (현재까지 매출 / 현재까지 일수) * 이번달 총 일수
+	        (
+	            SELECT
+	                CASE
+	                    WHEN EXTRACT(DAY FROM SYSDATE) > 0 THEN 
+	                        ROUND((NVL(SUM(PAY_AMOUNT), 0) / EXTRACT(DAY FROM SYSDATE)) * EXTRACT(DAY FROM LAST_DAY(SYSDATE)))
+	                    ELSE 0
+	                END
+	            FROM PAYMENT
+	            WHERE PAY_DATE >= TRUNC(SYSDATE, 'MM')
+	        ) AS "estimatedCurrentRevenue"
+	    FROM DUAL
+	    ]]>
+	</select>
+	
+	
+	
+	<!-- 
+	// 대시보드 하단 그래프 통계 (전체사용자 vs 구독자)
+	public List<Map<String, Object>> getMonthlyUserStatsForDashboard();
+	 -->
+	<select id="getMonthlyUserStatsForDashboard"  resultType="map">
+		<![CDATA[
+	    WITH MONTH_LIST AS (
+	        -- 올 해 1월 1일부터 이번 달 1일까지의 월초 날짜 목록 생성
+	        SELECT ADD_MONTHS(TRUNC(SYSDATE, 'YY'), LEVEL - 1) AS "month_start"
+	        FROM DUAL
+	        CONNECT BY ADD_MONTHS(TRUNC(SYSDATE, 'YY'), LEVEL - 1) <= TRUNC(SYSDATE, 'MM')
+	    )
+	    SELECT
+	        TO_CHAR(m."month_start", 'MM') AS "month",
+	        -- 해당 월초(1일) 시점까지의 누적 총 가입자 수(탈퇴자 제외)
+		        (SELECT COUNT(*) 
+		         FROM MEMBER 
+		         WHERE CREATED_AT < m."month_start"
+		         AND MEM_ID NOT IN (
+		             SELECT MEM_ID
+		             FROM   MEM_DEL
+		             WHERE  MD_DELETED_AT < m."month_start"
+		         )
+	         ) AS "totalUsers",
+	        -- 해당 월의 구독자 수 = 전달에 결제한 사람 수
+	        (SELECT COUNT(*) 
+	         FROM PAYMENT
+	         WHERE PAY_DATE >= ADD_MONTHS(m."month_start", -1) 
+	           AND PAY_DATE < m."month_start") AS "subscribers"
+	    FROM MONTH_LIST m
+	    ORDER BY "month"
+	    ]]>
 	</select>
 </mapper>
