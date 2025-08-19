@@ -1,146 +1,240 @@
-.intro-list-section {
-	width: 1160px;
-	margin: 60px auto;
+/* ==========================================================================
+   자기소개서 리스트 페이지 전용 스타일
+   ========================================================================== */
+.content-list__item:hover {
+	cursor: default;
+}
+
+/* 자기소개서 리스트 섹션 */
+.intro-list {
+	margin-bottom: 40px;
+}
+
+.intro-list__header {
 	display: flex;
-	flex-direction: column;
-	gap: 20px;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
 }
 
-.intro-list-header {
-	font-family: 'Noto Sans KR';
-	font-size: 18px;
+.intro-list__total-count {
+	font-size: 16px;
 	font-weight: 500;
-	color: #000;
+	color: #374151;
 }
 
+.intro-list__create-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 24px;
+	background-color: #fff;
+	color: #7881f5;
+	border: 2px solid #7881f5;
+	border-radius: 6px;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+.intro-list__create-button:hover {
+	background-color: #7881f5;
+	color: #fff;
+}
+
+/* 자기소개서 카드 */
 .intro-card {
 	display: flex;
-	max-width: 88%;
 	justify-content: space-between;
 	align-items: center;
-	padding: 20px 30px;
-	border: 2px solid #848EFB;
+	padding: 24px;
+	border: 1px solid #e5e7eb;
 	border-radius: 10px;
-	height: 120px;
+	background-color: #fff;
+	margin-bottom: 16px;
+	transition: all 0.2s ease;
 }
 
-.intro-title-section {
+.intro-card:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	border-color: #d1d5db;
+}
+
+.intro-card__info {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 12px;
+	flex: 1;
 }
 
-.intro-title {
-	font-family: 'Noto Sans KR';
-	font-size: 24px;
-	font-weight: 700;
-	color: #000;
+.intro-card__title {
+	font-size: 20px;
+	font-weight: 600;
+	color: #111827;
+	margin: 0;
+	line-height: 1.3;
 }
 
-.intro-meta {
+.intro-card__meta {
 	display: flex;
 	gap: 20px;
+	flex-wrap: wrap;
 }
 
-.intro-questions, .intro-date {
-	font-family: 'Noto Sans KR';
-	font-size: 16px;
-	color: #626262;
+.intro-card__meta-item {
+	font-size: 14px;
+	color: #6b7280;
+	display: flex;
+	align-items: center;
+	gap: 4px;
 }
 
-.intro-edit-button {
-	width: 228px;
-	height: 47px;
-	border: 2px solid #848EFB;
-	border-radius: 5px;
-	background: #fff;
-	font-family: 'IBM Plex Sans KR';
+.intro-card__meta-label {
+	font-weight: 500;
+}
+
+.intro-card__status {
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 12px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.intro-card__status--completed {
+	background-color: #eef2ff;
+	color: #4338ca;
+}
+
+.intro-card__status--draft {
+	background-color: #fef3c7;
+	color: #92400e;
+}
+
+.intro-card__actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.intro-card__edit-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 20px;
+	background-color: #fff;
+	color: #7881f5;
+	border: 1px solid #7881f5;
+	border-radius: 6px;
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: 500;
+	transition: all 0.2s ease;
+	white-space: nowrap;
+}
+
+.intro-card__edit-button:hover {
+	background-color: #7881f5;
+	color: #fff;
+}
+
+/* 빈 상태 */
+.intro-list__empty {
+	text-align: center;
+	padding: 60px 20px;
+	color: #6b7280;
+}
+
+.intro-list__empty-title {
 	font-size: 18px;
 	font-weight: 500;
-	color: #848EFB;
+	margin-bottom: 8px;
+	color: #374151;
+}
+
+.intro-list__empty-description {
+	font-size: 14px;
+	margin-bottom: 24px;
+}
+
+/* 빈 상태 스타일 - userCommon.css에서 가져온 스타일 적용 */
+.empty-state {
 	text-align: center;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-decoration: none;
+	padding: 60px 20px;
+	color: #6b7280;
 }
 
-.intro-edit-button:hover {
-	background-color: #848EFB;
-	color: white;
-}
-
-.intro-list-footer {
-	display: flex;
-	justify-content: flex-end;
-}
-
-.intro-list-btn {
-	width: 200px;
-	height: 50px;
-	background: #848EFB;
-	border-radius: 5px;
-	color: white;
-	font-family: 'IBM Plex Sans KR';
-	font-size: 20px;
+.empty-state__title {
+	font-size: 18px;
 	font-weight: 500;
-	display: flex;
+	margin-bottom: 8px;
+	color: #374151;
+}
+
+.empty-state__description {
+	font-size: 14px;
+	margin-bottom: 24px;
+}
+
+.empty-state__action {
+	margin-top: 20px;
+}
+
+.button {
+	display: inline-flex;
+	align-items: center;
 	justify-content: center;
-	align-items: center;
-	text-decoration: none;
-}
-
-/* 검색창 및 필터링 섹션 */
-.intro-search-filter {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 30px;
-	padding: 15px;
-	background-color: #fff;
-	border-radius: 10px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* 검색 입력창 */
-.intro-search-input {
-	width: 66%; /* 검색 입력창 넓이를 조정 */
-	padding: 16px 16px;
-	font-size: 16px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	outline: none;
-	transition: border-color 0.3s ease;
-}
-
-.intro-search-input:focus {
-	border-color: #848EFB;
-	box-shadow: 0 0 0 2px rgba(132, 142, 251, 0.2);
-}
-
-/* 상태 셀렉트박스 */
-.intro-status-select {
-	width: 19%;
-	padding: 12px;
-	font-size: 16px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	background-color: #fff;
-	margin-left: 10px;
-}
-
-/* 검색 버튼 */
-.intro-search-btn {
-	padding: 12px 20px;
-	font-size: 16px;
-	background-color: #848EFB;
-	color: white;
+	padding: 12px 24px;
 	border: none;
-	border-radius: 5px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 500;
 	cursor: pointer;
-	transition: background-color 0.3s ease;
+	transition: all 0.2s ease;
 }
 
-.intro-search-btn:hover {
-	background-color: #5a3fdb;
+.button--primary {
+	background-color: #7881f5;
+	color: #fff;
+}
+
+.button--primary:hover {
+	background-color: #6366f1;
+}
+
+.button--large {
+	padding: 14px 28px;
+	font-size: 16px;
+}
+
+/* 반응형 디자인 */
+@media ( max-width : 768px) {
+	.intro-list__header {
+		flex-direction: column;
+		gap: 16px;
+		align-items: stretch;
+	}
+	.intro-list__create-button {
+		width: 100%;
+		justify-content: center;
+	}
+	.intro-card {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 16px;
+		padding: 20px;
+	}
+	.intro-card__meta {
+		gap: 12px;
+	}
+	.intro-card__actions {
+		justify-content: stretch;
+	}
+	.intro-card__edit-button {
+		width: 100%;
+		justify-content: center;
+	}
 }
