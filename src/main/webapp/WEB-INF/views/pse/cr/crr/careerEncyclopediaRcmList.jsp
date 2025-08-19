@@ -25,7 +25,7 @@
 
 		<div class="public-wrapper-main">
 			<div class="search-filter">
-				<form method="GET" action="/pse/cr/crr/selectCareerRcmList.do">
+				<form method="GET" action="/pse/cr/crr/selectCareerRcmList.do" class="search-filter__form">
 					<div class="search-filter__bar">
 						<div class="search-filter__select-wrapper">
 							<select name="status" class="search-filter__select">

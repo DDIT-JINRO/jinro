@@ -27,7 +27,7 @@
 		</div>
 	
 		<div class="public-wrapper-main">
-			<form method="get" action="/empt/ema/employmentAdvertisement.do">
+			<form method="get" action="/empt/ema/employmentAdvertisement.do" class="search-filter__form">
 				<div class="search-filter__bar">
 					<div class="search-filter__input-wrapper">
 						<input type="search" name="keyword" class="search-filter__input" placeholder="제목 or 기업명 검색">

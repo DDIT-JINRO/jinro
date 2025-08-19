@@ -25,7 +25,7 @@
 		</div>
 
 		<div class="public-wrapper-main">
-			<form method="get" action="/ertds/qlfexm/selectQlfexmList.do">
+			<form method="get" action="/ertds/qlfexm/selectQlfexmList.do" class="search-filter__form">
 				<div class="search-filter__bar">
 					<div class="search-filter__input-wrapper">
 						<input class="search-filter__input" type="search" name="keyword" placeholder="검정고시 내에서 검색" value="${param.keyword}">

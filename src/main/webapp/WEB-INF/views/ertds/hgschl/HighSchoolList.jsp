@@ -23,7 +23,7 @@
 			<h3 class="page-title-bar__title">고등학교 정보</h3>
 		</div>
 		<div class="public-wrapper-main">
-			<form method="get" action="/ertds/hgschl/selectHgschList.do">
+			<form method="get" action="/ertds/hgschl/selectHgschList.do" class="search-filter__form">
 				<div class="search-filter__bar">
 					<div class="search-filter__input-wrapper">
 						<input class="search-filter__input" type="search" name="keyword" placeholder="고등학교명으로 검색" value="${checkedFilters.keyword}">

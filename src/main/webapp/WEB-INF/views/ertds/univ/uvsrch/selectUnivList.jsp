@@ -30,7 +30,7 @@
 			<a class="tab" href="/ertds/univ/uvivfb/selectInterviewList.do">면접 후기</a>
 		</div>
 		<div class="public-wrapper-main">
-			<form method="get" action="/ertds/univ/uvsrch/selectUnivList.do">
+			<form method="get" action="/ertds/univ/uvsrch/selectUnivList.do" class="search-filter__form">
 				<div class="search-filter__bar">
 					<div class="search-filter__input-wrapper">
 						<input class="search-filter__input" type="search" name="keyword" placeholder="대학명으로 검색" value="${param.keyword}">

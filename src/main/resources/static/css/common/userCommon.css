@@ -599,6 +599,10 @@ html, body {
 /* ==========================================================================
    검색 필터
    ========================================================================== */
+.search-filter__form {
+	margin-bottom: 40px;
+}
+
 .search-filter__bar {
 	display: flex;
 	border: 1px solid #e5e7eb;
@@ -607,7 +611,6 @@ html, body {
 	margin-bottom: 12px;
 	background-color: #fff;
 }
-
 	
 .search-filter__input-wrapper {
 	display: flex;
@@ -676,7 +679,6 @@ html, body {
 	border: 1px solid #e5e7eb;
 	border-radius: 10px;
 	background-color: #fff;
-	margin-bottom: 40px;
 	overflow: hidden;
 }
 

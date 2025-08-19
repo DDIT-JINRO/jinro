@@ -27,7 +27,7 @@
 		</div>
 
 		<div class="public-wrapper-main">
-			<form method="get" action="${articlePage.url}">
+			<form method="get" action="${articlePage.url}" class="search-filter__form">
 				<div class="search-filter__bar">
 					<div class="search-filter__select-wrapper">
 						<select name="status" class="search-filter__select">
