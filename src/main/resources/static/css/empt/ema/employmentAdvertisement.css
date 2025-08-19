@@ -1,14 +1,4 @@
 /* 헤더 스타일 재정의 */
-.accordion-list__header {
-    display: flex;
-    padding: 12px 24px;
-    background-color: #f3f4f6;
-    font-weight: 600;
-    color: #4b5563;
-    border-radius: 8px;
-    gap: 15px;
-}
-
 .accordion-list__col--meta {
 	flex: 2;
     display: flex;
@@ -19,7 +9,6 @@
 /* 개별 아이템 헤더 레이아웃 */
 .accordion-list__item-header {
 	padding: 20px 24px;
-    gap: 15px;
 }
 
 .accordion-list__content-body {
@@ -87,8 +76,6 @@
 .hire-url-section,
 .hire-date-section {
 	padding: 16px;
-	border-radius: 8px;
-	border: 1px solid #e9ecef;
 }
 
 .hire-description-section h4,
@@ -99,7 +86,7 @@
 	color: #333;
 	margin: 0 0 12px 0;
 	padding: 8px 0 8px 12px;
-	border-left: 4px solid #7881f5;
+	border-left: 4px solid #6c75ff;
 }
 
 .hire-description-section p {
@@ -117,7 +104,7 @@
 	align-items: center;
 	gap: 6px;
 	padding: 10px 20px;
-	background-color: #7881f5;
+	background-color: #6c75ff;
 	color: #fff;
 	border-radius: 6px;
 	font-size: 14px;

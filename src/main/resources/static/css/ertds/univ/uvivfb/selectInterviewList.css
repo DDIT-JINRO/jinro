@@ -33,18 +33,8 @@
 	margin-bottom: 20px;
 }
    
-.accordion-list__header, .accordion-list__item-header {
+.accordion-list__item-header {
 	padding: 20px 24px;
-	gap: 15px;
-}
-
-.accordion-list__header {
-	display: flex;
-	padding: 12px 24px;
-	background-color: #f3f4f6;
-	font-weight: 600;
-	color: #4b5563;
-	border-radius: 8px;
 }
 
 /* --- 컬럼 너비 및 정렬 --- */
