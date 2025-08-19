@@ -30,7 +30,7 @@
 .accordion-list__header .accordion-list__col--course {
 	flex: 2.4 1 0;
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 	font-weight: 600;
 	text-align: center;
@@ -107,7 +107,6 @@
 	overflow-wrap: break-word;
 	line-height: 1.4;
 	white-space: normal;
-	padding: 8px 4px;
 	min-width: 0;
 }
 
