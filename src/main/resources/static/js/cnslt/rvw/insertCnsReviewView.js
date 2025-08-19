@@ -431,23 +431,3 @@ function autoCompleteHandler() {
 
 	}, 500); // 500ms 지연
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -188,9 +188,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		deleteButton.addEventListener("click", function() {
 			const resumeId = document.querySelector("#resumeId").value;
 
-			console.log("asd");
-			console.log(resumeId);
-
 			if (!resumeId || resumeId === "0") {
 				alert("삭제할 이력서가 없습니다.");
 				return;
@@ -790,23 +787,3 @@ function autoCompleteHandler() {
 		if (skills[1]) skills[1].value = 'Java, Python';
 	}, 500);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
