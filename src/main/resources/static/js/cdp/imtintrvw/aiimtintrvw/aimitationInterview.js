@@ -161,7 +161,7 @@ function populateQuestionSelect(data, type) {
 function updateQuestionListByType(type) {    
     selectedInterviewType = type;
     const select = document.getElementById('questionSelect');
-    const sectionTitle = document.querySelector('.question-list-section .section-title');
+    const sectionTitle = document.querySelector('.section-title');
     
     // 현재 선택값 초기화
     select.value = '';
