@@ -1,49 +1,306 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="css/admin/umg/memberManagement.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="/js/include/admin/umg/memberManagement.js"></script>
 <h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">회원 관리</h2>
 <div class="member-1 flex gap">
 	<div class="template-panel public-countCard">
-		<div class="public-card-title">실시간 이용자</div>
+		<div class="public-card-title">일일 사용자 현황</div>
 		<img class="public-card-icon" alt="" src="/images/admin/admin-image1.png">
 		<div class="public-card-count">123</div>
 		<div class="public-span-space">
 			<span class="public-span-increase">&#9650;&nbsp;5.27%</span>
-			<div class=public-span-since>Since last week</div>
+			<div class=public-span-since>Since last day</div>
 		</div>
 	</div>
 	<div class="template-panel public-countCard">
-		<div class="public-card-title">실시간 이용자</div>
+		<div class="public-card-title">신규 가입자 수</div>
 		<img class="public-card-icon" alt="" src="/images/admin/admin-image1.png">
 		<div class="public-card-count">123</div>
 		<div class="public-span-space">
 			<span class="public-span-decrease">&#9660;&nbsp;5.27%</span>
-			<div class=public-span-since>Since last week</div>
+			<div class=public-span-since>Since last day</div>
 		</div>
 	</div>
 	<div class="template-panel public-countCard back-color-green">
-		<div class="public-card-title color-white">실시간 이용자</div>
-		<img class="public-card-icon" alt="" src="/images/admin/admin-image1.png">
-		<div class="public-card-count color-white" >123</div>
-		<div class="public-span-space">
-			<span class="public-span-increase color-white">&#9650;&nbsp;5.27%</span>
-			<div class="public-span-since color-white">Since last week</div>
-		</div>
-	</div>
-	<div class="template-panel public-countCard back-color-purple">
-		<div class="public-card-title color-white">실시간 이용자</div>
+		<div class="public-card-title color-white">일일 평균 홈페이지 이용시간</div>
 		<img class="public-card-icon" alt="" src="/images/admin/admin-image1.png">
 		<div class="public-card-count color-white">123</div>
 		<div class="public-span-space">
 			<span class="public-span-increase color-white">&#9650;&nbsp;5.27%</span>
-			<div class="public-span-since color-white">Since last week</div>
+			<div class="public-span-since color-white">Since last day</div>
+		</div>
+	</div>
+	<div class="template-panel public-countCard back-color-purple">
+		<div class="public-card-title color-white">월간 사용자 이탈수</div>
+		<img class="public-card-icon" alt="" src="/images/admin/admin-image1.png">
+		<div class="public-card-count color-white">123</div>
+		<div class="public-span-space">
+			<span class="public-span-increase color-white">&#9650;&nbsp;5.27%</span>
+			<div class="public-span-since color-white">Since last month</div>
 		</div>
 	</div>
 </div>
 
-<div class="member-1 flex gap">
-	<div class="template-panel" style="flex:1;"></div>
-	<div class="template-panel" style="flex:1;"></div>
+<div class="member-1 flex gap" style="height: 970px;">
+	<div class="template-panel" style="flex: 1;">
+		<div class="middleTitle">사용자 조회</div>
+		<div class="public-listSearch">
+			<select name="status" id="activityFilter">
+				<option value="1">전체</option>
+				<option value="2">이름</option>
+				<option value="3">이메일</option>
+			</select>
+			<input id="search" name="keyword" placeholder="검색어를 입력하세요" />
+			<button class="btn-save searchUserBtn">조회</button>
+		</div>
+		<div style="display: flex; justify-content: space-between;">
+			<div class="btn-group flex gap5 userListBtnGroup">
+				<button class="public-toggle-button active" id="userListId">ID</button>
+				<button class="public-toggle-button" id="userListName">이름</button>
+				<button class="public-toggle-button" id="userListEmail">이메일</button>
+			</div>
+			<select class="public-toggle-select" id="userListStatus">
+				<option value="">전체</option>
+				<option value="online">활동중</option>
+				<option value="offline">비활동</option>
+				<option value="suspended">정지상태</option>
+				<option value="neverLogin">신규 가입자</option>
+			</select>
+		</div>
+		<div class="userListSpace">
+			<div class="search-filter-bar">
+				<p class="ptag-list">
+					총
+					<span id="userList-count"></span>
+					건
+				</p>
+			</div>
+			<table id="userListTable">
+				<thead>
+					<tr>
+						<th class="body-id">ID</th>
+						<th class="body-memName">회원명</th>
+						<th class="body-email">이메일</th>
+						<th class="body-status">활동 상태</th>
+					</tr>
+				</thead>
+				<tbody class="userList" id="userList">
+				</tbody>
+			</table>
+		</div>
+		<div class="card-footer clearfix">
+			<div class="panel-footer pagination"></div>
+		</div>
+
+	</div>
+	<div style="width: 792.5px;">
+		<div class="template-panel" style="margin-bottom: 20px; height: 505px;">
+			<div class="middleTitle">사용자 상세</div>
+			<div class="profileInfo-1">
+				<div class="profileInfo-1-1">
+					<div class="profile-container">
+						<div class="profileFlex">
+							<div class="profile-image-wrapper">
+								<img id="member-profile-img" class="profile-image" src="/images/defaultProfileImg.png" alt="프로필 이미지">
+							</div>
+						</div>
+						<div class="profile-info">
+							<label for="mem-nickname">
+								<i class="fa-solid fa-pencil"></i>
+							</label>
+							<input type="text" id="mem-id" style="display: none">
+							<input id="mem-nickname" class="profile-nickname">
+							<div id="profile-status" class="profile-status">
+								<div id="profile-badge" class="profileBadge-none">일반</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="profileInfo-1-2">
+					<div class="info-field">
+						<label for="mem-name">이름</label>
+						<input id="mem-name" type="text" value="">
+					</div>
+					<div class="info-field">
+						<label for="mem-phone">휴대전화</label>
+						<input id="mem-phone" type="text" value="" disabled>
+					</div>
+					<div class="info-field">
+						<label>생년월일</label>
+						<input type="date" value="" id="mem-birth" disabled>
+					</div>
+					<div class="info-field">
+						<label>로그인 타입</label>
+						<input id="mem-logType" type="text" value="" disabled>
+					</div>
+				</div>
+				<div class="profileInfo-1-3">
+					<div class="info-field">
+						<label>이메일</label>
+						<input id="mem-email" type="email" value="" disabled>
+					</div>
+					<div class="info-field">
+						<label>성별</label>
+						<input id="mem-gen" type="text" value="" disabled>
+					</div>
+					<div class="info-field">
+						<label>경고수</label>
+						<input id="mem-warn-count" type="text" value="" disabled>
+					</div>
+					<div class="info-field">
+						<label>정지수</label>
+						<input id="mem-ban-count" type="text" value="" disabled>
+					</div>
+				</div>
+				<div class="profileInfo-1-4">
+					<div class="info-field">
+						<label>최근 로그인 기록</label>
+						<input id="mem-email" type="email" value="" disabled>
+					</div>
+					<div class="info-field">
+						<label>최근 제재 기록</label>
+						<input id="mem-gen" type="text" value="" disabled>
+					</div>
+				</div>
+			</div>
+			<div style="margin-top: auto; margin-left: 40px;">
+				<div class="info-second-space flex">
+					<div class="info-history flex">
+						<span>관심 키워드 :</span>
+						<div id="mem-interests">-</div>
+					</div>
+				</div>
+				<div class="info-second-space2 flex">
+					<div class="info-history2">
+						<span>AI 피드백 :</span>
+						<div>-</div>
+					</div>
+					<div class="info-history2">
+						<span>상담횟수 :</span>
+						<div>-</div>
+					</div>
+					<div class="info-history2">
+						<span>월드컵 :</span>
+						<div>-</div>
+					</div>
+					<div class="info-history2">
+						<span>로드맵 :</span>
+						<div>-</div>
+					</div>
+				</div>
+				<div class="info-second-space2 flex">
+					<div class="info-history2">
+						<span>심리검사 :</span>
+						<div>-</div>
+					</div>
+					<div class="info-history2">
+						<span>모의면접 :</span>
+						<div>-</div>
+					</div>
+					<div class="info-history2">
+						<span>최근 로그인 기록 :</span>
+						<div>
+							<i class="fa-regular fa-clock"></i>&nbsp;2025. 08. 27
+						</div>
+					</div>
+					<div class="info-history2">
+						<span>최근 제재 기록 :</span>
+						<div>-</div>
+					</div>
+				</div>
+			</div>
+			<div class="userdetail-button-group">
+				<button class="btn-primary" id="userModify">
+					<i class="fas fa-save"></i>저장
+				</button>
+			</div>
+
+
+
+		</div>
+		<div class="template-panel" style="height: 445px;">
+			<div class="middleTitle">
+				<select class="user-detail-listSelect">
+					<option>회원 게시글 내역</option>
+					<option>회원 댓글 내역</option>
+					<option>회원 결제 내역</option>
+				</select>
+			</div>
+
+
+			<div class="tableSpace-memDetailBoardList">
+				<div class="btn-group flex gap5 userDetailBtnGroup">
+					<button class="public-toggle-button active" id="memDetailBoardList-orderBtn-id">ID</button>
+					<button class="public-toggle-button" id="memDetailBoardList-orderBtn-category">삭제여부</button>
+					<button class="public-toggle-button" id="memDetailBoardList-orderBtn-category">작성일자</button>
+				</div>
+				<table class="userDetailTable" id="userDetailTable-memDetailBoardList">
+					<thead>
+						<tr>
+							<th class="body-id">게시글ID</th>
+							<th class="body-memName">분류</th>
+							<th class="body-email">조회수</th>
+							<th class="body-status">작성일</th>
+							<th class="body-status">삭제여부</th>
+						</tr>
+					</thead>
+					<tbody class="userDetailList" id="userDetailBoardList">
+					</tbody>
+				</table>
+				<div class="card-footer clearfix">
+					<div class="panel-footer pagination memDetailBoardListPagenation"></div>
+				</div>
+			</div>
+			
+			
+			
+			<div class="tableSpace-memDetailReplyList">
+				<div class="btn-group flex gap5 userDetailBtnGroup">
+					<button class="public-toggle-button active" id="memDetailReplyList-orderBtn-id">ID</button>
+					<button class="public-toggle-button" id="memDetailReplyList-orderBtn-category">삭제여부</button>
+					<button class="public-toggle-button" id="memDetailReplyList-orderBtn-category">작성일자</button>
+				</div>
+				<table class="userDetailTable" id="userDetailTable-memDetailReplyList">
+					<thead>
+						
+					</thead>
+					<tbody class="userDetailList" id="userDetailReplyList">
+					</tbody>
+				</table>
+				<div class="card-footer clearfix">
+					<div class="panel-footer pagination memDetailReplyListPagenation"></div>
+				</div>
+			</div>
+			
+			<div class="tableSpace-memDetailPaymentList">
+				<div class="btn-group flex gap5 userDetailBtnGroup">
+					<button class="public-toggle-button active" id="memDetailPaymentList-orderBtn-id">ID</button>
+					<button class="public-toggle-button" id="memDetailPaymentList-orderBtn-category">삭제여부</button>
+					<button class="public-toggle-button" id="memDetailPaymentist-orderBtn-category">작성일자</button>
+				</div>
+				<table class="userDetailTable" id="userDetailTable-memDetailPaymentList">
+					<thead>
+						<tr>
+							<th class="body-id">게시글ID</th>
+							<th class="body-memName">분류</th>
+							<th class="body-email">조회수</th>
+							<th class="body-status">작성일</th>
+							<th class="body-status">삭제여부</th>
+						</tr>
+					</thead>
+					<tbody class="userDetailList" id="userDetailPaymentList">
+					</tbody>
+				</table>
+				<div class="card-footer clearfix">
+					<div class="panel-footer pagination memDetailPaymentListPagenation"></div>
+				</div>
+			</div>
+
+
+
+		</div>
+	</div>
 </div>
 
 
@@ -93,9 +350,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="card-footer clearfix">
-					<div class="panel-footer pagination"></div>
-				</div>
+
 			</div>
 		</div>
 	</div>
@@ -115,10 +370,7 @@
 							<label>이름</label>
 							<input type="text" id="mem-name">
 						</div>
-						<div class="info-field">
-							<label>닉네임</label>
-							<input type="text" id="mem-nickname">
-						</div>
+
 						<div class="info-field">
 							<label>이메일</label>
 							<input type="text" id="mem-email" disabled="disabled">

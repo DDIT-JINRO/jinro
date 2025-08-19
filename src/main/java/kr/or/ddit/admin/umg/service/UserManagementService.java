@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.com.report.service.ReportVO;
+import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 
@@ -33,6 +34,8 @@ public interface UserManagementService {
 	
 	Map<String, Object> getDailyUserStats();
 	
-	ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus, String sortBy, String sortOrder);
+	ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus, String sortBy, String sortOrder, String inFilter);
+
+	ArticlePage<CommBoardVO> getMemberDetailBoardList(int currentPage, int size, String ccId, String sortBy, String sortOrder, int userId);
 
 }

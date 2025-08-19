@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
 import kr.or.ddit.com.report.service.ReportVO;
+import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.main.service.MemberVO;
 
 @Mapper
@@ -70,4 +71,8 @@ public interface UserManagementMapper {
 	int getYesterdayActiveUsers();
 	
 	Double getYesterdayAverageUsageTime();
+
+	List<CommBoardVO> getMemberDetailBoardList(Map<String, Object> map);
+	
+	int selectBoardCountByMemId(Map<String, Object> map);
 }

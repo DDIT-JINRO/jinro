@@ -17,6 +17,7 @@ import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
 import kr.or.ddit.com.report.service.ReportVO;
+import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileDetailVO;
@@ -28,9 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 public class UserManagementServiceImpl implements UserManagementService {
 
 	@Autowired
-	FileService fileService;
+	private FileService fileService;
 	@Autowired
-	UserManagementMapper userManagementMapper;
+	private UserManagementMapper userManagementMapper;
+
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	public UserManagementServiceImpl(BCryptPasswordEncoder passwordEncoder) {
@@ -103,7 +105,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	public int insertUserByAdmin(MemberVO member, MultipartFile profileImage) {
 
 		Long fileGroupId = null;
-		
+
 		if (profileImage != null) {
 			List<MultipartFile> profileImages = new ArrayList<MultipartFile>();
 			profileImages.add(profileImage);
@@ -270,91 +272,116 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Override
 	public Map<String, Object> getDailyUserStats() {
-	    Map<String, Object> stats = new HashMap<>();
-	    
-	    // 1. 일일 사용자 현황
-	    int todayActiveUsers = userManagementMapper.getDailyActiveUsers();
-	    int yesterdayActiveUsers = userManagementMapper.getYesterdayActiveUsers();
-	    
-	    // 전날 대비 일일 사용자 증감률 계산
-	    Map<String, Object> userGrowth = calculateGrowthRate(todayActiveUsers, yesterdayActiveUsers);
-	    
-	    // 2. 일일 평균 홈페이지 이용 현황
-	    Double todayAvgUsageTime = userManagementMapper.getDailyAverageUsageTime();
-	    Double yesterdayAvgUsageTime = userManagementMapper.getYesterdayAverageUsageTime();
-	    
-	    if (todayAvgUsageTime == null) todayAvgUsageTime = 0.0;
-	    if (yesterdayAvgUsageTime == null) yesterdayAvgUsageTime = 0.0;
-	    
-	    // 전날 대비 평균 이용시간 증감률 계산
-	    Map<String, Object> usageTimeGrowth = calculateGrowthRate(
-	        todayAvgUsageTime.intValue(), 
-	        yesterdayAvgUsageTime.intValue()
-	    );
-	    
-	    // 3. 현재 온라인 사용자 수
-	    int currentOnlineUsers = userManagementMapper.getCurrentOnlineUsers();
-	    
-	    stats.put("dailyActiveUsers", todayActiveUsers);
-	    stats.put("dailyActiveUsersRate", userGrowth.get("percentage"));
-	    stats.put("dailyActiveUsersStatus", userGrowth.get("status"));
-	    
-	    stats.put("avgUsageTimeMinutes", Math.round(todayAvgUsageTime));
-	    stats.put("avgUsageTimeRate", usageTimeGrowth.get("percentage"));
-	    stats.put("avgUsageTimeStatus", usageTimeGrowth.get("status"));
-	    
-	    stats.put("currentOnlineUsers", currentOnlineUsers);
-	    
-	    return stats;
+		Map<String, Object> stats = new HashMap<>();
+
+		// 1. 일일 사용자 현황
+		int todayActiveUsers = userManagementMapper.getDailyActiveUsers();
+		int yesterdayActiveUsers = userManagementMapper.getYesterdayActiveUsers();
+
+		// 전날 대비 일일 사용자 증감률 계산
+		Map<String, Object> userGrowth = calculateGrowthRate(todayActiveUsers, yesterdayActiveUsers);
+
+		// 2. 일일 평균 홈페이지 이용 현황
+		Double todayAvgUsageTime = userManagementMapper.getDailyAverageUsageTime();
+		Double yesterdayAvgUsageTime = userManagementMapper.getYesterdayAverageUsageTime();
+
+		if (todayAvgUsageTime == null)
+			todayAvgUsageTime = 0.0;
+		if (yesterdayAvgUsageTime == null)
+			yesterdayAvgUsageTime = 0.0;
+
+		// 전날 대비 평균 이용시간 증감률 계산
+		Map<String, Object> usageTimeGrowth = calculateGrowthRate(todayAvgUsageTime.intValue(),
+				yesterdayAvgUsageTime.intValue());
+
+		// 3. 현재 온라인 사용자 수
+		int currentOnlineUsers = userManagementMapper.getCurrentOnlineUsers();
+
+		stats.put("dailyActiveUsers", todayActiveUsers);
+		stats.put("dailyActiveUsersRate", userGrowth.get("percentage"));
+		stats.put("dailyActiveUsersStatus", userGrowth.get("status"));
+
+		stats.put("avgUsageTimeMinutes", Math.round(todayAvgUsageTime));
+		stats.put("avgUsageTimeRate", usageTimeGrowth.get("percentage"));
+		stats.put("avgUsageTimeStatus", usageTimeGrowth.get("status"));
+
+		stats.put("currentOnlineUsers", currentOnlineUsers);
+
+		return stats;
 	}
-	
+
 	private Map<String, Object> calculateGrowthRate(int currentCount, int previousCount) {
-	    double percentageChange = 0.0;
-	    String status = "equal";
+		double percentageChange = 0.0;
+		String status = "equal";
 
-	    if (previousCount > 0) {
-	        percentageChange = ((double) (currentCount - previousCount) / previousCount) * 100;
+		if (previousCount > 0) {
+			percentageChange = ((double) (currentCount - previousCount) / previousCount) * 100;
 
-	        if (percentageChange > 0) {
-	            status = "increase";
-	        } else if (percentageChange < 0) {
-	            status = "decrease";
-	        }
-	    } else if (currentCount > 0) {
-	        status = "new_entry";
-	        percentageChange = 100.0;
-	    }
+			if (percentageChange > 0) {
+				status = "increase";
+			} else if (percentageChange < 0) {
+				status = "decrease";
+			}
+		} else if (currentCount > 0) {
+			status = "new_entry";
+			percentageChange = 100.0;
+		}
 
-	    DecimalFormat df = new DecimalFormat("#.##");
-	    String formattedPercentage = df.format(Math.abs(percentageChange));
+		DecimalFormat df = new DecimalFormat("#.##");
+		String formattedPercentage = df.format(Math.abs(percentageChange));
 
-	    Map<String, Object> result = new HashMap<>();
-	    result.put("percentage", formattedPercentage);
-	    result.put("status", status);
+		Map<String, Object> result = new HashMap<>();
+		result.put("percentage", formattedPercentage);
+		result.put("status", status);
 
-	    return result;
+		return result;
 	}
 
 	@Override
-	public ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus, String sortBy, String sortOrder) {
-	    int startNo = (currentPage - 1) * size + 1;
-	    int endNo = currentPage * size;
+	public ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus,
+			String sortBy, String sortOrder, String inFilter) {
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
 
-	    Map<String, Object> map = new HashMap<>();
-	    map.put("keyword", keyword);
-	    map.put("activityStatus", activityStatus);
-	    map.put("currentPage", currentPage);
-	    map.put("startNo", startNo);
-	    map.put("endNo", endNo);
-	    map.put("sortBy", sortBy);
-	    map.put("sortOrder", sortOrder);
+		Map<String, Object> map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("activityStatus", activityStatus);
+		map.put("currentPage", currentPage);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		map.put("inFilter", inFilter);
 
-	    List<MemberVO> list = userManagementMapper.getMemberActivityList(map);
-	    int total = userManagementMapper.getAllMemberActivityList(map);
-	    
-	    ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword);
+		List<MemberVO> list = userManagementMapper.getMemberActivityList(map);
+		int total = userManagementMapper.getAllMemberActivityList(map);
 
-	    return articlePage;
+		ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword);
+
+		return articlePage;
+	}
+
+	@Override
+	public ArticlePage<CommBoardVO> getMemberDetailBoardList(int currentPage, int size, String ccId,
+			String sortBy, String sortOrder, int userId) {
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("memId", userId);
+		map.put("ccId", ccId);
+		map.put("currentPage", currentPage);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		
+		List<CommBoardVO> list = userManagementMapper.getMemberDetailBoardList(map);
+		int total = userManagementMapper.selectBoardCountByMemId(map);
+		
+		ArticlePage<CommBoardVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
+		
+		return articlePage;
 	}
 
 }

@@ -151,6 +151,6 @@
 		LEFT JOIN filtered f
 		  ON f.pl_url = c.pl_url
 		GROUP BY c.title
-		ORDER BY c.title
+		ORDER BY "cnt"
 	</select>
 </mapper>

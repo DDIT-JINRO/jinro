@@ -34,6 +34,8 @@ public class MemberVO {
 	private Long fileSub;
 	private Long fileBadge;
 	
+	private String activityStatus;
+	
 	private int memAge;
 	
 	private List<ComCodeVO> interests;
