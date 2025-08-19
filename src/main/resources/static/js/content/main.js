@@ -325,11 +325,11 @@ const fn_TopsWidget = () =>{
 
 const fn_ContestBanner = async () =>{
 	const datas = await fetchJSON('/contest-banner')
-	const slideContainer = document.querySelector('.main-slides');
+	const slideContainer = document.querySelector('.feature-slider__slides');
 	const banners = datas.map(d =>
 		`
 		<a href="${d.contestUrl}" data-title="${d.contestTitle}">
-			<img src="${d.filePath}" alt="${d.contestTitle.slice(1,6)}.." title="${d.contestTitle}">
+			<img src="${d.filePath}" alt="${d.contestTitle.slice(1,6)}.." title="${d.contestTitle}" class="feature-slider__image">
 		</a>
 		`
 	).join('');
