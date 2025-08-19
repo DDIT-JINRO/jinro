@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.prg.ctt.service.impl.ContestMapper">
 
-	<!-- 
+	<!--
 	// 검색 조건에 맞는 공모전 총 개수 조회 (페이징 처리를 위함)
     int selectCttCount(ContestVO contestVO);
 	 -->
@@ -46,7 +46,7 @@
         </where>
     </select>
 
-	<!-- 
+	<!--
 	// 검색 조건 및 페이징에 맞는 공모전 목록 조회
     List<ContestVO> selectCttList(ContestVO contestVO);
 	 -->
@@ -55,7 +55,7 @@
         FROM (
             SELECT
                  ROW_NUMBER() OVER(
-	                 ORDER BY 
+	                 ORDER BY
 	                     CASE WHEN T1.CONTEST_END_DATE >= TRUNC(SYSDATE) THEN 1 ELSE 2 END, -- 1. 진행중인 공모전 먼저
 						 <choose>
 						 	<when test="sortOrder == 'latest'">
@@ -89,13 +89,13 @@
              	,T1.AWARD_TYPE           AS awardType
             FROM CONTEST T1
             LEFT JOIN COM_CODE GUBUN
-                ON T1.CONTEST_GUBUN = GUBUN.CC_ID 
+                ON T1.CONTEST_GUBUN = GUBUN.CC_ID
                 AND GUBUN.CL_CODE = 'G32'
             LEFT JOIN COM_CODE TYPE
-                ON T1.CONTEST_TYPE = TYPE.CC_ID 
+                ON T1.CONTEST_TYPE = TYPE.CC_ID
                 AND TYPE.CL_CODE = 'G35'
             LEFT JOIN COM_CODE TARGET
-                ON T1.CONTEST_TARGET = TARGET.CC_ID 
+                ON T1.CONTEST_TARGET = TARGET.CC_ID
                 AND TARGET.CL_CODE = 'G34'
             <where>
             	T1.CONTEST_DEL_YN = 'N'
@@ -136,12 +136,12 @@
         WHERE RNUM BETWEEN #{startRow} AND #{endRow}
     </select>
 
-	<!-- 
+	<!--
 	// 공모전 상세 정보를 조회하는 메서드
     ContestVO selectCttDetail(String cttId);
 	 -->
     <select id="selectCttDetail" resultType="kr.or.ddit.prg.ctt.service.ContestVO">
-        SELECT 
+        SELECT
              T1.CONTEST_ID           AS contestId
             ,T1.CONTEST_TITLE        AS contestTitle
             ,T1.CONTEST_GUBUN        AS contestGubunCode
@@ -171,33 +171,33 @@
             ON T1.CONTEST_TARGET = TARGET.CC_ID AND TARGET.CL_CODE = 'G34'
         WHERE CONTEST_ID = #{cttId}  AND T1.CONTEST_DEL_YN = 'N'
     </select>
-	<!-- 
+	<!--
 	공모전분류 목록 조회
     public List<ComCodeVO> selectContestTypeList()
 	 -->
 	<select id="selectContestTypeList" resultType="kr.or.ddit.com.ComCodeVO">
         SELECT
         	 CC_ID
-        	,CC_NAME 
-        FROM COM_CODE 
-        WHERE CL_CODE = 'G35' 
+        	,CC_NAME
+        FROM COM_CODE
+        WHERE CL_CODE = 'G35'
         ORDER BY CC_NAME
     </select>
-    
-    <!-- 
+
+    <!--
     모집 대상 목록 조회
     public List<ComCodeVO> selectContestTargetList()
      -->
     <select id="selectContestTargetList" resultType="kr.or.ddit.com.ComCodeVO">
-        SELECT 
+        SELECT
         	 CC_ID
-        	,CC_NAME 
-        FROM COM_CODE 
-        WHERE CL_CODE = 'G34' 
+        	,CC_NAME
+        FROM COM_CODE
+        WHERE CL_CODE = 'G34'
         ORDER BY CC_NAME
     </select>
-    
-    <!-- 
+
+    <!--
     //공모전 조회수 증가 메소드
     public int updateCttViewCount(String cttId);
      -->
@@ -206,9 +206,9 @@
 	    SET CONTEST_RECRUIT_COUNT = CONTEST_RECRUIT_COUNT + 1
 	    WHERE CONTEST_ID = #{cttId}
 	</update>
-	
-	<!-- 
-	 // MERGE 
+
+	<!--
+	 // MERGE
     public int updateContest(ContestVO contestVO);
 	 -->
 	<update id="updateContest" parameterType="kr.or.ddit.prg.ctt.service.ContestVO">
@@ -271,8 +271,8 @@
 	            , #{fileGroupId}
 	        )
 	</update>
-	
-	<!-- 
+
+	<!--
 	 //delete
     public int deleteContest(String contestId);
      -->
@@ -280,5 +280,92 @@
         UPDATE CONTEST
         SET CONTEST_DEL_YN = 'Y'
         WHERE CONTEST_ID = #{contestId}
-    </update> 
+    </update>
+
+    <select id="selectContestBanner" resultType="map" parameterType="map">
+    	SELECT * FROM (
+			SELECT C.CONTEST_TITLE AS "contestTitle"
+			     , C.CONTEST_GUBUN AS "contestGubun"
+			     , C.CONTEST_ID AS "contestId"
+			     , C.CONTEST_TARGET AS "contestType"
+			     , '/prg/ctt/cttDetail.do?cttId='||C.CONTEST_ID AS "contestUrl"
+			     , '/files/download?fileGroupId='||FD.FILE_GROUP_ID||'&amp;seq='||FD.FILE_SEQ AS "filePath"
+			  FROM CONTEST C
+			  JOIN FILE_GROUP FG ON FG.FILE_GROUP_ID = C.FILE_GROUP_ID
+			  JOIN FILE_DETAIL FD ON FD.FILE_GROUP_ID = FG.FILE_GROUP_ID
+			 WHERE C.CONTEST_GUBUN = 'G32001'
+			 <if test="age!=null and age=='teen'">
+			 C.CONTEST_TARGET IN ('G34001','G34003')
+			 </if>
+			 <if test="age!=null and age=='youth'">
+			 C.CONTEST_TARGET IN ('G34002','G34003')
+			 </if>
+			 ORDER BY C.CONTEST_CREATED_AT DESC, C.CONTEST_END_DATE ASC
+			 FETCH FIRST 3 ROWS ONLY
+		)
+		UNION ALL
+		SELECT * FROM (
+			SELECT C.CONTEST_TITLE
+			     , C.CONTEST_GUBUN
+			     , C.CONTEST_ID
+			     , C.CONTEST_TARGET
+			     , '/prg/act/sup/supDetail.do?supId='||C.CONTEST_ID
+			     , '/files/download?fileGroupId='||FD.FILE_GROUP_ID||'&amp;seq='||FD.FILE_SEQ
+			  FROM CONTEST C
+			  JOIN FILE_GROUP FG ON FG.FILE_GROUP_ID = C.FILE_GROUP_ID
+			  JOIN FILE_DETAIL FD ON FD.FILE_GROUP_ID = FG.FILE_GROUP_ID
+			 WHERE C.CONTEST_GUBUN = 'G32002'
+ 			 <if test="age!=null and age=='teen'">
+			 C.CONTEST_TARGET IN ('G34001','G34003')
+			 </if>
+			 <if test="age!=null and age=='youth'">
+			 C.CONTEST_TARGET IN ('G34002','G34003')
+			 </if>
+			 ORDER BY C.CONTEST_CREATED_AT DESC, C.CONTEST_END_DATE ASC
+			 FETCH FIRST 3 ROWS ONLY
+		)
+		UNION ALL
+		SELECT * FROM (
+			SELECT C.CONTEST_TITLE
+			     , C.CONTEST_GUBUN
+			     , C.CONTEST_ID
+			     , C.CONTEST_TARGET
+			     , '/prg/act/vol/volDetail.do?volId='||C.CONTEST_ID
+			     , '/files/download?fileGroupId='||FD.FILE_GROUP_ID||'&amp;seq='||FD.FILE_SEQ
+			  FROM CONTEST C
+			  JOIN FILE_GROUP FG ON FG.FILE_GROUP_ID = C.FILE_GROUP_ID
+			  JOIN FILE_DETAIL FD ON FD.FILE_GROUP_ID = FG.FILE_GROUP_ID
+			 WHERE C.CONTEST_GUBUN = 'G32003'
+			 <if test="age!=null and age=='teen'">
+			 C.CONTEST_TARGET IN ('G34001','G34003')
+			 </if>
+			 <if test="age!=null and age=='youth'">
+			 C.CONTEST_TARGET IN ('G34002','G34003')
+			 </if>
+			 ORDER BY C.CONTEST_CREATED_AT DESC, C.CONTEST_END_DATE ASC
+			 FETCH FIRST 3 ROWS ONLY
+		)
+		UNION ALL
+		SELECT * FROM (
+			SELECT C.CONTEST_TITLE
+			     , C.CONTEST_GUBUN
+			     , C.CONTEST_ID
+			     , C.CONTEST_TARGET
+			     , '/prg/act/cr/crDetail.do?crId=121'||C.CONTEST_ID
+			     , '/files/download?fileGroupId='||FD.FILE_GROUP_ID||'&amp;seq='||FD.FILE_SEQ
+			  FROM CONTEST C
+			  JOIN FILE_GROUP FG ON FG.FILE_GROUP_ID = C.FILE_GROUP_ID
+			  JOIN FILE_DETAIL FD ON FD.FILE_GROUP_ID = FG.FILE_GROUP_ID
+			 WHERE C.CONTEST_GUBUN = 'G32004'
+			 <if test="age!=null and age=='teen'">
+			 C.CONTEST_TARGET IN ('G34001','G34003')
+			 </if>
+			 <if test="age!=null and age=='youth'">
+			 C.CONTEST_TARGET IN ('G34002','G34003')
+			 </if>
+			 ORDER BY C.CONTEST_CREATED_AT DESC, C.CONTEST_END_DATE ASC
+			 FETCH FIRST 3 ROWS ONLY
+		)
+    </select>
+
 </mapper>

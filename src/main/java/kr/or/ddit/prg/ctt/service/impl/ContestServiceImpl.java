@@ -1,13 +1,16 @@
 package kr.or.ddit.prg.ctt.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.com.ComCodeVO;
+import kr.or.ddit.comm.peer.teen.service.TeenCommService;
 import kr.or.ddit.prg.ctt.service.ContestService;
 import kr.or.ddit.prg.ctt.service.ContestVO;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +21,9 @@ public class ContestServiceImpl implements ContestService {
 
 	@Autowired
 	private ContestMapper contestMapper;
+
+	@Autowired
+	private TeenCommService teenCommService;
 
 	// 공모전 목록 조회
 	@Override
@@ -72,9 +78,9 @@ public class ContestServiceImpl implements ContestService {
 					sectionList.add("<strong style=\"font-size: 16px;\">" + sections[0] + "</strong>");
 					continue;
 				}
-				
-				
-				if(i!=0 && sections[i].contains(" - ")) {					
+
+
+				if(i!=0 && sections[i].contains(" - ")) {
 					String data = sections[i].replace(" - ", "<br>&nbsp;&nbsp; - ");
 					String[] parts = data.split("<br>"); // 배열 뽑고
 					String firstPart = parts[0].trim(); // 첫번째 가져오기
@@ -83,19 +89,19 @@ public class ContestServiceImpl implements ContestService {
 						sections[i]+= "<br>"+parts[j];
 					}
 				}
-				
+
 				if((i!=0 && sections[i].contains("*"))){
 					sections[i] = sections[i].replace("*", "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * ");
 				}
-				
+
 				if((i!=0 && sections[i].contains("※"))){
 					sections[i] = sections[i].replace("※", "<br>&nbsp;&nbsp;&nbsp;&nbsp; * ");
 				}
-				
-				sectionList.add(sections[i]);					
-				
+
+				sectionList.add(sections[i]);
+
 			}
-			
+
 			detail.setDescriptionSections(sectionList);
 		}
 
@@ -124,5 +130,22 @@ public class ContestServiceImpl implements ContestService {
 	@Override
 	public int deleteContest(String contestId) {
 		return contestMapper.deleteContest(contestId);
+	}
+
+	@Override
+	public List<Map<String, Object>> contestBanner(String memId) {
+		Map<String, Object> param = new HashMap<>();
+		if(memId== null || "anonymousUser".equals(memId)) {
+			return contestMapper.selectContestBanner(param);
+		}
+
+		boolean isTeen = teenCommService.isTeen(memId);
+		if(isTeen) {
+			param.put("age", "teen");
+		}else {
+			param.put("age", "youth");
+		}
+
+		return contestMapper.selectContestBanner(param);
 	}
 }
