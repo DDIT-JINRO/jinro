@@ -392,7 +392,7 @@ to {
 	width: fit-content;
 }
 
-.public-toggle-select > option {
+.public-toggle-select>option {
 	font-size: 12px;
 }
 
@@ -408,7 +408,7 @@ to {
 .public-listSearch {
 	display: flex;
 	justify-content: flex-end;
-	align-items : center;
+	align-items: center;
 	width: 100%;
 	border-radius: 2px;
 	overflow: hidden;
@@ -503,7 +503,9 @@ th, td {
 }
 
 .card-footer {
-    margin-top: auto; /* 이 속성이 페이지네이션 영역을 아래로 밀어냅니다. (위의 flex-direction: column과 함께 작동) */
+	display: flex;
+	margin-top: auto;
+	justify-content: center;
 }
 /****************************** 공용 색상 css ****************************/
 .color-white {
@@ -520,46 +522,45 @@ th, td {
 
 /* 공통 스타일 (크기와 모양) */
 .dot-status {
-    display: inline-block;
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-    margin-right: 5px;
+	display: inline-block;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	margin-right: 5px;
 }
 
 /* 각 상태별 색상 */
 .dot-status-green {
-    background: #06eaa9;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+	background: #06eaa9;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 .dot-status-gray {
-    background: #808080;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+	background: #808080;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 .dot-status-orange {
-    background: #ffdc53;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+	background: #ffdc53;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 .dot-status-red {
-    background: #F65A7A;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+	background: #F65A7A;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
 
-
-
 .btn-primary {
-    background-color: #7c7cf5;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 2px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+	background-color: #7c7cf5;
+	color: #fff;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 2px;
+	font-size: 12px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease, box-shadow
+		0.3s ease;
 }
 
 /***************************** 콘텐츠 이용 통계 도넛 ***************************************/

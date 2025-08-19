@@ -66,7 +66,8 @@
 				<button class="public-toggle-button" id="userListName">이름</button>
 				<button class="public-toggle-button" id="userListEmail">이메일</button>
 			</div>
-			<select class="public-toggle-select selectUserList-top" id="userListStatus">
+			<select class="public-toggle-select selectUserList-top"
+				id="userListStatus">
 				<option value="">전체</option>
 				<option value="online">활동중</option>
 				<option value="offline">비활동</option>
@@ -245,7 +246,8 @@
 						<button class="public-toggle-button"
 							id="memDetailBoardList-orderBtn-date">작성일자</button>
 					</div>
-					<select class="public-toggle-select selectpb-top" id="boardListCategory">
+					<select class="public-toggle-select selectpb-top"
+						id="boardListCategory">
 						<option value="">전체</option>
 						<option value="G09001">청소년 커뮤니티</option>
 						<option value="G09002">진로 진학 커뮤니티</option>
@@ -338,6 +340,16 @@
 		</div>
 	</div>
 </div>
+
+<div class="flex gap" style="height: 685px; margin-bottom: 20px;">
+	<div class="template-panel" style="width: 792.5px;">
+		<div class="middleTitle">사용자 접속 통계</div>
+	</div>
+	<div class="template-panel" style="width: 792.5px;">
+		<div class="middleTitle">페이지별 방문자 수</div>
+	</div>
+</div>
+
 
 
 
