@@ -81,6 +81,7 @@
 					<div class="dropdown-submenu">
 						<a href="/cnslt/resve/crsv/reservation.do">상담 예약</a>
 						<a href="/cnslt/rvw/cnsReview.do">상담 후기</a>
+						<a href="/cnslt/aicns/aicns.do">AI 상담</a>
 					</div>
 				</li>
 				<li class="main-nav__item main-nav__item--priority-low">
