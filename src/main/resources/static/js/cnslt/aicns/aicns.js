@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	  try {
 	    // ★ 서버 엔드포인트에 맞춰 변경하세요.
 	    // 기대 응답 예: { ok:true, sessionId:"...", popupUrl:"/counsel/ai/chat?sid=..."}
-	    const res = await axios.post('/counsel/ai/session/start', { topic: selectedType });
+	    const res = await axios.post('/cnslt/aicns/aicnsPopUpStart', { topic: selectedType });
 
 	    if (!res.data || !res.data.ok) {
 	      alert((res.data && res.data.message) ? res.data.message : '시작에 실패했습니다.');
