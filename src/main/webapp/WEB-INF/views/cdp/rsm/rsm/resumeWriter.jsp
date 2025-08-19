@@ -151,6 +151,7 @@
 				<div class="btn-right-group">
 					<button type="button" id="btn-submit-Temp">임시저장</button>
 					<button type="button" class="btn-preview" id="btn-preview">미리보기</button>
+							<button type="button" class="btn-autocomplete" id="autoCompleteBtn">자동완성</button>
 					<button type="button" id="btn-submit">저장</button>
 				</div>
 			</div>
