@@ -47,6 +47,15 @@ document.addEventListener('DOMContentLoaded', function(){
 			return;
 		}
 
+		if (localStorage.getItem("AICNS_OPEN")=== '1') {
+			alert('이미 상담이 진행중입니다. 먼저 완료해주세요.');
+			try {
+				const win = window.open('', 'aiCounselWindow'); // 기존 창 핸들 가져오기
+				win && win.focus();
+			} catch (e) { /* 무시 - 기존 창 선택가능하면 포커싱 맞춰줌. 실패해도 무관 */ }
+			return;
+		}
+
 		if (!selectedType) return;
 		switch(selectedType){
 			case 'JOB' :

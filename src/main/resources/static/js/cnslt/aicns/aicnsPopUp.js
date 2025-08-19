@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded',function(){
 				data.cnsType = "G07001";
 				break;
 		}
-		axios.post('/admin/las/aiCounselVisitLog.do', data)
+		axios.post('/admin/las/aiCounselVisitLog.do', data);
+		localStorage.setItem("AICNS_OPEN", "1");
 	}
 
 
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded',function(){
 	function sendClose() {
 	  if (!sid) return;
 	  const payload = JSON.stringify({ sid });
+	  if(localStorage.getItem("AICNS_OPEN")) localStorage.removeItem("AICNS_OPEN");
 
 	  // 우선권: beforeunload에서도 동작하는 sendBeacon
 	  if (navigator.sendBeacon) {
@@ -189,11 +191,10 @@ document.addEventListener('DOMContentLoaded',function(){
 	}
 
 	function closeOrFallback() {
+	  if(localStorage.getItem("AICNS_OPEN")) localStorage.removeItem("AICNS_OPEN");
 	  // 우리 팝업을 열 때 이름을 지정했다면(예: 'aiCounselWindow') 그걸 힌트로 사용
-	  console.log('opener?', !!window.opener, 'name:', window.name, 'closed?', window.closed);
 	  const isLikelyPopup =
 	    (window.opener && !window.opener?.closed) || window.name === 'aiCounselWindow';
-
 	  if (isLikelyPopup) {
 	    window.close();
 	    // 혹시 막히면 150ms 후 폴백
