@@ -351,7 +351,7 @@
 			     , C.CONTEST_GUBUN
 			     , C.CONTEST_ID
 			     , C.CONTEST_TARGET
-			     , '/prg/act/cr/crDetail.do?crId=121'||C.CONTEST_ID
+			     , '/prg/act/cr/crDetail.do?crId='||C.CONTEST_ID
 			     , '/files/download?fileGroupId='||FD.FILE_GROUP_ID||'&amp;seq='||FD.FILE_SEQ
 			  FROM CONTEST C
 			  JOIN FILE_GROUP FG ON FG.FILE_GROUP_ID = C.FILE_GROUP_ID
