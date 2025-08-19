@@ -336,7 +336,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 
 	@Override
-	public ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus) {
+	public ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus, String sortBy, String sortOrder) {
 	    int startNo = (currentPage - 1) * size + 1;
 	    int endNo = currentPage * size;
 
@@ -346,11 +346,10 @@ public class UserManagementServiceImpl implements UserManagementService {
 	    map.put("currentPage", currentPage);
 	    map.put("startNo", startNo);
 	    map.put("endNo", endNo);
+	    map.put("sortBy", sortBy);
+	    map.put("sortOrder", sortOrder);
 
-	    // 활동 상태가 포함된 회원 리스트
 	    List<MemberVO> list = userManagementMapper.getMemberActivityList(map);
-	    
-	    // 총 건수
 	    int total = userManagementMapper.getAllMemberActivityList(map);
 	    
 	    ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword);

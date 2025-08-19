@@ -157,9 +157,11 @@ public class UserManagementController {
 	        @RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
 	        @RequestParam(value = "size", required = false, defaultValue = "10") int size,
 	        @RequestParam(value = "keyword", required = false) String keyword,
-	        @RequestParam(value = "activityStatus", required = false) String activityStatus) {
+	        @RequestParam(value = "activityStatus", required = false) String activityStatus,
+	        @RequestParam(value = "sortBy", required = false) String sortBy,
+	        @RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder) {
 	    
-	    return userManagementService.getMemberActivityList(currentPage, size, keyword, activityStatus);
+	    return userManagementService.getMemberActivityList(currentPage, size, keyword, activityStatus, sortBy, sortOrder);
 	}
 
 }

@@ -33,6 +33,6 @@ public interface UserManagementService {
 	
 	Map<String, Object> getDailyUserStats();
 	
-	ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus);
+	ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus, String sortBy, String sortOrder);
 
 }
