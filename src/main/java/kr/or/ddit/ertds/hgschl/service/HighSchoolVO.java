@@ -45,7 +45,17 @@ public class HighSchoolVO {
 	private List<String> coedTypeFilter;
 
 	// 페이징
+	private int currentPage;
+	private int size = 10;
 	private int startRow;
 	private int endRow;
+
+	public int getStartNo() {
+		return (this.currentPage - 1) * size;
+	}
+
+	public int getEndNo() {
+		return this.currentPage * size;
+	}
 
 }

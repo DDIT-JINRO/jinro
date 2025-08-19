@@ -49,13 +49,4 @@ public interface HighSchoolMapper {
 
 	// 고등학교 학과 수정
 	public int highSchoolDeptUpdate(HighSchoolDeptVO highSchoolDeptVO);
-
-	// 공통 코드를 이름과 분류코드로 조회
-	public ComCodeVO selectCommonCodeByCcNameAndClCode(@Param("ccName") String ccName, @Param("clCode") String clCode);
-
-	// 모든 공통 코드를 조회 (캐싱 로직에 필요)
-	public List<ComCodeVO> selectAllCommonCodes();
-
-	// 관할 교육청 코드를 이름으로 조회
-	String selectJurisCodeByRegionName(@Param("regionName") String regionName);
 }
