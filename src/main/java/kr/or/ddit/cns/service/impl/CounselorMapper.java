@@ -104,4 +104,6 @@ public interface CounselorMapper {
 
 	public int plusPayConsultCnt(int payId);
 
+	public List<CounselingVO> selectMonthlyCounselingData(CounselingVO searchVO);
+
 }

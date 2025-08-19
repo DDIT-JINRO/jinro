@@ -118,4 +118,24 @@ public class CounselorApiController {
 		String result = this.counselorService.updateCounselStatus(counselingVO,payId);
 		return ResponseEntity.ok(result);
 	}
+	
+	@GetMapping("/counseling/monthly-counts.do")
+	public ResponseEntity<List<CounselingVO>> getMonthlyCounselingCounts(
+			Principal principal,
+			@RequestParam("counselReqDatetime") @DateTimeFormat(pattern = "yyyy-MM") Date counselReqDatetime
+			) {
+	    if (principal == null || principal.getName().equals("anonymousUser")) {
+	        return ResponseEntity.status(401).build(); // Unauthorized
+	    }
+	    String counselorStr = principal.getName();
+	    int counselor = Integer.parseInt(counselorStr);
+	    
+	    // 이 객체를 Mapper로 넘겨서 해당 상담사의 월별 상담 데이터를 조회
+	    CounselingVO searchVO = new CounselingVO();
+	    searchVO.setCounsel(counselor);
+	    searchVO.setCounselReqDatetime(counselReqDatetime);
+	    List<CounselingVO> counselingList = counselorService.selectMonthlyCounselingData(searchVO);
+
+	    return ResponseEntity.ok(counselingList);
+	}
 }

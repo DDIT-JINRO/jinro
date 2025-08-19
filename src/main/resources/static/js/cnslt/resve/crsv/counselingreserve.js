@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	counselorSelect.addEventListener('change', function() {
 		selectedCounselorId = this.value;
 
-		calendar.today();
+		fetchAvailableTimes(selectedCounselorId,selectedDate,memId)
 	});
 
 	// 이 코드를 DOMContentLoaded 안으로 옮겼습니다.
@@ -123,6 +123,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 
 			if (selectedDate && selectedTime) {
+				const selectedOption = counselorSelect.options[counselorSelect.selectedIndex];
+				const counselorName = selectedOption.text;
 				const isConfirmed = confirm("상담사: " + counselorName + "\n날짜: " + selectedDate + "\n시간: " + selectedTime + "\n\n이대로 예약하시겠습니까?");
 				if (isConfirmed) {
 					axios.get('/cnslt/resve/checkSubscription', {

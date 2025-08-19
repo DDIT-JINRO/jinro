@@ -24,18 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	</div>
 	<ul class="admin-side-menu">
 		<li class="admin-side-menu-item">
-			<a href="/cnsLeader">대시보드</a>
+			<a href="/cnsLeader">스케줄관리</a>
 		</li>
 
-		<!-- 필요한 항목이 있을때 이곳을 복사하거나 수정하면됩니다. -->
-		<li class="admin-side-menu-item" onclick="toggleSubmenu('scheduleManagement')">
-			<a href="javascript:void(0)">스케줄</a>
-			<ul class="admin-side-submenu" id="scheduleManagement">
-				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/cnsLeader/cnsLeaderMoveController.do?target=scm/scheduleManagement">스케줄 관리</a>
-				</li>
-			</ul>
-		</li>
 
 		<li class="admin-side-menu-item" onclick="toggleSubmenu('counselingLog')">
 			<a href="javascript:void(0)">상담사 관리</a>

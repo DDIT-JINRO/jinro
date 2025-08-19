@@ -16,6 +16,8 @@ function sidebar(){
 
 		      console.log(pageUrl);
 
+			  removeOldFiles();
+			  
 		      fetch(pageUrl)
 		        .then(response => {
 		          if (!response.ok) throw new Error("불러오기 실패");
@@ -45,4 +47,37 @@ function sidebar(){
 		        });
 		    });
 		  });
+}
+
+// 제거할 CSS 파일들을 명시적으로 지정
+const removableFiles = [
+    // CSS 파일 목록
+    '/css/cns/scm/scheduleManagement.css',
+    // JS 파일 목록 (새로 로드되는 페이지에만 필요한 스크립트)
+    '/js/include/cns/scm/scheduleManagement.js',
+	'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js',
+	'/js/com/index.global.min.js'
+];
+
+function removeOldFiles() {
+    // 모든 <link> 태그와 <script> 태그를 가져옵니다.
+    const allLinks = document.querySelectorAll('link[rel="stylesheet"]');
+    const allScripts = document.querySelectorAll('script');
+    
+    // CSS 파일 제거
+    allLinks.forEach(link => {
+        if (removableFiles.some(file => link.href.includes(file))) {
+            link.remove();
+            console.log(`Removed CSS: ${link.href}`);
+        }
+    });
+
+    // JS 파일 제거
+    allScripts.forEach(script => {
+        // src 속성이 있고, 제거 대상 목록에 포함된 스크립트만 제거
+        if (script.src && removableFiles.some(file => script.src.includes(file))) {
+            script.remove();
+            console.log(`Removed JS: ${script.src}`);
+        }
+    });
 }
