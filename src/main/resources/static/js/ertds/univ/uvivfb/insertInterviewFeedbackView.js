@@ -410,16 +410,14 @@ function autoCompleteHandler() {
 	// 2. 모달이 열리는 것을 기다린 후, 대학을 선택
 	setTimeout(function() {
 		//모달에서 국립한밭대학교
-		const univName = '동원과학기술대학교';
 		const univListItems = document.querySelectorAll('.university-list-item');
 		let selectedItem = null;
 
-		for (const item of univListItems) {
-			if (item.querySelector('.university-name').textContent.trim() === univName) {
-				item.click();
-				selectedItem = item;
-				break;
-			}
+		// 목록에 항목이 있는지 확인
+		if (univListItems.length > 0) {
+			// 첫 번째 항목을 선택
+			selectedItem = univListItems[0];
+			selectedItem.click();
 		}
 
 		if (selectedItem) {
