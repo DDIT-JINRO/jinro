@@ -23,7 +23,7 @@ public class CareerTechnicalEducationController {
 		    @RequestParam(required = false) String region,
 		    @RequestParam(required = false) String status,
 		    @RequestParam(value="currentPage",required=false, defaultValue="1") int currentPage,
-		    @RequestParam(value="size",required=false, defaultValue = "10")int size, Model model) {
+		    @RequestParam(value="size",required=false, defaultValue = "5")int size, Model model) {
 		
 			ArticlePage<CareerTechnicalEducationVO> articlePage = educationService.getList(keyword,region,status,currentPage,size);
 			articlePage.setUrl("/empt/cte/careerTechnicalEducation.do");
