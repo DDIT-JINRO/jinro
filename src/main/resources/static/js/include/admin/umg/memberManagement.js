@@ -1,6 +1,5 @@
 function memberManagement() {
 
-
 	let currentSortOrder = 'asc';
 	let currentSortBy = 'id';
 	let currentPage = 1;
@@ -10,6 +9,34 @@ function memberManagement() {
 	const userListNameBtn = document.getElementById('userListName');
 	const userListEmailBtn = document.getElementById('userListEmail');
 
+	// 게시글 정렬 버튼 변수 추가
+	const boardListIdBtn = document.getElementById('memDetailBoardList-orderBtn-id');
+	
+	const boardListDateBtn = document.getElementById('memDetailBoardList-orderBtn-date');
+	const boardListdelYnBtn = document.getElementById('memDetailBoardList-orderBtn-delYn');
+	
+	const selector = document.getElementById('tableSelector');
+	const table1 = document.getElementById('tableContainer1');
+	const table2 = document.getElementById('tableContainer2');
+	const table3 = document.getElementById('tableContainer3');
+
+	selector.addEventListener('change', function() {
+		// 모든 테이블을 숨김
+		table1.style.display = 'none';
+		table2.style.display = 'none';
+		table3.style.display = 'none';
+
+		// 선택된 옵션의 값에 따라 해당 테이블을 표시
+		if (this.value === 'table1') {
+			table1.style.display = 'block';
+		} else if (this.value === 'table2') {
+			table2.style.display = 'block';
+		} else if (this.value === 'table3') {
+			table3.style.display = 'block';
+		}
+	});
+
+	// 회원 리스트 정렬 이벤트 리스너
 	userListIdBtn.addEventListener('click', function() {
 		handleSortClick("id");
 		setActiveButton(this);
@@ -23,12 +50,63 @@ function memberManagement() {
 		setActiveButton(this);
 	})
 
-	// 1. change 이벤트에서 fetchUserList를 호출하도록 수정
-	document.getElementById('userListStatus').addEventListener('change', function() {
-		// 상태 필터가 변경되면 1페이지로 돌아가서 새로운 목록을 불러옴
-		fetchUserList(1);
-	});
+	// 게시글 목록 정렬 이벤트 리스너
+	if (boardListIdBtn) {
+		boardListIdBtn.addEventListener('click', function() {
+			const userId = document.getElementById('mem-id').value;
+			if (userId == null || userId == "") {
+				alert('회원을 선택하세요.');
+				return;
+			}
+			handleBoardSortClick("boardId", userId, this);
+		});
+	}
 
+	if (boardListdelYnBtn) {
+		boardListdelYnBtn.addEventListener('click', function() {
+			const userId = document.getElementById('mem-id').value;
+			if (userId == null || userId == "") {
+				alert('회원을 선택하세요.');
+				return;
+			}
+			handleBoardSortClick("boardDelYn", userId, this);
+		});
+	}
+
+	if (boardListDateBtn) {
+		boardListDateBtn.addEventListener('click', function() {
+			const userId = document.getElementById('mem-id').value;
+			if (userId == null || userId == "") {
+				alert('회원을 선택하세요.');
+				return;
+			}
+			handleBoardSortClick("boardCreatedAt", userId, this);
+		});
+	}
+	
+	// 게시글 분류 필터링 이벤트 리스너 추가
+	const boardListCategoryFilter = document.getElementById('boardListCategory');
+	if(boardListCategoryFilter) {
+		boardListCategoryFilter.addEventListener('change', function() {
+			const userId = document.getElementById('mem-id').value;
+			const category = this.value;
+			// 카테고리 필터 변경 시 첫 페이지로 이동하여 목록을 다시 불러옴
+			const boardTbody = document.getElementById('userDetailBoardList');
+			const sortBy = boardTbody.dataset.sortBy;
+			const sortOrder = boardTbody.dataset.sortOrder;
+			userDetailBoardList(userId, 1, sortBy, sortOrder, category);
+		});
+	}
+	
+	// 정렬 버튼 활성화/비활성화 함수
+	function setActiveButton(element) {
+		const parent = element.parentElement;
+		const buttons = parent.querySelectorAll('.public-toggle-button');
+		buttons.forEach(btn => btn.classList.remove('active'));
+		element.classList.add('active');
+	}
+	
+	// 유저 목록 정렬 처리
 	function handleSortClick(sortBy) {
 
 		if (currentSortBy !== sortBy) {
@@ -42,6 +120,23 @@ function memberManagement() {
 		// 2. handleSortClick에서 fetchUserList를 호출할 때 inFilter 값을 가져와서 전달
 		const userListInFilter = document.getElementById('userListStatus').value;
 		fetchUserList(currentPage, currentSortBy, currentSortOrder, userListInFilter);
+	}
+	
+	// 게시글 목록 정렬 처리
+	function handleBoardSortClick(sortBy, userId, element) {
+		const boardTbody = document.getElementById('userDetailBoardList');
+		
+		let sortOrder = 'asc';
+		if (boardTbody.dataset.sortBy === sortBy) {
+			sortOrder = boardTbody.dataset.sortOrder === 'asc' ? 'desc' : 'asc';
+		}
+		
+		boardTbody.dataset.sortBy = sortBy;
+		boardTbody.dataset.sortOrder = sortOrder;
+		
+		setActiveButton(element);
+		const category = document.getElementById('boardListCategory').value;
+		userDetailBoardList(userId, 1, sortBy, sortOrder, category);
 	}
 
 	function profileUploadFn() {
@@ -76,17 +171,19 @@ function memberManagement() {
 		const userListInFilter = document.getElementById('userListStatus').value;
 
 		axios.get('/admin/umg/getMemberActivityList.do', {
-			params: {
-				currentPage: page,
-				size: pageSize,
-				keyword: keyword,
-				status: status, // 이 status는 activityFilter의 값일 수 있으므로 확인 필요
-				sortBy: sortBy,
-				sortOrder: sortOrder,
-				inFilter: userListInFilter // 수정된 inFilter 값을 전달
-			}
-		})
-			.then(({ data }) => {
+				params: {
+					currentPage: page,
+					size: pageSize,
+					keyword: keyword,
+					status: status, // 이 status는 activityFilter의 값일 수 있으므로 확인 필요
+					sortBy: sortBy,
+					sortOrder: sortOrder,
+					inFilter: userListInFilter // 수정된 inFilter 값을 전달
+				}
+			})
+			.then(({
+				data
+			}) => {
 
 				const countEl = document.getElementById('userList-count');
 				if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
@@ -141,7 +238,13 @@ function memberManagement() {
 	    `;
 	}
 
-	function renderPagination({ startPage, endPage, currentPage, totalPages }) {
+	// 기존 유저 목록 페이지네이션 함수
+	function renderPagination({
+		startPage,
+		endPage,
+		currentPage,
+		totalPages
+	}) {
 		let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 		for (let p = startPage; p <= endPage; p++) {
 			html += `<a href="#" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
@@ -167,6 +270,25 @@ function memberManagement() {
 			}
 		});
 	}
+	
+	// boardList의 페이지네이션을 처리하는 함수
+	function renderBoardListPagination({
+		startPage,
+		endPage,
+		currentPage,
+		totalPages
+	}) {
+		let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← 이전</a>`;
+		for (let p = startPage; p <= endPage; p++) {
+			html += `<a href="#" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
+		}
+		html += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">다음 →</a>`;
+		const footer = document.getElementById('memDetailBoardListPagenation');
+		if (footer) footer.innerHTML = html;
+	}
+	
+	// 게시글 페이지네이션 이벤트 리스너를 위한 변수
+	let boardListPaginationContainer;
 
 	function formatDateMMDD(iso) {
 		const d = new Date(iso);
@@ -175,6 +297,7 @@ function memberManagement() {
 		const fullYear = String(d.getFullYear());
 		return `${fullYear}. ${mm}. ${dd}`;
 	}
+
 	function formatDate(iso) {
 		const d = new Date(iso);
 		const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -185,17 +308,25 @@ function memberManagement() {
 
 	function convertLoginType(code) {
 		switch (code) {
-			case 'G33001': return '일반';
-			case 'G33002': return '카카오';
-			case 'G33003': return '네이버';
-			default: return code;
+			case 'G33001':
+				return '일반';
+			case 'G33002':
+				return '카카오';
+			case 'G33003':
+				return '네이버';
+			default:
+				return code;
 		}
 	}
+
 	function memberGender(code) {
 		switch (code) {
-			case 'G11001': return '남자';
-			case 'G11002': return '여자';
-			default: return code;
+			case 'G11001':
+				return '남자';
+			case 'G11002':
+				return '여자';
+			default:
+				return code;
 		}
 	}
 
@@ -215,14 +346,26 @@ function memberManagement() {
 		let formData = new FormData();
 		formData.set("id", id);
 		userDetail(formData);
-		userDetailBoardList(id);
+		// 게시글 목록을 불러올 때 정렬 상태를 초기화하고 첫 페이지로 설정
+		const boardListIdBtn = document.getElementById('memDetailBoardList-orderBtn-id');
+		setActiveButton(boardListIdBtn);
+		const boardTbody = document.getElementById('userDetailBoardList');
+		boardTbody.dataset.sortBy = 'boardId';
+		boardTbody.dataset.sortOrder = 'asc';
+		const category = document.getElementById('boardListCategory').value;
+		userDetailBoardList(id, 1, 'boardId', 'asc', category);
 	});
 
 
 	function userDetail(formData) {
 		axios.post('/admin/umg/getMemberDetail.do', formData)
 			.then(res => {
-				const { memberDetail, filePath, countVO, interestCn } = res.data;
+				const {
+					memberDetail,
+					filePath,
+					countVO,
+					interestCn
+				} = res.data;
 				const profileImgEl = document.getElementById('member-profile-img');
 				profileImgEl.src = filePath ? filePath : '/images/defaultProfileImg.png';
 				document.getElementById('mem-id').value = memberDetail.memId || '-';
@@ -232,7 +375,6 @@ function memberManagement() {
 				document.getElementById('mem-phone').value = memberDetail.memPhoneNumber || '-';
 				document.getElementById('mem-gen').value = memberGender(memberDetail.memGen) || '-';
 				document.getElementById('mem-birth').value = formatDate(memberDetail.memBirth) || '-';
-				document.getElementById('mem-logType').value = convertLoginType(memberDetail.loginType) || '-';
 				const selectElement = document.getElementById("mem-role");
 				for (let i = 0; i < selectElement.options.length; i++) {
 					if (selectElement.options[i].value === memberDetail.memRole) {
@@ -280,7 +422,7 @@ function memberManagement() {
 				return;
 			}
 			if (!nicknameRegex.test(nickname)) {
-				alert('닉네임은 한글, 영문, 숫자 조합 2~10자로 입력해주세요.');
+				alert("닉네임은 한글, 영문, 숫자 조합 2~10자로 입력해주세요.");
 				return;
 			}
 			if (!passwordRegex.test(password)) {
@@ -412,10 +554,41 @@ function memberManagement() {
 		}
 	}
 
-	function userDetailBoardList(userId, page = 1, sortBy = 'id', sortOrder = 'asc') {
-		
+
+	// 게시글 분류 코드를 한글로 변환하는 함수
+	function convertCcIdToCategory(ccId) {
+		switch (ccId) {
+			case 'G09001':
+				return '청소년 커뮤니티';
+			case 'G09002':
+				return '진로 진학 커뮤니티';
+			case 'G09003':
+				return '면접후기 커뮤니티';
+			case 'G09004':
+				return '이력서 템플릿 게시판';
+			case 'G09005':
+				return '스터디 그룹 게시글';
+			case 'G09006':
+				return '청년 커뮤니티';
+			default:
+				return ccId;
+		}
+	}
+
+	// 삭제 여부(Y/N)에 따라 색상과 텍스트를 반환하는 함수
+	function renderBoardStatus(boardDelYn) {
+		if (boardDelYn === 'Y') {
+			return `<span style="color: red;">삭제</span>`;
+		} else if (boardDelYn === 'N') {
+			return `<span style="color: green;">게시</span>`;
+		}
+		return boardDelYn; // Y, N이 아닌 경우 원본 값 반환
+	}
+
+	// 사용자 게시글 목록을 가져와 테이블에 렌더링하고 페이지네이션을 처리하는 함수
+	function userDetailBoardList(userId, page = 1, sortBy = 'boardId', sortOrder = 'asc', category = '') {
 		const pageSize = 5;
-		
+
 		axios.get(`/admin/umg/getMemberDetailBoardList.do`, {
 			params: {
 				currentPage: page,
@@ -423,19 +596,174 @@ function memberManagement() {
 				userId: userId,
 				sortBy: sortBy,
 				sortOrder: sortOrder,
-				
+				ccId: category
 			}
 		}).then(res => {
-			console.log(res.data);
-		})
+			const {
+				content,
+				totalPages,
+				currentPage,
+				startPage,
+				endPage
+			} = res.data;
 
+			const tbodyEl = document.getElementById('userDetailBoardList');
+			const boardPaginationEl = document.getElementById('memDetailBoardListPagenation');
+
+			if (!tbodyEl) {
+				console.error('Error: tbody element with ID "userDetailBoardList" not found.');
+				return;
+			}
+			
+			// 테이블 내용 렌더링
+			if (content && content.length > 0) {
+				const rows = content.map(item => `
+					<tr>
+						<td>${item.boardId}</td>
+						<td>${convertCcIdToCategory(item.ccId)}</td>
+						<td>${item.boardCnt}</td>
+						<td>${formatDateMMDD(item.boardCreatedAt)}</td>
+						<td>${renderBoardStatus(item.boardDelYn)}</td>
+					</tr>
+				`).join('');
+				tbodyEl.innerHTML = rows;
+			} else {
+				tbodyEl.innerHTML = `<tr><td colspan='5' style="text-align: center;">작성한 게시글이 없습니다.</td></tr>`;
+			}
+
+			// 페이지네이션 렌더링
+			if (boardPaginationEl) {
+				let paginationHtml = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← 이전</a>`;
+				for (let p = startPage; p <= endPage; p++) {
+					paginationHtml += `<a href="#" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
+				}
+				paginationHtml += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">다음 →</a>`;
+				boardPaginationEl.innerHTML = paginationHtml;
+
+				// 기존 이벤트 리스너 제거
+				const oldListener = boardPaginationEl.onclick;
+				if (oldListener) {
+					boardPaginationEl.removeEventListener('click', oldListener);
+				}
+
+				// 새로운 이벤트 리스너 추가 (once 옵션 제거)
+				const newListener = e => {
+					e.preventDefault();
+					const link = e.target.closest('a[data-page]');
+					if (link && !link.classList.contains('disabled')) {
+						const newPage = parseInt(link.dataset.page, 10);
+						if (!isNaN(newPage) && newPage > 0) {
+							const category = document.getElementById('boardListCategory').value;
+							// 기존 정렬 상태를 유지하도록 변경
+							const boardTbody = document.getElementById('userDetailBoardList');
+							const sortBy = boardTbody.dataset.sortBy;
+							const sortOrder = boardTbody.dataset.sortOrder;
+							userDetailBoardList(userId, newPage, sortBy, sortOrder, category);
+						}
+					}
+				};
+
+				boardPaginationEl.addEventListener('click', newListener);
+				boardPaginationEl.onclick = newListener; // 레거시 브라우저 호환성을 위한 대체
+			}
+
+		}).catch(err => {
+			console.error('게시글 목록 조회 중 에러:', err);
+			const tbodyEl = document.getElementById('userDetailBoardList');
+			if(tbodyEl) {
+				tbodyEl.innerHTML = `<tr><td colspan='5' style="text-align: center;">데이터를 불러오는데 실패했습니다.</td></tr>`;
+			}
+		});
 	}
+	
+	// 숫자가 변경될 때 애니메이션 효과를 주는 함수
+	function animateNumberChange(elementId, newValue) {
+		const element = document.getElementById(elementId);
+		if (!element) return;
+
+		const currentValue = element.textContent.replace(/[^0-9.]/g, ''); // 숫자만 추출
+		if (currentValue !== String(newValue)) {
+			// 클래스를 토글하여 애니메이션 효과 적용
+			element.classList.add('number-change');
+			setTimeout(() => {
+				element.textContent = newValue;
+				element.classList.remove('number-change');
+			}, 300); // CSS transition 시간과 일치
+		}
+	}
+
+	// 분 단위의 숫자를 00:00 형식으로 변환하는 함수
+	function formatMinutesToTime(minutes) {
+		const hours = Math.floor(minutes / 60);
+		const remainingMinutes = minutes % 60;
+		const formattedHours = String(hours).padStart(2, '0');
+		const formattedMinutes = String(remainingMinutes).padStart(2, '0');
+		return `${formattedHours}:${formattedMinutes}`;
+	}
+
+	// 일일 통계 데이터를 가져와서 HTML에 반영하는 함수
+	function fetchDailyStats() {
+		axios.get('/admin/umg/getDailyUserStats.do')
+			.then(res => {
+				const {
+					dailyActiveUsers,
+					dailyActiveUsersStatus,
+					dailyActiveUsersRate,
+					avgUsageTimeMinutes,
+					avgUsageTimeStatus,
+					avgUsageTimeRate
+				} = res.data;
+
+				// 일일 사용자 현황
+				const dailyUsersCountEl = document.getElementById('dailyActiveUsersCount');
+				if (dailyUsersCountEl) {
+					animateNumberChange('dailyActiveUsersCount', dailyActiveUsers);
+				}
+
+				const dailyUsersRateEl = document.getElementById('dailyActiveUsersRate');
+				if (dailyUsersRateEl) {
+					dailyUsersRateEl.textContent = `${dailyActiveUsersStatus === 'increase' ? '▲' : '▼'} ${dailyActiveUsersRate}%`;
+					dailyUsersRateEl.classList.remove('public-span-increase', 'public-span-decrease');
+					dailyUsersRateEl.classList.add(dailyActiveUsersStatus === 'increase' ? 'public-span-increase' : 'public-span-decrease');
+				}
+
+				// 일일 평균 홈페이지 이용시간
+				const avgTimeCountEl = document.getElementById('avgUsageTimeCount');
+				if (avgTimeCountEl) {
+					animateNumberChange('avgUsageTimeCount', formatMinutesToTime(avgUsageTimeMinutes));
+				}
+
+				const avgTimeRateEl = document.getElementById('avgUsageTimeRate');
+				if (avgTimeRateEl) {
+					avgTimeRateEl.textContent = `${avgUsageTimeStatus === 'increase' ? '▲' : '▼'} ${avgUsageTimeRate}%`;
+					avgTimeRateEl.classList.remove('public-span-increase', 'public-span-decrease');
+					avgTimeRateEl.classList.add(avgUsageTimeStatus === 'increase' ? 'public-span-increase' : 'public-span-decrease');
+				}
+			})
+			.catch(err => {
+				console.error('일일 통계 데이터 조회 중 에러:', err);
+			});
+	}
+	
+	// 'userListStatus' select 요소의 change 이벤트 리스너를 다시 추가
+	const userListStatusFilter = document.getElementById('userListStatus');
+	if (userListStatusFilter) {
+		userListStatusFilter.addEventListener('change', function() {
+			const inFilter = this.value;
+			fetchUserList(1, currentSortBy, currentSortOrder, inFilter);
+		});
+	}
+
 
 	searchUserFn();
 	modifyFn();
 	addBtnFn();
 	profileUploadFn();
 	fetchUserList();
+	fetchDailyStats(); // 페이지 로드 시 통계 데이터 로드
+
+	// 10초마다 fetchDailyStats 함수를 호출
+	setInterval(fetchDailyStats, 10000);
 }
 
 memberManagement();

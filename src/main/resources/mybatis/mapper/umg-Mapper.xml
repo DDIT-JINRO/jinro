@@ -776,9 +776,9 @@
 		                <when test="sortBy != null and sortBy != ''">
 		                    ORDER BY
 		                    <choose>
-		                        <when test="sortBy == 'id'">BOARD_ID</when>
-		                        <when test="sortBy == 'title'">BOARD_TITLE</when>
-		                        <when test="sortBy == 'date'">BOARD_CREATED_AT</when>
+		                        <when test="sortBy == 'boardId'">BOARD_ID</when>
+		                        <when test="sortBy == 'boardDelYn'">BOARD_DEL_YN</when>
+		                        <when test="sortBy == 'boardCreatedAt'">BOARD_CREATED_AT</when>
 		                        <otherwise>BOARD_ID</otherwise>
 		                    </choose>
 		                    <if test="sortOrder == 'desc'">DESC</if>

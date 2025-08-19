@@ -68,7 +68,7 @@
 	margin-bottom: 20px;
 }
 
-.public-toggle-select {
+.selectUserList-top {
 	margin-top: 60px;
 }
 
@@ -80,6 +80,10 @@
 	overflow: hidden;
 	margin-bottom: 10px;
 	border-radius: 50%;
+}
+
+.selectpb-top {
+	margin-top: 20px;
 }
 
 .profileInfo-1-2 {
