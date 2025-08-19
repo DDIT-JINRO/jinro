@@ -49,26 +49,113 @@
 	  </section>
 	</div>
 
-	<section class="main-loadmap-banner">
-		<div class="banner-inner">
-			<div class="banner-left">
-				<img alt="" src="/images/logo.png">
-				<div class="main-title-banner">미래를 여는 길</div>
-				<p>
-					진로와 진학, 취업을 위한 종합 정보 제공<br /> 미래를 설계하는 데 필요한 모든 것
-				</p>
-				<button class="roadmapBtn">로드맵 바로가기</button>
+	<section class="main-loadmap-banner slider-container">
+			<button class="prev-btn" id="prev-btn">‹</button>
+		<div class="slides">
+			
+			<div class="slide">
+				<div class="banner-inner">
+					<div class="banner-left">
+						<img alt="" src="/images/logo.png">
+						<div class="main-title-banner">미래를 여는 길</div>
+						<p>
+							진로와 진학, 취업을 위한 종합 정보 제공<br /> 미래를 설계하는 데 필요한 모든 것
+						</p>
+						<button class="roadmapBtn">로드맵 바로가기</button>
+					</div>
+					<div class="banner-right floating-icons">
+						<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
+						<img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> 
+						<img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> 
+						<img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> 
+						<img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> 
+						<img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> 
+						<img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> 
+						<img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
+					</div>
+				</div>
 			</div>
-			<div class="banner-right floating-icons">
-				<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
-				<img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> 
-				<img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> 
-				<img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> 
-				<img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> 
-				<img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> 
-				<img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> 
-				<img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
+			
+			
+			<c:if test="${memId eq 'anonymousUser' or isTeen eq 'true'}">
+			<div class="slide">
+				
+				<div class="banner-inner">
+					<div class="banner-left">
+						<img alt="" src="/images/logo.png">
+						<div class="main-title-banner">꿈을 찾는 길</div>
+						<p>
+							대학에 꿈을 가진 청소년에게<br>
+							미래를 설계하는데 필요한 학과 비교 페이지
+						</p>
+						<a href="/ertds/univ/dpsrch/selectDeptList.do" class="BtnData">학과비교 바로가기</a>
+					</div>
+					<div class="banner-right floating-icons">
+						<img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
+						<img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> 
+						<img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> 
+						<img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> 
+						<img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> 
+						<img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> 
+						<img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> 
+						<img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
+					</div>
+				</div>
 			</div>
+			</c:if>
+			<c:if test="${memId eq 'anonymousUser' or isTeen eq 'false'}">
+			    <div class="slide">
+			        <div class="banner-inner">
+			            <div class="banner-left">
+			                <img alt="" src="/images/logo.png">
+			                <div class="main-title-banner">꿈이 현실이 되는 길</div>
+			                <p>
+								꿈을 향해 달려가는 멋진 청년에게<br>
+								진로를 설계하는데 필요한 직업 비교 페이지
+			                </p>
+			                <a href="/pse/cr/crl/selectCareerList.do" class="BtnData">직업비교 바로가기</a>
+			            </div>
+			            <div class="banner-right floating-icons">
+			                <img src="/images/main/loadMapIcon-board.png" class="float-icon1 delay1" /> 
+			                <img src="/images/main/loadMapIcon-charactor.png" class="float-icon-charactor delay2" /> 
+			                <img src="/images/main/loadMapIcon-book.png" class="float-icon1 delay3" /> 
+			                <img src="/images/main/loadMapIcon-book2.png" class="float-icon2 delay4" /> 
+			                <img src="/images/main/loadMapIcon-chart.png" class="float-icon2 delay5" /> 
+			                <img src="/images/main/loadMapIcon-cogwheel.png" class="float-icon3 delay6" /> 
+			                <img src="/images/main/loadMapIcon-lamp.png" class="float-icon3 delay7" /> 
+			                <img src="/images/main/loadMapIcon-reading_glasses.png" class="float-icon1 delay8" />
+			            </div>
+			        </div>
+			    </div>
+			</c:if>
+		</div>
+		<button class="next-btn" id="next-btn">›</button>
+		<div class="slider-controls">
+		    <div class="dots-container">
+		        <!-- 첫 번째 dot (항상 표시) -->
+		        <span class="dot active" data-slide-index="0"></span>
+		        
+		        <!-- 두 번째 dot -->
+		        <c:choose>
+		            <c:when test="${memId eq 'anonymousUser'}">
+		                <!-- 비로그인: 학과비교 -->
+		                <span class="dot" data-slide-index="1"></span>
+		            </c:when>
+		            <c:when test="${isTeen eq 'true'}">
+		                <!-- 로그인 + 청소년: 학과비교 -->
+		                <span class="dot" data-slide-index="1"></span>
+		            </c:when>
+		            <c:when test="${isTeen eq 'false'}">
+		                <!-- 로그인 + 성인: 직업비교 -->
+		                <span class="dot" data-slide-index="1"></span>
+		            </c:when>
+		        </c:choose>
+		        
+		        <!-- 세 번째 dot (비로그인 사용자만) -->
+		        <c:if test="${memId eq 'anonymousUser'}">
+		            <span class="dot" data-slide-index="2"></span>
+		        </c:if>
+		    </div>
 		</div>
 	</section>
 	<section class="main-event-banner">
