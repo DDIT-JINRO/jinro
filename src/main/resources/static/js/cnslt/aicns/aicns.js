@@ -94,10 +94,10 @@ document.addEventListener('DOMContentLoaded', function(){
 	    const y = window.top.outerHeight / 2 + window.top.screenY - (h/2);
 	    const x = window.top.outerWidth  / 2 + window.top.screenX - (w/2);
 
-	    const popup = window.open(res.data.popupUrl || `/counsel/ai/chat?sid=${res.data.sessionId}`,
+	    const popup = window.open(res.data.popupUrl,
 	      'aiCounselWindow',
 	      `popup=yes, width=${w}, height=${h}, top=${y}, left=${x},
-	       resizable=yes, scrollbars=yes, menubar=no, toolbar=no, location=no, status=no`);
+	       resizable=no, scrollbars=yes, menubar=no, toolbar=no, location=no, status=no`);
 
 	    if (!popup || popup.closed) {
 	      alert('팝업이 차단되었습니다. 브라우저의 팝업 차단을 해제해 주세요.');

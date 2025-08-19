@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded',function(){
 
 	if(errorB.dataset.message && errorB.dataset.message!=''){
 		alert(errorB.dataset.message);
-		window.close();
+		closeOrFallback();
 	}
 
 	const sid = new URLSearchParams(location.search).get('sid');
-	if(!sid){ alert('세션 정보가 없습니다. 창을 닫습니다.'); window.close(); }
+	if(!sid){ alert('세션 정보가 없습니다. 창을 닫습니다.'); closeOrFallback(); }
 
 	let pending = false;
 	let autoScroll = true;
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded',function(){
 	if (endBtn) {
 	  endBtn.addEventListener('click', () => {
 	    sendClose();
-	    window.close();
+	    closeOrFallback();
 	  });
 	}
 
@@ -168,6 +168,28 @@ document.addEventListener('DOMContentLoaded',function(){
 			pending = false;
 			send.disabled = !ta.value.trim();
 		}
+	}
+
+	function closeOrFallback() {
+	  // 우리 팝업을 열 때 이름을 지정했다면(예: 'aiCounselWindow') 그걸 힌트로 사용
+	  console.log('opener?', !!window.opener, 'name:', window.name, 'closed?', window.closed);
+	  const isLikelyPopup =
+	    (window.opener && !window.opener?.closed) || window.name === 'aiCounselWindow';
+
+	  if (isLikelyPopup) {
+	    window.close();
+	    // 혹시 막히면 150ms 후 폴백
+	    setTimeout(() => {
+	      if (!window.closed) fallback();
+	    }, 150);
+	  } else {
+	    fallback();
+	  }
+
+	  function fallback() {
+	    if (history.length > 1) history.back();
+	    else location.href = '/'; // 원하는 안전한 경로
+	  }
 	}
 
 })
