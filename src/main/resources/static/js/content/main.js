@@ -7,8 +7,6 @@ const target = document.getElementById("typing-js");
 let index = 0;
 let isDeleting = false;
 
-
-
 function typingLoop() {
 	if (isDeleting) {
 		target.textContent = text.substring(0, index--);
@@ -30,6 +28,7 @@ function typingLoop() {
 }
 
 typingLoop();
+
 // --- 슬라이더 스크립트 시작 ---
 const slidesContainer = document.querySelector('.slides');
 const slides = document.querySelectorAll('.slide');
@@ -54,6 +53,27 @@ const totalAllSlides = allSlides.length;
 
 // 초기 위치
 slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+// --- 자동 슬라이드 관리 변수 ---
+let slideInterval;
+
+// --- 자동 슬라이드 제어 함수 ---
+function pauseSlide() { 
+    if (slideInterval) {
+        clearInterval(slideInterval); 
+        slideInterval = null;
+    }
+}
+
+function resumeSlide() { 
+    pauseSlide(); // 기존 타이머 정리
+    slideInterval = setInterval(nextSlide, 3000); 
+}
+
+function resetSlideTimer() {
+    pauseSlide();
+    resumeSlide();
+}
 
 // --- 슬라이드 이동 함수 ---
 function showSlide(index) {
@@ -96,38 +116,42 @@ function prevSlide() {
     showSlide(currentSlide);
 }
 
-if (nextBtn) nextBtn.addEventListener("click", nextSlide);
-if (prevBtn) prevBtn.addEventListener("click", prevSlide);
+if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+        nextSlide();
+        resetSlideTimer(); // 버튼 클릭 시 타이머 리셋
+    });
+    nextBtn.addEventListener("mouseenter", pauseSlide);
+    nextBtn.addEventListener("mouseleave", resumeSlide);
+}
 
-// --- dot 클릭 이벤트 ---
+if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+        prevSlide();
+        resetSlideTimer(); // 버튼 클릭 시 타이머 리셋
+    });
+    prevBtn.addEventListener("mouseenter", pauseSlide);
+    prevBtn.addEventListener("mouseleave", resumeSlide);
+}
+
+// --- dot 클릭 이벤트 (타이머 리셋 기능 추가) ---
 if (dots) {
     dots.forEach(dot => {
         dot.addEventListener("click", e => {
             const slideIndex = parseInt(e.target.dataset.slideIndex);
             currentSlide = slideIndex + 1; // 클론 때문에 +1
             showSlide(currentSlide);
+            resetSlideTimer(); // dot 클릭 시 타이머 리셋
         });
     });
 }
 
-// --- 자동 슬라이드 ---
-let slideInterval = setInterval(nextSlide, 5000);
-function pauseSlide() { clearInterval(slideInterval); }
-function resumeSlide() { slideInterval = setInterval(nextSlide, 5000); }
-
-if (nextBtn) {
-    nextBtn.addEventListener("mouseenter", pauseSlide);
-    nextBtn.addEventListener("mouseleave", resumeSlide);
-}
-if (prevBtn) {
-    prevBtn.addEventListener("mouseenter", pauseSlide);
-    prevBtn.addEventListener("mouseleave", resumeSlide);
-}
+// --- 자동 슬라이드 시작 ---
+resumeSlide();
 
 // 초기 슬라이드 표시
 showSlide(currentSlide);
 // --- 슬라이더 스크립트 끝 ---
-
 
 document.addEventListener('DOMContentLoaded', function() {
 	fn_init();
@@ -137,10 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 });
 
-const fn_init = () => {
-	const banner = document.querySelector('.main-loadmap-banner');
-	// banner.classList.add('animate-in'); // 이 부분을 주석 처리하거나 삭제하여 슬라이더와 충돌하지 않도록 했습니다.
-	
+const fn_init = () => {	
 	// 로드맵 바로가기 버튼
 	const roadmap = document.querySelector('.roadmapBtn');
 	roadmap.addEventListener("click", () => {
@@ -159,7 +180,7 @@ const fn_init = () => {
 			
             axios.post("/admin/las/roadMapVisitLog.do");
             
-			window.open(roadmapUrl, 'Roadmap', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+			window.open(roadmapUrl, 'Roadmap', `width=${width}, height=${height}, left=${left}, top=${top}`);
 		}
 	});
 	
@@ -179,7 +200,7 @@ const fn_init = () => {
 			const left = Math.floor((screenWidth - width) / 2);
 			const top  = Math.floor((screenHeight - height) / 2);
 			
-			window.open(worldcupUrl, 'worldcup', `width=\${width}, height=\${height}, left=\${left}, top=\${top}`);
+			window.open(worldcupUrl, 'worldcup', `width=${width}, height=${height}, left=${left}, top=${top}`);
 		}
 	});
 }
