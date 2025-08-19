@@ -15,7 +15,8 @@ function sidebar(){
 	      const pageUrl = this.dataset.page;
 
 	      console.log(pageUrl);
-
+		  removeOldFiles();
+		  
 	      fetch(pageUrl)
 	        .then(response => {
 	          if (!response.ok) throw new Error("불러오기 실패");
@@ -45,4 +46,37 @@ function sidebar(){
 	        });
 	    });
 	  });
+}
+
+// 제거할 CSS 파일들을 명시적으로 지정
+const removableFiles = [
+    // CSS 파일 목록
+    '/js/com/index.global.min.js',
+    '/css/cnsLeader/scm/scheduleManagement.css',
+    'https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js',
+	'https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.min.js',
+	'/js/include/cnsLeader/scm/scheduleManagement.js'
+];
+
+function removeOldFiles() {
+    // 모든 <link> 태그와 <script> 태그를 가져옵니다.
+    const allLinks = document.querySelectorAll('link[rel="stylesheet"]');
+    const allScripts = document.querySelectorAll('script');
+    
+    // CSS 파일 제거
+    allLinks.forEach(link => {
+        if (removableFiles.some(file => link.href.includes(file))) {
+            link.remove();
+            console.log(`Removed CSS: ${link.href}`);
+        }
+    });
+
+    // JS 파일 제거
+    allScripts.forEach(script => {
+        // src 속성이 있고, 제거 대상 목록에 포함된 스크립트만 제거
+        if (script.src && removableFiles.some(file => script.src.includes(file))) {
+            script.remove();
+            console.log(`Removed JS: ${script.src}`);
+        }
+    });
 }

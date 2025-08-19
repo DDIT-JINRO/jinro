@@ -137,6 +137,10 @@
 /* ──────────────────────────────────────────────────────────
    CKEditor 개선: label 포함 정렬 및 너비 고정
 ──────────────────────────────────────────────────────────*/
+form{
+	margin-bottom: 0;
+}
+
 .template-panel form .noticeFormGroup,
 .template-panel form > div.ck-row {
 	display: flex;

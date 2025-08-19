@@ -34,7 +34,6 @@
    상세/작성 폼
 ──────────────────────────────────────────────────────────*/
 .template-panel form > div {
-	margin-bottom: 16px;
 	display: flex;
 	align-items: center;
 }
@@ -58,6 +57,11 @@
 .template-panel form textarea {
 	height: 180px;
 }
+
+form{
+	margin-bottom: 0;
+}
+
 
 /* ──────────────────────────────────────────────────────────
    버튼 그룹 (삭제/초기화/저장)
@@ -149,7 +153,7 @@
 .template-panel form > div.ck-row {
 	display: flex;
 	align-items: flex-start;
-	margin-bottom: 16px;
+	margin: 25px;
 }
 
 .template-panel form > div.ck-row label {
@@ -274,3 +278,29 @@ li {
   min-height: 150px;
   max-height: 150px;
 }
+
+
+.filter-box.vacSearch{
+    justify-content: flex-end;
+}
+
+.filter-box.vacRadio p {
+	display: flex;
+    justify-content: flex-start;
+    margin: 0;
+    font-weight: bold;
+    color: black;
+}
+
+.filter-box.vacRadio input {
+  display: inline-block;
+  width: 20px; /* 원하는 너비로 조절하세요 */
+  height: 20px; /* 원하는 높이로 조절하세요 */
+  margin: 0 5px; /* 양옆 간격 조절 */
+}
+
+th{
+	padding: 12px 12px; 
+}
+
+.noticeFormGroup{}
