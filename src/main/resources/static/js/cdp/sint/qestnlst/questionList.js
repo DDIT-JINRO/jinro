@@ -245,5 +245,3 @@ function updateQuestionIdsInput() {
 
 // 전역 함수로 노출 (JSP에서 onclick으로 호출하기 위해)
 window.toggleQuestion = toggleQuestion;
-window.removeFilter = removeFilter;
-window.resetJobFilters = resetJobFilters;
