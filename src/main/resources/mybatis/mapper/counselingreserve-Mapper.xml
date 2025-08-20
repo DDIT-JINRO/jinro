@@ -92,8 +92,9 @@
 	    select CC_ID, CC_NAME
 			from COM_CODE
 			where CL_CODE = 'G08'
+			and CC_ID != 'G08004'
 	</select>
-	
+
 	<!-- 회원 인적사항 가져오기 -->
 	<select id="counselingReserveMapper" parameterType="kr.or.ddit.main.service.MemberVO" resultType="kr.or.ddit.main.service.MemberVO">
 		SELECT
