@@ -21,6 +21,8 @@ function memberManagement() {
 	const userOnlineChartMaleBtn = document.getElementById('userOnlineChartMaleBtn');
 	const userOnlineChartFemaleBtn = document.getElementById('userOnlineChartFemaleBtn');
 	const userOnlineChartCalendarBtn = document.getElementById('userOnlineChartCalender');
+	/* 셀렉트 요소로 수정 */
+	const userOnlineChartDaySel = document.getElementById('userOnlineChartDay');
 
 	const pageVisitChartDayBtn = document.getElementById('pageVisitChartDayBtn');
 	const pageVisitChartMonthBtn = document.getElementById('pageVisitChartMonthBtn');
@@ -32,6 +34,8 @@ function memberManagement() {
 	const table1 = document.getElementById('tableContainer1');
 	const table2 = document.getElementById('tableContainer2');
 	const table3 = document.getElementById('tableContainer3');
+
+	userOnlineChartDaySel.addEventListener('change', eventDateRangeSelect);
 
 	userOnlineChartDayBtn.addEventListener('click', () => {
 		setActiveButton(userOnlineChartDayBtn);
@@ -1559,6 +1563,120 @@ function memberManagement() {
 
 	function formatDateRange(fS, fE){
 		return `${fS} ~ ${fE} 기간`
+	}
+
+	// 일별, 월별, 기간선택에 대해서 이벤트 바인딩
+	function eventDateRangeSelect(e){
+		const hiddenInput = document.getElementById('comCalendarInput');
+		const selectEl = e.target;
+		const dateValue = selectEl.value;
+
+		if(dateValue == 'daily'){
+
+		}else if(dateValue == 'monthly'){
+
+		}else if(dateValue == 'selectDays'){
+			const canvas = document.getElementById('userOnlineChartCanvas');
+			// flatpickr 중복 초기화 방지 (필요시)
+			if (hiddenInput._flatpickr) {
+				hiddenInput._flatpickr.destroy();
+			}
+
+			flatpickr(hiddenInput, {
+				mode: "range",
+				maxDate: "today",
+				disable: [date => date > new Date()],
+				positionElement: selectEl,
+				onChange: function(selectedDates) {
+					if (selectedDates.length === 2) {
+						const startDate = selectedDates[0];
+						const endDate = selectedDates[1];
+
+						const formattedStartDate = formatDate(startDate);
+						const formattedEndDate = formatDate(endDate);
+
+						// 기존 차트가 있으면 삭제
+						if (window.userOnlineChartInstance) {
+							window.userOnlineChartInstance.destroy();
+						}
+
+						axios.get('/admin/las/userInquiry.do', {
+							params: { startDate: formattedStartDate, endDate: formattedEndDate, selectUserInquiry:"selectDays" }
+						})
+							.then(response => {
+
+								const serverData = response.data;
+
+								const labels = serverData.map(vo => {
+									const date = new Date(vo.loginDate);
+									return `${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+								});
+								const dataPoints = serverData.map(vo => vo.userCount);
+
+								const data = {
+									labels,
+									datasets: [{
+										label: '접속자 수',
+										data: dataPoints,
+										borderColor: 'rgb(142, 110, 228)',
+										backgroundColor: 'rgba(142, 110, 228, 0.2)',
+										tension: 0.4,
+										pointRadius: 3,
+										pointHoverRadius: 6,
+										pointStyle: 'circle',
+										fill: true
+									}]
+								};
+
+								const config = {
+									type: 'line',
+									data,
+									options: {
+										responsive: true,
+										interaction: { mode: 'index', intersect: false },
+										plugins: {
+											legend: { position: 'top' },
+											title: {
+												display: true,
+												text: [
+													formatDateRange(formattedStartDate, formattedEndDate),
+													'사용자 접속 통계'
+												]
+											},
+											tooltip: {
+												callbacks: {
+													label: ctx => ` ${ctx.parsed.y}명`
+												},
+											},
+										},
+										scales: {
+											x: { grid: { display: false } },
+											y: {
+												beginAtZero: true,
+												ticks: {
+													stepSize: 1,
+													callback: value => value + '명'
+												},
+												grid: {
+													borderDash: [3],
+													color: '#e5e5e5'
+												}
+											}
+										}
+									}
+								};
+
+								// 새 차트 생성 및 공통 변수에 저장
+								window.userOnlineChartInstance = new Chart(canvas.getContext('2d'), config);
+							})
+							.catch(error => console.error('서버 오류:', error));
+					}
+				}
+			});
+
+			hiddenInput._flatpickr.open();
+			hiddenInput._flatpickr.clear();
+		}
 	}
 }
 
