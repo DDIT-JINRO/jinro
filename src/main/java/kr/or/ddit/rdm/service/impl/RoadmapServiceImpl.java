@@ -36,7 +36,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 	private final Set<String> ALLOWED_TABLE_NAMES = new HashSet<>(
 			Arrays.asList("INTEREST_CN", "APTITUDE_TEST", "WORLDCUP", "BOOKMARK", "CHAT_MEMBER", "COUNSELING", "BOARD",
 					"RESUME", "SELF_INTRO", "MOCK_INTERVIEW_HISTORY"));
-	
+
 	@Value("${DEV.AI.GEMINI.KEY}")
 	private String geminiApiKey;
 
@@ -57,7 +57,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 		} catch (NumberFormatException e) {
 		    throw new CustomException(ErrorCode.INVALID_USER);
 		}
-		
+
 		boolean isFirst = false;
 
 		// 초기 로드맵 생성
@@ -65,7 +65,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			this.roadmapMapper.insertMemberRoadmap(memId);
 			isFirst = true;
 		}
-		
+
 		// 현재 캐릭터 위치
 		int currentCharPosition = this.roadmapMapper.selectCurrentCharPosition(memId);
 
@@ -75,22 +75,22 @@ public class RoadmapServiceImpl implements RoadmapService {
 		// 각 진행 중인 미션에 대해 완료 가능 여부를 조회 및 설정
 		for(RoadmapVO mission : progressMissions) {
 			int rsId = mission.getRsId();
-			
+
 			String tableName = this.roadmapMapper.selectTableName(rsId);
 			if (tableName != null && ALLOWED_TABLE_NAMES.contains(tableName)) {
 				Map<String, Object> parameter = new HashMap<String, Object>();
 				parameter.put("tableName", tableName);
 				parameter.put("memId", memId);
 				parameter.put("rsId", rsId);
-				
+
 				int result = this.roadmapMapper.isCompleteExists(parameter);
-				
+
 				if(result > 0) mission.setComplete(true);
 			} else {
 				mission.setComplete(false);
 			}
 		}
-		
+
 		// 완료한 미션들
 		List<RoadmapVO> completedMissions = this.roadmapMapper.selectCompletedMissionList(memId);
 
@@ -120,19 +120,19 @@ public class RoadmapServiceImpl implements RoadmapService {
 		} catch (NumberFormatException e) {
 		    throw new CustomException(ErrorCode.INVALID_USER);
 		}
-		
+
 		if (roadmapVO == null) {
 			throw new CustomException(ErrorCode.INVALID_INPUT);
 		}
-		
+
 		int rsId = roadmapVO.getRsId();
-		
+
 		int point;
 		String tableName = this.roadmapMapper.selectTableName(rsId);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put("memId", memId);
-		
-		
+
+
 		if (rsId == 11) {
 			point = 10;
 			parameter.put("point", point);
@@ -141,7 +141,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			if (pointResult <= 0) {
 				throw new CustomException(ErrorCode.POINT_UPDATE_ERROR);
 			}
-			
+
 			return "complete";
 		}
 
@@ -163,11 +163,11 @@ public class RoadmapServiceImpl implements RoadmapService {
 	   if (updateResult <= 0) {
 	        throw new CustomException(ErrorCode.MISSION_ERROR);
 	    }
-		
+
 		point = 1;
 		parameter.put("point", point);
 		int pointResult = this.roadmapMapper.updateUserPoint(parameter);
-		
+
 	    if (pointResult <= 0) {
 	        throw new CustomException(ErrorCode.POINT_UPDATE_ERROR);
 	    }
@@ -186,7 +186,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 		} catch (NumberFormatException e) {
 		    throw new CustomException(ErrorCode.INVALID_USER);
 		}
-		
+
 		request.setMemId(memId);
 
 		int result = this.roadmapMapper.insertMission(request);
@@ -209,7 +209,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 		} catch (NumberFormatException e) {
 		    throw new CustomException(ErrorCode.INVALID_USER);
 		}
-		
+
 		request.setMemId(memId);
 
 		int result = this.roadmapMapper.updateDueDate(request);
@@ -231,34 +231,34 @@ public class RoadmapServiceImpl implements RoadmapService {
 		} catch (NumberFormatException e) {
 		    throw new CustomException(ErrorCode.INVALID_USER);
 		}
-		
+
 		RoadmapResultRequestVO roadmapResultRequestVO = this.roadmapMapper.selectResultData(memId);
 		String result = geminiAnalysis(roadmapResultRequestVO);
-		
+
 		if (result == null) {
 			throw new CustomException(ErrorCode.USER_NOT_FOUND);
 		}
-		
+
 		String jsonContent = result.substring(result.indexOf('{'), result.lastIndexOf('}') + 1);
-		
+
 		return jsonContent;
 	}
-	
+
 	@Override
     public String geminiAnalysis(RoadmapResultRequestVO roadmapResultRequest) {
 		Client client = Client.builder().apiKey(geminiApiKey).build();
 
 		String prompt = buildPrompt(roadmapResultRequest);
-		
-		GenerateContentResponse response = client.models.generateContent("gemini-2.5-flash", prompt, null);
+
+		GenerateContentResponse response = client.models.generateContent("gemini-2.0-flash", prompt, null);
 
     	return response.text();
     }
-    
+
 	@Override
 	public String buildPrompt(RoadmapResultRequestVO roadmapResultRequest) {
     	StringBuilder prompt = new StringBuilder();
-    	
+
     	prompt.append("당신은 15년 경력의 진로 상담사입니다.")
     		  .append("청소년과 청년들을 대상으로 상담 결과를 제출할 예정입니다.\n")
     		  .append("상담을 받은 대상의 이름은 " + roadmapResultRequest.getMemName() + "입니다.\n")
@@ -325,13 +325,13 @@ public class RoadmapServiceImpl implements RoadmapService {
     		  .append("  } \n")
     		  .append("} \n")
     		  .append("```\n\n");
-    	
+
     	prompt.append("⚠️ 중요 지침:\n");
 		prompt.append("- 구체적이고 실행 가능한 개선 방안 제시\n");
 		prompt.append("- JSON 형식을 정확히 준수 (문법 오류 금지)\n");
 		prompt.append("- 상담 대상에게 전하는 추가 제언은 각 planner, experience, enhance별로 200자 제한으로 상세하게 적어주세요.\n");
 		prompt.append("- interestDataType의 경우 INTEREST_CN뿐만이 아니라 다양한 데이터의 분석을 통하여 결정되어야 합니다.\n");
-    		
+
     	return prompt.toString();
     }
 
