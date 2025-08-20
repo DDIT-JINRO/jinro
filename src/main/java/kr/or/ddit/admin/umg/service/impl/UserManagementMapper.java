@@ -9,6 +9,7 @@ import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
 import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.comm.vo.CommBoardVO;
+import kr.or.ddit.comm.vo.CommReplyVO;
 import kr.or.ddit.main.service.MemberVO;
 
 @Mapper
@@ -59,23 +60,23 @@ public interface UserManagementMapper {
 	void updateMemDelYn(int memId);
 
 	int getDailyActiveUsers();
-	
+
 	Double getDailyAverageUsageTime();
-	
+
 	int getCurrentOnlineUsers();
-	
+
 	List<MemberVO> getMemberActivityList(Map<String, Object> map);
-	
+
 	int getAllMemberActivityList(Map<String, Object> map);
-	
+
 	int getYesterdayActiveUsers();
-	
+
 	Double getYesterdayAverageUsageTime();
 
 	List<CommBoardVO> getMemberDetailBoardList(Map<String, Object> map);
-	
+
 	int selectBoardCountByMemId(Map<String, Object> map);
-	
+
 	int getDailySignUpUsers();
 
 	int getYesterdaySignUpUsers();
@@ -83,21 +84,24 @@ public interface UserManagementMapper {
 	int getMonthlyWithdrawalUsers();
 
 	int getLastMonthWithdrawalUsers();
-	
+
 	int getMockInterviewCount(String memId);
-	
+
 	int getAiFeedbackCount(String memId);
 
 	int getCounselingCompletedCount(String memId);
 
 	int getWorldcupCount(String memId);
-	
+
 	int getRoadmapCount(String memId);
 
 	int getPsychTestCount(String memId);
 
 	String getRecentLoginDate(String memId);
-	
+
 	String getRecentPenaltyDate(String memId);
-	
+
+	List<CommReplyVO> getMemberDetailReplyList(Map<String, Object> map);
+
+	int selectReplyCountByMemId(Map<String, Object> map);
 }

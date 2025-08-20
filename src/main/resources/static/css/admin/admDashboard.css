@@ -324,6 +324,11 @@ to {
 	margin-right: 5px;
 }
 
+.public-span-equal {
+	color: #808080;
+	margin-right: 5px;
+}
+
 .public-card-title {
 	color: gray;
 	font-size: 14px;
@@ -500,6 +505,10 @@ th, td {
 	text-align: center;
 	border-left: none;
 	border-right: none;
+}
+
+tbody tr:hover {
+	background-color: #F8F8F8;
 }
 
 .card-footer {

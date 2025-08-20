@@ -18,6 +18,7 @@ import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
 import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.comm.vo.CommBoardVO;
+import kr.or.ddit.comm.vo.CommReplyVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileDetailVO;
@@ -441,6 +442,29 @@ public class UserManagementServiceImpl implements UserManagementService {
 		int total = userManagementMapper.selectBoardCountByMemId(map);
 		
 		ArticlePage<CommBoardVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
+		
+		return articlePage;
+	}
+
+	@Override
+	public ArticlePage<CommReplyVO> getMemberDetailReplyList(int currentPage, int size, String sortBy,
+			String sortOrder, int userId) {
+		
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("memId", userId);
+		map.put("currentPage", currentPage);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		
+		List<CommReplyVO> list = userManagementMapper.getMemberDetailReplyList(map);
+		int total = userManagementMapper.selectReplyCountByMemId(map);
+		
+		ArticlePage<CommReplyVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
 		
 		return articlePage;
 	}

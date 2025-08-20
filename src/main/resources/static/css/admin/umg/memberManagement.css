@@ -20,6 +20,15 @@
 	margin-top: 30px;
 }
 
+.inputmem-role {
+	width: 110px;
+	height: 25px;
+	border: 1px solid #E5E8EB;
+	border-radius: 4px;
+	padding-left: 10px;
+	font-weight: 400;
+}
+
 .userList tr td {
 	height: 30px;
 }
@@ -41,9 +50,9 @@
 .user-detail-listSelect {
 	border: none;
 	color: gray;
-    font-size: 14px;
-    margin: 0;
-    font-weight: 600;
+	font-size: 14px;
+	margin: 0;
+	font-weight: 600;
 }
 
 .user-detail-listSelect:hover {
@@ -76,7 +85,8 @@
 	width: 80px;
 	height: 80px;
 	display: flex;
-	justify-content: center; border-radius : 50%;
+	justify-content: center;
+	border-radius: 50%;
 	overflow: hidden;
 	margin-bottom: 10px;
 	border-radius: 50%;
@@ -92,12 +102,14 @@
 	flex-direction: column;
 	gap: 5px;
 }
+
 .profileInfo-1-3 {
 	display: flex;
 	margin-left: 20px;
 	flex-direction: column;
 	gap: 5px;
 }
+
 .profileInfo-1-4 {
 	display: flex;
 	margin-left: 20px;
@@ -149,6 +161,7 @@
 	margin-top: 20px;
 	gap: 60px;
 }
+
 .info-second-space2 {
 	min-height: 52px;
 	margin-left: 20px;
@@ -165,6 +178,7 @@
 	font-weight: bold;
 	min-width: 190px;
 }
+
 .info-history2 {
 	color: gray;
 	font-size: 13px;
@@ -298,33 +312,32 @@
 }
 
 .btn-primary i {
-    margin-right: 5px;
+	margin-right: 5px;
 }
 
 .table-space {
-    display: none;
+	display: none;
 }
 
 /* 첫 번째 테이블 컨테이너만 보이도록 설정 */
 .table-space:first-of-type {
-    display: block;
+	display: block;
 }
 
 /* p {
 	margin: 5px 0;
-}
+} */
 
-.flex {
+/* .flex {
 	display: flex;
-}
+} */
 
 
-
-#mem-interests {
+/* #mem-interests {
 	font-size: 12px;
-}
+} */
 
-******************************************** 테이블 칸 지정 **********************************
+/******************************************** 테이블 칸 지정 ********************************** */
 .body-id {
 	min-width: 30px;
 }
@@ -360,7 +373,7 @@
 .body-point {
 	min-width: 70px;
 }
-********************************************테이블 칸 지정 끝***************************************
+/* ******************************************테이블 칸 지정 끝*************************************** */
 .gap {
 	gap: 20px;
 }
@@ -395,11 +408,11 @@
 
 
 
-추가ㅏ된
+/* 추가ㅏ된 */
 .member-form-left, .member-form-right, .member-form-extra {
     display: flex;
     flex-direction: column;
-    gap: 6.5px; 간격 조절 라벨,인풋사이
+    gap: 6.5px; /* 간격 조절 라벨,인풋사이 */
 }
 
 .memberManagementLeft {
@@ -408,17 +421,16 @@
 
 .insertMember {
 	width: 800px;
-	height: 412px;
 }
 
 .listMemberBody {
 	padding: 10px;
 }
 
-.member-form input {
+/* .member-form input {
 	width: 100px;
 	height: 10px;
-}
+} */
 
 .managementMember {
 	margin-bottom: 20px;
@@ -427,10 +439,10 @@
 }
 
 .member-form {
-	margin-top: 10px;
+	margin-top: 50px;
 	padding-bottom: 20px;
 	display: grid;
-    grid-template-columns: repeat(3, 1fr); 3개의 열을 동일한 너비로 설정
+    grid-template-columns: repeat(3, 1fr); /* 3개의 열을 동일한 너비로 설정 */
     gap: 30px;
     box-sizing: border-box;
 }
@@ -447,8 +459,8 @@
 
 .btn-temp {
 	padding: 10px;
-    background-color: #DCDEFC;
-    color: black;
+    background-color: #727cf5;
+    color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -469,7 +481,7 @@
 	margin-bottom: 4px;
 }
 
-.flex input {
+/* .flex input {
 	width: 150px;
 	height: 28px;
 	padding: 4px 8px;
@@ -478,7 +490,7 @@
 	font-size: 13px;
 	box-sizing: border-box;
 	transition: border-color 0.2s ease;
-}
+} */
 
 .member-form input, .member-form select {
 	width: 100%;
@@ -530,10 +542,10 @@
 }
 
 .add-btn {
-	grid-column: 1 / 4; 첫 번째 열부터 네 번째 열의 시작점까지 차지
+	width: 80px;
     padding: 12px;
-    background-color: #DCDEFC;
-    color: black;
+    background-color: #727cf5;
+    color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -542,165 +554,21 @@
     transition: background-color 0.2s;
 }
 
-***************************************
-table {
-	width: 100%;
-	border-collapse: collapse;
-	font-size: 14px;
-	background-color: #fff;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	border-radius: 8px;
-	overflow: hidden;
-}
+/* *************************************** */
 
-th, td {
-	padding: 12px 16px;
-	text-align: center;
-	border-bottom: 1px solid #eee;
-}
+/* memberManagement.css 파일에 추가 또는 수정 */
 
-th {
-	background-color: #f4f6f8;
-	color: #333;
-	font-weight: 600;
-}
-
-td {
-	color: #555;
-	font-size: 12px;
-	cursor: pointer;
-}
-
-tr:hover {
-	background-color: #f1f1f1;
-}
-
-table td:first-child {
-	color: #848efb;
-	font-weight: bold;
-}
-
-table th:first-child {
-	border-top-left-radius: 8px;
-}
-
-table th:last-child {
-	border-top-right-radius: 8px;
-}
-
-.search-filter-container {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin-bottom: 20px;
-}
-
-#searchInput {
-	padding: 6px 12px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	width: 220px;
-}
-
-#loginTypeFilter {
-	padding: 6px 12px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
-
-memberManagement.css 파일에 추가 또는 수정
-
-회원 상세 상자
-#member-detail-box {
-	display: flex;
-	flex-direction: column; 세로 방향으로 정렬
-}
-
-프로필 이미지와 기본 정보 영역
-.member-header-section {
-	margin-top: 20px;
-	display: flex;
-	align-items: flex-start;
-	gap: 30px;
-}
-
-.member-penalty-title {
-	font-size: 12px;
-}
-
-프로필 이미지
-.member-profile img {
-	width: 150px;
-	height: 150px;
-	border-radius: 50%;
-	object-fit: cover;
-	border: 3px solid #dee2e6;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-회원 정보 그리드 레이아웃
-.member-info-grid {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr); 2열 그리드
-	gap: 20px;
-}
-
-각 정보 필드 (이름, 닉네임 등)
-.info-field {
-	display: flex;
-	flex-direction: column;
-}
-
-.info-field label {
-	font-weight: bold;
-	color: black;
-	margin-bottom: 3px;
-	background-color: #DCDEFC; 배경색으로 강조
-	padding: 3px 5px;
-	border-radius: 8px;
-	font-size: 10px;
-}
-
-.info-field input {
-	width: 100%;
-	height: 20px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	padding: 8px 12px;
-	box-sizing: border-box;
-}
-
-경고/정지, 관심 분야 영역
-.member-penalty-section, .member-interests-section {
-	border-top: 1px solid #eee;
-	margin-top: 10px;
-}
-
-.marginBt {
-	margin-bottom: 20px;
-}
-
-관심 키워드 스타일
-#mem-interests span {
-	background-color: #07223D;
-	color: white;
-	padding: 6px 12px;
-	border-radius: 20px;
-	font-size: 13px;
-	margin-right: 8px;
-	display: inline-block;
-}
-
-버튼 그룹
+/* 회원 상세 상자 */
+/* 버튼 그룹 */
 .button-group {
 	display: flex;
 	gap: 10px;
-	justify-content: flex-end; 오른쪽 정렬
+	justify-content: flex-end; /* 오른쪽 정렬 */
 	padding-top: 5px;
 	border-top: 1px solid #eee;
 }
 
-수정, 경고, 정지 버튼 스타일
+/* 수정, 경고, 정지 버튼 스타일 */
 .btn-modify {
 	background-color: rgb(220, 222, 252);;
 	color: black;
@@ -747,4 +615,98 @@ memberManagement.css 파일에 추가 또는 수정
 	margin-bottom: 20px;
 }
 
-************** */
+/* ************** */
+
+/* 모달 관련 CSS */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.info-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.info-list > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-list dt {
+    font-weight: bold;
+    color: gray;
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+.info-list dd {
+    margin-left: 0;
+    font-size: 1rem;
+}
+
+.info-list .full-width {
+    grid-column: 1 / 3;
+}
+
+.content-text {
+    white-space: pre-wrap; /* 내용이 긴 경우 줄바꿈 처리 */
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-close {
+    background-color: #6973E3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}

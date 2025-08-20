@@ -912,4 +912,56 @@
 	    )
 	    WHERE ROWNUM = 1
 	</select>
+	
+	<select id="getMemberDetailReplyList" resultType="kr.or.ddit.comm.vo.CommReplyVO">
+	    SELECT * FROM (
+	        SELECT ROWNUM AS RNUM, B.*
+	        FROM (
+	            SELECT
+	                A.REPLY_ID,
+	                A.BOARD_ID,
+	                A.MEM_ID,
+	                A.REPLY_CONTENT,
+	                A.REPLY_CREATED_AT,
+	                A.REPLY_UPDATED_AT,
+	                A.REPLY_DEL_YN,
+	                A.REPLY_PARENT_ID,
+	                B.CC_ID
+	            FROM
+	                REPLY A
+	            INNER JOIN
+	                BOARD B ON A.BOARD_ID = B.BOARD_ID
+	            WHERE
+	                A.MEM_ID = #{memId}
+	            <choose>
+	                <when test="sortBy != null and sortBy != ''">
+	                    ORDER BY
+	                    <choose>
+	                        <when test="sortBy == 'replyId'">A.REPLY_ID</when>
+	                        <when test="sortBy == 'replyDelYn'">A.REPLY_DEL_YN</when>
+	                        <when test="sortBy == 'replyCreatedAt'">A.REPLY_CREATED_AT</when>
+	                        <otherwise>A.REPLY_ID</otherwise>
+	                    </choose>
+	                    <if test="sortOrder == 'desc'">DESC</if>
+	                    <if test="sortOrder == 'asc' or sortOrder == null">ASC</if>
+	                </when>
+	                <otherwise>
+	                    ORDER BY
+	                        A.REPLY_ID ASC
+	                </otherwise>
+	            </choose>
+	        ) B
+	        WHERE ROWNUM &lt;= #{endNo}
+	    )
+	    WHERE RNUM &gt;= #{startNo}
+	</select>
+	
+	<select id="selectReplyCountByMemId" resultType="int">
+		SELECT
+	        COUNT(*)
+	    FROM
+	        REPLY
+	    WHERE
+	        MEM_ID = #{memId}
+	</select>
 </mapper>

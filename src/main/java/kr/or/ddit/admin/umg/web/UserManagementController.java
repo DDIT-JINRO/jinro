@@ -16,6 +16,7 @@ import kr.or.ddit.admin.umg.service.UserManagementService;
 import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.comm.peer.teen.service.TeenCommService;
 import kr.or.ddit.comm.vo.CommBoardVO;
+import kr.or.ddit.comm.vo.CommReplyVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.alarm.service.AlarmService;
@@ -65,6 +66,17 @@ public class UserManagementController {
 
 		return userManagementService.getMemberDetailBoardList(currentPage, size, ccId, sortBy, sortOrder, userId);
 
+	}
+	@GetMapping("/getMemberDetailReplyList.do")
+	public ArticlePage<CommReplyVO> getMemberDetailReplyList(
+			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+			@RequestParam(value = "size", required = false, defaultValue = "5") int size,
+			@RequestParam(value = "sortBy", required = false) String sortBy,
+			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder,
+			@RequestParam(value = "userId") int userId) {
+		
+		return userManagementService.getMemberDetailReplyList(currentPage, size, sortBy, sortOrder, userId);
+		
 	}
 
 	@PostMapping("/insertUserByAdmin.do")
