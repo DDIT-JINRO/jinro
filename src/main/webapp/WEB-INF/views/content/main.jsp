@@ -177,7 +177,7 @@
 	      <a class="ai-card" href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do" aria-label="AI 이력서 바로가기">
 	        <img class="ai-card__icon" src="/images/main/charactor6-airesume.png" alt="" />
 	        <div class="ai-card__body">
-	          <h3 class="ai-card__title">AI 이력서</h3>
+	          <h3 class="ai-card__title">AI 이력서 첨삭</h3>
 	          <p class="ai-card__text">키워드 보강 · 문장 다듬기</p>
 	        </div>
 	      </a>
@@ -186,7 +186,7 @@
 	      <a class="ai-card" href="/cdp/aifdbck/sint/aiFeedbackSelfIntroList.do" aria-label="AI 자소서 바로가기">
 	        <img class="ai-card__icon" src="/images/main/charactor7-aiselfintro.png" alt="" />
 	        <div class="ai-card__body">
-	          <h3 class="ai-card__title">AI 자소서</h3>
+	          <h3 class="ai-card__title">AI 자소서 첨삭</h3>
 	          <p class="ai-card__text">항목별 구조화 · 첨삭</p>
 	        </div>
 	      </a>
@@ -195,7 +195,7 @@
 	      <a class="ai-card" href="/cnslt/aicns/aicns.do" aria-label="AI 상담 바로가기">
 	        <img class="ai-card__icon" src="/images/main/charactor8-aicounsel.png" alt="" />
 	        <div class="ai-card__body">
-	          <h3 class="ai-card__title">AI 상담</h3>
+	          <h3 class="ai-card__title">AI 24시 상담</h3>
 	          <p class="ai-card__text">진로·진학/취업 맞춤 조언</p>
 	        </div>
 	      </a>
