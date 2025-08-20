@@ -59,16 +59,16 @@ slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
 let slideInterval;
 
 // --- 자동 슬라이드 제어 함수 ---
-function pauseSlide() { 
+function pauseSlide() {
     if (slideInterval) {
-        clearInterval(slideInterval); 
+        clearInterval(slideInterval);
         slideInterval = null;
     }
 }
 
-function resumeSlide() { 
+function resumeSlide() {
     pauseSlide(); // 기존 타이머 정리
-    slideInterval = setInterval(nextSlide, 3000); 
+    slideInterval = setInterval(nextSlide, 3000);
 }
 
 function resetSlideTimer() {
@@ -158,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	fn_init();
 	fn_TopsWidget();
 	fn_ContestBanner();
+	fn_checkLoginBeforeAI();
     if(memId && memId !='anonymousUser') {
     	roadmapPopup();
 	}
@@ -334,4 +335,18 @@ const fn_ContestBanner = async () =>{
 		`
 	).join('');
 	slideContainer.innerHTML = banners + banners;
+}
+
+const fn_checkLoginBeforeAI = () =>{
+	const anchors = document.querySelectorAll(".ai-shortcuts__grid .ai-card");
+	anchors.forEach(a =>{
+		a.addEventListener('click', function(e){
+			const anchor = e.target.closest('a');
+			console.log(anchor);
+			if(!memId || memId =='anonymousUser') {
+				e.preventDefault();
+				location.href="/login";
+			}
+		})
+	})
 }
