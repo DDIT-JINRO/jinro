@@ -388,12 +388,12 @@ document.addEventListener('DOMContentLoaded', function() {
 // 자동완성 핸들러
 function autoCompleteHandler() {
 	// 1. '입학지원 대학 검색' 버튼 클릭 
-	document.getElementById('university-search').click();
+	document.getElementById('searchBtn').click();
 
 	// 2. 모달이 열리는 것을 기다린 후, 대학을 선택
 	setTimeout(function() {
 		//모달에서 국립한밭대학교
-		const univListItems = document.querySelectorAll('.university-list-item');
+		const univListItems = document.querySelectorAll('.search-modal__list-item');
 		let selectedItem = null;
 
 		// 목록에 항목이 있는지 확인
@@ -405,7 +405,7 @@ function autoCompleteHandler() {
 
 		if (selectedItem) {
 			// '선택' 버튼을 클릭하여 메인 폼에 데이터 적용
-			document.getElementById('modal-confirm-btn').click();
+			document.getElementById('modalConfirmBtn').click();
 		} else {
 			console.error('자동완성할 대학을 찾지 못했습니다.');
 			alert('자동완성할 대학을 찾지 못했습니다. 목록을 다시 확인해주세요.');
@@ -414,26 +414,25 @@ function autoCompleteHandler() {
 
 		setTimeout(async function() {
 			//학과 채우기
-			document.getElementById('interview-position').value = '컴퓨터공학과';
+			document.getElementById('application').value = '컴퓨터공학과';
 
 			//면접일자 채우기
-			document.getElementById('interview-date').value = '2025-08-04';
+			document.getElementById('interviewDate').value = '2025-08-04';
 
 			// 별점 자동 선택 (5점 만점)
-			const ratingStars = document.querySelectorAll('#university-rating .star');
+			const ratingStars = document.querySelectorAll('.rating-input__star');
 			if (ratingStars.length > 4) {
 				ratingStars[4].click();
 			}
 
 			// 면접 후기 내용 자동 완성
 			const reviewContent = `면접관님께서 편안한 분위기를 만들어주셔서 긴장하지 않고 답변할 수 있었습니다. \n특히 전공 관련 질문에 대해 심도 있는 대화를 나누며 제 지식을 어필할 수 있었고, \n대학의 교육 목표와 비전에 대해 자세히 들을 수 있어 매우 유익했습니다. \n면접 이후에도 좋은 인상을 받았습니다.`;
-			document.getElementById('interview-detail').value = reviewContent;
+			document.getElementById('interviewContent').value = reviewContent;
 
 			// 파일 첨부
 			const fileInput = document.getElementById('file-input');
-			const fileNameDisplay = document.querySelector('.txt_filename b');
-			const fileNameContainer = document.querySelector('.txt_filename');
-
+			const fileNameDisplay = document.querySelector('.file-uploader__filename b');
+			const fileNameContainer = document.querySelector('.file-uploader__filename');
 			//서버에 있는 더미 파일
 			const fileUrl = '/images/main/charactor4.png';
 
