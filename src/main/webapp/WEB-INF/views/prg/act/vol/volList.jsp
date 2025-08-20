@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:useBean id="now" class="java.util.Date" />
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/prg/act/vol/volList.css">
+<link rel="stylesheet" href="/css/prg/ctt/cttList.css">
 <section class="channel">
 	<div class="channel-title">
 		<div class="channel-title-text">프로그램</div>
@@ -28,81 +28,79 @@
 
 		<div class="public-wrapper-main">
 			<div class="filter-section">
-				<form method="get" action="/prg/act/vol/volList.do">
-					<div class="com-default-search">
-						<div class="com-select-wrapper">
-							<svg class="com-select-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-			                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-			            </svg>
+				<form method="get" action="/prg/act/vol/volList.do" class="search-filter__form">
+					<div class="search-filter__bar">
+						<div class="search-filter__input-wrapper">
+							<input type="search" name="keyword" value="${checkedFilters.keyword}" class="search-filter__input" placeholder="검색어를 입력하세요">
+							<button class="search-filter__button" type="submit">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+								<path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+							</svg>
+							</button>
 						</div>
-						<input type="search" name="keyword" placeholder="검색어를 입력하세요">
-						<button class="com-search-btn" type="button">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-			                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-			            </svg>
-						</button>
 					</div>
-
-					<div class="com-accordion-filter">
-						<button type="button" class="com-accordion-header" id="com-accordion-toggle">
+					<div class="search-filter__accordion">
+						<button type="button" class="search-filter__accordion-header" id="search-filter-toggle">
 							<span>필터</span>
-							<span class="com-arrow-icon">▲</span>
+							<span class="search-filter__accordion-arrow">▲</span>
 						</button>
-						<div class="com-accordion-panel" id="com-accordion-panel">
-							<div class="com-accordion-content">
-
-								<div class="com-filter-section">
-									<label class="com-filter-title">모집 상태</label>
-									<div class="com-filter-options">
-										<label class="com-filter-item">
-											<input type="checkbox" name="contestStatusFilter" value="proceeding" data-label="모집 상태" data-name="진행중" <c:if test="${fn:contains(checkedFilters.contestStatusFilter, 'proceeding')}">checked</c:if> />
+						<div class="search-filter__accordion-panel" id="search-filter-panel">
+							<div class="search-filter__accordion-content">
+								<div class="search-filter__group">
+									<label class="search-filter__group-title">모집 상태</label>
+									<div class="search-filter__options">
+										<label class="search-filter__option">
+											<input type="checkbox" name="contestStatusFilter" value="proceeding" <c:if test="${fn:contains(checkedFilters.contestStatusFilter, 'proceeding')}">checked</c:if> />
 											<span>진행중</span>
 										</label>
-										<label class="com-filter-item">
-											<input type="checkbox" name="contestStatusFilter" value="finished" data-label="모집 상태" data-name="마감" <c:if test="${fn:contains(checkedFilters.contestStatusFilter, 'finished')}">checked</c:if> />
+										<label class="search-filter__option">
+											<input type="checkbox" name="contestStatusFilter" value="finished" <c:if test="${fn:contains(checkedFilters.contestStatusFilter, 'finished')}">checked</c:if> />
 											<span>마감</span>
 										</label>
 									</div>
 								</div>
 
-								<div class="com-filter-section">
-									<label class="com-filter-title">모집 대상</label>
-									<div class="com-filter-options">
+								<div class="search-filter__group">
+									<label class="search-filter__group-title">모집 대상</label>
+									<div class="search-filter__options">
 										<c:forEach var="cTarget" items="${contestTargetList}">
-											<label class="com-filter-item">
-												<input type="checkbox" name="contestTargetFilter" value="${cTarget.ccId}" data-label="모집 대상" data-name="${cTarget.ccName}" <c:if test="${fn:contains(checkedFilters.contestTargetFilter, cTarget.ccId)}">checked</c:if> />
+											<label class="search-filter__option">
+												<input type="checkbox" name="contestTargetFilter" value="${cTarget.ccId}" <c:if test="${fn:contains(checkedFilters.contestTargetFilter, cTarget.ccId)}">checked</c:if> />
 												<span>${cTarget.ccName}</span>
 											</label>
 										</c:forEach>
 									</div>
 								</div>
-								<div class="com-filter-section">
-									<label class="com-filter-title">정렬 순서</label>
-									<div class="com-filter-options">
-										<label class="com-filter-item">
-											<input type="radio" name="sortOrder" value="deadline" ${checkedFilters.sortOrder == 'deadlin' or empty checkedFilters.sortOrder ? 'checked' : ''} />
+
+								<div class="search-filter__group">
+									<label class="search-filter__group-title">정렬 순서</label>
+									<div class="search-filter__options">
+										<label class="search-filter__option">
+											<input type="radio" name="sortOrder" value="deadline" ${checkedFilters.sortOrder == 'deadline' or empty checkedFilters.sortOrder ? 'checked' : ''} />
 											<span>마감일 임박순</span>
 										</label>
-										<label class="com-filter-item">
+										<label class="search-filter__option">
 											<input type="radio" name="sortOrder" value="latest" ${checkedFilters.sortOrder == 'latest' ? 'checked' : ''} />
 											<span>최신 등록순</span>
 										</label>
 									</div>
 								</div>
-								<div class="com-filter-section">
-									<div class="com-button-container">
-										<label class="com-filter-title">선택된 필터</label>
-										<button type="button" class="com-filter-reset-btn">초기화</button>
+
+								<div class="search-filter__group">
+									<div class="search-filter__group-header">
+										<label class="search-filter__group-title">선택된 필터</label>
+										<button type="button" class="search-filter__reset-button">초기화</button>
 									</div>
-									<div class="com-selected-filters"></div>
+									<div class="search-filter__selected-tags"></div>
 								</div>
-								<button type="submit" class="com-submit-search-btn">검색</button>
+
+								<button type="submit" class="search-filter__submit-button">검색</button>
 							</div>
 						</div>
 					</div>
 				</form>
 			</div>
-			<p>총 ${articlePage.total}건</p>
+			<div class="content-list__total-count">총 ${articlePage.total}건</div>
 
 			<div class="list-container">
 				<c:if test="${not empty articlePage.content}">
@@ -161,21 +159,18 @@
 					</c:forEach>
 				</c:if>
 				<c:if test="${empty articlePage.content}">
-					<div style="text-align: center; padding: 50px;">검색 결과가 없습니다.</div>
+					<div class="content-list__no-results" style="grid-column: 1/-1;">검색 결과가 없습니다.</div>
 				</c:if>
 			</div>
 		</div>
 
-		<div class="card-footer clearfix">
+		<c:if test="${not empty articlePage.content}">
 			<ul class="pagination">
 				<li>
 					<c:url value="/prg/act/vol/volList.do" var="prevUrl">
 						<c:param name="currentPage" value="${articlePage.startPage - 5}" />
 						<c:param name="keyword" value="${checkedFilters.keyword}" />
 						<c:param name="sortOrder" value="${checkedFilters.sortOrder}" />
-						<c:forEach var="filter" items="${checkedFilters.contestGubunFilter}">
-							<c:param name="contestGubunFilter" value="${filter}" />
-						</c:forEach>
 						<c:forEach var="filter" items="${checkedFilters.contestTargetFilter}">
 							<c:param name="contestTargetFilter" value="${filter}" />
 						</c:forEach>
@@ -183,7 +178,7 @@
 							<c:param name="contestStatusFilter" value="${filter}" />
 						</c:forEach>
 					</c:url>
-					<a href="${prevUrl}" class="${articlePage.startPage < 6 ? 'disabled' : ''}">← Previous</a>
+					<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}">← Previous</a>
 				</li>
 
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
@@ -192,9 +187,6 @@
 							<c:param name="currentPage" value="${pNo}" />
 							<c:param name="keyword" value="${checkedFilters.keyword}" />
 							<c:param name="sortOrder" value="${checkedFilters.sortOrder}" />
-							<c:forEach var="filter" items="${checkedFilters.contestGubunFilter}">
-								<c:param name="contestGubunFilter" value="${filter}" />
-							</c:forEach>
 							<c:forEach var="filter" items="${checkedFilters.contestTargetFilter}">
 								<c:param name="contestTargetFilter" value="${filter}" />
 							</c:forEach>
@@ -202,7 +194,7 @@
 								<c:param name="contestStatusFilter" value="${filter}" />
 							</c:forEach>
 						</c:url>
-						<a href="${pageUrl}" class="${pNo == articlePage.currentPage ? 'active' : ''}">${pNo}</a>
+						<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}">${pNo}</a>
 					</li>
 				</c:forEach>
 
@@ -211,9 +203,6 @@
 						<c:param name="currentPage" value="${articlePage.startPage + 5}" />
 						<c:param name="keyword" value="${checkedFilters.keyword}" />
 						<c:param name="sortOrder" value="${checkedFilters.sortOrder}" />
-						<c:forEach var="filter" items="${checkedFilters.contestGubunFilter}">
-							<c:param name="contestGubunFilter" value="${filter}" />
-						</c:forEach>
 						<c:forEach var="filter" items="${checkedFilters.contestTargetFilter}">
 							<c:param name="contestTargetFilter" value="${filter}" />
 						</c:forEach>
@@ -221,14 +210,13 @@
 							<c:param name="contestStatusFilter" value="${filter}" />
 						</c:forEach>
 					</c:url>
-					<a href="${nextUrl}" class="${articlePage.endPage >= articlePage.totalPages ? 'disabled' : ''}">Next →</a>
+					<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}">Next →</a>
 				</li>
 			</ul>
-		</div>
-
+		</c:if>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
-<script src="/js/prg/act/vol/volList.js"></script>
+<script src="/js/prg/ctt/cttList.js"></script>
 </body>
 </html>
