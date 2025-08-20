@@ -891,9 +891,8 @@
 	<!-- 6. 심리검사 횟수 조회 -->
 	<select id="getPsychTestCount" parameterType="String" resultType="int">
 	    SELECT COUNT(*)
-	    FROM PAGE_LOG
+	    FROM APTITUDE_TEST
 	    WHERE MEM_ID = #{memId}
-	    AND PL_TITLE LIKE '심리검사%'
 	</select>
 	
 	<!-- 7. 최근 로그인 기록 조회 -->

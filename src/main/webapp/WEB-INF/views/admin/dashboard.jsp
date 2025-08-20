@@ -18,6 +18,7 @@
 						<div class="public-card-title">실시간 이용자</div>
 						<img class="image1-1-1-1" alt="" src="/images/admin/admin-image1.png">
 						<div class="userCnt-1-1-1" id="liveUserCount"></div>
+						<div id="localTimeDisplay"></div>
 					</div>
 					<div class="template-panel dashboard-1-1-1 overflow-wrap">
 						<div class="public-card-title">당월 이용자</div>

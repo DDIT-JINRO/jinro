@@ -414,7 +414,6 @@ to {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	
 	border-radius: 2px;
 	overflow: hidden;
 	font-family: Arial, sans-serif;
@@ -464,6 +463,22 @@ to {
 
 .public-listSearch .btn-save:hover {
 	background-color: #5548e0; /* hover 진한 보라 */
+}
+
+.public-card-red-count {
+	font-size: 42px;
+	font-weight: 700;
+	color: #FA5C7C;
+	margin-top: auto;
+	margin-left: auto;
+}
+
+.public-card-green-count {
+	font-size: 42px;
+	font-weight: 700;
+	color: #0ACF97;
+	margin-top: auto;
+	margin-left: auto;
 }
 
 .arrow {
@@ -570,6 +585,11 @@ tbody tr:hover {
 	cursor: pointer;
 	transition: background-color 0.3s ease, transform 0.2s ease, box-shadow
 		0.3s ease;
+}
+
+#localTimeDisplay {
+	color: #8a969c;
+	font-weight: 400;
 }
 
 /***************************** 콘텐츠 이용 통계 도넛 ***************************************/

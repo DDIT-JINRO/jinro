@@ -1,5 +1,124 @@
 function sanasd() {
-	
+
+	const baseColors = [
+		'#5B399B',
+		'#7B5EAA',
+		'#8D6EE4',
+		'#9B7BDD',
+		'#AD94E8',
+		'#BCACF0',
+		'#C5BCF3',
+		'#DCD2F8',
+		'#EAE5F8',
+		'#514578'
+	];
+
+	function getDynamicColors(dataCount) {
+		const colors = [];
+		for (let i = 0; i < dataCount; i++) {
+			colors.push(baseColors[i % baseColors.length]);
+		}
+		return colors;
+	}
+
+	function dashboardStats() {
+		axios.get('/admin/pmg/getDashboardStats.do').then(res => {
+			const { pendingReportCount, todayReportCount } = res.data;
+			document.getElementById('dailyReportCnt').innerHTML = `${todayReportCount}건`;
+			document.getElementById('delayReportCnt').innerHTML = `${pendingReportCount}건`;
+		})
+	}
+
+
+	function penaltyStats() {
+		axios.get('/admin/pmg/getPenaltyStats.do')
+			.then(res => {
+				const penaltyData = res.data.data;
+                
+                // 라벨을 직접 분할하는 대신, Chart.js의 콜백 함수에서 처리하도록 수정
+				const labels = penaltyData.map(item => item.PENALTYTYPE);
+				const dataValues = penaltyData.map(item => item.COUNT);
+				const colors = getDynamicColors(labels.length);
+
+				const ctx = document.getElementById('penaltyChart').getContext('2d');
+
+				const penaltyChart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: labels,
+						datasets: [{
+							data: dataValues,
+							backgroundColor: colors,
+							borderColor: colors,
+							borderWidth: 1,
+							barThickness: 20
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: false
+							},
+							title: {
+								display: false
+							}
+						},
+						scales: {
+							y: {
+								beginAtZero: true,
+								max: Math.max(...dataValues) + 1,
+								ticks: {
+									stepSize: 1
+								}
+							},
+							x: {
+								grid: {
+									display: false
+								},
+								ticks: {
+									display: true,
+									autoSkip: false,
+                                    // 라벨 회전 비활성화
+									maxRotation: 0,
+									minRotation: 0,
+                                    // 새로운 콜백 함수 로직 적용
+                                    callback: function(value) {
+                                        const label = this.getLabelForValue(value);
+                                        if (label.includes(" - ")) {
+                                            return label.split(" - ");
+                                        } else if (label.length > 6 && label.includes(' ')) {
+                                            return label.split(' ');
+                                        }
+                                        return label;
+                                    },
+                                    font: {
+                                        size: 10
+                                    }
+								}
+							}
+						}
+					}
+				});
+			})
+			.catch(error => {
+				console.error('제재 유형 데이터 조회 중 오류 발생:', error);
+			});
+	}
+
+
+
+
+	dashboardStats();
+	penaltyStats();
+
+
+
+
+
+
+
 	window.currentPage = 1;
 	const openNewPenaltyModalBtn = document.getElementById('openNewPenaltyModalBtn');
 	const cancelBtn = document.getElementById('cancelBtn');
@@ -380,8 +499,6 @@ function sanasd() {
 		})
 			.then(({ data }) => {
 
-				console.log(data);
-
 				const countEl = document.getElementById('penaltyList-count');
 				if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
 
@@ -439,10 +556,7 @@ function sanasd() {
 				document.getElementById('penalty-detail-endDate').innerHTML = '-';
 				fileContainer.innerHTML = '-';
 
-
 				const { penaltyVO, filePath, fileOrgName } = res.data;
-
-				console.log(penaltyVO, filePath, fileOrgName)
 
 				document.getElementById('penalty-detail-mpId').innerHTML = penaltyVO.mpId || '-';
 				document.getElementById('penalty-detail-mpType').innerHTML = penaltyStatusCng(penaltyVO.mpType) || '-';
