@@ -48,7 +48,7 @@
 				</div>
 				<div class="summary-wrapper">
 					<div class="summary-header">
-						<h3 class="summary-title">공모전 정보</h3>
+						<h3 class="summary-title">서포터즈 정보</h3>
 					</div>
 					<table class="info-table">
 						<tbody>
