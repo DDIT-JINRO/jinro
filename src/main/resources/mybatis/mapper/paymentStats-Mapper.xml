@@ -393,11 +393,11 @@
 		      )
 		  ) AS "totalUsers",
 		
-		  -- 해당 월의 구독자 수 (기준: 월말)
+		  -- 해당 월의 구독자 수 = 전달에 결제한 사람 수 (기준: 월말)
 		  (SELECT COUNT(*)
 		     FROM PAYMENT
-		    WHERE PAY_DATE >= TRUNC(m.month_end, 'MM')
- 		      AND PAY_DATE <  ADD_MONTHS(TRUNC(m.month_end, 'MM'), 1)               -- 당월 월초 미만
+		    WHERE PAY_DATE >= ADD_MONTHS(TRUNC(m.month_end, 'MM'), -1)  -- 전달 월초 포함
+		      AND PAY_DATE <  TRUNC(m.month_end, 'MM')                  -- 당월 월초 미만
 		  ) AS "subscribers"
 		
 		FROM MONTH_LIST m
