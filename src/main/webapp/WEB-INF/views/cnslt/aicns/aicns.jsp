@@ -41,7 +41,7 @@
 					<!-- 2. 주제별 안내 -->
 					<h2 class="ai-subtitle">상담 주제</h2>
 					<p>
-						채용·진로, 학업 설계, 마음 건강—세 가지 주제 중 하나를 선택하고 지금 바로 AI와 대화를 시작하세요.<br />
+						<b>취업</b>, <b>학업</b>, <b>심리</b> — 세 가지 주제 중 하나를 선택하고 지금 바로 AI와 대화를 시작하세요.<br />
 						상담은 <b>팝업창에서만</b> 진행되며, <b>운영 측에 대화가 저장되지 않는 휘발성</b> 방식으로 제공됩니다.
 					</p>
 					<ul class="ai-hero-list">
@@ -54,7 +54,7 @@
 					<!-- 3. 이용 방식 -->
 					<h2 class="ai-subtitle">이용 방식</h2>
 					<ul class="ai-hero-list">
-						<li>주제를 선택하고 “상담 시작하기”를 누르면 새로운 팝업 창이 열립니다.</li>
+						<li>주제를 선택하고 “<b>상담 시작하기</b>”를 누르면 새로운 팝업 창이 열립니다.</li>
 						<li>상담은 질문–답변 형식으로 자유롭게 이어갈 수 있습니다.</li>
 						<li>시작 시 <b>이용권 1회</b>가 차감되며, 선택한 주제는 상담 중 변경할 수 없습니다.
 						</li>
@@ -96,7 +96,7 @@
 					<article class="ai-card" data-type="JOB" tabindex="0" role="radio" aria-checked="false">
 						<div class="ai-icon" aria-hidden="true">💼</div>
 						<h3>취업 상담</h3>
-						<p>이력서·자소서 피드백, 면접 준비, 포지션 매칭 등 커리어 전반에 대한 코칭.</p>
+						<p>취업 관련 면접 준비, 포지션 매칭 등 커리어 전반에 대한 코칭.</p>
 					</article>
 
 					<article class="ai-card" data-type="STUDY" tabindex="0"
