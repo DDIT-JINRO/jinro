@@ -23,7 +23,8 @@
 			<h3 class="page-title-bar__title">스터디 그룹</h3>
 		</div>
 		<div class="public-wrapper-main">
-			<h3>스터디그룹 소개 및 채팅방 수정</h3>
+			<h2 class="studygroup-from__title">스터디그룹 소개 및 채팅방 수정</h2>
+			<p class="studygroup-form__subtitle">스터디그룹 모집 게시글을 수정합니다.</p>
 			<div class="study-post-wrapper" data-board-id="${csbVO.boardId }" data-cr-id="${csbVO.chatRoomVO.crId }">
 				<div class="form-group">
 					<label for="post-title">게시글 제목</label>

@@ -29,7 +29,8 @@
 	</div>
 
 	<div class="public-wrapper-main">
-		<h3>스터디그룹 소개 및 채팅방 개설</h3>
+		<h2 class="studygroup-from__title">스터디그룹 소개 및 채팅방 개설</h2>
+		<p class="studygroup-form__subtitle">스터디그룹 모집 게시글 작성과 함께 채팅방이 개설됩니다.</p>
 		<div class="create-wrapper">
 			<div class="form-group">
 				<label for="post-title">게시글 제목</label>
