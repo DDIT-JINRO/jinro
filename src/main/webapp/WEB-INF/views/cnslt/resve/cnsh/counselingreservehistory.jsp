@@ -159,15 +159,17 @@
 
 				<ul class="pagination">
 					<li class="pagination__item">
-						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="pagination__link <c:if test='${articlePage.startPage < 6}'>pagination__link--disabled</c:if>"> ← Previous </a>
+						<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}&counselStatus=${param.counselStatus}&counselCategory=${param.counselCategory}&counselMethod=${param.counselMethod}" class="pagination__link <c:if test='${articlePage.startPage < 6}'>pagination__link--disabled</c:if>"> ← Previous </a>
 					</li>
+
 					<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 						<li class="pagination__item">
-							<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="pagination__link <c:if test='${pNo == articlePage.currentPage}'>pagination__link--active</c:if>"> ${pNo} </a>
+							<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}&counselStatus=${param.counselStatus}&counselCategory=${param.counselCategory}&counselMethod=${param.counselMethod}" class="pagination__link <c:if test='${pNo == articlePage.currentPage}'>pagination__link--active</c:if>"> ${pNo} </a>
 						</li>
 					</c:forEach>
+
 					<li class="pagination__item">
-						<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="pagination__link <c:if test='${articlePage.endPage >= articlePage.totalPages}'>pagination__link--disabled</c:if>"> Next → </a>
+						<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}&counselStatus=${param.counselStatus}&counselCategory=${param.counselCategory}&counselMethod=${param.counselMethod}" class="pagination__link <c:if test='${articlePage.endPage >= articlePage.totalPages}'>pagination__link--disabled</c:if>"> Next → </a>
 					</li>
 				</ul>
 			</div>
