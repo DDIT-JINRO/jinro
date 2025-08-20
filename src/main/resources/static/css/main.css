@@ -210,9 +210,15 @@
 	animation-play-state: paused;
 }
 
-.feature-slider__image {
+.feature-slider__anchor{
 	height: 345px;
-	width: auto;
+	width: 300px;
+
+}
+
+.feature-slider__image {
+	height: 100%;
+	width: 100%;
 	object-fit: cover;
 	border-radius: 10px;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
