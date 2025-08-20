@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (posterImg && modal && modalImg && closeBtn) {
         posterImg.addEventListener('click', function() {
-            modal.style.display = "block";
+            modal.style.display = "flex";
             modalImg.src = this.src;
             modalImg.alt = this.alt;
         });
