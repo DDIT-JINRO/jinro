@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	// 2. 삭제 버튼 이벤트
-	const btnDelete = mainForm.querySelector(".btn-delete");
+	const btnDelete = mainForm.querySelector(".btn--danger");
 	if (btnDelete) {
 		btnDelete.addEventListener("click", () => {
 			if (confirm("정말 삭제하시겠습니까?")) {
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function autoCompleteHandler() {
 	//제목 입력 필드 자동완성
-	const titleInput = document.querySelector('.section-title .title-input');
+	const titleInput = document.querySelector('.form-section .form-input');
 	if (titleInput && titleInput.value.trim() == '새 면접 질문' || titleInput.value.trim() == '') {
 		titleInput.value = '나의 모의면접 질문 초안';
 	}
@@ -133,7 +133,7 @@ function autoCompleteHandler() {
 		`이전 건물에서 경비 업무를 할 때, 순찰 시간을 최적화하기 위해 CCTV 사각지대와 주요 동선을 분석하여 순찰 경로를 재조정했습니다. 그 결과, 순찰 시간을 20% 단축하면서도 보안 수준은 더욱 강화할 수 있었습니다. 이처럼 데이터를 활용하여 효율적인 업무 방식을 찾는 데 강점이 있습니다.`
 	];
 
-	const qaBlocks = document.querySelectorAll('.qa-block');
+	const qaBlocks = document.querySelectorAll('.qa-card');
 	qaBlocks.forEach((block, index) => {
 		const answerTextarea = block.querySelector('textarea[name="idAnswerList"]');
 

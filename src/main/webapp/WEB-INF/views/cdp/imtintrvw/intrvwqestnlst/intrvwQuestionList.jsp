@@ -58,7 +58,6 @@
 						<div class="search-filter__group">
 							<div class="search-filter__group-header">
 								<span class="search-filter__group-title">직무 분야</span>
-								<button type="button" class="search-filter__reset-button" onclick="resetJobFilters()">초기화</button>
 							</div>
 							<div class="search-filter__options">
 								<c:forEach var="code" items="${codeVOList}">
@@ -72,7 +71,10 @@
 
 						<!-- 선택된 필터 표시 -->
 						<div class="search-filter__group">
-							<span class="search-filter__group-title">선택된 필터</span>
+							<div class="search-filter__group-header">											
+								<span class="search-filter__group-title">선택된 필터</span>
+								<button type="button" class="search-filter__reset-button" onclick="resetJobFilters()">초기화</button>
+							</div>							
 							<div class="search-filter__selected-tags" id="selected-filters">
 								<!-- JS로 동적 생성 -->
 							</div>
