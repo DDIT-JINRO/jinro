@@ -22,6 +22,10 @@
 		<sec:authentication property="principal" var="memId" />
 	</sec:authorize>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<h3 class="page-title-bar__title">스터디 그룹</h3>
+		</div>
+		
 		<div class="public-wrapper-main">
 			<div class="boardEtcBtn" id="boardEtcBtn">...</div>
 			<div class="boardEtcContainer" data-board-id="${stdBoardVO.boardId }">
@@ -148,7 +152,7 @@
 							<div class="writer-info">
 								<div class="reply-nickname">${reply.memNickname}</div>
 								<div class="reply-date">
-									<fmt:formatDate pattern="yyyy. MM. dd.  HH:mm" value="${reply.replyCreatedAt}" />
+									<fmt:formatDate pattern="yyyy. MM. dd. HH:mm" value="${reply.replyCreatedAt}" />
 								</div>
 							</div>
 						</div>
@@ -191,7 +195,7 @@
 									<div class="writer-info">
 										<div class="reply-nickname">${child.memNickname}</div>
 										<div class="reply-date">
-											<fmt:formatDate value="${child.replyCreatedAt}" />
+											<fmt:formatDate pattern="yyyy. MM. dd. HH:mm" value="${child.replyCreatedAt}" />
 										</div>
 									</div>
 								</div>
