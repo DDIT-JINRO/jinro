@@ -18,6 +18,7 @@ public class CommReplyVO {
 	private Date replyUpdatedAt;
 	private int replyLikeCnt;	// 게시글 좋아요 수              
 	private int replyIsLiked;	// 내가 좋아요 눌렀는지 여부 (1 or 0)
+	private String ccId;
 	
 	private Long fileBadge;
 	private Long fileProfile;

@@ -1,5 +1,6 @@
 package kr.or.ddit.admin.umg.web;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,17 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import kr.or.ddit.account.join.service.MemberJoinService;
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
+import kr.or.ddit.admin.las.service.PageLogVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
 import kr.or.ddit.com.report.service.ReportVO;
+import kr.or.ddit.comm.peer.teen.service.TeenCommService;
+import kr.or.ddit.comm.vo.CommBoardVO;
+import kr.or.ddit.comm.vo.CommReplyVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.alarm.service.AlarmService;
 import kr.or.ddit.util.alarm.service.AlarmType;
 import kr.or.ddit.util.alarm.service.AlarmVO;
-import kr.or.ddit.util.file.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -28,13 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 public class UserManagementController {
 
 	@Autowired
-	UserManagementService userManagementService;
+	private UserManagementService userManagementService;
+
 	@Autowired
-	MemberJoinService memberJoinService;
+	private MemberJoinService memberJoinService;
+
 	@Autowired
-	FileService fileService;
-	@Autowired
-	AlarmService alarmService;
+	private AlarmService alarmService;
 
 	@GetMapping("/getMemberList.do")
 	public ArticlePage<MemberVO> getMemberList(
@@ -50,9 +53,31 @@ public class UserManagementController {
 	@PostMapping("/getMemberDetail.do")
 	public Map<String, Object> getMemberDetail(@RequestParam("id") String id) {
 
-		Map<String, Object> memberDetail = userManagementService.getMemberDetail(id);
+		return userManagementService.getMemberDetail(id);
+	}
 
-		return memberDetail;
+	@GetMapping("/getMemberDetailBoardList.do")
+	public ArticlePage<CommBoardVO> getMemberDetailBoardList(
+			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+			@RequestParam(value = "size", required = false, defaultValue = "5") int size,
+			@RequestParam(value = "ccId", required = false) String ccId,
+			@RequestParam(value = "sortBy", required = false) String sortBy,
+			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder,
+			@RequestParam(value = "userId") int userId) {
+
+		return userManagementService.getMemberDetailBoardList(currentPage, size, ccId, sortBy, sortOrder, userId);
+
+	}
+	@GetMapping("/getMemberDetailReplyList.do")
+	public ArticlePage<CommReplyVO> getMemberDetailReplyList(
+			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+			@RequestParam(value = "size", required = false, defaultValue = "5") int size,
+			@RequestParam(value = "sortBy", required = false) String sortBy,
+			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder,
+			@RequestParam(value = "userId") int userId) {
+		
+		return userManagementService.getMemberDetailReplyList(currentPage, size, sortBy, sortOrder, userId);
+		
 	}
 
 	@PostMapping("/insertUserByAdmin.do")
@@ -148,4 +173,34 @@ public class UserManagementController {
 		return userManagementService.reportModify(reportVO);
 	}
 
+	@GetMapping("/getDailyUserStats.do")
+	public Map<String, Object> getDailyUserStats() {
+		return userManagementService.getDailyUserStats();
+	}
+
+	@GetMapping("/getMemberActivityList.do")
+	public ArticlePage<MemberVO> getMemberActivityList(
+			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+			@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+			@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "activityStatus", required = false) String activityStatus,
+			@RequestParam(value = "sortBy", required = false) String sortBy,
+			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder,
+			@RequestParam(value = "inFilter", required = false) String inFilter) {
+
+		return userManagementService.getMemberActivityList(currentPage, size, keyword, activityStatus, sortBy,
+				sortOrder, inFilter);
+	}
+	
+	@GetMapping("/getMemberPageLogList.do")
+	public ArticlePage<PageLogVO> getMemberPageLogList(
+			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+			@RequestParam(value = "size", required = false, defaultValue = "5") int size,
+			@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "sortBy", required = false) String sortBy,
+			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder) {
+		
+		return userManagementService.getMemberPageLogList(currentPage, size, keyword, sortBy, sortOrder);
+	}
+	
 }

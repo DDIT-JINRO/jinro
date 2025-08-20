@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const totalUsersData = chartData.monthlyChart.map(item => item.CUMULATIVE_USER_COUNT);
 		const newUsersData = chartData.newUserChart.map(item => item.MONTHLY_USER_COUNT);
 		const secessionUsersData = chartData.secessionChart.map(item => item.MONTHLY_DELETION_COUNT);
-		const monthLabels = chartData.monthlyChart.map(item => item.MONTH);
+		const monthLabels = chartData.monthlyChart.map(item => item.MONTH + '월');
 		const ctxUser = document.getElementById('lineChart');
 		if (ctxUser) {
 			new Chart(ctxUser, {
@@ -54,12 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
 				data: {
 					labels: monthLabels,
 					datasets: [{
-						label: '총 활성 사용자',
+						label: '전체 사용자수',
 						data: totalUsersData,
 						fill: true,
 						borderColor: 'rgb(114, 124, 245)',
 						tension: 0.4,
-						pointRadius: 4,
 						pointBackgroundColor: 'rgb(114, 124, 245)',
 						backgroundColor: function(context) {
 							const { ctx, chartArea } = context.chart;
@@ -76,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
 						borderColor: 'rgb(0, 200, 150)',
 						backgroundColor: 'rgba(0, 200, 150, 0.2)',
 						tension: 0.4,
-						pointRadius: 4,
 						pointBackgroundColor: 'rgb(0, 200, 150)'
 					}, {
 						label: '이탈자',
@@ -85,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
 						borderColor: 'rgb(255, 99, 132)',
 						backgroundColor: 'rgba(255, 99, 132, 0.2)',
 						tension: 0.4,
-						pointRadius: 4,
 						pointBackgroundColor: 'rgb(255, 99, 132)'
 					}]
 				},
@@ -94,7 +91,21 @@ document.addEventListener('DOMContentLoaded', function() {
 					maintainAspectRatio: false,
 					plugins: {
 						title: { display: false },
-						legend: { display: true, position: 'bottom', labels: { padding: 20 } }
+						legend: { display: true, position: 'bottom', labels: { padding: 20 } },
+						tooltip: {
+							mode: 'index',
+							intersect: false,
+							callbacks: {
+								label: function(context) {
+									let label = context.dataset.label || '';
+									if (label) { label += ': '; }
+									if (context.parsed.y !== null) {
+										label += context.parsed.y.toLocaleString() + '명';
+									}
+									return label;
+								}
+							}
+						}
 					},
 					scales: {
 						y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)', drawBorder: false } },
@@ -180,9 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			const doughnutLabels = contentData.map(item => item.title);
 			const doughnutDataValues = contentData.map(item => item.cnt);
 			const purplePalette = [
-				'rgba(85, 60, 180, 0.85)', 'rgba(106, 90, 205, 0.85)',
-				'rgba(128, 90, 213, 0.85)', 'rgba(157, 128, 228, 0.85)',
-				'rgba(183, 161, 237, 0.85)'
+				'#F56F36', '#EBEFF2', '#0ACF97', '#FA5C7C', '#727CF5'
 			];
 
 			doughnutChart = new Chart(ctxDoughnut, {
@@ -215,36 +224,36 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	axios.get('/admin/las/payment/revenue-summary').then(res => {
-	    const avgPreviousRevenue = res.data.avgPreviousRevenue;
-	    const estimatedCurrentRevenue = res.data.estimatedCurrentRevenue;
-	    const spanAvgPreviousRevenue = document.getElementById('avgPreviousRevenue');
-	    const spanEstimatedCurrentRevenue = document.getElementById('estimatedCurrentRevenue');
+		const avgPreviousRevenue = res.data.avgPreviousRevenue;
+		const estimatedCurrentRevenue = res.data.estimatedCurrentRevenue;
+		const spanAvgPreviousRevenue = document.getElementById('avgPreviousRevenue');
+		const spanEstimatedCurrentRevenue = document.getElementById('estimatedCurrentRevenue');
 
-	    spanAvgPreviousRevenue.textContent = `${formatNumberWithCommasByAdminDashboard(avgPreviousRevenue)}원`;
+		spanAvgPreviousRevenue.textContent = `${formatNumberWithCommasByAdminDashboard(avgPreviousRevenue)}원`;
 
-	    const valueWrapper = spanEstimatedCurrentRevenue.parentElement;
+		const valueWrapper = spanEstimatedCurrentRevenue.parentElement;
 
-	    const existingArrow = valueWrapper.querySelector('.arrow');
-	    if (existingArrow) {
-	        existingArrow.remove();
-	    }
+		const existingArrow = valueWrapper.querySelector('.arrow');
+		if (existingArrow) {
+			existingArrow.remove();
+		}
 
-	    spanEstimatedCurrentRevenue.textContent = `${formatNumberWithCommasByAdminDashboard(estimatedCurrentRevenue)}원`;
+		spanEstimatedCurrentRevenue.textContent = `${formatNumberWithCommasByAdminDashboard(estimatedCurrentRevenue)}원`;
 
-	    if (estimatedCurrentRevenue > avgPreviousRevenue) {
-	        const arrowSpan = document.createElement('span');
-	        arrowSpan.className = 'arrow increase';
-	        arrowSpan.innerHTML = '&#9650;'; // 상승 화살표
-	        // --- 수정: 숫자(span) 뒤에 화살표를 추가합니다. ---
-	        valueWrapper.appendChild(arrowSpan);
+		if (estimatedCurrentRevenue > avgPreviousRevenue) {
+			const arrowSpan = document.createElement('span');
+			arrowSpan.className = 'arrow increase';
+			arrowSpan.innerHTML = '&#9650;'; // 상승 화살표
+			// --- 수정: 숫자(span) 뒤에 화살표를 추가합니다. ---
+			valueWrapper.appendChild(arrowSpan);
 
-	    } else if (estimatedCurrentRevenue < avgPreviousRevenue) {
-	        const arrowSpan = document.createElement('span');
-	        arrowSpan.className = 'arrow decrease';
-	        arrowSpan.innerHTML = '&#9660;'; // 하락 화살표
-	        // --- 수정: 숫자(span) 뒤에 화살표를 추가합니다. ---
-	        valueWrapper.appendChild(arrowSpan);
-	    }
+		} else if (estimatedCurrentRevenue < avgPreviousRevenue) {
+			const arrowSpan = document.createElement('span');
+			arrowSpan.className = 'arrow decrease';
+			arrowSpan.innerHTML = '&#9660;'; // 하락 화살표
+			// --- 수정: 숫자(span) 뒤에 화살표를 추가합니다. ---
+			valueWrapper.appendChild(arrowSpan);
+		}
 	});
 
 
@@ -262,16 +271,18 @@ document.addEventListener('DOMContentLoaded', function() {
 		setActiveButton(this);
 	});
 
-	// 버튼 활성화 상태 관리 함수
-	function setActiveButton(activeBtn) {
-		const buttons = activeBtn.parentElement.querySelectorAll('.public-toggle-button');
-		buttons.forEach(btn => btn.classList.remove('active'));
-		activeBtn.classList.add('active');
-	}
+
+
 });
 
 // 공통 함수
 function formatNumberWithCommasByAdminDashboard(num) {
 	if (isNaN(num)) { return "유효하지 않은 숫자입니다."; }
 	return num.toLocaleString();
+}
+
+function setActiveButton(activeBtn) {
+	const buttons = activeBtn.parentElement.querySelectorAll('.public-toggle-button');
+	buttons.forEach(btn => btn.classList.remove('active'));
+	activeBtn.classList.add('active');
 }

@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class VisitVO {
 	private String plTitle;
-	private int count;
+	private int userCount;
 }

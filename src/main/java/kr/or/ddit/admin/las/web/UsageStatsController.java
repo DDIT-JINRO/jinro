@@ -1,8 +1,10 @@
 package kr.or.ddit.admin.las.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,19 +30,40 @@ public class UsageStatsController {
 	@Autowired
 	UsageStatsService usageStatsService;
 	
-
-	// 일별 사용자
-	@GetMapping("/dailyUserInquiry.do")
-	public List<UsageStatsVO> dailyUserInquiry() {
-			
-		return usageStatsService.dailyUserInquiry();
+	/*
+	 * 사용 방법:
+	 * 필수 파라미터 : 
+	 * 	1. userInquiry - selectUserInquiry 
+	 *  2. visitCount - selectVisitCount 
+	 *  3. daily(일) / monthly(월) / selectDays(기간별) 로 해주셔야 합니다.  
+	 *  
+	 *  보내는 방식 : post
+	 * */
+	
+	
+	@GetMapping("/userInquiry.do")
+	public List<UsageStatsVO>userInquiry(@RequestParam(value="selectUserInquiry", defaultValue ="daily" )String selectUserInquiry,
+			@RequestParam(value="startDate", required = false) String startDate,
+			@RequestParam(value="endDate", required = false) String endDate,
+			@RequestParam(value="gender", required = false) String gender){
+		
+		
+		List<UsageStatsVO> list = usageStatsService.userInqury(selectUserInquiry,startDate,endDate,gender);
+		
+		return list;
 	}
-
-	// 월별 사용자
-	@GetMapping("/monthlyUserInquiry.do")
-	public List<UsageStatsVO> monthlyUserInquiry() {
-
-		return usageStatsService.monthlyUserInquiry();
+	
+	
+	// 페이지별 방문자 조회
+	@GetMapping("/visitCount.do")
+	public List<VisitVO> visitCount(@RequestParam(value="selectVisitCount", defaultValue ="daily" )String selectVisitCount,
+			@RequestParam(value="startDate", required = false) String startDate,
+			@RequestParam(value="endDate", required = false) String endDate,
+			@RequestParam(value="gender", required = false) String gender){
+		
+		List<VisitVO> list = usageStatsService.visitCount(selectVisitCount,startDate,endDate,gender);
+		
+		return list;
 	}
 	
 	// 실시간 사용자 조회
@@ -56,38 +79,5 @@ public class UsageStatsController {
 		ArticlePage<MemberVO> memList = usageStatsService.liveUserList(currentPage, size, keyword, gen, loginType);
 		
 		return memList;
-	}
-	
-	// 일별 페이지 별 방문자 수 
-	@GetMapping("/pageVisitCount.do")
-	public List<VisitVO> pageVisitCount(){
-		return usageStatsService.pageVisitCount();
-	}
-	
-	// 월별 페이지 별 방문자 수 
-	@GetMapping("/monthPageVisitCount.do")
-	public List<VisitVO> monthPageVisitCount(){
-		
-		return usageStatsService.monthPageVisitCount();
-	}
-
-	// 원하는 기간별 페이지 방문자 수 
-	@ResponseBody
-	@PostMapping("/getPageCalendar.do")
-	public List<VisitVO> getPageCalendar(String startDate, String endDate){
-		
-		return usageStatsService.getPageCalendar(startDate,endDate);
-	}
-	
-	// 원하는 기간별 방문자 수
-	@ResponseBody
-	@PostMapping("/customUserInquiry.do")
-	public List<UsageStatsVO> customUserInquiry( String startDate, String endDate){
-		log.info(startDate);
-		log.info(endDate);
-		List<UsageStatsVO> list=usageStatsService.customUserInquiry(startDate,endDate);
-		
-		log.info(list.toString());
-		return list;
 	}
 }

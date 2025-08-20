@@ -13,5 +13,5 @@ public class PageLogVO {
 	private String plTitle;
 	private String plRefererUrl;
 	private Date plCreatedAt;
-
+	private String memName;
 }

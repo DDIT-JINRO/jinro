@@ -201,6 +201,7 @@ to {
 }
 
 .dashboard-2-2 {
+	background-color: #DCDEFC;
 	width: 500px;
 }
 
@@ -296,6 +297,10 @@ to {
 	gap: 20px;
 }
 
+.gap5 {
+	gap: 5px;
+}
+
 .gap10 {
 	gap: 10px;
 }
@@ -316,6 +321,11 @@ to {
 
 .public-span-decrease {
 	color: rgba(250, 92, 124, 1);
+	margin-right: 5px;
+}
+
+.public-span-equal {
+	color: #808080;
 	margin-right: 5px;
 }
 
@@ -353,7 +363,9 @@ to {
 }
 
 .public-toggle-button {
-	font-size: 14px;
+	min-width: 45.77px;
+	height: 30px;
+	font-size: 12px;
 	font-weight: bold;
 	color: #555555;
 	background-color: #EDF2F9;
@@ -366,7 +378,27 @@ to {
 	justify-content: center;
 	align-items: center;
 	width: fit-content;
-	height: fit-content;
+}
+
+.public-toggle-select {
+	height: 30px;
+	font-size: 12px;
+	font-weight: bold;
+	color: #555555;
+	background-color: #EDF2F9;
+	border: none;
+	border-radius: 2px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: fit-content;
+}
+
+.public-toggle-select>option {
+	font-size: 12px;
 }
 
 .public-toggle-button.active {
@@ -375,24 +407,115 @@ to {
 }
 
 .public-toggle-button:hover {
-	background-color: #d0d0d0;
+	background-color: #E8ECF0;
+}
+
+.public-listSearch {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	
+	border-radius: 2px;
+	overflow: hidden;
+	font-family: Arial, sans-serif;
+	align-items: center;
+}
+
+/* 드롭다운 (이름, 이메일) */
+.public-listSearch select {
+	height: 30px;
+	background-color: #DCDEFC;
+	border: none;
+	padding: 8px 12px;
+	font-size: 12px;
+	font-weight: bold;
+	outline: none;
+	cursor: pointer;
+	border-radius: 3px 0 0 3px;
+}
+
+.public-listSearch select option {
+	background-color: white;
+}
+
+/* 검색창 */
+.public-listSearch input {
+	width: 150px;
+	padding: 8px 12px;
+	border: none;
+	font-size: 12px;
+	font-weight: bold;
+	outline: none;
+	background-color: #f8fafc; /* 연한 흰/회색 */
+}
+
+/* 버튼 */
+.public-listSearch .btn-save {
+	height: 30px;
+	background-color: #727CF5; /* 진한 보라 */
+	color: white;
+	border: none;
+	padding: 5px 16px;
+	font-size: 12px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.public-listSearch .btn-save:hover {
+	background-color: #5548e0; /* hover 진한 보라 */
 }
 
 .arrow {
-    margin-left: 10px; /* 숫자와의 여백 */
-    font-weight: bold;
+	margin-left: 10px; /* 숫자와의 여백 */
+	font-weight: bold;
 }
 
 /* 상승 화살표 색상 */
 .arrow.increase {
-    color: rgba(10, 207, 151, 1);
+	color: rgba(10, 207, 151, 1);
 }
 
 /* 하락 화살표 색상 */
 .arrow.decrease {
-    color: #FA5C7C;
+	color: #FA5C7C;
 }
 
+table {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: Arial, sans-serif;
+	border-left: none;
+	border-right: none;
+}
+
+th {
+	font-size: 14px;
+	font-weight: 700;
+}
+
+td {
+	font-size: 12px;
+	font-weight: 500;
+}
+
+th, td {
+	border: 1px solid #ddd;
+	padding: 12px;
+	text-align: center;
+	border-left: none;
+	border-right: none;
+}
+
+tbody tr:hover {
+	background-color: #F8F8F8;
+}
+
+.card-footer {
+	display: flex;
+	margin-top: auto;
+	justify-content: center;
+}
 /****************************** 공용 색상 css ****************************/
 .color-white {
 	color: white;
@@ -406,6 +529,49 @@ to {
 	background-color: #727CF5;
 }
 
+/* 공통 스타일 (크기와 모양) */
+.dot-status {
+	display: inline-block;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	margin-right: 5px;
+}
+
+/* 각 상태별 색상 */
+.dot-status-green {
+	background: #06eaa9;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dot-status-gray {
+	background: #808080;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dot-status-orange {
+	background: #ffdc53;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dot-status-red {
+	background: #F65A7A;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.btn-primary {
+	background-color: #7c7cf5;
+	color: #fff;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 2px;
+	font-size: 12px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease, box-shadow
+		0.3s ease;
+}
+
 /***************************** 콘텐츠 이용 통계 도넛 ***************************************/
 .chart-container-doughnut {
 	margin-top: auto;
@@ -415,7 +581,3 @@ to {
 	justify-content: center;
 	align-items: center;
 }
-
-
-
-

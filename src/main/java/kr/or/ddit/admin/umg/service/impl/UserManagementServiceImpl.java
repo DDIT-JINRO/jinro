@@ -1,6 +1,7 @@
 package kr.or.ddit.admin.umg.service.impl;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
+import kr.or.ddit.admin.las.service.PageLogVO;
 import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
 import kr.or.ddit.com.report.service.ReportVO;
+import kr.or.ddit.comm.vo.CommBoardVO;
+import kr.or.ddit.comm.vo.CommReplyVO;
 import kr.or.ddit.main.service.MemberVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileDetailVO;
@@ -27,9 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 public class UserManagementServiceImpl implements UserManagementService {
 
 	@Autowired
-	FileService fileService;
+	private FileService fileService;
 	@Autowired
-	UserManagementMapper userManagementMapper;
+	private UserManagementMapper userManagementMapper;
+
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	public UserManagementServiceImpl(BCryptPasswordEncoder passwordEncoder) {
@@ -77,6 +82,32 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 		// 정지 경고 횟수 이력
 		MemberPenaltyCountVO countVO = userManagementMapper.selectPenaltyCountByMemberId(id);
+		
+		// 새로 추가되는 8개 정보
+		// 1. 모의면접 횟수
+		int mockInterviewCount = userManagementMapper.getMockInterviewCount(id);
+		
+		// 2. AI 피드백 횟수  
+		int aiFeedbackCount = userManagementMapper.getAiFeedbackCount(id);
+		
+		// 3. 상담횟수 (기존 counseling과 동일하지만 별도로 조회)
+		int counselingCompletedCount = userManagementMapper.getCounselingCompletedCount(id);
+		
+		// 4. 월드컵 횟수
+		int worldcupCount = userManagementMapper.getWorldcupCount(id);
+		
+		// 5. 로드맵 횟수
+		int roadmapCount = userManagementMapper.getRoadmapCount(id);
+		
+		// 6. 심리검사 횟수
+		int psychTestCount = userManagementMapper.getPsychTestCount(id);
+		
+		// 7. 최근 로그인 기록
+		String recentLoginDate = userManagementMapper.getRecentLoginDate(id);
+		
+		// 8. 최근 제재 기록
+		String recentPenaltyDate = userManagementMapper.getRecentPenaltyDate(id);
+
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		if ("R01003".equals(memberDetail.getMemRole())) {
@@ -89,10 +120,21 @@ public class UserManagementServiceImpl implements UserManagementService {
 			map.put("avgRate", avgRate);
 		}
 
+		// 기존 정보
 		map.put("memberDetail", memberDetail);
 		map.put("interestCn", interestCn);
 		map.put("filePath", filePath);
 		map.put("countVO", countVO);
+
+		// 새로 추가되는 8개 정보
+		map.put("mockInterviewCount", mockInterviewCount);
+		map.put("aiFeedbackCount", aiFeedbackCount);
+		map.put("counselingCompletedCount", counselingCompletedCount);
+		map.put("worldcupCount", worldcupCount);
+		map.put("roadmapCount", roadmapCount);
+		map.put("psychTestCount", psychTestCount);
+		map.put("recentLoginDate", recentLoginDate);
+		map.put("recentPenaltyDate", recentPenaltyDate);
 
 		return map;
 	}
@@ -102,7 +144,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	public int insertUserByAdmin(MemberVO member, MultipartFile profileImage) {
 
 		Long fileGroupId = null;
-		
+
 		if (profileImage != null) {
 			List<MultipartFile> profileImages = new ArrayList<MultipartFile>();
 			profileImages.add(profileImage);
@@ -265,6 +307,189 @@ public class UserManagementServiceImpl implements UserManagementService {
 		int res = userManagementMapper.reportModify(reportVO);
 
 		return res;
+	}
+
+	@Override
+	public Map<String, Object> getDailyUserStats() {
+		Map<String, Object> stats = new HashMap<>();
+
+		// 1. 일일 사용자 현황
+		int todayActiveUsers = userManagementMapper.getDailyActiveUsers();
+		int yesterdayActiveUsers = userManagementMapper.getYesterdayActiveUsers();
+
+		// 전날 대비 일일 사용자 증감률 계산
+		Map<String, Object> userGrowth = calculateGrowthRate(todayActiveUsers, yesterdayActiveUsers);
+
+		// 2. 일일 평균 홈페이지 이용 현황
+		Double todayAvgUsageTime = userManagementMapper.getDailyAverageUsageTime();
+		Double yesterdayAvgUsageTime = userManagementMapper.getYesterdayAverageUsageTime();
+
+		if (todayAvgUsageTime == null)
+			todayAvgUsageTime = 0.0;
+		if (yesterdayAvgUsageTime == null)
+			yesterdayAvgUsageTime = 0.0;
+
+		// 전날 대비 평균 이용시간 증감률 계산
+		Map<String, Object> usageTimeGrowth = calculateGrowthRate(todayAvgUsageTime.intValue(),
+				yesterdayAvgUsageTime.intValue());
+
+		// 3. 현재 온라인 사용자 수
+		int currentOnlineUsers = userManagementMapper.getCurrentOnlineUsers();
+
+		// 4. 일일 가입자 수 현황 (새로 추가)
+		int todaySignUpUsers = userManagementMapper.getDailySignUpUsers();
+		int yesterdaySignUpUsers = userManagementMapper.getYesterdaySignUpUsers();
+
+		// 전날 대비 일일 가입자 수 증감률 계산
+		Map<String, Object> signUpGrowth = calculateGrowthRate(todaySignUpUsers, yesterdaySignUpUsers);
+
+		// 5. 월간 탈퇴자 수 현황 (새로 추가)
+		int monthlyWithdrawalUsers = userManagementMapper.getMonthlyWithdrawalUsers();
+		int lastMonthWithdrawalUsers = userManagementMapper.getLastMonthWithdrawalUsers();
+
+		// 지난 달 대비 월간 탈퇴자 수 증감률 계산
+		Map<String, Object> withdrawalGrowth = calculateGrowthRate(monthlyWithdrawalUsers, lastMonthWithdrawalUsers);
+
+		// 기존 데이터
+		stats.put("dailyActiveUsers", todayActiveUsers);
+		stats.put("dailyActiveUsersRate", userGrowth.get("percentage"));
+		stats.put("dailyActiveUsersStatus", userGrowth.get("status"));
+
+		stats.put("avgUsageTimeMinutes", Math.round(todayAvgUsageTime));
+		stats.put("avgUsageTimeRate", usageTimeGrowth.get("percentage"));
+		stats.put("avgUsageTimeStatus", usageTimeGrowth.get("status"));
+
+		stats.put("currentOnlineUsers", currentOnlineUsers);
+
+		// 새로 추가된 데이터
+		stats.put("dailySignUpUsers", todaySignUpUsers);
+		stats.put("dailySignUpUsersRate", signUpGrowth.get("percentage"));
+		stats.put("dailySignUpUsersStatus", signUpGrowth.get("status"));
+
+		stats.put("monthlyWithdrawalUsers", monthlyWithdrawalUsers);
+		stats.put("monthlyWithdrawalUsersRate", withdrawalGrowth.get("percentage"));
+		stats.put("monthlyWithdrawalUsersStatus", withdrawalGrowth.get("status"));
+
+		return stats;
+	}
+
+	private Map<String, Object> calculateGrowthRate(int currentCount, int previousCount) {
+		double percentageChange = 0.0;
+		String status = "equal";
+
+		if (previousCount > 0) {
+			percentageChange = ((double) (currentCount - previousCount) / previousCount) * 100;
+
+			if (percentageChange > 0) {
+				status = "increase";
+			} else if (percentageChange < 0) {
+				status = "decrease";
+			}
+		} else if (currentCount > 0) {
+			status = "new_entry";
+			percentageChange = 100.0;
+		}
+
+		DecimalFormat df = new DecimalFormat("#.##");
+		String formattedPercentage = df.format(Math.abs(percentageChange));
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("percentage", formattedPercentage);
+		result.put("status", status);
+
+		return result;
+	}
+
+	@Override
+	public ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus,
+			String sortBy, String sortOrder, String inFilter) {
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("activityStatus", activityStatus);
+		map.put("currentPage", currentPage);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		map.put("inFilter", inFilter);
+
+		List<MemberVO> list = userManagementMapper.getMemberActivityList(map);
+		int total = userManagementMapper.getAllMemberActivityList(map);
+
+		ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword);
+
+		return articlePage;
+	}
+
+	@Override
+	public ArticlePage<CommBoardVO> getMemberDetailBoardList(int currentPage, int size, String ccId,
+			String sortBy, String sortOrder, int userId) {
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("memId", userId);
+		map.put("ccId", ccId);
+		map.put("currentPage", currentPage);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		
+		List<CommBoardVO> list = userManagementMapper.getMemberDetailBoardList(map);
+		int total = userManagementMapper.selectBoardCountByMemId(map);
+		
+		ArticlePage<CommBoardVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
+		
+		return articlePage;
+	}
+
+	@Override
+	public ArticlePage<CommReplyVO> getMemberDetailReplyList(int currentPage, int size, String sortBy,
+			String sortOrder, int userId) {
+		
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("memId", userId);
+		map.put("currentPage", currentPage);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		
+		List<CommReplyVO> list = userManagementMapper.getMemberDetailReplyList(map);
+		int total = userManagementMapper.selectReplyCountByMemId(map);
+		
+		ArticlePage<CommReplyVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
+		
+		return articlePage;
+	}
+
+	@Override
+	public ArticlePage<PageLogVO> getMemberPageLogList(int currentPage, int size, String keyword, String sortBy,
+			String sortOrder) {
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("currentPage", currentPage);
+		map.put("size", size);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		map.put("keyword", keyword);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		
+		List<PageLogVO> list = userManagementMapper.getMemberPageLogList(map);
+		int total = userManagementMapper.getAllMemberPageLogList(map);
+		
+		return new ArticlePage<>(total, currentPage, size, list, keyword);
+		
 	}
 
 }

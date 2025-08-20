@@ -215,20 +215,13 @@
 					style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
 					<option value="부적절한 게시물" selected>부적절한 게시물</option>
 					<option value="욕설 및 비방">욕설 및 비방</option>
-					<option value="음란물 및 불건전한 내용">음란물 및 불건전한 내용</option>
-					<option value="개인정보 침해">개인정보 침해</option>
 					<option value="혐오 및 차별적 표현">혐오 및 차별적 표현</option>
 					<option value="폭력적, 위협적 내용">폭력적, 위협적 내용</option>
-					<option value="저작권 침해">저작권 침해</option>
 					<option value="허위 사실 유포">허위 사실 유포</option>
 					<option value="스팸 및 광고">스팸 및 광고</option>
-					<option value="도배 및 반복 게시">도배 및 반복 게시</option>
 					<option value="불법적 홍보">불법적 홍보</option>
-					<option value="운영 방해">운영 방해</option>
 					<option value="타인에게 불쾌감을 주는 행위">타인에게 불쾌감을 주는 행위</option>
 					<option value="커뮤니티 이용 방해">커뮤니티 이용 방해</option>
-					<option value="비매너 행위">비매너 행위</option>
-					<option value="분쟁 유발">분쟁 유발</option>
 					<option value="기타 운영 정책 위반">기타 운영 정책 위반</option>
 				</select>
 			</div>
