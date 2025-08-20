@@ -1,6 +1,6 @@
 function univManagement() {
 
-	document.getElementById('tgDepart').innerHTML = `<tr><td colspan='2' style="text-align: center;">대학을 선택하세요.</td></tr>`;
+	document.getElementById('tgDepart').innerHTML = `<tr><td colspan='5' style="text-align: center;">대학을 선택하세요.</td></tr>`;
 
 	const pageSize = 10;
 	const keyword = document.querySelector('input[name="keyword"]').value;
@@ -137,7 +137,7 @@ function univManagement() {
 				const tgDepart = document.getElementById('tgDepart');
 
 				if (univDeptList < 1) {
-					tgDepart.innerHTML = `<tr><td colspan='2' style="text-align: center;">등록된 학과 정보가 없습니다.</td></tr>`;
+					tgDepart.innerHTML = `<tr><td colspan='5' style="text-align: center;">등록된 학과 정보가 없습니다.</td></tr>`;
 				} else {
 					const rows = univDeptList.map(item => `
 														  <tr id="${item.udId}">
@@ -221,7 +221,7 @@ function univManagement() {
 		univDepDetailReset();
 		document.getElementById('univ-dept-detail-univId').value = '';
 		document.getElementById('univ-dept-detail-univName').value = '';
-		document.getElementById('tgDepart').innerHTML = `<tr><td colspan='2' style="text-align: center;">대학을 선택하세요.</td></tr>`;
+		document.getElementById('tgDepart').innerHTML = `<tr><td colspan='5' style="text-align: center;">대학을 선택하세요.</td></tr>`;
 
 		const detailInputs = [
 			'univ-detail-univId',

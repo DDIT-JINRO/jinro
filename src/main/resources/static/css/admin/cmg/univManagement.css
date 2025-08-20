@@ -258,7 +258,7 @@ table th:last-child {
   border: none;
   padding: 6px 14px; /* 높이 줄이고 좌우 패딩 줄임 */
   border-radius: 6px;
-  font-size: 13px; /* 글씨 크기 살짝 축소 */
+  font-size: 16px; /* 글씨 크기 살짝 축소 */
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
