@@ -2,10 +2,10 @@
 /**
  * 이력서 AI 피드백 화면을 위한 자바스크립트
  */
+let aiFeedbackData = null;
 document.addEventListener('DOMContentLoaded', () => {
 
 	let subscriptionInfo = null;
-	let aiFeedbackData = null;
 	let originalData = null;
 
 	const resumeList = document.getElementById('resumeList');
