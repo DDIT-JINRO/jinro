@@ -425,8 +425,8 @@ function memberManagement() {
 				statusText = '정지상태';
 				break;
 			case 'NEVER_LOGIN':
-				statusClass = 'dot-status-orange';
-				statusText = '신규 가입자';
+				statusClass = 'dot-status-gray';
+				statusText = '비활동';
 				break;
 			default:
 				statusClass = '';
@@ -1182,8 +1182,6 @@ function memberManagement() {
 			window.userOnlineChartInstance.destroy();
 		}
 
-		console.log("파라미터 값 : ", selectUserInquiry);
-
 		axios.get('/admin/las/userInquiry.do', {
 			params: {
 				selectUserInquiry: selectUserInquiry,
@@ -1194,7 +1192,6 @@ function memberManagement() {
 		})
 			.then(res => {
 				const responseData = res.data;
-				console.log("userInquiry data: ", responseData);
 
 				let labels;
 				let chartLabel;
@@ -1325,8 +1322,6 @@ function memberManagement() {
 			}
 		}).then(res => {
 			
-			console.log(res);
-			
 			const responseData = res.data;
 			
 			// 데이터를 'plTitle'과 'userCount'로 매핑
@@ -1446,7 +1441,7 @@ function memberManagement() {
 						<td>${item.plId}</td>
 						<td>${item.memId}</td>
 						<td>${item.memName || '-'}</td>
-						<td><a href="${item.plUrl}" target="_blank">${item.plTitle || '-'}</a></td>
+						<td>${item.plTitle || '-'}</td>
 						<td>${formatDateTime(item.plCreatedAt)}</td>
 					</tr>
 				`).join('');

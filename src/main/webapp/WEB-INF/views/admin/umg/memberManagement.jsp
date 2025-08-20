@@ -65,7 +65,7 @@
 				<option value="online">활동중</option>
 				<option value="offline">비활동</option>
 				<option value="suspended">정지상태</option>
-				<option value="neverLogin">신규 가입자</option>
+				
 			</select>
 		</div>
 		<div class="userListSpace">

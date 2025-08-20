@@ -639,12 +639,14 @@
 		                    AND P.MEM_ID IS NULL
 		                </if>
 		                <if test="activityStatus == 'OFFLINE' or inFilter == 'offline'">
-		                    AND L.LL_STATUS = 'O'
-		                    AND P.MEM_ID IS NULL
+		                     AND (
+		                        (L.LL_STATUS = 'O' AND P.MEM_ID IS NULL)
+		                        OR (L.LL_STATUS IS NULL AND P.MEM_ID IS NULL)
+		                     )
 		                </if>
 		                <if test="activityStatus == 'NEVER_LOGIN' or inFilter == 'neverLogin'">
-		                    AND L.LL_STATUS IS NULL
-		                    AND P.MEM_ID IS NULL
+		                     AND L.LL_STATUS IS NULL
+		                     AND P.MEM_ID IS NULL
 		                </if>
 		            </if>
 		        </where>
@@ -712,8 +714,14 @@
 			            AND P.MEM_ID IS NULL
 			        </if>
 			        <if test="activityStatus == 'OFFLINE' or inFilter == 'offline'">
-			            AND L.LL_STATUS = 'O'
-			            AND P.MEM_ID IS NULL
+			            AND (
+				            (L.LL_STATUS = 'O'
+				            AND P.MEM_ID IS NULL)
+				            OR (
+				            	 L.LL_STATUS IS NULL
+				            	AND P.MEM_ID IS NULL
+				            )
+			            )
 			        </if>
 			        <if test="activityStatus == 'NEVER_LOGIN' or inFilter == 'neverLogin'">
 			            AND L.LL_STATUS IS NULL
