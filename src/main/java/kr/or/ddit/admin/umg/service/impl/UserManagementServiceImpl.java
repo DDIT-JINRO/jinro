@@ -80,6 +80,32 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 		// 정지 경고 횟수 이력
 		MemberPenaltyCountVO countVO = userManagementMapper.selectPenaltyCountByMemberId(id);
+		
+		// 새로 추가되는 8개 정보
+		// 1. 모의면접 횟수
+		int mockInterviewCount = userManagementMapper.getMockInterviewCount(id);
+		
+		// 2. AI 피드백 횟수  
+		int aiFeedbackCount = userManagementMapper.getAiFeedbackCount(id);
+		
+		// 3. 상담횟수 (기존 counseling과 동일하지만 별도로 조회)
+		int counselingCompletedCount = userManagementMapper.getCounselingCompletedCount(id);
+		
+		// 4. 월드컵 횟수
+		int worldcupCount = userManagementMapper.getWorldcupCount(id);
+		
+		// 5. 로드맵 횟수
+		int roadmapCount = userManagementMapper.getRoadmapCount(id);
+		
+		// 6. 심리검사 횟수
+		int psychTestCount = userManagementMapper.getPsychTestCount(id);
+		
+		// 7. 최근 로그인 기록
+		String recentLoginDate = userManagementMapper.getRecentLoginDate(id);
+		
+		// 8. 최근 제재 기록
+		String recentPenaltyDate = userManagementMapper.getRecentPenaltyDate(id);
+
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		if ("R01003".equals(memberDetail.getMemRole())) {
@@ -92,10 +118,21 @@ public class UserManagementServiceImpl implements UserManagementService {
 			map.put("avgRate", avgRate);
 		}
 
+		// 기존 정보
 		map.put("memberDetail", memberDetail);
 		map.put("interestCn", interestCn);
 		map.put("filePath", filePath);
 		map.put("countVO", countVO);
+
+		// 새로 추가되는 8개 정보
+		map.put("mockInterviewCount", mockInterviewCount);
+		map.put("aiFeedbackCount", aiFeedbackCount);
+		map.put("counselingCompletedCount", counselingCompletedCount);
+		map.put("worldcupCount", worldcupCount);
+		map.put("roadmapCount", roadmapCount);
+		map.put("psychTestCount", psychTestCount);
+		map.put("recentLoginDate", recentLoginDate);
+		map.put("recentPenaltyDate", recentPenaltyDate);
 
 		return map;
 	}
@@ -297,6 +334,21 @@ public class UserManagementServiceImpl implements UserManagementService {
 		// 3. 현재 온라인 사용자 수
 		int currentOnlineUsers = userManagementMapper.getCurrentOnlineUsers();
 
+		// 4. 일일 가입자 수 현황 (새로 추가)
+		int todaySignUpUsers = userManagementMapper.getDailySignUpUsers();
+		int yesterdaySignUpUsers = userManagementMapper.getYesterdaySignUpUsers();
+
+		// 전날 대비 일일 가입자 수 증감률 계산
+		Map<String, Object> signUpGrowth = calculateGrowthRate(todaySignUpUsers, yesterdaySignUpUsers);
+
+		// 5. 월간 탈퇴자 수 현황 (새로 추가)
+		int monthlyWithdrawalUsers = userManagementMapper.getMonthlyWithdrawalUsers();
+		int lastMonthWithdrawalUsers = userManagementMapper.getLastMonthWithdrawalUsers();
+
+		// 지난 달 대비 월간 탈퇴자 수 증감률 계산
+		Map<String, Object> withdrawalGrowth = calculateGrowthRate(monthlyWithdrawalUsers, lastMonthWithdrawalUsers);
+
+		// 기존 데이터
 		stats.put("dailyActiveUsers", todayActiveUsers);
 		stats.put("dailyActiveUsersRate", userGrowth.get("percentage"));
 		stats.put("dailyActiveUsersStatus", userGrowth.get("status"));
@@ -306,6 +358,15 @@ public class UserManagementServiceImpl implements UserManagementService {
 		stats.put("avgUsageTimeStatus", usageTimeGrowth.get("status"));
 
 		stats.put("currentOnlineUsers", currentOnlineUsers);
+
+		// 새로 추가된 데이터
+		stats.put("dailySignUpUsers", todaySignUpUsers);
+		stats.put("dailySignUpUsersRate", signUpGrowth.get("percentage"));
+		stats.put("dailySignUpUsersStatus", signUpGrowth.get("status"));
+
+		stats.put("monthlyWithdrawalUsers", monthlyWithdrawalUsers);
+		stats.put("monthlyWithdrawalUsersRate", withdrawalGrowth.get("percentage"));
+		stats.put("monthlyWithdrawalUsersStatus", withdrawalGrowth.get("status"));
 
 		return stats;
 	}

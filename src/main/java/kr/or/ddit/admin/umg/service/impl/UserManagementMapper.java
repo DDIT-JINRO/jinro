@@ -75,4 +75,29 @@ public interface UserManagementMapper {
 	List<CommBoardVO> getMemberDetailBoardList(Map<String, Object> map);
 	
 	int selectBoardCountByMemId(Map<String, Object> map);
+	
+	int getDailySignUpUsers();
+
+	int getYesterdaySignUpUsers();
+
+	int getMonthlyWithdrawalUsers();
+
+	int getLastMonthWithdrawalUsers();
+	
+	int getMockInterviewCount(String memId);
+	
+	int getAiFeedbackCount(String memId);
+
+	int getCounselingCompletedCount(String memId);
+
+	int getWorldcupCount(String memId);
+	
+	int getRoadmapCount(String memId);
+
+	int getPsychTestCount(String memId);
+
+	String getRecentLoginDate(String memId);
+	
+	String getRecentPenaltyDate(String memId);
+	
 }
