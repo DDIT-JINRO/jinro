@@ -22,19 +22,18 @@ public class YoutubeApiController {
 
 	@GetMapping("/main/youtubeJsp")
 	public String youtube(@AuthenticationPrincipal String memId, Model model) {	
-		log.info(memId);	
 		
 		// 채널 검색 ID
-		String channelId = "UCFCtZJTuJhE18k8IXwmXTYQ";
+		String channelId = "UC7veJl4E23uPDXoVu-0qYAA";
 		// 키워드
 		String result ="";
 		
 		if(!memId.equals("anonymousUser")) {
 			log.info("서비스 진행");
-			result  = service.getKeyword(memId)+"적성";
+			result  = service.getKeyword(memId);
 			log.info("result : "+result);
 		}else {
-			result ="적성|진로";
+			result ="취업";
 		}
 		
 		model.addAttribute("result", result);

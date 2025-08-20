@@ -26,7 +26,7 @@ iframe {
     		axios.get('https://youtube.googleapis.com/youtube/v3/search', {
     		    params: {
     		    	"part":"snippet",
-    		    	"maxResults":5,
+    		    	"maxResults":4,
     		    	"channelId": "${channelId}",
     		    	"q": "${result}",
     			    "regionCode":"kr",
