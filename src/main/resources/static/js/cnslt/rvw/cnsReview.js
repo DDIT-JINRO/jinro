@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	})
 	
-	const cardHeaders = document.querySelectorAll(".card-header");
+	const cardHeaders = document.querySelectorAll(".accordion-list__item-header");
 	
 	cardHeaders.forEach((cardHeader) => {
 		cardHeader.addEventListener("click", function() {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		})
 	})
 	
-	const deleteBtns = document.querySelectorAll(".delete-btn");
+	const deleteBtns = document.querySelectorAll(".card-actions__button--delete");
 	
 	deleteBtns.forEach((deleteBtn) => {
 		deleteBtn.addEventListener("click", function() {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		})
 	})
 	
-	const editBtns = document.querySelectorAll(".edit-btn");
+	const editBtns = document.querySelectorAll(".card-actions__button--edit");
 	
 	editBtns.forEach((editBtn) => {
 		editBtn.addEventListener("click", function() {
@@ -56,22 +56,29 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function toggleCard(header) {
-    const card = header.parentElement;
-    const content = card.querySelector('.card-content');
-    const toggle = header.querySelector('.card-toggle');
-    
-    // 현재 카드의 활성 상태 토글
-    const isActive = content.classList.contains('active');
-    
-    if (isActive) {
-        content.classList.remove('active');
-        header.classList.remove('active');
-        toggle.classList.remove('active');
-    } else {
-        content.classList.add('active');
-        header.classList.add('active');
-        toggle.classList.add('active');
-    }
+	const currentCard = header.closest('.accordion-list__item');
+	const currentContent = currentCard.querySelector('.accordion-list__item-content');
+	const currentToggle = header.querySelector('.accordion-list__toggle-icon');
+	const isOpening = !currentContent.classList.contains('is-active');
+
+	// 모든 아이템을 먼저 닫음
+	document.querySelectorAll('.accordion-list__item').forEach(item => {
+	    if (item !== currentCard) {
+	        item.querySelector('.accordion-list__item-content').classList.remove('is-active');
+	        item.querySelector('.accordion-list__item-header').classList.remove('is-active');
+	        item.querySelector('.accordion-list__toggle-icon').classList.remove('is-active');
+	    }
+	});
+
+	if (isOpening) {
+	    currentContent.classList.add('is-active');
+	    header.classList.add('is-active');
+	    currentToggle.classList.add('is-active');
+	} else {
+	    currentContent.classList.remove('is-active');
+	    header.classList.remove('is-active');
+	    currentToggle.classList.remove('is-active');
+	}
 }
 
 // 면접 후기 삭제 기능
@@ -108,13 +115,9 @@ function deleteCounselingReview(crId) {
 
 // 페이지 로드 시 모든 카드 닫힌 상태로 초기화
 document.addEventListener('DOMContentLoaded', function() {
-    const allContents = document.querySelectorAll('.card-content');
-    const allHeaders = document.querySelectorAll('.card-header');
-    const allToggles = document.querySelectorAll('.card-toggle');
-    
-    allContents.forEach(content => content.classList.remove('active'));
-    allHeaders.forEach(header => header.classList.remove('active'));
-    allToggles.forEach(toggle => toggle.classList.remove('active'));
+	document.querySelectorAll('.accordion-list__item-content').forEach(content => content.classList.remove('is-active'));
+	document.querySelectorAll('.accordion-list__item-header').forEach(header => header.classList.remove('is-active'));
+	document.querySelectorAll('.accordion-list__toggle-icon').forEach(toggle => toggle.classList.remove('is-active'));
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -122,28 +125,28 @@ document.addEventListener('DOMContentLoaded', function() {
 	const filterOrder = ['counselCategory', 'counselMethod'];
 
 	// 토글 버튼
-	const toggleButton = document.getElementById('com-accordion-toggle');
+	const toggleButton = document.querySelector('.search-filter__accordion-header');
 
 	// 필터 패널 
-	const panel = document.getElementById('com-accordion-panel');
+	const panel = document.querySelector('.search-filter__accordion-panel');
 
 	// 필터 키워드
 	const allCheckboxGroups = {
-	    counselCategory: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="counselCategorys"]'),
-	    counselMethod: document.querySelectorAll('.com-filter-item input[type="checkbox"][name="counselMethods"]'),
+	    counselMethods: document.querySelectorAll('.search-filter__option input[name="counselMethods"]'),
+		counselCategorys: document.querySelectorAll('.search-filter__option input[name="counselCategorys"]'),
 	};
 	
 	// 선택 필터 영역
-	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
-	
+	const selectedFiltersContainer = document.querySelector('.search-filter__selected-tags');
+
 	// 초기화 버튼
-	const resetButton = document.querySelector('.com-filter-reset-btn');
+	const resetButton = document.querySelector('.search-filter__reset-button');
 
 	// 아코디언 코드
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
-			this.classList.toggle('active');
-			panel.classList.toggle('open');
+			this.classList.toggle('is-active');
+			panel.classList.toggle('is-open');
 		});
 	}
 
@@ -168,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     text = "상담 방법 > " + text;
                 }
                 
-                const filterTagHTML = `<span class="com-selected-filter" data-group="${groupName}" data-value="${checkbox.value}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
+                const filterTagHTML = `<span class="search-filter__tag" data-group="${groupName}" data-value="${checkbox.value}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
                 selectedFiltersContainer.innerHTML += filterTagHTML;
             });
 	    });
@@ -188,8 +191,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
 	selectedFiltersContainer.addEventListener('click', (e) => {
-		if (e.target.classList.contains('com-remove-filter')) {
-			const tag = e.target.closest('.com-selected-filter');
+		if (e.target.classList.contains('search-filter__tag-remove')) {
+			const tag = e.target.closest('.search-filter__tag');
 			const groupName = tag.dataset.group;
             const value = tag.dataset.value;
 
