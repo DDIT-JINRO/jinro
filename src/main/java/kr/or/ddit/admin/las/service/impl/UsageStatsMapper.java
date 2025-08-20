@@ -13,26 +13,26 @@ import kr.or.ddit.main.service.MemberVO;
 public interface UsageStatsMapper {
 
 	// 일별 사용자 구하기
-	public List<UsageStatsVO> dailyUserInquiry();
+	public List<UsageStatsVO> dailyUserInquiry(String gender);
 
 	// 월별 사용자 구하기
-	public List<UsageStatsVO> monthlyUserInquiry();
+	public List<UsageStatsVO> monthlyUserInquiry(String gender);
+	
+	// 원하는 기간별 방문자 수
+	public List<UsageStatsVO> customUserInquiry(String startDate, String endDate,String gender);
 
 	// 로그인한 사용자 정보 조회
 	public List<MemberVO> liveUserList(Map<String, Object> map);
 
 	// 건수 조회
 	public int liveUserListCount(Map<String, Object> map);
-
+	
 	// 일별 페이지 방문자 수 TOP10
-	public List<VisitVO> pageVisitCount();
+	public List<VisitVO> dailyPageVisitCount(String gender);
 
 	// 해당월 페이지 방문자 수 top10
-	public List<VisitVO> monthPageVisitCount();
-	
-	// 원하는 기간별 방문자 수
-	public List<UsageStatsVO> customUserInquiry(String startDate, String endDate);
+	public List<VisitVO> monthlyPageVisitCount(String gender);
 	
 	// 원하는 기간별 페이지 방문자 수
-	public List<VisitVO> getPageCalendar(String startDate, String endDate);
+	public List<VisitVO> customPageVisitCount(String startDate, String endDate, String gender);
 }

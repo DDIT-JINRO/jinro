@@ -6,10 +6,6 @@ function initDashboard() {
 
 }
 
-
-
-
-
 // 실시간 사용자 조회
 // 초기 페이지 로드 시 호출되는 함수
 function loadLiveUserList(page = 1) {
