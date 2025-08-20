@@ -1,5 +1,6 @@
 package kr.or.ddit.admin.las.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,20 +23,42 @@ public class UsageStatsServiceImpl implements UsageStatsService{
 	@Autowired
 	UsageStatsMapper usageStatsMapper;
 	
-	// 일별 사용자 구하기
+	// 일별/월별/기간별 사용자 구하기
 	@Override
-	public List<UsageStatsVO> dailyUserInquiry() {
+	public List<UsageStatsVO> userInqury(String selectUserInquiry, String startDate, String endDate, String gender) {
+		// TODO Auto-generated method stub
 		
-		return this.usageStatsMapper.dailyUserInquiry();
+		List<UsageStatsVO> list = new ArrayList<>();
+		
+		if(selectUserInquiry.equals("daily")) {
+			list = usageStatsMapper.dailyUserInquiry(gender);
+		}else if(selectUserInquiry.equals("monthly")) {
+			list = usageStatsMapper.monthlyUserInquiry(gender);		
+		}else if(selectUserInquiry.equals("selectDays")) {
+			list= usageStatsMapper.customUserInquiry(startDate,endDate,gender);
+		}
+		
+		return list;
+	}
+	
+	
+
+	@Override
+	public List<VisitVO> visitCount(String selectVisitCount, String startDate, String endDate, String gender) {
+		List<VisitVO> list = new ArrayList<>();
+		
+		if(selectVisitCount.equals("daily")) {
+			list = usageStatsMapper.dailyPageVisitCount(gender);
+		}else if(selectVisitCount.equals("monthly")) {
+			list = usageStatsMapper.monthlyPageVisitCount(gender);		
+		}else if(selectVisitCount.equals("selectDays")) {
+			list= usageStatsMapper.customPageVisitCount(startDate,endDate,gender);
+		}
+		
+		return list;
 	}
 
-	// 월별 사용자 구하기
-	@Override
-	public List<UsageStatsVO> monthlyUserInquiry() {
-		
-		return  this.usageStatsMapper.monthlyUserInquiry();
-	}
-
+	
 	@Override
 	public ArticlePage<MemberVO> liveUserList(int currentPage, int size, String keyword, String gen, String loginType) {
 		// 파라미터
@@ -60,33 +83,5 @@ public class UsageStatsServiceImpl implements UsageStatsService{
 		
 		return articlePage;
 	}
-
-	// 일별 페이지 방문자 수 top10
-	@Override
-	public List<VisitVO> pageVisitCount() {
-		return this.usageStatsMapper.pageVisitCount();
-	}
-
-	// 해당월 페이지 방문자 수 top10
-	@Override
-	public List<VisitVO> monthPageVisitCount() {
-		return this.usageStatsMapper.monthPageVisitCount();
-	}
-
-	
-	// 원하는 기간별 방문자 수
-	@Override
-	public List<UsageStatsVO> customUserInquiry(String startDate, String endDate) {
-		
-		return this.usageStatsMapper.customUserInquiry(startDate,endDate);
-	}
-	
-	// 원하는 기간별 페이지 방문자 수
-	@Override
-	public List<VisitVO> getPageCalendar(String startDate, String endDate) {
-		
-		return this.usageStatsMapper.getPageCalendar(startDate,endDate);
-	}
-
 	
 }
