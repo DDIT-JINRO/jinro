@@ -92,7 +92,9 @@ public class CounselingReserveController {
 				// FlashAttribute에 VO 객체 전체를 담아 다음 요청으로 전달
 				redirectAttributes.addFlashAttribute("counselingVO", counselingVO);
 				redirectAttributes.addAttribute("payId", payId);
-
+				
+				redirectAttributes.addAttribute("memId", memIdString);
+				
 				// 리다이렉트할 경로만 반환
 				return "redirect:/cnslt/resve/crsv/reservationDetail.do";
 			} else {
@@ -130,7 +132,8 @@ public class CounselingReserveController {
 	 * 상세 페이지 뷰를 반환하는 메서드
 	 */
 	@GetMapping("/crsv/reservationDetail.do")
-	public String reservationDetail(@ModelAttribute CounselingVO counselingVO, @RequestParam int payId, Model model) {
+	public String reservationDetail(@ModelAttribute CounselingVO counselingVO, @RequestParam int payId, Model model,
+			@RequestParam int memId) {
 		if (counselingVO == null || counselingVO.getCounsel() <= 0) {
 			// FlashAttribute가 없을 경우의 예외 처리
 			return "redirect:/cnslt/resve/crsv/reservation.do";
@@ -151,9 +154,15 @@ public class CounselingReserveController {
 			memberVO.setMemAge(age);
 		}
 
+		MemberSubscriptionVO currentSub = paymentService.selectByMemberId(memId);
+
+		// 현재 구독 정보가 있으면 구독결제 최신 가져오기
+		PaymentVO aiCounts = counselingReserveService.selectLastSubcription(currentSub);
+
 		model.addAttribute("payId", payId);
 		model.addAttribute("memberVO", memberVO);
 		model.addAttribute("counselingVO" + counselingVO);
+		model.addAttribute("aiCounts", aiCounts);
 
 		return "cnslt/resve/crsv/counselingreserveDetail";
 	}
