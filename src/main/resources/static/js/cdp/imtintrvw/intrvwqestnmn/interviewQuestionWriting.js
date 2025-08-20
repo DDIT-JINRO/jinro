@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	// 2. 삭제 버튼 이벤트
-	const btnDelete = mainForm.querySelector(".btn-delete");
+	const btnDelete = mainForm.querySelector(".btn--danger");
 	if (btnDelete) {
 		btnDelete.addEventListener("click", () => {
 			if (confirm("정말 삭제하시겠습니까?")) {

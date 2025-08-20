@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		form.submit();
 	});
 
-	document.querySelector(".btn-delete")?.addEventListener("click", () => {
+	document.querySelector(".btn--danger")?.addEventListener("click", () => {
 		const form = document.querySelector('.selfintro-write-form');
 		if (confirm("정말 삭제하시겠습니까?")) {
 			form.action = "/cdp/sint/sintwrt/delete.do";
