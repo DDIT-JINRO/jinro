@@ -1,12 +1,14 @@
 package kr.or.ddit.admin.csmg.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import kr.or.ddit.admin.csmg.service.CounselManagementService;
 import kr.or.ddit.admin.service.AdminCommonChartService;
+import kr.or.ddit.util.ArticlePage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -69,6 +71,27 @@ public class CounselManagementServiceImpl implements CounselManagementService {
 		map.put("videoTotalCountStatus", videoTotalCountStatus);
 		
 		return map;
+	}
+
+	@Override
+	public ArticlePage<Map<String, Object>> selectCounselorStatList(Map<String, Object> map) {
+		
+		int currentPage = Integer.parseInt((String) map.getOrDefault("currentPage",1));
+		int size = Integer.parseInt((String)map.getOrDefault("size",10));
+		String keyword= (String) map.get("keyword");
+		
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+		
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		
+		int total = counselManagementMapper.selectCounselorStatTotalCount(map);
+		List<Map<String, Object>> counselorStatList = counselManagementMapper.selectCounselorStatList(map);
+		
+		ArticlePage<Map<String, Object>> articlePage = new ArticlePage<>(total, currentPage, size, counselorStatList, keyword);
+		
+		return articlePage;
 	}
 	
 }

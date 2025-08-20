@@ -18,5 +18,72 @@
 	    WHERE
 	        TRUNC(COUNSEL_REQ_DATETIME, 'MM') IN (TRUNC(SYSDATE, 'MM'), TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM'))
 	</select>
+	
+	
+	<select id="selectCounselorStatTotalCount" parameterType="map" resultType="int">
+	    SELECT
+	        COUNT(*)
+	    FROM
+	        MEMBER a
+	    WHERE
+	        a.MEM_ROLE = 'R01003'
+	    <if test="keyword != null and keyword != ''">
+	        AND a.MEM_NAME LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	
+	<select id="selectCounselorStatList" parameterType="map" resultType="map">
+	    SELECT
+		        *
+		    FROM (
+		        SELECT
+		            t1.*,
+		            ROWNUM AS RNUM
+		        FROM
+		            (
+		                SELECT
+		                    a.MEM_ID,
+		                    a.MEM_NAME,
+		                    COUNT(b.COUNSEL_ID) AS COUNSEL_COUNT,
+		                    ROUND(AVG(c.CR_RATE)) AS RATING_AVERAGE
+		                FROM
+		                    MEMBER a
+		                JOIN
+		                    COUNSELING b ON a.MEM_ID = b.COUNSEL
+		                LEFT JOIN
+		                    COUNSELING_REVIEW c ON b.COUNSEL_ID = c.CR_ID
+		                WHERE
+		                    a.MEM_ROLE = 'R01003'
+		                <if test="keyword != null and keyword != ''">
+		                    AND a.MEM_NAME LIKE '%' || #{keyword} || '%'
+		                </if>
+		                GROUP BY
+		                    a.MEM_ID, a.MEM_NAME
+		                ORDER BY
+		                <choose>
+		                    <when test="sortBy == 'MEM_ID'">
+		                        a.MEM_ID
+		                    </when>
+		                    <when test="sortBy == 'MEM_NAME'">
+		                        a.MEM_NAME
+		                    </when>
+		                    <when test="sortBy == 'COUNSEL_COUNT'">
+		                        COUNSEL_COUNT
+		                    </when>
+		                    <when test="sortBy == 'RATING_AVERAGE'">
+		                        RATING_AVERAGE
+		                    </when>
+		                    <otherwise>
+		                        a.MEM_ID
+		                    </otherwise>
+		                </choose>
+		                <if test="sortOrder != null and sortOrder != ''">
+		                    ${sortOrder}
+		                </if>
+		            ) t1
+		        WHERE ROWNUM <![CDATA[<]]>= #{endNo}
+		    ) t2
+		    WHERE RNUM <![CDATA[>=]]> #{startNo}
+	</select>
 
 </mapper>
