@@ -18,8 +18,8 @@
 	<div class="main-content">
 		<div id="content">
 			<h3>스케줄 관리</h3>
-
-			<div class="topBox" style="margin-bottom: 10px">
+		<div class="template-container">
+			<div class="top-row">
 				<div class="template-panel topheader">
 					<div class="panel-header" id="counselListHeader"
 						style="cursor: pointer; text-decoration: none">상담 리스트</div>
@@ -60,11 +60,9 @@
 							</tbody>
 						</table>
 					</div>
-					<div style="margin-top: 10px; text-align: center;">
 						<div class="card-footer clearfix">
 							<div class="panel-footer pagination"></div>
 						</div>
-					</div>
 				</div>
 				<div class="template-panel topheader">
 					<div class="panel-header" id="calenderHeader"
@@ -76,8 +74,9 @@
 					<input type="hidden" id="counselReqDatetimeInput"
 						name="counselReqDatetime">
 				</div>
-			</div>
-			<div class="template-panel bottomBox">
+			    </div>
+				
+			<div class="template-panel bottom-box">
 				<div class="panel-header" id="calenderHeader"
 					style="cursor: pointer; text-decoration: none">스케줄 관리</div>
 				<div class="bottom-content-wrapper">
@@ -127,11 +126,11 @@
 									class="info-value-counselMethodStr"></span>
 							</div>
 							<div class="info-item">
-								<span class="info-label">상담 예약일 : </span> <span
+								<span class="info-label">상담 예약일</span> <span
 									class="info-value-counselReqDate"></span>
 							</div>
 							<div class="info-item">
-								<span class="info-label">상담 예약시간 : </span> <span
+								<span class="info-label">상담 예약시간</span> <span
 									class="info-value-counselReqtime"></span>
 							</div>
 							<div class="info-item">
@@ -153,8 +152,11 @@
 			</div>
 		</div>
 	</div>
+</div>
 </body>
 </html>
 <script type="text/javascript" src="/js/com/index.global.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.min.js"></script>
 <script type="text/javascript"
 	src="/js/include/cnsLeader/scm/scheduleManagement.js"></script>

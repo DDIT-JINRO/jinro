@@ -8,24 +8,33 @@
 </script>
 <!-- 제목입니다 -->
 <h3>연차/휴가 신청 및 목록</h3>
-<body>
+<div class="template-container">
 	<div class="template-panel vac-approve-panel">
 		<div class="panel-header">휴가 신청 양식</div>
 		<div class="vac-approve-container">
 
 			<div class="vac-approve-content-left">
-				<h3>날짜 선택</h3>
+			<div class="calGroup">
+			  	<button type="button" id="dateResetBtn" class="btn btn-reset date-reset">날짜초기화</button>
+				<h3 class="calDate">날짜 선택</h3>
+			</div>
 			  <div id="dateRange"></div>
-			  <button type="button" id="dateResetBtn" class="btn btn-reset date-reset">날짜초기화</button>
 			</div>
 
 			<div class="vac-approve-content-right">
-				<label>시작일</label>
-			  <input type="text" id="startDateInput" readonly name="startDate" placeholder="달력에서 시작일 선택">
-			  	<label>종료일</label>
-			  <input type="text" id="endDateInput" readonly  name="endDate" placeholder="달력에서 종료일 선택">
-				<label>총 휴가일수</label>
-			  <input type="text" id="totalDateCnt" readonly placeholder="총 휴가일수"/>
+			<div class="vac-approve-content-right-header">
+					<label>시작일</label>
+				  <input type="text" id="startDateInput" readonly name="startDate" placeholder="달력에서 시작일 선택">
+				  	<label>종료일</label>
+				  <input type="text" id="endDateInput" readonly  name="endDate" placeholder="달력에서 종료일 선택">
+					<label>총 휴가일수</label>
+				  <input type="text" id="totalDateCnt" readonly placeholder="총 휴가일수"/>
+					<div class="panel-footer button-group">
+						<button type="button" id="resetAllBtn" class="btn btn-reset">전체초기화</button>
+						<button type="button" onclick="confirmVacation()"
+							class="btn btn-confirm" id="btn-confirm">제출</button>
+					</div>
+				</div>
 			  <h3>사유 작성</h3>
   			  <div class="ck-editor">
 			    <!-- CKEditor가 여기에 mount됨 -->
@@ -40,38 +49,33 @@
 			</div>
 
 		</div>
-
-		<div class="panel-footer button-group">
-			<button type="button" id="resetAllBtn" class="btn btn-reset">전체초기화</button>
-			<button  type="button" onclick="confirmVacation()" class="btn btn-confirm"  id="btn-confirm">제출</button>
-		</div>
 	</div>
 	<div class="template-panel vac-list-panel">
 		<div class="panel-header">휴가 신청 내역</div>
 		<div class="filter-box">
-			<form action="/csc/admin/noticeList.do" method="get">
+			<form action="/csc/admin/noticeList.do" method="get" class="filterForm">
 				<div class="form-group">
-					<div class="filter-group">
-						<h4>필터</h4>
-						<input type="radio" name="filter" value="" checked/>
+					<div class="filter-group filters">
+						<h3>필터 </h3>
 						<label>전체</label>
-						<input type="radio" name="filter" value="S03001"/>
+						<input type="radio" name="filter" value="" checked/>
 						<label>신청</label>
-						<input type="radio" name="filter" value="S03003"/>
+						<input type="radio" name="filter" value="S03001"/>
 						<label>승인</label>
-						<input type="radio" name="filter" value="S03002"/>
+						<input type="radio" name="filter" value="S03003"/>
 						<label>반려</label>
+						<input type="radio" name="filter" value="S03002"/>
 					</div>
 					<div class="sort-group">
-						<h4>정렬</h4>
-						<input type="radio" name="sortBy" value="reqDesc" checked/>
+						<h3>정렬 </h3>
 						<label>신청일 최신순</label>
-						<input type="radio" name="sortBy" value="reqAsc"/>
+						<input type="radio" name="sortBy" value="reqDesc" checked/>
 						<label>신청일 과거순</label>
-						<input type="radio" name="sortBy" value="startAsc"/>
+						<input type="radio" name="sortBy" value="reqAsc"/>
 						<label>시작일 빠른순</label>
-						<input type="radio" name="sortBy" value="startDesc"/>
+						<input type="radio" name="sortBy" value="startAsc"/>
 						<label>시작일 느린순</label>
+						<input type="radio" name="sortBy" value="startDesc"/>
 					</div>
 				</div>
 			</form>
@@ -117,5 +121,5 @@
 			</div>
 		</div>
 	</div>
-</body>
+</div>
 

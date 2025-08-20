@@ -1,11 +1,7 @@
-.topBox {
-	display: flex;
-	gap: 20px;
-}
 
 .topheader {
 	width: 100%;
-	height: 450px;
+	height: auto;
 }
 
 .bottomBox {
@@ -16,6 +12,38 @@
 h3 {
 	margin-bottom: 10px;
 }
+.top-row {
+    display: flex;
+    flex-direction: row; /* 가로 방향으로 정렬 */
+    gap: 15px; /* 패널 사이의 간격 */
+    width: 100%;
+    height: inherit;
+}
+
+.top-row .template-panel:first-child {
+  flex: 1.5; /* 상담 리스트 패널의 너비 비율을 1로 설정 */
+}
+
+.top-row .template-panel:last-child {
+  flex: 2; /* 달력 패널의 너비 비율을 2로 설정 */
+}
+
+.template-container {
+    flex-direction: column;
+}
+
+.template-panel.topheader {
+    display: flex;
+    flex-direction: column;
+    /* 나머지 스타일은 기존대로 유지 */
+}
+
+.template-panel.topheader .panel-footer.pagination {
+    margin-top: auto; /* 이 속성이 페이징 영역을 아래로 밀어냅니다. */
+}
+.card-footer {
+    margin-top: auto;
+}
 /* ──────────────────────────────────────────────────────────
    필터 영역
 ──────────────────────────────────────────────────────────*/
@@ -23,7 +51,7 @@ h3 {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	flex-direction: row-reverse;
+	justify-content: flex-end;
 }
 
 .filter-box select, .filter-box input[type="text"] {
@@ -59,86 +87,6 @@ p {
    테이블 영역
 ──────────────────────────────────────────────────────────*/
 /* 테이블 전체 스타일 */
-.table-wrapper {
-	border: 1px solid #ddd; /* 테이블 외곽선 */
-	border-radius: 4px;
-	overflow: auto; /* 테이블 내용이 wrapper 밖으로 넘치면 숨김 */
-	margin-bottom: 20px; /* 하단 간격 추가 */
-}
-
-table {
-	width: 100%;
-	border-collapse: collapse;
-	table-layout: fixed;
-}
-
-/* 테이블 헤더 스타일 */
-thead {
-	background-color: #f8f9fa; /* 밝은 회색 배경 */
-	border-bottom: 2px solid #dee2e6; /* 헤더 아래 구분선 */
-}
-
-thead th {
-	padding: 12px;
-	font-weight: 600;
-	color: #495057; /* 글자색 */
-	text-align: center;
-	border-right: 1px solid #dee2e6; /* 헤더 셀 구분선 */
-}
-
-thead th:last-child {
-	border-right: none; /* 마지막 헤더 셀의 오른쪽 테두리 제거 */
-}
-
-/* 테이블 바디 스타일 */
-tbody tr {
-	border-bottom: 1px solid #eee; /* 행 아래 구분선 */
-	cursor: pointer; /* 마우스 오버 시 커서 변경 */
-}
-
-tbody tr:last-child {
-	border-bottom: none; /* 마지막 행의 아래 테두리 제거 */
-}
-
-tbody td {
-	padding: 10px;
-	color: #6c757d; /* 글자색 */
-	text-align: center;
-	border-right: 1px solid #eee; /* 데이터 셀 구분선 */
-	overflow: auto; /* 내용이 넘치면 숨김 */
-	text-overflow: ellipsis; /* 내용이 넘치면 ...으로 표시 */
-	white-space: nowrap; /* 내용이 한 줄로 표시되도록 */
-}
-
-tbody td:last-child {
-	border-right: none; /* 마지막 데이터 셀의 오른쪽 테두리 제거 */
-}
-
-tbody tr:hover {
-	background-color: #f5f5f5; /* 마우스 오버 시 배경색 변경 */
-}
-
-/* 번호 컬럼 너비 조정 (이미지 참고) */
-colgroup col:nth-child(1) {
-	width: 10%; /* 예시: 필요에 따라 조정 */
-}
-
-/* 나머지 컬럼 너비는 auto 또는 필요에 따라 조정 */
-colgroup col:nth-child(2) {
-	width: auto;
-}
-
-colgroup col:nth-child(3) {
-	width: auto;
-}
-
-colgroup col:nth-child(4) {
-	width: auto;
-}
-
-colgroup col:nth-child(5) {
-	width: 15%; /* 상태 컬럼 너비 예시 */
-}
 
 /* ──────────────────────────────────────────────────────────
    하단 박스 (스케줄 관리)
@@ -181,10 +129,11 @@ colgroup col:nth-child(5) {
 
 .info-item {
 	display: flex;
+	gap: 20px;
 }
 
 .info-label {
-	font-weight: 500;
+	font-weight: bold;
 	color: #555;
 	min-width: 80px; /* 라벨 너비를 고정하여 값들이 정렬되게 함 */
 }
@@ -196,29 +145,27 @@ colgroup col:nth-child(5) {
 /* ------------------ FullCalendar 영역 스타일 수정 ------------------ */
 /* FullCalendar 기본 스타일: 오늘 날짜의 노란색 하이라이트를 제거하거나 조정 */
 .fc-day-today {
-	background-color: transparent; /* 기본 노란색 배경 제거 */
+	background-color: blue; /* 기본 노란색 배경 제거 */
 	border: none; /* 기본 테두리 제거 */
 }
 
 /* 사용자 정의 스타일: 선택된 날짜에 대한 파란색 하이라이트 */
 .fc-day.selected {
-	background-color: #e0f7fa; /* 연한 하늘색 배경 */
-	border: 2px solid #00acc1; /* 테두리 강조 */
+	background-color: #e0f7fa; 
+	border: 2px solid rgb(128, 255, 128) ; 
 }
 
 /* 오늘 날짜가 선택되었을 경우의 스타일 */
 .fc-day-today.selected {
-	background-color: #e0f7fa !important; /* 선택된 날짜와 동일한 배경색 */
-	border: 2px solid #00acc1; /* 선택된 날짜와 동일한 테두리 */
+	background-color: #e0f7fa  !important; 
+	border: 2px solid rgb(128, 255, 128);
 }
 /* FullCalendar 컨테이너 스타일 */
 #calendar {
-	flex: 1;
-	height: auto;
+	height: 100%;
 	width: 100%; /* 화면 너비의 100%를 차지하도록 설정 */
 	max-width: none; /* 최대 너비 제한 해제 */
 	margin: 0px auto;
-	margin-bottom: 20px;
 	padding: 0; /* 내부 패딩을 0으로 설정 */
 }
 
@@ -234,4 +181,45 @@ colgroup col:nth-child(5) {
 /* 캘린더 버튼 크기 줄이기 */
 .fc .fc-button {
 	padding: 0; /* 버튼 내부 패딩을 줄입니다. */
+}
+.fc-day-other {
+    /* 날짜와 요일 모두 숨기기 */
+    visibility: hidden;
+}
+.fc .fc-bg-event {
+    opacity: 0.4;
+}
+
+.template-panel #calendar .fc-event-title {
+    font-size: 0.8rem; 
+    color: #555;
+    display: block ;
+}
+
+/* 상담 건수가 많을 때 셀에 스크롤바를 생성합니다. */
+.fc-daygrid-day-events {
+    overflow-y: auto !important;
+}
+
+/* 스크롤바를 마우스를 올렸을 때만 보이게 하려면 */
+.fc-daygrid-day-events::-webkit-scrollbar {
+    width: 5px; /* 스크롤바 너비 */
+}
+.fc-daygrid-day-events::-webkit-scrollbar-thumb {
+    background: transparent; /* 평소에는 투명 */
+    border-radius: 5px;
+}
+.fc-daygrid-day-events:hover::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2); /* 마우스를 올리면 보이게 */
+}
+
+.fc-scrollgrid-sync-table{
+	width: 100%;
+	height: 100%;
+}
+
+/*___________________ 페이지 네이션_______________ 
+_______________________ _________________________*/
+.pagination {
+    padding: 10px 0 0 0;
 }

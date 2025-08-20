@@ -12,8 +12,8 @@
 		<div class="panel-header" id="noticeHeader" style="cursor: pointer; text-decoration: none">휴가신청내역</div>
 
 		<!-- 리스트 패널 상단: 필터 영역 -->
-		<div class="filter-box">
-			<form action="/csc/admin/noticeList.do" method="get">
+		<div class="filter-box vacSearch" >
+			<form action="/csc/admin/noticeList.do" method="get" >
 				<select name="status">
 				    <option value="counselor">상담사명</option>
 				    <!-- … -->
@@ -22,12 +22,12 @@
  				 <button type="button" class="btn-save" id="btn-search">조회</button>
 			</form>
 		</div>
-		<div class="filter-box">
-			<p>상태필터 : </p>
-			<input type="radio" name="filter" value="" checked />전체
-			<input type="radio" name="filter" value="S03001"/>접수
-			<input type="radio" name="filter" value="S03003"/>승인
-			<input type="radio" name="filter" value="S03002"/>반려
+		<div class="filter-box vacRadio">
+			<p>상태필터</p>
+			전체<input type="radio" name="filter" value="" checked />
+			접수<input type="radio" name="filter" value="S03001"/>
+			승인<input type="radio" name="filter" value="S03003"/>
+			반려<input type="radio" name="filter" value="S03002"/>
 		</div>
 		<p>
 			총 <span id="notice-count"></span>건
