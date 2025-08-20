@@ -373,31 +373,35 @@
 	 -->
 	<select id="getMonthlyUserStatsForDashboard"  resultType="map">
 		<![CDATA[
-	    WITH MONTH_LIST AS (
-	        -- 올 해 1월 1일부터 이번 달 1일까지의 월초 날짜 목록 생성
-	        SELECT ADD_MONTHS(TRUNC(SYSDATE, 'YY'), LEVEL - 1) AS "month_start"
-	        FROM DUAL
-	        CONNECT BY ADD_MONTHS(TRUNC(SYSDATE, 'YY'), LEVEL - 1) <= TRUNC(SYSDATE, 'MM')
-	    )
-	    SELECT
-	        TO_CHAR(m."month_start", 'MM') AS "month",
-	        -- 해당 월초(1일) 시점까지의 누적 총 가입자 수(탈퇴자 제외)
-		        (SELECT COUNT(*) 
-		         FROM MEMBER 
-		         WHERE CREATED_AT < m."month_start"
-		         AND MEM_ID NOT IN (
-		             SELECT MEM_ID
-		             FROM   MEM_DEL
-		             WHERE  MD_DELETED_AT < m."month_start"
-		         )
-	         ) AS "totalUsers",
-	        -- 해당 월의 구독자 수 = 전달에 결제한 사람 수
-	        (SELECT COUNT(*) 
-	         FROM PAYMENT
-	         WHERE PAY_DATE >= ADD_MONTHS(m."month_start", -1) 
-	           AND PAY_DATE < m."month_start") AS "subscribers"
-	    FROM MONTH_LIST m
-	    ORDER BY "month"
+	   WITH MONTH_LIST AS (
+		  -- 올해 1월 말일부터 현재 월 말일까지의 월말 목록
+		  SELECT LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE, 'YY'), LEVEL - 1)) AS month_end
+		  FROM DUAL
+		  CONNECT BY LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE, 'YY'), LEVEL - 1)) <= LAST_DAY(SYSDATE)
+		)
+		SELECT
+		  TO_CHAR(m.month_end, 'MM') AS "month",
+		
+		  -- 해당 월말 시점까지의 누적 총 가입자 수(탈퇴자 제외)
+		  (SELECT COUNT(*)
+		     FROM MEMBER
+		    WHERE CREATED_AT <= m.month_end
+		      AND MEM_ID NOT IN (
+		            SELECT MEM_ID
+		              FROM MEM_DEL
+		             WHERE MD_DELETED_AT <= m.month_end
+		      )
+		  ) AS "totalUsers",
+		
+		  -- 해당 월의 구독자 수 = 전달에 결제한 사람 수 (기준: 월말)
+		  (SELECT COUNT(*)
+		     FROM PAYMENT
+		    WHERE PAY_DATE >= ADD_MONTHS(TRUNC(m.month_end, 'MM'), -1)  -- 전달 월초 포함
+		      AND PAY_DATE <  TRUNC(m.month_end, 'MM')                  -- 당월 월초 미만
+		  ) AS "subscribers"
+		
+		FROM MONTH_LIST m
+		ORDER BY "month"
 	    ]]>
 	</select>
 </mapper>
