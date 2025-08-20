@@ -64,6 +64,25 @@
 				    <button class="aifb-button proofread" onclick="requestProofread()">내 이력서 수정하러 가기</button>
 				</div>
 			</div>
+			<!-- 모달 -->
+			<div class="ai-modal-backdrop" id="modalBg" aria-hidden="true"></div>
+			<div class="ai-modal" id="confirmModal" role="dialog"
+				aria-modal="true" aria-labelledby="confirmTitle">
+				<h4 id="confirmTitle">ai 첨삭 시작을 확인해 주세요</h4>
+				<div class="ai-kv">
+					<div>
+						<b>사용 서비스</b> : <span>이력서 AI 첨삭</span>
+					</div>
+					<div>
+						<b>남은 이용권 수</b> : <span id="resume-count-display">${aiCounts.payResumeCnt}</span>회
+					</div>
+				</div>
+				<p>확인을 누르면 이용권이 차감되며, 새 팝업 창에서 상담이 시작됩니다.</p>
+				<div class="row">
+					<button type="button" class="btn secondary" id="btnCancel">취소</button>
+					<button type="button" class="btn" id="btnConfirm">확인하고 시작</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -5,16 +5,57 @@
 let aiFeedbackData = null;
 document.addEventListener('DOMContentLoaded', () => {
 
+	// --- 주요 HTML 요소 가져오기 ---
+	const resumeList = document.getElementById('resumeList');
+	const requestAiFeedbackBtn = document.getElementById('requestAiFeedback');
+	const bg = document.getElementById('modalBg');
+	const modal = document.getElementById('confirmModal');
+	const btnCancel = document.getElementById('btnCancel');
+	const btnConfirm = document.getElementById('btnConfirm');
+
 	let subscriptionInfo = null;
 	let originalData = null;
 
-	const resumeList = document.getElementById('resumeList');
+	// --- 이벤트 리스너 연결 ---
 	resumeList.addEventListener('change', loadResumeDetail);
 
-	const requestAiFeedbackBtn = document.getElementById('requestAiFeedback');
-	if (requestAiFeedbackBtn) {
-		requestAiFeedbackBtn.addEventListener('click', requestAiFeedback);
+	// 'AI 피드백 요청' 버튼 클릭 -> 모달 열기
+	requestAiFeedbackBtn.addEventListener('click', () => {
+		// --- 사전 조건 검사 ---
+		if (!subscriptionInfo || !subscriptionInfo.payId) {
+			alert('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.');
+			return;
+		}
+		if (!originalData) {
+			alert('먼저 피드백을 받을 이력서를 선택해주세요.');
+			return;
+		}
+		if (subscriptionInfo.payResumeCnt <= 0) {
+			alert('이력서 첨삭 횟수를 모두 사용했습니다.');
+			return;
+		}
+
+	document.getElementById('resume-count-display').textContent = subscriptionInfo.payResumeCnt;
+		// --- 모달 표시 ---
+		bg.style.display = 'block';
+		modal.style.display = 'block';
+		modal.focus();
+	});
+	        
+	// 모달의 '확인' 버튼 클릭 -> 실제 AI 분석 및 횟수 차감 요청
+	btnConfirm.addEventListener('click', () => {
+		closeModal();
+		requestAiFeedback();
+	});
+
+	// 모달 닫기 관련 이벤트 리스너
+	function closeModal() {
+		modal.style.display = 'none';
+		bg.style.display = 'none';
 	}
+	btnCancel.addEventListener('click', closeModal);
+	bg.addEventListener('click', closeModal);
+	window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'block') closeModal(); });
 
 	//페이지 로드시 구독 상태를 확인하는 함수
 	const checkSubscription = () => {
@@ -105,20 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	//이력서 ai첨삭 호출
 	function requestAiFeedback() {
 
-		if (!subscriptionInfo || !subscriptionInfo.payId) {
-			alert('유효한 구독 정보가 없습니다.');
-			return;
-		}
 
-		if (!originalData) {
-			alert('먼저 이력서를 선택해주세요.');
-			return;
-		}
-
-		if (subscriptionInfo.payResumeCnt <= 0) {
-			alert('이력서 첨삭 횟수를 모두 사용했습니다.');
-			return;
-		}
 
 		const feedbackArea = document.getElementById('feedbackArea');
 		feedbackArea.innerHTML = `
@@ -129,14 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		</div>
 	`;
 
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(originalData.resumeContent, 'text/html');
-		const cleanedHtml = doc.body.innerHTML;
-
-		fetch('/ai/proofread/resume', {
+		fetch('/cdp/aifdbck/rsm/requestFeedback.do', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ "html": cleanedHtml })
+			body: JSON.stringify({
+				"payId": subscriptionInfo.payId, // 횟수를 차감할 결제 ID
+				"html": originalData.resumeContent // 피드백 받을 이력서 내용
+			})
 		})
 			.then(response => {
 				if (!response.ok) throw new Error('AI 첨삭 요청 실패');
