@@ -106,6 +106,7 @@
 						</c:if>
 					</div>
 					<div class="form-actions__right">
+						<button type="button" class="btn btn--outline" id="autoCompleteBtn">자동완성</button>
 						<button type="button" class="btn btn--secondary btn-temp-save">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
 								<path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
@@ -120,7 +121,6 @@
 							</svg>
 							미리보기
 						</button>
-						<button type="button" class="btn-autocomplete" id="autoCompleteBtn">자동완성</button>
 						<button type="submit" class="btn btn--primary">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
 								<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
