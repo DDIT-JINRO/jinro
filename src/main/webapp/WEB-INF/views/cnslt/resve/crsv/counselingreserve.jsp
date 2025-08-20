@@ -23,6 +23,7 @@
 		</div>
 
 		<div class="public-wrapper-main">
+			<div class="reserveTitle">상담 예약</div>
 			<div class="reserveHeader">
 				<div class="dept-asterisk"></div>
 				<h2>상담선택</h2>
