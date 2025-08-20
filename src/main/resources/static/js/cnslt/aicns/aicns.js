@@ -113,6 +113,14 @@ document.addEventListener('DOMContentLoaded', function(){
 	      return;
 	    }
 
+		// 기존 윈도우 선택상태 정리
+		grid.querySelectorAll('.ai-card').forEach(el => {
+			el.classList.remove('selected');
+			el.setAttribute('aria-checked', 'false');
+		});
+		selectedType = null;
+	    btnStart.disabled = true;
+
 	    // 팝업이 닫히면 필요한 후처리(예: 세션 정리) 호출 가능
 	    const closeWatcher = setInterval(() => {
 	      if (popup.closed) {
