@@ -1,16 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/cdp/sint/sintlst/selfIntroList.css">
-<!-- 스타일 여기 적어주시면 가능 -->
+<link rel="stylesheet" href="/css/common/listCard.css">
 
 <section class="channel">
-	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
-		<!-- 대분류 -->
 		<div class="channel-title-text">경력관리</div>
 	</div>
-	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-item">
 			<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
@@ -26,90 +21,124 @@
 		</div>
 	</div>
 </section>
-<div>
-	<div class="public-wrapper">
-		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
-		<div class="tab-container" id="tabs">
-			<a class="tab" href="/cdp/sint/qestnlst/questionList.do">질문 리스트</a> 
-			<a class="tab active" href="/cdp/sint/sintlst/selfIntroList.do">자기소개서 리스트</a> 
-			<a class="tab" href="/cdp/sint/sintwrt/selfIntroWriting.do">자기소개서 작성</a>
-		</div>
-		<!-- 여기부터 작성해 주시면 됩니다 -->
-		<div class="public-wrapper-main">
-			<form method="get" action="/cdp/sint/sintlst/selfIntroList.do" class="intro-search-filter">
-				<!-- 검색어 입력 -->
-				<input type="text" name="keyword" value="${param.keyword}"
-					placeholder="자기소개서 제목 검색" class="intro-search-input" />
 
-				<!-- 상태 선택 -->
-				<select name="status" class="intro-status-select">
-					<option value="">전체 상태</option>
-					<option value="작성중"
-						<c:if test="${param.status eq '작성중'}">selected</c:if>>작성중</option>
-					<option value="완료"
-						<c:if test="${param.status eq '완료'}">selected</c:if>>완료</option>
-				</select>
+<div class="public-wrapper">
+	<div class="tab-container" id="tabs">
+		<a class="tab" href="/cdp/sint/qestnlst/questionList.do">질문 리스트</a>
+		<a class="tab active" href="/cdp/sint/sintlst/selfIntroList.do">자기소개서 리스트</a>
+		<a class="tab" href="/cdp/sint/sintwrt/selfIntroWriting.do">자기소개서 작성</a>
+	</div>
 
-				<!-- 검색 버튼 -->
-				<button type="submit" class="intro-search-btn">검색</button>
-			</form>
-			<div class="intro-list-section">
-				<sec:authorize access="isAuthenticated()">
-					<div class="intro-list-header">총 ${articlePage.total}건</div>
-				</sec:authorize>
-
-				<c:forEach var="intro" items="${articlePage.content}">
-					<div class="intro-card">
-						<div class="intro-title-section">
-							<div class="intro-title">${intro.siTitle}</div>
-							<div class="intro-meta">
-								<span class="intro-date"> 수정일 : <fmt:formatDate
-										value="${intro.siUpdatedAt}" pattern="yyyy. MM. dd (E) HH:mm" />
-								</span> <span class="intro-status"> 상태 : <c:choose>
-										<c:when test="${intro.siStatus eq '완료'}">완료</c:when>
-										<c:when test="${intro.siStatus eq '작성중'}">임시 저장</c:when>
-										<c:otherwise>미지정</c:otherwise>
-									</c:choose>
-								</span>
+	<div class="public-wrapper-main">
+		<form method="get" action="/cdp/sint/sintlst/selfIntroList.do" class="search-filter__form">
+			<div class="search-filter__bar">
+				<div class="search-filter__input-wrapper">
+					<input type="search" name="keyword" value="${param.keyword}" class="search-filter__input" placeholder="자기소개서 제목 검색">
+					<button class="search-filter__button" type="submit">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+							<path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+						</svg>
+					</button>
+				</div>
+			</div>
+			<div class="search-filter__accordion">
+				<button type="button" class="search-filter__accordion-header" id="search-filter-toggle">
+					<span>필터</span>
+					<span class="search-filter__accordion-arrow">▲</span>
+				</button>
+				<div class="search-filter__accordion-panel" id="search-filter-panel">
+					<div class="search-filter__accordion-content">
+						<div class="search-filter__group">
+							<label class="search-filter__group-title">상태</label>
+							<div class="search-filter__options">
+								<label class="search-filter__option">
+									<input type="radio" name="status" value="" <c:if test="${empty param.status}">checked</c:if>>
+									<span>전체</span>
+								</label>
+								<label class="search-filter__option">
+									<input type="radio" name="status" value="작성중" <c:if test="${param.status eq '작성중'}">checked</c:if>>
+									<span>임시 저장</span>
+								</label>
+								<label class="search-filter__option">
+									<input type="radio" name="status" value="완료" <c:if test="${param.status eq '완료'}">checked</c:if>>
+									<span>완료</span>
+								</label>
 							</div>
 						</div>
-						<a class="intro-edit-button"
-							href="/cdp/sint/sintwrt/selfIntroWriting.do?siId=${intro.siId}"> 자기소개서 수정하러 가기 </a>
+						<button type="submit" class="search-filter__submit-button">검색</button>
 					</div>
-				</c:forEach>
+				</div>
 			</div>
+		</form>
+
+		<div class="content-list__total-count">총 ${articlePage.total}건</div>
+
+		<div class="content-list">
+			<c:choose>
+				<c:when test="${not empty articlePage.content}">
+					<c:forEach var="intro" items="${articlePage.content}">
+						<div class="list-card">
+							<div class="list-card__info">
+								<h3 class="list-card__title">${intro.siTitle}</h3>
+								<div class="list-card__meta">
+									<div class="list-card__meta-item">
+										<span class="list-card__meta-label">수정일:</span>
+										<fmt:formatDate value="${intro.siUpdatedAt}" pattern="yyyy.MM.dd (E) HH:mm" />
+									</div>
+									<div class="list-card__meta-item">
+										<span class="list-card__meta-label">상태:</span>
+										<span class="list-card__status <c:choose><c:when test='${intro.siStatus eq \"완료\"}'>list-card__status--completed</c:when><c:otherwise>list-card__status--draft</c:otherwise></c:choose>">
+											<c:choose>
+												<c:when test="${intro.siStatus eq '완료'}">완료</c:when>
+												<c:when test="${intro.siStatus eq '작성중'}">임시 저장</c:when>
+												<c:otherwise>미지정</c:otherwise>
+											</c:choose>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="list-card__actions">
+								<a class="list-card__edit-button" href="/cdp/sint/sintwrt/selfIntroWriting.do?siId=${intro.siId}"> 자기소개서 수정하기 </a>
+							</div>
+						</div>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<div class="empty-state">
+						<div class="empty-state__title">작성된 자기소개서가 없습니다</div>
+						<div class="empty-state__description">새로운 자기소개서를 작성하여 취업 활동을 시작해보세요.</div>
+						<div class="empty-state__action">
+							<a href="/cdp/sint/sintwrt/selfIntroWriting.do" class="button button--primary button--large"> 자기소개서 작성하기 </a>
+						</div>
+					</div>
+				</c:otherwise>
+			</c:choose>
 		</div>
+
+		<sec:authorize access="isAuthenticated()">
+			<div class="list__footer">
+				<a href="/cdp/sint/sintwrt/selfIntroWriting.do" class="list__create-button"> 자기소개서 작성하기 </a>
+			</div>
+		</sec:authorize>
+
+		<c:if test="${not empty articlePage.content}">
+			<ul class="pagination">
+				<li>
+					<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="pagination__link <c:if test='${articlePage.startPage < 6}'>pagination__link--disabled</c:if>"> ← Previous </a>
+				</li>
+				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
+					<li>
+						<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="pagination__link <c:if test='${pNo == articlePage.currentPage}'>pagination__link--active</c:if>"> ${pNo} </a>
+					</li>
+				</c:forEach>
+				<li>
+					<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="pagination__link <c:if test='${articlePage.endPage >= articlePage.totalPages}'>pagination__link--disabled</c:if>"> Next → </a>
+				</li>
+			</ul>
+		</c:if>
 	</div>
 </div>
-</div>
-
-<div class="card-footer clearfix">
-	<ul class="pagination">
-		<!-- Previous -->
-		<li><a
-			href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}"
-			class="<c:if test='${articlePage.startPage < 6}'>disabled</c:if>">
-				← Previous </a></li>
-
-		<!-- Page Numbers -->
-		<c:forEach var="pNo" begin="${articlePage.startPage}"
-			end="${articlePage.endPage}">
-			<li><a
-				href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}"
-				class="<c:if test='${pNo == articlePage.currentPage}'>active</c:if>">
-					${pNo} </a></li>
-		</c:forEach>
-
-		<!-- Next -->
-		<li><a
-			href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&gubun=${param.status}"
-			class="<c:if test='${articlePage.endPage >= articlePage.totalPages}'>disabled</c:if>">
-				Next → </a></li>
-	</ul>
-</div>
+<script type="text/javascript" src="/js/cdp/sint/sintlst/selfIntroList.js"></script>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
-<script>
-	// 스크립트 작성 해주시면 됩니다.
-</script>

@@ -1,13 +1,13 @@
 /**
  * 자바스크립트 파일로 분리된 AI 피드백 로직입니다.
  */
+let aiFeedbackData = null;
 document.addEventListener('DOMContentLoaded', () => {
 
 	// 구독 정보를 저장할 전역 변수
 	let subscriptionInfo = null;
 
 	// 전역 변수로 AI 피드백 데이터를 저장할 공간
-	let aiFeedbackData = null;
 	let originalData = null;
 
 	const selfIntroList = document.getElementById('selfIntroList');
@@ -129,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		feedbackArea.innerHTML = `
 		  <div class="spinner-wrapper">
 		    <div class="spinner-border text-primary" role="status">
-		      <span class="visually-hidden">Loading...</span>
 		    </div>
 		    <div class="text-center mt-2">AI가 피드백을 생성 중입니다...<br>잠시만 기다려주세요.</div>
 		  </div>

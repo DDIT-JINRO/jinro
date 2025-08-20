@@ -21,57 +21,58 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	})
 	
-	const cardHeaders = document.querySelectorAll(".card-header");
-	
+	const cardHeaders = document.querySelectorAll(".accordion-list__item-header");
 	cardHeaders.forEach((cardHeader) => {
 		cardHeader.addEventListener("click", function() {
 			toggleCard(this);
 		})
 	})
 	
-	const deleteBtns = document.querySelectorAll(".delete-btn");
-	
+	const deleteBtns = document.querySelectorAll(".card-actions__button--delete");
 	deleteBtns.forEach((deleteBtn) => {
 		deleteBtn.addEventListener("click", function() {
 			const irId = this.dataset.irId;
-			deleteInterviewFeedback(irId)
+			deleteInterviewFeedback(irId);
 		})
 	})
 	
-	const editBtns = document.querySelectorAll(".edit-btn");
-	
+	const editBtns = document.querySelectorAll(".card-actions__button--edit");
 	editBtns.forEach((editBtn) => {
 		editBtn.addEventListener("click", function() {
 			const dataMemId = this.dataset.memId;
 			const irId = this.dataset.irId;
-			
 			if (dataMemId != memId) {
-				alert("허용되지 않은 접근입니다.")
+				alert("허용되지 않은 접근입니다.");
 				return;
 			}
-			
-			location.href = `/ertds/univ/uvivfb/updateInterviewFeedbackView.do?irId=${irId}` 
+			location.href = `/ertds/univ/uvivfb/updateInterviewFeedbackView.do?irId=${irId}`; 
 		})
 	})
 });
 
 function toggleCard(header) {
-    const card = header.parentElement;
-    const content = card.querySelector('.card-content');
-    const toggle = header.querySelector('.card-toggle');
-    
-    // 현재 카드의 활성 상태 토글
-    const isActive = content.classList.contains('active');
-    
-    if (isActive) {
-        content.classList.remove('active');
-        header.classList.remove('active');
-        toggle.classList.remove('active');
-    } else {
-        content.classList.add('active');
-        header.classList.add('active');
-        toggle.classList.add('active');
-    }
+	const currentCard = header.closest('.accordion-list__item');
+	const currentContent = currentCard.querySelector('.accordion-list__item-content');
+	const currentToggle = header.querySelector('.accordion-list__toggle-icon');
+	const isOpening = !currentContent.classList.contains('is-active');
+
+	document.querySelectorAll('.accordion-list__item').forEach(item => {
+	    if (item !== currentCard) {
+	        item.querySelector('.accordion-list__item-content').classList.remove('is-active');
+	        item.querySelector('.accordion-list__item-header').classList.remove('is-active');
+	        item.querySelector('.accordion-list__toggle-icon').classList.remove('is-active');
+	    }
+	});
+
+	if (isOpening) {
+	    currentContent.classList.add('is-active');
+	    header.classList.add('is-active');
+	    currentToggle.classList.add('is-active');
+	} else {
+	    currentContent.classList.remove('is-active');
+	    header.classList.remove('is-active');
+	    currentToggle.classList.remove('is-active');
+	}
 }
 
 // 면접 후기 삭제 기능
@@ -107,11 +108,11 @@ function deleteInterviewFeedback(irId) {
 
 // 페이지 로드 시 모든 카드 닫힌 상태로 초기화
 document.addEventListener('DOMContentLoaded', function() {
-    const allContents = document.querySelectorAll('.card-content');
-    const allHeaders = document.querySelectorAll('.card-header');
-    const allToggles = document.querySelectorAll('.card-toggle');
-    
-    allContents.forEach(content => content.classList.remove('active'));
-    allHeaders.forEach(header => header.classList.remove('active'));
-    allToggles.forEach(toggle => toggle.classList.remove('active'));
+	const allContents = document.querySelectorAll('.accordion-list__item-content');
+	const allHeaders = document.querySelectorAll('.accordion-list__item-header');
+	const allToggles = document.querySelectorAll('.accordion-list__toggle-icon');
+
+	allContents.forEach(content => content.classList.remove('is-active'));
+	allHeaders.forEach(header => header.classList.remove('is-active'));
+	allToggles.forEach(toggle => toggle.classList.remove('is-active'));
 });

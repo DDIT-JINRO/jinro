@@ -28,7 +28,7 @@
   		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
   		<div class="public-wrapper-main">
-    		<img alt="인터뷰" src="/images/interview.png" style="max-width: 100%; height: auto;">
+    		<img alt="인터뷰" src="/images/interview.png" style="display: block; margin: 0 auto;">
   		</div>
 	</div>
 </div>

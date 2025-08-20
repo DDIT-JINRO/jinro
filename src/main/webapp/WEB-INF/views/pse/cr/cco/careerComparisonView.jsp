@@ -1,14 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/pse/cr/cco/careerComparsionView.css">
-<!-- 스타일 여기 적어주시면 가능 -->
+<link rel="stylesheet" href="/css/common/comparsionView.css">
+
 <section class="channel">
-	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
-		<!-- 대분류 -->
 		<div class="channel-title-text">진로 탐색</div>
 	</div>
-	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-item">
 			<a href="/pse/cat/careerAptitudeTest.do">진로 심리검사</a>
@@ -18,78 +15,84 @@
 		</div>
 	</div>
 </section>
+
 <div>
 	<div class="public-wrapper">
-		<table class="comparison-table">
-			<thead>
-				<tr>
-					<th></th>
+		<div class="tab-container" id="tabs">
+			<h3 class="page-title-bar__title">직업 비교</h3>
+		</div>
+	
+		<div class="table-responsive-wrapper">
+			<table class="comparison-table">
+				<thead class="comparison-table__header">
+					<tr class="comparison-table__row">
+						<th class="comparison-table__category-header"></th>
+						<c:forEach var="job" items="${jobsList}" varStatus="status">
+							<th class="comparison-table__job-col-header">
+								<div class="job-card-condensed">
+									<button class="bookmark-button job-card-condensed__bookmark ${job.isBookmark == job.jobTargetId ? 'is-active' : '' }" data-category-id="G03004" data-target-id="${job.jobTargetId}">
+										<span class="bookmark-button__icon--active">
+											<img src="/images/bookmark-btn-active.png" alt="활성 북마크">
+										</span>
+										<span class="bookmark-button__icon--inactive">
+											<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+										</span>
+									</button>
+									<button class="job-card-condensed__remove" data-column-index="${status.index}">&times;</button>
+									<h4 class="job-card-condensed__title">${job.jobName}</h4>
+									<a href="/pse/cr/crl/selectCareerDetail.do?jobCode=${job.jobCode}" class="job-card-condensed__detail-link">직업 상세보기</a>
+								</div>
+							</th>
+						</c:forEach>
+					</tr>
+				</thead>
 
-					<c:forEach var="job" items="${jobsList}">
-						<th class="job-card-header">
-							<div class="job-card">
-								<button class="bookmark-btn ${job.isBookmark == job.jobTargetId ? 'active' : '' }" data-category-id="G03004" data-target-id="${job.jobTargetId}">
-									<span class="icon-active">
-										<img src="/images/bookmark-btn-active.png" alt="활성 북마크" width="30" height="30">
-									</span>
-									<span class="icon-inactive">
-										<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크" width="30" height="30">
-									</span>
-								</button>
-								<button class="close-btn">&times;</button>
-								<h4>${job.jobName}</h4>
-								<a href="/pse/cr/crl/selectCareerDetail.do?jobCode=${job.jobCode}" class="btn-detail">직업 상세보기</a>
-							</div>
-						</th>
-					</c:forEach>
-				</tr>
-			</thead>
-			
-			<tbody>
-				<tr>
-					<th class="row-header">하는 일</th>
-					<c:forEach var="job" items="${jobsList}">
-						<td class="align-left">${job.jobMainDuty}</td>
-					</c:forEach>
-				</tr>
-				<tr>
-					<th class="row-header">직업 대분류</th>
-					<c:forEach var="job" items="${jobsList}">
-						<td>${job.jobLcl}</td>
-					</c:forEach>
-				</tr>
-				<tr>
-					<th class="row-header">직업 중분류</th>
-					<c:forEach var="job" items="${jobsList}">
-						<td>${job.jobMcl}</td>
-					</c:forEach>
-				</tr>
-				<tr>
-					<th class="row-header sortable-header" data-sort-key="education">평균 학력 ↕</th>
-					<c:forEach var="job" items="${jobsList}">
-						<td>${job.education}</td>
-					</c:forEach>
-				</tr>
-				<tr>
-					<th class="row-header sortable-header" data-sort-key="salary">평균 연봉 ↕</th>
-					<c:forEach var="job" items="${jobsList}">
-						<td>${job.averageSal}</td>
-					</c:forEach>
-				</tr>
-				<tr>
-					<th class="row-header sortable-header" data-sort-key="prospect">미래 전망 ↕</th>
-					<c:forEach var="job" items="${jobsList}">
-						<td>${job.prospect}</td>
-					</c:forEach>
-				</tr>
-				<tr>
-					<th class="row-header sortable-header" data-sort-key="satisfaction">만족도 ↕</th>
-					<c:forEach var="job" items="${jobsList}">
-						<td>${job.jobSatis}</td>
-					</c:forEach>
-				</tr>
-			</tbody>
-		</table>
+				<tbody class="comparison-table__body">
+					<tr class="comparison-table__row">
+						<th class="comparison-table__category-header">하는 일</th>
+						<c:forEach var="job" items="${jobsList}">
+							<td class="comparison-table__cell comparison-table__cell--align-left" data-label="하는 일">${job.jobMainDuty}</td>
+						</c:forEach>
+					</tr>
+					<tr class="comparison-table__row">
+						<th class="comparison-table__category-header">직업 대분류</th>
+						<c:forEach var="job" items="${jobsList}">
+							<td class="comparison-table__cell" data-label="직업 대분류">${job.jobLcl}</td>
+						</c:forEach>
+					</tr>
+					<tr class="comparison-table__row">
+						<th class="comparison-table__category-header">직업 중분류</th>
+						<c:forEach var="job" items="${jobsList}">
+							<td class="comparison-table__cell" data-label="직업 중분류">${job.jobMcl}</td>
+						</c:forEach>
+					</tr>
+					<tr class="comparison-table__row">
+						<th class="comparison-table__category-header comparison-table__category-header--sortable" data-sort-key="education">평균 학력 ↕</th>
+						<c:forEach var="job" items="${jobsList}">
+							<td class="comparison-table__cell" data-label="평균 학력">${job.education}</td>
+						</c:forEach>
+					</tr>
+					<tr class="comparison-table__row">
+						<th class="comparison-table__category-header comparison-table__category-header--sortable" data-sort-key="salary">평균 연봉 ↕</th>
+						<c:forEach var="job" items="${jobsList}">
+							<td class="comparison-table__cell" data-label="평균 연봉">${job.averageSal}</td>
+						</c:forEach>
+					</tr>
+					<tr class="comparison-table__row">
+						<th class="comparison-table__category-header comparison-table__category-header--sortable" data-sort-key="prospect">미래 전망 ↕</th>
+						<c:forEach var="job" items="${jobsList}">
+							<td class="comparison-table__cell" data-label="미래 전망">${job.prospect}</td>
+						</c:forEach>
+					</tr>
+					<tr class="comparison-table__row">
+						<th class="comparison-table__category-header comparison-table__category-header--sortable" data-sort-key="satisfaction">만족도 ↕</th>
+						<c:forEach var="job" items="${jobsList}">
+							<td class="comparison-table__cell" data-label="만족도">${job.jobSatis}</td>
+						</c:forEach>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>

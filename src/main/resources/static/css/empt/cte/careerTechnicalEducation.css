@@ -1,437 +1,379 @@
-.com-select-wrapper {
-	position: relative;
+/* ==========================================================================
+   아코디언 헤더 및 아이템 정렬
+   ========================================================================== */
+
+/* 헤더와 아이템의 gap을 동일하게 맞춤 */
+.accordion-list__header {
+	gap: 15px;
+}
+
+.accordion-list__item-header {
+	padding: 20px 24px;
+	gap: 15px;
+}
+
+/* ==========================================================================
+   헤더 컬럼 스타일 (모든 컬럼 중앙정렬)
+   ========================================================================== */
+
+/* 헤더의 교육기관명 */
+.accordion-list__header .accordion-list__col--institution {
+	flex: 1 1 0;
 	display: flex;
+	justify-content: center;
 	align-items: center;
-	background-color: #fff;
-	border-right: 2px solid #e5e7eb;
-}
-
-/* 검색창 select 박스 스타일 */
-.com-status-filter {
-	/* 기본 select 스타일 초기화 */
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	background-color: transparent;
-	border: none;
-	padding: 0 36px 0 16px; /* 오른쪽 패딩으로 화살표 공간 확보 */
-	font-size: 1rem;
-	color: #4b5563;
-	cursor: pointer;
-	height: 100%;
-}
-
-.com-status-filter:focus {
-	outline: none;
-}
-/* IE 브라우저용 화살표 숨기기 */
-.com-status-filter::-ms-expand {
-	display: none;
-}
-
-/* 커스텀 화살표 아이콘 */
-.com-select-arrow {
-	position: absolute;
-	right: 12px;
-	width: 20px;
-	height: 20px;
-	color: #6b7280;
-	pointer-events: none; /* 화살표가 select 클릭을 방해하지 않도록 */
-}
-
-/* 1. 기본 검색창 스타일 */
-.com-default-search {
-	display: flex;
-	border: 2px solid #e5e7eb;
-	border-radius: 8px;
-	overflow: hidden;
-	margin-bottom: 12px;
-	background-color: #fff;
-}
-
-.com-default-search input {
-	width: 100%;
-	border: none;
-	padding: 12px 16px;
-	font-size: 1rem;
-}
-
-.com-default-search input:focus {
-	outline: none;
-}
-
-.com-default-search .com-search-btn {
-	background: none;
-	border: none;
-	padding: 0 16px;
-	cursor: pointer;
-	color: #6b7280;
-}
-
-/* 2. 아코디언 상세 필터 스타일 */
-.com-accordion-filter {
-	border: 2px solid #e5e7eb;
-	border-radius: 10px;
-	background-color: #fff;
-	margin-bottom: 40px;
-	overflow: hidden; /* 아코디언 애니메이션을 위해 추가 */
-}
-
-.com-accordion-header {
-	width: 100%;
-	padding: 12px 20px;
-	background-color: #fff;
-	border: none;
-	font-size: 0.95rem;
 	font-weight: 500;
-	cursor: pointer;
+	text-align: center;
+}
+
+/* 헤더의 교육 과정명 */
+.accordion-list__header .accordion-list__col--course {
+	flex: 2.4 1 0;
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	align-items: center;
-	color: #4b5563;
+	font-weight: 600;
+	text-align: center;
 }
 
-.com-accordion-header .com-arrow-icon {
-	transition: transform 0.3s ease;
-	font-size: 0.8rem;
+/* 헤더의 마감일 */
+.accordion-list__header .accordion-list__col--deadline {
+	flex: 0.7 1 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 }
 
-.com-accordion-header.active .com-arrow-icon {
-	transform: rotate(0deg); /* active일 때(열렸을 때) 원상태 */
+/* 헤더의 만족도 */
+.accordion-list__header .accordion-list__col--score {
+	flex: 0 0 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 }
 
-.com-accordion-header:not(.active) .com-arrow-icon {
-	transform: rotate(180deg); /* active가 아닐 때(닫혔을 때) 회전 */
+/* 헤더의 정원 */
+.accordion-list__header .accordion-list__col--quota {
+	flex: 0 0 80px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 80px;
+	max-width: 80px;
+	text-align: center;
 }
 
-/* 아코디언 내부 패널 */
-.com-accordion-panel {
-	display: grid;
-	grid-template-rows: 0fr;
-	transition: grid-template-rows 0.3s ease-out;
-	overflow: hidden;
+/* 헤더의 토글 */
+.accordion-list__header .accordion-list__col--toggle {
+	flex: 0 0 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 30px;
+	max-width: 30px;
 }
 
-/* 아코디언 내용이 열렸을 때 */
-.accordion-item.open .accordion-content {
-	max-height: fit-content;
-	padding: 20px; /* 열릴 때 패딩 적용 */
-	border-radius: 10px;
+/* ==========================================================================
+   아이템 컬럼 스타일 (과정명만 좌측정렬, 나머지는 중앙정렬)
+   ========================================================================== */
+
+/* 아이템의 교육기관명 */
+.accordion-list__item-header .accordion-list__col--institution {
+	flex: 1 1 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: 500;
+	text-align: center;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	line-height: 1.3;
+	white-space: normal;
+	padding: 8px 4px;
+	min-width: 0;
 }
 
-.com-accordion-panel.open {
-	grid-template-rows: 1fr;
+/* 아이템의 교육 과정명 - 좌측정렬 */
+.accordion-list__item-header .accordion-list__col--course {
+	flex: 2.4 1 0;
+	display: flex;
+	justify-content: flex-start; /* 좌측정렬 */
+	align-items: center;
+	font-weight: 600;
+	text-align: left; /* 좌측정렬 */
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	line-height: 1.4;
+	white-space: normal;
+	min-width: 0;
 }
 
-.com-accordion-content {
-	background-color: #F9FAFB;
-	padding: 0 24px;
-	border-top: 1px solid #E5E7EB;
+/* 아이템의 마감일 */
+.accordion-list__item-header .accordion-list__col--deadline {
+	flex: 0.7 1 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+/* 아이템의 만족도 */
+.accordion-list__item-header .accordion-list__col--score {
+	flex: 0 0 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+/* 아이템의 정원 */
+.accordion-list__item-header .accordion-list__col--quota {
+	flex: 0 0 80px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 80px;
+	max-width: 80px;
+	text-align: center;
+}
+
+/* 아이템의 토글 */
+.accordion-list__item-header .accordion-list__col--toggle {
+	flex: 0 0 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 30px;
+	max-width: 30px;
+}
+
+/* ==========================================================================
+   아코디언 내용 섹션 스타일
+   ========================================================================== */
+
+/* 섹션 제목 (h4) */
+.education-detail-section h4, .education-url-section h4,
+	.education-date-section h4 {
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
+	margin: 0 0 12px 0;
+	padding: 8px 0 8px 12px;
+	border-left: 4px solid #6c75ff;
+}
+
+/* 섹션 컨테이너 */
+.education-detail-section, .education-url-section,
+	.education-date-section {
+	padding: 16px;
+	border-radius: 8px;
+	border: 1px solid #e9ecef;
+}
+
+/* 섹션 내 텍스트 */
+.education-detail-section p, .education-url-section p,
+	.education-date-section p {
+	font-size: 14px;
+	line-height: 1.5;
+	color: #495057;
+	margin: 0;
+	padding: 8px 0;
+	white-space: pre-wrap;
+}
+
+/* 교육 신청 사이트 버튼 */
+.education-link {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #7881f5;
+	color: #fff;
+	border-radius: 8px;
+	font-size: 0.95rem;
+	font-weight: 600;
+	text-align: center;
+	text-decoration: none;
+	border: none;
+	cursor: pointer;
+	transition: background-color 0.2s, box-shadow 0.2s;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.education-link:hover {
+	background-color: #5c68d9;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	text-decoration: none;
+}
+
+.education-link:active {
+	background-color: #3730a3;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	transform: translateY(1px);
+}
+
+/* 훈련 기간 스타일 */
+.education-date-section .date-container {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
-	overflow: hidden;
-	transition: padding 0.3s ease-out;
-}
-
-.com-accordion-panel.open .com-accordion-content {
-	padding: 24px;
-}
-
-.com-button-container {
-	display: flex;
-	justify-content: space-between;
-}
-
-.com-filter-reset-btn {
-	width: auto;
-	padding: 5px 15px;
-	background-color: #f3f4f6;
-	color: #4b5563;
-	border: 1px solid #d1d5db;
-	border-radius: 8px;
-	font-size: 0.8rem;
-	font-weight: 600;
-	cursor: pointer;
-	white-space: nowrap;
-}
-
-.com-filter-title {
-	display: block;
-	font-size: 0.9rem;
-	font-weight: 500;
-	color: #374151;
-	margin: 12px;
-}
-
-.com-filter-options {
-	display: flex;
-	flex-wrap: wrap;
 	gap: 12px;
 }
 
-.com-filter-item {
-	display: inline-flex;
-	cursor: pointer;
-}
-
-.com-filter-item span:hover {
-	background-color: #f0f0ff;
-}
-
-.com-filter-item input {
-	display: none;
-}
-
-.com-filter-item span {
-	padding: 8px 16px;
-	border: 1px solid #d1d5db;
-	border-radius: 20px;
-	background-color: #fff;
-	font-size: 0.9rem;
-	transition: all 0.2s ease;
-}
-
-.com-filter-item input:checked+span {
-	background-color: #eef2ff;
-	border-color: #818cf8;
-	color: #4338ca;
+.education-date-section .date-container label {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	color: #495057;
 	font-weight: 500;
+	padding: 8px 12px;
+	background-color: #f8f9fa;
+	border-radius: 4px;
+	border-left: 3px solid #dee2e6;
 }
 
-.com-selected-filters {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	min-height: 38px; /* 필터가 없을 때도 높이 유지 */
-}
+/* ==========================================================================
+   반응형 스타일 (모바일)
+   ========================================================================== */
+@media ( max-width : 768px) {
+	/* 아코디언 헤더 숨김 (모바일에서는 테이블 헤더 불필요) */
+	.accordion-list__header {
+		display: none;
+	}
 
-.com-selected-filter {
-	font-size: 0.9rem;
-	background-color: #eef6ff;
-	color: #1f5ea9;
-	padding: 9px 15px;
-	border-radius: 16px;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	border: 1px solid #c4defc;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-	transition: background-color 0.2s, border 0.2s;
-}
+	/* 아이템 헤더 레이아웃 변경 */
+	.accordion-list__item-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+		padding: 16px 20px;
+		position: relative;
+	}
 
-.com-remove-filter {
-	background: none;
-	border: none;
-	cursor: pointer;
-	color: #38bdf8;
-	font-weight: bold;
-	padding: 0;
-}
+	/* 토글 아이콘을 우상단으로 */
+	.accordion-list__col--toggle {
+		position: absolute;
+		top: 16px;
+		right: 20px;
+		order: 0;
+	}
 
-.com-submit-search-btn {
-	width: 100%;
-	padding: 10px;
-	background-color: #7881f5;
-	color: white;
-	border: none;
-	border-radius: 8px;
-	font-size: 1rem;
-	font-weight: 600;
-	cursor: pointer;
-	margin-top: 12px;
-}
+	/* 교육 과정명을 최상단으로 - 모바일에서도 좌측정렬 유지 */
+	.accordion-list__col--course {
+		width: 92%;
+		padding-right: 40px; /* 토글 아이콘 공간 확보 */
+		justify-content: flex-start; /* 좌측정렬 유지 */
+		font-size: 1.1rem;
+		font-weight: 600;
+		order: 1;
+		text-align: left; /* 좌측정렬 유지 */
+		flex: none;
+		word-wrap: break-word;
+		word-break: break-all;
+		overflow-wrap: break-word;
+		hyphens: auto;
+		line-height: 1.4;
+		white-space: normal;
+	}
 
-/* 북마크 아이콘 */
-/* 북마크 버튼 기본 스타일 */
-.bookmark-btn {
-	background: none;
-	border: none;
-	cursor: pointer;
-	padding: 0;
-}
+	/* 교육기관명을 두번째로 */
+	.accordion-list__col--institution {
+		width: 100%;
+		justify-content: flex-start;
+		order: 2;
+		font-size: 0.95rem;
+		color: #666;
+		text-align: left;
+		flex: none;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		line-height: 1.3;
+		white-space: normal;
+		margin-bottom: 4px;
+	}
 
-/* 비활성 아이콘은 기본적으로 숨깁니다. */
-.bookmark-btn .icon-inactive {
-	display: none;
-}
+	/* 메타 정보들을 하나의 행으로 배치 */
+	.accordion-list__col--deadline, .accordion-list__col--score,
+		.accordion-list__col--quota {
+		order: 4;
+		flex: 1;
+		font-size: 0.85rem;
+		text-align: center;
+		min-width: 0;
+	}
 
-/* 활성 아이콘은 기본적으로 보입니다. */
-.bookmark-btn .icon-active {
-	display: inline-block;
-}
+	/* 메타 정보 컨테이너 생성 */
+	.accordion-list__item-header::before {
+		content: "";
+		width: 100%;
+		display: flex;
+		order: 3;
+		padding-top: 8px;
+		border-top: 1px solid #f0f0f0;
+	}
 
-.bookmark-btn span img {
-	width: 30px;
-	height: 30px;
-}
+	/* 메타 정보들을 flex 컨테이너로 만들기 */
+	.accordion-list__item-header {
+		display: flex;
+		flex-wrap: wrap;
+	}
 
-/* .active 클래스가 없는 경우 (비활성화 상태) */
-.bookmark-btn:not(.active) .icon-active {
-	display: none; /* 활성 아이콘을 숨깁니다. */
-}
+	/* 메타 정보 래퍼 */
+	.accordion-list__col--deadline, .accordion-list__col--score,
+		.accordion-list__col--quota {
+		width: 33.33%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 4px;
+	}
 
-.bookmark-btn:not(.active) .icon-inactive {
-	display: inline-block; /* 비활성 아이콘을 보여줍니다. */
-}
+	/* 메타 정보에 라벨 추가 */
+	.accordion-list__col--deadline::before {
+		content: "마감일";
+		font-size: 0.75rem;
+		color: #888;
+		font-weight: 500;
+	}
+	.accordion-list__col--score::before {
+		content: "만족도";
+		font-size: 0.75rem;
+		color: #888;
+		font-weight: 500;
+	}
+	.accordion-list__col--quota::before {
+		content: "정원";
+		font-size: 0.75rem;
+		color: #888;
+		font-weight: 500;
+	}
 
-/* 기업 목록 전체 컨테이너 */
-.hire-list {
-	margin-top: 20px;
-	border-radius: 8px;
-	overflow: hidden;
-}
-
-/* 기업 목록 헤더 (기업이미지, 기업명 등) */
-.hire-list>.accordion-header { /* 직접 자식인 accordion-header에만 적용 */
-	display: flex;
-	align-items: center;
-	padding: 12px 20px;
-	font-weight: 600;
-	color: #4b5563;
-	border: 1px solid #e5e7eb;
-	gap: 10px; /* 항목 간 간격 */
-	margin-bottom: 10px;
-	border-radius: 10px;
-}
-
-/* 개별 기업 항목 */
-.accordion-item {
-	border: 1px solid #e5e7eb;
-	border-radius: 10px;
-	background-color: #fff;
-	margin-bottom: 10px;
-}
-
-
-/* 각 기업 항목의 헤더 (펼치기/접기 버튼 포함) */
-.accordion-item .accordion-header {
-	display: flex;
-	align-items: center;
-	padding: 15px 20px;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-}
-
-.accordion-item .accordion-header:hover {
-	background-color: #f9fafb;
-}
-
-/* 기업 정보 각 항목 (이미지, 이름, 번호 등) */
-.hire-info-item {
-	padding: 0 3px; /* 내부 패딩 */
-	display: flex;
-	align-items: center;
-	white-space: nowrap; /* 내용이 길어져도 줄바꿈 방지 */
-	overflow: hidden; /* 넘치는 내용 숨김 */
-	text-overflow: ellipsis; /* 넘치는 내용 ... 처리 */
-	font-size: 0.95rem;
-	color: #374151;
-}
-
-.hire-info-item a:hover {
-	text-decoration: underline;
-}
-
-/* 총 건수 표시 */
-p:first-of-type { /* 이 부분이 '총 10건'을 의미하는 것으로 가정 */
-	font-size: 0.9rem;
-	color: #6b7280;
-	margin-bottom: 15px;
-	padding-right: 10px;
-}
-
-/* 펼치기/접기 아이콘 */
-.toggle-icon {
-	font-size: 1.2rem;
-	font-weight: bold;
-	color: #6b7280;
-	transition: transform 0.3s ease;
-}
-
-/* 아코디언 내용 부분 (기본적으로 숨김) */
-.accordion-content {
-	max-height: 0;
-	overflow: hidden;
-	transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-	background-color: #fefefe;
-	border-top: 1px solid #f3f4f6; /* 내용과 헤더 사이 구분선 */
-	padding: 0 20px; /* 초기 패딩 0 */
-}
-
-/* 아코디언 내용 내부 섹션 */
-.hire-description-section, .hire-url-section,
-	/* 현재 JSP에서 주석 처리되어 있지만, 스타일은 남겨둠 */ .hire-date-section {
-	margin-bottom: 15px;
-	padding-bottom: 15px;
-	border-bottom: 1px dashed #e0e0e0; /* 섹션 구분선 */
-}
-
-.hire-date-section div {
-	text-align: right;
-	padding: 15px;
-}
-
-.hire-date-section .date-container {
-	display: flex;
-	gap: 30px;
-	font-size: 0.9rem;
-	color: #4b5563; /* 기본 텍스트 색상 */
-}
-
-/* 마감일 텍스트 스타일 */
-.hire-date-section .date-container label .deadline-text {
-	font-weight: 500;
-}
-
-/* D-3일 이내 임박한 공고 마감일 텍스트 */
-.deadline-text.deadline-imminent {
-	color: #ef4444; /* 붉은색 */
-}
-
-/* 마감된 공고 마감일 텍스트 */
-.deadline-text.deadline-passed {
-	color: #9ca3af; /* 회색 */
-	text-decoration: line-through; /* 글자에 줄 긋기 */
-}
-
-.accordion-content label {
-	font-size: 0.9rem;
-	color: #1f2937;
-	margin-bottom: 8px;
-	font-weight: 600;
-	border-left: 3px solid #7881f5;
-	padding-left: 8px;
-}
-
-.accordion-content h4 {
-	font-size: 1rem;
-	color: #1f2937;
-	margin-bottom: 8px;
-	font-weight: 600;
-	border-left: 4px solid #a4aaf5; /* 강조를 위한 왼쪽 보더 */
-	padding-left: 8px;
-}
-
-.accordion-content p {
-	font-size: 1rem;
-	color: #4b5563;
-	line-height: 1.6;
-}
-
-.homepage-link {
-	/* 기존 스타일에서 변경 */
-	display: inline-block; /* 인라인 블록으로 패딩/마진 적용 가능 */
-	padding: 10px 20px; /* 패딩을 더 넓게 */
-	background-color: #8c8df9; /* 진한 파란색 배경 */
-	color: #fff; /* 흰색 텍스트 */
-	border-radius: 8px; /* 모서리를 둥글게 */
-	font-size: 0.95rem; /* 폰트 크기 */
-	font-weight: 600; /* 폰트 굵기 */
-	text-align: center;
-	text-decoration: none; /* 밑줄 제거 */
-	border: none; /* 보더 제거 */
-	cursor: pointer; /* 마우스 커서 변경 */
-	transition: background-color 0.2s, box-shadow 0.2s;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+	/* 섹션별 반응형 */
+	.education-detail-section, .education-url-section,
+		.education-date-section {
+		padding: 12px;
+	}
+	.education-detail-section h4, .education-url-section h4,
+		.education-date-section h4 {
+		font-size: 14px;
+		padding: 6px 0 6px 8px;
+	}
+	.education-detail-section p, .education-url-section p,
+		.education-date-section p {
+		font-size: 13px;
+	}
+	.education-link {
+		width: 100%;
+		justify-content: center;
+		padding: 12px 16px;
+	}
+	.education-date-section .date-container {
+		gap: 8px;
+	}
+	.education-date-section .date-container label {
+		font-size: 13px;
+		padding: 6px 8px;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
+	}
 }

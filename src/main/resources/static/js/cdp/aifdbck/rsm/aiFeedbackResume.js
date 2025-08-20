@@ -2,10 +2,10 @@
 /**
  * 이력서 AI 피드백 화면을 위한 자바스크립트
  */
+let aiFeedbackData = null;
 document.addEventListener('DOMContentLoaded', () => {
 
 	let subscriptionInfo = null;
-	let aiFeedbackData = null;
 	let originalData = null;
 
 	const resumeList = document.getElementById('resumeList');
@@ -124,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		feedbackArea.innerHTML = `
 		<div class="spinner-wrapper">
 			<div class="spinner-border text-primary" role="status">
-				<span class="visually-hidden">Loading...</span>
 			</div>
 			<div class="text-center mt-2">AI가 피드백을 생성 중입니다...<br>잠시만 기다려주세요.</div>
 		</div>
@@ -134,18 +133,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		const doc = parser.parseFromString(originalData.resumeContent, 'text/html');
 		const cleanedHtml = doc.body.innerHTML;
 
-	fetch('/ai/proofread/resume', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ "html": cleanedHtml })
-	})
-		.then(response => {
-			if (!response.ok) throw new Error('AI 첨삭 요청 실패');
-			return response.text();
+		fetch('/ai/proofread/resume', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ "html": cleanedHtml })
 		})
-		.then(aiResponseText => {
-			const cleanedText = cleanAiResponse(aiResponseText);
-
+			.then(response => {
+				if (!response.ok) throw new Error('AI 첨삭 요청 실패');
+				return response.text();
+			})
+			.then(aiResponseText => {
+				const cleanedText = cleanAiResponse(aiResponseText);
 				aiFeedbackData = {
 					sections_feedback: [cleanedText], // 배열로 감싸기!
 					questions: ["이력서 전체 피드백"] // 제목만 하나 넣기
@@ -154,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				feedbackArea.innerHTML = aiResponseText.replace(/\n/g, '<br>');
 				subscriptionInfo.payResumeCnt--;
 				alert(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payResumeCnt}회)`);
-				
+
 				axios.post('/admin/las/aiResumeVisitLog.do')
 				// 화면 표시
 				//document.getElementById('feedbackArea').innerHTML = cleanedText.replace(/\n/g, '<br>');

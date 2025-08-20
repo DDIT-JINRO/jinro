@@ -1,13 +1,9 @@
-// /js/cdp/imtintrvw/intrvwqestnlst/intrvwQuestionList.js
-
 let selectedQuestions = [];
 
-// 1) 페이지 로드
 document.addEventListener('DOMContentLoaded', () => {
-	const memId = (window.currentMemId === 'anonymousUser') ? '' : (window.currentMemId || '');
-	const isLoggedIn = !!memId;
+	// 1. JSP에서 직접 전달한 memId를 사용하도록 로직 간소화
+	const currentMemId = (window.currentMemId === 'anonymousUser') ? '' : window.currentMemId;
 
-	// 선택 복원
 	const saved = sessionStorage.getItem('selectedQuestions');
 	if (saved) {
 		selectedQuestions = JSON.parse(saved);
@@ -19,76 +15,136 @@ document.addEventListener('DOMContentLoaded', () => {
 	updateCartSidebar();
 	updateQuestionIdsInput();
 
-	// URL의 필터 복원
+	const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
+
 	restoreFiltersFromUrl();
 
-	// “면접 질문 작성” 버튼
+	// 아코디언 토글 기능
+	const accordionHeader = document.querySelector('.search-filter__accordion-header');
+	const accordionPanel = document.querySelector('.search-filter__accordion-panel');
+
+	if (accordionHeader && accordionPanel) {
+		accordionHeader.addEventListener('click', function() {
+			const isOpen = accordionPanel.classList.contains('is-open');
+			if (isOpen) {
+				accordionPanel.classList.remove('is-open');
+				accordionHeader.classList.remove('is-active');
+			} else {
+				accordionPanel.classList.add('is-open');
+				accordionHeader.classList.add('is-active');
+			}
+		});
+	}
+
+	// 체크박스 클릭 시 필터 조건 업데이트
+	filterCheckboxes.forEach(function(checkbox) {
+		checkbox.addEventListener('change', function() {
+			const filterName = this.getAttribute('data-name');
+			const filterId = this.getAttribute('data-id');
+			if (this.checked) {
+				addFilterToConditions(filterName, filterId);
+			} else {
+				removeFilter(filterId);
+			}
+		});
+	});
+
+	// 2. 폼 제출 로직 수정 (버튼 클릭 -> 폼 제출 이벤트)
 	const cartForm = document.getElementById('cartForm');
 	if (cartForm) {
-		cartForm.addEventListener('submit', (event) => {
-			// form의 기본 제출 동작을 일단 막습니다. (유효성 검사를 위해)
-			event.preventDefault();
+		cartForm.addEventListener('submit', function(event) {
+			event.preventDefault(); // 기본 제출 동작을 막습니다.
 
-			if (!isLoggedIn) {
+			if (!currentMemId) {
 				alert('로그인이 필요합니다.');
-				location.href = '/login';
+				window.location.href = '/login';
 				return;
 			}
 
 			if (selectedQuestions.length === 0) {
-				alert('면접 질문을 하나 이상 선택해 주세요.');
-				return; // 여기서 return 되면 폼 제출이 중단됨
+				// 3. 알림 메시지 수정
+				alert('면접 질문을 하나 이상 선택해주세요.');
+				return;
 			}
 
-			// 모든 검증이 통과되면, form의 숨겨진 필드에 값을 채우고 최종적으로 제출합니다.
-			document.getElementById('questionIds').value = selectedQuestions.map(q => q.id).join(',');
 			sessionStorage.removeItem('selectedQuestions');
-			cartForm.submit();
+			this.submit(); // 유효성 검사 통과 후 폼 제출
 		});
 	}
 
-	// 필터 체크박스에 실시간 반응 이벤트 추가
-	const selectedFiltersContainer = document.getElementById('selected-filters');
-	document.querySelectorAll('.filter-checkbox').forEach(cb => {
-		cb.addEventListener('change', function() {
-			const filterId = this.dataset.id;
-			const filterName = this.dataset.name;
-			const parentLabel = this.closest('.filter-item');
-
-			if (this.checked) {
-				// 체크 시: 선택된 필터 태그 추가
-				const tag = document.createElement('span');
-				tag.className = 'selected-filter';
-				tag.dataset.id = filterId;
-				tag.innerHTML = `${filterName} <span class="remove-filter">×</span>`;
-
-				// 태그의 X 버튼 클릭 시 필터 제거
-				tag.querySelector('.remove-filter').addEventListener('click', () => {
-					cb.checked = false;
-					tag.remove();
-					if (parentLabel) parentLabel.classList.remove('checked');
-				});
-
-				selectedFiltersContainer.appendChild(tag);
-				if (parentLabel) parentLabel.classList.add('checked');
-			} else {
-				// 체크 해제 시: 선택된 필터 태그 제거
-				const tagToRemove = selectedFiltersContainer.querySelector(`.selected-filter[data-id="${filterId}"]`);
-				if (tagToRemove) {
-					tagToRemove.remove();
-				}
-				if (parentLabel) parentLabel.classList.remove('checked');
-			}
+	const submitButton = document.querySelector('.submitCartForm');
+	if (submitButton && cartForm) {
+		submitButton.addEventListener('click', function() {
+			cartForm.dispatchEvent(new Event('submit', { cancelable: true }));
 		});
-	});
+	}
 });
 
-// 2) 체크박스 토글
+// 필터를 선택했을 때, 필터 조건에 추가
+function addFilterToConditions(name, id) {
+	const selectedFiltersContainer = document.getElementById('selected-filters');
+	const filterItem = document.createElement('div');
+	filterItem.classList.add('search-filter__tag');
+	filterItem.setAttribute('data-id', id);
+	filterItem.innerHTML = `${name} <button type="button" class="search-filter__tag-remove" onclick="removeFilter('${id}')">×</button>`;
+	selectedFiltersContainer.appendChild(filterItem);
+
+	const checkbox = document.querySelector(`.filter-checkbox[data-id="${id}"]`);
+	if (checkbox) {
+		const parent = checkbox.closest('.search-filter__option');
+		if (parent) {
+			parent.classList.add('checked');
+		}
+	}
+}
+
+// 필터를 제거할 때, 필터 조건에서 삭제
+window.removeFilter = function(id) {
+	const filterItem = document.querySelector(`.search-filter__tag[data-id="${id}"]`);
+	if (filterItem) {
+		filterItem.remove();
+		const checkbox = document.querySelector(`.filter-checkbox[data-id="${id}"]`);
+		if (checkbox) {
+			checkbox.checked = false;
+			const parent = checkbox.closest('.search-filter__option');
+			if (parent) {
+				parent.classList.remove('checked');
+			}
+		}
+	}
+}
+
+// URL로부터 필터 복원
+function restoreFiltersFromUrl() {
+	const urlParams = new URLSearchParams(window.location.search);
+	const selectedJobFilters = urlParams.getAll('siqJobFilter');
+	if (selectedJobFilters.length > 0) {
+		document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+			if (selectedJobFilters.includes(checkbox.value)) {
+				checkbox.checked = true;
+				addFilterToConditions(checkbox.dataset.name, checkbox.dataset.id);
+			}
+		});
+	}
+}
+
+// 직무 필터 초기화
+window.resetJobFilters = function() {
+	document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+		checkbox.checked = false;
+		const parent = checkbox.closest('.search-filter__option');
+		if (parent) {
+			parent.classList.remove('checked');
+		}
+	});
+	document.getElementById('selected-filters').innerHTML = '';
+}
+
+// 선택 토글 함수
 function toggleQuestion(checkbox, id, content) {
-	id = String(id);
-	const exists = selectedQuestions.find(q => q.id === id);
+	const existing = selectedQuestions.find(q => q.id === id);
 	if (checkbox.checked) {
-		if (!exists) selectedQuestions.push({ id, content });
+		if (!existing) selectedQuestions.push({ id, content });
 	} else {
 		selectedQuestions = selectedQuestions.filter(q => q.id !== id);
 	}
@@ -97,25 +153,24 @@ function toggleQuestion(checkbox, id, content) {
 	sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
 }
 
-// 3) 사이드바 렌더
+// 사이드바 렌더링
 function updateCartSidebar() {
-	const wrap = document.getElementById('cartSidebar');
-	if (!wrap) return;
-	wrap.innerHTML = '';
+	const cartSidebar = document.getElementById('cartSidebar');
+	cartSidebar.innerHTML = '';
 
 	if (selectedQuestions.length === 0) {
-		wrap.innerHTML = '<div class="empty-cart-message">선택된 질문이 없습니다.</div>';
+		cartSidebar.innerHTML = '<div class="empty-cart-message">선택된 질문이 없습니다.</div>';
 		return;
 	}
 
 	selectedQuestions.forEach(q => {
 		const item = document.createElement('div');
 		item.className = 'question-panel-item';
-		item.dataset.id = q.id;
+		item.setAttribute('data-id', q.id);
 
-		const txt = document.createElement('div');
-		txt.className = 'question-panel-content';
-		txt.textContent = q.content;
+		const contentDiv = document.createElement('div');
+		contentDiv.className = 'question-panel-content';
+		contentDiv.textContent = q.content;
 
 		const btn = document.createElement('button');
 		btn.type = 'button';
@@ -123,54 +178,24 @@ function updateCartSidebar() {
 		btn.innerHTML = '&times;';
 		btn.addEventListener('click', () => removeQuestionFromCart(q.id));
 
-		item.append(txt, btn);
-		wrap.appendChild(item);
+		item.append(contentDiv, btn);
+		cartSidebar.appendChild(item);
 	});
 }
 
-// 4) 카트에서 제거
+// × 버튼 클릭 시 제거
 function removeQuestionFromCart(id) {
-	id = String(id);
 	selectedQuestions = selectedQuestions.filter(q => q.id !== id);
 	const chk = document.querySelector(`input[type="checkbox"][data-id="${id}"]`);
 	if (chk) chk.checked = false;
-
 	updateCartSidebar();
 	updateQuestionIdsInput();
 	sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
 }
 
-// 5) 히든 input 갱신
+// 숨겨진 input 갱신
 function updateQuestionIdsInput() {
-	const hidden = document.getElementById('questionIds');
-	if (!hidden) return;
-	hidden.value = selectedQuestions.map(q => q.id).join(',');
+	document.getElementById('questionIds').value = selectedQuestions.map(q => q.id).join(',');
 }
 
-// 6) URL 파라미터에서 필터 복원(선택된 필터 떠주기)
-function restoreFiltersFromUrl() {
-	const urlParams = new URLSearchParams(window.location.search);
-	const selected = urlParams.getAll('siqJobFilter') || [];
-	const selectedFiltersContainer = document.getElementById('selected-filters');
-
-	document.querySelectorAll('.filter-checkbox').forEach(cb => {
-		if (selected.includes(cb.value)) {
-			cb.checked = true;
-			const tag = document.createElement('span');
-			tag.className = 'selected-filter';
-			tag.dataset.id = cb.dataset.id;
-			tag.innerHTML = `${cb.dataset.name} <span class="remove-filter">×</span>`;
-			selectedFiltersContainer.appendChild(tag);
-
-			const parent = cb.closest('.filter-item');
-			if (parent) parent.classList.add('checked');
-
-			tag.querySelector('.remove-filter').addEventListener('click', () => {
-				cb.checked = false;
-				const p = cb.closest('.filter-item');
-				if (p) p.classList.remove('checked');
-				tag.remove();
-			});
-		}
-	});
-}
+window.toggleQuestion = toggleQuestion;

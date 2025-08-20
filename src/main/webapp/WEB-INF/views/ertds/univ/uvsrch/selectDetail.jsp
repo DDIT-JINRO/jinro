@@ -26,11 +26,6 @@
 			<a class="tab" href="/ertds/univ/dpsrch/selectDeptList.do">학과 정보</a>
 			<a class="tab" href="/ertds/univ/uvivfb/selectInterviewList.do">면접 후기</a>
 		</div>
-	</div>
-</div>
-
-<div>
-	<div class="public-wrapper">
 		<div class="public-wrapper-main">
 			<!-- 대학 기본 정보 -->
 			<div class="univ-detail-info">
@@ -46,8 +41,11 @@
 							</c:forEach>
 
 							<button class="bookmark-btn ${isBookmarked ? 'active' : ''}" data-category-id="G03001" data-target-id="${universityDetail.univId}">
-								<span class="icon-active"> <img src="/images/bookmark-btn-active.png" alt="활성 북마크">
-								</span> <span class="icon-inactive"> <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+								<span class="icon-active">
+									<img src="/images/bookmark-btn-active.png" alt="활성 북마크">
+								</span>
+								<span class="icon-inactive">
+									<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
 								</span>
 							</button>
 						</div>
@@ -55,13 +53,17 @@
 
 					<div class="univ-info-grid">
 						<div class="info-item">
-							<span class="info-label">대학 유형</span> <span class="info-value">${universityDetail.univType}</span>
+							<span class="info-label">대학 유형</span>
+							<span class="info-value">${universityDetail.univType}</span>
 						</div>
 						<div class="info-item">
-							<span class="info-label">설립 유형</span> <span class="info-value">${universityDetail.univGubun}</span>
+							<span class="info-label">설립 유형</span>
+							<span class="info-value">${universityDetail.univGubun}</span>
 						</div>
 						<div class="info-item">
-							<span class="info-label">홈페이지</span> <span class="info-value"> <c:choose>
+							<span class="info-label">홈페이지</span>
+							<span class="info-value">
+								<c:choose>
 									<c:when test="${not empty universityDetail.univUrl}">
 										<a href="${universityDetail.univUrl}" target="_blank" class="homepage-link">바로가기</a>
 									</c:when>
@@ -72,14 +74,17 @@
 							</span>
 						</div>
 						<div class="info-item">
-							<span class="info-label">지역</span> <span class="info-value">${universityDetail.univRegion}</span>
+							<span class="info-label">지역</span>
+							<span class="info-value">${universityDetail.univRegion}</span>
 						</div>
 						<div class="info-item">
-							<span class="info-label">주소</span> <span class="info-value">${universityDetail.univAddr}</span>
+							<span class="info-label">주소</span>
+							<span class="info-value">${universityDetail.univAddr}</span>
 						</div>
 
 						<div class="info-item">
-							<span class="info-label">총 학과 수</span> <span class="info-value">${universityDetail.totalDeptCount}개</span>
+							<span class="info-label">총 학과 수</span>
+							<span class="info-value">${universityDetail.totalDeptCount}개</span>
 						</div>
 					</div>
 				</div>
@@ -127,10 +132,15 @@
 														<c:when test="${dept.udTuition != null and dept.udTuition > 0}">
 															<span class="current-value 
                                                                 ${dept.udTuition > dept.avgTuition ? 'higher' : 
-                                                                  dept.udTuition < dept.avgTuition ? 'lower' : 'equal'}"> <fmt:formatNumber value="${dept.udTuition}" pattern="#,###" />원 ${dept.udTuition > dept.avgTuition ? '↑' : '↓'}
+                                                                  dept.udTuition < dept.avgTuition ? 'lower' : 'equal'}">
+																<fmt:formatNumber value="${dept.udTuition}" pattern="#,###" />
+																원 ${dept.udTuition > dept.avgTuition ? '↑' : '↓'}
 															</span>
 															<c:if test="${dept.avgTuition != null and dept.avgTuition > 0}">
-																<span class="avg-value"> (<fmt:formatNumber value="${dept.avgTuition}" pattern="#,###" />원)
+																<span class="avg-value">
+																	(
+																	<fmt:formatNumber value="${dept.avgTuition}" pattern="#,###" />
+																	원)
 																</span>
 															</c:if>
 														</c:when>
@@ -148,10 +158,15 @@
 														<c:when test="${dept.udScholar != null and dept.udScholar > 0}">
 															<span class="current-value 
                                                                 ${dept.udScholar > dept.avgScholar ? 'higher' : 
-                                                                  dept.udScholar < dept.avgScholar ? 'lower' : 'equal'}"> <fmt:formatNumber value="${dept.udScholar}" pattern="#,###" />원 ${dept.udScholar > dept.avgScholar ? '↑' : '↓'}
+                                                                  dept.udScholar < dept.avgScholar ? 'lower' : 'equal'}">
+																<fmt:formatNumber value="${dept.udScholar}" pattern="#,###" />
+																원 ${dept.udScholar > dept.avgScholar ? '↑' : '↓'}
 															</span>
 															<c:if test="${dept.avgScholar != null and dept.avgScholar > 0}">
-																<span class="avg-value"> (<fmt:formatNumber value="${dept.avgScholar}" pattern="#,###" />원)
+																<span class="avg-value">
+																	(
+																	<fmt:formatNumber value="${dept.avgScholar}" pattern="#,###" />
+																	원)
 																</span>
 															</c:if>
 														</c:when>
@@ -215,10 +230,12 @@
 					<h3>비교 안내</h3>
 					<div class="legend-items">
 						<div class="legend-item">
-							<span class="legend-color higher"></span> <span>전국 평균보다 높음 (등록금: 비쌈, 장학금/취업률: 좋음)</span>
+							<span class="legend-color higher"></span>
+							<span>전국 평균보다 높음 (등록금: 비쌈, 장학금/취업률: 좋음)</span>
 						</div>
 						<div class="legend-item">
-							<span class="legend-color lower"></span> <span>전국 평균보다 낮음 (등록금: 저렴, 장학금/취업률: 아쉬움)</span>
+							<span class="legend-color lower"></span>
+							<span>전국 평균보다 낮음 (등록금: 저렴, 장학금/취업률: 아쉬움)</span>
 						</div>
 						<div class="legend-item">
 							<span class="legend-text">괄호 안은 전국 평균값</span>
@@ -232,7 +249,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="interview-list-section">
 				<!-- 대학 면접 후기 -->
 				<div class="interview-review-list-section">

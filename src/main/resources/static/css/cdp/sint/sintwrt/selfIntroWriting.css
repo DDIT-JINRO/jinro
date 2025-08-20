@@ -1,194 +1,360 @@
-@font-face {
-	font-family: 'NotoSansCJKkr';
-	src: url('/fonts/NotoSansCJKkr-Regular.otf') format('opentype');
+/* ==========================================================================
+   자기소개서 작성 페이지 전용 스타일
+   ========================================================================== */
+
+/* 자기소개서 작성 컨테이너 */
+.selfintro-write-container {
+	max-width: 100%;
 }
 
-body, input, textarea {
-	font-family: 'NotoSansCJKkr', 'Malgun Gothic', 'Arial', sans-serif;
+.selfintro-write-form {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
 }
 
-/* 제목 섹션 */
-.section-title {
+/* 폼 섹션 */
+.form-section {
 	margin-bottom: 32px;
 }
 
-.section-title h2 {
-	font-size: 1.75rem;
+.form-label {
+	display: block;
+	font-size: 16px;
 	font-weight: 600;
-	color: #333;
+	color: #374151;
 	margin-bottom: 8px;
 }
 
-.title-input {
-	width: 95.5%;
+.form-input {
+	width: 100%;
 	padding: 12px 16px;
-	font-size: 1rem;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	outline: none;
-}
-
-.title-input:focus {
-	border-color: #5a3fdb;
-	box-shadow: 0 0 0 2px rgba(90, 63, 219, 0.2);
-}
-
-/* 질문+답변 블록 */
-.qa-block {
-	margin-bottom: 24px;
-	border: 1px solid #eee;
+	font-size: 16px;
+	border: 1px solid #d1d5db;
 	border-radius: 8px;
-	padding: 16px;
-	background: #fafafa;
+	background-color: #fff;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	box-sizing: border-box;
 }
 
-.question-block {
+.form-input:focus {
+	outline: none;
+	border-color: #7881f5;
+	box-shadow: 0 0 0 3px rgba(120, 129, 245, 0.1);
+}
+
+.form-input--large {
+	padding: 16px 20px;
+	font-size: 18px;
+}
+
+/* QA 컨테이너 */
+.qa-container {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+/* QA 카드 */
+.qa-card {
+	background-color: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	transition: box-shadow 0.2s ease;
+}
+
+.qa-card:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.qa-card__header {
+	background: #f8f9fa;
+	border-bottom: 1px solid #e5e7eb;
+	padding: 16px 20px;
 	display: flex;
 	align-items: center;
-	margin-bottom: 12px;
+	gap: 12px;
 }
 
-.question-number {
-	display: inline-block;
-	min-width: 32px;
-	font-size: 1rem;
-	font-weight: 700;
-	color: #5a3fdb;
+.qa-card__number {
+	background-color: #7881f5;
+	color: #fff;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 600;
+	font-size: 14px;
+	flex-shrink: 0;
 }
 
-.question-text {
+.qa-card__question {
+	color: #374151;
+	font-size: 15px;
+	font-weight: 500;
+	margin: 0;
+	line-height: 1.5;
 	flex: 1;
-	font-size: 1rem;
-	color: #333;
-	margin-left: 8px;
 }
 
-.answer-block textarea {
-  width: 96%; /* 가로폭을 꽉 채우도록 */
-  margin: 0; /* 여백 제거 */
-  padding: 12px;
-  font-size: 1rem;
-  line-height: 1.5;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  resize: vertical; /* 높이만 조정 가능하도록 */
-  outline: none;
+.qa-card__body {
+	padding: 20px;
 }
 
-.answer-block textarea:focus {
-	border-color: #5a3fdb;
-	box-shadow: 0 0 0 2px rgba(90, 63, 219, 0.2);
+/* 폼 그룹 */
+.form-group {
+	position: relative;
 }
 
-/* 버튼 그룹 */
-.btn-group {
+.form-textarea {
+	width: 100%;
+	min-height: 160px;
+	padding: 16px;
+	font-size: 15px;
+	line-height: 1.6;
+	border: 1px solid #d1d5db;
+	border-radius: 8px;
+	background-color: #fff;
+	resize: vertical;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	box-sizing: border-box;
+	font-family: inherit;
+}
+
+.form-textarea:focus {
+	outline: none;
+	border-color: #7881f5;
+	box-shadow: 0 0 0 3px rgba(120, 129, 245, 0.1);
+}
+
+.form-textarea::placeholder {
+	color: #9ca3af;
+}
+
+/* 글자 수 카운터 */
+.char-counter {
+	text-align: right;
+	margin-top: 8px;
+	font-size: 14px;
+	color: #6b7280;
+}
+
+.char-counter span {
+	font-weight: 600;
+	color: #7881f5;
+}
+
+/* 폼 액션 */
+.form-actions {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 30px;
+	margin-top: 40px;
+	padding-top: 24px;
+	border-top: 1px solid #e5e7eb;
 }
 
-.btn-group button {
-	padding: 10px 24px;
-	font-size: 1rem;
-	font-weight: 500;
-	border-radius: 4px;
-	cursor: pointer;
-	border: none;
-	transition: background 0.2s, color 0.2s;
-}
-/* 오른쪽 버튼 그룹 묶음 */
-.btn-right-group {
+.form-actions__left, .form-actions__right {
 	display: flex;
-	gap: 10px;
+	gap: 12px;
 }
 
-.btn-left-group {
-	display: flex;
-}
-
-.btn-temp-save {
-	background: transparent;
-	color: #666;
-	border: 1px solid #ccc;
-}
-
-.btn-temp-save:hover {
-	background: #e2e2e2;
-}
-
-.btn-preview {
-	background: #fff;
-	color: #5a3fdb;
-	border: 1px solid #5a3fdb;
-}
-
-.btn-preview:hover {
-	background: #717bfb;
-	color: #fff;
-}
-
-.btn-submit {
-	background: #717bfb;
-	color: #fff;
-}
-
-.btn-submit:hover {
-	background: #4a2fb8;
-}
-
-/* 삭제 버튼 스타일 */
-.btn-delete {
-	background-color: #ff6262;
-	color: white;
-	border: none;
-	padding: 10px 20px;
+/* 버튼 스타일 */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 12px 24px;
 	font-size: 14px;
-	border-radius: 6px;
+	font-weight: 600;
+	border-radius: 8px;
+	border: 1px solid transparent;
 	cursor: pointer;
-	transition: background-color 0.2s;
+	text-decoration: none;
+	transition: all 0.2s ease;
+	white-space: nowrap;
 }
 
-.btn-delete:hover {
-	background-color: #d9363e;
+.btn svg {
+	width: 16px;
+	height: 16px;
 }
 
-.char-count {
-  margin-top: 5px; /* 적당한 위쪽 여백 */
-  font-size: 0.9rem;
-  color: #666;
-  text-align: right;
-  padding: 0;
+/* 기본 버튼 */
+.btn--primary {
+	background-color: #7881f5;
+	color: #fff;
+	border-color: #7881f5;
 }
 
-/* 문항-답변 블록 전체 (질문+답변을 묶어서 페이지 중간에 잘리지 않게) */
-.qa-block {
-	page-break-inside: avoid;
-	break-inside: avoid;
-	margin-bottom: 20px; 
-	page-break-after: auto; 
+.btn--primary:hover {
+	background-color: #6366f1;
+	border-color: #6366f1;
 }
 
-/* 답변이 너무 길 경우 내부에서 줄 바꿈 되도록 */
-/* 문항-답변 블록 */
-.answer-block {
-  margin-bottom: 10px; /* 여백 최소화 */
-  padding: 0; /* 불필요한 패딩 제거 */
-  page-break-inside: avoid; /* 페이지 중간에서 끊기지 않도록 */
-  break-inside: avoid;
+/* 보조 버튼 */
+.btn--secondary {
+	background-color: #f3f4f6;
+	color: #374151;
+	border-color: #d1d5db;
 }
 
-/* 반응형 */
-@media ( max-width : 600px) {
-	.btn-group {
+.btn--secondary:hover {
+	background-color: #e5e7eb;
+	border-color: #9ca3af;
+}
+
+/* 외곽선 버튼 */
+.btn--outline {
+	background-color: #fff;
+	color: #7881f5;
+	border-color: #7881f5;
+}
+
+.btn--outline:hover {
+	background-color: #7881f5;
+	color: #fff;
+}
+
+/* 위험 버튼 */
+.btn--danger {
+	background-color: #ef4444;
+	color: #fff;
+	border-color: #ef4444;
+}
+
+.btn--danger:hover {
+	background-color: #dc2626;
+	border-color: #dc2626;
+}
+
+.btn--danger.btn--outline {
+	background-color: #fff;
+	color: #ef4444;
+	border-color: #ef4444;
+}
+
+.btn--danger.btn--outline:hover {
+	background-color: #ef4444;
+	color: #fff;
+}
+
+/* PDF 미리보기용 스타일 최적화 */
+@media print {
+	.qa-card {
+		page-break-inside: avoid;
+		break-inside: avoid;
+		margin-bottom: 16px;
+		box-shadow: none;
+		border: 1px solid #e5e7eb;
+	}
+	.qa-card__header {
+		background: #f8f9fa !important;
+		border-bottom: 1px solid #e5e7eb !important;
+		padding: 12px 16px !important;
+		-webkit-print-color-adjust: exact;
+		color-adjust: exact;
+	}
+	.qa-card__number {
+		background: #7881f5 !important;
+		color: #fff !important;
+		width: 24px !important;
+		height: 24px !important;
+		font-size: 12px !important;
+		font-weight: 500 !important;
+		-webkit-print-color-adjust: exact;
+		color-adjust: exact;
+	}
+	.qa-card__question {
+		color: #374151 !important;
+		font-size: 13px !important;
+		font-weight: 500 !important;
+		line-height: 1.4 !important;
+		word-break: keep-all !important;
+		word-wrap: break-word !important;
+	}
+	.qa-card__body {
+		padding: 12px 16px !important;
+	}
+	.form-actions, .char-counter {
+		display: none !important;
+	}
+	.form-textarea {
+		border: none !important;
+		padding: 0 !important;
+		min-height: auto !important;
+		resize: none !important;
+		background: transparent !important;
+		font-size: 12px !important;
+		line-height: 1.5 !important;
+		color: #374151 !important;
+		white-space: pre-wrap !important;
+	}
+
+	/* 미리보기 제목 스타일 */
+	.preview-title {
+		font-size: 18px !important;
+		font-weight: 600 !important;
+		color: #111827 !important;
+		margin-bottom: 20px !important;
+		text-align: center !important;
+		padding: 10px 0 !important;
+		border-bottom: 2px solid #7881f5 !important;
+	}
+	.form-section {
+		margin-bottom: 24px !important;
+	}
+
+	/* 질문 번호 숨김 */
+	.qa-card__number {
+		display: none !important;
+	}
+
+	/* 질문 헤더 간격 조정 */
+	.qa-card__header {
+		padding: 12px 16px !important;
+		gap: 0 !important;
+	}
+}
+
+/* 반응형 디자인 */
+@media ( max-width : 768px) {
+	.qa-card__header {
+		padding: 14px 16px;
+		flex-direction: row;
+		align-items: center;
+		gap: 10px;
+	}
+	.qa-card__number {
+		width: 26px;
+		height: 26px;
+		font-size: 13px;
+	}
+	.qa-card__question {
+		font-size: 14px;
+	}
+	.qa-card__body {
+		padding: 16px;
+	}
+	.form-actions {
 		flex-direction: column;
+		gap: 16px;
 		align-items: stretch;
 	}
-	.btn-left-group, .btn-right-group {
+	.form-actions__left, .form-actions__right {
 		justify-content: center;
-		margin-top: 8px;
 	}
-	.btn-group button {
+	.btn {
 		width: 100%;
+		justify-content: center;
+	}
+	.form-input--large {
+		padding: 14px 16px;
+		font-size: 16px;
 	}
 }

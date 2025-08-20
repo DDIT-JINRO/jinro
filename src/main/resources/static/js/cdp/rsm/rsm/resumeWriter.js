@@ -582,10 +582,6 @@ function handleEducationClick(event) {
 	if (event.target && event.target.closest('.form-Education #add-education')) {
 		const educationInputGroupContainer = event.target.closest('.form-Education').querySelector('.education-input-container');
 
-		// 1개씩만 추가
-		/*		const newEducationInputGroup = document.createElement('div');
-				newEducationInputGroup.classList.add('education-input-group');*/
-
 		const newSelect = document.createElement('select');
 		newSelect.name = 'education-level';
 		newSelect.innerHTML = `

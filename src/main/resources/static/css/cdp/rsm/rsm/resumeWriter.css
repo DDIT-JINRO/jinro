@@ -1,30 +1,17 @@
-/* General Body and Container Styles */
-body {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	line-height: 1.6;
-	color: #333;
-	margin: 0;
-	padding: 20px;
-	background-color: #f4f7f6;
-}
+/* ==========================================================================
+   이력서 작성 전용 스타일 (공통 CSS와 통합)
+   ========================================================================== */
 
-.public-wrapper-main {
-	max-width: 900px;
-	margin: 20px auto;
-	padding: 30px;
-	background-color: #fff;
-	border-radius: 8px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
+/* 기본 body 스타일은 공통 CSS 사용 */
 
 /* Section Styling */
-section {
+.personal-info-section {
 	margin-bottom: 30px;
 	padding-bottom: 20px;
 	border-bottom: 1px solid #eee;
 }
 
-section:last-of-type {
+.personal-info-section:last-of-type {
 	border-bottom: none;
 	margin-bottom: 0;
 	padding-bottom: 0;
@@ -37,12 +24,11 @@ section:last-of-type {
 	align-items: center;
 	margin-bottom: 15px;
 	padding-bottom: 10px;
-	border-bottom: 2px solid #007bff;
-	/* Primary color for section headers */
+	border-bottom: 2px solid #7881f5; /* 공통 CSS 색상 사용 */
 }
 
-h2 {
-	color: #007bff;
+.section-header h2, .JobWish-header h2, .Skills-header h2 {
+	color: #7881f5; /* 공통 CSS 색상 사용 */
 	font-size: 1.8em;
 	margin: 0;
 }
@@ -57,6 +43,38 @@ h2 {
 	margin-left: 2px;
 }
 
+/* 이력서 제목 */
+.resume-title {
+	font-family: 'Noto Sans KR';
+	font-weight: 700;
+	color: #000;
+	margin-bottom: 32px;
+}
+
+.resume-title label {
+	font-size: 18px;
+	font-weight: 600;
+	margin-bottom: 8px;
+	color: #333;
+	display: block;
+}
+
+.resume-title input {
+	width: 100%;
+	padding: 12px 15px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	font-size: 16px;
+	box-sizing: border-box;
+	transition: border-color 0.3s ease;
+}
+
+.resume-title input:focus {
+	border-color: #7881f5;
+	outline: none;
+	box-shadow: 0 0 5px rgba(120, 129, 245, 0.3);
+}
+
 /* Form Group Layouts */
 .form-profile-grid {
 	display: grid;
@@ -69,59 +87,57 @@ h2 {
 	flex-direction: column;
 }
 
-.resume-title {
-	font-family: 'Noto Sans KR';
-	font-weight: 700;
-	color: #000;
-	margin-bottom: 32px;
-}
-
 /* Label and Input/Select Styles */
-label {
+.personal-info-section label {
 	font-weight: 600;
 	margin-bottom: 8px;
 	color: #555;
-	display: block; /* Ensure label takes full width */
+	display: block;
 }
 
-input[type="text"], input[type="email"], input[type="tel"], input[type="date"],
-	select {
+.personal-info-section input[type="text"], .personal-info-section input[type="email"],
+	.personal-info-section input[type="tel"], .personal-info-section input[type="date"],
+	.personal-info-section select {
 	width: 100%;
 	padding: 12px 15px;
 	border: 1px solid #ccc;
 	border-radius: 6px;
 	font-size: 1em;
 	box-sizing: border-box;
-	/* Include padding and border in the element's total width and height */
 	transition: border-color 0.3s ease;
 }
 
-input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
-	input[type="date"]:focus, select:focus {
-	border-color: #007bff;
+.personal-info-section input[type="text"]:focus, .personal-info-section input[type="email"]:focus,
+	.personal-info-section input[type="tel"]:focus, .personal-info-section input[type="date"]:focus,
+	.personal-info-section select:focus {
+	border-color: #7881f5;
 	outline: none;
-	box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+	box-shadow: 0 0 5px rgba(120, 129, 245, 0.3);
 }
 
 .error-message {
 	color: #e74c3c;
 	font-size: 0.85em;
 	margin-top: 5px;
-	display: none; /* Hidden by default, show with JavaScript */
+	display: none;
 }
 
-.address-group, .form-JobWish, .form-Skills, .form-Education,
-	.form-certificate, .certificate-input-container {
+.address-group {
+	margin-bottom: 30px;
+}
+
+.form-JobWish, .form-Skills, .form-Education, .form-certificate,
+	.certificate-input-container {
 	margin-bottom: 15px;
 }
 
 /* Specific Group Adjustments */
 .name-group, .email-group, .mobile-phone-group {
-	grid-column: span 1; /* These take one column */
+	grid-column: span 1;
 }
 
 .address-group {
-	grid-column: 1/-1; /* Address takes full width */
+	grid-column: 1/-1;
 }
 
 /* Photo Upload */
@@ -138,17 +154,19 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 	height: 150px;
 	border: 2px dashed #ccc;
 	border-radius: 50%;
-	flex-direction: column; /* 항목들을 수직으로 쌓습니다. */
-	align-items: center; /* 가로(수평) 중앙 정렬합니다. */
-	justify-content: center; /* 세로(수직) 중앙 정렬합니다. */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	cursor: pointer;
 	overflow: hidden;
 	position: relative;
 	background-color: #f9f9f9;
+	transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .photo-upload-area:hover {
-	border-color: #007bff;
+	border-color: #7881f5;
 	background-color: #e9f5ff;
 }
 
@@ -162,12 +180,12 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 .upload-placeholder {
 	text-align: center;
 	color: #888;
-	display: flex; /* upload-placeholder도 플렉스 컨테이너로 만듭니다. */
-	flex-direction: column; /* 자식 요소들을 수직으로 쌓습니다. */
-	align-items: center; /* 자식 요소들을 가로 중앙에 정렬합니다. */
-	justify-content: center; /* 자식 요소들을 세로 중앙에 정렬합니다. */
-	height: 100%; /* 부모(photo-upload-area)의 전체 높이를 차지하도록 합니다. */
-	width: 100%; /* 부모(photo-upload-area)의 전체 너비를 차지하도록 합니다. */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
 }
 
 .upload-placeholder i {
@@ -175,7 +193,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 	margin-bottom: 5px;
 }
 
-.photo-delete-btn {
+#photo-delete-btn {
 	background-color: #e74c3c;
 	color: white;
 	border: none;
@@ -187,7 +205,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 	transition: background-color 0.3s ease;
 }
 
-.photo-delete-btn:hover {
+#photo-delete-btn:hover {
 	background-color: #c0392b;
 }
 
@@ -195,10 +213,11 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 .input-with-icon {
 	position: relative;
 	width: 100%;
+	margin-bottom: 10px;
 }
 
 .input-with-icon input {
-	padding-right: 40px; /* Space for the icon */
+	padding-right: 40px;
 }
 
 .input-with-icon .icon-search {
@@ -209,9 +228,14 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 	color: #888;
 	cursor: pointer;
 	font-size: 1.1em;
+	transition: color 0.3s ease;
 }
 
-/* Dynamic Input Groups (Job Wish, Skills, Education, Certificate, Activities) */
+.input-with-icon .icon-search:hover {
+	color: #7881f5;
+}
+
+/* Dynamic Input Groups */
 .job-input-group, .skills-input-group, .education-input-container,
 	.certificate-input-container, .activities-input-container {
 	display: flex;
@@ -228,23 +252,25 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 	margin-bottom: 15px;
 }
 
-.input-container input[type="text"], .input-container select {
-	flex-grow: 1; /* Allows the input/select to take available space */
-}
-
 /* Education specific adjustments */
-.education-input-group {
+.education-input-group, .input-container.education {
 	display: flex;
 	gap: 10px;
 	align-items: center;
 }
 
-.education-input-group select {
-	flex-basis: 35%; /* Give select box a bit more width */
+.education-input-group select, .input-container.education select {
+	width: 150px;
+	flex-shrink: 0;
 }
 
-.education-input-group input {
-	flex-basis: 65%;
+.education-input-group input, .input-container.education input {
+	flex: 1;
+}
+
+/* 동적으로 추가된 학력 항목의 삭제 버튼 */
+.input-container.education .delete-button {
+	flex-shrink: 0;
 }
 
 /* Button Groups */
@@ -262,7 +288,8 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 	gap: 10px;
 }
 
-button {
+/* 이력서 작성 페이지 전용 버튼 스타일 */
+.personal-info-section button, .btn-group button {
 	padding: 10px 15px;
 	border: none;
 	border-radius: 6px;
@@ -270,7 +297,7 @@ button {
 	font-size: 0.9em;
 	font-weight: 600;
 	transition: background-color 0.3s ease, transform 0.2s ease;
-	white-space: nowrap; /* Prevent text wrapping on buttons */
+	white-space: nowrap;
 }
 
 .delete-button {
@@ -310,131 +337,181 @@ button {
 
 .btn-preview {
 	background: #fff;
-	color: #5a3fdb;
-	border: 1px solid #5a3fdb;
+	color: #7881f5;
+	border: 1px solid #7881f5;
 }
 
 .btn-preview:hover {
-	background: #717bfb;
+	background: #7881f5;
 	color: #fff;
 }
 
 #btn-submit {
-	background: #717bfb;
+	background: #7881f5;
 	color: #fff;
 }
 
 #btn-submit:hover {
-	background: #4a2fb8;
+	background: #5c68d9;
 }
 
-/* General Body and Container Styles (from previous CSS - keep as is) */
-body {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	line-height: 1.6;
-	color: #333;
-	margin: 0;
-	padding: 20px;
-	background-color: #f4f7f6;
-}
-
-.public-wrapper-main {
-	max-width: 900px;
-	margin: 20px auto;
-	padding: 30px;
-	background-color: #fff;
-	border-radius: 8px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-	position: relative; /* 중요: 내부 absolute 요소의 기준점이 됩니다 */
-}
-
-/* --- 새로 추가되거나 수정될 load-button-group 관련 CSS --- */
+/* Load Button Group */
 .load-button-group {
-	position: fixed; /* 절대 위치 지정 */
-	top: 20%; /* 상단에서 20px 떨어짐 */
-	right: 10%; /* 오른쪽에서 30px 떨어짐 (padding 고려) */
-	background-color: #f8f9fa; /* 배경색으로 구분 */
-	border: 1px solid #dee2e6; /* 테두리 추가 */
-	border-radius: 8px; /* 둥근 모서리 */
-	padding: 15px 20px; /* 내부 여백 */
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+	position: fixed;
+	top: 30%;
+	left: 5%;
+	background-color: #f8f9fa;
+	border: 1px solid #dee2e6;
+	border-radius: 8px;
+	padding: 15px 20px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	display: flex;
-	flex-direction: column; /* 버튼들을 세로로 정렬 */
-	gap: 10px; /* 버튼 사이 간격 */
-	align-items: flex-end; /* 버튼들을 오른쪽으로 정렬 */
-	z-index: 10; /* 다른 요소 위에 오도록 z-index 설정 */
-	min-width: 150px; /* 최소 너비 지정 */
+	flex-direction: column;
+	gap: 10px;
+	align-items: flex-end;
+	z-index: 10;
+	min-width: 150px;
 }
 
-.load-button-group::before { /* 장바구니/사진 같은 느낌을 위한 아이콘 또는 장식 */
-	content: "\f02d"; /* Font Awesome 책 아이콘 (자료를 불러오는 느낌) */
-	font-family: 'Font Awesome 6 Free'; /* Font Awesome 폰트 지정 */
-	font-weight: 900; /* Solid 아이콘을 위해 */
-	color: #6c75ff; /* 아이콘 색상 */
-	font-size: 1.5em; /* 아이콘 크기 */
-	margin-bottom: 10px; /* 아이콘과 버튼 사이 간격 */
-	text-align: center; /* 아이콘 중앙 정렬 */
-	width: 100%; /* 아이콘이 부모 너비를 차지하도록 */
+.load-button-group::before {
+	content: "\f02d";
+	font-family: 'Font Awesome 6 Free';
+	font-weight: 900;
+	color: #7881f5;
+	font-size: 1.5em;
+	margin-bottom: 10px;
+	text-align: center;
+	width: 100%;
 }
 
 .load-button-group button {
-	background-color: #6c75ff; /* 버튼 배경색 (회색 계열) */
+	background-color: #7881f5;
 	color: white;
-	padding: 8px 15px; /* 버튼 패딩 */
+	padding: 8px 15px;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 0.9em;
 	font-weight: 500;
 	transition: background-color 0.3s ease, transform 0.2s ease;
-	width: 100%; /* 부모에 맞춰 너비 100% */
-	text-align: center; /* 텍스트 중앙 정렬 */
+	width: 100%;
+	text-align: center;
 }
 
 .load-button-group button:hover {
-	background-color: #5159ff; /* 호버 시 색상 변경 */
-	transform: translateY(-1px); /* 살짝 위로 이동 효과 */
+	background-color: #5c68d9;
+	transform: translateY(-1px);
 }
 
-/* 나머지 기존 CSS (form-group, input, button 등)는 그대로 유지됩니다. */
+/* 동적으로 추가되는 섹션들의 label 스타일 (부제목 느낌) */
+.form-JobWish>.JobWish-header>label, .form-Skills>.Skills-header>label,
+	.form-Education>.education-header>label, .form-certificate>.certificate-header>label,
+	.form-activities>.Activities-header>label {
+	font-size: 1.4em;
+	font-weight: 700;
+	color: #7881f5;
+	margin-bottom: 12px;
+	padding-bottom: 8px;
+	display: block;
+	width: 100%;
+}
 
-/* Responsive Adjustments for load-button-group */
+/* Section headers의 추가 버튼 스타일 */
+.section-header button, .JobWish-header button, .Skills-header button,
+	.education-header button, .certificate-header button,
+	.Activities-header button {
+	background-color: #7881f5;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	border-radius: 4px;
+	font-size: 0.8em;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.section-header button:hover, .JobWish-header button:hover,
+	.Skills-header button:hover, .education-header button:hover,
+	.certificate-header button:hover, .Activities-header button:hover {
+	background-color: #5c68d9;
+}
+
+/* Utility Classes */
+.hidden {
+	display: none !important;
+}
+
+/* ==========================================================================
+   반응형 스타일
+   ========================================================================== */
 @media ( max-width : 768px) {
+	.form-profile-grid {
+		grid-template-columns: 1fr;
+		gap: 15px;
+	}
+	.address-group {
+		grid-column: 1;
+	}
+	.btn-group {
+		flex-direction: column;
+		gap: 15px;
+	}
+	.btn-left-group, .btn-right-group {
+		flex-direction: column;
+		width: 100%;
+	}
+	.btn-group button {
+		width: 100%;
+	}
 	.load-button-group {
-		position: static; /* 작은 화면에서는 정적 위치로 변경하여 흐름에 맞춤 */
-		margin-top: 20px; /*다른 요소와 간격 */
+		position: static;
+		margin-top: 20px;
 		right: auto;
 		top: auto;
-		width: 90%; /* 화면 너비에 맞게 조정 */
-		max-width: 300px; /* 최대 너비 설정 */
-		margin-left: auto; /* 중앙 정렬 */
-		margin-right: auto; /* 중앙 정렬 */
-		flex-direction: row; /* 작은 화면에서는 가로로 정렬 */
-		flex-wrap: wrap; /* 필요하면 줄바꿈 */
-		justify-content: center; /* 중앙 정렬 */
+		width: 90%;
+		max-width: 300px;
+		margin-left: auto;
+		margin-right: auto;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
 		padding: 15px;
 	}
 	.load-button-group::before {
-		display: none; /* 작은 화면에서는 아이콘 숨김 */
+		display: none;
 	}
 	.load-button-group button {
-		width: auto; /* 자동으로 너비 조정 */
-		flex-grow: 1; /* 남는 공간 채우기 */
+		width: auto;
+		flex-grow: 1;
 	}
 }
 
 @media ( max-width : 480px) {
+	.form-profile-grid {
+		gap: 12px;
+	}
+	.photo-upload-area {
+		width: 120px;
+		height: 120px;
+	}
+	.input-container {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 8px;
+	}
+	.education-input-group {
+		flex-direction: column;
+	}
+	.education-input-group select, .education-input-group input {
+		flex-basis: auto;
+		width: 100%;
+	}
 	.load-button-group {
-		flex-direction: column; /* 더 작은 화면에서는 다시 세로로 */
+		flex-direction: column;
 		width: 100%;
 		padding: 10px;
 	}
 	.load-button-group button {
 		width: 100%;
 	}
-}
-
-/* Utility Classes (e.g., for JS toggling) */
-.hidden {
-	display: none !important;
 }

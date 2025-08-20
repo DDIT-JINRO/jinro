@@ -60,9 +60,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 별점 평가 기능
 document.addEventListener('DOMContentLoaded', function() {
-    const starRating = document.getElementById('company-rating');
-    const ratingText = document.getElementById('rating-text');
-    const stars = starRating.querySelectorAll('.star');
+	const starRating = document.getElementById('rating');
+	const ratingText = document.getElementById('rating-text');
+	const stars = starRating.querySelectorAll('.rating-input__star');
     
     // 별점 설명 텍스트
     const ratingTexts = {
@@ -82,20 +82,17 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
     
     // 별 클릭 이벤트
-    stars.forEach((star, index) => {
-        // 클릭 이벤트
-        star.addEventListener('click', function() {
-            const rating = parseInt(this.dataset.value);
-            setRating(rating);
-        });
-        
-        // 마우스 호버 이벤트
-        star.addEventListener('mouseenter', function() {
-            const rating = parseInt(this.dataset.value);
-            highlightStars(rating, true);
-            updateRatingText(rating, true);
-        });
-    });
+	stars.forEach(star => {
+	    star.addEventListener('click', function() {
+	        const rating = parseInt(this.dataset.value);
+	        setRating(rating);
+	    });
+	    star.addEventListener('mouseenter', function() {
+	        const rating = parseInt(this.dataset.value);
+	        highlightStars(rating, true);
+	        updateRatingText(rating, true);
+	    });
+	});
     
     // 별점 컨테이너에서 마우스가 나갔을 때
     starRating.addEventListener('mouseleave', function() {
@@ -113,28 +110,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 별 하이라이트 함수
     function highlightStars(rating, isHover) {
-        stars.forEach((star, index) => {
-            star.classList.remove('active', 'temp-active');
-            
-            if (index < rating) {
-                if (isHover) {
-                    star.classList.add('temp-active');
-                } else {
-                    star.classList.add('active');
-                }
-            }
-        });
+		stars.forEach((star, index) => {
+		    star.classList.remove('is-active', 'is-hover');
+		    if (index < rating) {
+		        star.classList.add(isHover ? 'is-hover' : 'is-active');
+		    }
+		});
     }
     
     // 평가 텍스트 업데이트 함수
     function updateRatingText(rating, isHover) {
         ratingText.textContent = ratingTexts[rating];
         
-        if (rating > 0) {
-            ratingText.classList.add('selected');
-        } else {
-            ratingText.classList.remove('selected');
-        }
+		if (rating > 0) {
+		    ratingText.classList.add('is-selected');
+		} else {
+		    ratingText.classList.remove('is-selected');
+		}
     }
     
     // 별점 값을 가져오는 함수 (폼 제출 시 사용)
@@ -151,40 +143,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // 글자수 카운터 HTML 생성
     const counterHTML = `
         <div class="char-counter">
-            <span class="current-count">0</span><span class="unit">자</span>
+            <span class="char-counter__current">0</span><span class="unit">자</span>
             <span class="separator">/</span>
             <span>최대&nbsp;</span><span class="max-count">${maxLength}</span><span class="unit">자</span>
         </div>
     `;
     
     // textarea 부모 요소에 textarea-container 클래스 추가
-    const parentDiv = textarea.closest('.input-group');
-    if (parentDiv) {
-        parentDiv.classList.add('textarea-container');
-        // 카운터를 textarea 다음에 추가
-        parentDiv.insertAdjacentHTML('beforeend', counterHTML);
-    }
+	const parentDiv = textarea.closest('.input-group--textarea');
+	if (parentDiv) {
+	    parentDiv.insertAdjacentHTML('beforeend', counterHTML);
+	}
     
     // 글자수 카운터 요소들 선택
     const counter = parentDiv.querySelector('.char-counter');
-    const currentCount = counter.querySelector('.current-count');
+	const currentCount = counter.querySelector('.char-counter__current');
     
     // 글자수 업데이트 함수
-    function updateCounter() {
-        const currentLength = textarea.value.length;
-        currentCount.textContent = currentLength;
-        
-        // 글자수에 따른 스타일 변경
-        counter.classList.remove('warning', 'error');
-    }
+	function updateCounter() {
+	    const currentLength = textarea.value.length;
+	    currentCount.textContent = currentLength;
+	}
     
     // 이벤트 리스너 등록
-    textarea.addEventListener('input', updateCounter);
-    textarea.addEventListener('paste', function() {
-        // paste 이벤트는 약간의 지연 후 실행
-        setTimeout(updateCounter, 10);
-    });
-    
-    // 초기 글자수 설정
-    updateCounter();
+	textarea.addEventListener('input', updateCounter);
+	textarea.addEventListener('paste', () => setTimeout(updateCounter, 10));
+	updateCounter();
 });

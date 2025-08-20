@@ -1,31 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
 	// 토글 버튼
-	const toggleButton = document.getElementById('com-accordion-toggle');
+	const toggleButton = document.getElementById('search-filter-toggle');
 
 	// 필터 패널 
-	const panel = document.getElementById('com-accordion-panel');
+	const panel = document.getElementById('search-filter-panel');
 
 	// 필터 키워드
-	const filterCheckboxes = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
+	const filterCheckboxes = document.querySelectorAll('.search-filter__option input[type="checkbox"]');
 
 	// 선택 필터 영역
-	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
+	const selectedFiltersContainer = document.querySelector('.search-filter__selected-tags');
 
 	// 초기화 버튼
-	const resetButton = document.querySelector('.com-filter-reset-btn');
+	const resetButton = document.querySelector('.search-filter__reset-button');
 
 	// 아코디언 코드
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
-			this.classList.toggle('active');
-			panel.classList.toggle('open');
+			this.classList.toggle('is-active');
+			panel.classList.toggle('is-open');
 		});
 	}
 
 	// 필터 태그 추가
 	const createFilterTag = (text) => {
-		const filterTag = `<span class="com-selected-filter" data-filter="${text}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
-
+		const filterTag = `<span class="search-filter__tag" data-filter="${text}">${text}<button type="button" class="search-filter__tag-remove">×</button></span>`;
 		selectedFiltersContainer.innerHTML += filterTag;
 	};
 
@@ -51,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
 	selectedFiltersContainer.addEventListener('click', (e) => {
-		if (e.target.classList.contains('com-remove-filter')) {
-			const tag = e.target.closest('.com-selected-filter');
+		if (e.target.classList.contains('search-filter__tag-remove')) {
+			const tag = e.target.closest('.search-filter__tag');
 			const filterText = tag.dataset.filter;
 
 			// 연결된 체크박스 찾아서 해제
@@ -112,47 +111,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 	//내용 아코디언
-	const accordionHeaders = document.querySelectorAll('.accordion-item .accordion-header');
+	const accordionHeaders = document.querySelectorAll('.accordion-list__item-header');
 
 	accordionHeaders.forEach(header => {
 		header.addEventListener('click', function() {
-			const accordionItem = this.closest('.accordion-item');
-			const toggleIcon = this.querySelector('.toggle-icon');
+			const currentItem = header.closest('.accordion-list__item');
+			const currentContent = currentItem.querySelector('.accordion-list__item-content');
+			const currentToggle = header.querySelector('.accordion-list__toggle-icon');
+			const isOpening = !currentContent.classList.contains('is-active');
 
 			// 이미 열려있는 다른 아코디언 닫기
-			document.querySelectorAll('.accordion-item.open').forEach(item => {
-				if (item !== accordionItem) {
-					item.classList.remove('open');
-					item.querySelector('.toggle-icon').textContent = '+';
+			document.querySelectorAll('.accordion-list__item').forEach(item => {
+				if (item !== currentItem) {
+					item.querySelector('.accordion-list__item-content').classList.remove('is-active');
+					item.querySelector('.accordion-list__item-header').classList.remove('is-active');
+					item.querySelector('.accordion-list__toggle-icon').classList.remove('is-active');
 				}
 			});
 
-			// 현재 아코디언 열거나 닫기
-			accordionItem.classList.toggle('open');
-
-			if (accordionItem.classList.contains('open')) {
-				toggleIcon.textContent = '-'; // 유니코드 마이너스 기호
-
-				// === 이곳에 하이픈 줄바꿈 로직을 추가합니다 ===
-				const descriptionSection = accordionItem.querySelector('.hire-description-section p');
-
-				// descriptionSection이 존재하고, 아직 처리되지 않았을 경우에만 실행
-				if (descriptionSection && !descriptionSection.dataset.isProcessed) {
-					const originalText = descriptionSection.textContent;
-
-					// 하이픈(-)을 <br> 태그로 교체
-					const newHtml = originalText.replace(/-/g, '<br>-');
-
-					// HTML로 삽입
-					descriptionSection.innerHTML = newHtml;
-
-					// 중복 처리를 막기 위해 데이터셋 플래그를 설정
-					descriptionSection.dataset.isProcessed = true;
-				}
-				// ============================================
-
+			if (isOpening) {
+				currentContent.classList.add('is-active');
+				header.classList.add('is-active');
+				currentToggle.classList.add('is-active');
 			} else {
-				toggleIcon.textContent = '+';
+				currentContent.classList.remove('is-active');
+				header.classList.remove('is-active');
+				currentToggle.classList.remove('is-active');
 			}
 		});
 	});

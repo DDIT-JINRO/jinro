@@ -1,18 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
 	document.querySelector('.btn-temp-save').addEventListener('click', function() {
 		document.getElementById('siStatus').value = '작성중';
-		const form = document.querySelector('.selfintro-write-form form');
+		const form = document.querySelector('.selfintro-write-form');
 		form.submit();
 	});
 
 	document.querySelector(".btn-delete")?.addEventListener("click", () => {
-		const form = document.querySelector('.selfintro-write-form form');
+		const form = document.querySelector('.selfintro-write-form');
 		if (confirm("정말 삭제하시겠습니까?")) {
 			form.action = "/cdp/sint/sintwrt/delete.do";
 			form.submit();
 		}
 	});
-
 
 	/*--미리보기*/
 	document.querySelector(".btn-preview").addEventListener("click", () => {
@@ -27,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			const originalEl = originalInputs[i];
 			if (clonedEl.tagName === "TEXTAREA") {
 				clonedEl.innerHTML = originalEl.value; // textarea는 innerHTML에 입력된 내용 반영
+				clonedEl.textContent = originalEl.value; // 추가: textContent도 설정
 			} else if (clonedEl.type === "checkbox" || clonedEl.type === "radio") {
 				clonedEl.checked = originalEl.checked;
 			} else {
@@ -34,11 +34,30 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		});
 
+		// 제목 처리
+		const titleSection = clonedForm.querySelector(".form-section");
+		if (titleSection) {
+			const titleInput = titleSection.querySelector('input[name="siTitle"]');
+			if (titleInput && titleInput.value.trim()) {
+				// 제목을 표시용 div로 변경
+				const titleDiv = document.createElement('div');
+				titleDiv.className = 'preview-title';
+				titleDiv.textContent = titleInput.value;
+				titleSection.innerHTML = '';
+				titleSection.appendChild(titleDiv);
+			} else {
+				titleSection.remove();
+			}
+		}
 
+		// section-title 처리 (기존 코드와 호환)
 		const title = clonedForm.querySelector(".section-title");
 		if (title) {
 			title.remove();
 		}
+
+		// 질문 번호 제거
+		clonedForm.querySelectorAll(".qa-card__number")?.forEach(e => e.remove());
 
 		// 2. 버튼 그룹 제거
 		const btnGroup = clonedForm.querySelector(".btn-group");
@@ -46,9 +65,15 @@ document.addEventListener('DOMContentLoaded', function() {
 			btnGroup.remove();
 		}
 
+		// form-actions 제거 (새 버튼 구조)
+		const formActions = clonedForm.querySelector(".form-actions");
+		if (formActions) {
+			formActions.remove();
+		}
+
 		//글자수 제거
 		clonedForm.querySelectorAll(".char-count")?.forEach(e => e.remove());
-
+		clonedForm.querySelectorAll(".char-counter")?.forEach(e => e.remove());
 
 		const xhtmlContent = sanitizeHtmlToXHTML(clonedForm.outerHTML);
 		// 3. 스타일 가져오기 (예: /css/cdp/sint/sintwrt/selfIntroWriting.css)

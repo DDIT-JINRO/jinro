@@ -1,86 +1,86 @@
 document.addEventListener("DOMContentLoaded", function() {
 	document.querySelector('#file-input').addEventListener('change', function(e) {
 		const fileName = e.target.files[0]?.name || '';
-		const fileNameDisplay = document.querySelector('.txt_filename b');
-		const fileNameContainer = document.querySelector('.txt_filename');
+		const fileNameDisplay = document.querySelector('.file-uploader__filename b');
+		const fileNameContainer = document.querySelector('.file-uploader__filename');
 
 		if (fileName) {
 			fileNameDisplay.textContent = fileName;
-			fileNameContainer.classList.add('show');
+			fileNameContainer.classList.add('is-active');
 		} else {
-			fileNameContainer.classList.remove('show');
+			fileNameContainer.classList.remove('is-active');
 		}
 	});
 
 	document.querySelector("#submit-btn").addEventListener("click", async function() {
-	    const cpNameInput = document.querySelector("#company-name");
-	    
-	    const cpId = cpNameInput.dataset.cpId;
-	    const interviewPosition = document.querySelector("#interview-position").value.trim();
-	    const interviewDate = document.querySelector("#interview-date").value.trim();
-	    const interviewDetail = document.querySelector("#interview-detail").value.trim();
+		const cpNameInput = document.querySelector("#company-name");
+
+		const cpId = cpNameInput.dataset.cpId;
+		const interviewPosition = document.querySelector("#interview-position").value.trim();
+		const interviewDate = document.querySelector("#interview-date").value.trim();
+		const interviewDetail = document.querySelector("#interview-detail").value.trim();
 		const interviewRating = window.getInterviewRating();
-	    const files = document.querySelector("#file-input").files;
-	    
-	    if (!interviewDate) {
-	        alert("면접 일자를 입력해 주세요.");
-	        return;
-	    }
-		
+		const files = document.querySelector("#file-input").files;
+
+		if (!interviewDate) {
+			alert("면접 일자를 입력해 주세요.");
+			return;
+		}
+
 		if (interviewRating === 0) {
 			alert("기업 평가를 선택해 주세요.");
 			return;
 		}
-	    
-	    if (!interviewDetail) {
-	        alert("면접 후기를 입력해 주세요.");
-	        return;
-	    }
-	    
-	    if (files.length === 0) {
-	        alert("증빙자료를 첨부해 주세요.");
-	        return;
-	    }
-		
-		if (files.length > 1) {
-		    alert("증빙자료는 1장만 첨부해 주세요.");
-		    return;
+
+		if (!interviewDetail) {
+			alert("면접 후기를 입력해 주세요.");
+			return;
 		}
 
-	    // FormData 생성
-	    const formData = new FormData();
+		if (files.length === 0) {
+			alert("증빙자료를 첨부해 주세요.");
+			return;
+		}
+
+		if (files.length > 1) {
+			alert("증빙자료는 1장만 첨부해 주세요.");
+			return;
+		}
+
+		// FormData 생성
+		const formData = new FormData();
 		formData.append('irType', 'G02002')
-	    formData.append('targetId', cpId);
-	    formData.append('irContent', interviewDetail);
+		formData.append('targetId', cpId);
+		formData.append('irContent', interviewDetail);
 		formData.append('irRating', interviewRating);
-	    formData.append('irApplication', interviewPosition);
-	    formData.append('irInterviewAt', new Date(interviewDate));
+		formData.append('irApplication', interviewPosition);
+		formData.append('irInterviewAt', new Date(interviewDate));
 
-	    // 파일 추가
-        formData.append('file', files[0]);
+		// 파일 추가
+		formData.append('file', files[0]);
 
-	    try {
-	        const response = await fetch("/empt/ivfb/insertInterViewFeedback.do", {
-	            method: "POST",
-	            body: formData
-	        });
+		try {
+			const response = await fetch("/empt/ivfb/insertInterViewFeedback.do", {
+				method: "POST",
+				body: formData
+			});
 
-	        if (response.ok) {
-	            const result = await response.json();
-	            
-	            if (result.success) {
-	                alert("후기 등록 요청이 완료되었습니다");
-	                window.location.href = "/empt/ivfb/interViewFeedback.do";
-	            } else {
-	                alert(result.message || "등록에 실패했습니다.");
-	            }
-	        } else {
-	            throw new Error(`서버 응답 오류: ${response.status}`);
-	        }
-	    } catch (error) {
-	        console.error("등록 중 오류:", error);
-	        alert("등록에 실패했습니다.");
-	    }
+			if (response.ok) {
+				const result = await response.json();
+
+				if (result.success) {
+					alert("후기 등록 요청이 완료되었습니다");
+					window.location.href = "/empt/ivfb/interViewFeedback.do";
+				} else {
+					alert(result.message || "등록에 실패했습니다.");
+				}
+			} else {
+				throw new Error(`서버 응답 오류: ${response.status}`);
+			}
+		} catch (error) {
+			console.error("등록 중 오류:", error);
+			alert("등록에 실패했습니다.");
+		}
 	});
 
 	document.querySelector("#back-btn").addEventListener("click", function() {
@@ -90,145 +90,131 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 별점 평가 기능
 document.addEventListener('DOMContentLoaded', function() {
-    const starRating = document.getElementById('company-rating');
-    const ratingText = document.getElementById('rating-text');
-    const stars = starRating.querySelectorAll('.star');
-    
-    // 별점 설명 텍스트
-    const ratingTexts = {
-        0: '평가해주세요',
-        1: '매우 불만족',
-        2: '불만족',
-        3: '보통',
-        4: '만족',
-        5: '매우 만족'
-    };
-    
-    let currentRating = 0;
-    
-    // 별 클릭 이벤트
-    stars.forEach((star, index) => {
-        // 클릭 이벤트
-        star.addEventListener('click', function() {
-            const rating = parseInt(this.dataset.value);
-            setRating(rating);
-        });
-        
-        // 마우스 호버 이벤트
-        star.addEventListener('mouseenter', function() {
-            const rating = parseInt(this.dataset.value);
-            highlightStars(rating, true);
-            updateRatingText(rating, true);
-        });
-    });
-    
-    // 별점 컨테이너에서 마우스가 나갔을 때
-    starRating.addEventListener('mouseleave', function() {
-        highlightStars(currentRating, false);
-        updateRatingText(currentRating, false);
-    });
-    
-    // 별점 설정 함수
-    function setRating(rating) {
-        currentRating = rating;
-        starRating.dataset.rating = rating;
-        highlightStars(rating, false);
-        updateRatingText(rating, false);
-    }
-    
-    // 별 하이라이트 함수
-    function highlightStars(rating, isHover) {
-        stars.forEach((star, index) => {
-            star.classList.remove('active', 'temp-active');
-            
-            if (index < rating) {
-                if (isHover) {
-                    star.classList.add('temp-active');
-                } else {
-                    star.classList.add('active');
-                }
-            }
-        });
-    }
-    
-    // 평가 텍스트 업데이트 함수
-    function updateRatingText(rating, isHover) {
-        ratingText.textContent = ratingTexts[rating];
-        
-        if (rating > 0) {
-            ratingText.classList.add('selected');
-        } else {
-            ratingText.classList.remove('selected');
-        }
-    }
-    
-    // 별점 값을 가져오는 함수 (폼 제출 시 사용)
-    window.getInterviewRating = function() {
-        return currentRating;
-    };
+	const starRating = document.getElementById('company-rating');
+	const ratingText = document.getElementById('rating-text');
+	const stars = starRating.querySelectorAll('.rating-input__star');
+
+	// 별점 설명 텍스트
+	const ratingTexts = {
+		0: '평가해주세요',
+		1: '매우 불만족',
+		2: '불만족',
+		3: '보통',
+		4: '만족',
+		5: '매우 만족'
+	};
+
+	let currentRating = 0;
+
+	// 별 클릭 이벤트
+	stars.forEach((star) => {
+		star.addEventListener('click', function() {
+			const rating = parseInt(this.dataset.value);
+			setRating(rating);
+		});
+		star.addEventListener('mouseenter', function() {
+			const rating = parseInt(this.dataset.value);
+			highlightStars(rating, true);
+			updateRatingText(rating, true);
+		});
+	});
+
+	// 별점 컨테이너에서 마우스가 나갔을 때
+	starRating.addEventListener('mouseleave', function() {
+		highlightStars(currentRating, false);
+		updateRatingText(currentRating, false);
+	});
+
+	// 별점 설정 함수
+	function setRating(rating) {
+		currentRating = rating;
+		starRating.dataset.rating = rating;
+		highlightStars(rating, false);
+		updateRatingText(rating, false);
+	}
+
+	// 별 하이라이트 함수
+	function highlightStars(rating, isHover) {
+		stars.forEach((star, index) => {
+			star.classList.remove('is-active', 'is-hover');
+			if (index < rating) {
+				if (isHover) {
+					star.classList.add('is-hover');
+				} else {
+					star.classList.add('is-active');
+				}
+			}
+		});
+	}
+
+	// 평가 텍스트 업데이트 함수
+	function updateRatingText(rating, isHover) {
+		ratingText.textContent = ratingTexts[rating];
+
+		if (rating > 0) {
+			ratingText.classList.add('is-selected');
+		} else {
+			ratingText.classList.remove('is-selected');
+		}
+	}
+
+	// 별점 값을 가져오는 함수 (폼 제출 시 사용)
+	window.getInterviewRating = function() {
+		return currentRating;
+	};
 });
 
 // textarea 글자수 카운터 기능
 document.addEventListener('DOMContentLoaded', function() {
-    const textarea = document.getElementById('interview-detail');
-    const maxLength = 300; // 최대 글자수 설정
-    
-    // 글자수 카운터 HTML 생성
-    const counterHTML = `
+	const textarea = document.getElementById('interview-detail');
+	const maxLength = 300; // 최대 글자수 설정
+
+	// 글자수 카운터 HTML 생성
+	const counterHTML = `
         <div class="char-counter">
-            <span class="current-count">0</span><span class="unit">자</span>
+            <span class="char-counter__current">0</span><span class="unit">자</span>
             <span class="separator">/</span>
             <span>최대&nbsp;</span><span class="max-count">${maxLength}</span><span class="unit">자</span>
         </div>
     `;
-    
-    // textarea 부모 요소에 textarea-container 클래스 추가
-    const parentDiv = textarea.closest('.input-group');
-    if (parentDiv) {
-        parentDiv.classList.add('textarea-container');
-        // 카운터를 textarea 다음에 추가
-        parentDiv.insertAdjacentHTML('beforeend', counterHTML);
-    }
-    
-    // 글자수 카운터 요소들 선택
-    const counter = parentDiv.querySelector('.char-counter');
-    const currentCount = counter.querySelector('.current-count');
-    
-    // 글자수 업데이트 함수
-    function updateCounter() {
-        const currentLength = textarea.value.length;
-        currentCount.textContent = currentLength;
-        
-        // 글자수에 따른 스타일 변경
-        counter.classList.remove('warning', 'error');
-    }
-    
-    // 이벤트 리스너 등록
-    textarea.addEventListener('input', updateCounter);
-    textarea.addEventListener('paste', function() {
-        // paste 이벤트는 약간의 지연 후 실행
-        setTimeout(updateCounter, 10);
-    });
-    
-    // 초기 글자수 설정
-    updateCounter();
+
+	// textarea 부모 요소에 textarea-container 클래스 추가
+	const parentDiv = textarea.closest('.input-group--textarea');
+	if (parentDiv) {
+		parentDiv.insertAdjacentHTML('beforeend', counterHTML);
+	}
+
+	// 글자수 카운터 요소들 선택
+	const counter = parentDiv.querySelector('.char-counter');
+	const currentCount = counter.querySelector('.char-counter__current');
+
+	// 글자수 업데이트 함수
+	function updateCounter() {
+		const currentLength = textarea.value.length;
+		currentCount.textContent = currentLength;
+	}
+
+	// 이벤트 리스너 등록
+	textarea.addEventListener('input', updateCounter);
+	textarea.addEventListener('paste', () => setTimeout(updateCounter, 10));
+	updateCounter();
 });
 
 // 기업 검색 모달 관련 JavaScript
 document.addEventListener('DOMContentLoaded', function() {
 	const url = "/empt/ivfb/selectCompanyList.do";
-	
-	const modal            = document.querySelector('#modal-overlay');
+
+	const modal            = document.querySelector('#search-modal');
 	const searchBtn        = document.querySelector('#company-search');
-	const closeBtn         = document.querySelector('.modal-close-btn');
-	const cancelBtn        = document.querySelector('#modal-cancel-btn');
-	const confirmBtn       = document.querySelector('#modal-confirm-btn');
-	const searchInput      = document.querySelector('#company-search-input');
-	const searchButton     = document.querySelector('#search-btn');
-	const companyList      = document.querySelector('#company-list');
-	const prevPageBtn      = document.querySelector('#prev-page');
-	const nextPageBtn      = document.querySelector('#next-page');
-	const pageInfo         = document.querySelector('#page-info');
+	const closeBtn         = modal.querySelector('.search-modal__close-button');
+	const cancelBtn        = modal.querySelector('#modal-cancel-btn');
+	const confirmBtn       = modal.querySelector('#modal-confirm-btn');
+	const searchInput      = modal.querySelector('#company-search-input');
+	const searchButton     = modal.querySelector('#search-btn');
+	const companyList      = modal.querySelector('#company-list');
+	const prevPageBtn      = modal.querySelector('#prev-page');
+	const nextPageBtn      = modal.querySelector('#next-page');
+	const pageInfo         = modal.querySelector('#page-info');
 	const companyNameInput = document.querySelector('#company-name');
 
 	let currentPage = 1;
@@ -239,14 +225,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// 모달 열기
 	searchBtn.addEventListener('click', function() {
-		modal.classList.add('show');
+		modal.classList.add('is-active');
 		searchInput.focus();
 		loadCompanies('');
 	});
 
 	// 모달 닫기
 	function closeModal() {
-		modal.classList.remove('show');
+		modal.classList.remove('is-active');
 		resetModal();
 	}
 
@@ -270,24 +256,24 @@ document.addEventListener('DOMContentLoaded', function() {
 					"Content-Type": "application/json",
 				}
 			});
-			
+
 			if (!response.ok) {
 				throw new Error(`서버 응답 오류: ${response.status}`);
 			}
 
-		    const result = await response.json();
+			const result = await response.json();
 
-		if (result.success && Array.isArray(result.companyList)) {
-			return result.companyList;
-		} else {
-			console.error("API 응답에 문제가 있습니다.", result.message);
+			if (result.success && Array.isArray(result.companyList)) {
+				return result.companyList;
+			} else {
+				console.error("API 응답에 문제가 있습니다.", result.message);
+				return [];
+			}
+		} catch (error) {
+			console.error("기업 정보를 불러오는 중 에러가 발생하였습니다.", error.message);
 			return [];
 		}
-	} catch (error) {
-		console.error("기업 정보를 불러오는 중 에러가 발생하였습니다.", error.message);
-		return [];
 	}
-}
 
 	// 기업 목록 로드
 	const loadCompanies = async (keyword) => {
@@ -295,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		companyList.innerHTML = '<li class="loading-message">검색 중...</li>';
 
 		companies = await searchCompanies(keyword);
-		
+
 		totalPages = Math.ceil(companies.length / itemsPerPage);
 		if (totalPages === 0) totalPages = 1;
 
@@ -316,25 +302,22 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 
 		companyList.innerHTML = pageCompanies.map(company => `
-            <li class="company-list-item" data-company-id="${company.cpId}" data-company-name="${company.cpName}">
-                <div class="company-name">${company.cpName}</div>
-                <div class="company-info">${company.cpScale} · ${company.cpRegion}</div>
-            </li>
+			<li class="search-modal__list-item" data-company-id="${company.cpId}" data-company-name="${company.cpName}">
+			    <div class="search-modal__list-item-name">${company.cpName}</div>
+			    <div class="search-modal__list-item-info">${company.cpScale} · ${company.cpRegion}</div>
+			</li>
         `).join('');
 
 		// 기업 선택 이벤트 추가
-		document.querySelectorAll('.company-list-item').forEach(item => {
+		document.querySelectorAll('.search-modal__list-item').forEach(item => {
 			item.addEventListener('click', function() {
-				// 이전 선택 제거
-				document.querySelectorAll('.company-list-item').forEach(i => i.classList.remove('selected'));
-
-				// 현재 항목 선택
-				this.classList.add('selected');
+				document.querySelectorAll('.search-modal__list-item').forEach(i => i.classList.remove('is-selected'));
+				this.classList.add('is-selected');
+				
 				selectedCompany = {
 					cpId: this.dataset.companyId,
 					cpName: this.dataset.companyName
 				};
-
 				confirmBtn.disabled = false;
 			});
 		});

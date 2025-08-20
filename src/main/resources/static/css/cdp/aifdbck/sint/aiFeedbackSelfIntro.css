@@ -1,109 +1,128 @@
+@charset "UTF-8";
+
+/* =================================================== */
+/* AI 자소서 피드백 페이지 (AI 이력서 피드백 테마 적용) */
+/* =================================================== */
+
+/* 컨테이너 */
 .aifb-container {
-	padding: 60px 40px 40px;
-	border: 1px solid #858E96;
-	border-radius: 5px;
-	background-color: #ffffff;
 	display: flex;
 	flex-direction: column;
-	gap: 30px;
+	gap: 24px;
 }
 
 .aifb-title {
-	font-family: 'Noto Sans KR';
-	font-weight: 700;
-	font-size: 36px;
+	font-size: 24px;
+	font-weight: 600;
 	text-align: center;
-	color: #000000;
+	color: #111827;
+	margin-bottom: 16px;
 }
 
-.self-intro-select, .resume-select {
+/* 드롭다운 (자소서 선택) */
+.self-intro-select {
 	width: 100%;
-	padding: 12px 40px 12px 14px;
-	border: 1px solid #D8D8D8;
-	border-radius: 8px;
-	font-family: 'Noto Sans KR';
+	padding: 12px 16px;
 	font-size: 16px;
-	color: #333;
+	border: 1px solid #d1d5db;
+	border-radius: 8px;
+	background-color: #fff;
 	appearance: none;
-	background-color: #FFFFFF;
-	background-image:
-		url("data:image/svg+xml;utf8,<svg fill='%239D9D9D' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+	background-image: url("data:image/svg+xml;utf8,<svg fill='%239D9D9D' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
 	background-repeat: no-repeat;
-	background-position: right 14px center;
+	background-position: right 16px center;
 	background-size: 18px;
+	cursor: pointer;
 }
 
+/* 메인 콘텐츠 */
 .aifb-content-wrapper {
 	display: flex;
-	flex-direction: row;
-	align-items: stretch;
-	gap: 20px;
+	gap: 24px;
 	width: 100%;
+	align-items: flex-start;
 }
 
-.aifb-section, .aifb-feedback-wrapper {
+.aifb-section,
+.aifb-feedback-wrapper {
 	flex: 1;
-	box-sizing: border-box;
-	border: 2px solid #D8D8D8;
-	border-radius: 20px;
-	padding: 30px;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 24px;
+	background-color: #fff;
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 	min-height: 500px;
+	box-sizing: border-box;
 }
 
-.aifb-section-header, .aifb-feedback-header {
-	border-bottom: 2px solid #848EFB;
-	padding-bottom: 20px;
+/* 섹션 헤더 (자소서 / 피드백 공통) */
+.aifb-section-header,
+.aifb-feedback-header {
+	padding-bottom: 16px;
+	border-bottom: 1px solid #e5e7eb;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 10px;
-	min-height: 65px; 
+	min-height: auto;
 }
 
-.aifb-section-header h2, .aifb-feedback-header h2 {
-	font-family: 'Noto Sans KR';
-	font-weight: 700;
-	font-size: 24px;
-	color: #000000;
+.aifb-section-header h2,
+.aifb-feedback-header h2 {
+	font-family: 'Noto Sans KR', sans-serif;
+	font-weight: 600;
+	font-size: 18px;
+	color: #1f2937;
 	margin: 0;
 	white-space: nowrap;
 }
 
-.aifb-questions-wrapper, .aifb-feedback-area {
+/* 내용 영역 */
+.aifb-questions-wrapper,
+.aifb-feedback-area {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 20px;
 	white-space: pre-wrap;
-	font-family: 'Noto Sans KR';
+	font-family: 'Noto Sans KR', sans-serif;
 	font-size: 14px;
 	line-height: 1.6;
 }
 
-.feedback-section {
-	padding: 15px;
-	border-radius: 5px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-	transition: all 0.3s ease;
-	background-color: transparent;
-	border-left: none;
-	box-shadow: none;
+/* 불러온 자소서 질문/답변 블록 스타일 */
+.qa-block {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f3f4f6;
+}
+.qa-block:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.question-block {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 10px;
+}
+.answer-block p {
+    margin: 0;
+    color: #4b5563;
+}
+.char-count {
+    text-align: right;
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 8px;
 }
 
-.feedback-section:hover {
-	background-color: #f0f2ff;
-}
 
-.feedback-section h4 {
-	font-weight: 600;
-	font-size: 16px;
-	color: #222;
-	margin-bottom: 8px;
-}
-
+/* 버튼 그룹 */
 .aifb-button-group {
 	display: flex;
 	gap: 10px;
@@ -111,194 +130,85 @@
 }
 
 .aifb-button {
-	padding: 10px 18px;
-	font-family: 'IBM Plex Sans KR';
+	padding: 8px 16px;
+	font-family: 'Noto Sans KR', sans-serif;
 	font-weight: 600;
 	font-size: 14px;
-	border-radius: 6px;
-	border: none;
+	border-radius: 8px;
+	border: 1px solid #d1d5db;
 	cursor: pointer;
-	background-color: #5a57f0;
-	color: white;
-	transition: background-color 0.2s ease;
+	background-color: #f3f4f6;
+	color: #374151;
+	transition: all 0.2s ease;
 	white-space: nowrap;
 }
-
 .aifb-button:hover {
-	background-color: #3e3bdb;
+	background-color: #e5e7eb;
 }
 
-.aifb-button.proofread {
-	background: #5a57f0;
-	color: #FFFFFF;
-}
-
-.aifb-button.proofread:hover {
-	background: #3e3bdb;
-}
-
+/* 하단 버튼 영역 */
 .aifb-footer-wrapper {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
-	box-sizing: border-box;
+	margin-top: 32px;
+	padding-top: 24px;
+	border-top: 1px solid #e5e7eb;
 }
-
 .ai-feedback-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
-    gap: 5px;
+    gap: 8px;
 }
-
 .powered-by-text {
-    font-family: 'IBM Plex Sans KR';
-    font-size: 11px;
-    color: #888;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    color: #9ca3af;
     font-weight: 400;
-    letter-spacing: 0.3px;
+}
+.aifb-button.feedback {
+	background-color: #7881f5;
+	color: #fff;
+	border-color: #7881f5;
+	padding: 10px 20px;
+}
+.aifb-button.feedback:hover {
+	background-color: #6366f1;
+}
+.aifb-button.proofread {
+	background-color: #fff;
+	color: #7881f5;
+	border-color: #7881f5;
+	padding: 10px 20px;
+}
+.aifb-button.proofread:hover {
+	background-color: #7881f5;
+	color: #fff;
 }
 
-.answer-block {
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-	text-align: left;
-	padding: 0;
-}
-
-.answer-block p {
-	margin: 0;
-	padding: 0;
-	white-space: pre-wrap;
-	line-height: 1.6;
-	font-size: 14px;
-	color: #333;
-}
-
-.char-count {
-	text-align: right;
-	font-size: 12px;
-	color: #999;
-	margin-top: 4px;
-}
-
-.question-block {
-	display: flex;
-	flex-direction: row;
-	gap: 8px;
-	align-items: center;
-	font-size: 13px;
-	color: #666;
-	margin-bottom: 6px;
-	line-height: 1.5;
-}
-
-.question-number {
-	font-weight: bold;
-	color: #444;
-}
-
-.question-text {
-	flex: 1;
-	white-space: pre-wrap;
-}
-
-.aifb-feedback-area {
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-	white-space: pre-wrap;
-	font-family: 'Noto Sans KR';
-	font-size: 14px;
-	color: #333;
-	line-height: 1.6;
-	padding: 0; /* 여백 초기화 */
-}
-
-.feedback-section {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	text-align: left;
-	padding: 0;
-	gap: 8px;
-}
-
-.feedback-section h4 {
-	margin: 0;
-	font-weight: bold;
-	font-size: 14px;
-	color: #444;
-}
-
-.feedback-section p {
-	margin: 0;
-	padding: 0;
-}
-/* ========================================= */
-/* 부트스트랩 없는 순수 CSS 스피너 구현 */
-/* ========================================= */
-
-/* 스피너를 감싸고 전체를 중앙 정렬하는 컨테이너 */
+/* 스피너 구현 */
 .spinner-wrapper {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	padding: 40px 20px;
-	min-height: 250px; /* 로딩 중 최소 높이 확보 */
+	min-height: 250px;
 	text-align: center;
-	color: #666; /* 로딩 텍스트 색상 */
+	color: #666;
 }
-
-/* 스피너 아이콘 자체의 스타일 */
 .spinner-border {
 	display: inline-block;
-	width: 2.5rem; /* 스피너 크기 */
-	height: 2.5rem; /* 스피너 크기 */
+	width: 2.5rem;
+	height: 2.5rem;
 	vertical-align: -0.125em;
-	/* 테두리의 한쪽만 투명하게 만들어 회전하는 효과를 줍니다. */
-	border: 0.25em solid currentColor; /* 'text-primary' 클래스의 color를 사용 */
+	border: 0.25em solid #7881f5;
 	border-right-color: transparent;
 	border-radius: 50%;
-	/* 'spinner-spin' 애니메이션을 0.75초 동안 무한 반복 */
 	animation: spinner-spin .75s linear infinite;
 }
-
-/* 스피너 회전 애니메이션 정의 */
 @keyframes spinner-spin {
-	to {
-		transform: rotate(360deg);
-	}
-}
-
-/* 부트스트랩의 .text-primary 클래스를 흉내 냅니다. */
-.text-primary {
-	color: #6c75ff; /* 스피너의 색상 */
-}
-
-/* 부트스트랩의 .text-center 클래스를 흉내 냅니다. */
-.text-center {
-	text-align: center;
-}
-
-/* 부트스트랩의 .mt-2 (margin-top) 클래스를 흉내 냅니다. */
-.mt-2 {
-	margin-top: 0.8rem; /* 스피너와 텍스트 사이의 간격 */
-}
-
-/* 스크린 리더는 읽을 수 있지만, 화면에는 보이지 않게 처리 (접근성) */
-.visually-hidden {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border: 0;
+	to { transform: rotate(360deg); }
 }

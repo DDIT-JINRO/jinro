@@ -1,24 +1,28 @@
 document.addEventListener('DOMContentLoaded', function() {
 	// 토글 버튼
-	const toggleButton = document.getElementById('com-accordion-toggle');
+	const toggleButton = document.querySelector('.search-filter__accordion-header');
 
 	// 필터 패널 
-	const panel = document.getElementById('com-accordion-panel');
-
-	// 필터 키워드
-	const filterCheckboxes = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
-
+	const panel = document.querySelector('.search-filter__accordion-panel');
+	
+	// 필터 그룹 객체
+	const allCheckboxGroups = {
+	    regionIds: document.querySelectorAll('.search-filter__option input[type="checkbox"][name="regionIds"]'),
+	    typeIds: document.querySelectorAll('.search-filter__option input[type="checkbox"][name="typeIds"]'),
+	    gubunIds: document.querySelectorAll('.search-filter__option input[type="checkbox"][name="gubunIds"]')
+	};
+	
 	// 선택 필터 영역
-	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
+	const selectedFiltersContainer = document.querySelector('.search-filter__selected-tags');
 
 	// 초기화 버튼
-	const resetButton = document.querySelector('.com-filter-reset-btn');
+	const resetButton = document.querySelector('.search-filter__reset-button');
 
 	// 디테일 페이지로 이동
-	document.querySelectorAll('.univ-item').forEach(univ => {
+	document.querySelectorAll('.content-list__item').forEach(univ => {
 		univ.addEventListener('click', (e) => {
 			// 북마크 버튼 눌렀을 때에는 디테일 페이지로 넘어가지 않도록 방지
-			if (e.target.closest('.bookmark-btn')) {
+			if (e.target.closest('.bookmark-button')) {
 				return;
 			}
 			location.href = '/ertds/univ/uvsrch/selectDetail.do?univId=' + univ.dataset.univId;
@@ -28,63 +32,60 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 아코디언 코드
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
-			this.classList.toggle('active');
-			panel.classList.toggle('open');
-
-			if (panel.style.maxHeight) {
-				panel.style.maxHeight = null;
-			} else {
-				panel.style.maxHeight = panel.scrollHeight + 'px';
-			}
+			this.classList.toggle('is-active');
+			panel.classList.toggle('is-open');
 		});
 	}
 
 	// 필터 태그 추가
-	const createFilterTag = (text) => {
-		const filterTag = `<span class="com-selected-filter" data-filter="${text}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
+	const updateSelectedFiltersDisplay = () => {
+		if (!selectedFiltersContainer) return;
+	    selectedFiltersContainer.innerHTML = '';
+	    
+	    Object.keys(allCheckboxGroups).forEach(groupName => {
+	        const checkboxList = allCheckboxGroups[groupName];
+	        const selectedCheckboxes = Array.from(checkboxList).filter(checkBox => checkBox.checked);
 
-		selectedFiltersContainer.innerHTML += filterTag;
+	        selectedCheckboxes.forEach(checkbox => {
+	            const labelText = checkbox.nextElementSibling.textContent;
+	            let groupLabel = '';
+	            if (groupName === 'regionIds') groupLabel = '대학 지역';
+	            if (groupName === 'typeIds') groupLabel = '대학 유형';
+	            if (groupName === 'gubunIds') groupLabel = '설립 유형';
+	            
+	            const tagHTML = `<span class="search-filter__tag" data-group="${groupName}" data-value="${checkbox.value}">${groupLabel} > ${labelText}<button type="button" class="search-filter__tag-remove">×</button></span>`;
+	            selectedFiltersContainer.insertAdjacentHTML('beforeend', tagHTML);
+	        });
+	    });
 	};
-
-	// 필터 태그 삭제
-	const removeFilterTag = (text) => {
-		const tagToRemove = selectedFiltersContainer.querySelector(`[data-filter="${text}"]`);
-		if (tagToRemove) {
-			selectedFiltersContainer.removeChild(tagToRemove);
-		}
+	
+	const handleCheckboxChange = () => {
+		updateSelectedFiltersDisplay();
 	};
-
-	// 체크박스 변경 시 이벤트 처리
-	filterCheckboxes.forEach(checkbox => {
-		checkbox.addEventListener('change', (e) => {
-			const labelText = e.target.nextElementSibling.textContent;
-			if (e.target.checked) {
-				createFilterTag(labelText);
-			} else {
-				removeFilterTag(labelText);
-			}
-		});
+	
+	// 이벤트 등록 (기존 로직 유지)
+	Object.values(allCheckboxGroups).forEach(checkboxList => {
+	    checkboxList.forEach(checkbox => {
+	        checkbox.addEventListener('change', handleCheckboxChange);
+    	});
 	});
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
 	selectedFiltersContainer.addEventListener('click', (e) => {
-		if (e.target.classList.contains('com-remove-filter')) {
-			const tag = e.target.closest('.com-selected-filter');
-			const filterText = tag.dataset.filter;
+		if (e.target.classList.contains('search-filter__tag-remove')) {
+			const tag = e.target.closest('.search-filter__tag');
+			const groupName = tag.dataset.group;
+	        const value = tag.dataset.value;
 
-			// 연결된 체크박스 찾아서 해제
-			const checkboxToUncheck = Array.from(filterCheckboxes).find(
-				cb => cb.nextElementSibling.textContent === filterText
-			);
-			if (checkboxToUncheck) {
-				checkboxToUncheck.checked = false;
-			}
+	        const checkboxToUncheck = Array.from(allCheckboxGroups[groupName]).find(checkbox => checkbox.value === value);
 
-			// 태그 삭제
-			tag.remove();
+	        if (checkboxToUncheck) {
+	            checkboxToUncheck.checked = false;
+	        }
+			updateSelectedFiltersDisplay();
 		}
 	});
-
+	
 	// 초기화 버튼 클릭 시 이벤트 처리
 	if (resetButton) {
 		resetButton.addEventListener('click', () => {
@@ -97,13 +98,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	// 이벤트 추가
-	document.querySelectorAll('.bookmark-btn').forEach(button => {
+	document.querySelectorAll('.bookmark-button').forEach(button => {
 		button.addEventListener('click', function(event) {
 			event.preventDefault();
 			// 함수 전달
 			handleBookmarkToggle(this);
 		});
 	});
+	
+	updateSelectedFiltersDisplay();
 });
 
 const handleBookmarkToggle = (button) => {
@@ -115,7 +118,7 @@ const handleBookmarkToggle = (button) => {
 	const bmTargetId = button.dataset.targetId;
 
 	// 현재 버튼이 'active' 클래스를 가지고 있는지 확인
-	const isBookmarked = button.classList.contains('active');
+	const isBookmarked = button.classList.contains('is-active');
 
 	const data = {
 		bmCategoryId: bmCategoryId,
@@ -140,7 +143,7 @@ const handleBookmarkToggle = (button) => {
 		.then(data => {
 			if (data.success) {
 				alert(data.message);
-				button.classList.toggle('active');
+				button.classList.toggle('is-active');
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');
 			}

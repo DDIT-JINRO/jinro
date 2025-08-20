@@ -1,14 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/cdp/rsm/rsmb/resumeBoardDetail.css">
-<!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
-	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
-		<!-- 대분류 -->
 		<div class="channel-title-text">경력관리</div>
 	</div>
-	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-itemIn">
 			<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
@@ -26,14 +22,11 @@
 </section>
 <div>
 	<div class="public-wrapper">
-		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
 			<a class="tab" href="/cdp/rsm/rsm/resumeList.do">이력서</a>
 			<a class="tab active" href="/cdp/rsm/rsmb/resumeBoardList.do">이력서 템플릿 게시판</a>
 		</div>
-		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			<!-- 게시글 박스 -->
 			<div class="detail-wrapper">
 				<div class="boardEtcBtn" id="boardEtcBtn">...</div>
 				<div class="boardEtcContainer" data-board-id="${boardVO.boardId }">
@@ -56,7 +49,6 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
-				<!-- 1) 제목 + 프로필 + 메타 -->
 				<div class="post-header">
 					<h1 class="post-title">${boardVO.boardTitle}</h1>
 					<div class="author-meta">
@@ -77,28 +69,27 @@
 						<span class="meta-item">조회수: ${boardVO.boardCnt}</span>
 						<span class="meta-item" id="like-board-wrapper-${boardVO.boardId}">
 							<button class="like-button ${boardVO.boardIsLiked == 1 ? 'liked' : ''}" data-board-id="${boardVO.boardId}" aria-label="좋아요 버튼">
-							    <svg class="heart-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<svg class="heart-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
 							    </svg>
-							    
-							    <svg class="heart-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+								<svg class="heart-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
 							    </svg>
 							</button>
 							<span class="like-cnt" id="board-like-cnt-${boardVO.boardId}">${boardVO.boardLikeCnt}</span>
 						</span>
-					    <button class="bookmark-btn ${boardVO.isBookmark == boardVO.boardId ? 'active' : ''}" data-category-id="G03005" data-target-id="${boardVO.boardId}">
-					        <span class="icon-active">
-					            <img src="/images/bookmark-btn-active.png" alt="활성 북마크">
-					        </span>
-					        
-					        <span class="icon-inactive">
-					            <img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
-					        </span>
-					    </button>
+						<button class="bookmark-btn ${boardVO.isBookmark == boardVO.boardId ? 'active' : ''}" data-category-id="G03005" data-target-id="${boardVO.boardId}">
+							<span class="icon-active">
+								<img src="/images/bookmark-btn-active.png" alt="활성 북마크">
+							</span>
+
+							<span class="icon-inactive">
+								<img src="/images/bookmark-btn-inactive.png" alt="비활성 북마크">
+							</span>
+						</button>
 					</div>
 				</div>
-				<!-- 2) 핵심 정보 그리드 -->
 				<div class="detailMainContent">
 					<div class="detailContent">${boardVO.boardContent}</div>
 				</div>
@@ -107,14 +98,14 @@
 						<div class="detailFile">
 							<c:set var="lowerCaseName" value="${fn:toLowerCase(file.fileOrgName)}" />
 							<span class="file-name">${file.fileOrgName}</span>
-							
+
 							<div class="file-btn-wrapper">
 								<c:if test="${fn:endsWith(lowerCaseName, '.pdf')}">
 									<button type="button" class="btn-pdf-preview" data-pdf-url="${file.filePath}" data-target-id="pdf-preview-${status.index}">미리보기 보기</button>
 								</c:if>
 								<a href="/files/download?fileGroupId=${file.fileGroupId}&seq=${file.fileSeq}" class="btn-pdf-download"> 다운로드 </a>
 							</div>
-							
+
 							<c:if test="${fn:endsWith(lowerCaseName, '.pdf')}">
 								<div class="pdf-preview-container" id="pdf-preview-${status.index}"></div>
 							</c:if>
@@ -124,7 +115,6 @@
 			</div>
 		</div>
 
-		<!-- 댓글 입력창 -->
 		<form action="/cdp/rsm/rsmb/createResumeReply.do" method="post" class="comment-form">
 			<input type="hidden" name="boardId" value="${boardVO.boardId}" />
 			<textarea id="replyContent" name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
@@ -134,7 +124,6 @@
 			</div>
 		</form>
 
-		<!-- 댓글 리스트 -->
 		<div class="comment-section">
 			<c:forEach var="reply" items="${replyVO}">
 				<div class="reply-box" id="reply-${boardVO.boardId}-${reply.replyId }" data-reply-mem="${reply.memId }">
@@ -169,7 +158,6 @@
 					<div class="reply-content">${reply.replyContent }</div>
 					<div>
 						<button class="reply-child-btn" id="reply-${reply.replyId }">답글</button>
-						<!-- 						토글시킬 답글버튼 id:reply-댓글번호 -->
 						<span class="child-count">
 							<c:if test="${reply.childCount > 0 }"> ${reply.childCount }</c:if>
 						</span>
@@ -219,7 +207,8 @@
 						</div>
 					</c:forEach>
 					<form action="/cdp/rsm/rsmb/createResumeReply.do" method="post" class="comment-form child-form">
-						<input type="hidden" name="boardId" value="${boardVO.boardId }" /> <input type="hidden" name="replyParentId" value="${reply.replyId }" />
+						<input type="hidden" name="boardId" value="${boardVO.boardId }" />
+						<input type="hidden" name="replyParentId" value="${reply.replyId }" />
 						<textarea name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
 						<div class="comment-footer">
 							<span class="char-count">0 / 300</span>
@@ -243,15 +232,11 @@
 	<div class="modal-content">
 		<button class="modal-close-btn" type="button">&times;</button>
 		<h3>신고 사유 입력</h3>
-		<p>
-			신고하실 내용을 구체적으로 입력해주세요.
-			<br />
-			예: 욕설·비방, 개인정보 노출, 허위 사실 유포, 부적절한 홍보 등
-			<br />
-			위반 항목과 상황을 간략히 작성해 주시면 처리에 도움이 됩니다.
+		<p>신고하실 내용을 구체적으로 입력해주세요. <br /> 예: 욕설·비방, 개인정보 노출, 허위 사실 유포, 부적절한 홍보 등 <br /> 위반 항목과 상황을 간략히 작성해 주시면 처리에 도움이 됩니다.
 		</p>
 		<div class="modal-form">
-			<input type="hidden" id="report-target-id" /> <input type="hidden" id="report-target-type" />
+			<input type="hidden" id="report-target-id" />
+			<input type="hidden" id="report-target-type" />
 			<textarea id="report-content-input" placeholder="사유를 작성해주세요"></textarea>
 			<input type="file" id="report-file" />
 			<span class="modal-error-msg" id="modal-error-msg"></span>
