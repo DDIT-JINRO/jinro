@@ -9,7 +9,9 @@
 <body>
 	<div class="admin-univMng-1" style="margin-bottom: 20px;">
 		<div class="template-panel admin-univMng-1-1">
-			<div class="middleTitle">대학 리스트</div>
+			<div class="middleTitle act-mng-category-header">
+				대학 리스트
+			</div>
 			<div class="filter-box">
 				<select name="status">
 					<option value="1">전체</option>
@@ -49,8 +51,10 @@
 			</div>
 		</div>
 
-		<div class="template-panel admin-univMng-1-1">
-			<div class="middleTitle">대학 상세</div>
+		<div class="template-panel admin-univMng-1-2 ">
+			<div class="middleTitle act-mng-category-header">
+				대학 상세
+			</div>
 			<div class="detail-item">
 				<span class="detail-label">대학 ID:</span>
 				<input id="univ-detail-univId" placeholder="자동 입력" readonly="readonly" />
@@ -59,13 +63,22 @@
 				<span class="detail-label">대학명:</span>
 				<input id="univ-detail-univName" placeholder="대학명 입력" />
 			</div>
-			<div class="detail-item">
-				<span class="detail-label">대학구분</span>
-				<select id="univ-detail-univGubun">
-					<option value="G21001">국립</option>
-					<option value="G21002">공립</option>
-					<option value="G21003">사립</option>
-				</select>
+			<div class="parent-flex" style="display: flex;">
+				<div class="detail-item">
+					<span class="detail-label">대학구분</span>
+					<select id="univ-detail-univGubun">
+						<option value="G21001">국립</option>
+						<option value="G21002">공립</option>
+						<option value="G21003">사립</option>
+					</select>
+				</div>
+				<div class="detail-item">
+					<span class="detail-label">대학 타입</span>
+					<select id="univ-detail-univType">
+						<option value="G20001">대학(4년제)</option>
+						<option value="G20002">전문대학</option>
+					</select>
+				</div>
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">대학 지역:</span>
@@ -76,28 +89,23 @@
 				<input id="univ-detail-univAddr" placeholder="대학 상세 주소:" />
 			</div>
 			<div class="detail-item">
-				<span class="detail-label">대학 타입</span>
-				<select id="univ-detail-univType">
-					<option value="G20001">대학(4년제)</option>
-					<option value="G20002">전문대학</option>
-				</select>
-			</div>
-			<div class="detail-item">
 				<span class="detail-label">URL 주소:</span>
 				<input id="univ-detail-univUrl" placeholder="URL 주소:" />
 			</div>
-			<div class="flex">
-				<button id="univReset">초기화</button>
-				<button id="univSave">저장</button>
-				<button id="univDel">삭제</button>
-				<button id="univDepInsert">학과 추가</button>
+			<div class="flex"style="gap:10px;">
+				   <button id="univReset" class="btn btn-secondary">🔄 초기화</button>
+				  <button id="univSave" class="btn btn-success">💾 저장</button>
+				  <button id="univDel" class="btn btn-danger">🗑 삭제</button>
+				  <button id="univDepInsert" class="btn btn-primary">➕ 학과 추가</button>
 			</div>
 		</div>
 	</div>
 
-	<div class="flex" style="gap: 20px; margin-bottom: 20px;">
+	<div class="admin-univMng-1" style="display:flex; gap: 20px; margin-bottom: 20px;">
 		<div class="template-panel admin-univMng-2">
-			<div class="middleTitle">해당 대학 학과정보</div>
+			<div class="middleTitle act-mng-category-header" >
+				해당 대학 학과정보
+			</div>
 			<table>
 				<thead>
 					<tr>
@@ -113,44 +121,56 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="template-panel admin-univMng-3">
-			<div class="middleTitle">학과 정보</div>
-			<input id="univ-dept-detail-uddId" style="display: none;" placeholder="자동 입력" readonly="readonly" />
-			<div class="detail-item">
-				<span class="detail-label">대학 ID:</span>
-				<input id="univ-dept-detail-univId" placeholder="자동 입력" readonly="readonly" />
+		<div class="template-panel admin-univMng-3" >
+			<div>
+				<div class="middleTitle act-mng-category-header">
+					학과 정보
+				</div>
+				<div class="parent-flex" style="display: flex;">
+					<input id="univ-dept-detail-uddId" style="display: none;" placeholder="자동 입력" readonly="readonly" />
+					<div class="detail-item">
+						<span class="detail-label">대학 ID:</span>
+						<input id="univ-dept-detail-univId" placeholder="자동 입력" readonly="readonly" />
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">대학명:</span>
+						<input id="univ-dept-detail-univName" placeholder="자동 입력" readonly="readonly" />
+					</div>
+				</div>
+				<div class="parent-flex" style="display: flex;">
+					<div class="detail-item">
+						<span class="detail-label">학과번호:</span>
+						<input id="univ-dept-detail-udId" placeholder="자동 입력" />
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">학과명:</span>
+						<input id="univ-dept-detail-udName" />
+					</div>
+				</div>
+				<div class="parent-flex" style="display: flex;">
+					<div class="detail-item">
+						<span class="detail-label">평균 등록금:</span>
+						<input id="univ-dept-detail-udTuition" />
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">평균 장학금:</span>
+						<input id="univ-dept-detail-udScholar" />
+					</div>
+				</div>
+				<div class="parent-flex" style="display: flex;">
+					<div class="detail-item">
+						<span class="detail-label">입시 경쟁률:</span>
+						<input id="univ-dept-detail-udCompetition" />
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">평균 취업률:</span>
+						<input id="univ-dept-detail-udEmpRate" />
+					</div>
+				</div>
 			</div>
-			<div class="detail-item">
-				<span class="detail-label">대학명:</span>
-				<input id="univ-dept-detail-univName" placeholder="자동 입력" readonly="readonly" />
-			</div>
-			<div class="detail-item">
-				<span class="detail-label">학과번호:</span>
-				<input id="univ-dept-detail-udId" placeholder="자동 입력" />
-			</div>
-			<div class="detail-item">
-				<span class="detail-label">학과명:</span>
-				<input id="univ-dept-detail-udName" />
-			</div>
-			<div class="detail-item">
-				<span class="detail-label">평균 등록금:</span>
-				<input id="univ-dept-detail-udTuition" />
-			</div>
-			<div class="detail-item">
-				<span class="detail-label">평균 장학금:</span>
-				<input id="univ-dept-detail-udScholar" />
-			</div>
-			<div class="detail-item">
-				<span class="detail-label">입시 경쟁률:</span>
-				<input id="univ-dept-detail-udCompetition" />
-			</div>
-			<div class="detail-item">
-				<span class="detail-label">평균 취업률:</span>
-				<input id="univ-dept-detail-udEmpRate" />
-			</div>
-			<div class="flex">
-				<button id="univ-udDel">학과 삭제</button>
-				<button id="univ-udMod">수정</button>
+			<div class="flex good">
+				<button id="univ-udMod" class="btn btn-success">💾 저장</button>
+				<button id="univ-udDel" class="btn btn-danger">🗑 삭제</button>
 			</div>
 		</div>
 	</div>
