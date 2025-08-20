@@ -39,6 +39,7 @@ html, body {
 }
 
 .public-wrapper-main {
+	position: relative;
     margin: 20px auto 0 auto;
     background-color: #fff;
     border-radius: 16px;
