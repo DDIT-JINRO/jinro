@@ -20,22 +20,21 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // 2) 아코디언 토글 (기존 로직 그대로)
-  const toggleButton = document.getElementById('com-accordion-toggle');
-  const panel        = document.getElementById('com-accordion-panel');
+  const toggleButton = document.getElementById('search-filter-toggle');
+  const panel        = document.getElementById('search-filter-panel');
+  
+  // 아코디언 기능
   if (toggleButton && panel) {
-    toggleButton.addEventListener('click', function() {
-      this.classList.toggle('active');
-      panel.classList.toggle('open');
-      panel.style.maxHeight = panel.style.maxHeight
-        ? null
-        : panel.scrollHeight + 'px';
-    });
+  	toggleButton.addEventListener('click', function() {
+  		this.classList.toggle('is-active');
+  		panel.classList.toggle('is-open');
+  	});
   }
 
   // 3) 필터 로직
-  const selectedContainer = document.querySelector('.com-selected-filters');
-  const resetButton       = document.querySelector('.com-filter-reset-btn');
-  const filterInputs      = Array.from(document.querySelectorAll('.filter-item input'));
+  const selectedContainer = document.querySelector('.search-filter__selected-tags');
+  const resetButton       = document.querySelector('.search-filter__reset-button');
+  const filterInputs      = Array.from(document.querySelectorAll('.search-filter__option input'));
   // 그룹 이름 집합 (region, gender, interest, maxPeople 등)
   const groupNames = [...new Set(filterInputs.map(i => i.name))];
   // helper: filterName(한글 라벨) 얻기
@@ -75,12 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const name   = inputEl.name;
     const label  = getLabel(name);
     const tag    = document.createElement('span');
-    tag.className = 'com-selected-filter';
+    tag.className = 'search-filter__tag';
     // dataset 에 input name 보관
     tag.dataset.inputName = name;
     tag.innerHTML = `
-      ${label} » ${txt}
-      <button type="button" class="com-remove-filter" aria-label="삭제 ${txt}">×</button>
+      ${label} > ${txt}
+      <button type="button" class="search-filter__tag-remove" aria-label="삭제 ${txt}">×</button>
     `;
     selectedContainer.appendChild(tag);
   }
@@ -101,8 +100,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 3-4) 태그 내 × 클릭 -> 해당 input만 해제
   selectedContainer.addEventListener('click', function(e) {
-    if (e.target.classList.contains('com-remove-filter')) {
-      const tag     = e.target.closest('.com-selected-filter');
+    if (e.target.classList.contains('search-filter__tag-remove')) {
+      const tag     = e.target.closest('.search-filter__tag');
       const name    = tag.dataset.inputName;
       const txt     = tag.textContent.replace('×','').split('»')[1].trim();
       // 동일 name & 동일 라벨 텍스트인 input 찾기
