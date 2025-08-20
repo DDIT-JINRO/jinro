@@ -165,37 +165,33 @@ document.addEventListener('DOMContentLoaded', function() {
 		parentDiv.insertAdjacentHTML('beforeend', counterHTML);
 		const currentCount = parentDiv.querySelector('.char-counter__current');
 
-    // 글자수 업데이트 함수
-	const updateCounter = () => {
-		currentCount.textContent = textarea.value.length;
-	};
-
-	textarea.addEventListener('input', updateCounter);
-	updateCounter();
-}
+	    // 글자수 업데이트 함수
+		const updateCounter = () => {
+			currentCount.textContent = textarea.value.length;
+		};
+	
+		textarea.addEventListener('input', updateCounter);
+		updateCounter();
+	}
 
 	// 이벤트 리스너 등록
 	textarea.addEventListener('paste', function() {
 		// paste 이벤트는 약간의 지연 후 실행
 		setTimeout(updateCounter, 10);
 	});
-
-	// 초기 글자수 설정
-	updateCounter();
 });
 
 // 상담 내역 검색 모달 관련 JavaScript
 document.addEventListener('DOMContentLoaded', function() {
 	const url = "/cnslt/rvw/selectCounselingHistory.do";
 
-	const modal = document.querySelector('#modal-overlay');
-	const searchBtn = document.querySelector('#counsel-search');
-	const closeBtn = document.querySelector('.modal-close-btn');
+	const modal = document.querySelector('#search-modal');
+	const closeBtn = document.querySelector('.search-modal__close-button');
 	const cancelBtn = document.querySelector('#modal-cancel-btn');
 	const confirmBtn = document.querySelector('#modal-confirm-btn');
-	const searchInput = document.querySelector('#counsel-search-input');
-	const searchButton = document.querySelector('#search-btn');
-	const counselList = document.querySelector('#counsel-list');
+	const searchInput = document.querySelector('#modal-search-input');
+	const searchButton = document.querySelector('#counsel-history-search');
+	const counselList = document.querySelector('#modal-list');
 	const prevPageBtn = document.querySelector('#prev-page');
 	const nextPageBtn = document.querySelector('#next-page');
 	const pageInfo = document.querySelector('#page-info');
@@ -211,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const itemsPerPage = 5;
 
 	// 모달 열기
-	searchBtn.addEventListener('click', function() {
+	searchButton.addEventListener('click', function() {
 		modal.classList.add('is-active');
 		searchInput.focus();
 		loadCounselings('');
@@ -395,12 +391,12 @@ document.addEventListener('DOMContentLoaded', function() {
 // 자동완성 핸들러
 function autoCompleteHandler() {
 	// 1. 과거 상담내역 검색 버튼을 클릭하여 모달을 엽니다
-	document.getElementById('counsel-search').click();
+	document.getElementById('counsel-history-search').click();
 
 	// 2. 모달이 열리는 데 약간의 시간이 필요하므로 setTimeout을 사용
 	setTimeout(function() {
 		//모달에서 '최미혜' 상담 내역을 찾아서 클릭
-		const counselorListItems = document.querySelectorAll('.counsel-list-item');
+		const counselorListItems = document.querySelectorAll('.search-modal__list-item');
 		let selectedItem = null;
 		// 목록에 항목이 있는지 확인하고 첫 번째 항목을 선택합니다.
 		if (counselorListItems.length > 0) {
@@ -416,7 +412,7 @@ function autoCompleteHandler() {
 		// 3. 모달이 닫히고 폼 필드가 채워지는 데 약간의 시간이 필요 
 		setTimeout(function() {
 			//별점 자동선택 (5점 만점)
-			const ratingStars = document.querySelectorAll('#cr-rate .star');
+			const ratingStars = document.querySelectorAll('.rating-input__star');
 			if (ratingStars.length > 4) {
 				ratingStars[4].click();
 			}
