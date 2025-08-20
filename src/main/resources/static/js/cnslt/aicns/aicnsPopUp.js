@@ -10,6 +10,13 @@ document.addEventListener('DOMContentLoaded',function(){
 	const newBtn = document.getElementById('btnNewMsg');
 	const topicBadge = document.getElementById('topicBadge');
 
+	const roleIcon = role => role === 'mine' ? '👤' : '🤖';
+	const nowStr = () => {
+		const d = new Date();
+		const p = n => String(n).padStart(2, '0');
+		return `${String(d.getFullYear()).slice(-2)}.${p(d.getMonth() + 1)}.${p(d.getDate())}. ${p(d.getHours())}:${p(d.getMinutes())}`;
+	};
+
 	const sid = new URLSearchParams(location.search).get('sid');
 	if (!sid) { alert('세션 정보가 없습니다. 창을 닫습니다.'); closeOrFallback(); }
 
@@ -18,17 +25,38 @@ document.addEventListener('DOMContentLoaded',function(){
 		alert(errorB.dataset.message);
 		closeOrFallback();
 	}else{
-		// 오류없으면 페이지 로그 기록
+		// 오류없으면 페이지 로그 기록 및 상담시작문구 출력
+		const defaultChat_MIND = `
+		안녕하세요. 찾아주셔서 감사합니다.<br/>
+		저는 심리상담을 담당하는 AI 챗봇입니다.<br/>
+		<br/>
+		이곳은 당신의 마음을 편안하게 이야기하고, 함께 어려움을 헤쳐나갈 수 있도록 돕는 공간이에요. 어떤 이야기든 괜찮으니, 지금 어떤 기분이신지, 혹은 어떤 고민이 있으신지 편하게 이야기해주시면 제가 귀 기울여 듣고 함께 생각해볼게요.
+		`;
+		const defaultChat_STUDY=`
+		안녕하세요. 찾아주셔서 감사합니다.<br/>
+		저는 학업상담을 담당하는 AI 챗봇입니다.<br/>
+		<br/>
+		이곳은 학습 고민을 편하게 이야기하고, 당신에게 맞는 효율적인 공부 전략과 루틴을 함께 찾아가는 공간이에요. 목표(성적 향상·진학·루틴 만들기 등)와 현재 어려움(집중·시간관리·과목 이해 등)을 말씀해주시면, 오늘부터 실천할 수 있는 방법을 함께 설계해볼게요.
+		`;
+		const defaultChat_JOB=`
+		안녕하세요. 찾아주셔서 감사합니다.<br/>
+		저는 취업상담을 담당하는 AI 챗봇입니다.<br/>
+		<br/>
+		이곳은 커리어 방향과 구직 준비를 차분히 정리하고, 당신의 상황에 맞는 현실적인 다음 단계를 제안받는 공간이에요. 이력서·자소서·면접·직무 탐색 중 어디에서 막히셨는지, 그리고 희망 직무/업종·근무 형태 같은 조건을 알려주시면 맞춤 조언을 드릴게요.
+		`;
 		const data = {};
 		switch (topicBadge.dataset.topic){
 			case "MIND":
 				data.cnsType = "G07003";
+				addAI(defaultChat_MIND);
 				break;
 			case "STUDY":
 				data.cnsType = "G07002";
+				addAI(defaultChat_STUDY);
 				break;
 			case "JOB":
 				data.cnsType = "G07001";
+				addAI(defaultChat_JOB);
 				break;
 		}
 		axios.post('/admin/las/aiCounselVisitLog.do', data);
@@ -80,14 +108,6 @@ document.addEventListener('DOMContentLoaded',function(){
 	  setTimeout(()=> errorB.style.display='none', 4200);
 	}
 
-	const nowStr = () => {
-		const d = new Date();
-		const p = n => String(n).padStart(2, '0');
-		return `${String(d.getFullYear()).slice(-2)}.${p(d.getMonth() + 1)}.${p(d.getDate())}. ${p(d.getHours())}:${p(d.getMinutes())}`;
-	};
-
-	const roleIcon = role => role === 'mine' ? '👤' : '🤖';
-
 	function escapeHtml(s) {
 		return s.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[ch]));
 	}
@@ -116,7 +136,7 @@ document.addEventListener('DOMContentLoaded',function(){
 		requestIdleCallback(scrollMaybe, { timeout: 0 });
 	}
 	function addAI(text) {
-		chat.appendChild(row('ai', escapeHtml(text)));
+		chat.appendChild(row('ai', text));
 		requestIdleCallback(scrollMaybe, { timeout: 0 });
 	}
 
