@@ -218,17 +218,12 @@
 						</form>
 					</div>
 				</c:forEach>
+				<div class="bottom-button">
+					<a href="/prg/std/stdGroupList.do" class="btn-back">목록</a>
+				</div>
 			</div>
 		</div>
 
-		<!-- 여기까지 게시글 끝 -->
-
-
-
-		<!-- 목록 버튼 -->
-		<div class="bottom-button">
-			<a href="/prg/std/stdGroupList.do" class="btn-back">목록</a>
-		</div>
 
 		<!-- 신고모달 -->
 		<div class="modal-overlay" id="report-modal-overlay">
