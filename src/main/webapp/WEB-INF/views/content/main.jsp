@@ -166,7 +166,7 @@
 	    <div class="ai-shortcuts__grid">
 	      <!-- 1. AI 모의면접 -->
 	      <a class="ai-card" href="/cdp/imtintrvw/aiimtintrvw/aiImitationInterview.do" aria-label="AI 모의면접 바로가기">
-	        <img class="ai-card__icon" src="/static/img/icons/ai-interview.svg" alt="" />
+	        <img class="ai-card__icon" src="/images/main/charactor5-aimockintrv.png" alt="" />
 	        <div class="ai-card__body">
 	          <h3 class="ai-card__title">AI 모의면접</h3>
 	          <p class="ai-card__text">질문/피드백으로 실전 감각 up</p>
@@ -175,7 +175,7 @@
 
 	      <!-- 2. AI 이력서 -->
 	      <a class="ai-card" href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do" aria-label="AI 이력서 바로가기">
-	        <img class="ai-card__icon" src="/static/img/icons/ai-resume.svg" alt="" />
+	        <img class="ai-card__icon" src="/images/main/charactor6-airesume.png" alt="" />
 	        <div class="ai-card__body">
 	          <h3 class="ai-card__title">AI 이력서</h3>
 	          <p class="ai-card__text">키워드 보강 · 문장 다듬기</p>
@@ -184,7 +184,7 @@
 
 	      <!-- 3. AI 자소서 -->
 	      <a class="ai-card" href="/cdp/aifdbck/sint/aiFeedbackSelfIntroList.do" aria-label="AI 자소서 바로가기">
-	        <img class="ai-card__icon" src="/static/img/icons/ai-coverletter.svg" alt="" />
+	        <img class="ai-card__icon" src="/images/main/charactor7-aiselfintro.png" alt="" />
 	        <div class="ai-card__body">
 	          <h3 class="ai-card__title">AI 자소서</h3>
 	          <p class="ai-card__text">항목별 구조화 · 첨삭</p>
@@ -193,7 +193,7 @@
 
 	      <!-- 4. AI 상담 -->
 	      <a class="ai-card" href="/cnslt/aicns/aicns.do" aria-label="AI 상담 바로가기">
-	        <img class="ai-card__icon" src="/static/img/icons/ai-counsel.svg" alt="" />
+	        <img class="ai-card__icon" src="/images/main/charactor8-aicounsel.png" alt="" />
 	        <div class="ai-card__body">
 	          <h3 class="ai-card__title">AI 상담</h3>
 	          <p class="ai-card__text">진로·진학/취업 맞춤 조언</p>

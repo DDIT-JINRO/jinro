@@ -477,8 +477,8 @@
 
 /* 아이콘 이미지 (정사각, 투명 배경 권장) */
 .ai-card__icon{
-  width: 44px;
-  height: 44px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
   flex: 0 0 44px;
 }
