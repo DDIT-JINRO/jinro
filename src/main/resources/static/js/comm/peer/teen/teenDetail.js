@@ -5,7 +5,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 	document.addEventListener('click', function (event) {
-		const btn = event.target.closest('.liked'); // 클릭한 요소 또는 부모 중 .liked가 있는지 확인
+		const btn = event.target.closest('.like-button'); // 클릭한 요소 또는 부모 중 .liked가 있는지 확인
 
 		if (!btn) return; // .liked가 아니면 무시
 
@@ -29,23 +29,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 				if (isReply) {
 					const likeCntSpan = document.querySelector(`#reply-like-cnt-${replyId}`);
-					const likeImg = document.querySelector(`img[data-reply-id="${replyId}"]`);
-
-					if (result.isLiked === 1) {
-						likeImg.src = '/images/likedFill.png';
-					} else {
-						likeImg.src = '/images/likedBean.png';
-					}
+				
+					btn.classList.toggle('liked');
 					likeCntSpan.textContent = result.likeCnt;
 				} else {
 					const likeCntSpan = document.querySelector(`#board-like-cnt-${boardId}`);
-					const likeImg = document.querySelector(`img[data-board-id="${boardId}"]`);
-
-					if (result.isLiked === 1) {
-						likeImg.src = '/images/likedFill.png';
-					} else {
-						likeImg.src = '/images/likedBean.png';
-					}
+					btn.classList.toggle('liked');
 					likeCntSpan.textContent = result.likeCnt;
 				}
 			})
