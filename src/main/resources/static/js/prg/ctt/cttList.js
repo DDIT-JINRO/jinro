@@ -5,7 +5,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 	// 토글 버튼
 	const toggleButton = document.getElementById('search-filter-toggle');
-	console.log("toggleButton : ", toggleButton);
 
 	// 필터 패널 
 	const panel = document.getElementById('search-filter-panel');
