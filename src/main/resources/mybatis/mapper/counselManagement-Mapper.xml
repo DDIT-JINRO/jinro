@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.admin.csmg.service.impl.CounselManagementMapper">
-
+	<select id="selectMonthlyCounselingStatList" resultType="map">
+		 SELECT
+	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(SYSDATE, 'MM') THEN 1 ELSE 0 END) AS current_month_total,
+	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(SYSDATE, 'MM') AND COUNSEL_METHOD = 'G08001' THEN 1 ELSE 0 END) AS current_month_face_to_face,
+	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(SYSDATE, 'MM') AND COUNSEL_METHOD = 'G08002' THEN 1 ELSE 0 END) AS current_month_chat,
+	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(SYSDATE, 'MM') AND COUNSEL_METHOD = 'G08003' THEN 1 ELSE 0 END) AS current_month_video,
+	        
+	
+	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM') THEN 1 ELSE 0 END) AS previous_month_total,
+	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM') AND COUNSEL_METHOD = 'G08001' THEN 1 ELSE 0 END) AS previous_month_face_to_face,
+	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM') AND COUNSEL_METHOD = 'G08002' THEN 1 ELSE 0 END) AS previous_month_chat,
+	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM') AND COUNSEL_METHOD = 'G08003' THEN 1 ELSE 0 END) AS previous_month_video
+	    FROM
+	        COUNSELING
+	    WHERE
+	        TRUNC(COUNSEL_REQ_DATETIME, 'MM') IN (TRUNC(SYSDATE, 'MM'), TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM'))
+	</select>
 
 </mapper>

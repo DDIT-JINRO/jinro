@@ -1,5 +1,7 @@
 package kr.or.ddit.admin.csmg.service;
 
-public interface CounselManagementService {
+import java.util.Map;
 
+public interface CounselManagementService {
+	Map<String, Object> selectMonthlyCounselingStatList();
 }
