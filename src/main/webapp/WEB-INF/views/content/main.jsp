@@ -169,7 +169,7 @@
 	        <img class="ai-card__icon" src="/images/main/charactor5-aimockintrv.png" alt="" />
 	        <div class="ai-card__body">
 	          <h3 class="ai-card__title">AI 모의면접</h3>
-	          <p class="ai-card__text">질문/피드백으로 실전 감각 up</p>
+	          <p class="ai-card__text">실전 감각 · AI 피드백</p>
 	        </div>
 	      </a>
 
