@@ -29,9 +29,6 @@
 		</div>
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
-			<div class="teenListTop">
-				<p class="textmessage">또래 게시판은 연령 기준에 따라 이용이 제한될 수 있습니다.</p>
-			</div>
 			<form method="get" action="/comm/peer/teen/teenList.do" class="search-filter__form">
 				<div class="search-filter__bar">
 					<div class="search-filter__select-wrapper">
@@ -54,7 +51,7 @@
 					</div>
 				</div>
 			</form>
-
+			<p class="content-list__total-count">또래 게시판은 연령 기준에 따라 이용이 제한될 수 있습니다.</p>
 			<div class="content-list">
 				<div class="content-list__header">
 					<span class="content-list__col content-list__col--no">번호</span>
