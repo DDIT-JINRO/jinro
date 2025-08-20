@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="/js/include/admin/umg/memberManagement.js"></script>
 <h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">회원 관리</h2>
-<input type="hidden" id="comCalendarInput" />
+<input type="hidden" id="comCalendarInput" style="display: none;"/>
 <div class="member-1 flex gap">
 	<div class="template-panel public-countCard">
 		<div class="public-card-title">일일 사용자 현황</div>
@@ -321,30 +321,23 @@
 	<div class="template-panel" style="width: 792.5px;">
 		<div class="middleTitle">사용자 접속 통계</div>
 		<div class="btn-group flex gap5 userOnlineChart">
-		<input type="hidden" id="userOnlineChartStartDay" />
-		<input type="hidden" id="userOnlineChartEndDay" />
-		<select class="public-toggle-select" name="userOnlineChartDay" id="userOnlineChartDay">
-			<option value="daily">일별</option>
-			<option value="monthly">월별</option>
-			<option value="selectDays">기간선택</option>
-		</select>
-		<select class="public-toggle-select" name="userOnlineChartGender" id="userOnlineChartGender">
-			<option value="">성별전체</option>
-			<option value="male">남자</option>
-			<option value="female">여자</option>
-		</select>
-		<select class="public-toggle-select" name="userOnlineChartAgeGroup" id="userOnlineChartAgeGroup">
-			<option value="">성별전체</option>
-			<option value="male">남자</option>
-			<option value="female">여자</option>
-		</select>
-			<button class="public-toggle-button active" id="userOnlineChartDayBtn">일별</button>
-			<button class="public-toggle-button" id="userOnlineChartMonthBtn">월별</button>
-			<button class="public-toggle-button" id="userOnlineChartMaleBtn">남성</button>
-			<button class="public-toggle-button" id="userOnlineChartFemaleBtn">여성</button>
-			<button class="public-toggle-button" id="userOnlineChartCalender">
-				<img alt="" src="/images/admin/admin-calender.png">
-			</button>
+			<input type="hidden" id="userOnlineChartStartDay" />
+			<input type="hidden" id="userOnlineChartEndDay" />
+			<select class="public-toggle-select" name="userOnlineChartDay" id="userOnlineChartDay">
+				<option value="daily">일별</option>
+				<option value="monthly">월별</option>
+				<option value="selectDays">기간선택</option>
+			</select>
+			<select class="public-toggle-select" name="userOnlineChartGender" id="userOnlineChartGender">
+				<option value="">성별전체</option>
+				<option value="male">남자</option>
+				<option value="female">여자</option>
+			</select>
+			<select class="public-toggle-select" name="userOnlineChartAgeGroup" id="userOnlineChartAgeGroup">
+				<option value="">연령전체</option>
+				<option value="teen">청소년</option>
+				<option value="youth">청년</option>
+			</select>
 		</div>
 		<div style="height: 500px; margin-top: auto;">
 			<canvas id="userOnlineChartCanvas"></canvas>
@@ -353,13 +346,23 @@
 	<div class="template-panel" style="width: 792.5px;">
 		<div class="middleTitle">페이지별 방문자 수</div>
 		<div class="btn-group flex gap5 pageVisitChart">
-			<button class="public-toggle-button active" id="pageVisitChartDayBtn">일별</button>
-			<button class="public-toggle-button" id="pageVisitChartMonthBtn">월별</button>
-			<button class="public-toggle-button" id="pageVisitChartMaleBtn">남성</button>
-			<button class="public-toggle-button" id="pageVisitChartFemaleBtn">여성</button>
-			<button class="public-toggle-button" id="pageVisitChartCalender">
-				<img alt="" src="/images/admin/admin-calender.png">
-			</button>
+			<input type="hidden" id="pageVisitChartStartDay" />
+			<input type="hidden" id="pageVisitChartEndDay" />
+			<select class="public-toggle-select" name="pageVisitChartDay" id="pageVisitChartDay">
+				<option value="monthly">월간</option>
+				<option value="daily">일간</option>
+				<option value="selectDays">기간선택</option>
+			</select>
+			<select class="public-toggle-select" name="pageVisitChartGender" id="pageVisitChartGender">
+				<option value="">성별전체</option>
+				<option value="male">남자</option>
+				<option value="female">여자</option>
+			</select>
+			<select class="public-toggle-select" name="pageVisitChartAgeGroup" id="pageVisitChartAgeGroup">
+				<option value="">연령전체</option>
+				<option value="teen">청소년</option>
+				<option value="youth">청년</option>
+			</select>
 		</div>
 		<div style="height: 500px; margin-top: auto;">
 			<canvas id="pageVisitChartCanvas"></canvas>
