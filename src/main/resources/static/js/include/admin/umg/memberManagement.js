@@ -12,15 +12,152 @@ function memberManagement() {
 	const boardListDateBtn = document.getElementById('memDetailBoardList-orderBtn-date');
 	const boardListdelYnBtn = document.getElementById('memDetailBoardList-orderBtn-delYn');
 
-	// 댓글 정렬 버튼 ID 추가
 	const replyListIdBtn = document.getElementById('memDetailReplyList-orderBtn-id');
 	const replyListDateBtn = document.getElementById('memDetailReplyList-orderBtn-date');
 	const replyListDelYnBtn = document.getElementById('memDetailReplyList-orderBtn-delYn');
+
+	const userOnlineChartDayBtn = document.getElementById('userOnlineChartDayBtn');
+	const userOnlineChartMonthBtn = document.getElementById('userOnlineChartMonthBtn');
+	const userOnlineChartMaleBtn = document.getElementById('userOnlineChartMaleBtn');
+	const userOnlineChartFemaleBtn = document.getElementById('userOnlineChartFemaleBtn');
+	const userOnlineChartCalendarBtn = document.getElementById('userOnlineChartCalender');
+	
+	const pageVisitChartDayBtn = document.getElementById('pageVisitChartDayBtn');
+	const pageVisitChartMonthBtn = document.getElementById('pageVisitChartMonthBtn');
+	const pageVisitChartMaleBtn = document.getElementById('pageVisitChartMaleBtn');
+	const pageVisitChartFemaleBtn = document.getElementById('pageVisitChartFemaleBtn');
+	const pageVisitChartCalendarBtn = document.getElementById('pageVisitChartCalender');
 
 	const selector = document.getElementById('tableSelector');
 	const table1 = document.getElementById('tableContainer1');
 	const table2 = document.getElementById('tableContainer2');
 	const table3 = document.getElementById('tableContainer3');
+
+	userOnlineChartDayBtn.addEventListener('click', () => {
+		setActiveButton(userOnlineChartDayBtn);
+		userOnlineChart("daily");
+	});
+
+	// 월별 버튼 클릭 시
+	userOnlineChartMonthBtn.addEventListener('click', () => {
+		setActiveButton(userOnlineChartMonthBtn);
+		userOnlineChart("monthly");
+	});
+
+	// 남성 버튼 클릭 시
+	userOnlineChartMaleBtn.addEventListener('click', () => {
+		setActiveButton(userOnlineChartMaleBtn);
+		userOnlineChart("daily", "", "", "G11001");
+	});
+
+	// 여성 버튼 클릭 시
+	userOnlineChartFemaleBtn.addEventListener('click', () => {
+		setActiveButton(userOnlineChartFemaleBtn);
+		userOnlineChart("daily", "", "", "G11002");
+	});
+
+	userOnlineChartCalendarBtn.addEventListener('click', () => {
+		const canvas = document.getElementById('userOnlineChartCanvas');
+		// flatpickr 중복 초기화 방지 (필요시)
+		if (userOnlineChartCalendarBtn._flatpickr) {
+			userOnlineChartCalendarBtn._flatpickr.destroy();
+		}
+
+		flatpickr(userOnlineChartCalendarBtn, {
+			mode: "range",
+			maxDate: "today",
+			disable: [date => date > new Date()],
+			onChange: function(selectedDates) {
+				if (selectedDates.length === 2) {
+					const startDate = selectedDates[0];
+					const endDate = selectedDates[1];
+
+					const formattedStartDate = startDate.toISOString().split('T')[0];
+					const formattedEndDate = endDate.toISOString().split('T')[0];
+
+					// 기존 차트가 있으면 삭제
+					if (window.userOnlineChartInstance) {
+						window.userOnlineChartInstance.destroy();
+					}
+
+					axios.get('/admin/las/userInquiry.do', {
+						params: { startDate: formattedStartDate, endDate: formattedEndDate }
+					})
+						.then(response => {
+
+							const serverData = response.data;
+
+							const labels = serverData.map(vo => {
+								const date = new Date(vo.loginDate);
+								return `${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+							});
+							const dataPoints = serverData.map(vo => vo.userCount);
+
+							const data = {
+								labels,
+								datasets: [{
+									label: '접속자 수',
+									data: dataPoints,
+									borderColor: 'rgb(142, 110, 228)',
+									backgroundColor: 'rgba(142, 110, 228, 0.2)',
+									tension: 0.4,
+									pointRadius: 3,
+									pointHoverRadius: 6,
+									pointStyle: 'circle',
+									fill: true
+								}]
+							};
+
+							const config = {
+								type: 'line',
+								data,
+								options: {
+									responsive: true,
+									interaction: { mode: 'index', intersect: false },
+									plugins: {
+										legend: { position: 'top' },
+										title: {
+											display: true,
+											text: [
+												`${formattedStartDate} ~ ${formattedEndDate} 기간`,
+												'사용자 접속 통계'
+											]
+										},
+										tooltip: {
+											callbacks: {
+												label: ctx => ` ${ctx.parsed.y}명`
+											},
+										},
+									},
+									scales: {
+										x: { grid: { display: false } },
+										y: {
+											beginAtZero: true,
+											ticks: {
+												stepSize: 1,
+												callback: value => value + '명'
+											},
+											grid: {
+												borderDash: [3],
+												color: '#e5e5e5'
+											}
+										}
+									}
+								}
+							};
+
+							// 새 차트 생성 및 공통 변수에 저장
+							window.userOnlineChartInstance = new Chart(canvas.getContext('2d'), config);
+						})
+						.catch(error => console.error('서버 오류:', error));
+				}
+			}
+		});
+
+		userOnlineChartCalendarBtn._flatpickr.open();
+		userOnlineChartCalendarBtn._flatpickr.clear();
+
+	});
 
 	selector.addEventListener('change', function() {
 		// 모든 테이블을 숨김
@@ -1014,7 +1151,6 @@ function memberManagement() {
 			});
 	}
 
-	// 'userListStatus' select 요소의 change 이벤트 리스너를 다시 추가
 	const userListStatusFilter = document.getElementById('userListStatus');
 	if (userListStatusFilter) {
 		userListStatusFilter.addEventListener('change', function() {
@@ -1022,6 +1158,386 @@ function memberManagement() {
 			fetchUserList(1, currentSortBy, currentSortOrder, inFilter);
 		});
 	}
+
+	// 날짜 형식 변환을 위한 헬퍼 함수
+	function formatDailyDate(isoString) {
+		const date = new Date(isoString);
+		return `${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+	}
+
+	function formatMonthlyDate(isoString) {
+		const date = new Date(isoString);
+		return `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}`;
+	}
+
+	// userOnlineChart 함수를 재정의하여 공통 변수를 사용하도록 수정
+	function userOnlineChart(selectUserInquiry = "daily", startDate = "", endDate = "", gender = "") {
+		const ctx = document.getElementById('userOnlineChartCanvas').getContext('2d');
+		
+		// 차트 캔버스 높이 설정 (안정적인 렌더링을 위해 추가)
+		ctx.canvas.style.minHeight = '400px';
+
+		// 캘린더 버튼 로직과 동일하게 공통 변수를 사용하여 기존 차트 파괴
+		if (window.userOnlineChartInstance) {
+			window.userOnlineChartInstance.destroy();
+		}
+
+		console.log("파라미터 값 : ", selectUserInquiry);
+
+		axios.get('/admin/las/userInquiry.do', {
+			params: {
+				selectUserInquiry: selectUserInquiry,
+				startDate: startDate,
+				endDate: endDate,
+				gender: gender
+			}
+		})
+			.then(res => {
+				const responseData = res.data;
+				console.log("userInquiry data: ", responseData);
+
+				let labels;
+				let chartLabel;
+				if (selectUserInquiry === 'monthly') {
+					labels = responseData.map(item => formatMonthlyDate(item.loginDate));
+					chartLabel = '월별 접속자 수';
+				} else {
+					labels = responseData.map(item => formatDailyDate(item.loginDate));
+					chartLabel = '일별 접속자 수';
+				}
+				
+				const dataValues = responseData.map(item => item.userCount);
+
+				// 새 차트 생성 및 공통 변수에 저장
+				window.userOnlineChartInstance = new Chart(ctx, {
+					type: 'line', // 선 차트
+					data: {
+						labels: labels,
+						datasets: [{
+							label: chartLabel,
+							data: dataValues,
+							fill: true,
+							borderColor: 'rgb(142, 110, 228)',
+							backgroundColor: 'rgba(142, 110, 228, 0.2)',
+							tension: 0.4,
+							pointRadius: 3,
+							pointHoverRadius: 6,
+							pointStyle: 'circle'
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: true,
+								position: 'top',
+							},
+							title: {
+								display: true,
+								text: '사용자 접속 통계',
+							},
+						},
+						scales: {
+							x: { grid: { display: false } },
+							y: {
+								beginAtZero: true,
+								ticks: {
+									stepSize: 1,
+									callback: value => value + '명'
+								},
+								grid: {
+									borderDash: [3],
+									color: '#e5e5e5'
+								}
+							}
+						}
+					}
+				});
+			})
+			.catch(error => {
+				console.error("사용자 접속 통계 데이터 조회 중 에러:", error);
+			});
+	}
+
+
+	// === 페이지별 방문자 수 차트 함수 시작 ===
+	// HTML에 캔버스 ID 추가 필요: <canvas id="pageVisitChartCanvas"></canvas>
+	pageVisitChartDayBtn.addEventListener('click', () => {
+		setActiveButton(pageVisitChartDayBtn);
+		pageVisitChart("daily");
+	});
+
+	pageVisitChartMonthBtn.addEventListener('click', () => {
+		setActiveButton(pageVisitChartMonthBtn);
+		pageVisitChart("monthly");
+	});
+
+	pageVisitChartMaleBtn.addEventListener('click', () => {
+		setActiveButton(pageVisitChartMaleBtn);
+		pageVisitChart("daily", "", "", "G11001");
+	});
+
+	pageVisitChartFemaleBtn.addEventListener('click', () => {
+		setActiveButton(pageVisitChartFemaleBtn);
+		pageVisitChart("daily", "", "", "G11002");
+	});
+
+	pageVisitChartCalendarBtn.addEventListener('click', () => {
+		const canvas = document.getElementById('pageVisitChartCanvas');
+		if (pageVisitChartCalendarBtn._flatpickr) {
+			pageVisitChartCalendarBtn._flatpickr.destroy();
+		}
+
+		flatpickr(pageVisitChartCalendarBtn, {
+			mode: "range",
+			maxDate: "today",
+			disable: [date => date > new Date()],
+			onChange: function(selectedDates) {
+				if (selectedDates.length === 2) {
+					const startDate = selectedDates[0];
+					const endDate = selectedDates[1];
+					const formattedStartDate = startDate.toISOString().split('T')[0];
+					const formattedEndDate = endDate.toISOString().split('T')[0];
+					pageVisitChart("selectDays", formattedStartDate, formattedEndDate);
+				}
+			}
+		});
+		pageVisitChartCalendarBtn._flatpickr.open();
+		pageVisitChartCalendarBtn._flatpickr.clear();
+	});
+
+	function pageVisitChart(selectVisitCount = "daily", startDate = "", endDate = "", gender = "") {
+		const ctx = document.getElementById('pageVisitChartCanvas').getContext('2d');
+		
+		// 기존 차트 파괴 및 최소 높이 설정
+		if (window.pageVisitChartInstance) {
+			window.pageVisitChartInstance.destroy();
+		}
+		ctx.canvas.style.minHeight = '400px';
+
+		axios.get('/admin/las/visitCount.do', {
+			params: {
+				selectVisitCount: selectVisitCount,
+				startDate: startDate,
+				endDate: endDate,
+				gender: gender
+			}
+		}).then(res => {
+			
+			console.log(res);
+			
+			const responseData = res.data;
+			
+			// 데이터를 'plTitle'과 'userCount'로 매핑
+			const labels = responseData.map(item => item.plTitle);
+			const dataValues = responseData.map(item => item.userCount);
+			
+			// 막대 차트 생성
+			window.pageVisitChartInstance = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: labels,
+					datasets: [{
+						label: '방문자 수',
+						data: dataValues,
+						backgroundColor: 'rgba(142, 110, 228, 0.8)',
+						borderColor: 'rgb(142, 110, 228)',
+						borderWidth: 1,
+						hoverBackgroundColor: 'rgba(142, 110, 228, 1)',
+						barThickness: 20 // 막대 차트 두께 설정
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					interaction: {
+						mode: 'index',
+						intersect: false
+					},
+					plugins: {
+						legend: { display: true, position: 'top' },
+						title: { display: true, text: '페이지별 방문자 수' },
+						tooltip: {
+							callbacks: {
+								label: function(context) {
+									let label = context.dataset.label || '';
+									if (label) {
+										label += ': ';
+									}
+									if (context.parsed.y !== null) {
+										label += context.parsed.y.toLocaleString() + '명';
+									}
+									return label;
+								},
+								// 전체 라벨 이름을 툴팁에 추가
+								title: function(context) {
+									return context[0].label;
+								}
+							}
+						}
+					},
+					scales: {
+						y: {
+							beginAtZero: true,
+							ticks: { callback: value => value + '명' }
+						},
+						x: {
+							grid: { display: false },
+							// 라벨 회전 및 자르기 설정
+							ticks: {
+								maxRotation: 45,
+								minRotation: 45,
+								callback: function(value, index, values) {
+									const originalLabel = labels[index];
+									if (originalLabel.length > 10) {
+										return originalLabel.substring(0, 10) + '...';
+									}
+									return originalLabel;
+								}
+							}
+						}
+					}
+				}
+			});
+		}).catch(error => {
+			console.error("페이지별 방문자 데이터 조회 중 에러:", error);
+		});
+	}
+	// === 페이지별 방문자 수 차트 함수 끝 ===
+
+	// === 페이지 로그 목록 함수 시작 ===
+	let pageLogCurrentPage = 1;
+	let pageLogCurrentSortBy = 'plCreatedAt';
+	let pageLogCurrentSortOrder = 'desc';
+
+	function fetchPageLogList(page = 1, keyword = '', sortBy = 'plCreatedAt', sortOrder = 'desc') {
+		pageLogCurrentPage = page;
+		pageLogCurrentSortBy = sortBy;
+		pageLogCurrentSortOrder = sortOrder;
+
+		const pageSize = 5;
+		const pageLogTbody = document.getElementById('pageLogList');
+		const pageLogCountEl = document.getElementById('pageLog-count');
+		const pageLogPaginationEl = document.getElementById('pageLogPagination');
+
+		if (!pageLogTbody || !pageLogCountEl || !pageLogPaginationEl) {
+			console.error("페이지 로그 요소를 찾을 수 없습니다.");
+			return;
+		}
+
+		axios.get('/admin/umg/getMemberPageLogList.do', {
+			params: {
+				currentPage: page,
+				size: pageSize,
+				keyword: keyword,
+				sortBy: sortBy,
+				sortOrder: sortOrder
+			}
+		})
+		.then(res => {
+			const { content, total, currentPage, startPage, endPage, totalPages } = res.data;
+
+			pageLogCountEl.textContent = total.toLocaleString();
+
+			if (content && content.length > 0) {
+				const rows = content.map(item => `
+					<tr>
+						<td>${item.plId}</td>
+						<td>${item.memId}</td>
+						<td>${item.memName || '-'}</td>
+						<td><a href="${item.plUrl}" target="_blank">${item.plTitle || '-'}</a></td>
+						<td>${formatDateTime(item.plCreatedAt)}</td>
+					</tr>
+				`).join('');
+				pageLogTbody.innerHTML = rows;
+			} else {
+				pageLogTbody.innerHTML = `<tr><td colspan='5' style="text-align: center;">조회된 페이지 방문 기록이 없습니다.</td></tr>`;
+			}
+			
+			// 페이지네이션 렌더링
+			let paginationHtml = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
+			for (let p = startPage; p <= endPage; p++) {
+				paginationHtml += `<a href="#" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
+			}
+			paginationHtml += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
+			
+			pageLogPaginationEl.innerHTML = paginationHtml;
+		})
+		.catch(err => {
+			console.error('페이지 로그 조회 중 에러:', err);
+			const pageLogTbody = document.getElementById('pageLogList');
+			if (pageLogTbody) {
+				pageLogTbody.innerHTML = `<tr><td colspan='5' style="text-align: center;">데이터를 불러오는데 실패했습니다.</td></tr>`;
+			}
+		});
+	}
+	
+	function formatDateTime(isoString) {
+		const date = new Date(isoString);
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		const seconds = String(date.getSeconds()).padStart(2, '0');
+		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	}
+
+	// 페이지 로그 검색 버튼
+	const pageLogSearchBtn = document.querySelector(".pageLogSearchBtn");
+	if (pageLogSearchBtn) {
+		pageLogSearchBtn.addEventListener("click", function() {
+			const keyword = document.getElementById('pageLogKeyword').value;
+			fetchPageLogList(1, keyword, pageLogCurrentSortBy, pageLogCurrentSortOrder);
+		});
+	}
+
+	// 페이지 로그 정렬 버튼
+	const pageLogSortBtns = document.querySelectorAll('.pageVisitList .public-toggle-button');
+	const pageLogSortOrderSelect = document.getElementById('pageLogSortOrder');
+
+	if (pageLogSortBtns && pageLogSortOrderSelect) {
+		pageLogSortBtns.forEach(btn => {
+			btn.addEventListener('click', function() {
+				const sortBy = this.dataset.sortBy;
+				setActiveButton(this);
+				pageLogCurrentSortBy = sortBy;
+				
+				const keyword = document.getElementById('pageLogKeyword').value;
+				fetchPageLogList(1, keyword, pageLogCurrentSortBy, pageLogCurrentSortOrder);
+			});
+		});
+
+		pageLogSortOrderSelect.addEventListener('change', function() {
+			pageLogCurrentSortOrder = this.value;
+			const keyword = document.getElementById('pageLogKeyword').value;
+			fetchPageLogList(1, keyword, pageLogCurrentSortBy, pageLogCurrentSortOrder);
+		});
+	}
+
+	// 페이지 로그 페이지네이션 클릭 이벤트
+	const pageLogPaginationContainer = document.getElementById('pageLogPagination');
+	if (pageLogPaginationContainer) {
+		pageLogPaginationContainer.addEventListener('click', e => {
+			e.preventDefault();
+			const link = e.target.closest('a[data-page]');
+			if (!link || link.classList.contains('disabled')) return;
+			
+			const newPage = parseInt(link.dataset.page, 10);
+			if (!isNaN(newPage) && newPage > 0) {
+				const keyword = document.getElementById('pageLogKeyword').value;
+				fetchPageLogList(newPage, keyword, pageLogCurrentSortBy, pageLogCurrentSortOrder);
+			}
+		});
+	}
+	// === 페이지 로그 목록 함수 끝 ===
+
+
+	userOnlineChart();
+	pageVisitChart();
+	fetchPageLogList(); // 페이지 로드 시 페이지 로그 리스트 불러오기
+
 	nicknameDbCkFn();
 	emailDbCkFn();
 	searchUserFn();

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
+import kr.or.ddit.admin.las.service.PageLogVO;
 import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
@@ -41,5 +42,8 @@ public interface UserManagementService {
 
 	ArticlePage<CommReplyVO> getMemberDetailReplyList(int currentPage, int size, String ccId, String sortBy,
 			int userId);
+
+	ArticlePage<PageLogVO> getMemberPageLogList(int currentPage, int size, String keyword, String sortBy,
+			String sortOrder);
 
 }

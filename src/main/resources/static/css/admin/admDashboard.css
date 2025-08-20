@@ -364,8 +364,8 @@ to {
 
 .public-toggle-button {
 	min-width: 45.77px;
-	height: 34px;
-	font-size: 14px;
+	height: 30px;
+	font-size: 12px;
 	font-weight: bold;
 	color: #555555;
 	background-color: #EDF2F9;
@@ -381,8 +381,8 @@ to {
 }
 
 .public-toggle-select {
-	height: 34px;
-	font-size: 14px;
+	height: 30px;
+	font-size: 12px;
 	font-weight: bold;
 	color: #555555;
 	background-color: #EDF2F9;
@@ -390,7 +390,7 @@ to {
 	border-radius: 2px;
 	cursor: pointer;
 	transition: background-color 0.3s ease, color 0.3s ease;
-	padding: 7px 10px;
+	padding: 5px 10px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -414,7 +414,7 @@ to {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	width: 100%;
+	
 	border-radius: 2px;
 	overflow: hidden;
 	font-family: Arial, sans-serif;

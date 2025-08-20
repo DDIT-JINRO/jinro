@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import kr.or.ddit.account.join.service.MemberJoinService;
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
+import kr.or.ddit.admin.las.service.PageLogVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
 import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.comm.peer.teen.service.TeenCommService;
@@ -190,5 +191,16 @@ public class UserManagementController {
 		return userManagementService.getMemberActivityList(currentPage, size, keyword, activityStatus, sortBy,
 				sortOrder, inFilter);
 	}
-
+	
+	@GetMapping("/getMemberPageLogList.do")
+	public ArticlePage<PageLogVO> getMemberPageLogList(
+			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+			@RequestParam(value = "size", required = false, defaultValue = "5") int size,
+			@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "sortBy", required = false) String sortBy,
+			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder) {
+		
+		return userManagementService.getMemberPageLogList(currentPage, size, keyword, sortBy, sortOrder);
+	}
+	
 }

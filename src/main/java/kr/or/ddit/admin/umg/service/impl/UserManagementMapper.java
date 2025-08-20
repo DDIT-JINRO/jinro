@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
+import kr.or.ddit.admin.las.service.PageLogVO;
 import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
 import kr.or.ddit.com.report.service.ReportVO;
 import kr.or.ddit.comm.vo.CommBoardVO;
@@ -104,4 +105,8 @@ public interface UserManagementMapper {
 	List<CommReplyVO> getMemberDetailReplyList(Map<String, Object> map);
 
 	int selectReplyCountByMemId(Map<String, Object> map);
+
+	List<PageLogVO> getMemberPageLogList(Map<String, Object> map);
+
+	int getAllMemberPageLogList(Map<String, Object> map);
 }

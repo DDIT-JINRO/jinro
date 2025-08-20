@@ -964,4 +964,71 @@
 	    WHERE
 	        MEM_ID = #{memId}
 	</select>
+	<select id="getMemberPageLogList" resultType="kr.or.ddit.admin.las.service.PageLogVO">
+		SELECT * FROM (
+		    SELECT ROWNUM AS RNUM, A.*
+		    FROM (
+		        SELECT
+		            PL.PL_ID,
+		            PL.MEM_ID,
+		            PL.PL_URL,
+		            PL.PL_TITLE,
+		            PL.PL_REFERER_URL,
+		            PL.PL_CREATED_AT,
+		            M.MEM_NAME
+		        FROM
+		            PAGE_LOG PL
+		        LEFT JOIN
+		        	MEMBER M ON PL.MEM_ID = M.MEM_ID
+		        <where>
+		        	1=1
+		            <if test="keyword != null and keyword != ''">
+		                AND (
+		                    PL.PL_TITLE LIKE '%' || #{keyword} || '%'
+		                    OR PL.PL_URL LIKE '%' || #{keyword} || '%'
+		                    OR M.MEM_NAME LIKE '%' || #{keyword} || '%'
+		                )
+		            </if>
+		        </where>
+		        <choose>
+		            <when test="sortBy != null and sortBy != ''">
+		                ORDER BY
+		                <choose>
+		                    <when test="sortBy == 'plId'">PL.PL_ID</when>
+		                    <when test="sortBy == 'memId'">PL.MEM_ID</when>
+		                    <when test="sortBy == 'memName'">M.MEM_NAME</when>
+		                    <when test="sortBy == 'plTitle'">PL.PL_TITLE</when>
+		                    <when test="sortBy == 'plCreatedAt'">PL.PL_CREATED_AT</when>
+		                    <otherwise>PL.PL_ID</otherwise>
+		                </choose>
+		                <if test="sortOrder == 'desc'">DESC</if>
+		                <if test="sortOrder == 'asc' or sortOrder == null">ASC</if>
+		            </when>
+		            <otherwise>
+		                ORDER BY PL.PL_CREATED_AT DESC
+		            </otherwise>
+		        </choose>
+		    ) A
+		    WHERE ROWNUM <![CDATA[<=]]> #{endNo}
+		)
+		WHERE RNUM <![CDATA[>=]]> #{startNo}
+	</select>
+	
+	<select id="getAllMemberPageLogList" resultType="int">
+	    SELECT COUNT(*)
+	    FROM PAGE_LOG PL
+	    LEFT JOIN
+		MEMBER M ON PL.MEM_ID = M.MEM_ID
+	    <where>
+	    	1=1
+	        <if test="keyword != null and keyword != ''">
+	            AND (
+	                PL.PL_TITLE LIKE '%' || #{keyword} || '%'
+	                OR PL.PL_URL LIKE '%' || #{keyword} || '%'
+	                OR M.MEM_NAME LIKE '%' || #{keyword} || '%'
+	            )
+	        </if>
+	    </where>
+	</select>
+	
 </mapper>

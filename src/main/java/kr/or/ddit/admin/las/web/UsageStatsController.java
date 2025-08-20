@@ -41,11 +41,12 @@ public class UsageStatsController {
 	 * */
 	
 	
-	@PostMapping("/userInquiry.do")
+	@GetMapping("/userInquiry.do")
 	public List<UsageStatsVO>userInquiry(@RequestParam(value="selectUserInquiry", defaultValue ="daily" )String selectUserInquiry,
 			@RequestParam(value="startDate", required = false) String startDate,
 			@RequestParam(value="endDate", required = false) String endDate,
 			@RequestParam(value="gender", required = false) String gender){
+		
 		
 		List<UsageStatsVO> list = usageStatsService.userInqury(selectUserInquiry,startDate,endDate,gender);
 		
@@ -54,7 +55,7 @@ public class UsageStatsController {
 	
 	
 	// 페이지별 방문자 조회
-	@PostMapping("/visitCount.do")
+	@GetMapping("/visitCount.do")
 	public List<VisitVO> visitCount(@RequestParam(value="selectVisitCount", defaultValue ="daily" )String selectVisitCount,
 			@RequestParam(value="startDate", required = false) String startDate,
 			@RequestParam(value="endDate", required = false) String endDate,

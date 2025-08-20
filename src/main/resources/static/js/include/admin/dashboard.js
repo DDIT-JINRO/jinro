@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const totalUsersData = chartData.monthlyChart.map(item => item.CUMULATIVE_USER_COUNT);
 		const newUsersData = chartData.newUserChart.map(item => item.MONTHLY_USER_COUNT);
 		const secessionUsersData = chartData.secessionChart.map(item => item.MONTHLY_DELETION_COUNT);
-		const monthLabels = chartData.monthlyChart.map(item => item.MONTH);
+		const monthLabels = chartData.monthlyChart.map(item => item.MONTH + '월');
 		const ctxUser = document.getElementById('lineChart');
 		if (ctxUser) {
 			new Chart(ctxUser, {
@@ -54,12 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
 				data: {
 					labels: monthLabels,
 					datasets: [{
-						label: '총 활성 사용자',
+						label: '전체 사용자수',
 						data: totalUsersData,
 						fill: true,
 						borderColor: 'rgb(114, 124, 245)',
 						tension: 0.4,
-						pointRadius: 4,
 						pointBackgroundColor: 'rgb(114, 124, 245)',
 						backgroundColor: function(context) {
 							const { ctx, chartArea } = context.chart;
@@ -76,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
 						borderColor: 'rgb(0, 200, 150)',
 						backgroundColor: 'rgba(0, 200, 150, 0.2)',
 						tension: 0.4,
-						pointRadius: 4,
 						pointBackgroundColor: 'rgb(0, 200, 150)'
 					}, {
 						label: '이탈자',
@@ -85,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
 						borderColor: 'rgb(255, 99, 132)',
 						backgroundColor: 'rgba(255, 99, 132, 0.2)',
 						tension: 0.4,
-						pointRadius: 4,
 						pointBackgroundColor: 'rgb(255, 99, 132)'
 					}]
 				},
@@ -94,7 +91,21 @@ document.addEventListener('DOMContentLoaded', function() {
 					maintainAspectRatio: false,
 					plugins: {
 						title: { display: false },
-						legend: { display: true, position: 'bottom', labels: { padding: 20 } }
+						legend: { display: true, position: 'bottom', labels: { padding: 20 } },
+						tooltip: {
+							mode: 'index',
+							intersect: false,
+							callbacks: {
+								label: function(context) {
+									let label = context.dataset.label || '';
+									if (label) { label += ': '; }
+									if (context.parsed.y !== null) {
+										label += context.parsed.y.toLocaleString() + '명';
+									}
+									return label;
+								}
+							}
+						}
 					},
 					scales: {
 						y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)', drawBorder: false } },
@@ -260,8 +271,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		setActiveButton(this);
 	});
 
-	
-	
+
+
 });
 
 // 공통 함수
@@ -271,7 +282,7 @@ function formatNumberWithCommasByAdminDashboard(num) {
 }
 
 function setActiveButton(activeBtn) {
-		const buttons = activeBtn.parentElement.querySelectorAll('.public-toggle-button');
-		buttons.forEach(btn => btn.classList.remove('active'));
-		activeBtn.classList.add('active');
-	}
+	const buttons = activeBtn.parentElement.querySelectorAll('.public-toggle-button');
+	buttons.forEach(btn => btn.classList.remove('active'));
+	activeBtn.classList.add('active');
+}

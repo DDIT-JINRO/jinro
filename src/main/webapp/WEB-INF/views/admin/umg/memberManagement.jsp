@@ -319,9 +319,33 @@
 <div class="flex gap" style="height: 685px; margin-bottom: 20px;">
 	<div class="template-panel" style="width: 792.5px;">
 		<div class="middleTitle">사용자 접속 통계</div>
+		<div class="btn-group flex gap5 userOnlineChart">
+			<button class="public-toggle-button active" id="userOnlineChartDayBtn">일별</button>
+			<button class="public-toggle-button" id="userOnlineChartMonthBtn">월별</button>
+			<button class="public-toggle-button" id="userOnlineChartMaleBtn">남성</button>
+			<button class="public-toggle-button" id="userOnlineChartFemaleBtn">여성</button>
+			<button class="public-toggle-button" id="userOnlineChartCalender">
+				<img alt="" src="/images/admin/admin-calender.png">
+			</button>
+		</div>
+		<div style="height: 500px; margin-top: auto;">
+			<canvas id="userOnlineChartCanvas"></canvas>
+		</div>
 	</div>
 	<div class="template-panel" style="width: 792.5px;">
 		<div class="middleTitle">페이지별 방문자 수</div>
+		<div class="btn-group flex gap5 pageVisitChart">
+			<button class="public-toggle-button active" id="pageVisitChartDayBtn">일별</button>
+			<button class="public-toggle-button" id="pageVisitChartMonthBtn">월별</button>
+			<button class="public-toggle-button" id="pageVisitChartMaleBtn">남성</button>
+			<button class="public-toggle-button" id="pageVisitChartFemaleBtn">여성</button>
+			<button class="public-toggle-button" id="pageVisitChartCalender">
+				<img alt="" src="/images/admin/admin-calender.png">
+			</button>
+		</div>
+		<div style="height: 500px; margin-top: auto;">
+			<canvas id="pageVisitChartCanvas"></canvas>
+		</div>
 	</div>
 </div>
 <div class="flex gap" style="height: 500px; margin-bottom: 20px;">
@@ -374,5 +398,47 @@
 	</div>
 	<div class="template-panel" style="width: 792.5px;">
 		<div class="middleTitle">페이지 방문자 조회</div>
+
+		<div style="display: flex; justify-content: space-between; margin-top: 20px;">
+			<div class="btn-group flex gap5 pageVisitList">
+				<button class="public-toggle-button active" id="pageLogSortByPlId" data-sort-by="plId">로그ID</button>
+				<button class="public-toggle-button" id="pageLogSortByMemId" data-sort-by="memId">회원ID</button>
+				<button class="public-toggle-button" id="pageLogSortByPlTitle" data-sort-by="plTitle">페이지 제목</button>
+				<button class="public-toggle-button" id="pageLogSortByPlCreatedAt" data-sort-by="plCreatedAt">방문일시</button>
+				<select class="public-toggle-select" id="pageLogSortOrder">
+					<option value="asc">오름차순</option>
+					<option value="desc">내림차순</option>
+				</select>
+			</div>
+			<div class="public-listSearch">
+				<input id="pageLogKeyword" name="keyword" placeholder="(페이지 제목, URL, 회원ID)" />
+				<button class="btn-save pageLogSearchBtn">조회</button>
+			</div>
+		</div>
+		<div class="pageLogListSpace">
+			<div class="search-filter-bar">
+				<p class="ptag-list pageLogCount">
+					총
+					<span id="pageLog-count"></span>
+					건
+				</p>
+			</div>
+			<table id="pageLogTable">
+				<thead>
+					<tr>
+						<th class="body-logId">로그ID</th>
+						<th class="body-memId">회원ID</th>
+						<th class="body-memName">회원명</th>
+						<th class="body-title">페이지 제목</th>
+						<th class="body-createdAt">방문일시</th>
+					</tr>
+				</thead>
+				<tbody class="pageLogList" id="pageLogList">
+				</tbody>
+			</table>
+		</div>
+		<div class="card-footer clearfix">
+			<div class="panel-footer pagination" id="pageLogPagination"></div>
+		</div>
 	</div>
 </div>

@@ -397,16 +397,18 @@
 	width: 500px;	
 }
 
-.template-panel .btn-save {
-	background: #6973E3;
-	color: white;
-	margin-left: auto;
-	border-radius: 6px;
-	border: none;
-	font-weight: 500;
+
+.pageVisitChart {
+	justify-content: flex-end;
 }
 
+#pageVisitChartCalender {
+	background-color: #727cf5;
+}
 
+.pageLogCount {
+	margin-top: 10px;
+}
 
 /* 추가ㅏ된 */
 .member-form-left, .member-form-right, .member-form-extra {
@@ -613,6 +615,14 @@
 .searchBox {
 	width: 780px;
 	margin-bottom: 20px;
+}
+
+#userOnlineChartCalender {
+	background-color: #727cf5;
+}
+
+.userOnlineChart {
+	justify-content: flex-end;
 }
 
 /* ************** */

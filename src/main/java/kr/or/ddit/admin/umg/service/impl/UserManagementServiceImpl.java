@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
+import kr.or.ddit.admin.las.service.PageLogVO;
 import kr.or.ddit.admin.umg.service.MemberPenaltyCountVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
 import kr.or.ddit.com.report.service.ReportVO;
@@ -467,6 +468,28 @@ public class UserManagementServiceImpl implements UserManagementService {
 		ArticlePage<CommReplyVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
 		
 		return articlePage;
+	}
+
+	@Override
+	public ArticlePage<PageLogVO> getMemberPageLogList(int currentPage, int size, String keyword, String sortBy,
+			String sortOrder) {
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("currentPage", currentPage);
+		map.put("size", size);
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		map.put("keyword", keyword);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		
+		List<PageLogVO> list = userManagementMapper.getMemberPageLogList(map);
+		int total = userManagementMapper.getAllMemberPageLogList(map);
+		
+		return new ArticlePage<>(total, currentPage, size, list, keyword);
+		
 	}
 
 }
