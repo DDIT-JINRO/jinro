@@ -7,14 +7,12 @@
 	public int selectTotalSubscriberCount();
 	 -->
 	<select id="selectTotalSubscriberCount">
-		<![CDATA[
         SELECT
 	        COUNT(DISTINCT MEM_ID)
 	    FROM
 	        MEMBER_SUBSCRIPTION
 	    WHERE
 	        TRUNC(SUB_END_DT) >= TRUNC(SYSDATE)
-	    ]]>
     </select>
  
  	<!-- 
@@ -41,7 +39,6 @@
 	public List<Map<String, Object>> selectRevenueStats(Map<String, Object> params);
 	 --> 
 	<select id="selectRevenueStats" parameterType="map" resultType="map">
-		<![CDATA[
         SELECT
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(p.PAY_DATE, 'YYYY-MM')</when>
@@ -53,7 +50,7 @@
         JOIN MEMBER m ON ms.MEM_ID = m.MEM_ID
         WHERE p.PAY_AMOUNT > 0
           <if test="from != null and from != ''">AND p.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-          <if test="to != null and to != ''">AND p.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+          <if test="to != null and to != ''">AND p.PAY_DATE	<![CDATA[ < ]]>TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
           <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
         GROUP BY 
             <choose>
@@ -61,7 +58,7 @@
                 <otherwise>TO_CHAR(p.PAY_DATE, 'YYYY-MM-DD')</otherwise>
             </choose>
         ORDER BY "dt" ASC
-	    ]]>
+	   
     </select>
 	
 	<!-- 
@@ -69,7 +66,6 @@
 	public List<Map<String, Object>> selectSubscriberCountStats(Map<String, Object> params);
 	 -->
 	<select id="selectSubscriberCountStats" parameterType="map" resultType="map">
-		<![CDATA[
         SELECT
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -81,7 +77,7 @@
         JOIN MEMBER M ON M.MEM_ID = MS.MEM_ID
         WHERE 1=1
             <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+            <if test="to != null and to != ''">AND P.PAY_DATE <![CDATA[ < ]]> TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
             <if test="gender != null and gender != '' and gender != 'ALL'">AND M.MEM_GEN = #{gender}</if>
         GROUP BY 
             <choose>
@@ -89,15 +85,13 @@
                 <otherwise>TO_CHAR(P.PAY_DATE, 'YYYY-MM-DD')</otherwise>
             </choose>
         ORDER BY "dt" ASC
-	    ]]>
     </select>
 	
 	 <!-- 
-	 // 상품별 인기 통계 
+	 // 상품별 인기 통계 (수정됨: 나이 조건 추가)
 	public List<Map<String, Object>> selectProductPopularityStats(Map<String, Object> params);
 	  -->
 	<select id="selectProductPopularityStats" parameterType="map" resultType="map">
-		<![CDATA[
         SELECT
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -111,8 +105,15 @@
         JOIN MEMBER M ON M.MEM_ID = MS.MEM_ID
         WHERE 1=1
             <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+            <if test="to != null and to != ''">AND P.PAY_DATE <![CDATA[ < ]]> TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
             <if test="gender != null and gender != '' and gender != 'ALL'">AND M.MEM_GEN = #{gender}</if>
+            <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+              AND M.MEM_BIRTH IS NOT NULL
+              AND CASE
+                    WHEN FLOOR(MONTHS_BETWEEN(TRUNC(P.PAY_DATE), M.MEM_BIRTH)/12) BETWEEN 10 AND 19 THEN '청소년'
+                    ELSE '청년'
+                  END = #{ageBand}
+            </if>
         GROUP BY 
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -120,15 +121,13 @@
             </choose>,
             S.SUB_NAME
         ORDER BY "dt", "subName"
-	    ]]>
     </select>
 	
 	<!-- 
-	// AI 기능 이용 내역
+	// AI 기능 이용 내역 (수정됨: 나이 구분 변경)
 	public List<Map<String, Object>> selectAiServiceUsageStats(Map<String, Object> params);
 	 -->
 	<select id="selectAiServiceUsageStats" parameterType="map" resultType="map">
-		<![CDATA[
 	    SELECT
 	        <choose>
 	            <when test="period == 'monthly'">TO_CHAR(l.PL_CREATED_AT, 'YYYY-MM')</when>
@@ -139,28 +138,24 @@
 	        COUNT(CASE WHEN l.PL_TITLE = '이력서AI요청' THEN 1 END) AS "resumeCnt",
 	        
 	        -- '자기소개서AI요청' 로그 카운트
-	        COUNT(CASE WHEN l.PL_TITLE = '자기소개서AI요청' THEN 1 END) AS "coverCnt"
+	        COUNT(CASE WHEN l.PL_TITLE = '자기소개서AI요청' THEN 1 END) AS "coverCnt",
 	        
-	        -- 참고: 모의면접 로그가 있다면 여기에 추가
-	        -- COUNT(CASE WHEN l.PL_TITLE = '모의면접AI요청' THEN 1 END) AS "mockCnt"
+	        -- '모의면접AI요청' 로그 카운트
+	        COUNT(CASE WHEN l.PL_TITLE = '모의면접AI요청' THEN 1 END) AS "mockCnt"
 	        
 	    FROM PAGE_LOG l
 	    JOIN MEMBER m ON l.MEM_ID = m.MEM_ID
 	    WHERE 
-	        l.PL_TITLE IN ('이력서AI요청', '자기소개서AI요청' ,'모의면접AI요청')
+	        l.PL_TITLE IN ('이력서AI요청', '자기소개서AI요청', '모의면접AI요청')
 	        
 	        <if test="from != null and from != ''">AND l.PL_CREATED_AT >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	        <if test="to != null and to != ''">AND l.PL_CREATED_AT < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
-	        
+	        <if test="to != null and to != ''">AND l.PL_CREATED_AT <![CDATA[ < ]]> TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
 	        <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
-	        
 	        <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
 	          AND m.MEM_BIRTH IS NOT NULL
 	          AND CASE
-	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) < 20 THEN '10대'
-	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 29 THEN '20대'
-	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 30 AND 39 THEN '30대'
-	                ELSE '40대 이상'
+	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 10 AND 19 THEN '청소년'
+	                ELSE '청년'
 	              END = #{ageBand}
 	        </if>
 	        
@@ -169,9 +164,7 @@
 	            <when test="period == 'monthly'">TO_CHAR(l.PL_CREATED_AT, 'YYYY-MM')</when>
 	            <otherwise>TO_CHAR(l.PL_CREATED_AT, 'YYYY-MM-DD')</otherwise>
 	        </choose>
-	        
 	    ORDER BY "dt" ASC
-	    ]]>
 	</select>
 
 	<!-- 
