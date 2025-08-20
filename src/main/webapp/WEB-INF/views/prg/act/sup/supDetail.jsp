@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<link rel="stylesheet" href="/css/prg/act/sup/supDetail.css">
+<link rel="stylesheet" href="/css/prg/ctt/cttDetail.css">
 <section class="channel">
 	<div class="channel-title">
 		<div class="channel-title-text">프로그램</div>
@@ -25,87 +25,88 @@
 			<a class="tab active" href="/prg/act/sup/supList.do">서포터즈</a>
 		</div>
 		<div class="public-wrapper-main">
-			<div class="detail-container">
 
-				<div class="detail-title-wrapper">
-					<h1>${supDetail.contestTitle}</h1>
-					<div class="meta-info">
-						<span>조회수: ${supDetail.contestRecruitCount}</span>
-						<span class="divider">|</span>
-						<span>
-							게시일:
-							<fmt:formatDate value="${supDetail.contestCreatedAt}" pattern="yyyy.MM.dd" />
-						</span>
-					</div>
+			<div class="detail-title-wrapper">
+				<h1>${supDetail.contestTitle}</h1>
+				<div class="meta-info">
+					<span>조회수: ${supDetail.contestRecruitCount}</span>
+					<span class="divider">|</span>
+					<span>
+						게시일:
+						<fmt:formatDate value="${supDetail.contestCreatedAt}" pattern="yyyy.MM.dd" />
+					</span>
 				</div>
-
-				<div class="summary-layout">
-					<div class="poster-wrapper">
-						<img src="/files/download?fileGroupId=${supDetail.fileGroupId}&seq=1" alt="${cttDetail.contestTitle} 포스터" class="poster-image" id="poster-modal-trigger">
-					</div>
-					<div id="poster-modal" class="modal">
-						<span class="close-button">&times;</span>
-						<img class="modal-content" id="modal-image">
-					</div>
-					<div class="summary-wrapper">
-						<table class="info-table">
-							<tbody>
-								<tr>
-									<th>주최</th>
-									<td>${supDetail.contestHost}</td>
-								</tr>
-								<tr>
-									<th>주관</th>
-									<td>${supDetail.contestOrganizer}</td>
-								</tr>
-								<tr>
-									<th>접수기간</th>
-									<td><fmt:formatDate value="${supDetail.contestStartDate}" pattern="yyyy.MM.dd" /> ~ <fmt:formatDate value="${supDetail.contestEndDate}" pattern="yyyy.MM.dd" /></td>
-								</tr>
-								<tr>
-									<th>참가자격</th>
-									<td>${supDetail.contestTargetName}</td>
-								</tr>
-								<tr>
-									<th>접수방법</th>
-									<td>${supDetail.applicationMethod}</td>
-								</tr>
-								<tr>
-									<th>시상종류</th>
-									<td>${supDetail.awardType}</td>
-								</tr>
-								<tr>
-									<th>홈페이지</th>
-									<td><a href="${supDetail.contestUrl}" target="_blank">바로가기</a></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-				<div class="content-wrapper">
-					<div class="tabs">
-						<div class="tab-item active">공모요강</div>
-					</div>
-					<div class="tab-content">
-						<c:forEach var="section" items="${supDetail.descriptionSections}">
-							<div class="description-section">
-								<p class="description-text">${section}</p>
-							</div>
-						</c:forEach>
-					</div>
-				</div>
-
-				<div class="bottom-button-wrapper">
-					<a href="/prg/act/sup/supList.do" class="btn-list-bottom">목록</a>
-				</div>
-
 			</div>
+
+			<div class="summary-layout">
+				<div class="poster-wrapper">
+					<img src="/files/download?fileGroupId=${supDetail.fileGroupId}&seq=1" alt="${cttDetail.contestTitle} 포스터" class="poster-image" id="poster-modal-trigger">
+				</div>
+				<div id="poster-modal" class="modal">
+					<span class="close-button">&times;</span>
+					<img class="modal-content" id="modal-image">
+				</div>
+				<div class="summary-wrapper">
+					<div class="summary-header">
+						<h3 class="summary-title">공모전 정보</h3>
+					</div>
+					<table class="info-table">
+						<tbody>
+							<tr>
+								<th>주최</th>
+								<td>${supDetail.contestHost}</td>
+							</tr>
+							<tr>
+								<th>주관</th>
+								<td>${supDetail.contestOrganizer}</td>
+							</tr>
+							<tr>
+								<th>접수기간</th>
+								<td><fmt:formatDate value="${supDetail.contestStartDate}" pattern="yyyy.MM.dd" /> ~ <fmt:formatDate value="${supDetail.contestEndDate}" pattern="yyyy.MM.dd" /></td>
+							</tr>
+							<tr>
+								<th>참가자격</th>
+								<td>${supDetail.contestTargetName}</td>
+							</tr>
+							<tr>
+								<th>접수방법</th>
+								<td>${supDetail.applicationMethod}</td>
+							</tr>
+							<tr>
+								<th>시상종류</th>
+								<td>${supDetail.awardType}</td>
+							</tr>
+							<tr>
+								<th>홈페이지</th>
+								<td><a href="${supDetail.contestUrl}" target="_blank">바로가기</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="content-wrapper">
+				<div class="tabs">
+					<div class="tab-item active">공모요강</div>
+				</div>
+				<div class="tab-content">
+					<c:forEach var="section" items="${supDetail.descriptionSections}">
+						<div class="description-section">
+							<p class="description-text">${section}</p>
+						</div>
+					</c:forEach>
+				</div>
+			</div>
+
+			<div class="bottom-button-wrapper">
+				<a href="/prg/act/sup/supList.do" class="btn-list-bottom">목록</a>
+			</div>
+
 		</div>
 	</div>
 </div>
 
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
-<script src="/js/prg/act/sup/supDetail.js"></script>
+<script src="/js/prg/ctt/cttDetail.js"></script>
 </body>
 </html>
