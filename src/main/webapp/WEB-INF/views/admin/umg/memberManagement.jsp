@@ -60,6 +60,10 @@
 				<button class="public-toggle-button active" id="userListId">ID</button>
 				<button class="public-toggle-button" id="userListName">이름</button>
 				<button class="public-toggle-button" id="userListEmail">이메일</button>
+				<select class="public-toggle-select" id="userListSortOrder">
+					<option value="asc">오름차순</option>
+					<option value="desc">내림차순</option>
+				</select>
 			</div>
 			<select class="public-toggle-select selectUserList-top" id="userListStatus">
 				<option value="">전체</option>

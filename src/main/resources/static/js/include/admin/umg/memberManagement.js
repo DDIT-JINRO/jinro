@@ -9,6 +9,7 @@ function memberManagement() {
 	const userListIdBtn = document.getElementById('userListId');
 	const userListNameBtn = document.getElementById('userListName');
 	const userListEmailBtn = document.getElementById('userListEmail');
+	const userListSortOrder = document.getElementById('userListSortOrder');
 
 	const boardListIdBtn = document.getElementById('memDetailBoardList-orderBtn-id');
 	const boardListDateBtn = document.getElementById('memDetailBoardList-orderBtn-date');
@@ -40,6 +41,21 @@ function memberManagement() {
 	pageVisitChartDaySel.addEventListener('change', eventDateRangeSelect);
 	pageVisitChartGenderSel.addEventListener('change', pageVisitChart);
 	pageVisitChartAgeGroupSel.addEventListener('change', pageVisitChart);
+
+	userListSortOrder.addEventListener('change', function(e){
+		const currentSortValEl = e.target.closest('.userListBtnGroup').querySelector('.public-toggle-button.active');
+		switch (currentSortValEl.id){
+			case "userListId" :
+				handleSortClick('id');
+				break;
+			case "userListName" :
+				handleSortClick('name');
+				break;
+			case "userListEmail" :
+				handleSortClick('email');
+				break;
+		}
+	})
 
 	selector.addEventListener('change', function() {
 		// 모든 테이블을 숨김
@@ -176,17 +192,11 @@ function memberManagement() {
 	// 유저 목록 정렬 처리
 	function handleSortClick(sortBy) {
 
-		if (currentSortBy !== sortBy) {
-			currentSortBy = sortBy;
-			currentSortOrder = 'asc';
-		} else {
-
-			currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
-		}
+		const sortOrder = document.getElementById("userListSortOrder").value;
 
 		// 2. handleSortClick에서 fetchUserList를 호출할 때 inFilter 값을 가져와서 전달
 		const userListInFilter = document.getElementById('userListStatus').value;
-		fetchUserList(currentPage, currentSortBy, currentSortOrder, userListInFilter);
+		fetchUserList(currentPage, sortBy, sortOrder, userListInFilter);
 	}
 
 	// 게시글 목록 정렬 처리
