@@ -141,7 +141,7 @@ function countChars(textarea, index) {
 function autoCompleteHandler() {
 
 	//제목 입력 필드 찾기
-	const titleInput = document.querySelector('.section-title .title-input');
+	const titleInput = document.querySelector('.form-section .form-input');
 
 	//제목이 비어 있을 경우에만 자동 완성
 	if (titleInput && titleInput.value.trim() == '') {
@@ -163,7 +163,7 @@ function autoCompleteHandler() {
 
 
 	// 모든 질문 블록을 찾습니다.
-	const qaBlocks = document.querySelectorAll('.qa-block');
+	const qaBlocks = document.querySelectorAll('.qa-card');
 
 	// 각 블록에 순서대로 답변을 할당합니다.
 	qaBlocks.forEach((block, index) => {
