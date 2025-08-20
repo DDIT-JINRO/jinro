@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
 	document.querySelector("#submit-btn").addEventListener("click", async function() {
-		const crId = document.querySelector("#counsel-name").dataset.crId;
-		const crRate = window.getCounselReviewRating();
-		const crContent = document.querySelector("#cr-content").value.trim();
+	    const crId = document.querySelector("#counsel-name").dataset.crId;
+	    const crRate = window.getCounselReviewRating();
+	    const crContent = document.querySelector("#cr-content").value.trim();
 		const crPublic = document.querySelector("input[name='cr-public']:checked").value.trim();
 
 		if (!crId) {
@@ -15,40 +15,40 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		}
 
-		if (!crContent) {
-			alert("상담 후기를 입력해 주세요.");
-			return;
-		}
+	    if (!crContent) {
+	        alert("상담 후기를 입력해 주세요.");
+	        return;
+	    }
 
-		// FormData 생성
-		const formData = new FormData();
+	    // FormData 생성
+	    const formData = new FormData();
 		formData.append('crId', crId)
-		formData.append('crRate', crRate);
-		formData.append('crContent', crContent);
+	    formData.append('crRate', crRate);
+	    formData.append('crContent', crContent);
 		formData.append('crPublic', crPublic);
 
-		try {
-			const response = await fetch("/cnslt/rvw/insertCnsReview.do", {
-				method: "POST",
-				body: formData
-			});
+	    try {
+	        const response = await fetch("/cnslt/rvw/insertCnsReview.do", {
+	            method: "POST",
+	            body: formData
+	        });
 
-			if (response.ok) {
-				const result = await response.json();
+	        if (response.ok) {
+	            const result = await response.json();
 
-				if (result.success) {
-					alert("후기 등록이 완료되었습니다");
-					window.location.href = "/cnslt/rvw/cnsReview.do";
-				} else {
-					alert(result.message || "등록에 실패했습니다.");
-				}
-			} else {
-				throw new Error(`서버 응답 오류: ${response.status}`);
-			}
-		} catch (error) {
-			console.error("등록 중 오류:", error);
-			alert("등록에 실패했습니다.");
-		}
+	            if (result.success) {
+	                alert("후기 등록이 완료되었습니다");
+	                window.location.href = "/cnslt/rvw/cnsReview.do";
+	            } else {
+	                alert(result.message || "등록에 실패했습니다.");
+	            }
+	        } else {
+	            throw new Error(`서버 응답 오류: ${response.status}`);
+	        }
+	    } catch (error) {
+	        console.error("등록 중 오류:", error);
+	        alert("등록에 실패했습니다.");
+	    }
 	});
 
 	document.querySelector("#back-btn").addEventListener("click", function() {
@@ -58,42 +58,38 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 별점 평가 기능
 document.addEventListener('DOMContentLoaded', function() {
-	const starRating = document.getElementById('cr-rate');
-	const ratingText = document.getElementById('rating-text');
-	const stars = starRating.querySelectorAll('.star');
 
-	// 별점 설명 텍스트
-	const ratingTexts = {
-		0: '평가해주세요',
-		1: '매우 불만족',
-		2: '불만족',
-		3: '보통',
-		4: '만족',
-		5: '매우 만족'
-	};
+	const starRating = document.getElementById('counsel-rating');
+	const ratingText = document.getElementById('rating-text');
+	const stars = starRating.querySelectorAll('.rating-input__star');
+
+    // 별점 설명 텍스트
+    const ratingTexts = {
+        0: '평가해주세요',
+        1: '매우 불만족',
+        2: '불만족',
+        3: '보통',
+        4: '만족',
+        5: '매우 만족'
+    };
 
 	let currentRating = 0;
 
 	// 별 클릭 이벤트
-	stars.forEach((star, index) => {
-		// 클릭 이벤트
+	stars.forEach((star) => {
 		star.addEventListener('click', function() {
-			const rating = parseInt(this.dataset.value);
-			setRating(rating);
+			setRating(parseInt(this.dataset.value));
 		});
-
-		// 마우스 호버 이벤트
 		star.addEventListener('mouseenter', function() {
-			const rating = parseInt(this.dataset.value);
-			highlightStars(rating, true);
-			updateRatingText(rating, true);
+			highlightStars(parseInt(this.dataset.value), true);
+			updateRatingText(parseInt(this.dataset.value));
 		});
 	});
 
 	// 별점 컨테이너에서 마우스가 나갔을 때
 	starRating.addEventListener('mouseleave', function() {
 		highlightStars(currentRating, false);
-		updateRatingText(currentRating, false);
+		updateRatingText(currentRating);
 	});
 
 	// 별점 설정 함수
@@ -101,35 +97,48 @@ document.addEventListener('DOMContentLoaded', function() {
 		currentRating = rating;
 		starRating.dataset.rating = rating;
 		highlightStars(rating, false);
-		updateRatingText(rating, false);
+		updateRatingText(rating);
 	}
 
 	// 별 하이라이트 함수
 	function highlightStars(rating, isHover) {
 		stars.forEach((star, index) => {
-			star.classList.remove('active', 'temp-active');
-
+			star.classList.remove('is-active', 'is-hover');
 			if (index < rating) {
-				if (isHover) {
-					star.classList.add('temp-active');
-				} else {
-					star.classList.add('active');
-				}
+				star.classList.add(isHover ? 'is-hover' : 'is-active');
 			}
 		});
 	}
 
 	// 평가 텍스트 업데이트 함수
-	function updateRatingText(rating, isHover) {
+	function updateRatingText(rating) {
 		ratingText.textContent = ratingTexts[rating];
-
-		if (rating > 0) {
-			ratingText.classList.add('selected');
-		} else {
-			ratingText.classList.remove('selected');
-		}
+		ratingText.classList.toggle('is-selected', rating > 0);
 	}
 
+	// 별점 컨테이너에서 마우스가 나갔을 때
+	starRating.addEventListener('mouseleave', function() {
+		highlightStars(currentRating, false);
+		updateRatingText(currentRating);
+	});
+
+	// 별점 설정 함수
+	function setRating(rating) {
+		currentRating = rating;
+		starRating.dataset.rating = rating;
+		highlightStars(rating, false);
+		updateRatingText(rating);
+	}
+
+	// 별 하이라이트 함수
+	function highlightStars(rating, isHover) {
+		stars.forEach((star, index) => {
+			star.classList.remove('is-active', 'is-hover');
+			if (index < rating) {
+				star.classList.add(isHover ? 'is-hover' : 'is-active');
+			}
+		});
+	}
 	// 별점 값을 가져오는 함수 (폼 제출 시 사용)
 	window.getCounselReviewRating = function() {
 		return currentRating;
@@ -144,35 +153,28 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 글자수 카운터 HTML 생성
 	const counterHTML = `
         <div class="char-counter">
-            <span class="current-count">0</span><span class="unit">자</span>
+            <span class="char-counter__current">0</span><span class="unit">자</span>
             <span class="separator">/</span>
             <span>최대&nbsp;</span><span class="max-count">${maxLength}</span><span class="unit">자</span>
         </div>
     `;
 
 	// textarea 부모 요소에 textarea-container 클래스 추가
-	const parentDiv = textarea.closest('.input-group');
+	const parentDiv = textarea.closest('.input-group--textarea');
 	if (parentDiv) {
-		parentDiv.classList.add('textarea-container');
-		// 카운터를 textarea 다음에 추가
 		parentDiv.insertAdjacentHTML('beforeend', counterHTML);
-	}
+		const currentCount = parentDiv.querySelector('.char-counter__current');
 
-	// 글자수 카운터 요소들 선택
-	const counter = parentDiv.querySelector('.char-counter');
-	const currentCount = counter.querySelector('.current-count');
+    // 글자수 업데이트 함수
+	const updateCounter = () => {
+		currentCount.textContent = textarea.value.length;
+	};
 
-	// 글자수 업데이트 함수
-	function updateCounter() {
-		const currentLength = textarea.value.length;
-		currentCount.textContent = currentLength;
-
-		// 글자수에 따른 스타일 변경
-		counter.classList.remove('warning', 'error');
-	}
+	textarea.addEventListener('input', updateCounter);
+	updateCounter();
+}
 
 	// 이벤트 리스너 등록
-	textarea.addEventListener('input', updateCounter);
 	textarea.addEventListener('paste', function() {
 		// paste 이벤트는 약간의 지연 후 실행
 		setTimeout(updateCounter, 10);
@@ -210,14 +212,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// 모달 열기
 	searchBtn.addEventListener('click', function() {
-		modal.classList.add('show');
+		modal.classList.add('is-active');
 		searchInput.focus();
 		loadCounselings('');
 	});
 
 	// 모달 닫기
 	function closeModal() {
-		modal.classList.remove('show');
+		modal.classList.remove('is-active');
 		resetModal();
 	}
 
@@ -290,26 +292,26 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 
 		counselList.innerHTML = pageCounselings.map(counsel => `
-            <li class="counsel-list-item"
+            <li class="search-modal__list-item"
 				data-counsel-id="${counsel.counselId}"
 				data-counsel-name="${counsel.counselName}"
 				data-counsel-category="${counsel.counselCategory}"
 				data-counsel-method="${counsel.counselMethod}"
 				data-counsel-req-datetime="${counsel.counselReqDatetime}"
 				>
-                <div class="counsel-name">${counsel.counselName}</div>
-                <div class="counsel-info">${counsel.counselCategory} · ${counsel.counselMethod} · 상담시간 : ${counsel.counselReqDatetime}</div>
+                <div class="search-modal__list-item-name">${counsel.counselName}</div>
+                <div class="search-modal__list-item-info">${counsel.counselCategory} · ${counsel.counselMethod} · 상담시간 : ${counsel.counselReqDatetime}</div>
             </li>
         `).join('');
 
 		// 상담 선택 이벤트 추가
-		document.querySelectorAll('.counsel-list-item').forEach(item => {
+		document.querySelectorAll('.search-modal__list-item').forEach(item => {
 			item.addEventListener('click', function() {
 				// 이전 선택 제거
-				document.querySelectorAll('.counsel-list-item').forEach(i => i.classList.remove('selected'));
+				document.querySelectorAll('.search-modal__list-item').forEach(i => i.classList.remove('is-selected'));
 
 				// 현재 항목 선택
-				this.classList.add('selected');
+				this.classList.add('is-selected');
 				selectedCounsel = {
 					counselId: this.dataset.counselId,
 					counselName: this.dataset.counselName,
