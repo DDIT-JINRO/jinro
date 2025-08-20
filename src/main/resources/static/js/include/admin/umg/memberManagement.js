@@ -21,7 +21,7 @@ function memberManagement() {
 	const userOnlineChartMaleBtn = document.getElementById('userOnlineChartMaleBtn');
 	const userOnlineChartFemaleBtn = document.getElementById('userOnlineChartFemaleBtn');
 	const userOnlineChartCalendarBtn = document.getElementById('userOnlineChartCalender');
-	
+
 	const pageVisitChartDayBtn = document.getElementById('pageVisitChartDayBtn');
 	const pageVisitChartMonthBtn = document.getElementById('pageVisitChartMonthBtn');
 	const pageVisitChartMaleBtn = document.getElementById('pageVisitChartMaleBtn');
@@ -72,8 +72,8 @@ function memberManagement() {
 					const startDate = selectedDates[0];
 					const endDate = selectedDates[1];
 
-					const formattedStartDate = startDate.toISOString().split('T')[0];
-					const formattedEndDate = endDate.toISOString().split('T')[0];
+					const formattedStartDate = formatDate(startDate);
+					const formattedEndDate = formatDate(endDate);
 
 					// 기존 차트가 있으면 삭제
 					if (window.userOnlineChartInstance) {
@@ -81,7 +81,7 @@ function memberManagement() {
 					}
 
 					axios.get('/admin/las/userInquiry.do', {
-						params: { startDate: formattedStartDate, endDate: formattedEndDate }
+						params: { startDate: formattedStartDate, endDate: formattedEndDate, selectUserInquiry:"selectDays" }
 					})
 						.then(response => {
 
@@ -119,7 +119,7 @@ function memberManagement() {
 										title: {
 											display: true,
 											text: [
-												`${formattedStartDate} ~ ${formattedEndDate} 기간`,
+												formatDateRange(formattedStartDate, formattedEndDate),
 												'사용자 접속 통계'
 											]
 										},
@@ -1171,9 +1171,9 @@ function memberManagement() {
 	}
 
 	// userOnlineChart 함수를 재정의하여 공통 변수를 사용하도록 수정
-	function userOnlineChart(selectUserInquiry = "daily", startDate = "", endDate = "", gender = "") {
+	function userOnlineChart(selectUserInquiry = "daily", startDate = "", endDate = "", gender = "", chartRange = "") {
 		const ctx = document.getElementById('userOnlineChartCanvas').getContext('2d');
-		
+
 		// 차트 캔버스 높이 설정 (안정적인 렌더링을 위해 추가)
 		ctx.canvas.style.minHeight = '400px';
 
@@ -1202,7 +1202,7 @@ function memberManagement() {
 					labels = responseData.map(item => formatDailyDate(item.loginDate));
 					chartLabel = '일별 접속자 수';
 				}
-				
+
 				const dataValues = responseData.map(item => item.userCount);
 
 				// 새 차트 생성 및 공통 변수에 저장
@@ -1232,7 +1232,10 @@ function memberManagement() {
 							},
 							title: {
 								display: true,
-								text: '사용자 접속 통계',
+								text: [
+									'사용자 접속 통계',
+									chartRange
+								],
 							},
 						},
 						scales: {
@@ -1294,9 +1297,9 @@ function memberManagement() {
 				if (selectedDates.length === 2) {
 					const startDate = selectedDates[0];
 					const endDate = selectedDates[1];
-					const formattedStartDate = startDate.toISOString().split('T')[0];
-					const formattedEndDate = endDate.toISOString().split('T')[0];
-					pageVisitChart("selectDays", formattedStartDate, formattedEndDate);
+					const formattedStartDate = formatDate(startDate);
+					const formattedEndDate = formatDate(endDate);
+					pageVisitChart("selectDays", formattedStartDate, formattedEndDate, "", formatDateRange(formattedStartDate,formattedEndDate));
 				}
 			}
 		});
@@ -1304,9 +1307,10 @@ function memberManagement() {
 		pageVisitChartCalendarBtn._flatpickr.clear();
 	});
 
-	function pageVisitChart(selectVisitCount = "daily", startDate = "", endDate = "", gender = "") {
+	function pageVisitChart(selectVisitCount = "daily", startDate = "", endDate = "", gender = "", dateRange = "") {
 		const ctx = document.getElementById('pageVisitChartCanvas').getContext('2d');
-		
+		console.log(dateRange);
+
 		// 기존 차트 파괴 및 최소 높이 설정
 		if (window.pageVisitChartInstance) {
 			window.pageVisitChartInstance.destroy();
@@ -1321,13 +1325,13 @@ function memberManagement() {
 				gender: gender
 			}
 		}).then(res => {
-			
+
 			const responseData = res.data;
-			
+
 			// 데이터를 'plTitle'과 'userCount'로 매핑
 			const labels = responseData.map(item => item.plTitle);
 			const dataValues = responseData.map(item => item.userCount);
-			
+
 			// 막대 차트 생성
 			window.pageVisitChartInstance = new Chart(ctx, {
 				type: 'bar',
@@ -1352,7 +1356,7 @@ function memberManagement() {
 					},
 					plugins: {
 						legend: { display: true, position: 'top' },
-						title: { display: true, text: '페이지별 방문자 수' },
+						title: { display: true, text: [ dateRange , '페이지별 방문자 수'] },
 						tooltip: {
 							callbacks: {
 								label: function(context) {
@@ -1449,14 +1453,14 @@ function memberManagement() {
 			} else {
 				pageLogTbody.innerHTML = `<tr><td colspan='5' style="text-align: center;">조회된 페이지 방문 기록이 없습니다.</td></tr>`;
 			}
-			
+
 			// 페이지네이션 렌더링
 			let paginationHtml = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 			for (let p = startPage; p <= endPage; p++) {
 				paginationHtml += `<a href="#" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
 			}
 			paginationHtml += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
-			
+
 			pageLogPaginationEl.innerHTML = paginationHtml;
 		})
 		.catch(err => {
@@ -1467,7 +1471,7 @@ function memberManagement() {
 			}
 		});
 	}
-	
+
 	function formatDateTime(isoString) {
 		const date = new Date(isoString);
 		const year = date.getFullYear();
@@ -1498,7 +1502,7 @@ function memberManagement() {
 				const sortBy = this.dataset.sortBy;
 				setActiveButton(this);
 				pageLogCurrentSortBy = sortBy;
-				
+
 				const keyword = document.getElementById('pageLogKeyword').value;
 				fetchPageLogList(1, keyword, pageLogCurrentSortBy, pageLogCurrentSortOrder);
 			});
@@ -1518,7 +1522,7 @@ function memberManagement() {
 			e.preventDefault();
 			const link = e.target.closest('a[data-page]');
 			if (!link || link.classList.contains('disabled')) return;
-			
+
 			const newPage = parseInt(link.dataset.page, 10);
 			if (!isNaN(newPage) && newPage > 0) {
 				const keyword = document.getElementById('pageLogKeyword').value;
@@ -1544,6 +1548,18 @@ function memberManagement() {
 
 
 	setInterval(fetchDailyStats, 10000);
+
+	//=== flatpicker 달력 선택된 날자 yyyy-mm-dd 문자열로 포맷팅
+	function formatDate(d){
+		const y = d.getFullYear();
+		const m = String(d.getMonth() + 1).padStart(2, '0');
+		const day = String(d.getDate()).padStart(2, '0');
+		return `${y}-${m}-${day}`;
+	}
+
+	function formatDateRange(fS, fE){
+		return `${fS} ~ ${fE} 기간`
+	}
 }
 
 memberManagement();
