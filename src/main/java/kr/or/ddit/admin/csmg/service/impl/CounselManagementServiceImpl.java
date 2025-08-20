@@ -93,5 +93,37 @@ public class CounselManagementServiceImpl implements CounselManagementService {
 		
 		return articlePage;
 	}
+
+	@Override
+	public Map<String, Object> selectCounselorDetail(int counselor) {
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map = counselManagementMapper.selectCounselorDetail(counselor);
+		
+		return map;
+	}
+
+	@Override
+	public ArticlePage<Map<String, Object>> selectCounselingList(Map<String, Object> map) {
+		
+		int currentPage = Integer.parseInt((String) map.getOrDefault("currentPage",1));
+		int size = Integer.parseInt((String)map.getOrDefault("size",5));
+		
+		int startNo = (currentPage - 1) * size + 1;
+		int endNo = currentPage * size;
+		
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+		
+		int total = counselManagementMapper.selectCounselingListTotalCount(map);
+		List<Map<String, Object>> counselingList = counselManagementMapper.selectCounselingList(map);
+		
+		ArticlePage<Map<String, Object>> articlePage = new ArticlePage<>(total, currentPage, size, counselingList, null);
+		
+		return articlePage;
+	}
+	
+	
 	
 }

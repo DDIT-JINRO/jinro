@@ -9,4 +9,8 @@ public interface CounselManagementService {
 	Map<String, Object> selectMonthlyCounselingStatList();
 	
 	ArticlePage<Map<String, Object>> selectCounselorStatList(Map<String, Object> map);
+	
+	Map<String, Object> selectCounselorDetail(int counselor);
+	
+	ArticlePage<Map<String, Object>> selectCounselingList(Map<String, Object> map);
 }

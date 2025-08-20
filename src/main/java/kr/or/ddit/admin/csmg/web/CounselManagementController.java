@@ -34,7 +34,7 @@ public class CounselManagementController {
 			@RequestParam(defaultValue = "10") String size,
 			@RequestParam(required = false) String keyword,
 			@RequestParam(required = false) String status,
-			@RequestParam(defaultValue = "id", required = false) String sortBy,
+			@RequestParam(defaultValue = "MEM_ID", required = false) String sortBy,
 			@RequestParam(defaultValue = "asc",required = false) String sortOrder,
 			@RequestParam(required = false) String userListInFilter
 			) {
@@ -49,6 +49,41 @@ public class CounselManagementController {
 		map.put("userListInFilter", userListInFilter);
 		
 		ArticlePage<Map<String, Object>> articlePage = counselManagementService.selectCounselorStatList(map);
+		
+		return articlePage;
+	}
+	
+	@GetMapping("/selectCounselorDetail.do")
+	public Map<String, Object> selectCounselorDetail(
+			@RequestParam int counselor){
+		
+		Map<String, Object> map = counselManagementService.selectCounselorDetail(counselor);
+		return map;
+	}
+	
+	@GetMapping("/selectCounselingList.do")
+	public ArticlePage<Map<String, Object>> selectCounselingList(
+			@RequestParam int counselor,
+			@RequestParam(defaultValue = "1") String currentPage,
+			@RequestParam(defaultValue = "5") String size,
+			@RequestParam(defaultValue = "counselId", required = false) String sortBy,
+			@RequestParam(defaultValue = "asc",required = false) String sortOrder,
+			@RequestParam(required = false) String counselCategory,
+			@RequestParam(required = false) String counselMethod,
+			@RequestParam(required = false) String counselStatus
+			) {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("counselor", counselor);
+		map.put("currentPage", currentPage);
+		map.put("size", size);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		map.put("counselCategory", counselCategory);
+		map.put("counselMethod", counselMethod);
+		map.put("counselStatus", counselStatus);
+		
+		ArticlePage<Map<String, Object>> articlePage = counselManagementService.selectCounselingList(map);
 		
 		return articlePage;
 	}
