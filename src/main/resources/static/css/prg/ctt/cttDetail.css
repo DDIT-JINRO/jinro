@@ -188,7 +188,7 @@ a {
 }
 
 .tab-content {
-	padding: 32px 24px;
+	padding: 20px 15px;
 	border-top: none;
 	border-radius: 0 0 12px 12px;
 	background-color: white;
@@ -203,16 +203,42 @@ a {
 }
 
 .description-section {
-	margin-bottom: 24px;
+	margin-bottom: 0;
+	padding: 24px 10px;
+	border-bottom: 1px dashed #d1d5db;
+	position: relative;
+	transition: background-color 0.3s ease;
+	border-radius: 8px;
+}
+
+.description-section:hover {
+	background-color: rgba(120, 129, 245, 0.05);
+}
+
+.description-section::before {
+	content: "• • •";
+	position: absolute;
+	bottom: -8px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: white;
+	color: #7881f5;
+	padding: 0 16px;
+	font-size: 12px;
+	letter-spacing: 4px;
+	transition: color 0.3s ease;
+}
+
+.description-section:hover::before {
+	color: #6366f1;
 }
 
 .description-section:last-child {
-	margin-bottom: 0;
+	border-bottom: none;
 }
 
-.description-text {
-	margin: 0;
-	line-height: 1.8;
+.description-section:last-child::before {
+	display: none;
 }
 
 /* 4. 하단 목록 버튼 */
