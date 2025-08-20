@@ -1,4 +1,4 @@
-function sanasd() {
+function sanctionsDescription() {
 
 	const baseColors = [
 		'#5B399B',
@@ -35,6 +35,8 @@ function sanasd() {
 			.then(res => {
 				const penaltyData = res.data.data;
                 
+				console.log(res);
+				
                 // 라벨을 직접 분할하는 대신, Chart.js의 콜백 함수에서 처리하도록 수정
 				const labels = penaltyData.map(item => item.PENALTYTYPE);
 				const dataValues = penaltyData.map(item => item.COUNT);
@@ -319,12 +321,6 @@ function sanasd() {
 		});
 	}
 
-	function reportStatusCng(stat) {
-		if (stat === 'S03001') return '접수';
-		if (stat === 'S03002') return '반려';
-		if (stat === 'S03003') return '승인';
-	}
-
 	function renderPagination({ startPage, endPage, currentPage, totalPages }) {
 
 		let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
@@ -416,14 +412,14 @@ function sanasd() {
 				const { reportVO, filePath, fileOrgName } = res.data;
 				const fileContainer = document.getElementById('report-detail-file');
 
-				document.getElementById('report-detail-mpId').innerHTML = reportVO.reportId || '-';
-				document.getElementById('report-detail-mpType').innerHTML = reportType(reportVO.targetType) || '-';
-				document.getElementById('report-detail-memId').innerHTML = reportVO.memId || '-';
-				document.getElementById('report-detail-memName').innerHTML = reportVO.reporterName || '-';
-				document.getElementById('report-detail-targetId').innerHTML = reportVO.reportedMemId || '-';
-				document.getElementById('report-detail-targetName').innerHTML = reportVO.reportedName || '-';
-				document.getElementById('report-detail-reason').innerHTML = reportVO.reportReason || '-';
-				document.getElementById('report-detail-warnDate').innerHTML = formatDateMMDD(reportVO.reportCreatedAt) || '-';
+				document.getElementById('report-detail-mpId').value = reportVO.reportId || '-';
+				document.getElementById('report-detail-mpType').value = reportType(reportVO.targetType) || '-';
+				document.getElementById('report-detail-memId').value = reportVO.memId || '-';
+				document.getElementById('report-detail-memName').value = reportVO.reporterName || '-';
+				document.getElementById('report-detail-targetId').value = reportVO.reportedMemId || '-';
+				document.getElementById('report-detail-targetName').value = reportVO.reportedName || '-';
+				document.getElementById('report-detail-reason').value = reportVO.reportReason || '-';
+				document.getElementById('report-detail-warnDate').value = formatDateMMDD(reportVO.reportCreatedAt) || '-';
 				const selectElement = document.getElementById("report-detail-status");
 
 				for (let i = 0; i < selectElement.options.length; i++) {
@@ -449,23 +445,9 @@ function sanasd() {
 			});
 	}
 
-
-
 	function reportType(stat) {
-
 		if (stat === 'G10001') return '게시글 신고';
 		if (stat === 'G10002') return '댓글 신고';
-
-
-	}
-
-
-
-
-
-	function penaltyStatusCng(stat) {
-		if (stat === 'G14001') return '경고';
-		if (stat === 'G14002') return '정지';
 	}
 
 	function formatDateMMDD(iso) {
@@ -546,26 +528,26 @@ function sanasd() {
 			.then(res => {
 				const fileContainer = document.getElementById('penalty-detail-file');
 
-				document.getElementById('penalty-detail-mpId').innerHTML = '-';
-				document.getElementById('penalty-detail-mpType').innerHTML = '-';
-				document.getElementById('penalty-detail-memId').innerHTML = '-';
-				document.getElementById('penalty-detail-memName').innerHTML = '-';
-				document.getElementById('penalty-detail-reason').innerHTML = '-';
-				document.getElementById('penalty-detail-warnDate').innerHTML = '-';
-				document.getElementById('penalty-detail-startDate').innerHTML = '-';
-				document.getElementById('penalty-detail-endDate').innerHTML = '-';
+				document.getElementById('penalty-detail-mpId').value = '-';
+				document.getElementById('penalty-detail-mpType').value = '-';
+				document.getElementById('penalty-detail-memId').value = '-';
+				document.getElementById('penalty-detail-memName').value = '-';
+				document.getElementById('penalty-detail-reason').value = '-';
+				document.getElementById('penalty-detail-warnDate').value = '-';
+				document.getElementById('penalty-detail-startDate').value = '-';
+				document.getElementById('penalty-detail-endDate').value = '-';
 				fileContainer.innerHTML = '-';
 
 				const { penaltyVO, filePath, fileOrgName } = res.data;
 
-				document.getElementById('penalty-detail-mpId').innerHTML = penaltyVO.mpId || '-';
-				document.getElementById('penalty-detail-mpType').innerHTML = penaltyStatusCng(penaltyVO.mpType) || '-';
-				document.getElementById('penalty-detail-memId').innerHTML = penaltyVO.memId || '-';
-				document.getElementById('penalty-detail-memName').innerHTML = penaltyVO.memName || '-';
-				document.getElementById('penalty-detail-reason').innerHTML = penaltyVO.mpWarnReason || '-';
-				document.getElementById('penalty-detail-warnDate').innerHTML = formatDateMMDD(penaltyVO.mpWarnDate) || '-';
-				if (penaltyVO.mpStartedAt != null) document.getElementById('penalty-detail-startDate').innerHTML = formatDateMMDD(penaltyVO.mpStartedAt) || '-';
-				if (penaltyVO.mpCompleteAt != null) document.getElementById('penalty-detail-endDate').innerHTML = formatDateMMDD(penaltyVO.mpCompleteAt) || '-';
+				document.getElementById('penalty-detail-mpId').value = penaltyVO.mpId || '-';
+				document.getElementById('penalty-detail-mpType').value = penaltyStatusCng(penaltyVO.mpType) == "<span class=\"penalty-정지\">정지</span>" ? "정지" : penaltyStatusCng(penaltyVO.mpType) || '-';
+				document.getElementById('penalty-detail-memId').value = penaltyVO.memId || '-';
+				document.getElementById('penalty-detail-memName').value = penaltyVO.memName || '-';
+				document.getElementById('penalty-detail-reason').value = penaltyVO.mpWarnReason || '-';
+				document.getElementById('penalty-detail-warnDate').value = formatDateMMDD(penaltyVO.mpWarnDate) || '-';
+				if (penaltyVO.mpStartedAt != null) document.getElementById('penalty-detail-startDate').value = formatDateMMDD(penaltyVO.mpStartedAt) || '-';
+				if (penaltyVO.mpCompleteAt != null) document.getElementById('penalty-detail-endDate').value = formatDateMMDD(penaltyVO.mpCompleteAt) || '-';
 				fileContainer.innerHTML = '-';
 
 				if (filePath != null || filePath != undefined) {
@@ -607,9 +589,20 @@ function sanasd() {
 
 			})
 	})
-
+	
+	function reportStatusCng(stat) {
+	    if (stat === 'S03001') return '<span class="status-접수">접수</span>';
+	    if (stat === 'S03002') return '<span class="status-반려">반려</span>';
+	    if (stat === 'S03003') return '<span class="status-승인">승인</span>';
+	    return stat;
+	}
+	
+	function penaltyStatusCng(stat) {
+	    if (stat === 'G14001') return '경고';
+	    if (stat === 'G14002') return '<span class="penalty-정지">정지</span>';
+	}
 	fetchReportList();
 	fetchPenaltyList();
 }
 
-sanasd();
+sanctionsDescription();

@@ -47,33 +47,140 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .ptag-list {
 	align-content: center;
 	padding: 0;
-	margin: 0;
+	margin: 0px;
 	font-size: 14px;
 	font-weight: 600;
 }
+
+/* 기존 CSS 내용 유지... */
+
+/* 신고 상세 정보 섹션 */
+.scdMng-2-2 {
+	flex: 1; /* 기존 scdMng-2-2 스타일 */
+}
+
+/* 새로운 레이아웃을 위한 스타일 */
+.penalty-detail-view {
+    margin-top: 10px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-item-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #333;
+    min-width: 80px;
+}
+
+.detail-input,
+.detail-input-select {
+    width: 50px;
+    flex-grow: 1;
+    padding: 6px 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #555;
+}
+
+.detail-reason-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.detail-textarea {
+	box-sizing: border-box;
+    width: 100%;
+    height: 150px;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    resize: none;
+}
+
+.detail-item-file {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detail-file-link {
+    color: #1701ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.detail-file-link:hover {
+    text-decoration: underline;
+}
+
+.reportModify {
+    width: 60px;
+    height: 35px;
+    background-color: #727CF5;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-top: auto;
+    display: block;
+}
+
+.status-접수 {
+    color: #0ACF97;
+    font-weight: bold;
+}
+
+.status-반려 {
+    color: #808080;
+    font-weight: bold;
+}
+
+.status-승인 {
+    color: #737DF4;
+    font-weight: bold;
+}
+
+.penalty-정지 {
+    color: #FA5C7C;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .scdMng-1 {
 	display: flex;
@@ -95,7 +202,7 @@
 
 .scdMng-2-1 {
 	flex: 2;
-	height: 720px;
+	height: 740px;
 }
 
 .card-footer {
@@ -106,12 +213,140 @@
 	flex: 1;
 }
 
+.scdMng-2-2 {
+	flex: 1;
+}
+
+/* 새로운 레이아웃을 위한 스타일 */
+.penalty-detail-view {
+    margin-top: 10px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ... (기존 상세 정보 스타일은 그대로 유지) ... */
+
+/* 제재 상세 정보 섹션 스타일 */
+#penalty-detail-box.penalty-detail-view .detail-item {
+    display: flex;
+    gap: 10px;
+}
+
+#penalty-detail-box.penalty-detail-view .detail-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: gray;
+    min-width: 80px;
+    display: inline-block;
+}
+
+#penalty-detail-box.penalty-detail-view span {
+    color: #333;
+}
+
+/* 신규 제재 등록 모달 스타일 */
+.penalty-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.penalty-modal-overlay.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.penalty-modal-content {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.penalty-modal-body {
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.penalty-modal-content h3 {
+    margin-top: 0;
+}
+
+.modal-form-group {
+    margin-bottom: 1rem;
+}
+
+.modal-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.modal-form-group input, .modal-form-group select, .modal-form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.penalty-type-label {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.penalty-type-label.active {
+    background-color: #6759ff;
+    color: white;
+    border-color: #6759ff;
+}
+
+.file-attach-btn {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #f1f3f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#file-list {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #555;
+}
+
+#modalReason {
+    box-sizing: border-box;
+}
+
+
+
+
+
 
 
 
 
 .penalty-detail-view {
-	margin-top: 10px;
+	margin-top: 50px;
 	font-size: 14px;
 }
 
@@ -120,8 +355,9 @@
 }
 
 .detail-label {
+	font-size: 13px;
 	font-weight: 600;
-	color: #333;
+	color: gray;
 	min-width: 80px;
 	display: inline-block;
 }

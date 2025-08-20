@@ -588,8 +588,8 @@ tbody tr:hover {
 }
 
 #localTimeDisplay {
-	color: #8a969c;
-	font-weight: 400;
+	color: #808080;
+    font-weight: 600;
 }
 
 /***************************** 콘텐츠 이용 통계 도넛 ***************************************/
