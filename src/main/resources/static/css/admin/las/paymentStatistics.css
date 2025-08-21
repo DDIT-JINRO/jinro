@@ -1,0 +1,1104 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+   기본 초기화 및 공통 스타일
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   페이지 헤더
+   ========================================================================== */
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page-title {
+    color: gray;
+    font-size: 18px;
+    margin: 0;
+    line-height: 75px;
+}
+
+/* ==========================================================================
+   메인 컨테이너 및 레이아웃
+   ========================================================================== */
+.main-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 20px;
+    min-height: 800px;
+    width: 100%;
+}
+
+.left-column {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px;
+    max-width: 50%;
+}
+
+.right-column {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px;
+    max-width: 50%;
+}
+
+.cards-row {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 20px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   템플릿 패널 및 카드
+   ========================================================================== */
+.template-panel {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.public-countCard {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.back-color-green {
+    background: linear-gradient(135deg, #2DCF97, #20B2AA);
+}
+
+.back-color-purple {
+    background: linear-gradient(135deg, #727cf5, #5a67d8);
+}
+
+.public-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.color-white {
+    color: white !important;
+}
+
+.public-card-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 24px;
+    height: 24px;
+    opacity: 0.3;
+}
+
+.public-card-count {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+}
+
+.public-span-space {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+}
+
+.public-span-increase {
+    color: #2DCF97;
+    font-weight: bold;
+}
+
+.public-span-decrease {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.public-span-since {
+    color: #999;
+}
+
+.large-panel {
+    flex: 1;
+    min-height: 340px;
+    height: auto;
+}
+
+/* ==========================================================================
+   타이틀 및 헤더
+   ========================================================================== */
+.middleTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* ==========================================================================
+   버튼 그룹 및 컨트롤
+   ========================================================================== */
+.btn-group {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.flex {
+    display: flex;
+}
+
+.gap {
+    gap: 20px;
+}
+
+.gap5 {
+    gap: 5px;
+}
+
+.public-toggle-button {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.public-toggle-button.active {
+    background-color: #727cf5;
+    color: white;
+    border-color: #727cf5;
+}
+
+.public-toggle-button:hover {
+    background-color: #f8f9fa;
+}
+
+.public-toggle-button.active:hover {
+    background-color: #5a67d8;
+}
+
+.public-toggle-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+    background-color: white;
+}
+
+/* ==========================================================================
+   검색 및 입력 요소
+   ========================================================================== */
+.public-listSearch {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.public-listSearch select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.public-listSearch input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-save {
+    padding: 8px 16px;
+    background-color: #727cf5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-save:hover {
+    background-color: #5a67d8;
+}
+
+/* ==========================================================================
+   테이블 스타일
+   ========================================================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th,
+table td {
+    padding: 12px 8px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
+}
+
+table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #666;
+}
+
+table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.popular-pages-table {
+    margin-top: 0;
+}
+
+/* 테이블 칸 지정 */
+.body-id {
+    min-width: 30px;
+}
+
+.body-memName {
+    min-width: 90px;
+}
+
+.body-email {
+    min-width: 200px;
+}
+
+.body-status {
+    min-width: 100px;
+}
+
+.body-nickname {
+    min-width: 90px;
+}
+
+.body-phone {
+    min-width: 100px;
+}
+
+.body-birth {
+    min-width: 100px;
+}
+
+.body-logType {
+    min-width: 70px;
+}
+
+.body-point {
+    min-width: 70px;
+}
+
+/* ==========================================================================
+   차트 컨테이너
+   ========================================================================== */
+.chart-container {
+    flex: 1;
+    min-height: 250px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 14px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ==========================================================================
+   통계 그리드
+   ========================================================================== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.stat-item {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #727cf5;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   활동 리스트
+   ========================================================================== */
+.activity-list {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 500;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.activity-time {
+    font-size: 11px;
+    color: #999;
+}
+
+.activity-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.badge-new {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.badge-active {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+}
+
+.badge-warning {
+    background-color: #fff3e0;
+    color: #f57c00;
+}
+
+/* ==========================================================================
+   퍼센티지 표시
+   ========================================================================== */
+.percentage-high {
+    color: #2DCF97;
+    font-weight: bold;
+}
+
+.percentage-medium {
+    color: #727cf5;
+    font-weight: bold;
+}
+
+.percentage-low {
+    color: #FFC75A;
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   원본 CSS 유지 (기존 스타일)
+   ========================================================================== */
+.member-1 {
+    margin-bottom: 20px;
+}
+
+.userListBtnGroup {
+    margin-top: 60px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.userListSpace {
+    margin-top: 30px;
+}
+
+.inputmem-role {
+    width: 110px;
+    height: 25px;
+    border: 1px solid #E5E8EB;
+    border-radius: 4px;
+    padding-left: 10px;
+    font-weight: 400;
+}
+
+.userList tr td {
+    height: 30px;
+}
+
+.search-filter-bar {
+    display: flex;
+    padding: 0 10px;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.profileInfo-1 {
+    margin-top: auto;
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+}
+
+.user-detail-listSelect {
+    border: none;
+    color: gray;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.user-detail-listSelect:hover {
+    cursor: pointer;
+}
+
+.userDetailBtnGroup {
+    margin-top: 20px;
+}
+
+.ptag-list {
+    align-content: center;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.profile-container {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.selectUserList-top {
+    margin-top: 60px;
+}
+
+.profile-image-wrapper {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border-radius: 50%;
+}
+
+.selectpb-top {
+    margin-top: 20px;
+}
+
+.profileInfo-1-2 {
+    display: flex;
+    margin-left: 20px;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profileInfo-1-3 {
+    display: flex;
+    margin-left: 20px;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profileInfo-1-4 {
+    display: flex;
+    margin-left: 20px;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profileFlex {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-nickname {
+    width: 90px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    height: 24px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.keyword-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    margin-right: 8px;
+    background-color: #e6e6f2;
+    color: #4a4a50;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#mem-interests {
+    margin-left: 10px;
+}
+
+.info-second-space {
+    min-height: 40px;
+    margin-left: 20px;
+    margin-top: 20px;
+    gap: 60px;
+}
+
+.info-second-space2 {
+    min-height: 52px;
+    margin-left: 20px;
+    gap: 60px;
+}
+
+.loginDate {
+    margin-top: 10px;
+}
+
+.info-history {
+    color: gray;
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 190px;
+}
+
+.info-history2 {
+    color: gray;
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 100px;
+}
+
+.profileBadge-none {
+    border: 2px;
+    display: flex;
+    background-color: #EDF2F9;
+    color: gray;
+    font-size: 13px;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 19px;
+}
+
+.profileBadge-basic {
+    border: 2px;
+    display: flex;
+    background-color: #E7FAF5;
+    color: #2DCF97;
+    font-size: 13px;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 19px;
+}
+
+.profileBadge-plus {
+    border: 2px;
+    display: flex;
+    background-color: #FFF9EF;
+    color: #FFC75A;
+    font-size: 13px;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 19px;
+}
+
+.profileBadge-pro {
+    border: 2px;
+    display: flex;
+    background-color: #EBF7FA;
+    color: #3EB6D6;
+    font-size: 13px;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 19px;
+}
+
+.profile-status {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.profileInfoDetail-span {
+    font-size: 13px;
+    font-weight: bold;
+    color: gray;
+}
+
+.info-field input {
+    width: 110px;
+    height: 20px;
+    border: 1px solid #E5E8EB;
+    border-radius: 4px;
+    padding-left: 10px;
+    font-weight: 400;
+}
+
+.fa-pencil {
+    color: gray;
+}
+
+.info-field input[type='date'] {
+    width: 100px;
+    height: 22px;
+    border: 1px solid #E5E8EB;
+    border-radius: 4px;
+    padding-left: 20px;
+    font-weight: 400;
+}
+
+.flexInfo {
+    display: flex;
+}
+
+.user-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 20px;
+    row-gap: 2px;
+}
+
+.info-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-field label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.userDetailTable {
+    margin-top: 10px;
+}
+
+.userdetail-button-group {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-primary {
+    background-color: #727cf5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-primary i {
+    margin-right: 5px;
+}
+
+.table-space {
+    display: none;
+}
+
+.table-space:first-of-type {
+    display: block;
+}
+
+.management-left {
+    padding-right: 20px;
+}
+
+.listMember {
+    width: 780px;
+    height: 720px;
+    margin-bottom: 20px;
+}
+
+.filter-box select, .filter-box input[type="text"] {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.filter-box input[type="text"] {
+    width: 500px;
+}
+
+.pageVisitChart {
+    justify-content: flex-end;
+}
+
+#pageVisitChartCalender {
+    background-color: #727cf5;
+}
+
+.pageLogCount {
+    margin: 10px 0;
+}
+
+.member-form-left, .member-form-right, .member-form-extra {
+    display: flex;
+    flex-direction: column;
+    gap: 6.5px;
+}
+
+.memberManagementLeft {
+    width: 100%;
+}
+
+.insertMember {
+    width: 800px;
+}
+
+.listMemberBody {
+    padding: 10px;
+}
+
+.managementMember {
+    margin-bottom: 20px;
+    height: 410px;
+    width: 800px;
+}
+
+.member-form {
+    margin-top: 50px;
+    padding-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    box-sizing: border-box;
+}
+
+.card-footer {
+    margin-top: auto;
+}
+
+.card-footer.clearfix {
+    clear: both;
+}
+
+.panel-footer.pagination {
+    text-align: center;
+    padding: 10px;
+}
+
+.member-form-left {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.btn-temp {
+    padding: 10px;
+    background-color: #727cf5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.member-form-right {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.member-form label {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.member-form input, .member-form select {
+    width: 100%;
+    height: 28px;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.member-form input:focus, .member-form select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.profile-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 0px;
+}
+
+.profile-wrapper img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 8px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
+
+.upload-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7C7CF5;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#profileUpload {
+    display: none;
+}
+
+.add-btn {
+    width: 80px;
+    padding: 12px;
+    background-color: #727cf5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 5px;
+    border-top: 1px solid #eee;
+}
+
+.btn-modify {
+    background-color: rgb(220, 222, 252);
+    color: black;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.onlineUser {
+    width: 300px;
+    height: 300px;
+}
+
+.onlineUser2 {
+    width: 1000px;
+    height: 300px;
+}
+
+.btn-warn {
+    background-color: #FFD700;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-ban {
+    background-color: #DC143C;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.searchBox {
+    width: 780px;
+    margin-bottom: 20px;
+}
+
+#userOnlineChartCalender {
+    background-color: #727cf5;
+}
+
+.userOnlineChart {
+    justify-content: flex-end;
+}
+
+/* ==========================================================================
+   모달 관련 CSS
+   ========================================================================== */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.info-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.info-list > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-list dt {
+    font-weight: bold;
+    color: gray;
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+.info-list dd {
+    margin-left: 0;
+    font-size: 1rem;
+}
+
+.info-list .full-width {
+    grid-column: 1 / 3;
+}
+
+.content-text {
+    white-space: pre-wrap;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-close {
+    background-color: #6973E3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
