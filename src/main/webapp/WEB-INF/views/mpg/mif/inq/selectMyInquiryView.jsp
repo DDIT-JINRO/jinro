@@ -44,13 +44,14 @@
 									<img class="badge-img" src="${member.badgeFilePath}" alt="테두리이미지"/>
 								</c:if>
 								<c:if test="${!empty member.subFilePath}">
-								    <img class="effect-img sparkle" src="${member.subFilePath}" alt="효과이미지"/>
+								    <img class="effect-img" src="${member.subFilePath}" alt="효과이미지"/>
 								</c:if>
 							</div>
 							
+
 							<div class="profile-photo-buttons">
 								<input type="file" id="change-photo-input" style="display: none;" accept="image/jpeg, image/png" />
-								<button type="button" class="btn btn-primary" id="change-photo-btn">사진 변경</button>
+								<button type="button" class="detail__action-button" id="change-photo-btn">사진 변경</button>
 							</div>
 						</div>
 					</div>
@@ -61,65 +62,67 @@
 								<h3 class="card-title">나의 정보</h3>
 							</div>
 							<div class="info-item profile-update">
-								<button type="button" id="info-update-btn" class="btn btn-primary disable" disabled="disabled">수정</button>
+								<button type="button" id="info-update-btn" class="detail__action-button disable" disabled="disabled">수정</button>
 							</div>
 						</div>
 						<form action="updateMyInquiryDetail.do" method="POST">
 							<div class="info-grid">
 								<div class="info-item">
 									<label>이름</label>
-									<input value="${member.memName}" name="memName" data-init-value="${member.memName}" />
+									<input value="${member.memName}" name="memName" data-init-value="${member.memName}" class="form-input" />
 								</div>
 								<div class="info-item">
 									<label>닉네임</label>
-									<input value="${member.memNickname}" name="memNickname" data-init-value="${member.memNickname}" />
+									<input value="${member.memNickname}" name="memNickname" data-init-value="${member.memNickname}" class="form-input" />
 								</div>
 								<div class="info-item">
 									<label>이메일</label>
-									<span>${member.memEmail}</span>
+									<span class="info-value">${member.memEmail}</span>
 								</div>
 								<div class="info-item">
 									<label>성별</label>
-									<c:if test="${member.memGen eq 'G11001'}">
-										<span>남</span>
-									</c:if>
-									<c:if test="${member.memGen eq 'G11002'}">
-										<span>여</span>
-									</c:if>
+									<c:choose>
+										<c:when test="${member.memGen eq 'G11001'}">
+											<span class="info-value">남</span>
+										</c:when>
+										<c:otherwise>
+											<span class="info-value">여</span>
+										</c:otherwise>
+									</c:choose>
 								</div>
 								<div class="info-item">
 									<label>연락처</label>
-									<span>${member.memPhoneNumber}</span>
-									<button type="button" class="btn btn-auth">번호 변경</button>
+									<span class="info-value">${member.memPhoneNumber}</span>
+									<button type="button" class="detail__action-button detail__action-button--auth">번호 변경</button>
 								</div>
 								<div class="info-item">
 									<label>생년월일</label>
-									<span>
+									<span class="info-value">
 										<fmt:formatDate pattern="yyyy년 MM월 dd일" value="${member.memBirth}" />
 									</span>
 								</div>
 								<div class="info-item">
 									<label>포인트</label>
-									<span>${member.memPoint} 포인트</span>
+									<span class="info-value point-value">${member.memPoint} 포인트</span>
 								</div>
 								<div class="info-item">
 									<label>학생 여부</label>
 									<c:choose>
 										<c:when test="${member.veriStatus == 'S05001'}">
-											<span>신청 중</span>
-											<small> <fmt:formatDate pattern="(yyyy년 MM월 dd일)" value="${member.veriCreatedAt}" />
+											<span class="status-badge status-badge--pending">신청 중</span>
+											<small class="status-date"> <fmt:formatDate pattern="(yyyy년 MM월 dd일)" value="${member.veriCreatedAt}" />
 											</small>
 										</c:when>
 										<c:when test="${member.veriStatus == 'S05002'}">
-											<span>인증</span>
+											<span class="status-badge status-badge--verified">인증</span>
 										</c:when>
 										<c:when test="${member.veriStatus == 'S05003'}">
-											<span>반려</span>
-											<button type="button" id="reject-reason-btn" class="btn btn-secondary">반려 이유</button>
+											<span class="status-badge status-badge--rejected">반려</span>
+											<button type="button" id="reject-reason-btn" class="detail__action-button detail__action-button--secondary">반려 이유</button>
 										</c:when>
 										<c:otherwise>
-											<span>미인증</span>
-											<button type="button" id="auth-student" class="btn btn-auth">학생 인증</button>
+											<span class="status-badge status-badge--unverified">미인증</span>
+											<button type="button" id="auth-student" class="detail__action-button detail__action-button--auth">학생 인증</button>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -132,14 +135,14 @@
 					<div class="profile-card my-interest-card">
 						<div class="card-header">
 							<h3 class="card-title">나의 관심 분야</h3>
-							<button class="btn btn-primary" id="interests-update-btn">수정</button>
+							<button class="detail__action-button" id="interests-update-btn">수정</button>
 						</div>
 						<div class="tags-container">
 							<c:if test="${empty member.interests}">
-							    <span>선택한 관심 분야가 없습니다.</span>
+								<span class="empty-message">선택한 관심 분야가 없습니다.</span>
 							</c:if>
 							<c:forEach var="userKeyword" items="${member.interests}">
-								<span class="tag">${userKeyword.ccName}</span>
+								<span class="interest-tag">${userKeyword.ccName}</span>
 							</c:forEach>
 						</div>
 					</div>
@@ -149,7 +152,7 @@
 							<div class="card-header">
 								<h3 class="card-title">나의 구독 상태</h3>
 								<div class="subscription-header-right">
-									<button type="button" class="btn btn-primary" id="move-sub-btn">구독하러 가기</button>
+									<button type="button" class="detail__action-button" id="move-sub-btn">구독하러 가기</button>
 								</div>
 							</div>
 							<p class="plan-desc">구독 중인 상품이 없습니다.</p>
@@ -158,12 +161,12 @@
 							<div class="card-header">
 								<h3 class="card-title">나의 구독 상태</h3>
 								<div class="subscription-header-right">
-									<span class="days-remaining">구독 만료까지 15일 남았어요!</span>
+									<span class="days-remaining">구독 만료까지 ${member.remainingDays}일 남았어요!</span>
 								</div>
 							</div>
 							<div class="subscription-status-box">
-								<p class="plan-name">BASIC</p>
-								<p class="plan-desc">베이직 등급일 수 있습니다.</p>
+								<p class="plan-name">${member.subName}</p>
+								<p class="plan-desc">${member.subDetail}</p>
 							</div>
 						</c:if>
 					</div>
@@ -177,34 +180,22 @@
 						<div class="tiers-row is-header">
 							<div class="tier-cell feature-title"></div>
 							<div class="tier-cell">
-								💎&nbsp;DIAMOND
-								<br>
-								<small>5,000,000 P</small>
+								💎&nbsp;DIAMOND <br> <small>5,000,000 P</small>
 							</div>
 							<div class="tier-cell">
-								🏆&nbsp;PLATINUM
-								<br>
-								<small>2,500,000 P</small>
+								🏆&nbsp;PLATINUM <br> <small>2,500,000 P</small>
 							</div>
 							<div class="tier-cell">
-								🥇&nbsp;GOLD
-								<br>
-								<small>500,000 P</small>
+								🥇&nbsp;GOLD <br> <small>500,000 P</small>
 							</div>
 							<div class="tier-cell">
-								🥈&nbsp;SILVER
-								<br>
-								<small>100,000 P</small>
+								🥈&nbsp;SILVER <br> <small>100,000 P</small>
 							</div>
 							<div class="tier-cell">
-								🥉&nbsp;BRONZE
-								<br>
-								<small>50,000 P</small>
+								🥉&nbsp;BRONZE <br> <small>50,000 P</small>
 							</div>
 							<div class="tier-cell">
-								🌱&nbsp;SEED
-								<br>
-								<small>0 P</small>
+								🌱&nbsp;SEED <br> <small>0 P</small>
 							</div>
 						</div>
 						<div class="tiers-row">
@@ -259,15 +250,16 @@
 	</div>
 </div>
 
+<!-- Modals remain the same but with updated button classes -->
 <div class="modal-overlay" id="password-modal-overlay">
 	<div class="modal-content">
 		<button class="modal-close-btn" type="button">&times;</button>
 		<h3>비밀번호 확인</h3>
 		<p>회원 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 입력해 주세요.</p>
 		<div class="modal-form">
-			<input type="password" id="password-check-input" placeholder="비밀번호를 입력하세요">
+			<input type="password" id="password-check-input" placeholder="비밀번호를 입력하세요" class="form-input">
 			<span class="modal-error-msg" id="modal-error-msg"></span>
-			<button class="btn btn-primary" id="password-confirm-btn" type="button">인증</button>
+			<button class="detail__action-button" id="password-confirm-btn" type="button">인증</button>
 		</div>
 	</div>
 </div>
@@ -281,7 +273,16 @@
 			<form method="post" action="insertInterestList.do">
 				<div class="com-filter-section">
 					<div class="com-filter-options">
-						<c:forEach items="${interetsKeywordList}" var="allKeyword">
+						<c:set var="currentCat" value=""/>					
+						<c:forEach items="${interetsKeywordList}" var="allKeyword" varStatus="status">
+							<c:if test="${currentCat != allKeyword.ccEtc}">
+								<div class="interest-modal__keyword-group">
+									<span class="interest-modal__keyword-title">
+										${allKeyword.ccEtc}
+									</span>
+									<div class="interest-modal__keyword-items">
+							</c:if>
+							
 							<c:set var="isChecked" value="false" />
 							<c:forEach var="userKeyword" items="${member.interests}">
 								<c:if test="${allKeyword.ccId == userKeyword.ccId }">
@@ -293,6 +294,13 @@
 								<input type="checkbox" name="filter-keyword" value="${allKeyword.ccId}" ${isChecked ? "checked" : ""}>
 								<span>${allKeyword.ccName}</span>
 							</label>
+							
+							<c:set var="currentCat" value="${allKeyword.ccEtc}"/>					
+							
+							<c:if test="${status.last or currentCat != interetsKeywordList[status.index + 1].ccEtc}">
+								</div>
+							</div>
+							</c:if>
 						</c:forEach>
 					</div>
 				</div>
@@ -307,7 +315,7 @@
 						</c:forEach>
 					</div>
 				</div>
-				<button type="submit" class="com-submit-search-btn">수정</button>
+				<button type="submit" class="detail__action-button">수정</button>
 			</form>
 		</div>
 	</div>
@@ -319,9 +327,9 @@
 		<h3>학생 인증 신청</h3>
 		<p>학생 회원 인증을 위하여 증빙서류를 첨부해주세요.</p>
 		<div class="modal-form">
-			<input type="file" id="student-auth-input">
+			<input type="file" id="student-auth-input" class="form-input">
 			<span class="modal-error-msg" id="modal-error-msg"></span>
-			<button class="btn btn-primary" id="student-confirm-btn" type="button">인증</button>
+			<button class="detail__action-button" id="student-confirm-btn" type="button">인증</button>
 		</div>
 	</div>
 </div>
