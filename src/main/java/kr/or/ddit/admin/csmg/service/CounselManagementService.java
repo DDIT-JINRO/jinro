@@ -19,4 +19,6 @@ public interface CounselManagementService {
 	List<Map<String, Object>> selectTopCounselorList(Map<String, Object> map);
 	
 	List<Map<String, Object>> selectCounselingStatsByCategory(Map<String, Object> map);
+	
+	List<Map<String, Object>> selectCounselingStatsByTime(Map<String, Object> map);
 }

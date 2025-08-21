@@ -319,7 +319,7 @@
 	                    AND TRUNC(A.counsel_req_datetime) = TO_DATE(#{startDate}, 'YYYY-MM-DD')
 	                </when>
 	                <when test='selectUserInquiry == "monthly"'>
-	                    AND TO_CHAR(A.counsel_req_datetime, 'YYYY-MM') = TO_CHAR(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'YYYY-MM')
+	                    AND TO_CHAR(A.COUNSEL_REQ_DATETIME, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
 	                </when>
 	                <when test='selectUserInquiry == "selectDays"'>
 	                    AND A.counsel_req_datetime BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
@@ -341,5 +341,56 @@
 	    GROUP BY
 	        c.CC_NAME
 	    ORDER BY c.CC_NAME
-</select>
+	</select>
+	
+	
+	<select id="selectCounselingStatsByTime" parameterType="map" resultType="map">
+	    SELECT
+	        CASE
+	            WHEN A.COUNSEL_METHOD = 'G08001' THEN '대면상담'
+	            WHEN A.COUNSEL_METHOD = 'G08002' THEN '채팅상담'
+	            WHEN A.COUNSEL_METHOD = 'G08003' THEN '화상상담'
+	            ELSE '기타'
+	        END AS CONSULTATION_TYPE,
+	        TO_CHAR(A.COUNSEL_REQ_DATETIME, 'HH24') AS consultation_hour,
+	        COUNT(A.COUNSEL_ID) AS total_consultations
+	    FROM
+	        COUNSELING A
+	    JOIN
+	        MEMBER M ON A.MEM_ID = M.mem_id
+	    <where>
+	        A.COUNSEL_METHOD IN ('G08001', 'G08002', 'G08003')
+	        AND TO_CHAR(A.COUNSEL_REQ_DATETIME, 'HH24') BETWEEN '09' AND '18'
+	        AND A.COUNSEL_STATUS != 'S04002'
+	        
+	        <if test='selectUserInquiry != null and selectUserInquiry != ""'>
+	            <choose>
+	                <when test='selectUserInquiry == "daily"'>
+	                    AND TRUNC(A.counsel_req_datetime) = TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	                </when>
+	                <when test='selectUserInquiry == "monthly"'>
+	                    AND TO_CHAR(A.COUNSEL_REQ_DATETIME, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+	                </when>
+	                <when test='selectUserInquiry == "selectDays"'>
+	                    AND A.counsel_req_datetime BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+	                </when>
+	            </choose>
+	        </if>
+	        
+			<if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
+		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, M.MEM_BIRTH) / 12) &lt;= 19
+		    </if>
+		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
+		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, M.MEM_BIRTH) / 12) &gt;= 20
+		    </if>
+	        
+	        <if test='gender != null and gender != ""'>
+	            AND M.MEM_GEN = #{gender}
+	        </if>
+	    </where>
+	    GROUP BY
+	        A.COUNSEL_METHOD, TO_CHAR(A.COUNSEL_REQ_DATETIME, 'HH24')
+	    ORDER BY
+	        CONSULTATION_TYPE asc,consultation_hour ASC
+	</select>
 </mapper>

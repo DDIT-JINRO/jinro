@@ -33,4 +33,7 @@ public interface CounselManagementMapper {
 	
 	//상담종류별 통계
 	List<Map<String, Object>> selectCounselingStatsByCategory(Map<String, Object> map);
+	
+	//상담유형별 시간대 통계
+	List<Map<String, Object>> selectCounselingStatsByTime(Map<String, Object> map);
 }

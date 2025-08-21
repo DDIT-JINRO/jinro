@@ -157,4 +157,28 @@ public class CounselManagementController {
 		return list;
 	}
 	
+	@GetMapping("/selectCounselingStatsByTime.do")
+	public List<Map<String, Object>> selectCounselingStatsByTime(
+			@RequestParam String selectUserInquiry,
+			@RequestParam String gender,
+			@RequestParam String ageGroup,
+			@RequestParam(required = false) String startDate,
+			@RequestParam(required = false) String endDate
+			){
+		
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("selectUserInquiry", selectUserInquiry);
+		paramMap.put("gender", gender);
+		paramMap.put("ageGroup", ageGroup);
+		
+		if(paramMap.get("selectUserInquiry").equals("selectDays")) {
+			paramMap.put("startDate", startDate);
+			paramMap.put("endDate", endDate);
+		}
+		
+		List<Map<String, Object>> list = counselManagementService.selectCounselingStatsByTime(paramMap);
+		
+		return list;
+	}
+	
 }
