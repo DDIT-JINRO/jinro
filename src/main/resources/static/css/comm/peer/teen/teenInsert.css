@@ -120,6 +120,23 @@
   box-shadow: none;
 }
 
+.ck.ck-toolbar.ck-toolbar_grouping {
+    border-width: 0;
+}
+
+.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred {
+	border-width: 2px 0 0 0;
+    border-color: var(--border-light);
+    transition: all 0.2s ease;
+}
+
+.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-focused {
+	border-radius: 0 0 16px 16px;
+	border-width: 1px;
+	border-color: var(--primary);
+	transition: all 0.2s ease;
+}
+
 /* 파일 업로드 섹션 */
 .file-label {
   display: inline-block;
