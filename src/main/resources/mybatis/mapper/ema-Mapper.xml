@@ -50,7 +50,12 @@
 	                        )
 	                </if>
 	            </where>
-	            ORDER BY a.hire_start_date DESC
+	            ORDER BY 
+	            CASE
+			        WHEN a.hire_end_date >= TRUNC(SYSDATE) THEN 0
+			        ELSE 1
+			    END ASC,
+	            a.hire_start_date DESC
 	        ) a
 	    )
 	    WHERE RNUM BETWEEN #{startNo} AND #{endNo}
