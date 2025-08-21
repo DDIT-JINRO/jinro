@@ -7,6 +7,7 @@
 	내역</h2>
 
 <div class="sancChartSpace flex gap">
+	<input type="hidden" id="comCalendarInput" style="display: none;"/>
 	<div class="sancChart-1">
 		<div class="flex gap" style="margin-bottom: 20px;">
 			<div class="template-panel dailyReportCount">
@@ -38,14 +39,16 @@
 		<div class="template-panel penaltyStats">
 			<div class="middleTitle">제재 유형 분포</div>
 			<div class="flex gap10 endflex btn-group">
+				<input type="hidden" id="penaltyStatsStartDay" />
+				<input type="hidden" id="penaltyStatsEndDay" />
 				<select class="public-toggle-select" id="penaltyStatsDateBtn">
-					<option value="daily">일별</option>
-					<option value="monthly">월별</option>
-					<option value="selectDays">기간선택</option>
+					<option value="monthly">월간</option>
+					<option value="daily">일간</option>
+					<option value="selectDays">기간</option>
 				</select> <select class="public-toggle-select" id="penaltyStatsGenBtn">
 					<option value="">성별</option>
-					<option value="male">남성</option>
-					<option value="female">여성</option>
+					<option value="male">남자</option>
+					<option value="female">여자</option>
 				</select> <select class="public-toggle-select" id="penaltyStatsAgeBtn">
 					<option value="">연령대</option>
 					<option value="youth">청년</option>
