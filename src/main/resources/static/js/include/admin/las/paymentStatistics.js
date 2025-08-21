@@ -323,73 +323,90 @@ function paymentStatistics() {
             window.revenueChartInstance.destroy();
         }
         
-        axios.get('/admin/las/payment/revenue-stats', { params })
-            .then(res => {
-                const responseData = res.data;
-                
-                let labels;
-                let chartLabel;
-                if (dateValue === 'monthly') {
-                    labels = responseData.map(item => formatMonthlyDate(item.dt));
-                    chartLabel = '월별 매출';
-                } else {
-                    labels = responseData.map(item => formatDailyDate(item.dt));
-                    chartLabel = '일별 매출';
-                }
-                
-                const dataValues = responseData.map(item => item.revenue || 0);
-                
-                window.revenueChartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: chartLabel,
-                            data: dataValues,
-                            fill: true,
-                            borderColor: 'rgb(114, 124, 245)',
-                            backgroundColor: 'rgba(114, 124, 245, 0.2)',
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointHoverRadius: 6,
-                            pointStyle: 'circle'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: [
-                                    '구독 결제 매출',
-                                    chartRange
-                                ],
-                            },
-                        },
-                        scales: {
-                            x: { grid: { display: false } },
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: value => value.toLocaleString() + '원'
-                                },
-                                grid: {
-                                    borderDash: [3],
-                                    color: '#e5e5e5'
-                                }
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => {
-                console.error("구독 결제 매출 데이터 조회 중 에러:", error);
-            });
+		axios.get('/admin/las/payment/revenue-stats', { params })
+	        .then(res => {
+	            const responseData = res.data;
+	            
+	            let labels;
+	            let chartLabel;
+	            if (dateValue === 'monthly') {
+	                labels = responseData.map(item => formatMonthlyDate(item.dt));
+	                chartLabel = '월별 매출';
+	            } else {
+	                labels = responseData.map(item => formatDailyDate(item.dt));
+	                chartLabel = '일별 매출';
+	            }
+	            
+	            const dataValues = responseData.map(item => item.revenue || 0);
+	            
+	            window.revenueChartInstance = new Chart(ctx, {
+	                type: 'line',
+	                data: {
+	                    labels: labels,
+	                    datasets: [{
+	                        label: chartLabel,
+	                        data: dataValues,
+	                        fill: true,
+	                        borderColor: 'rgb(114, 124, 245)',
+	                        backgroundColor: 'rgba(114, 124, 245, 0.2)',
+	                        tension: 0.4,
+	                        pointRadius: 3,
+	                        pointHoverRadius: 6,
+	                        pointStyle: 'circle'
+	                    }]
+	                },
+	                options: {
+	                    responsive: true,
+	                    maintainAspectRatio: false,
+	                    plugins: {
+	                        legend: {
+	                            display: true,
+	                            position: 'top',
+	                        },
+	                        title: {
+	                            display: true,
+	                            text: [
+	                                '구독 결제 매출',
+	                                chartRange
+	                            ],
+	                        },
+	                        // tooltip 설정 추가
+	                        tooltip: {
+	                            mode: 'index',
+	                            intersect: false,
+	                            callbacks: {
+	                                label: function(context) {
+	                                    let label = context.dataset.label || '';
+	                                    if (label) {
+	                                        label += ': ';
+	                                    }
+	                                    if (context.parsed.y !== null) {
+	                                        label += context.parsed.y.toLocaleString() + '원';
+	                                    }
+	                                    return label;
+	                                }
+	                            }
+	                        }
+	                    },
+	                    scales: {
+	                        x: { grid: { display: false } },
+	                        y: {
+	                            beginAtZero: true,
+	                            ticks: {
+	                                callback: value => value.toLocaleString() + '원'
+	                            },
+	                            grid: {
+	                                borderDash: [3],
+	                                color: '#e5e5e5'
+	                            }
+	                        }
+	                    }
+	                }
+	            });
+	        })
+	        .catch(error => {
+	            console.error("구독 결제 매출 데이터 조회 중 에러:", error);
+	        });
     }
     
     // 상품별 인기 통계 차트 로드
@@ -420,7 +437,7 @@ function paymentStatistics() {
             window.productChartInstance.destroy();
         }
         
-        ctx.canvas.style.minHeight = '400px';
+        ctx.canvas.style.maxHeight = '400px';
         
         axios.get('/admin/las/payment/product-popularity', { params })
             .then(res => {
@@ -533,76 +550,93 @@ function paymentStatistics() {
             window.subscriberChartInstance.destroy();
         }
         
-        ctx.canvas.style.minHeight = '400px';
+        ctx.canvas.style.maxHeight = '400px';
         
-        axios.get('/admin/las/payment/subscriber-stats', { params })
-            .then(res => {
-                const responseData = res.data;
-                
-                let labels;
-                let chartLabel;
-                if (dateValue === 'monthly') {
-                    labels = responseData.map(item => formatMonthlyDate(item.dt));
-                    chartLabel = '월별 구독자 수';
-                } else {
-                    labels = responseData.map(item => formatDailyDate(item.dt));
-                    chartLabel = '일별 구독자 수';
-                }
-                
-                const dataValues = responseData.map(item => item.count || 0);
-                
-                window.subscriberChartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: chartLabel,
-                            data: dataValues,
-                            fill: true,
-                            borderColor: 'rgb(45, 207, 151)',
-                            backgroundColor: 'rgba(45, 207, 151, 0.2)',
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointHoverRadius: 6,
-                            pointStyle: 'circle'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: [
-                                    '구독자 수 통계',
-                                    chartRange
-                                ],
-                            },
-                        },
-                        scales: {
-                            x: { grid: { display: false } },
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1,
-                                    callback: value => value + '명'
-                                },
-                                grid: {
-                                    borderDash: [3],
-                                    color: '#e5e5e5'
-                                }
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => {
-                console.error("구독자 수 통계 데이터 조회 중 에러:", error);
-            });
+		axios.get('/admin/las/payment/subscriber-stats', { params })
+	        .then(res => {
+	            const responseData = res.data;
+	            
+	            let labels;
+	            let chartLabel;
+	            if (dateValue === 'monthly') {
+	                labels = responseData.map(item => formatMonthlyDate(item.dt));
+	                chartLabel = '월별 구독자 수';
+	            } else {
+	                labels = responseData.map(item => formatDailyDate(item.dt));
+	                chartLabel = '일별 구독자 수';
+	            }
+	            
+	            const dataValues = responseData.map(item => item.count || 0);
+	            
+	            window.subscriberChartInstance = new Chart(ctx, {
+	                type: 'line',
+	                data: {
+	                    labels: labels,
+	                    datasets: [{
+	                        label: chartLabel,
+	                        data: dataValues,
+	                        fill: true,
+	                        borderColor: 'rgb(45, 207, 151)',
+	                        backgroundColor: 'rgba(45, 207, 151, 0.2)',
+	                        tension: 0.4,
+	                        pointRadius: 3,
+	                        pointHoverRadius: 6,
+	                        pointStyle: 'circle'
+	                    }]
+	                },
+	                options: {
+	                    responsive: true,
+	                    maintainAspectRatio: false,
+	                    plugins: {
+	                        legend: {
+	                            display: true,
+	                            position: 'top',
+	                        },
+	                        title: {
+	                            display: true,
+	                            text: [
+	                                '구독자 수 통계',
+	                                chartRange
+	                            ],
+	                        },
+	                        // tooltip 설정 추가
+	                        tooltip: {
+	                            mode: 'index',
+	                            intersect: false,
+	                            callbacks: {
+	                                label: function(context) {
+	                                    let label = context.dataset.label || '';
+	                                    if (label) {
+	                                        label += ': ';
+	                                    }
+	                                    if (context.parsed.y !== null) {
+	                                        label += context.parsed.y.toLocaleString() + '명';
+	                                    }
+	                                    return label;
+	                                }
+	                            }
+	                        }
+	                    },
+	                    scales: {
+	                        x: { grid: { display: false } },
+	                        y: {
+	                            beginAtZero: true,
+	                            ticks: {
+	                                stepSize: 1,
+	                                callback: value => value + '명'
+	                            },
+	                            grid: {
+	                                borderDash: [3],
+	                                color: '#e5e5e5'
+	                            }
+	                        }
+	                    }
+	                }
+	            });
+	        })
+	        .catch(error => {
+	            console.error("구독자 수 통계 데이터 조회 중 에러:", error);
+	        });
     }
     
     // 유료 컨텐츠 이용내역 차트 로드 (라인 차트로 변경)
@@ -635,7 +669,7 @@ function paymentStatistics() {
             window.aiServiceChartInstance.destroy();
         }
         
-        ctx.canvas.style.minHeight = '400px';
+        ctx.canvas.style.maxHeight = '400px';
         
 		axios.get('/admin/las/payment/ai-service-usage', { params })
 	        .then(res => {
@@ -656,7 +690,7 @@ function paymentStatistics() {
 	            if (serviceTypeValue === '' || serviceTypeValue === 'resume') {
 	                const aiResumeData = responseData.map(item => parseInt(item.resumeCnt) || 0);
 	                datasets.push({
-	                    label: 'AI 첨삭',
+	                    label: '이력서 첨삭',
 	                    data: aiResumeData,
 	                    borderColor: 'rgb(45, 207, 151)',
 	                    backgroundColor: 'rgba(45, 207, 151, 0.1)',
@@ -717,7 +751,7 @@ function paymentStatistics() {
 	            let chartTitle = '유료 컨텐츠 이용내역';
 	            if (serviceTypeValue) {
 	                const serviceNames = {
-	                    'resume': 'AI 첨삭',
+	                    'resume': '이력서 첨삭',
 	                    'cover': '자기소개서 첨삭', 
 	                    'mock': '모의면접',
 	                    'counseling': 'AI 상담'

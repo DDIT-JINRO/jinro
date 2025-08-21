@@ -142,7 +142,7 @@
 		        <!-- 새로 추가되는 서비스 유형 선택 셀렉트 -->
 		        <select class="public-toggle-select" name="aiServiceChartType" id="aiServiceChartType">
 		            <option value="">전체서비스</option>
-		            <option value="resume">AI 첨삭</option>
+		            <option value="resume">이력서 첨삭</option>
 		            <option value="cover">자기소개서 첨삭</option>
 		            <option value="mock">모의면접</option>
 		            <option value="counseling">AI 상담</option>
