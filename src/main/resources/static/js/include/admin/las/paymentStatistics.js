@@ -63,37 +63,39 @@ function paymentStatistics() {
     
     // 차트 필터 리셋 함수
     function resetChartFilters(chartType) {
+        const defaultRange = getRecentDaysRange(7); // 기본적으로 최근 7일
+        
         switch(chartType) {
             case 'revenue':
                 document.getElementById('revenueChartDay').value = 'daily';
                 document.getElementById('revenueChartGender').value = '';
                 document.getElementById('revenueChartAgeGroup').value = '';
-                document.getElementById('revenueChartStartDay').value = '';
-                document.getElementById('revenueChartEndDay').value = '';
+                document.getElementById('revenueChartStartDay').value = defaultRange.start;
+                document.getElementById('revenueChartEndDay').value = defaultRange.end;
                 loadRevenueChart();
                 break;
             case 'product':
-                document.getElementById('productChartDay').value = '6month';
+                document.getElementById('productChartDay').value = 'daily';
                 document.getElementById('productChartGender').value = '';
                 document.getElementById('productChartAgeGroup').value = '';
-                document.getElementById('productChartStartDay').value = '';
-                document.getElementById('productChartEndDay').value = '';
+                document.getElementById('productChartStartDay').value = defaultRange.start;
+                document.getElementById('productChartEndDay').value = defaultRange.end;
                 loadProductChart();
                 break;
             case 'subscriber':
                 document.getElementById('subscriberChartDay').value = 'daily';
                 document.getElementById('subscriberChartGender').value = '';
                 document.getElementById('subscriberChartAgeGroup').value = '';
-                document.getElementById('subscriberChartStartDay').value = '';
-                document.getElementById('subscriberChartEndDay').value = '';
+                document.getElementById('subscriberChartStartDay').value = defaultRange.start;
+                document.getElementById('subscriberChartEndDay').value = defaultRange.end;
                 loadSubscriberChart();
                 break;
             case 'aiService':
-                document.getElementById('aiServiceChartDay').value = 'weekly';
+                document.getElementById('aiServiceChartDay').value = 'daily';
                 document.getElementById('aiServiceChartGender').value = '';
                 document.getElementById('aiServiceChartAgeGroup').value = '';
-                document.getElementById('aiServiceChartStartDay').value = '';
-                document.getElementById('aiServiceChartEndDay').value = '';
+                document.getElementById('aiServiceChartStartDay').value = defaultRange.start;
+                document.getElementById('aiServiceChartEndDay').value = defaultRange.end;
                 loadAiServiceChart();
                 break;
         }
@@ -121,51 +123,90 @@ function paymentStatistics() {
         return `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}`;
     }
     
+    // 기본 날짜 범위 계산 함수들
+    function getRecentDaysRange(days = 7) {
+        const today = new Date();
+        const startDate = new Date(today);
+        startDate.setDate(today.getDate() - (days - 1));
+        
+        return {
+            start: formatDateCal(startDate),
+            end: formatDateCal(today)
+        };
+    }
+    
+    function getCurrentYearRange() {
+        const today = new Date();
+        const startDate = new Date(today.getFullYear(), 0, 1); // 올해 1월 1일
+        
+        return {
+            start: formatDateCal(startDate),
+            end: formatDateCal(today)
+        };
+    }
+    
+    // 차트 로드 시 기본 날짜 범위 설정
+    function setDefaultDateRange() {
+        const weekRange = getRecentDaysRange(7); // 최근 7일
+        
+        // 모든 차트의 시작일과 종료일을 최근 7일로 설정
+        document.getElementById('revenueChartStartDay').value = weekRange.start;
+        document.getElementById('revenueChartEndDay').value = weekRange.end;
+        document.getElementById('productChartStartDay').value = weekRange.start;
+        document.getElementById('productChartEndDay').value = weekRange.end;
+        document.getElementById('subscriberChartStartDay').value = weekRange.start;
+        document.getElementById('subscriberChartEndDay').value = weekRange.end;
+        document.getElementById('aiServiceChartStartDay').value = weekRange.start;
+        document.getElementById('aiServiceChartEndDay').value = weekRange.end;
+        
+        return weekRange;
+    }
+    
     // 일별, 월별, 기간선택에 대해서 이벤트 바인딩
     function eventDateRangeSelect(e) {
         const selectEl = e.target.nodeName == "SELECT" ? e.target : e.target.closest('select');
         const dateValue = selectEl.value;
         
         if(dateValue == 'daily') {
+            // 일별 선택 시 최근 7일 범위 설정
+            const dailyRange = getRecentDaysRange(7);
+            
             if(selectEl.id == 'revenueChartDay') {
-                document.getElementById("revenueChartStartDay").value = '';
-                document.getElementById("revenueChartEndDay").value = '';
+                document.getElementById("revenueChartStartDay").value = dailyRange.start;
+                document.getElementById("revenueChartEndDay").value = dailyRange.end;
                 loadRevenueChart();
             } else if(selectEl.id == 'productChartDay') {
-                document.getElementById("productChartStartDay").value = '';
-                document.getElementById("productChartEndDay").value = '';
+                document.getElementById("productChartStartDay").value = dailyRange.start;
+                document.getElementById("productChartEndDay").value = dailyRange.end;
                 loadProductChart();
             } else if(selectEl.id == 'subscriberChartDay') {
-                document.getElementById("subscriberChartStartDay").value = '';
-                document.getElementById("subscriberChartEndDay").value = '';
+                document.getElementById("subscriberChartStartDay").value = dailyRange.start;
+                document.getElementById("subscriberChartEndDay").value = dailyRange.end;
                 loadSubscriberChart();
             } else if(selectEl.id == 'aiServiceChartDay') {
-                document.getElementById("aiServiceChartStartDay").value = '';
-                document.getElementById("aiServiceChartEndDay").value = '';
+                document.getElementById("aiServiceChartStartDay").value = dailyRange.start;
+                document.getElementById("aiServiceChartEndDay").value = dailyRange.end;
                 loadAiServiceChart();
             }
-        } else if(dateValue == 'monthly' || dateValue == '6month' || dateValue == '1year') {
+        } else if(dateValue == 'monthly') {
+            // 월별 선택 시 올해 1월부터 현재까지 범위 설정
+            const monthlyRange = getCurrentYearRange();
+            
             if(selectEl.id == 'revenueChartDay') {
-                document.getElementById("revenueChartStartDay").value = '';
-                document.getElementById("revenueChartEndDay").value = '';
+                document.getElementById("revenueChartStartDay").value = monthlyRange.start;
+                document.getElementById("revenueChartEndDay").value = monthlyRange.end;
                 loadRevenueChart();
             } else if(selectEl.id == 'productChartDay') {
-                document.getElementById("productChartStartDay").value = '';
-                document.getElementById("productChartEndDay").value = '';
+                document.getElementById("productChartStartDay").value = monthlyRange.start;
+                document.getElementById("productChartEndDay").value = monthlyRange.end;
                 loadProductChart();
             } else if(selectEl.id == 'subscriberChartDay') {
-                document.getElementById("subscriberChartStartDay").value = '';
-                document.getElementById("subscriberChartEndDay").value = '';
+                document.getElementById("subscriberChartStartDay").value = monthlyRange.start;
+                document.getElementById("subscriberChartEndDay").value = monthlyRange.end;
                 loadSubscriberChart();
             } else if(selectEl.id == 'aiServiceChartDay') {
-                document.getElementById("aiServiceChartStartDay").value = '';
-                document.getElementById("aiServiceChartEndDay").value = '';
-                loadAiServiceChart();
-            }
-        } else if(dateValue == 'weekly') {
-            if(selectEl.id == 'aiServiceChartDay') {
-                document.getElementById("aiServiceChartStartDay").value = '';
-                document.getElementById("aiServiceChartEndDay").value = '';
+                document.getElementById("aiServiceChartStartDay").value = monthlyRange.start;
+                document.getElementById("aiServiceChartEndDay").value = monthlyRange.end;
                 loadAiServiceChart();
             }
         } else if(dateValue == 'selectDays') {
@@ -705,6 +746,7 @@ function paymentStatistics() {
     }
     
     // 초기 데이터 로드
+    setDefaultDateRange(); // 기본적으로 이번주 범위 설정
     loadSubscriberSummary();
     loadRevenueChart();
     loadProductChart();

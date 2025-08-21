@@ -66,8 +66,8 @@
                 <input type="hidden" id="productChartEndDay" />
                 <button class="public-toggle-button" id="productChartReset">전체</button>
                 <select class="public-toggle-select" name="productChartDay" id="productChartDay">
-                    <option value="6month">6개월</option>
-                    <option value="1year">1년</option>
+                    <option value="daily">일별</option>
+                    <option value="monthly">월별</option>
                     <option value="selectDays">기간선택</option>
                 </select>
                 <select class="public-toggle-select" name="productChartGender" id="productChartGender">
@@ -125,8 +125,8 @@
                 <input type="hidden" id="aiServiceChartEndDay" />
                 <button class="public-toggle-button" id="aiServiceChartReset">전체</button>
                 <select class="public-toggle-select" name="aiServiceChartDay" id="aiServiceChartDay">
-                    <option value="weekly">주간</option>
-                    <option value="monthly">월간</option>
+                    <option value="daily">일별</option>
+                    <option value="monthly">월별</option>
                     <option value="selectDays">기간선택</option>
                 </select>
                 <select class="public-toggle-select" name="aiServiceChartGender" id="aiServiceChartGender">
