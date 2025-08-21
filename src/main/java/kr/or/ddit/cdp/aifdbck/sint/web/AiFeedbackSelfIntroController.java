@@ -60,9 +60,16 @@ public class AiFeedbackSelfIntroController {
 		selfIntroVO.setSize(9999); // 충분히 큰 값으로 설정하여 모든 데이터를 가져옴
 		// 서비스 메서드를 호출하여 해당 사용자의 자기소개서 전체 목록을 가져옴
 		List<SelfIntroVO> selfIntroList = selfIntroService.selectSelfIntroBymemId(selfIntroVO);
+		
+		// 1. 회원 현재 구독정보 가져오기
+		MemberSubscriptionVO currentSub = paymentService.selectByMemberId(Integer.parseInt(memId));
 
+		// 2. 현재 구독정보가 잇으면 최신 결제 정보(남은 횟수 포함) 가져오기
+		PaymentVO aiCounts = aiFeedbackSelfIntroService.selectLastPaymentInfo(currentSub);
+		
 		// JSP로 넘겨줄 모델에 담기. JSTL <c:forEach>의 items 속성과 일치하도록 "selfIntroList"로 명명.
 		model.addAttribute("selfIntroList", selfIntroList);
+		model.addAttribute("aiCounts", aiCounts);
 
 		return "cdp/aifdbck/sint/aiFeedbackSelfIntro";
 	}

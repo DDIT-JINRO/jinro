@@ -4,6 +4,14 @@
 let aiFeedbackData = null;
 document.addEventListener('DOMContentLoaded', () => {
 
+	// --- 주요 HTML 요소 가져오기 ---
+	const resumeList = document.getElementById('resumeList');
+	const requestAiFeedbackBtn = document.getElementById('requestAiFeedback');
+	const bg = document.getElementById('modalBg');
+	const modal = document.getElementById('confirmModal');
+	const btnCancel = document.getElementById('btnCancel');
+	const btnConfirm = document.getElementById('btnConfirm');
+
 	// 구독 정보를 저장할 전역 변수
 	let subscriptionInfo = null;
 
@@ -13,8 +21,46 @@ document.addEventListener('DOMContentLoaded', () => {
 	const selfIntroList = document.getElementById('selfIntroList');
 	selfIntroList.addEventListener('change', loadSelfIntroDetail);
 
-	const requestAiFeedbackBtn = document.getElementById('requestAiFeedback');
-	requestAiFeedbackBtn.addEventListener('click', requestAiFeedback);
+
+	// 'AI 피드백 요청' 버튼 클릭 -> 모달 열기
+	if (requestAiFeedbackBtn) {
+		requestAiFeedbackBtn.addEventListener('click', () => {
+			// --- 사전 조건 검사 ---
+			if (!subscriptionInfo || !subscriptionInfo.payId) {
+				alert('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.');
+				return;
+			}
+			if (!originalData) {
+				alert('먼저 피드백을 받을 자기소개서를 선택해주세요.');
+				return;
+			}
+			if (subscriptionInfo.payCoverCnt <= 0) {
+				alert('자기소개서 첨삭 횟수를 모두 사용했습니다.');
+				return;
+			}
+			document.getElementById('cover-count-display').textContent = subscriptionInfo.payCoverCnt;
+			// --- 모달 표시 ---
+			bg.style.display = 'block';
+			modal.style.display = 'block';
+			modal.focus();
+		});
+	}
+
+	// 모달의 '확인' 버튼 클릭 -> 실제 AI 분석 및 횟수 차감 요청
+	btnConfirm.addEventListener('click', () => {
+		closeModal();
+		requestAiFeedback();
+	});
+
+	// 모달 닫기 관련 이벤트 리스너
+	function closeModal() {
+		modal.style.display = 'none';
+		bg.style.display = 'none';
+	}
+	btnCancel.addEventListener('click', closeModal);
+	bg.addEventListener('click', closeModal);
+	window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'block') closeModal(); });
+
 
 	//페이지 로드시 구독 상태를 확인하는 함수
 	const checkSubscription = () => {
@@ -110,20 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//자기소개서 ai 첨삭 호출
 	function requestAiFeedback() {
-		if (!subscriptionInfo || !subscriptionInfo.payId) {
-			alert('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.');
-			return;
-		}
-
-		if (!originalData) {
-			alert('먼저 자기소개서를 선택해주세요.');
-			return;
-		}
-
-		if (subscriptionInfo.payCoverCnt <= 0) {
-			alert('자기소개서 첨삭 횟수를 모두 사용했습니다.');
-			return;
-		}
 
 		const feedbackArea = document.getElementById('feedbackArea');
 		feedbackArea.innerHTML = `
@@ -143,19 +175,22 @@ document.addEventListener('DOMContentLoaded', () => {
 			};
 		});
 
-	// AI 첨삭 요청 (단일 요청으로 변경)
-	fetch('/ai/proofread/coverletter', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ "sections": sections })
-	})
-		.then(response => {
-			if (!response.ok) throw new Error('AI 첨삭 요청 실패');
-			return response.text();
+		// AI 첨삭 요청 (단일 요청으로 변경)
+		fetch('/cdp/aifdbck/sint/requestFeedbackPI.do', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				"payId": subscriptionInfo.payId,
+				"sections": sections
+			})
 		})
-		.then(aiResponseText => {
-			// AI 응답 텍스트를 정리하고 파싱
-			const cleanedText = cleanAiResponse(aiResponseText);
+			.then(response => {
+				if (!response.ok) throw new Error('AI 첨삭 요청 실패');
+				return response.text();
+			})
+			.then(aiResponseText => {
+				// AI 응답 텍스트를 정리하고 파싱
+				const cleanedText = cleanAiResponse(aiResponseText);
 
 				// ---로 구분된 피드백을 파싱
 				const sections = cleanedText.split('---').map(section => section.trim()).filter(section => section.length > 0);
@@ -171,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				// ⭐️ 성공 시 로컬 자소서 횟수 1 차감 후 알림
 				subscriptionInfo.payCoverCnt--;
 				alert(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payCoverCnt}회)`);
-				
+
 			})
 			.catch(error => {
 				console.error('AI 피드백 요청 오류:', error);

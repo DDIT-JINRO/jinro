@@ -122,7 +122,12 @@
 					</div>
 				</div>
 			</div>
-
+			
+			<div id="usage-data" 
+			     data-consult-cnt="${usageCounts.payConsultCnt != null ? usageCounts.payConsultCnt : 0}"
+			     style="display: none;">
+			</div>
+			
 			<!-- 모달 -->
 			<div class="ai-modal-backdrop" id="modalBg" aria-hidden="true"></div>
 			<div class="ai-modal" id="confirmModal" role="dialog"
@@ -133,7 +138,7 @@
 						<b>선택 주제</b> : <span id="kvType">-</span>
 					</div>
 					<div>
-						<b>차감 횟수</b> : <span id="kvUse">1회</span>
+						<b>남은 이용권 수</b> : ${usageCounts.payConsultCnt}</span>회
 					</div>
 				</div>
 				<p>확인을 누르면 이용권이 차감되며, 새 팝업 창에서 상담이 시작됩니다.</p>
