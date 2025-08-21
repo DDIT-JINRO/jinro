@@ -56,11 +56,8 @@ public class AiFeedbackResumeController {
 
 		List<ResumeVO> resumeList = resumeService.selectResumeBymemId(resumeVO);
 		
-		
-		int memId1 = Integer.parseInt(principal.getName());
-
 		// 1. 회원 현재 구독정보 가져오기
-		MemberSubscriptionVO currentSub = paymentService.selectByMemberId(memId1);
+		MemberSubscriptionVO currentSub = paymentService.selectByMemberId(Integer.parseInt(memId));
 
 		// 2. 현재 구독정보가 잇으면 최신 결제 정보(남은 횟수 포함) 가져오기
 		PaymentVO aiCounts = aiFeedbackResumeService.selectLastPaymentInfo(currentSub);
