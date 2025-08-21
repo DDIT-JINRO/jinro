@@ -300,4 +300,46 @@
 		        </choose>
 		    FETCH FIRST 3 ROWS ONLY
 	</select>
+	
+	<select id="selectCounselingStatsByCategory" parameterType="map" resultType="map">
+	    SELECT
+	        c.CC_NAME,
+	        COUNT(A.COUNSEL_ID) AS total_consultations
+	    FROM
+	        COUNSELING A
+	    JOIN
+	        MEMBER M ON A.MEM_ID = M.mem_id
+	    join COM_CODE c on a.COUNSEL_CATEGORY = c.CC_ID
+	    <where>
+	        A.COUNSEL_CATEGORY IN ('G07001', 'G07002', 'G07003')
+	        and a.COUNSEL_STATUS != 'S04002'
+	        <if test='selectUserInquiry != null and selectUserInquiry != ""'>
+	            <choose>
+	                <when test='selectUserInquiry == "daily"'>
+	                    AND TRUNC(A.counsel_req_datetime) = TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	                </when>
+	                <when test='selectUserInquiry == "monthly"'>
+	                    AND TO_CHAR(A.counsel_req_datetime, 'YYYY-MM') = TO_CHAR(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'YYYY-MM')
+	                </when>
+	                <when test='selectUserInquiry == "selectDays"'>
+	                    AND A.counsel_req_datetime BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+	                </when>
+	            </choose>
+	        </if>
+	        
+			<if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
+		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, M.MEM_BIRTH) / 12) &lt;= 19
+		    </if>
+		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
+		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, M.MEM_BIRTH) / 12) &gt;= 20
+		    </if>
+	        
+	        <if test='gender != null and gender != ""'>
+	            AND M.MEM_GEN = #{gender}
+	        </if>
+	    </where>
+	    GROUP BY
+	        c.CC_NAME
+	    ORDER BY c.CC_NAME
+</select>
 </mapper>

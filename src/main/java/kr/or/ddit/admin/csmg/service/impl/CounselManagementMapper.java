@@ -30,4 +30,7 @@ public interface CounselManagementMapper {
 	
 	//상담사 top3
 	List<Map<String, Object>> selectTopCounselorList(Map<String, Object> map);
+	
+	//상담종류별 통계
+	List<Map<String, Object>> selectCounselingStatsByCategory(Map<String, Object> map);
 }

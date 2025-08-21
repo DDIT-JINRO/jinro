@@ -139,6 +139,14 @@ public class CounselManagementServiceImpl implements CounselManagementService {
 		
 		return list;
 	}
+
+	@Override
+	public List<Map<String, Object>> selectCounselingStatsByCategory(Map<String, Object> map) {
+
+		List<Map<String, Object>> list = counselManagementMapper.selectCounselingStatsByCategory(map);
+		
+		return list;
+	}
 	
 	
 	
