@@ -1,48 +1,46 @@
 
 // FAQ 모달창
-document.addEventListener("DOMContentLoaded", () => {
-	document.querySelectorAll(".faq-question").forEach(button => {
-		button.addEventListener("click", () => {
-
-			const answer = button.nextElementSibling;
-			const isOpen = answer.classList.contains("active");
-
-			// 다른 열려 있는 FAQ 닫기
-			document.querySelectorAll(".faq-answer").forEach(a => a.classList.remove("active"));
-			document.querySelectorAll(".arrow").forEach(arrow => arrow.textContent = '▼');
-
-			if (!isOpen) {
-				answer.classList.add("active");
-				button.querySelector(".arrow").textContent = '▲';
-			}
+document.addEventListener('DOMContentLoaded', function() {
+	const cardHeaders = document.querySelectorAll(".accordion-list__item-header");
+	cardHeaders.forEach((cardHeader) => {
+		cardHeader.addEventListener("click", function() {
+			toggleCard(this);
 		});
 	});
+
+	// 페이지 로드 시 모든 카드 닫힌 상태로 초기화
+	const allContents = document.querySelectorAll('.accordion-list__item-content');
+	const allHeaders = document.querySelectorAll('.accordion-list__item-header');
+	const allToggles = document.querySelectorAll('.accordion-list__toggle-icon');
+
+	allContents.forEach(content => content.classList.remove('is-active'));
+	allHeaders.forEach(header => header.classList.remove('is-active'));
+	allToggles.forEach(toggle => toggle.classList.remove('is-active'));
 });
-// 파일 다운로드
-function filedownload(fileGroupId,fileSeq,fileOrgName){
-	axios({
-	  method: 'get',
-	  url: `/files/download`,
-	  params: {
-		fileGroupId: fileGroupId, 
-		seq: fileSeq            
-	  },
-	  responseType: 'blob' // 중요: 파일 다운로드 시 꼭 필요
-	})
-	.then(response => {
-	  // 브라우저에서 파일 저장 처리
-	  const blob = new Blob([response.data]);
-	  const url = window.URL.createObjectURL(blob);
-	  
-	  const a = document.createElement('a');
-	  a.href = url;
-	  a.download = fileOrgName;
-	  document.body.appendChild(a);
-	  a.click();
-	  document.body.removeChild(a);
-	  window.URL.revokeObjectURL(url);
-	})
-	.catch(error => {
-	  console.error('파일 다운로드 실패:', error);
+
+function toggleCard(header) {
+	const currentCard = header.closest('.accordion-list__item');
+	const currentContent = currentCard.querySelector('.accordion-list__item-content');
+	const currentToggle = header.querySelector('.accordion-list__toggle-icon');
+	const isOpening = !currentContent.classList.contains('is-active');
+
+	// 다른 모든 FAQ 아이템 닫기
+	document.querySelectorAll('.accordion-list__item').forEach(item => {
+		if (item !== currentCard) {
+			item.querySelector('.accordion-list__item-content').classList.remove('is-active');
+			item.querySelector('.accordion-list__item-header').classList.remove('is-active');
+			item.querySelector('.accordion-list__toggle-icon').classList.remove('is-active');
+		}
 	});
+
+	// 현재 아이템 토글
+	if (isOpening) {
+		currentContent.classList.add('is-active');
+		header.classList.add('is-active');
+		currentToggle.classList.add('is-active');
+	} else {
+		currentContent.classList.remove('is-active');
+		header.classList.remove('is-active');
+		currentToggle.classList.remove('is-active');
+	}
 }

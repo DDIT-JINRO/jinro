@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function autoCompleteHandler() {
 	//제목 입력 필드 자동완성
-	const titleInput = document.querySelector('.form-section .form-input');
+	const titleInput = document.querySelector('input[name="idlTitle"]');
 	if (titleInput && titleInput.value.trim() == '새 면접 질문' || titleInput.value.trim() == '') {
 		titleInput.value = '나의 모의면접 질문 초안';
 	}

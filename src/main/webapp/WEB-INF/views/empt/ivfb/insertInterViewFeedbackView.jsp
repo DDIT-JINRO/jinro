@@ -27,6 +27,9 @@
 </section>
 <div>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<h3 class="page-title-bar__title">면접 후기</h3>
+		</div>
 		<div class="public-wrapper-main">
 			<div class="feedback-form">
 				<div class="feedback-form__header">

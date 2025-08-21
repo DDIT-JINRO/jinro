@@ -141,7 +141,7 @@ function countChars(textarea, index) {
 function autoCompleteHandler() {
 
 	//제목 입력 필드 찾기
-	const titleInput = document.querySelector('.form-section .form-input');
+	const titleInput = document.querySelector('input[name="siTitle"]');
 
 	//제목이 비어 있을 경우에만 자동 완성
 	if (titleInput && titleInput.value.trim() == '') {

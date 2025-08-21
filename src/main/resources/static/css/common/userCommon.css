@@ -880,11 +880,12 @@ html, body {
 	align-items: center;
 	border: 1px solid #e5e7eb;
 	border-radius: 8px;
-	transition: background-color 0.2s ease;
+	transition: all 0.2s ease;
 }
 
 .content-list__item:hover {
-	background-color: #f9fafb;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #d1d5db;
 	cursor: pointer;
 }
 
@@ -974,7 +975,8 @@ html, body {
     transition: box-shadow 0.2s ease;
 }
 .accordion-list__item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #d1d5db;
 }
 
 .accordion-list__item-header {

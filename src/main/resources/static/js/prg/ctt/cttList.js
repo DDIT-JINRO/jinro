@@ -4,34 +4,38 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 	// 토글 버튼
-	const toggleButton = document.getElementById('com-accordion-toggle');
+	const toggleButton = document.getElementById('search-filter-toggle');
 
 	// 필터 패널 
-	const panel = document.getElementById('com-accordion-panel');
+	const panel = document.getElementById('search-filter-panel');
 
-	// 필터 키워드
-	const filterInputs = document.querySelectorAll('.com-filter-item input[type="checkbox"], .com-filter-item input[type="radio"]');
-	const filterCheckboxes = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
-	const filterRadios = document.querySelectorAll('.com-filter-item input[type="radio"]'); // 라디오 버튼 추가
+	// 필터 입력 요소들
+	const filterInputs = document.querySelectorAll('.search-filter__option input[type="checkbox"], .search-filter__option input[type="radio"]');
+	const filterCheckboxes = document.querySelectorAll('.search-filter__option input[type="checkbox"]');
+	const filterRadios = document.querySelectorAll('.search-filter__option input[type="radio"]');
 
-	// 선택 필터 영역
-	const selectedFiltersContainer = document.querySelector('.com-selected-filters');
+	// 선택된 필터 태그가 표시될 컨테이너
+	const selectedFiltersContainer = document.querySelector('.search-filter__selected-tags');
 
 	// 초기화 버튼
-	const resetButton = document.querySelector('.com-filter-reset-btn');
+	const resetButton = document.querySelector('.search-filter__reset-button');
 
-	// 아코디언 코드
+	// 아코디언 기능
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
-			this.classList.toggle('active');
-			panel.classList.toggle('open');
+			this.classList.toggle('is-active');
+			panel.classList.toggle('is-open');
 		});
 	}
 
 	// 필터 태그 추가
 	const createFilterTag = (text, inputName) => {
-		const filterTag = `<span class="com-selected-filter" data-filter="${text}" data-name="${inputName}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
-		selectedFiltersContainer.innerHTML += filterTag;
+		const filterTag = document.createElement('span');
+		filterTag.className = 'search-filter__tag';
+		filterTag.dataset.filter = text;
+		filterTag.dataset.name = inputName;
+		filterTag.innerHTML = `${text} <button type="button" class="search-filter__tag-remove">×</button>`;
+		selectedFiltersContainer.appendChild(filterTag);
 	};
 
 	// 필터 태그 삭제
@@ -65,10 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	//라디오 버튼 변경 시 이벤트 처리
 	filterRadios.forEach(radio => {
 		radio.addEventListener('change', (e) => {
-			// 1. 같은 그룹의 기존 태그를 먼저 삭제
 			removeFilterTagByInputName(e.target.name);
-
-			// 2. 새로 선택된 항목의 태그를 추가 (기본값은 제외)
 			if (e.target.checked && !(e.target.name === 'sortOrder' && e.target.value === 'deadline')) {
 				const labelText = e.target.nextElementSibling.textContent;
 				createFilterTag(labelText, e.target.name);
@@ -77,78 +78,69 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
-	selectedFiltersContainer.addEventListener('click', (e) => {
-		if (e.target.classList.contains('com-remove-filter')) {
-			const tag = e.target.closest('.com-selected-filter');
-			const filterText = tag.dataset.filter;
+	if (selectedFiltersContainer) {
+		selectedFiltersContainer.addEventListener('click', (e) => {
+			if (e.target.classList.contains('search-filter__tag-remove')) {
+				const tag = e.target.closest('.search-filter__tag');
+				const filterText = tag.dataset.filter;
 
-			// 연결된 체크박스 또는 라디오 버튼을 찾아서 해제
-			const inputToUncheck = Array.from(filterInputs).find(
-				input => input.nextElementSibling.textContent.trim() === filterText.trim()
-			);
-			if (inputToUncheck) {
-				inputToUncheck.checked = false;
+				const inputToUncheck = Array.from(filterInputs).find(
+					input => input.nextElementSibling.textContent.trim() === filterText.trim()
+				);
+
+				if (inputToUncheck) {
+					inputToUncheck.checked = false;
+				}
+
+				tag.remove();
 			}
-
-			tag.remove();
-		}
-	});
+		});
+	}
 
 	// 초기화 버튼 클릭 시 이벤트 처리
 	if (resetButton) {
 		resetButton.addEventListener('click', () => {
-			filterCheckboxes.forEach(input => {
+			filterInputs.forEach(input => {
 				input.checked = false;
 			});
-			// 정렬 라디오 버튼은 기본값(마감일순)으로 다시 체크해줍니다.
 			const defaultSort = document.querySelector('input[name="sortOrder"][value="deadline"]');
 			if (defaultSort) defaultSort.checked = true;
 
-			selectedFiltersContainer.innerHTML = '';
+			if (selectedFiltersContainer) selectedFiltersContainer.innerHTML = '';
 		});
-
-		// 페이지가 로드될 때 URL을 분석하여 필터를 복원하는 함수
-		function restoreFiltersFromUrl() {
-			// 1. 현재 페이지의 URL에서 모든 파라미터를 읽어옵니다.
-			const urlParams = new URLSearchParams(window.location.search);
-
-			// 2. 모든 필터 입력(체크박스 + 라디오)을 하나씩 확인합니다.
-			filterInputs.forEach(input => {
-				const paramName = input.name;   // <input>의 name 속성
-				const paramValue = input.value; // <input>의 value 속성
-
-				let isSelected = false;
-
-				// 3. 입력 타입에 따라 URL 파라미터와 비교합니다.
-				if (input.type === 'checkbox') {
-					// 체크박스는 같은 name으로 여러 값이 올 수 있으므로 getAll, includes로 확인
-					const paramValues = urlParams.getAll(paramName);
-					if (paramValues.includes(paramValue)) {
-						isSelected = true;
-					}
-				} else if (input.type === 'radio') {
-					// 라디오 버튼 그룹은 하나의 값만 가지므로 get으로 확인
-					if (urlParams.get(paramName) === paramValue) {
-						isSelected = true;
-					}
-				}
-
-				// 4. URL 파라미터와 일치하는 입력 요소를 선택 상태로 만듭니다.
-				if (isSelected) {
-					input.checked = true;
-
-					// 5. '선택된 필터' 영역에 태그도 함께 생성합니다. (단, 기본 정렬값은 제외)
-					if (!(input.name === 'sortOrder' && input.value === 'deadline')) {
-						const labelText = input.nextElementSibling.textContent;
-						createFilterTag(labelText, input.name);
-					}
-				}
-			});
-		}
-
-		// 페이지가 처음 로드될 때 필터 복원 함수를 실행합니다.
-		restoreFiltersFromUrl();
 	}
+
+	// 페이지가 로드될 때 URL을 분석하여 필터를 복원하는 함수
+	function restoreFiltersFromUrl() {
+		const urlParams = new URLSearchParams(window.location.search);
+
+		filterInputs.forEach(input => {
+			const paramName = input.name;
+			const paramValue = input.value;
+			let isSelected = false;
+
+			if (input.type === 'checkbox') {
+				if (urlParams.getAll(paramName).includes(paramValue)) {
+					isSelected = true;
+				}
+			} else if (input.type === 'radio') {
+				if (urlParams.get(paramName) === paramValue) {
+					isSelected = true;
+				}
+			}
+
+			if (isSelected) {
+				input.checked = true;
+				if (!(input.name === 'sortOrder' && input.value === 'deadline')) {
+					const labelText = input.nextElementSibling.textContent;
+					createFilterTag(labelText, input.name);
+				}
+			}
+		});
+	}
+
+	// 페이지가 처음 로드될 때 필터 복원 함수를 실행합니다.
+	restoreFiltersFromUrl();
 
 	// 페이지에 있는 모든 D-Day 항목들을 선택합니다.
 	const dDayItems = document.querySelectorAll('.d-day-item');

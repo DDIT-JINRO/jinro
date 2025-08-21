@@ -26,11 +26,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
-		
+
 		const files = fileInput.files;
-		if(files.length == 0) {
+		if (files.length == 0) {
 			alert("템플릿 파일을 등록해주세요.")
-			return;			
+			return;
 		}
 
 		for (let i = 0; i < files.length; i++) {
@@ -58,52 +58,90 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 });
 
-document.getElementById('file-input').addEventListener('change', function(event) {
-    const previewContainer = document.getElementById('preview-container');
-    const previewList = document.getElementById('preview-list');
-    
-    // 이전에 생성된 미리보기가 있다면 모두 삭제
-    previewList.innerHTML = '';
+document.getElementById('fileInput').addEventListener('change', function(event) {
+	const mainPreviewContainer = document.getElementById('preview-container'); // 이름 변경
+	const previewList = document.getElementById('preview-list');
 
-    const files = event.target.files;
-    let pdfFound = false; // PDF 파일 존재 여부 플래그
+	// 이전에 생성된 미리보기가 있다면 모두 삭제
+	previewList.innerHTML = '';
 
-    // 선택된 모든 파일을 순회
-    for (const file of files) {
-        // 파일 타입이 PDF인 경우에만 미리보기 생성
-        if (file.type === 'application/pdf') {
-            pdfFound = true; // PDF 파일을 찾았다고 표시
+	const files = event.target.files;
+	let pdfFound = false;
 
-            // 1. 미리보기를 감쌀 div 생성
-            const previewItem = document.createElement('div');
-            previewItem.className = 'pdf-preview-item';
+	// 선택된 모든 파일을 순회
+	for (let i = 0; i < files.length; i++) {
+		const file = files[i];
 
-            // 2. 파일 이름을 표시할 h4 태그 생성
-            const fileName = document.createElement('h4');
-            fileName.className = 'pdf-file-name';
-            fileName.textContent = file.name;
+		// 파일 타입이 PDF인 경우에만 미리보기 항목 생성
+		if (file.type === 'application/pdf') {
+			pdfFound = true;
 
-            // 3. PDF를 표시할 iframe 생성
-            const iframe = document.createElement('iframe');
-            iframe.className = 'pdf-iframe';
-            iframe.title = file.name + ' 미리보기';
-			
-            // 4. iframe에 PDF 뷰어 경로 설정
-            const fileURL = URL.createObjectURL(file);
-            const viewerURL = `/js/pdfjs/web/viewer.html?file=${encodeURIComponent(fileURL)}#zoom=page-fit`;
-            iframe.src = viewerURL;
+			// 파일 아이템 컨테이너 생성
+			const fileItem = document.createElement('div');
+			fileItem.className = 'pdf-file-item';
 
-            // 5. 생성된 요소들을 조립하여 preview-list에 추가
-            previewItem.appendChild(fileName);
-            previewItem.appendChild(iframe);
-            previewList.appendChild(previewItem);
-        }
-    }
+			// 파일 헤더 (파일명 + 버튼) 생성
+			const fileHeader = document.createElement('div');
+			fileHeader.className = 'pdf-file-header';
 
-    // PDF 파일이 하나라도 있었으면 전체 미리보기 컨테이너를 보여줌
-    if (pdfFound) {
-        previewContainer.style.display = 'block';
-    } else {
-        previewContainer.style.display = 'none';
-    }
+			// 파일 이름
+			const fileName = document.createElement('div');
+			fileName.className = 'pdf-file-name';
+			fileName.textContent = file.name;
+
+			// 미리보기 토글 버튼
+			const previewBtn = document.createElement('button');
+			previewBtn.className = 'btn-pdf-preview';
+			previewBtn.textContent = '미리보기 보기';
+			previewBtn.type = 'button';
+
+			// 미리보기 컨테이너 생성 (이름 변경)
+			const pdfPreviewContainer = document.createElement('div');
+			pdfPreviewContainer.className = 'pdf-preview-container';
+
+			// PDF iframe 생성
+			const iframe = document.createElement('iframe');
+			iframe.className = 'pdf-iframe';
+			iframe.title = file.name + ' 미리보기';
+
+			previewBtn.addEventListener('click', function() {
+				if (pdfPreviewContainer.classList.contains('open')) {
+					pdfPreviewContainer.classList.remove('open');
+					previewBtn.textContent = '미리보기 보기';
+				} else {
+					// 다른 모든 미리보기 닫기
+					const allPreviews = document.querySelectorAll('.pdf-preview-container.open');
+					const allButtons = document.querySelectorAll('.btn-pdf-preview');
+
+					allPreviews.forEach(preview => preview.classList.remove('open'));
+					allButtons.forEach(btn => btn.textContent = '미리보기 보기');
+
+					// iframe이 아직 로드되지 않았다면 지금 로드
+					if (!iframe.src) {
+						const fileURL = URL.createObjectURL(file);
+						const viewerURL = `/js/pdfjs/web/viewer.html?file=${encodeURIComponent(fileURL)}&locale=en-US#zoom=page-fit`;
+						iframe.src = viewerURL;
+					}
+
+					pdfPreviewContainer.classList.add('open');
+					previewBtn.textContent = '미리보기 닫기';
+				}
+			});
+
+			// 요소들 조립
+			fileHeader.appendChild(fileName);
+			fileHeader.appendChild(previewBtn);
+			pdfPreviewContainer.appendChild(iframe);
+			fileItem.appendChild(fileHeader);
+			fileItem.appendChild(pdfPreviewContainer);
+			previewList.appendChild(fileItem);
+		}
+	}
+
+	// PDF 파일이 하나라도 있었으면 전체 컨테이너를 보여줌
+	if (pdfFound) {
+		mainPreviewContainer.style.display = 'block'; // 올바른 변수 사용
+	} else {
+		mainPreviewContainer.style.display = 'none';
+	}
 });
