@@ -4,13 +4,14 @@
    메인 배너
    ========================================================================== */
 .main-banner {
-	width: 100%;
-	height: 750px;
-	background-color: #CCDCFE;
-	animation: slideDownFade 1s ease-out forwards;
-	animation-delay: 0.2s;
-	opacity: 0; /* 애니메이션 시작 전 숨김 */
-	overflow: hidden;
+    width: 100%;
+    height: 750px;
+    background-color: #CCDCFE;
+    transition: background-color 0.5s ease;
+    animation: slideDownFade 1s ease-out forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+    overflow: hidden;
 }
 
 .main-banner__inner {
@@ -102,6 +103,20 @@
 	z-index: 2;
 }
 
+.main-banner__float-icon--char2 {
+	width: 80%;
+    bottom: 10%;
+    left: 25%;
+    animation-delay: 0.3s;
+    z-index: 2;
+}
+.main-banner__float-icon--char3{
+	width: 75%;
+    bottom: 10%;
+    left: 25%;
+    animation-delay: 0.3s;
+    z-index: 2;
+}
 .main-banner__float-icon--1 {
 	width: 90px;
 	top: 15%;
@@ -353,7 +368,6 @@
 
 .content-showcase__header {
 	text-align: center;
-	margin-bottom: 80px;
 }
 
 .content-showcase__title {
@@ -380,7 +394,7 @@
 
 .content-card {
 	width: 300px;
-	padding: 24px;
+	padding: 12px 24px 24px;
 	background: #fff;
 	border-radius: 12px;
 	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
@@ -1107,3 +1121,34 @@
 		height: 40px;
 	}
 }
+
+/* 유튜브 관련 */
+.goToTest {
+    margin-right: 200px;
+    top: 50%;            
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;  
+    align-items: flex-end;   
+ 	display: none;
+}
+.goToTest button {
+    padding: 8px 16px;
+    cursor: pointer;
+	background-color: #eeeeee;
+    color: #333333;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 700;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid black;
+    
+}
+
+.goToTest p{
+	font-size: 14px;
+	color: #778899;
+	
+}
+

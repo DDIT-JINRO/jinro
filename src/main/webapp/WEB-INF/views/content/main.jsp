@@ -86,7 +86,7 @@
 						</div>
 						<div class="main-banner__visuals">
 							<img src="/images/main/loadMapIcon-board.png" class="main-banner__float-icon main-banner__float-icon--1" />
-							<img src="/images/main/loadMapIcon-charactor.png" class="main-banner__float-icon main-banner__float-icon--char" />
+							<img src="/images/main/selectDept-logo.png" class="main-banner__float-icon main-banner__float-icon--char2 "/>
 							<img src="/images/main/loadMapIcon-book.png" class="main-banner__float-icon main-banner__float-icon--2" />
 							<img src="/images/main/loadMapIcon-book2.png" class="main-banner__float-icon main-banner__float-icon--3" />
 							<img src="/images/main/loadMapIcon-chart.png" class="main-banner__float-icon main-banner__float-icon--4" />
@@ -110,7 +110,7 @@
 
 						<div class="main-banner__visuals">
 							<img src="/images/main/loadMapIcon-board.png" class="main-banner__float-icon main-banner__float-icon--1" />
-							<img src="/images/main/loadMapIcon-charactor.png" class="main-banner__float-icon main-banner__float-icon--char" />
+							<img src="/images/main/selectJobs-logo.png" class="main-banner__float-icon main-banner__float-icon--char3" />
 							<img src="/images/main/loadMapIcon-book.png" class="main-banner__float-icon main-banner__float-icon--2" />
 							<img src="/images/main/loadMapIcon-book2.png" class="main-banner__float-icon main-banner__float-icon--3" />
 							<img src="/images/main/loadMapIcon-chart.png" class="main-banner__float-icon main-banner__float-icon--4" />
@@ -292,17 +292,24 @@
 	</section>
 
 	<section class="content-showcase content-showcase--youtube">
-		<a href="/main/youtubeJsp">유튜브 API 확인 </a>
 		<div class="content-showcase__header">
 			<h2 id="typing-js" class="content-showcase__title typing-js"></h2>
 		</div>
-		<div class="content-showcase__list">
-			<div class="content-card">
-				<iframe class="content-card__video" width="300" height="215" src="https://www.youtube.com/embed/U5GU0uoKEUs" frameborder="0" allowfullscreen></iframe>
+		<div>
+			<div class="goToTest" id="nonKeyword">
+				<p>* 맞춤 영상을 제공받고 싶다면?</p>
+				<button onclick="location.href='/pse/cat/careerAptitudeTest.do'">진로검사 시작하기</button>
 			</div>
-			<div class="content-card"></div>
-			<div class="content-card"></div>
-			<div class="content-card"></div>
+			<div class="goToTest" id="getKeyword">
+				<p>*<span id="goToTestJobName" style="font: bold; font-weight: 600"></span>의 직업이 궁금하다면?</p>
+				<button id="getKeywordBtn">직업정보 확인하기</button>
+			</div>
+			<div class="content-showcase__list">
+				
+			</div>
+			<div class="content-showcase__header" style="margin-top: 10px;">
+				<h3>커리어패스는 회원님의 진로 및 관심사에 맞춰 맞춤 동영상을 제공합니다!</h3>
+			</div>
 		</div>
 	</section>
 

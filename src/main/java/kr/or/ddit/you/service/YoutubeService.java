@@ -1,5 +1,7 @@
 package kr.or.ddit.you.service;
 
+import java.util.Map;
+
 public interface YoutubeService {
-	public String getKeyword(String memId);
+	public Map<String, Object> getKeyword(String memId);
 }

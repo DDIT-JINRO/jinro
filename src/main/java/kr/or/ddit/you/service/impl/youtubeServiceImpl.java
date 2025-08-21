@@ -1,5 +1,8 @@
 package kr.or.ddit.you.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +18,31 @@ public class youtubeServiceImpl implements YoutubeService {
 	YoutubeMapper mapper;
 	
 	@Override
-	// 사용자별 관심사 키워드 가져오기
-	public String getKeyword(String memId) {
-		String data = "";
-		data = this.mapper.getKeyword(Integer.parseInt(memId));
-		
-		if(data != null) {
-			return data;
-		}else {
-			return "직업|흥미";
-		}
+	public Map<String, Object> getKeyword(String memId) {
+	    String data = "";
+	    Map<String, Object> map = this.mapper.getKeyword(Integer.parseInt(memId));
+
+	    log.info("datadatadatadata: "+map);
+	    
+	    // 결과 없으면 새로운 HashMap 생성
+	    if (map == null) {
+	        map = new HashMap<>();
+	    }
+
+	    if (map.get("RESULT") != null) {
+	        data = map.get("RESULT").toString();
+	    }
+
+	    if (data != null) {
+	        if (data.contains("·")) {
+	            String replaceData = data.replace("·", " 적성 |");
+	            map.put("RESULT", replaceData);
+	        }
+	        return map;
+	    } else {
+	        map.put("RESULT", "직업");
+	        return map;
+	    }
 	}
+
 }

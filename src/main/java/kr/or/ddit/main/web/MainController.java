@@ -33,7 +33,6 @@ public class MainController {
 	
 	@GetMapping
 	public String main(@AuthenticationPrincipal String memId, Model model) {
-		
 		if(memId!="anonymousUser") {
 			Boolean isTeen = teenCommService.isTeen(memId); 
 			
