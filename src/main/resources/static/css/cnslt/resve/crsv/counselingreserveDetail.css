@@ -151,8 +151,8 @@
 .ai-modal {
 	position: fixed;
 	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
+	top: 80px; /* 원하는 상단 위치 */
+	transform: translateX(-50%);
 	width: 420px;
 	max-width: 90vw;
 	background: #fff;

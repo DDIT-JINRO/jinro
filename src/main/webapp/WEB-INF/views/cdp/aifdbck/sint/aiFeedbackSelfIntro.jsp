@@ -73,7 +73,7 @@
 			<div class="ai-modal-backdrop" id="modalBg" aria-hidden="true"></div>
 			<div class="ai-modal" id="confirmModal" role="dialog"
 				aria-modal="true" aria-labelledby="confirmTitle">
-				<h4 id="confirmTitle">ai 첨삭 시작을 확인해 주세요</h4>
+				<h4 id="confirmTitle">AI 첨삭 시작을 확인해 주세요</h4>
 				<div class="ai-kv">
 					<div>
 						<b>사용 서비스</b> : <span>자기소개서 AI 첨삭</span>
@@ -82,7 +82,7 @@
 						<b>남은 이용권 수</b> : <span id="cover-count-display">${aiCounts.payCoverCnt}</span>회
 					</div>
 				</div>
-				<p>확인을 누르면 이용권이 차감되며, ai첨삭이 시작됩니다.</p>
+				<p>확인을 누르면 이용권이 차감되며, AI첨삭이 시작됩니다.</p>
 				<div class="row">
 					<button type="button" class="btn secondary" id="btnCancel">취소</button>
 					<button type="button" class="btn" id="btnConfirm">확인하고 시작</button>
