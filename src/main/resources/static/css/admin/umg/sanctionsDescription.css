@@ -18,6 +18,16 @@
 	height: 345px;
 }
 
+.penaltyMemberChart-2 {
+	width: 250px;
+	height: 250px;
+	margin-left: 50px;
+}
+
+.chartDounutSpac {
+	margin-top: auto;
+}
+
 .sancChart-2 {
 	width: 100%;
 }
@@ -31,7 +41,7 @@
 	font-size: 42px;
 	font-weight: 700;
     color: #FA5C7C;
-    margin-left: 20px;
+    margin-left: 50px;
 	
 }
 

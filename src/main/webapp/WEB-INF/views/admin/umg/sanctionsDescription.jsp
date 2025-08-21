@@ -24,11 +24,13 @@
 		</div>
 		<div class="template-panel penaltyMemberChart">
 			<div class="middleTitle">정지 회원 비율</div>
-			<div class="flex">
-				<div class="penaltyMemberChart-1" id="suspendedMemberRatio">13.5%</div>
+			<img class="public-card-icon" alt=""
+					src="/images/admin/admin-stop.png">
+			<div class="flex chartDounutSpac">
 				<div class="penaltyMemberChart-2">
 					<canvas id="penaltyDounutChart"></canvas>
 				</div>
+				<div class="penaltyMemberChart-1" id="suspendedMemberRatio"></div>
 			</div>
 		</div>
 	</div>

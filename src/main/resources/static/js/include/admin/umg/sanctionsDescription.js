@@ -23,9 +23,68 @@ function sanctionsDescription() {
 
 	function dashboardStats() {
 		axios.get('/admin/pmg/getDashboardStats.do').then(res => {
-			const { pendingReportCount, todayReportCount } = res.data;
+			const { pendingReportCount, todayReportCount, suspendedMemberRatio } = res.data;
+
 			document.getElementById('dailyReportCnt').innerHTML = `${todayReportCount}건`;
 			document.getElementById('delayReportCnt').innerHTML = `${pendingReportCount}건`;
+			document.getElementById('suspendedMemberRatio').innerHTML = `${suspendedMemberRatio}%`;
+
+			const nonSuspendedMemberRatio = 100 - suspendedMemberRatio;
+
+			const ctx = document.getElementById('penaltyDounutChart').getContext('2d');
+
+			const data = {
+				labels: [
+					'비제재 회원',
+					'제재 회원'
+				],
+				datasets: [{
+					data: [nonSuspendedMemberRatio, suspendedMemberRatio],
+					backgroundColor: [
+						'#A388E8',
+						'#D1C4E9'
+
+					],
+					hoverOffset: 4
+				}]
+			};
+
+			const config = {
+				type: 'doughnut',
+				data: data,
+				options: {
+					responsive: true,
+					layout: {
+						padding: 15
+					},
+					plugins: {
+						legend: {
+							position: 'bottom',
+						},
+						title: {
+							display: false
+						},
+						tooltip: {
+							callbacks: {
+								label: function(context) {
+									let label = context.label || '';
+									if (label) {
+										label += ': ';
+									}
+									if (context.parsed !== null) {
+										label += context.parsed + '%';
+									}
+									return label;
+								}
+							}
+						}
+					}
+				}
+			};
+
+			new Chart(ctx, config);
+
+
 		})
 	}
 
@@ -34,10 +93,10 @@ function sanctionsDescription() {
 		axios.get('/admin/pmg/getPenaltyStats.do')
 			.then(res => {
 				const penaltyData = res.data.data;
-                
+
 				console.log(res);
-				
-                // 라벨을 직접 분할하는 대신, Chart.js의 콜백 함수에서 처리하도록 수정
+
+				// 라벨을 직접 분할하는 대신, Chart.js의 콜백 함수에서 처리하도록 수정
 				const labels = penaltyData.map(item => item.PENALTYTYPE);
 				const dataValues = penaltyData.map(item => item.COUNT);
 				const colors = getDynamicColors(labels.length);
@@ -82,22 +141,22 @@ function sanctionsDescription() {
 								ticks: {
 									display: true,
 									autoSkip: false,
-                                    // 라벨 회전 비활성화
+									// 라벨 회전 비활성화
 									maxRotation: 0,
 									minRotation: 0,
-                                    // 새로운 콜백 함수 로직 적용
-                                    callback: function(value) {
-                                        const label = this.getLabelForValue(value);
-                                        if (label.includes(" - ")) {
-                                            return label.split(" - ");
-                                        } else if (label.length > 6 && label.includes(' ')) {
-                                            return label.split(' ');
-                                        }
-                                        return label;
-                                    },
-                                    font: {
-                                        size: 10
-                                    }
+									// 새로운 콜백 함수 로직 적용
+									callback: function(value) {
+										const label = this.getLabelForValue(value);
+										if (label.includes(" - ")) {
+											return label.split(" - ");
+										} else if (label.length > 6 && label.includes(' ')) {
+											return label.split(' ');
+										}
+										return label;
+									},
+									font: {
+										size: 10
+									}
 								}
 							}
 						}
@@ -279,6 +338,9 @@ function sanctionsDescription() {
 		})
 			.then(({ data }) => {
 				reportListCache = data.content;
+
+				console.log(reportListCache);
+
 				const countEl = document.getElementById('reportList-count');
 				if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
 
@@ -589,17 +651,17 @@ function sanctionsDescription() {
 
 			})
 	})
-	
+
 	function reportStatusCng(stat) {
-	    if (stat === 'S03001') return '<span class="status-접수">접수</span>';
-	    if (stat === 'S03002') return '<span class="status-반려">반려</span>';
-	    if (stat === 'S03003') return '<span class="status-승인">승인</span>';
-	    return stat;
+		if (stat === 'S03001') return '<span class="status-접수">접수</span>';
+		if (stat === 'S03002') return '<span class="status-반려">반려</span>';
+		if (stat === 'S03003') return '<span class="status-승인">승인</span>';
+		return stat;
 	}
-	
+
 	function penaltyStatusCng(stat) {
-	    if (stat === 'G14001') return '경고';
-	    if (stat === 'G14002') return '<span class="penalty-정지">정지</span>';
+		if (stat === 'G14001') return '경고';
+		if (stat === 'G14002') return '<span class="penalty-정지">정지</span>';
 	}
 	fetchReportList();
 	fetchPenaltyList();
