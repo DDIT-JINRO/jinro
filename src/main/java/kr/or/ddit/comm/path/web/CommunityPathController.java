@@ -57,7 +57,11 @@ public class CommunityPathController {
 	}
 
 	@GetMapping("/pathDetail.do")
-	public String selectPathDetail(@RequestParam int boardId, Model model, @AuthenticationPrincipal String memId) {
+	public String selectPathDetail(@RequestParam int boardId, Model model, @AuthenticationPrincipal String memId, Principal principal) {
+		
+		if (principal == null || principal.getName().equals("anonymousUser")) {
+			return "redirect:/error/logReq";
+		}
 
 		teenCommService.cntPlus(boardId);
 
