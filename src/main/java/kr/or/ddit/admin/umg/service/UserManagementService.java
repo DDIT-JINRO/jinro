@@ -20,12 +20,13 @@ public interface UserManagementService {
 
 	int updateMemberInfo(MemberVO memberVO);
 
-	ArticlePage<ReportVO> getReportList(int currentPage, int size, String keyword, String status);
+	ArticlePage<ReportVO> getReportList(int currentPage, int size, String keyword, String status, String sortBy, String sortOrder, String filter);
 
 	Map<String, Object> getReportDetail(String id);
 
-	ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status);
-
+	ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status, 
+	        String sortBy, String sortOrder, String mpType);
+	
 	Map<String, Object> getPenaltyDetail(String id);
 
 	int reportModify(ReportVO reportVO);
@@ -33,9 +34,9 @@ public interface UserManagementService {
 	int submitPenalty(MemberPenaltyVO memberPenaltyVO, MultipartFile[] evidenceFiles);
 
 	int insertUserByAdmin(MemberVO memberVO, MultipartFile profileImage);
-	
+
 	Map<String, Object> getDailyUserStats();
-	
+
 	ArticlePage<MemberVO> getMemberActivityList(int currentPage, int size, String keyword, String activityStatus, String sortBy, String sortOrder, String inFilter);
 
 	ArticlePage<CommBoardVO> getMemberDetailBoardList(int currentPage, int size, String ccId, String sortBy, String sortOrder, int userId);

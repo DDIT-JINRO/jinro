@@ -1,5 +1,14 @@
 function sanctionsDescription() {
 
+	const hiddenCalInput = document.getElementById('comCalendarInput');
+	const penaltyStatsDateBtn = document.getElementById('penaltyStatsDateBtn');
+	const penaltyStatsGenBtn = document.getElementById('penaltyStatsGenBtn');
+	const penaltyStatsAgeBtn = document.getElementById('penaltyStatsAgeBtn');
+
+	penaltyStatsDateBtn.addEventListener('change', eventDateRangeSelect);
+	penaltyStatsGenBtn.addEventListener('change', penaltyStats);
+	penaltyStatsAgeBtn.addEventListener('change', penaltyStats);
+
 	const baseColors = [
 		'#5B399B',
 		'#7B5EAA',
@@ -21,6 +30,46 @@ function sanctionsDescription() {
 		return colors;
 	}
 
+	function eventDateRangeSelect(e){
+		const selectEl = e.target.nodeName == "SELECT" ? e.target : e.target.closest('select');
+		const dateValue = selectEl.value;
+		if(dateValue == 'daily'){
+			hiddenCalInput.value = '';
+			penaltyStats();
+		}else if(dateValue == 'monthly'){
+			hiddenCalInput.value = '';
+			penaltyStats();
+		}else if(dateValue == 'selectDays'){
+			if (hiddenCalInput._flatpickr) {
+				hiddenCalInput._flatpickr.destroy();
+			}
+
+			flatpickr(hiddenCalInput, {
+				mode: "range",
+				maxDate: "today",
+				disable: [date => date > new Date()],
+				positionElement: selectEl,	//open되는 위치는 변경가능. select요소를 넣어줌.
+				onChange: function(selectedDates) {
+					if (selectedDates.length === 2) {
+						const startDate = selectedDates[0];
+						const endDate = selectedDates[1];
+						// yyyy-mm-dd 형식으로 포맷
+						const formattedStartDate = formatDateCal(startDate);
+						const formattedEndDate = formatDateCal(endDate);
+
+						document.getElementById('penaltyStatsStartDay').value = formattedStartDate;
+						document.getElementById('penaltyStatsEndDay').value = formattedEndDate;
+
+						penaltyStats(formatDateRange(formattedStartDate, formattedEndDate));
+					}
+				}
+			});
+
+			hiddenCalInput._flatpickr.open();
+			hiddenCalInput._flatpickr.clear();
+		}
+	}
+
 	function dashboardStats() {
 		axios.get('/admin/pmg/getDashboardStats.do').then(res => {
 			const { pendingReportCount, todayReportCount, suspendedMemberRatio } = res.data;
@@ -35,8 +84,8 @@ function sanctionsDescription() {
 
 			const data = {
 				labels: [
-					'비제재 회원',
-					'제재 회원'
+					'활성 계정',
+					'정지 계정'
 				],
 				datasets: [{
 					data: [nonSuspendedMemberRatio, suspendedMemberRatio],
@@ -89,8 +138,43 @@ function sanctionsDescription() {
 	}
 
 
-	function penaltyStats() {
-		axios.get('/admin/pmg/getPenaltyStats.do')
+	function penaltyStats(dateRange) {
+		// 일별, 월별, 기간선택에 대해서 파라미터를 같이 전송해야함 ->서버에서 서로다른 쿼리 호출
+		// 기간선택인 경우 startDate , endDate 까지 같이 전송함.
+		// 성별 파라미터 같이 전송해야함
+		// 연령 파라미터 같이 전송해야함
+		const filterType = document.getElementById('penaltyStatsDateBtn').value;
+		const gender	 = document.getElementById('penaltyStatsGenBtn').value;
+		const ageGroup	 = document.getElementById('penaltyStatsAgeBtn').value;
+
+		const hiddenCalInput = document.getElementById('comCalendarInput').value;
+
+		const params = {
+			filterType, gender, ageGroup
+		};
+
+		if(filterType == 'selectDays'){
+			let startDate = document.getElementById('penaltyStatsStartDay').value;
+			let endDate = document.getElementById('penaltyStatsEndDay').value;
+			if(!startDate){
+				// 기간 선택인데 날짜 지정 안한경우 월간데이터로 되돌리기 -> 기간지정안한상태로 성별, 연령대 변경 시에 대응
+				document.getElementById('penaltyStatsDateBtn').value = 'monthly';
+			}
+			params.startDate = startDate
+			params.endDate = endDate
+		}else {
+			document.getElementById('penaltyStatsStartDay').value = '';
+			document.getElementById('penaltyStatsEndDay').value = '';
+			hiddenCalInput.value = '';
+		}
+
+		if (window.penaltyStatsChartInstance) {
+			window.penaltyStatsChartInstance.destroy();
+		}
+
+		console.log(params);
+
+		axios.get('/admin/pmg/getPenaltyStats.do', {params : params})
 			.then(res => {
 				const penaltyData = res.data.data;
 
@@ -103,7 +187,7 @@ function sanctionsDescription() {
 
 				const ctx = document.getElementById('penaltyChart').getContext('2d');
 
-				const penaltyChart = new Chart(ctx, {
+				window.penaltyStatsChartInstance = new Chart(ctx, {
 					type: 'bar',
 					data: {
 						labels: labels,
@@ -123,7 +207,7 @@ function sanctionsDescription() {
 								display: false
 							},
 							title: {
-								display: false
+								dateRange
 							}
 						},
 						scales: {
@@ -322,18 +406,32 @@ function sanctionsDescription() {
 	openNewPenaltyModalBtn.addEventListener('click', openModal);
 	cancelBtn.addEventListener('click', closeModal);
 
+	let reportSortBy = null;
+	let reportSortOrder = 'asc';
 
-	function fetchReportList(page = 1) {
+	function fetchReportList(page = 1, isFirst = false) {
 		const pageSize = 10;
 		const keyword = document.querySelector('input[name="keywordReport"]').value;
 		const status = document.querySelector('select[name="statusReport"]').value;
+		let sortByVal = reportSortBy ||  document.querySelector('.reportListBtnGroup .public-toggle-button.active').dataset.sortBy;
+		let sortOrderVal = reportSortOrder || document.getElementById('ReportListSortOrder').value;
+		const filter = document.getElementById('ReportListFilter').value;
+
+		// 첫번째 호출 일때에는 상태값 접수부터 출력
+		if(isFirst) {
+			sortByVal = "status";
+			sortOrderVal = "asc";
+		}
 
 		axios.get('/admin/umg/getReportList.do', {
 			params: {
 				currentPage: page,
 				size: pageSize,
 				keyword: keyword,
-				status: status
+				status: status,
+				sortBy: sortByVal,
+				sortOrder: sortOrderVal,
+				filter: filter
 			}
 		})
 			.then(({ data }) => {
@@ -358,7 +456,7 @@ function sanctionsDescription() {
 						            <td>${item.reportedName}</td>
 						            <td>${reportStatusCng(item.reportStatus)}</td>
 						            <td>${formatDateMMDD(item.reportCreatedAt)}</td>
-						           
+
 						          </tr>`).join('');
 					listEl.innerHTML = rows;
 				}
@@ -484,6 +582,12 @@ function sanctionsDescription() {
 				document.getElementById('report-detail-warnDate').value = formatDateMMDD(reportVO.reportCreatedAt) || '-';
 				const selectElement = document.getElementById("report-detail-status");
 
+				if(reportVO.reportStatus == 'S03001'){
+					selectElement.disabled = false;
+				}else{
+					selectElement.disabled = true;
+				}
+
 				for (let i = 0; i < selectElement.options.length; i++) {
 					if (selectElement.options[i].value === reportVO.reportStatus) {
 						selectElement.options[i].selected = true;
@@ -512,6 +616,18 @@ function sanctionsDescription() {
 		if (stat === 'G10002') return '댓글 신고';
 	}
 
+	//=== flatpicker 달력 선택된 날자 yyyy-mm-dd 문자열로 포맷팅
+	function formatDateCal(d){
+		const y = d.getFullYear();
+		const m = String(d.getMonth() + 1).padStart(2, '0');
+		const day = String(d.getDate()).padStart(2, '0');
+		return `${y}-${m}-${day}`;
+	}
+
+	function formatDateRange(fS, fE){
+		return `${fS} ~ ${fE} 기간`
+	}
+
 	function formatDateMMDD(iso) {
 		const d = new Date(iso);
 		const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -528,46 +644,135 @@ function sanctionsDescription() {
 		return `${fullYear}-${mm}-${dd}`;
 	}
 
+	let penaltySortBy = '';
+	let penaltySortOrder = 'desc';
+
 	function fetchPenaltyList(page = 1) {
 		const pageSize = 10;
 		const keyword = document.querySelector('input[name="keywordPenalty"]').value;
 		const status = document.querySelector('select[name="statusPenalty"]').value;
+		const mpType = document.getElementById('penaltyTypeFilter').value;
 
 		axios.get('/admin/umg/getPenaltyList.do', {
 			params: {
 				currentPage: page,
 				size: pageSize,
 				keyword: keyword,
-				status: status
+				status: status,
+				sortBy: penaltySortBy,
+	            sortOrder: penaltySortOrder,
+	            mpType: mpType
 			}
 		})
-			.then(({ data }) => {
+		.then(({ data }) => {
+	        const countEl = document.getElementById('penaltyList-count');
+	        if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
 
-				const countEl = document.getElementById('penaltyList-count');
-				if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
+	        const listEl = document.getElementById('penaltyList');
+	        if (!listEl) return;
 
-				const listEl = document.getElementById('penaltyList');
-				if (!listEl) return;
-
-				if (data.content.length < 1 && keyword.trim() !== '') {
-					listEl.innerHTML = `<tr><td colspan='2' style="text-align: center;">검색 결과를 찾을 수 없습니다.</td></tr>`;
-
-				} else {
-					const rows = data.content.map(item => `
-						          <tr>
-						            <td>${item.mpId}</td>
-						            <td>${item.memId}</td>
-						            <td>${item.memName}</td>
-						            <td>${penaltyStatusCng(item.mpType)}</td>
-						            <td>${formatDateMMDD(item.mpWarnDate)}</td>
-						           
-						          </tr>`).join('');
-					listEl.innerHTML = rows;
-				}
-				renderPaginationPenalty(data);
-			})
-			.catch(err => console.error('유저 목록 조회 중 에러:', err));
+	        if (data.content.length < 1 && keyword.trim() !== '') {
+	            listEl.innerHTML = `<tr><td colspan='5' style="text-align: center;">검색 결과를 찾을 수 없습니다.</td></tr>`;
+	        } else {
+	            const rows = data.content.map(item => `
+	                <tr>
+	                    <td>${item.mpId}</td>
+	                    <td>${item.memId}</td>
+	                    <td>${item.memName}</td>
+	                    <td>${penaltyStatusCng(item.mpType)}</td>
+	                    <td>${formatDateMMDD(item.mpWarnDate)}</td>
+	                </tr>`).join('');
+	            listEl.innerHTML = rows;
+	        }
+	        renderPaginationPenalty(data);
+	    })
+	    .catch(err => console.error('제재 목록 조회 중 에러:', err));
 	}
+
+	document.getElementById('penaltyListSortByTargetName').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handlePenaltySortClick(sortBy, this);
+	});
+
+	document.getElementById('penaltyListSortByRpCreatedAt').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handlePenaltySortClick(sortBy, this);
+	});
+
+	document.getElementById('ReportListSortByMemId').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handleReportSortClick(sortBy, this);
+	});
+	document.getElementById('ReportListSortByTargetName').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handleReportSortClick(sortBy, this);
+	});
+	document.getElementById('ReportListSortByRpCreatedAt').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handleReportSortClick(sortBy, this);
+	});
+
+	document.getElementById('ReportListFilter').addEventListener('change', function(){
+		fetchReportList(1);
+	})
+
+	document.getElementById('ReportListSortOrder').addEventListener('change', function(){
+		reportSortOrder = this.value;
+		fetchReportList(1);
+	})
+
+	// 신고 정렬 클릭 처리 함수
+	function handleReportSortClick(sortBy, clickedButton) {
+	    // 같은 버튼을 다시 클릭하면 정렬 순서 변경
+	    if (reportSortBy === sortBy) {
+	        reportSortOrder = reportSortOrder === 'asc' ? 'desc' : 'asc';
+	    } else {
+	        reportSortBy = sortBy;
+	        reportSortOrder = 'asc';
+	    }
+
+	    // 정렬 순서 셀렉트 박스 업데이트
+	    document.getElementById('ReportListSortOrder').value = reportSortOrder;
+
+	    // 버튼 활성화 상태 업데이트
+	    document.querySelectorAll('.reportListBtnGroup .public-toggle-button').forEach(btn => btn.classList.remove('active'));
+	    clickedButton.classList.add('active');
+
+	    // 첫 페이지로 이동하여 정렬된 결과 조회
+	    fetchReportList(1);
+	}
+
+	// 정렬 클릭 처리 함수
+	function handlePenaltySortClick(sortBy, clickedButton) {
+	    // 같은 버튼을 다시 클릭하면 정렬 순서 변경
+	    if (penaltySortBy === sortBy) {
+	        penaltySortOrder = penaltySortOrder === 'asc' ? 'desc' : 'asc';
+	    } else {
+	        penaltySortBy = sortBy;
+	        penaltySortOrder = 'asc';
+	    }
+
+	    // 정렬 순서 셀렉트 박스 업데이트
+	    document.getElementById('penaltyListSortOrder').value = penaltySortOrder;
+
+	    // 버튼 활성화 상태 업데이트
+	    document.querySelectorAll('.penalListBtnGroup .public-toggle-button').forEach(btn => btn.classList.remove('active'));
+	    clickedButton.classList.add('active');
+
+	    // 첫 페이지로 이동하여 정렬된 결과 조회
+	    fetchPenaltyList(1);
+	}
+
+	// 제재 목록 정렬 순서 셀렉트 박스 이벤트 리스너
+	document.getElementById('penaltyListSortOrder').addEventListener('change', function() {
+	    penaltySortOrder = this.value;
+	    fetchPenaltyList(1);
+	});
+
+	// 제재 유형 필터 이벤트 리스너
+	document.getElementById('penaltyTypeFilter').addEventListener('change', function() {
+	    fetchPenaltyList(1);
+	});
 
 	document.getElementById("penaltyList").addEventListener("click", function(e) {
 		const tr = e.target.closest("tr");
@@ -663,7 +868,7 @@ function sanctionsDescription() {
 		if (stat === 'G14001') return '경고';
 		if (stat === 'G14002') return '<span class="penalty-정지">정지</span>';
 	}
-	fetchReportList();
+	fetchReportList(1, true);
 	fetchPenaltyList();
 }
 

@@ -7,6 +7,7 @@
 	내역</h2>
 
 <div class="sancChartSpace flex gap">
+	<input type="hidden" id="comCalendarInput" style="display: none;"/>
 	<div class="sancChart-1">
 		<div class="flex gap" style="margin-bottom: 20px;">
 			<div class="template-panel dailyReportCount">
@@ -38,14 +39,16 @@
 		<div class="template-panel penaltyStats">
 			<div class="middleTitle">제재 유형 분포</div>
 			<div class="flex gap10 endflex btn-group">
+				<input type="hidden" id="penaltyStatsStartDay" />
+				<input type="hidden" id="penaltyStatsEndDay" />
 				<select class="public-toggle-select" id="penaltyStatsDateBtn">
-					<option value="daily">일별</option>
-					<option value="monthly">월별</option>
-					<option value="selectDays">기간선택</option>
+					<option value="monthly">월간</option>
+					<option value="daily">일간</option>
+					<option value="selectDays">기간</option>
 				</select> <select class="public-toggle-select" id="penaltyStatsGenBtn">
 					<option value="">성별</option>
-					<option value="male">남성</option>
-					<option value="female">여성</option>
+					<option value="male">남자</option>
+					<option value="female">여자</option>
 				</select> <select class="public-toggle-select" id="penaltyStatsAgeBtn">
 					<option value="">연령대</option>
 					<option value="youth">청년</option>
@@ -80,7 +83,7 @@
 			style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 reportListBtnGroup">
-				<button class="public-toggle-button" id="ReportListSortByMemId"
+				<button class="public-toggle-button active" id="ReportListSortByMemId"
 					data-sort-by="memId">신고자명</button>
 				<button class="public-toggle-button" id="ReportListSortByTargetName"
 					data-sort-by="plTitle">신고대상명</button>
@@ -92,11 +95,11 @@
 				</select>
 			</div>
 			<div>
-				<select class="public-toggle-select">
+				<select class="public-toggle-select" id="ReportListFilter">
 					<option value="">상태</option>
-					<option value="">승인</option>
-					<option value="">접수</option>
-					<option value="">반려</option>
+					<option value="S03003">승인</option>
+					<option value="S03001">접수</option>
+					<option value="S03002">반려</option>
 				</select>
 			</div>
 		</div>
@@ -154,9 +157,10 @@
 				</div>
 				<div class="detail-item">
 					<span class="detail-label">신고 상태</span>
-					<select id="report-detail-status" class="detail-input-select">
+					<select id="report-detail-status" class="detail-input-select" disabled>
 						<option value="S03001">접수</option>
 						<option value="S03002">반려</option>
+						<option value="S03003" title="승인은 신규 제제 등록으로 처리바랍니다" disabled >승인</option>
 					</select>
 				</div>
 			</div>
@@ -196,7 +200,7 @@
 			<select name="statusPenalty" id="">
 				<option value="1">전체</option>
 				<option value="2">회원명</option>
-			</select> <input id="search" name="keywordPenalty" placeholder="검색어를 입력하세요" />
+			</select> <input id="search" name="keywordPenalty" placeholder="회원명을 입력하세요" />
 			<button class="btn-save searchPenaltyBtn">조회</button>
 		</div>
 
@@ -209,9 +213,7 @@
 			style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 penalListBtnGroup">
-				<button class="public-toggle-button" id="penaltyListSortByMemId"
-					data-sort-by="memId">회원ID</button>
-				<button class="public-toggle-button"
+				<button class="public-toggle-button active"
 					id="penaltyListSortByTargetName" data-sort-by="memName">회원명</button>
 				<button class="public-toggle-button"
 					id="penaltyListSortByRpCreatedAt" data-sort-by="mpWarnDate">제재일시</button>
@@ -221,10 +223,10 @@
 				</select>
 			</div>
 			<div>
-				<select class="public-toggle-select">
+				<select class="public-toggle-select" id="penaltyTypeFilter">
 					<option value="">유형</option>
-					<option value="">경고</option>
-					<option value="">정지</option>
+					<option value="G14001">경고</option>
+					<option value="G14002">정지</option>
 				</select>
 			</div>
 		</div>

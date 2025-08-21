@@ -82,29 +82,29 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 		// 정지 경고 횟수 이력
 		MemberPenaltyCountVO countVO = userManagementMapper.selectPenaltyCountByMemberId(id);
-		
+
 		// 새로 추가되는 8개 정보
 		// 1. 모의면접 횟수
 		int mockInterviewCount = userManagementMapper.getMockInterviewCount(id);
-		
-		// 2. AI 피드백 횟수  
+
+		// 2. AI 피드백 횟수
 		int aiFeedbackCount = userManagementMapper.getAiFeedbackCount(id);
-		
+
 		// 3. 상담횟수 (기존 counseling과 동일하지만 별도로 조회)
 		int counselingCompletedCount = userManagementMapper.getCounselingCompletedCount(id);
-		
+
 		// 4. 월드컵 횟수
 		int worldcupCount = userManagementMapper.getWorldcupCount(id);
-		
+
 		// 5. 로드맵 횟수
 		int roadmapCount = userManagementMapper.getRoadmapCount(id);
-		
+
 		// 6. 심리검사 횟수
 		int psychTestCount = userManagementMapper.getPsychTestCount(id);
-		
+
 		// 7. 최근 로그인 기록
 		String recentLoginDate = userManagementMapper.getRecentLoginDate(id);
-		
+
 		// 8. 최근 제재 기록
 		String recentPenaltyDate = userManagementMapper.getRecentPenaltyDate(id);
 
@@ -176,7 +176,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 
 	@Override
-	public ArticlePage<ReportVO> getReportList(int currentPage, int size, String keyword, String status) {
+	public ArticlePage<ReportVO> getReportList(int currentPage, int size, String keyword, String status, String sortBy, String sortOrder, String filter) {
 
 		int startNo = (currentPage - 1) * size + 1;
 		int endNo = currentPage * size;
@@ -187,6 +187,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 		map.put("currentPage", currentPage);
 		map.put("startNo", startNo);
 		map.put("endNo", endNo);
+		map.put("sortBy", sortBy);
+		map.put("sortOrder", sortOrder);
+		map.put("filter", filter);
 
 		// 리스트 불러오기
 		List<ReportVO> list = userManagementMapper.getReportList(map);
@@ -220,27 +223,33 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 
 	@Override
-	public ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status) {
+	public ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status, 
+	        String sortBy, String sortOrder, String mpType) {
 
-		int startNo = (currentPage - 1) * size + 1;
-		int endNo = currentPage * size;
+	    int startNo = (currentPage - 1) * size + 1;
+	    int endNo = currentPage * size;
 
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("keyword", keyword);
-		map.put("status", status);
-		map.put("currentPage", currentPage);
-		map.put("startNo", startNo);
-		map.put("endNo", endNo);
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    map.put("keyword", keyword);
+	    map.put("status", status);
+	    map.put("currentPage", currentPage);
+	    map.put("startNo", startNo);
+	    map.put("endNo", endNo);
+	    
+	    // 새로운 파라미터들 추가
+	    map.put("sortBy", sortBy);
+	    map.put("sortOrder", sortOrder);
+	    map.put("mpType", mpType);
 
-		List<MemberPenaltyVO> penaltyVOList = userManagementMapper.getPenaltyList(map);
+	    List<MemberPenaltyVO> penaltyVOList = userManagementMapper.getPenaltyList(map);
 
-		// 건수
-		int total = userManagementMapper.getAllMemberPenaltyList(map);
-		// 페이지 네이션
-		ArticlePage<MemberPenaltyVO> articlePage = new ArticlePage<MemberPenaltyVO>(total, currentPage, size,
-				penaltyVOList, keyword);
+	    // 건수
+	    int total = userManagementMapper.getAllMemberPenaltyList(map);
+	    // 페이지 네이션
+	    ArticlePage<MemberPenaltyVO> articlePage = new ArticlePage<MemberPenaltyVO>(total, currentPage, size,
+	            penaltyVOList, keyword);
 
-		return articlePage;
+	    return articlePage;
 	}
 
 	@Override
@@ -431,7 +440,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 			String sortBy, String sortOrder, int userId) {
 		int startNo = (currentPage - 1) * size + 1;
 		int endNo = currentPage * size;
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("memId", userId);
 		map.put("ccId", ccId);
@@ -440,22 +449,22 @@ public class UserManagementServiceImpl implements UserManagementService {
 		map.put("endNo", endNo);
 		map.put("sortBy", sortBy);
 		map.put("sortOrder", sortOrder);
-		
+
 		List<CommBoardVO> list = userManagementMapper.getMemberDetailBoardList(map);
 		int total = userManagementMapper.selectBoardCountByMemId(map);
-		
+
 		ArticlePage<CommBoardVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
-		
+
 		return articlePage;
 	}
 
 	@Override
 	public ArticlePage<CommReplyVO> getMemberDetailReplyList(int currentPage, int size, String sortBy,
 			String sortOrder, int userId) {
-		
+
 		int startNo = (currentPage - 1) * size + 1;
 		int endNo = currentPage * size;
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("memId", userId);
 		map.put("currentPage", currentPage);
@@ -463,12 +472,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 		map.put("endNo", endNo);
 		map.put("sortBy", sortBy);
 		map.put("sortOrder", sortOrder);
-		
+
 		List<CommReplyVO> list = userManagementMapper.getMemberDetailReplyList(map);
 		int total = userManagementMapper.selectReplyCountByMemId(map);
-		
+
 		ArticlePage<CommReplyVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
-		
+
 		return articlePage;
 	}
 
@@ -477,7 +486,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 			String sortOrder) {
 		int startNo = (currentPage - 1) * size + 1;
 		int endNo = currentPage * size;
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("currentPage", currentPage);
 		map.put("size", size);
@@ -486,12 +495,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 		map.put("keyword", keyword);
 		map.put("sortBy", sortBy);
 		map.put("sortOrder", sortOrder);
-		
+
 		List<PageLogVO> list = userManagementMapper.getMemberPageLogList(map);
 		int total = userManagementMapper.getAllMemberPageLogList(map);
-		
+
 		return new ArticlePage<>(total, currentPage, size, list, keyword);
-		
+
 	}
 
 }
