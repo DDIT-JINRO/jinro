@@ -149,12 +149,11 @@
 							</div>
 						</div>
 						<div class="reply-content">${reply.replyContent }</div>
-						<div>
-							<button class="reply-child-btn" id="reply-${reply.replyId }">답글</button>
-							<!-- 						토글시킬 답글버튼 id:reply-댓글번호 -->
-							<span class="child-count">
-								<c:if test="${reply.childCount > 0 }"> ${reply.childCount }</c:if>
-							</span>
+						<div class="reply-action-wrapper">
+							<button class="reply-child-btn" id="reply-${reply.replyId }">
+								답글<c:if test="${reply.childCount > 0 }"> ${reply.childCount }</c:if>
+							</button>
+							
 							<button class="like-button ${reply.replyIsLiked == 1 ? 'liked' : ''}" data-board-id="${boardVO.boardId}" data-reply-id="${reply.replyId}" aria-label="댓글 좋아요 버튼">
 								<svg class="heart-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
