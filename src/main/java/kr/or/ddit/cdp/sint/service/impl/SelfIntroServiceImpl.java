@@ -48,6 +48,7 @@ public class SelfIntroServiceImpl implements SelfIntroService {
 		int siId = selfIntroMapper.selectMaxIntroId();
 		int cnt = 1;
 		selfIntroVO.setSiId(siId);
+		selfIntroVO.setSiTitle("새 자기소개서");
 		selfIntroVO.setSiStatus("작성중");
 		selfIntroMapper.insertIntro(selfIntroVO);
 
