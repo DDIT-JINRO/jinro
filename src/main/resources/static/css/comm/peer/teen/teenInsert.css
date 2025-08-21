@@ -191,6 +191,7 @@
 }
 
 #fileInput::file-selector-button:hover {
+	transform: scale(1.03);
   background: linear-gradient(135deg, var(--primary-hover), #3a8bfc);
 }
 
