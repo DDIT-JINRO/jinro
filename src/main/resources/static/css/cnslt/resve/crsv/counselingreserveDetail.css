@@ -195,3 +195,21 @@
 .ai-kv > div + div {
     margin-top: 12px;
 }
+
+.btn {
+    appearance: none;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 18px;
+    font-weight: 800;
+    cursor: pointer;
+    background: #6a82fb;
+    color: #fff;
+    transition: all .15s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.btn.secondary {
+    background: #f3f5f7;
+    color: #202427;
+}
