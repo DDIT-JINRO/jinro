@@ -82,11 +82,29 @@
 				<div class="detailContent">${boardVO.boardContent}</div>
 			</div>
 			<div class="fileClass">
-				<c:forEach var="file" items="${fileList}">
-					<div class="detailFile">
-						<a href="/files/download?fileGroupId=${file.fileGroupId }&seq=${file.fileSeq }">${file.fileOrgName }</a>
-					</div>
-				</c:forEach>
+				<c:choose>
+					<c:when test="${not empty fileList}">
+						<c:forEach var="file" items="${fileList}">
+							<div class="detailFile">
+								<div class="file-info">
+									<a href="/files/download?fileGroupId=${file.fileGroupId}&seq=${file.fileSeq}" 
+									   class="file-name" 
+									   title="파일명을 클릭하여 다운로드">
+										${file.fileOrgName}
+									</a>
+								</div>
+								<a href="/files/download?fileGroupId=${file.fileGroupId}&seq=${file.fileSeq}" 
+								   class="file-download-btn" 
+								   title="다운로드">
+									다운로드
+								</a>
+							</div>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<div class="no-files">첨부된 파일이 없습니다.</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 
 			<form action="/comm/peer/teen/createTeenReply.do" method="post" class="comment-form">
