@@ -133,7 +133,7 @@
 							<div class="writer-info">
 								<div class="reply-nickname">${reply.memNickname}</div>
 								<div class="reply-date">
-									<fmt:formatDate pattern="yyyy. MM. dd.  HH:mm" value="${reply.replyCreatedAt}" />
+									<fmt:formatDate pattern="yyyy. MM. dd. HH:mm" value="${reply.replyCreatedAt}" />
 								</div>
 							</div>
 						</div>
@@ -181,7 +181,7 @@
 									<div class="writer-info">
 										<div class="reply-nickname">${child.memNickname}</div>
 										<div class="reply-date">
-											<fmt:formatDate value="${child.replyCreatedAt}" />
+											<fmt:formatDate pattern="yyyy. MM. dd. HH:mm" value="${child.replyCreatedAt}" />
 										</div>
 									</div>
 								</div>
