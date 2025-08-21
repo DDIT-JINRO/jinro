@@ -33,13 +33,24 @@
         <div class="template-panel large-panel">
             <div class="middleTitle">구독 결제 매출</div>
             <div class="btn-group flex gap5 revenueChart">
-                <button class="public-toggle-button active" id="revenueChartDayBtn">일별</button>
-                <button class="public-toggle-button" id="revenueChartMonthBtn">월별</button>
-                <button class="public-toggle-button" id="revenueChartMaleBtn">남성</button>
-                <button class="public-toggle-button" id="revenueChartFemaleBtn">여성</button>
-                <button class="public-toggle-button" id="revenueChartCalender">
-                    <img alt="" src="/images/admin/admin-calender.png">
-                </button>
+                <input type="hidden" id="revenueChartStartDay" />
+                <input type="hidden" id="revenueChartEndDay" />
+                <button class="public-toggle-button" id="revenueChartReset">전체</button>
+                <select class="public-toggle-select" name="revenueChartDay" id="revenueChartDay">
+                    <option value="daily">일별</option>
+                    <option value="monthly">월별</option>
+                    <option value="selectDays">기간선택</option>
+                </select>
+                <select class="public-toggle-select" name="revenueChartGender" id="revenueChartGender">
+                    <option value="">성별전체</option>
+                    <option value="male">남자</option>
+                    <option value="female">여자</option>
+                </select>
+                <select class="public-toggle-select" name="revenueChartAgeGroup" id="revenueChartAgeGroup">
+                    <option value="">연령전체</option>
+                    <option value="teen">청소년</option>
+                    <option value="youth">청년</option>
+                </select>
             </div>
             <div class="chart-container">
                 <canvas id="revenueChartCanvas"></canvas>
@@ -50,13 +61,24 @@
         <div class="template-panel large-panel">
             <div class="middleTitle">상품별 인기 통계</div>
             <div class="btn-group flex gap5 productChart">
-                <button class="public-toggle-button active" id="productChart6MonthBtn">6개월</button>
-                <button class="public-toggle-button" id="productChart1YearBtn">1년</button>
-                <button class="public-toggle-button" id="productChartMaleBtn">남성</button>
-                <button class="public-toggle-button" id="productChartFemaleBtn">여성</button>
-                <button class="public-toggle-button" id="productChartCalender">
-                    <img alt="" src="/images/admin/admin-calender.png">
-                </button>
+                <input type="hidden" id="productChartStartDay" />
+                <input type="hidden" id="productChartEndDay" />
+                <button class="public-toggle-button" id="productChartReset">전체</button>
+                <select class="public-toggle-select" name="productChartDay" id="productChartDay">
+                    <option value="6month">6개월</option>
+                    <option value="1year">1년</option>
+                    <option value="selectDays">기간선택</option>
+                </select>
+                <select class="public-toggle-select" name="productChartGender" id="productChartGender">
+                    <option value="">성별전체</option>
+                    <option value="male">남자</option>
+                    <option value="female">여자</option>
+                </select>
+                <select class="public-toggle-select" name="productChartAgeGroup" id="productChartAgeGroup">
+                    <option value="">연령전체</option>
+                    <option value="teen">청소년</option>
+                    <option value="youth">청년</option>
+                </select>
             </div>
             <div class="chart-container">
                 <canvas id="productChartCanvas"></canvas>
@@ -70,13 +92,24 @@
         <div class="template-panel large-panel">
             <div class="middleTitle">구독자 수 통계</div>
             <div class="btn-group flex gap5 subscriberChart">
-                <button class="public-toggle-button active" id="subscriberChartDayBtn">일별</button>
-                <button class="public-toggle-button" id="subscriberChartMonthBtn">월별</button>
-                <button class="public-toggle-button" id="subscriberChartMaleBtn">남성</button>
-                <button class="public-toggle-button" id="subscriberChartFemaleBtn">여성</button>
-                <button class="public-toggle-button" id="subscriberChartCalender">
-                    <img alt="" src="/images/admin/admin-calender.png">
-                </button>
+                <input type="hidden" id="subscriberChartStartDay" />
+                <input type="hidden" id="subscriberChartEndDay" />
+                <button class="public-toggle-button" id="subscriberChartReset">전체</button>
+                <select class="public-toggle-select" name="subscriberChartDay" id="subscriberChartDay">
+                    <option value="daily">일별</option>
+                    <option value="monthly">월별</option>
+                    <option value="selectDays">기간선택</option>
+                </select>
+                <select class="public-toggle-select" name="subscriberChartGender" id="subscriberChartGender">
+                    <option value="">성별전체</option>
+                    <option value="male">남자</option>
+                    <option value="female">여자</option>
+                </select>
+                <select class="public-toggle-select" name="subscriberChartAgeGroup" id="subscriberChartAgeGroup">
+                    <option value="">연령전체</option>
+                    <option value="teen">청소년</option>
+                    <option value="youth">청년</option>
+                </select>
             </div>
             <div class="chart-container">
                 <canvas id="subscriberChartCanvas"></canvas>
@@ -87,13 +120,24 @@
         <div class="template-panel large-panel">
             <div class="middleTitle">유료 컨텐츠 이용내역</div>
             <div class="btn-group flex gap5 aiServiceChart">
-                <button class="public-toggle-button active" id="aiServiceChartWeekBtn">주간</button>
-                <button class="public-toggle-button" id="aiServiceChartMonthBtn">월간</button>
-                <button class="public-toggle-button" id="aiServiceChartActiveBtn">활성</button>
-                <button class="public-toggle-button" id="aiServiceChartInactiveBtn">비활성</button>
-                <button class="public-toggle-button" id="aiServiceChartCalender">
-                    <img alt="" src="/images/admin/admin-calender.png">
-                </button>
+                <input type="hidden" id="aiServiceChartStartDay" />
+                <input type="hidden" id="aiServiceChartEndDay" />
+                <button class="public-toggle-button" id="aiServiceChartReset">전체</button>
+                <select class="public-toggle-select" name="aiServiceChartDay" id="aiServiceChartDay">
+                    <option value="weekly">주간</option>
+                    <option value="monthly">월간</option>
+                    <option value="selectDays">기간선택</option>
+                </select>
+                <select class="public-toggle-select" name="aiServiceChartGender" id="aiServiceChartGender">
+                    <option value="">성별전체</option>
+                    <option value="male">남자</option>
+                    <option value="female">여자</option>
+                </select>
+                <select class="public-toggle-select" name="aiServiceChartAgeGroup" id="aiServiceChartAgeGroup">
+                    <option value="">연령전체</option>
+                    <option value="teen">청소년</option>
+                    <option value="youth">청년</option>
+                </select>
             </div>
             <div class="chart-container">
                 <canvas id="aiServiceChartCanvas"></canvas>
