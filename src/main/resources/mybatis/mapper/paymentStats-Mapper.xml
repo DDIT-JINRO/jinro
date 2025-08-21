@@ -397,4 +397,31 @@
 		ORDER BY "month"
 	    ]]>
 	</select>
+	
+	<!-- 지난달 총 구독자 수 조회 (Oracle 버전) -->
+	<select id="selectTotalSubscriberCountLastMonth" resultType="int">
+	    SELECT
+	        COUNT(DISTINCT MEM_ID)
+	    FROM
+	        MEMBER_SUBSCRIPTION
+	    WHERE
+	        TRUNC(SUB_END_DT) >= LAST_DAY(ADD_MONTHS(SYSDATE, -2)) + 1
+	        AND TRUNC(SUB_END_DT) <![CDATA[ <= ]]> LAST_DAY(ADD_MONTHS(SYSDATE, -1))
+	</select>
+	
+	<!-- 어제 새로운 구독자 수 조회 (Oracle 버전) -->
+	<select id="selectNewSubscriberCountYesterday" resultType="int">
+	    SELECT
+	        COUNT(*)
+	    FROM PAYMENT P
+	    JOIN MEMBER_SUBSCRIPTION MS ON P.MS_ID = MS.MS_ID
+	    WHERE 
+	        TRUNC(P.PAY_DATE) = TRUNC(SYSDATE) - 1
+	        AND P.PAY_DATE = (
+	            SELECT MIN(P2.PAY_DATE)
+	            FROM PAYMENT P2
+	            JOIN MEMBER_SUBSCRIPTION MS2 ON P2.MS_ID = MS2.MS_ID
+	            WHERE MS2.MEM_ID = MS.MEM_ID
+	        )
+	</select>
 </mapper>

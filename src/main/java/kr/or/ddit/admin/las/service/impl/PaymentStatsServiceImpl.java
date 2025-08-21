@@ -1,5 +1,6 @@
 package kr.or.ddit.admin.las.service.impl;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +16,32 @@ public class PaymentStatsServiceImpl implements PaymentStatsService {
     @Autowired
     private PaymentStatsMapper paymentStatsMapper;
 
-    // 총 구독자 수와 신규 구독자 수 통합
+    // 총 구독자 수와 신규 구독자 수 통합 (증감률 포함)
     @Override
     public Map<String, Object> getSubscriberSummary() {
         Map<String, Object> result = new HashMap<>();
-        result.put("totalSubscribers", paymentStatsMapper.selectTotalSubscriberCount());
-        result.put("newSubscribersToday", paymentStatsMapper.selectNewSubscriberCountToday());
+        
+        // 1. 총 구독자 수 (지난달 대비 증감률)
+        int totalSubscribers = paymentStatsMapper.selectTotalSubscriberCount();
+        int lastMonthTotalSubscribers = paymentStatsMapper.selectTotalSubscriberCountLastMonth();
+        
+        Map<String, Object> totalSubscriberGrowth = calculateGrowthRate(totalSubscribers, lastMonthTotalSubscribers);
+        
+        // 2. 신규 구독자 수 (어제 대비 증감률)
+        int newSubscribersToday = paymentStatsMapper.selectNewSubscriberCountToday();
+        int newSubscribersYesterday = paymentStatsMapper.selectNewSubscriberCountYesterday();
+        
+        Map<String, Object> newSubscriberGrowth = calculateGrowthRate(newSubscribersToday, newSubscribersYesterday);
+        
+        // 결과 설정
+        result.put("totalSubscribers", totalSubscribers);
+        result.put("totalSubscribersRate", totalSubscriberGrowth.get("percentage"));
+        result.put("totalSubscribersStatus", totalSubscriberGrowth.get("status"));
+        
+        result.put("newSubscribersToday", newSubscribersToday);
+        result.put("newSubscribersTodayRate", newSubscriberGrowth.get("percentage"));
+        result.put("newSubscribersTodayStatus", newSubscriberGrowth.get("status"));
+        
         return result;
     }
 
@@ -88,5 +109,38 @@ public class PaymentStatsServiceImpl implements PaymentStatsService {
     @Override
     public List<Map<String, Object>> getMonthlyUserStatsForDashboard() {
         return paymentStatsMapper.getMonthlyUserStatsForDashboard();
+    }
+
+    /**
+     * 증감률 계산 메서드
+     * @param currentCount 현재 수치
+     * @param previousCount 이전 수치
+     * @return percentage: 증감률(%), status: 상태(increase/decrease/equal/new_entry)
+     */
+    private Map<String, Object> calculateGrowthRate(int currentCount, int previousCount) {
+        double percentageChange = 0.0;
+        String status = "equal";
+
+        if (previousCount > 0) {
+            percentageChange = ((double) (currentCount - previousCount) / previousCount) * 100;
+
+            if (percentageChange > 0) {
+                status = "increase";
+            } else if (percentageChange < 0) {
+                status = "decrease";
+            }
+        } else if (currentCount > 0) {
+            status = "new_entry";
+            percentageChange = 100.0;
+        }
+
+        DecimalFormat df = new DecimalFormat("#.##");
+        String formattedPercentage = df.format(Math.abs(percentageChange));
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("percentage", formattedPercentage);
+        result.put("status", status);
+
+        return result;
     }
 }
