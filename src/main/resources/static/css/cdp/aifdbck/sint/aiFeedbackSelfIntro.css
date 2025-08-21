@@ -219,8 +219,7 @@
 	animation: spinner-spin .75s linear infinite;
 }
 
-@
-keyframes spinner-spin {to { transform:rotate(360deg);
+@keyframes spinner-spin {to { transform:rotate(360deg);
 	
 }
 

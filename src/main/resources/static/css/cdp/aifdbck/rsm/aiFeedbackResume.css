@@ -527,3 +527,162 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 	grid-template-columns: repeat(2, 1fr);
 	gap: 5px 10px;
 }
+
+/* ==========================================================================
+   AI 피드백 이력서 페이지 - 이력서 내용 보완 스타일 (최소 버전)
+   ========================================================================== */
+
+/* #questionsWrapper 안에 있는 모든 버튼과 편집용 UI를 숨깁니다. */
+#questionsWrapper .personal-info-form button,
+#questionsWrapper .personal-info-form .icon-search,
+#questionsWrapper .personal-info-form .required-asterisk,
+#questionsWrapper .personal-info-form .error-message,
+#questionsWrapper .personal-info-form .load-button-group {
+    display: none !important;
+}
+
+/* 사진 삭제 버튼, 사진 추가 텍스트 등도 숨깁니다. */
+#questionsWrapper #photo-delete-btn,
+#questionsWrapper .upload-placeholder {
+    display: none !important;
+}
+
+/* 인적사항 섹션의 "필수 입력 정보" 문구도 숨깁니다. */
+#questionsWrapper .personal-info-form .required-info {
+    display: none !important;
+}
+
+/* 모든 입력 필드(input, select, textarea)를 읽기 전용 텍스트처럼 보이게 합니다. */
+#questionsWrapper .personal-info-form input:not([type="hidden"]),
+#questionsWrapper .personal-info-form select,
+#questionsWrapper .personal-info-form textarea {
+    cursor: default !important;
+    pointer-events: none !important; /* 마우스 이벤트 비활성화 */
+}
+
+/* select의 드롭다운 화살표와 textarea의 크기 조절 핸들러를 숨깁니다. */
+#questionsWrapper .personal-info-form select {
+    appearance: none !important;
+    background-image: none !important;
+    padding-right: 0 !important;
+}
+#questionsWrapper .personal-info-form textarea {
+    resize: none !important;
+}
+
+/* ==========================================================================
+   AI 피드백 페이지에 로드된 이력서 내용 스타일 재정의
+   ========================================================================== */
+
+/* 이력서 폼 전체 컨테이너 스타일 */
+#questionsWrapper .personal-info-form {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 인적사항 그리드 레이아웃 조정 */
+#questionsWrapper .personal-info-form .form-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 20px;
+}
+#questionsWrapper .personal-info-form .form-profile-grid .form-group {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 10px;
+    align-items: center;
+}
+/* 주소 그룹은 2열을 모두 차지하도록 함 */
+#questionsWrapper .personal-info-form .address-group {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+}
+
+/* 동적으로 추가된 항목들의 컨테이너 레이아웃 재정의 */
+#questionsWrapper .personal-info-form .form-JobWish,
+#questionsWrapper .personal-info-form .form-Skills,
+#questionsWrapper .personal-info-form .form-Education,
+#questionsWrapper .personal-info-form .form-certificate,
+#questionsWrapper .personal-info-form .form-activities {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 동적 항목의 헤더 스타일 */
+#questionsWrapper .personal-info-form .JobWish-header,
+#questionsWrapper .personal-info-form .Skills-header,
+#questionsWrapper .personal-info-form .education-header,
+#questionsWrapper .personal-info-form .certificate-header,
+#questionsWrapper .personal-info-form .Activities-header {
+    display: flex !important; /* flex로 설정하여 라벨과 버튼이 나란히 정렬 */
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    margin-top: 20px !important;
+    margin-bottom: 8px !important;
+}
+
+/* 모든 라벨 스타일을 통일 */
+#questionsWrapper .personal-info-form label {
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+}
+
+/* 모든 입력 필드를 읽기 전용으로 스타일링 */
+#questionsWrapper .personal-info-form input:not([type="hidden"]),
+#questionsWrapper .personal-info-form select,
+#questionsWrapper .personal-info-form textarea {
+    border: 1px solid #d1d5db;
+    padding: 8px 12px;
+    background-color: #f3f4f6;
+    border-radius: 6px;
+    box-shadow: none;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: auto;
+    width: 100%;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* 불필요한 편집용 UI 숨기기 */
+#questionsWrapper .personal-info-form .resume-title,
+#questionsWrapper .personal-info-form .icon-search,
+#questionsWrapper .personal-info-form .required-asterisk,
+#questionsWrapper .personal-info-form .error-message,
+#questionsWrapper .personal-info-form .load-button-group,
+#questionsWrapper .personal-info-form button {
+    display: none !important;
+}
+
+/* 주소 영역의 라벨과 입력 필드 정렬을 위한 스타일 */
+#questionsWrapper .personal-info-form .address-group {
+    display: grid;
+    grid-template-columns: 100px 1fr; /* 라벨과 내용이 2열로 깔끔하게 정렬 */
+    gap: 10px; /* 라벨과 입력 필드 간 간격 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+/* 주소 검색 아이콘을 포함하는 input 그룹을 2번째 열에 배치 */
+#questionsWrapper .personal-info-form .address-group .input-with-icon {
+    grid-column: 2 / 3; /* 2번째 열에 위치 */
+}
+
+/* 상세 주소 입력란을 2번째 열에 배치 */
+#questionsWrapper .personal-info-form .address-group input[name="address-detail"] {
+    grid-column: 2 / 3; /* 2번째 열에 위치 */
+}
