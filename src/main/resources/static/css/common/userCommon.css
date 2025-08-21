@@ -516,13 +516,14 @@ html, body {
 }
 
 .footer__info {
-	flex: 1 1 100%;
 	margin-bottom: 20px;
+	display: flex;
 }
 
 .footer__logo {
 	width: 140px;
-	margin-bottom: 15px;
+	margin-right: 10px;
+	object-fit: contain;
 }
 
 .footer__description {
