@@ -23,249 +23,167 @@
 /*******************************상담사 관리-1 끝 *************************************/
 
 /*******************************상담사 관리-2 시작 *************************************/
-.cnsMng-2 {
-	display: flex;
-	gap: 20px;
+.cnsCateChart {
+	width: 386.25px;
+	height: 360px;
+	background-color: #DCDEFC;
 }
 
-.cnsMng-2-1 {
-	width: 100%;
-	height: 700px;
+.cnsTop3Chart {
+	width: 386.25px;
+	height: 360px;
 }
 
-.body-id {
-	min-width: 30px;
+.cnsTypeChart {
+	height: 430px;
 }
 
-.body-memName {
-	min-width: 90px;
+.cnsMg-2-2 {
+	width: 800px;
 }
+/*******************************상담사 관리-2 끝 *************************************/
 
-.body-email {
-	min-width: 200px;
-}
-
-.body-nickname {
-	min-width: 90px;
-}
-
-.body-phone {
-	min-width: 100px;
-}
-
-.body-birth {
-	min-width: 100px;
-}
-
-.body-logType {
-	min-width: 70px;
-}
-
-.management-left {
-	padding-right: 20px;
-}
-
-.body-point {
-	min-width: 70px;
-}
-
-table {
-	width: 100%;
-	border-collapse: collapse;
-	font-size: 14px;
-	background-color: #fff;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	border-radius: 8px;
-	overflow: hidden;
-}
-
-th, td {
-	padding: 12px 16px;
-	text-align: center;
-	border-bottom: 1px solid #eee;
-}
-
-th {
-	background-color: #f4f6f8;
-	color: #333;
-	font-weight: 600;
-}
-
-td {
-	color: #555;
-	font-size: 12px;
-	cursor: pointer;
-}
-
-tr:hover {
-	background-color: #f1f1f1;
-}
-
-table td:first-child {
-	color: #848efb;
-	font-weight: bold;
-}
-
-table th:first-child {
-	border-top-left-radius: 8px;
-}
-
-table th:last-child {
-	border-top-right-radius: 8px;
-}
-
-.search-filter-container {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin-bottom: 20px;
-}
-
-#searchInput {
-	padding: 6px 12px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	width: 220px;
-}
-
-#loginTypeFilter {
-	padding: 6px 12px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
-
-/* memberManagement.css 파일에 추가 또는 수정 */
-
-/* 회원 상세 상자 */
-#member-detail-box {
-	display: flex;
-	flex-direction: column; /* 세로 방향으로 정렬 */
-}
-
-/* 프로필 이미지와 기본 정보 영역 */
-.member-header-section {
-	margin-top: 20px;
-	display: flex;
-	align-items: flex-start;
-	gap: 30px;
-}
-
-.member-penalty-title {
-	font-size: 12px;
-}
-
-/* 프로필 이미지 */
-.member-profile img {
-	width: 150px;
-	height: 150px;
-	border-radius: 50%;
-	object-fit: cover;
-	border: 3px solid #dee2e6;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-/* 회원 정보 그리드 레이아웃 */
-.member-info-grid {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr); /* 2열 그리드 */
-	gap: 20px;
-}
-
-/* 각 정보 필드 (이름, 닉네임 등) */
-.info-field {
-	display: flex;
-	flex-direction: column;
-}
-
+/*******************************상담사 관리-3 시작 *************************************/
 .info-field label {
+	font-size: 12px;
+	color: #666;
+	margin-bottom: 5px;
 	font-weight: bold;
-	color: black;
-	margin-bottom: 3px;
-	background-color: #DCDEFC; /* 배경색으로 강조 */
-	padding: 3px 5px;
-	border-radius: 8px;
-	font-size: 10px;
 }
 
-.info-field input {
-	width: 100%;
-	height: 20px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	padding: 8px 12px;
-	box-sizing: border-box;
+.cnsCompleteAndReviewList {
+	width: 800px;
+	height: 940px;
 }
 
-/* 경고/정지, 관심 분야 영역 */
-.member-penalty-section, .member-interests-section {
-	border-top: 1px solid #eee;
-	margin-top: 10px;
+.btn-primary i {
+    margin-right: 5px;
 }
 
-.marginBt {
+.info-history2 {
+    color: gray;
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 100px;
+}
+
+.cns-info-detail {
+	width: 800px;
+	height: 400px;
 	margin-bottom: 20px;
 }
 
-/* 관심 키워드 스타일 */
-#mem-interests span {
-	background-color: #07223D;
-	color: white;
-	padding: 6px 12px;
-	border-radius: 20px;
-	font-size: 13px;
-	margin-right: 8px;
-	display: inline-block;
+.cns-profile img {
+	width: 80px;
+	height: 80px;
 }
 
-/* 버튼 그룹 */
-.button-group {
+.cns-header-section {
+	align-items: center; /* 항목 세로 중앙 정렬 */
+}
+
+/* 프로필 이미지 컨테이너 */
+.cns-profile {
+	justify-self: center; /* 이미지를 가로 중앙 정렬 */
+}
+
+/* 정보 그리드 컨테이너 */
+.cns-info-grid {
+	margin-top: 20px; margin-left : 50px;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr); /* 2개의 열로 나눔 */
+	gap: 10px 80px;
+	display: grid;
+	margin-left: 50px; /* 행과 열의 간격 */
+}
+
+/* 권한, 로그인 타입 그리드 컨테이너 (두 번째 cns-info-grid) */
+.cns-info-grid:nth-child(3) {
+	grid-template-columns: repeat(2, 1fr); /* 2개 항목이므로 다시 그리드 적용 */
+	grid-column: span 2; /* 부모 그리드(cns-header-section)의 2개 열 모두 차지 */
+}
+
+/* 상세 정보 개수 컨테이너 */
+.cns-detail-info-count {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr); /* 3개의 항목을 가로로 정렬 */
+	gap: 10px; /* 항목 사이 간격 */
+	text-align: center; /* 텍스트 가로 중앙 정렬 */
+	margin-top: 20px; /* 위쪽 여백 */
+}
+
+#cns-detail-box {
 	display: flex;
-	gap: 10px;
-	justify-content: flex-end; /* 오른쪽 정렬 */
-	padding-top: 5px;
-	border-top: 1px solid #eee;
+	justify-content: center;
 }
 
-/* 수정, 경고, 정지 버튼 스타일 */
 .btn-modify {
-	background-color: rgb(220, 222, 252);;
-	color: black;
-	border: none;
-	border-radius: 8px;
-	padding: 10px 20px;
+	margin-top: 40px;
+	width: 60px;
+	height: 35px;
+	background-color: #727CF5;
+	color: white;
 	font-weight: bold;
+	border: none;
+	border-radius: 4px;
 	cursor: pointer;
+	margin-left: auto;
+	margin-top: auto;
+	display: block;
+	width: 60px;
+}
+
+/* 기타 스타일링 (기존 코드 유지) */
+.info-field label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
 }
 
 .ptag-list {
-	align-content: center;
+	margin-top: 20px; align-content : center;
 	padding: 0;
 	margin: 0;
 	font-size: 14px;
 	font-weight: 600;
+	margin-bottom: 20px;
+	align-content: center;
 }
 
-.filter-box {
-	margin: 10px 0;
+.search-filter-bar {
+	margin-top: 20px;
 }
 
-.card-footer {
-    margin-top: auto;
+.info-field input {
+	width: 110px;
+	height: 20px;
+	border: 1px solid #E5E8EB;
+	border-radius: 4px;
+	padding-left: 10px;
+	font-weight: 400;
 }
 
-#mem-warn-count {
-	font-size: 13px;
+.star-rating {
+	color: #FFD700; /* 별 색상: 황금색 */
+	font-size: 18px;
 }
 
-#mem-ban-count {
-	font-size: 13px;
+.info-field select {
+	width: 125px;
+	height: 25px;
+	border: 1px solid #E5E8EB;
+	border-radius: 4px;
+	padding-left: 10px;
+	font-weight: 400;
 }
 
-#mem-interests {
-	font-size: 13px;
+#cns-profile-img {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	object-fit: cover;
 }
 
-#mem-avg-count {
-	font-size: 13px;
+.cnsDetailListSpace{
+	height: 520px;
 }
-/*******************************상담사 관리-2 끝 *************************************/
