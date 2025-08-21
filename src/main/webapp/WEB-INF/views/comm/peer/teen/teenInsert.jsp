@@ -21,6 +21,10 @@
 </section>
 <div>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<a class="tab active" href="/comm/peer/teen/teenList.do">청소년 게시판</a>
+			<a class="tab" href="/comm/peer/youth/youthList.do">청년 게시판</a>
+		</div>
 		<div class="public-wrapper-main">
 			<div class="titleSpace">
 				<div class="insertTitle">제목</div>
