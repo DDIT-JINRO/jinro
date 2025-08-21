@@ -157,9 +157,10 @@
 				</div>
 				<div class="detail-item">
 					<span class="detail-label">신고 상태</span>
-					<select id="report-detail-status" class="detail-input-select">
+					<select id="report-detail-status" class="detail-input-select" disabled>
 						<option value="S03001">접수</option>
 						<option value="S03002">반려</option>
+						<option value="S03003" title="승인은 신규 제제 등록으로 처리바랍니다" disabled >승인</option>
 					</select>
 				</div>
 			</div>

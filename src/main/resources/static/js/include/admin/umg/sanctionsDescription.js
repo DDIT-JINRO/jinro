@@ -582,6 +582,12 @@ function sanctionsDescription() {
 				document.getElementById('report-detail-warnDate').value = formatDateMMDD(reportVO.reportCreatedAt) || '-';
 				const selectElement = document.getElementById("report-detail-status");
 
+				if(reportVO.reportStatus == 'S03001'){
+					selectElement.disabled = false;
+				}else{
+					selectElement.disabled = true;
+				}
+
 				for (let i = 0; i < selectElement.options.length; i++) {
 					if (selectElement.options[i].value === reportVO.reportStatus) {
 						selectElement.options[i].selected = true;
