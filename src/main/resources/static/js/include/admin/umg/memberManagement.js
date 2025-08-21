@@ -14,10 +14,12 @@ function memberManagement() {
 	const boardListIdBtn = document.getElementById('memDetailBoardList-orderBtn-id');
 	const boardListDateBtn = document.getElementById('memDetailBoardList-orderBtn-date');
 	const boardListdelYnBtn = document.getElementById('memDetailBoardList-orderBtn-delYn');
+	const boardListSortOrder = document.getElementById("memDetailSortOrder");
 
 	const replyListIdBtn = document.getElementById('memDetailReplyList-orderBtn-id');
 	const replyListDateBtn = document.getElementById('memDetailReplyList-orderBtn-date');
 	const replyListDelYnBtn = document.getElementById('memDetailReplyList-orderBtn-delYn');
+	const replyListSortOrder = document.getElementById("memDetailReplySortOrder");
 
 	/* 사용자 접속 통계 셀렉트 요소로 수정 */
 	const userOnlineChartDaySel = document.getElementById('userOnlineChartDay');
@@ -41,6 +43,51 @@ function memberManagement() {
 	pageVisitChartDaySel.addEventListener('change', eventDateRangeSelect);
 	pageVisitChartGenderSel.addEventListener('change', pageVisitChart);
 	pageVisitChartAgeGroupSel.addEventListener('change', pageVisitChart);
+
+	replyListSortOrder.addEventListener('click', function() {
+		const userId = document.getElementById('mem-id').value;
+		if (!userId) {
+			alert('회원을 선택하세요.');
+		}
+	})
+
+	replyListSortOrder.addEventListener('change', function(e){
+		const userId = document.getElementById('mem-id').value;
+		const currentSortValEl = e.target.closest('.userDetailBtnGroup').querySelector('.public-toggle-button.active');
+		switch (currentSortValEl.id){
+					case "memDetailReplyList-orderBtn-id" :
+						handleReplySortClick('replyId',userId);
+						break;
+					case "memDetailReplyList-orderBtn-delYn" :
+						handleReplySortClick('replyDelYn',userId);
+						break;
+					case "memDetailReplyList-orderBtn-date" :
+						handleReplySortClick('replyCreatedAt',userId);
+						break;
+				}
+	})
+
+	boardListSortOrder.addEventListener('click', function(){
+		const userId = document.getElementById('mem-id').value;
+		if(!userId){
+			alert('회원을 선택하세요.');
+		}
+	})
+	boardListSortOrder.addEventListener('change', function(e){
+		const userId = document.getElementById('mem-id').value;
+		const currentSortValEl = e.target.closest('.userDetailBtnGroup').querySelector('.public-toggle-button.active');
+		switch (currentSortValEl.id){
+					case "memDetailBoardList-orderBtn-id" :
+						handleBoardSortClick('boardId',userId);
+						break;
+					case "memDetailBoardList-orderBtn-delYn" :
+						handleBoardSortClick('boardDelYn',userId);
+						break;
+					case "memDetailBoardList-orderBtn-date" :
+						handleBoardSortClick('boardCreatedAt',userId);
+						break;
+				}
+	})
 
 	userListSortOrder.addEventListener('change', function(e){
 		const currentSortValEl = e.target.closest('.userListBtnGroup').querySelector('.public-toggle-button.active');
@@ -202,33 +249,30 @@ function memberManagement() {
 	// 게시글 목록 정렬 처리
 	function handleBoardSortClick(sortBy, userId, element) {
 		const boardTbody = document.getElementById('userDetailBoardList');
-
-		let sortOrder = 'asc';
-		if (boardTbody.dataset.sortBy === sortBy) {
-			sortOrder = boardTbody.dataset.sortOrder === 'asc' ? 'desc' : 'asc';
-		}
+		const boardSortOrder = document.getElementById('memDetailSortOrder').value;
 
 		boardTbody.dataset.sortBy = sortBy;
-		boardTbody.dataset.sortOrder = sortOrder;
+		boardTbody.dataset.sortOrder = boardSortOrder;
 
-		setActiveButton(element);
+		if(element){
+			setActiveButton(element);
+		}
 		const category = document.getElementById('boardListCategory').value;
+		const sortOrder = boardTbody.dataset.sortOrder;
 		userDetailBoardList(userId, 1, sortBy, sortOrder, category);
 	}
 
 	// 댓글 목록 정렬 처리 함수
 	function handleReplySortClick(sortBy, userId, element) {
 		const replyTbody = document.getElementById('userDetailReplyList');
-
-		let sortOrder = 'asc';
-		if (replyTbody.dataset.sortBy === sortBy) {
-			sortOrder = replyTbody.dataset.sortOrder === 'asc' ? 'desc' : 'asc';
-		}
+		const replySortOrder = document.getElementById('memDetailReplySortOrder').value;
 
 		replyTbody.dataset.sortBy = sortBy;
-		replyTbody.dataset.sortOrder = sortOrder;
-
-		setActiveButton(element);
+		replyTbody.dataset.sortOrder = replySortOrder;
+		if(element){
+			setActiveButton(element);
+		}
+		const sortOrder = replyTbody.dataset.sortOrder;
 		userDetailReplyList(userId, 1, sortBy, sortOrder);
 	}
 
@@ -1432,7 +1476,7 @@ function memberManagement() {
 	setInterval(fetchDailyStats, 10000);
 
 	//=== flatpicker 달력 선택된 날자 yyyy-mm-dd 문자열로 포맷팅
-	function formatDate(d){
+	function formatDateCal(d){
 		const y = d.getFullYear();
 		const m = String(d.getMonth() + 1).padStart(2, '0');
 		const day = String(d.getDate()).padStart(2, '0');
@@ -1487,8 +1531,8 @@ function memberManagement() {
 						const startDate = selectedDates[0];
 						const endDate = selectedDates[1];
 						// yyyy-mm-dd 형식으로 포맷
-						const formattedStartDate = formatDate(startDate);
-						const formattedEndDate = formatDate(endDate);
+						const formattedStartDate = formatDateCal(startDate);
+						const formattedEndDate = formatDateCal(endDate);
 						if(selectEl.id == 'userOnlineChartDay'){
 							// hidden 날짜 input에 데이터 삽입
 							document.getElementById('userOnlineChartStartDay').value=formattedStartDate;

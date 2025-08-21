@@ -238,6 +238,10 @@
 						<button class="public-toggle-button active" id="memDetailBoardList-orderBtn-id">ID</button>
 						<button class="public-toggle-button" id="memDetailBoardList-orderBtn-delYn">삭제여부</button>
 						<button class="public-toggle-button" id="memDetailBoardList-orderBtn-date">작성일자</button>
+						<select class="public-toggle-select" id="memDetailSortOrder">
+							<option value="asc">오름차순</option>
+							<option value="desc">내림차순</option>
+						</select>
 					</div>
 					<select class="public-toggle-select selectpb-top" id="boardListCategory">
 						<option value="">전체</option>
@@ -274,6 +278,10 @@
 					<button class="public-toggle-button active" id="memDetailReplyList-orderBtn-id">ID</button>
 					<button class="public-toggle-button" id="memDetailReplyList-orderBtn-delYn">삭제여부</button>
 					<button class="public-toggle-button" id="memDetailReplyList-orderBtn-date">작성일자</button>
+					<select class="public-toggle-select" id="memDetailReplySortOrder">
+						<option value="asc">오름차순</option>
+						<option value="desc">내림차순</option>
+					</select>
 				</div>
 				<table class="userDetailTable" id="userDetailTable-memDetailReplyList">
 					<thead>
