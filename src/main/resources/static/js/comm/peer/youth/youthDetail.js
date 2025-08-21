@@ -295,7 +295,7 @@ function createParentReply(replyVO, e) {
 	childReplyContainer.classList.add('reply-child-container');
 	childReplyContainer.dataset.parentId = replyVO.replyId;
 	childReplyContainer.innerHTML = `
-		<form action="/comm/path/createpathReply.do" method="post" class="comment-form child-form">
+		<form action="/comm/peer/youth/createYouthReply.do" method="post" class="comment-form child-form">
 		  <input type="hidden" name="boardId" value="${replyVO.boardId}" />
 		  <input type="hidden" name="replyParentId" value="${replyVO.replyId}" />
 		  <textarea name="replyContent" maxlength="300" placeholder="댓글을 입력하세요."></textarea>
