@@ -379,18 +379,21 @@
                             <otherwise>TRUNC(l.PL_CREATED_AT)</otherwise>
                         </choose> AS dt,
                         
-                        -- '이력서AI요청' 로그 카운트
-                        COUNT(CASE WHEN l.PL_TITLE = '이력서AI요청' THEN 1 END) AS resumeCnt,
+                        -- 'AI 피드백 - 이력서' 로그 카운트
+                        COUNT(CASE WHEN l.PL_TITLE = 'AI 피드백 - 이력서' THEN 1 END) AS resumeCnt,
                         
-                        -- '자기소개서AI요청' 로그 카운트
-                        COUNT(CASE WHEN l.PL_TITLE = '자기소개서AI요청' THEN 1 END) AS coverCnt,
+                        -- 'AI 피드백 - 자기소개서' 로그 카운트
+                        COUNT(CASE WHEN l.PL_TITLE = 'AI 피드백 - 자기소개서' THEN 1 END) AS coverCnt,
                         
-                        -- '모의면접AI요청' 로그 카운트
-                        COUNT(CASE WHEN l.PL_TITLE = '모의면접AI요청' THEN 1 END) AS mockCnt
+                        -- '모의면접 - AI 모의 면접' 로그 카운트
+                        COUNT(CASE WHEN l.PL_TITLE = '모의면접 - AI 모의 면접' THEN 1 END) AS mockCnt,
+                        
+                        -- 'AI상담%'으로 시작하는 로그 카운트
+                        COUNT(CASE WHEN l.PL_TITLE LIKE 'AI상담%' THEN 1 END) AS counselingCnt
                         
                     FROM PAGE_LOG l
                     JOIN MEMBER m ON l.MEM_ID = m.MEM_ID
-                    WHERE l.PL_TITLE IN ('이력서AI요청', '자기소개서AI요청', '모의면접AI요청')
+                    WHERE (l.PL_TITLE IN ('AI 피드백 - 이력서', 'AI 피드백 - 자기소개서', '모의면접 - AI 모의 면접') OR l.PL_TITLE LIKE 'AI상담%')
                       AND l.PL_CREATED_AT >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
                       AND l.PL_CREATED_AT <![CDATA[ < ]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
                       <if test="gender != null and gender == 'male'">AND m.MEM_GEN = 'G11001'</if>
@@ -416,7 +419,8 @@
                     </choose> AS "dt",
                     NVL(asd.resumeCnt, 0) AS "resumeCnt",
                     NVL(asd.coverCnt, 0) AS "coverCnt",
-                    NVL(asd.mockCnt, 0) AS "mockCnt"
+                    NVL(asd.mockCnt, 0) AS "mockCnt",
+                    NVL(asd.counselingCnt, 0) AS "counselingCnt"
                 FROM DATE_RANGE dr
                 LEFT JOIN AI_SERVICE_DATA asd ON dr.dt = asd.dt
                 ORDER BY dr.dt ASC
@@ -429,18 +433,21 @@
                         <otherwise>TO_CHAR(l.PL_CREATED_AT, 'YYYY-MM-DD')</otherwise>
                     </choose> AS "dt",
                     
-                    -- '이력서AI요청' 로그 카운트
-                    COUNT(CASE WHEN l.PL_TITLE = '이력서AI요청' THEN 1 END) AS "resumeCnt",
+                    -- 'AI 피드백 - 이력서' 로그 카운트
+                    COUNT(CASE WHEN l.PL_TITLE = 'AI 피드백 - 이력서' THEN 1 END) AS "resumeCnt",
                     
-                    -- '자기소개서AI요청' 로그 카운트
-                    COUNT(CASE WHEN l.PL_TITLE = '자기소개서AI요청' THEN 1 END) AS "coverCnt",
+                    -- 'AI 피드백 - 자기소개서' 로그 카운트
+                    COUNT(CASE WHEN l.PL_TITLE = 'AI 피드백 - 자기소개서' THEN 1 END) AS "coverCnt",
                     
-                    -- '모의면접AI요청' 로그 카운트
-                    COUNT(CASE WHEN l.PL_TITLE = '모의면접AI요청' THEN 1 END) AS "mockCnt"
+                    -- '모의면접 - AI 모의 면접' 로그 카운트
+                    COUNT(CASE WHEN l.PL_TITLE = '모의면접 - AI 모의 면접' THEN 1 END) AS "mockCnt",
+                    
+                    -- 'AI상담%'으로 시작하는 로그 카운트
+                    COUNT(CASE WHEN l.PL_TITLE LIKE 'AI상담%' THEN 1 END) AS "counselingCnt"
                     
                 FROM PAGE_LOG l
                 JOIN MEMBER m ON l.MEM_ID = m.MEM_ID
-                WHERE l.PL_TITLE IN ('이력서AI요청', '자기소개서AI요청', '모의면접AI요청')
+                WHERE (l.PL_TITLE IN ('AI 피드백 - 이력서', 'AI 피드백 - 자기소개서', '모의면접 - AI 모의 면접') OR l.PL_TITLE LIKE 'AI상담%')
                     <if test="gender != null and gender == 'male'">AND m.MEM_GEN = 'G11001'</if>
                     <if test="gender != null and gender == 'female'">AND m.MEM_GEN = 'G11002'</if>
                     <if test="ageGroup != null and ageGroup != '' and ageGroup == 'teen'">

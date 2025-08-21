@@ -647,10 +647,11 @@ function paymentStatistics() {
                     }
                 });
                 
-                // 각 AI 서비스별 데이터셋 생성
-                const aiFirstdakData = responseData.map(item => parseInt(item.resumeCnt) || 0);
-                const aiInterviewData = responseData.map(item => parseInt(item.mockCnt) || 0);
-                const aiCounselingData = responseData.map(item => parseInt(item.coverCnt) || 0);
+                // 각 AI 서비스별 데이터셋 생성 (4개 라인)
+                const aiResumeData = responseData.map(item => parseInt(item.resumeCnt) || 0);
+                const aiCoverData = responseData.map(item => parseInt(item.coverCnt) || 0);
+                const aiMockData = responseData.map(item => parseInt(item.mockCnt) || 0);
+                const aiCounselingData = responseData.map(item => parseInt(item.counselingCnt) || 0);
                 
                 window.aiServiceChartInstance = new Chart(ctx, {
                     type: 'line',
@@ -658,28 +659,44 @@ function paymentStatistics() {
                         labels: labels,
                         datasets: [{
                             label: 'AI 첨삭',
-                            data: aiFirstdakData,
+                            data: aiResumeData,
                             borderColor: 'rgb(45, 207, 151)',
                             backgroundColor: 'rgba(45, 207, 151, 0.1)',
                             tension: 0.4,
                             pointRadius: 3,
-                            pointHoverRadius: 6
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: 'rgb(45, 207, 151)',
+                            fill: true
                         }, {
-                            label: '모의면접',
-                            data: aiInterviewData,
-                            borderColor: 'rgb(114, 124, 245)',
-                            backgroundColor: 'rgba(114, 124, 245, 0.1)',
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointHoverRadius: 6
-                        }, {
-                            label: 'AI 상담',
-                            data: aiCounselingData,
+                            label: '자기소개서 첨삭',
+                            data: aiCoverData,
                             borderColor: 'rgb(255, 199, 90)',
                             backgroundColor: 'rgba(255, 199, 90, 0.1)',
                             tension: 0.4,
                             pointRadius: 3,
-                            pointHoverRadius: 6
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: 'rgb(255, 199, 90)',
+                            fill: true
+                        }, {
+                            label: '모의면접',
+                            data: aiMockData,
+                            borderColor: 'rgb(114, 124, 245)',
+                            backgroundColor: 'rgba(114, 124, 245, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: 'rgb(114, 124, 245)',
+                            fill: true
+                        }, {
+                            label: 'AI 상담',
+                            data: aiCounselingData,
+                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                            fill: true
                         }]
                     },
                     options: {
@@ -688,7 +705,10 @@ function paymentStatistics() {
                         plugins: {
                             legend: {
                                 display: true,
-                                position: 'top'
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20
+                                }
                             },
                             title: {
                                 display: true,
@@ -697,9 +717,30 @@ function paymentStatistics() {
                                     chartRange
                                 ],
                             },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += context.parsed.y.toLocaleString() + '회';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
                         },
                         scales: {
-                            x: { grid: { display: false } },
+                            x: { 
+                                grid: { 
+                                    display: false, 
+                                    drawBorder: false 
+                                } 
+                            },
                             y: {
                                 beginAtZero: true,
                                 ticks: {
@@ -707,8 +748,8 @@ function paymentStatistics() {
                                     callback: value => value + '회'
                                 },
                                 grid: {
-                                    borderDash: [3],
-                                    color: '#e5e5e5'
+                                    color: 'rgba(0, 0, 0, 0.05)',
+                                    drawBorder: false
                                 }
                             }
                         }
