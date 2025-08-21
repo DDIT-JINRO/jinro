@@ -44,7 +44,7 @@
 				</div>
 
 				<label class="file-label">PDF 미리보기</label>
-				<div id="preview-container">
+				<div id="preview-container" class="preview-container">
 					<div id="preview-list">미리보기할 PDF 파일이 없습니다.</div>
 				</div>
 
