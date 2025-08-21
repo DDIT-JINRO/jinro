@@ -75,9 +75,9 @@ public class UserManagementController {
 			@RequestParam(value = "sortBy", required = false) String sortBy,
 			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder,
 			@RequestParam(value = "userId") int userId) {
-		
+
 		return userManagementService.getMemberDetailReplyList(currentPage, size, sortBy, sortOrder, userId);
-		
+
 	}
 
 	@PostMapping("/insertUserByAdmin.do")
@@ -122,9 +122,12 @@ public class UserManagementController {
 			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
 			@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 			@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "status", required = false) String status) {
+			@RequestParam(value = "status", required = false) String status,
+			@RequestParam(value = "sortBy", required = false) String sortBy,
+			@RequestParam(value = "sortOrder", required = false) String sortOrder,
+			@RequestParam(value = "filter", required = false) String filter) {
 
-		return userManagementService.getReportList(currentPage, size, keyword, status);
+		return userManagementService.getReportList(currentPage, size, keyword, status, sortBy, sortOrder, filter);
 
 	}
 
@@ -194,7 +197,7 @@ public class UserManagementController {
 		return userManagementService.getMemberActivityList(currentPage, size, keyword, activityStatus, sortBy,
 				sortOrder, inFilter);
 	}
-	
+
 	@GetMapping("/getMemberPageLogList.do")
 	public ArticlePage<PageLogVO> getMemberPageLogList(
 			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
@@ -202,8 +205,8 @@ public class UserManagementController {
 			@RequestParam(value = "keyword", required = false) String keyword,
 			@RequestParam(value = "sortBy", required = false) String sortBy,
 			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder) {
-		
+
 		return userManagementService.getMemberPageLogList(currentPage, size, keyword, sortBy, sortOrder);
 	}
-	
+
 }

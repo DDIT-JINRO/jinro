@@ -240,74 +240,103 @@
 		)
 	</select>
 
-	<select id="getReportList"
-		parameterType="kr.or.ddit.com.report.service.ReportVO"
-		resultType="kr.or.ddit.com.report.service.ReportVO">
-		SELECT * FROM (
-		SELECT ROWNUM AS RNUM, B.*
-		FROM (SELECT
-		R.REPORT_ID
-		,
-		R.TARGET_TYPE
-		, R.TARGET_ID
-		, R.REPORT_REASON
-		, R.REPORT_STATUS
-		,
-		R.REPORT_CREATED_AT
-		, R.REPORT_COMPLETE_AT
-		, R.REPORT_COMPLETE_ID
-		,
-		R.MEM_ID
-		, M1.MEM_NAME AS REPORTER_NAME
-		, R.FILE_GROUP_NO
-		, CASE
-		WHEN
-		R.TARGET_TYPE = 'G10001' THEN B.MEM_ID
-		WHEN R.TARGET_TYPE = 'G10002'
-		THEN RP.MEM_ID
-		END AS REPORTED_MEM_ID
-		, M2.MEM_NAME AS REPORTED_NAME
-		FROM REPORT R
-		LEFT JOIN BOARD B
-		ON R.TARGET_TYPE = 'G10001'
-		AND
-		R.TARGET_ID = B.BOARD_ID
-		LEFT JOIN REPLY RP
-		ON R.TARGET_TYPE = 'G10002'
-		AND R.TARGET_ID = RP.REPLY_ID
-		LEFT JOIN MEMBER M1
-		ON R.MEM_ID =
-		M1.MEM_ID
-		LEFT JOIN MEMBER M2
-		ON (CASE
-		WHEN R.TARGET_TYPE = 'G10001' THEN
-		B.MEM_ID
-		WHEN R.TARGET_TYPE = 'G10002' THEN RP.MEM_ID
-		END) = M2.MEM_ID
-		<where>
-			R.REPORT_ID IS NOT NULL
-			<if test="keyword != null and keyword != '' and status == 1">
-				AND (M1.MEM_NAME LIKE '%' || #{keyword} || '%' OR
-				M2.MEM_NAME LIKE '%' || #{keyword} || '%' OR R.REPORT_REASON LIKE
-				'%' ||
-				#{keyword} || '%')
-			</if>
-			<if test="keyword != null and keyword != '' and status == 2">
-				AND M1.MEM_NAME LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="keyword != null and keyword != '' and status == 3">
-				AND M2.MEM_NAME LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="keyword != null and keyword != '' and status == 4">
-				AND R.REPORT_REASON LIKE '%' || #{keyword} || '%'
-			</if>
-		</where>
-		ORDER BY R.REPORT_CREATED_AT DESC) B
-		WHERE ROWNUM &lt;= #{endNo}
-		)
-		WHERE
-		RNUM &gt;=
-		#{startNo}
+	<select id="getReportList" parameterType="map" resultType="kr.or.ddit.com.report.service.ReportVO">
+	  WITH base AS (
+	    SELECT
+	        r.REPORT_ID
+	      , r.TARGET_TYPE
+	      , r.TARGET_ID
+	      , r.REPORT_REASON
+	      , r.REPORT_STATUS
+	      , r.REPORT_CREATED_AT
+	      , r.REPORT_COMPLETE_AT
+	      , r.REPORT_COMPLETE_ID
+	      , r.MEM_ID                              -- 신고자 ID
+	      , m1.MEM_NAME AS REPORTER_NAME          -- 신고자명
+	      , r.FILE_GROUP_NO
+	      , CASE
+	          WHEN r.TARGET_TYPE = 'G10001' THEN b.MEM_ID
+	          WHEN r.TARGET_TYPE = 'G10002' THEN rp.MEM_ID
+	        END AS REPORTED_MEM_ID                -- 신고대상자 ID
+	      , m2.MEM_NAME AS REPORTED_NAME          -- 신고대상자명
+	    FROM REPORT r
+	    /* 신고 대상(게시글/댓글)에 따라 조건부 조인 */
+	    LEFT JOIN BOARD b
+	      ON r.TARGET_TYPE = 'G10001'
+	     AND r.TARGET_ID  = b.BOARD_ID
+	    LEFT JOIN REPLY rp
+	      ON r.TARGET_TYPE = 'G10002'
+	     AND r.TARGET_ID  = rp.REPLY_ID
+	    LEFT JOIN MEMBER m1
+	      ON r.MEM_ID = m1.MEM_ID
+	    LEFT JOIN MEMBER m2
+	      ON (CASE
+	            WHEN r.TARGET_TYPE = 'G10001' THEN b.MEM_ID
+	            WHEN r.TARGET_TYPE = 'G10002' THEN rp.MEM_ID
+	          END) = m2.MEM_ID
+	    WHERE r.REPORT_ID IS NOT NULL
+	  )
+	  , filtered AS (
+	    SELECT
+	        t.*
+	      , ROW_NUMBER() OVER (
+	          ORDER BY
+	            /* --- 정렬 컬럼 화이트리스트 --- */
+	            <if test="filter == null or filter == ''"> t.REPORT_STATUS ASC , </if>
+	            <choose>
+	              <when test="sortBy == 'memId'">           t.MEM_ID </when>                <!-- 신고자 ID -->
+	              <when test="sortBy == 'plTitle'">         t.REPORTED_NAME </when>         <!-- 신고대상자명 -->
+	              <when test="sortBy == 'plCreatedAt'">     t.REPORT_CREATED_AT </when>     <!-- 신고 접수일 -->
+	              <otherwise>                               t.REPORT_CREATED_AT </otherwise> <!-- 기본 -->
+	            </choose>
+	            <choose>
+	              <when test="sortOrder != null and (sortOrder == 'asc' or sortOrder == 'ASC')"> ASC </when>
+	              <otherwise> DESC </otherwise>
+	            </choose>
+	        ) AS RNUM
+	    FROM base t
+	    WHERE 1=1
+	      <!-- 상태 필터 (예: S03001 접수 / S03002 반려 / S03003 승인) -->
+	      <if test="filter != null and filter != ''">
+	        AND t.REPORT_STATUS = #{filter}
+	      </if>
+
+	      <!-- 키워드 검색 -->
+	      <if test="keyword != null and keyword != ''">
+	        <choose>
+	          <!-- 2: 신고자명 -->
+	          <when test="status == 2">
+	            AND t.REPORTER_NAME LIKE '%' || #{keyword} || '%'
+	          </when>
+	          <!-- 3: 신고대상자명 -->
+	          <when test="status == 3">
+	            AND t.REPORTED_NAME LIKE '%' || #{keyword} || '%'
+	          </when>
+	          <!-- 1 또는 그 외: 전체(신고자/신고대상자/사유) -->
+	          <otherwise>
+	            AND ( t.REPORTER_NAME LIKE '%' || #{keyword} || '%'
+	               OR t.REPORTED_NAME LIKE '%' || #{keyword} || '%'
+	               OR t.REPORT_REASON  LIKE '%' || #{keyword} || '%' )
+	          </otherwise>
+	        </choose>
+	      </if>
+	  )
+	  SELECT
+	      REPORT_ID
+	    , TARGET_TYPE
+	    , TARGET_ID
+	    , REPORT_REASON
+	    , REPORT_STATUS
+	    , REPORT_CREATED_AT
+	    , REPORT_COMPLETE_AT
+	    , REPORT_COMPLETE_ID
+	    , MEM_ID
+	    , REPORTER_NAME
+	    , FILE_GROUP_NO
+	    , REPORTED_MEM_ID
+	    , REPORTED_NAME
+	  FROM filtered
+	  WHERE RNUM BETWEEN #{startNo} AND #{endNo}
 	</select>
 
 	<select id="getAllReportList"
@@ -398,8 +427,8 @@
 		WHERE REPORT_ID = #{reportId}
 	</select>
 
-	<select id="getPenaltyList" 
-	        resultType="kr.or.ddit.account.lgn.service.MemberPenaltyVO" 
+	<select id="getPenaltyList"
+	        resultType="kr.or.ddit.account.lgn.service.MemberPenaltyVO"
 	        parameterType="kr.or.ddit.account.lgn.service.MemberPenaltyVO">
 	    SELECT * FROM (
 	        SELECT ROWNUM AS RNUM, B.*
@@ -419,7 +448,7 @@
 	            JOIN MEMBER M ON MP.MEM_ID = M.MEM_ID
 	            <where>
 	                MP.MP_ID IS NOT NULL
-	                
+
 	                <!-- 키워드 검색 조건 -->
 	                <if test="keyword != null and keyword != '' and status == 1">
 	                    AND (M.MEM_NAME LIKE '%' || #{keyword} || '%' OR
@@ -431,13 +460,13 @@
 	                <if test="keyword != null and keyword != '' and status == 3">
 	                    AND MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%'
 	                </if>
-	                
+
 	                <!-- 제재 유형별 필터링 -->
 	                <if test="mpType != null and mpType != ''">
 	                    AND MP.MP_TYPE = #{mpType}
 	                </if>
 	            </where>
-	            
+
 	            <!-- 정렬 조건 -->
 	            <choose>
 	                <when test="sortBy != null and sortBy != ''">
@@ -469,7 +498,7 @@
 	    JOIN MEMBER M ON MP.MEM_ID = M.MEM_ID
 	    <where>
 	        MP.MP_ID IS NOT NULL
-	        
+
 	        <!-- 키워드 검색 조건 -->
 	        <if test="keyword != null and keyword != '' and status == 1">
 	            AND (M.MEM_NAME LIKE '%' || #{keyword} || '%' OR
@@ -481,7 +510,7 @@
 	        <if test="keyword != null and keyword != '' and status == 3">
 	            AND MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%'
 	        </if>
-	        
+
 	        <!-- 제재 유형별 필터링 (새로 추가) -->
 	        <if test="mpType != null and mpType != ''">
 	            AND MP.MP_TYPE = #{mpType}
@@ -568,7 +597,7 @@
 		WHERE
 		MEM_ID = #{memId}
 	</update>
-	
+
 	<!-- 1. 일일 사용자 현황 (오늘 로그인한 고유 사용자 수) -->
 	<select id="getDailyActiveUsers" resultType="int">
 	    SELECT COUNT(DISTINCT MEM_ID)
@@ -576,11 +605,11 @@
 	    WHERE TRUNC(LL_CREATED_AT) = TRUNC(SYSDATE)
 	    AND LL_STATUS = 'I'
 	</select>
-	
+
 	<!-- 2. 일일 평균 홈페이지 이용 현황 (분 단위) -->
 	<select id="getDailyAverageUsageTime" resultType="double">
 	    WITH SESSION_TIMES AS (
-	        SELECT 
+	        SELECT
 	            MEM_ID,
 	            LL_CREATED_AT AS LOGIN_TIME,
 	            LEAD(LL_CREATED_AT) OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT) AS LOGOUT_TIME,
@@ -591,15 +620,15 @@
 	    )
 	    SELECT NVL(AVG((LOGOUT_TIME - LOGIN_TIME) * 24 * 60), 0) AS avg_minutes
 	    FROM SESSION_TIMES
-	    WHERE LL_STATUS = 'I' 
+	    WHERE LL_STATUS = 'I'
 	    AND NEXT_STATUS = 'O'
 	    AND LOGOUT_TIME IS NOT NULL
 	</select>
-	
+
 	<!-- 3. 현재 온라인 사용자 수 -->
 	<select id="getCurrentOnlineUsers" resultType="int">
 	    WITH LAST_LOG AS (
-	        SELECT 
+	        SELECT
 	            MEM_ID,
 	            LL_STATUS,
 	            ROW_NUMBER() OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT DESC) AS rn
@@ -607,10 +636,10 @@
 	    )
 	    SELECT COUNT(*)
 	    FROM LAST_LOG
-	    WHERE rn = 1 
+	    WHERE rn = 1
 	    AND LL_STATUS = 'I'
 	</select>
-	
+
 	<!-- 4. 활동 상태가 포함된 전체 회원 리스트 -->
 	<select id="getMemberActivityList" resultType="kr.or.ddit.main.service.MemberVO">
 	    SELECT * FROM (
@@ -702,7 +731,7 @@
 		)
 		WHERE RNUM <![CDATA[>=]]> #{startNo}
 	</select>
-	
+
 	<!-- 5. 활동 상태 회원 리스트 총 건수 -->
 	<select id="getAllMemberActivityList" resultType="int">
 	    SELECT COUNT(*)
@@ -754,7 +783,7 @@
 			    </if>
 			</where>
 	</select>
-	
+
 	<!-- 6. 어제 로그인한 고유 사용자 수 -->
 	<select id="getYesterdayActiveUsers" resultType="int">
 	    SELECT COUNT(DISTINCT MEM_ID)
@@ -762,11 +791,11 @@
 	    WHERE TRUNC(LL_CREATED_AT) = TRUNC(SYSDATE) - 1
 	    AND LL_STATUS = 'I'
 	</select>
-	
+
 	<!-- 7. 어제 평균 홈페이지 이용 시간 (분 단위) -->
 	<select id="getYesterdayAverageUsageTime" resultType="double">
 	    WITH SESSION_TIMES AS (
-	        SELECT 
+	        SELECT
 	            MEM_ID,
 	            LL_CREATED_AT AS LOGIN_TIME,
 	            LEAD(LL_CREATED_AT) OVER (PARTITION BY MEM_ID ORDER BY LL_CREATED_AT) AS LOGOUT_TIME,
@@ -777,11 +806,11 @@
 	    )
 	    SELECT NVL(AVG((LOGOUT_TIME - LOGIN_TIME) * 24 * 60), 0) AS avg_minutes
 	    FROM SESSION_TIMES
-	    WHERE LL_STATUS = 'I' 
+	    WHERE LL_STATUS = 'I'
 	    AND NEXT_STATUS = 'O'
 	    AND LOGOUT_TIME IS NOT NULL
 	</select>
-	
+
 	<select id="getMemberDetailBoardList" resultType="kr.or.ddit.comm.vo.CommBoardVO">
 		SELECT * FROM (
 		        SELECT ROWNUM AS RNUM, B.*
@@ -838,7 +867,7 @@
 	        AND CC_ID = #{ccId}
 	    </if>
 	</select>
-	
+
 	<!-- 8. 일일 가입자 수 (오늘 가입한 사용자 수) -->
 	<select id="getDailySignUpUsers" resultType="int">
 	    SELECT COUNT(*)
@@ -846,7 +875,7 @@
 	    WHERE TRUNC(CREATED_AT) = TRUNC(SYSDATE)
 	    AND DEL_YN = 'N'
 	</select>
-	
+
 	<!-- 9. 어제 가입한 사용자 수 -->
 	<select id="getYesterdaySignUpUsers" resultType="int">
 	    SELECT COUNT(*)
@@ -854,7 +883,7 @@
 	    WHERE TRUNC(CREATED_AT) = TRUNC(SYSDATE) - 1
 	    AND DEL_YN = 'N'
 	</select>
-	
+
 	<!-- 10. 월간 탈퇴자 수 (이번 달 탈퇴한 사용자 수) -->
 	<select id="getMonthlyWithdrawalUsers" resultType="int">
 	    SELECT COUNT(*)
@@ -862,7 +891,7 @@
 	    WHERE TRUNC(MD_DELETED_AT, 'MM') = TRUNC(SYSDATE, 'MM')
 	    AND MD_DELETED_AT IS NOT NULL
 	</select>
-	
+
 	<!-- 11. 지난 달 탈퇴한 사용자 수 -->
 	<select id="getLastMonthWithdrawalUsers" resultType="int">
 	    SELECT COUNT(*)
@@ -870,7 +899,7 @@
 	    WHERE TRUNC(MD_DELETED_AT, 'MM') = TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM')
 	    AND MD_DELETED_AT IS NOT NULL
 	</select>
-	
+
 	<!-- 멤버 Detail 보내줄 때 같이 보내줄 데이터들 -->
 	<!-- 1. 모의면접 횟수 조회 -->
 	<select id="getMockInterviewCount" parameterType="String" resultType="int">
@@ -879,7 +908,7 @@
 	    WHERE MEM_ID = #{memId}
 	    AND PL_TITLE = '모의면접'
 	</select>
-	
+
 	<!-- 2. AI 피드백 횟수 조회 -->
 	<select id="getAiFeedbackCount" parameterType="String" resultType="int">
 	    SELECT COUNT(*)
@@ -887,7 +916,7 @@
 	    WHERE MEM_ID = #{memId}
 	    AND PL_TITLE LIKE 'AI 피드백%'
 	</select>
-	
+
 	<!-- 3. 완료된 상담횟수 조회 -->
 	<select id="getCounselingCompletedCount" parameterType="String" resultType="int">
 	    SELECT COUNT(*)
@@ -895,7 +924,7 @@
 	    WHERE COUNSEL = #{memId}
 	    AND COUNSEL_STATUS = 'S04004'
 	</select>
-	
+
 	<!-- 4. 월드컵 횟수 조회 -->
 	<select id="getWorldcupCount" parameterType="String" resultType="int">
 	    SELECT COUNT(*)
@@ -903,7 +932,7 @@
 	    WHERE MEM_ID = #{memId}
 	    AND PL_TITLE = '월드컵'
 	</select>
-	
+
 	<!-- 5. 로드맵 횟수 조회 -->
 	<select id="getRoadmapCount" parameterType="String" resultType="int">
 	    SELECT COUNT(*)
@@ -911,14 +940,14 @@
 	    WHERE MEM_ID = #{memId}
 	    AND PL_TITLE = '로드맵'
 	</select>
-	
+
 	<!-- 6. 심리검사 횟수 조회 -->
 	<select id="getPsychTestCount" parameterType="String" resultType="int">
 	    SELECT COUNT(*)
 	    FROM APTITUDE_TEST
 	    WHERE MEM_ID = #{memId}
 	</select>
-	
+
 	<!-- 7. 최근 로그인 기록 조회 -->
 	<select id="getRecentLoginDate" parameterType="String" resultType="String">
 	    SELECT TO_CHAR(LL_CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS recent_login
@@ -931,7 +960,7 @@
 	    )
 	    WHERE ROWNUM = 1
 	</select>
-	
+
 	<!-- 8. 최근 제재 기록 조회 -->
 	<select id="getRecentPenaltyDate" parameterType="String" resultType="String">
 	    SELECT TO_CHAR(MP_WARN_DATE, 'YYYY-MM-DD HH24:MI:SS') AS recent_penalty
@@ -943,7 +972,7 @@
 	    )
 	    WHERE ROWNUM = 1
 	</select>
-	
+
 	<select id="getMemberDetailReplyList" resultType="kr.or.ddit.comm.vo.CommReplyVO">
 	    SELECT * FROM (
 	        SELECT ROWNUM AS RNUM, B.*
@@ -986,7 +1015,7 @@
 	    )
 	    WHERE RNUM &gt;= #{startNo}
 	</select>
-	
+
 	<select id="selectReplyCountByMemId" resultType="int">
 		SELECT
 	        COUNT(*)
@@ -1044,7 +1073,7 @@
 		)
 		WHERE RNUM <![CDATA[>=]]> #{startNo}
 	</select>
-	
+
 	<select id="getAllMemberPageLogList" resultType="int">
 	    SELECT COUNT(*)
 	    FROM PAGE_LOG PL
@@ -1061,5 +1090,5 @@
 	        </if>
 	    </where>
 	</select>
-	
+
 </mapper>

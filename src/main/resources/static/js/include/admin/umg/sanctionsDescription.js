@@ -406,18 +406,30 @@ function sanctionsDescription() {
 	openNewPenaltyModalBtn.addEventListener('click', openModal);
 	cancelBtn.addEventListener('click', closeModal);
 
+	let reportSortBy = null;
+	let reportSortOrder = 'asc';
 
 	function fetchReportList(page = 1) {
 		const pageSize = 10;
 		const keyword = document.querySelector('input[name="keywordReport"]').value;
 		const status = document.querySelector('select[name="statusReport"]').value;
+		const sortByVal = reportSortBy ||  document.querySelector('.reportListBtnGroup .public-toggle-button.active').dataset.sortBy;
+		const sortOrderVal = reportSortOrder || document.getElementById('ReportListSortOrder').value;
+		const filter = document.getElementById('ReportListFilter').value;
+
+		// 신고자, 신고대상, 일시 정렬기준
+		// 오름차순,내림차순 정렬기준
+		// 상태 필터
 
 		axios.get('/admin/umg/getReportList.do', {
 			params: {
 				currentPage: page,
 				size: pageSize,
 				keyword: keyword,
-				status: status
+				status: status,
+				sortBy: sortByVal,
+				sortOrder: sortOrderVal,
+				filter: filter
 			}
 		})
 			.then(({ data }) => {
@@ -623,7 +635,7 @@ function sanctionsDescription() {
 		const fullYear = String(d.getFullYear());
 		return `${fullYear}-${mm}-${dd}`;
 	}
-	
+
 	let penaltySortBy = '';
 	let penaltySortOrder = 'desc';
 
@@ -678,7 +690,50 @@ function sanctionsDescription() {
 	    const sortBy = this.getAttribute('data-sort-by');
 	    handlePenaltySortClick(sortBy, this);
 	});
-	
+
+	document.getElementById('ReportListSortByMemId').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handleReportSortClick(sortBy, this);
+	});
+	document.getElementById('ReportListSortByTargetName').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handleReportSortClick(sortBy, this);
+	});
+	document.getElementById('ReportListSortByRpCreatedAt').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handleReportSortClick(sortBy, this);
+	});
+
+	document.getElementById('ReportListFilter').addEventListener('change', function(){
+		fetchReportList(1);
+	})
+
+	document.getElementById('ReportListSortOrder').addEventListener('change', function(){
+		reportSortOrder = this.value;
+		fetchReportList(1);
+	})
+
+	// 신고 정렬 클릭 처리 함수
+	function handleReportSortClick(sortBy, clickedButton) {
+	    // 같은 버튼을 다시 클릭하면 정렬 순서 변경
+	    if (reportSortBy === sortBy) {
+	        reportSortOrder = reportSortOrder === 'asc' ? 'desc' : 'asc';
+	    } else {
+	        reportSortBy = sortBy;
+	        reportSortOrder = 'asc';
+	    }
+
+	    // 정렬 순서 셀렉트 박스 업데이트
+	    document.getElementById('ReportListSortOrder').value = reportSortOrder;
+
+	    // 버튼 활성화 상태 업데이트
+	    document.querySelectorAll('.reportListBtnGroup .public-toggle-button').forEach(btn => btn.classList.remove('active'));
+	    clickedButton.classList.add('active');
+
+	    // 첫 페이지로 이동하여 정렬된 결과 조회
+	    fetchReportList(1);
+	}
+
 	// 정렬 클릭 처리 함수
 	function handlePenaltySortClick(sortBy, clickedButton) {
 	    // 같은 버튼을 다시 클릭하면 정렬 순서 변경
@@ -688,14 +743,14 @@ function sanctionsDescription() {
 	        penaltySortBy = sortBy;
 	        penaltySortOrder = 'asc';
 	    }
-	    
+
 	    // 정렬 순서 셀렉트 박스 업데이트
 	    document.getElementById('penaltyListSortOrder').value = penaltySortOrder;
-	    
+
 	    // 버튼 활성화 상태 업데이트
 	    document.querySelectorAll('.penalListBtnGroup .public-toggle-button').forEach(btn => btn.classList.remove('active'));
 	    clickedButton.classList.add('active');
-	    
+
 	    // 첫 페이지로 이동하여 정렬된 결과 조회
 	    fetchPenaltyList(1);
 	}

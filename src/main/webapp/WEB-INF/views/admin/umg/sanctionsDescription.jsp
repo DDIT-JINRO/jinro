@@ -83,7 +83,7 @@
 			style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 reportListBtnGroup">
-				<button class="public-toggle-button" id="ReportListSortByMemId"
+				<button class="public-toggle-button active" id="ReportListSortByMemId"
 					data-sort-by="memId">신고자명</button>
 				<button class="public-toggle-button" id="ReportListSortByTargetName"
 					data-sort-by="plTitle">신고대상명</button>
@@ -95,11 +95,11 @@
 				</select>
 			</div>
 			<div>
-				<select class="public-toggle-select">
+				<select class="public-toggle-select" id="ReportListFilter">
 					<option value="">상태</option>
-					<option value="">승인</option>
-					<option value="">접수</option>
-					<option value="">반려</option>
+					<option value="S03003">승인</option>
+					<option value="S03001">접수</option>
+					<option value="S03002">반려</option>
 				</select>
 			</div>
 		</div>
@@ -212,7 +212,7 @@
 			style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 penalListBtnGroup">
-				<button class="public-toggle-button"
+				<button class="public-toggle-button active"
 					id="penaltyListSortByTargetName" data-sort-by="memName">회원명</button>
 				<button class="public-toggle-button"
 					id="penaltyListSortByRpCreatedAt" data-sort-by="mpWarnDate">제재일시</button>
