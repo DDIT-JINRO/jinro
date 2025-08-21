@@ -23,33 +23,64 @@
 	</div>
 </section>
 <div class="public-wrapper">
-	<!-- 여기부터 작성해 주시면 됩니다 -->
+	<div class="tab-container" id="tabs">
+		<h3 class="page-title-bar__title">공지사항</h3>
+	</div>
+
 	<div class="public-wrapper-main">
-		<div class="detail-box">
-			<div class="detail-title">
-				<span class="num"> <fmt:formatNumber value="${noticeDetail.noticeId}" pattern="000" />
-				</span> &nbsp; ${noticeDetail.noticeTitle}
+		<div class="detail__header-wrapper">
+			<div class="detail__header">
+				<span class="detail__badge">
+					<fmt:formatNumber value="${noticeDetail.noticeId}" pattern="000" />
+				</span>
+				<h1 class="detail__title">${noticeDetail.noticeTitle}</h1>
 			</div>
-			<div class="detail-meta">
-				번호: ${noticeDetail.noticeId} | 조회수: ${noticeDetail.noticeCnt} | 작성일:
-				<fmt:formatDate value="${noticeDetail.noticeCreatedAt}" pattern="yyyy-MM-dd HH:mm:ss" />
+			<div class="detail__meta">
+				<span class="detail__meta-item">번호: ${noticeDetail.noticeId}</span>
+				<span class="detail__meta-item">조회수: ${noticeDetail.noticeCnt}</span>
+				<span class="detail__meta-item">
+					작성일:
+					<fmt:formatDate value="${noticeDetail.noticeCreatedAt}" pattern="yyyy-MM-dd" />
+				</span>
 			</div>
-			<hr class="detail-divider" />
-			<div class="detail-content">${noticeDetail.noticeContent}</div>
-			<!-- 첨부 파일 -->
-			<c:if test="${not empty noticeDetail.getFileList}">
-				<div class="attachment-box">
-					<div class="attachment-label">📥 다운로드 &nbsp;|</div>
-					<div class="attachment-file-list">
-						<c:forEach var="file" items="${noticeDetail.getFileList}">
-							<div class="file-item" onclick="filedownload(${file.fileGroupId}, ${file.fileSeq}, '${file.fileOrgName}')">${file.fileOrgName}</div>
-						</c:forEach>
+		</div>
+		<hr class="detail__divider" />
+
+		<div class="notice-content">${noticeDetail.noticeContent}</div>
+
+		<!-- 첨부파일 섹션 -->
+		<c:if test="${not empty fileList}">
+			<div class="detail__attachments">
+				<h3 class="detail__attachments-title">첨부파일</h3>
+				<div class="detail__attachments-list">
+					<div class="fileClass">
+						<c:choose>
+							<c:when test="${not empty fileList}">
+								<c:forEach var="file" items="${fileList}">
+									<div class="detail__attachment-item detailFile">
+										<svg class="detail__attachment-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+											<path fill-rule="evenodd" d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z" clip-rule="evenodd" />
+										</svg>
+										<div class="file-info">
+											<a href="/files/download?fileGroupId=${file.fileGroupId}&seq=${file.fileSeq}" class="detail__attachment-name file-name" title="파일명을 클릭하여 다운로드"> ${file.fileOrgName} </a>
+										</div>
+										<a href="/files/download?fileGroupId=${file.fileGroupId}&seq=${file.fileSeq}" class="file-download-btn" title="다운로드"> 다운로드 </a>
+									</div>
+								</c:forEach>
+							</c:when>
+							<c:otherwise>
+								<div class="no-files">첨부된 파일이 없습니다.</div>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
-			</c:if>
-		</div>
-		<div class="goList">
-			<a href="/csc/not/noticeList.do">목 록</a>
+			</div>
+		</c:if>
+
+		<hr class="detail__divider" />
+
+		<div class="detail__back-to-list">
+			<a href="/csc/not/noticeList.do" class="detail__action-button">목 록</a>
 		</div>
 	</div>
 </div>
