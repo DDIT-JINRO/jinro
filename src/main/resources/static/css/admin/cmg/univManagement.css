@@ -147,17 +147,6 @@ table th:last-child {
 	padding: 12px;
 }
 
-.btn-primary {
-	background-color: #7881f5;
-	color: white;
-}
-
-.btn-primary:hover {
-	transform: scale(1.03);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-	background-color: #5c68d9; /* 더 진한 파랑 */
-}
-
 .btn {
 	border: 1px solid transparent;
 	padding: 6px 18px;
@@ -279,11 +268,13 @@ table th:last-child {
 
 /* 색상 */
 .btn-primary {
-  background-color: #0d6efd;
+   background-color: #6c757d;
+   color: #fff;
 }
 
 .btn-success {
-  background-color: #198754;
+    background-color: #7c7cf5;
+    color: #fff;
 }
 
 .btn-danger {
@@ -292,4 +283,5 @@ table th:last-child {
 
 .btn-secondary {
   background-color: #6c757d;
+  color: #fff;
 }

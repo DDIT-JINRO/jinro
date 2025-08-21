@@ -183,12 +183,12 @@
 				<div class="flex" style="flex-direction: row-reverse; gap: 20px;">
 					<div class="form-actions">
 						<button type="button" id="btnRegister" class="btn-primary">
-							<i class="fas fa-save"></i> 저장
+							저장
 						</button>
 					</div>
 					<div class="form-actions">
 						<button type="button" id="btnReset" class="btn-warning">
-							<i class="fas fa-undo-alt"></i> 초기화
+							초기화
 						</button>
 					</div>
 				</div>

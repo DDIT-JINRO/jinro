@@ -171,12 +171,30 @@ function univManagement() {
 		const tr = e.target.closest('tr');
 		const tds = tr.querySelectorAll('td');
 		
-		const udName = tds[0].textContent;
-		const udTuition = tds[1].textContent;
-		const udScholar = tds[2].textContent;
-		const udCompetition = tds[3].textContent;
-		const udEmpRate = tds[4].textContent;
-		const uddId = tds[5].textContent;
+		let udName="";
+		let udTuition ="";
+		let udScholar ="";
+		let udCompetition ="";
+		let udEmpRate="";
+		let uddId ="";
+		if(tds[0].textContent != null){
+			udName = tds[0].textContent;
+		}
+		if(tds[1].textContent != null){
+			udTuition = tds[1].textContent;
+		}
+		if(tds[2].textContent != null){
+			udScholar = tds[2].textContent;
+		}
+		if(tds[3].textContent != null){
+			udCompetition = tds[3].textContent;
+		}
+		if(tds[4].textContent != null){
+			udEmpRate = tds[4].textContent;
+		}
+		if(tds[5].textContent != null){
+			uddId = tds[5].textContent;
+		}
 		
 		if (!tr) {
 			return;

@@ -93,10 +93,10 @@
 				<input id="univ-detail-univUrl" placeholder="URL 주소:" />
 			</div>
 			<div class="flex"style="gap:10px;">
-				  <button id="univDepInsert" class="btn btn-primary">➕ 학과 추가</button>
-				  <button id="univSave" class="btn btn-success">💾 저장</button>
-				  <button id="univDel" class="btn btn-danger">🗑 삭제</button>
-				  <button id="univReset" class="btn btn-secondary"><i class="fas fa-undo-alt"></i> 초기화</button>
+				  <button id="univSave" class="btn btn-success">저장</button>
+				  <button id="univDel" class="btn btn-danger">삭제</button>
+				  <button id="univReset" class="btn btn-danger">초기화</button>
+				  <button id="univDepInsert" class="btn btn-secondary" >학과 추가</button>				  
 			</div>
 		</div>
 	</div>
@@ -172,8 +172,8 @@
 				</div>
 			</div>
 			<div class="flex good">
-				<button id="univ-udMod" class="btn btn-success">💾 저장</button>
-				<button id="univ-udDel" class="btn btn-danger">🗑 삭제</button>
+				<button id="univ-udMod" class="btn btn-success">저장</button>
+				<button id="univ-udDel" class="btn btn-danger">삭제</button>
 			</div>
 		</div>
 	</div>
