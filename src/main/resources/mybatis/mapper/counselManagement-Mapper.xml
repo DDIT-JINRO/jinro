@@ -275,11 +275,10 @@
 		        COUNSELING A ON M.mem_id = A.COUNSEL
 		    LEFT OUTER JOIN
 		        COUNSELING_REVIEW R ON A.COUNSEL_ID = R.CR_ID
-		    <where>
-		        <if test='selectUserInquiry == "selectDays"'>
-		            AND A.counsel_req_datetime BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
-		        </if>
-		    </where>
+		    where A.COUNSEL_STATUS != 'S04002'
+	        <if test='selectUserInquiry == "selectDays"'>
+	            AND A.counsel_req_datetime BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+	        </if>
 		    GROUP BY
 		        M.mem_id,
 		        M.mem_name
