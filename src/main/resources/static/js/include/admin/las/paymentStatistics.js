@@ -22,6 +22,7 @@ function paymentStatistics() {
     const aiServiceChartDaySel = document.getElementById('aiServiceChartDay');
     const aiServiceChartGenderSel = document.getElementById('aiServiceChartGender');
     const aiServiceChartAgeGroupSel = document.getElementById('aiServiceChartAgeGroup');
+	const aiServiceChartTypeSel = document.getElementById('aiServiceChartType');
     const aiServiceChartResetBtn = document.getElementById('aiServiceChartReset');
 
     // 이벤트 리스너 등록
@@ -56,6 +57,7 @@ function paymentStatistics() {
         aiServiceChartDaySel.addEventListener('change', eventDateRangeSelect);
         aiServiceChartGenderSel.addEventListener('change', loadAiServiceChart);
         aiServiceChartAgeGroupSel.addEventListener('change', loadAiServiceChart);
+		aiServiceChartTypeSel.addEventListener('change', loadAiServiceChart);
         aiServiceChartResetBtn.addEventListener('click', function() {
             resetChartFilters('aiService');
         });
@@ -94,6 +96,7 @@ function paymentStatistics() {
                 document.getElementById('aiServiceChartDay').value = 'daily';
                 document.getElementById('aiServiceChartGender').value = '';
                 document.getElementById('aiServiceChartAgeGroup').value = '';
+				document.getElementById('aiServiceChartType').value = '';
                 document.getElementById('aiServiceChartStartDay').value = defaultRange.start;
                 document.getElementById('aiServiceChartEndDay').value = defaultRange.end;
                 loadAiServiceChart();
@@ -319,8 +322,6 @@ function paymentStatistics() {
         if (window.revenueChartInstance) {
             window.revenueChartInstance.destroy();
         }
-        
-        ctx.canvas.style.minHeight = '400px';
         
         axios.get('/admin/las/payment/revenue-stats', { params })
             .then(res => {
@@ -611,6 +612,7 @@ function paymentStatistics() {
         const dateValue = document.getElementById("aiServiceChartDay").value;
         const genderValue = document.getElementById("aiServiceChartGender").value;
         const ageGroupValue = document.getElementById("aiServiceChartAgeGroup").value;
+		const serviceTypeValue = document.getElementById("aiServiceChartType").value;
         const startDateValue = document.getElementById("aiServiceChartStartDay").value;
         const endDateValue = document.getElementById("aiServiceChartEndDay").value;
         
@@ -624,7 +626,8 @@ function paymentStatistics() {
             startDate: startDateValue,
             endDate: endDateValue,
             gender: genderValue,
-            ageGroup: ageGroupValue
+            ageGroup: ageGroupValue,
+			serviceType: serviceTypeValue
         };
         
         // 기존 차트 파괴
@@ -634,131 +637,160 @@ function paymentStatistics() {
         
         ctx.canvas.style.minHeight = '400px';
         
-        axios.get('/admin/las/payment/ai-service-usage', { params })
-            .then(res => {
-                const responseData = res.data;
-                
-                // 날짜별로 데이터 정리
-                const labels = responseData.map(item => {
-                    if (dateValue === 'monthly') {
-                        return formatMonthlyDate(item.dt);
-                    } else {
-                        return formatDailyDate(item.dt);
-                    }
-                });
-                
-                // 각 AI 서비스별 데이터셋 생성 (4개 라인)
-                const aiResumeData = responseData.map(item => parseInt(item.resumeCnt) || 0);
-                const aiCoverData = responseData.map(item => parseInt(item.coverCnt) || 0);
-                const aiMockData = responseData.map(item => parseInt(item.mockCnt) || 0);
-                const aiCounselingData = responseData.map(item => parseInt(item.counselingCnt) || 0);
-                
-                window.aiServiceChartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'AI 첨삭',
-                            data: aiResumeData,
-                            borderColor: 'rgb(45, 207, 151)',
-                            backgroundColor: 'rgba(45, 207, 151, 0.1)',
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: 'rgb(45, 207, 151)',
-                            fill: true
-                        }, {
-                            label: '자기소개서 첨삭',
-                            data: aiCoverData,
-                            borderColor: 'rgb(255, 199, 90)',
-                            backgroundColor: 'rgba(255, 199, 90, 0.1)',
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: 'rgb(255, 199, 90)',
-                            fill: true
-                        }, {
-                            label: '모의면접',
-                            data: aiMockData,
-                            borderColor: 'rgb(114, 124, 245)',
-                            backgroundColor: 'rgba(114, 124, 245, 0.1)',
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: 'rgb(114, 124, 245)',
-                            fill: true
-                        }, {
-                            label: 'AI 상담',
-                            data: aiCounselingData,
-                            borderColor: 'rgb(255, 99, 132)',
-                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: 'rgb(255, 99, 132)',
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'bottom',
-                                labels: {
-                                    padding: 20
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: [
-                                    '유료 컨텐츠 이용내역',
-                                    chartRange
-                                ],
-                            },
-                            tooltip: {
-                                mode: 'index',
-                                intersect: false,
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        if (context.parsed.y !== null) {
-                                            label += context.parsed.y.toLocaleString() + '회';
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: { 
-                                grid: { 
-                                    display: false, 
-                                    drawBorder: false 
-                                } 
-                            },
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1,
-                                    callback: value => value + '회'
-                                },
-                                grid: {
-                                    color: 'rgba(0, 0, 0, 0.05)',
-                                    drawBorder: false
-                                }
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => {
-                console.error("AI 서비스 이용내역 데이터 조회 중 에러:", error);
-            });
+		axios.get('/admin/las/payment/ai-service-usage', { params })
+	        .then(res => {
+	            const responseData = res.data;
+	            
+	            // 날짜별로 데이터 정리
+	            const labels = responseData.map(item => {
+	                if (dateValue === 'monthly') {
+	                    return formatMonthlyDate(item.dt);
+	                } else {
+	                    return formatDailyDate(item.dt);
+	                }
+	            });
+	            
+	            // 서비스 유형에 따른 데이터셋 생성
+	            let datasets = [];
+	            
+	            if (serviceTypeValue === '' || serviceTypeValue === 'resume') {
+	                const aiResumeData = responseData.map(item => parseInt(item.resumeCnt) || 0);
+	                datasets.push({
+	                    label: 'AI 첨삭',
+	                    data: aiResumeData,
+	                    borderColor: 'rgb(45, 207, 151)',
+	                    backgroundColor: 'rgba(45, 207, 151, 0.1)',
+	                    tension: 0.4,
+	                    pointRadius: 3,
+	                    pointHoverRadius: 6,
+	                    pointBackgroundColor: 'rgb(45, 207, 151)',
+	                    fill: true
+	                });
+	            }
+	            
+	            if (serviceTypeValue === '' || serviceTypeValue === 'cover') {
+	                const aiCoverData = responseData.map(item => parseInt(item.coverCnt) || 0);
+	                datasets.push({
+	                    label: '자기소개서 첨삭',
+	                    data: aiCoverData,
+	                    borderColor: 'rgb(255, 199, 90)',
+	                    backgroundColor: 'rgba(255, 199, 90, 0.1)',
+	                    tension: 0.4,
+	                    pointRadius: 3,
+	                    pointHoverRadius: 6,
+	                    pointBackgroundColor: 'rgb(255, 199, 90)',
+	                    fill: true
+	                });
+	            }
+	            
+	            if (serviceTypeValue === '' || serviceTypeValue === 'mock') {
+	                const aiMockData = responseData.map(item => parseInt(item.mockCnt) || 0);
+	                datasets.push({
+	                    label: '모의면접',
+	                    data: aiMockData,
+	                    borderColor: 'rgb(114, 124, 245)',
+	                    backgroundColor: 'rgba(114, 124, 245, 0.1)',
+	                    tension: 0.4,
+	                    pointRadius: 3,
+	                    pointHoverRadius: 6,
+	                    pointBackgroundColor: 'rgb(114, 124, 245)',
+	                    fill: true
+	                });
+	            }
+	            
+	            if (serviceTypeValue === '' || serviceTypeValue === 'counseling') {
+	                const aiCounselingData = responseData.map(item => parseInt(item.counselingCnt) || 0);
+	                datasets.push({
+	                    label: 'AI 상담',
+	                    data: aiCounselingData,
+	                    borderColor: 'rgb(255, 99, 132)',
+	                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
+	                    tension: 0.4,
+	                    pointRadius: 3,
+	                    pointHoverRadius: 6,
+	                    pointBackgroundColor: 'rgb(255, 99, 132)',
+	                    fill: true
+	                });
+	            }
+	            
+	            // 선택된 서비스 유형에 따른 제목 설정
+	            let chartTitle = '유료 컨텐츠 이용내역';
+	            if (serviceTypeValue) {
+	                const serviceNames = {
+	                    'resume': 'AI 첨삭',
+	                    'cover': '자기소개서 첨삭', 
+	                    'mock': '모의면접',
+	                    'counseling': 'AI 상담'
+	                };
+	                chartTitle = serviceNames[serviceTypeValue] + ' 이용내역';
+	            }
+	            
+	            window.aiServiceChartInstance = new Chart(ctx, {
+	                type: 'line',
+	                data: {
+	                    labels: labels,
+	                    datasets: datasets
+	                },
+	                options: {
+	                    responsive: true,
+	                    maintainAspectRatio: false,
+	                    plugins: {
+	                        legend: {
+	                            display: true,
+	                            position: 'bottom',
+	                            labels: {
+	                                padding: 20
+	                            }
+	                        },
+	                        title: {
+	                            display: true,
+	                            text: [
+	                                chartTitle,
+	                                chartRange
+	                            ],
+	                        },
+	                        tooltip: {
+	                            mode: 'index',
+	                            intersect: false,
+	                            callbacks: {
+	                                label: function(context) {
+	                                    let label = context.dataset.label || '';
+	                                    if (label) {
+	                                        label += ': ';
+	                                    }
+	                                    if (context.parsed.y !== null) {
+	                                        label += context.parsed.y.toLocaleString() + '회';
+	                                    }
+	                                    return label;
+	                                }
+	                            }
+	                        }
+	                    },
+	                    scales: {
+	                        x: { 
+	                            grid: { 
+	                                display: false, 
+	                                drawBorder: false 
+	                            } 
+	                        },
+	                        y: {
+	                            beginAtZero: true,
+	                            ticks: {
+	                                stepSize: 1,
+	                                callback: value => value + '회'
+	                            },
+	                            grid: {
+	                                color: 'rgba(0, 0, 0, 0.05)',
+	                                drawBorder: false
+	                            }
+	                        }
+	                    }
+	                }
+	            });
+	        })
+	        .catch(error => {
+	            console.error("AI 서비스 이용내역 데이터 조회 중 에러:", error);
+	        });
     }
     
     // 상태에 따른 스타일 업데이트

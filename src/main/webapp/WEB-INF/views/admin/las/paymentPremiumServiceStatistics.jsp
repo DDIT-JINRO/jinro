@@ -119,30 +119,38 @@
         
         <!-- 두 번째 큰 div - 유료 컨텐츠 이용내역 -->
         <div class="template-panel large-panel">
-            <div class="middleTitle">유료 컨텐츠 이용내역</div>
-            <div class="btn-group flex gap5 aiServiceChart">
-                <input type="hidden" id="aiServiceChartStartDay" />
-                <input type="hidden" id="aiServiceChartEndDay" />
-                <button class="public-toggle-button" id="aiServiceChartReset">전체</button>
-                <select class="public-toggle-select" name="aiServiceChartDay" id="aiServiceChartDay">
-                    <option value="daily">일별</option>
-                    <option value="monthly">월별</option>
-                    <option value="selectDays">기간선택</option>
-                </select>
-                <select class="public-toggle-select" name="aiServiceChartGender" id="aiServiceChartGender">
-                    <option value="">성별전체</option>
-                    <option value="male">남자</option>
-                    <option value="female">여자</option>
-                </select>
-                <select class="public-toggle-select" name="aiServiceChartAgeGroup" id="aiServiceChartAgeGroup">
-                    <option value="">연령전체</option>
-                    <option value="teen">청소년</option>
-                    <option value="youth">청년</option>
-                </select>
-            </div>
-            <div class="chart-container">
-                <canvas id="aiServiceChartCanvas"></canvas>
-            </div>
-        </div>
+		    <div class="middleTitle">유료 컨텐츠 이용내역</div>
+		    <div class="btn-group flex gap5 aiServiceChart">
+		        <input type="hidden" id="aiServiceChartStartDay" />
+		        <input type="hidden" id="aiServiceChartEndDay" />
+		        <button class="public-toggle-button" id="aiServiceChartReset">전체</button>
+		        <select class="public-toggle-select" name="aiServiceChartDay" id="aiServiceChartDay">
+		            <option value="daily">일별</option>
+		            <option value="monthly">월별</option>
+		            <option value="selectDays">기간선택</option>
+		        </select>
+		        <select class="public-toggle-select" name="aiServiceChartGender" id="aiServiceChartGender">
+		            <option value="">성별전체</option>
+		            <option value="male">남자</option>
+		            <option value="female">여자</option>
+		        </select>
+		        <select class="public-toggle-select" name="aiServiceChartAgeGroup" id="aiServiceChartAgeGroup">
+		            <option value="">연령전체</option>
+		            <option value="teen">청소년</option>
+		            <option value="youth">청년</option>
+		        </select>
+		        <!-- 새로 추가되는 서비스 유형 선택 셀렉트 -->
+		        <select class="public-toggle-select" name="aiServiceChartType" id="aiServiceChartType">
+		            <option value="">전체서비스</option>
+		            <option value="resume">AI 첨삭</option>
+		            <option value="cover">자기소개서 첨삭</option>
+		            <option value="mock">모의면접</option>
+		            <option value="counseling">AI 상담</option>
+		        </select>
+		    </div>
+		    <div class="chart-container">
+		        <canvas id="aiServiceChartCanvas"></canvas>
+		    </div>
+		</div>
     </div>
 </div>
