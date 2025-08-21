@@ -621,6 +621,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				// 컨테이너가 현재 열려있지 않은 상태라면, 미리보기를 생성하고 보여줌
 				if (!previewContainer.classList.contains('open')) {
+					const allPreviews = document.querySelectorAll('.pdf-preview-container.open');
+					const allButtons = document.querySelectorAll('.btn-pdf-preview');
+
+					allPreviews.forEach(preview => preview.classList.remove('open'));
+					allButtons.forEach(btn => btn.textContent = '미리보기 보기');
+					
 					// iframe이 아직 생성되지 않았다면 생성
 					if (previewContainer.innerHTML === '') {
 						const iframe = document.createElement('iframe');
