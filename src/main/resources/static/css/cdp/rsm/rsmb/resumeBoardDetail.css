@@ -5,6 +5,16 @@
 	margin: 16px 0;
 }
 
+.bookmark-button {
+	width: 24px;
+	height: 24px;
+}
+
+.bookmark-button span img {
+	width: 24px;
+	height: 24px;
+}
+
 /* 동적으로 생성될 개별 PDF 미리보기 아이템 */
 .pdf-preview-item {
 	margin-bottom: 24px; /* 각 미리보기 사이의 간격 */
@@ -26,746 +36,111 @@
 	border-radius: 12px;
 }
 
-/* 게시글 전체 */
-.post-box {
-	width: 1160px;
-	border: 2px solid #e8ecef;
-	border-radius: 10px;
-	margin: 0 auto;
-	padding-bottom: 30px;
-	background-color: white;
-}
-
-/* 제목 영역 */
-.post-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding-top: 30px;
-	border-bottom: 2px solid #e8ecef;
-}
-
-.post-id-badge {
-	background: #d3f8ff;
-	color: #848efb;
-	border-radius: 1000px;
-	padding: 3px 15px;
-	font-weight: 700;
-}
-
-.post-title {
-	font-size: 20px;
-	font-weight: 700;
-	flex-grow: 1;
-	color: #000;
-}
-
-.post-meta {
-	display: flex;
-	gap: 10px;
-	font-size: 14px;
-	color: #858e96;
-	flex-shrink: 0;
-	align-items: center; /* ⬇️ [핵심] 이 한 줄을 추가합니다. */
-}
-
-/* 게시글 본문 */
-.post-content {
-	padding: 50px;
-	font-size: 18px;
-	line-height: 1.5;
-	border-top: 2px solid #e8ecef;
-}
-
-/* 첨부파일 */
-.download-section {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin-left: 50px;
-	margin-top: 20px;
-}
-
-.download-section .file-link {
-	color: blue;
-	text-decoration: underline;
-}
-
-/* 댓글 리스트 */
-.comment-section {
-	margin-top: 40px;
-	width: 1160px;
-	margin: 0 auto;
-}
-
-/* 댓글 하나 */
-.reply-box {
-	border: 2px solid #e8ecef;
-	border-radius: 10px;
-	padding: 20px;
-	margin-bottom: 10px;
-	background: #fff;
-}
-
-.reply-child-container {
-	/* display: none; 대신 */
-	max-height: 0;
-	opacity: 0;
-	overflow: hidden;
-	transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
-}
-
-.reply-box.reply-child {
-	background: #f9f9f9;
-	padding-left: 40px;
-	margin-bottom: 0px;
-}
-
-.reply-child-container.open {
-	/* 충분히 큰 값 */
-	max-height: 1000px;
-	opacity: 1;
-}
-
-.reply-child-container .reply-box {
-	margin-bottom: 10px;
-	/* 애니메이션 간 자연스러운 여백 전환 */
-	transition: margin 0.3s ease-out;
-}
-
-/* 댓글 프로필 */
-.reply-profile {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
-
-.reply-nickname {
-	font-weight: 700;
-}
-
-.reply-date {
-	font-size: 12px;
-	color: #858e96;
-}
-
-/* 댓글 본문 */
-.reply-content {
-	margin-top: 10px;
-	font-size: 14px;
-	line-height: 1.5;
-}
-
-/* 댓글 행동 버튼 */
-.reply-actions {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 10px;
-	font-size: 14px;
-	color: #858e96;
-}
-
-/* 대댓글 영역 */
-.reply-children {
-	margin-top: 10px;
-	margin-left: 20px;
-	margin-bottom: 0px;
-}
-
-/* 댓글 입력 */
-.comment-form {
-	margin-top: 40px;
-	margin-bottom: 40px;
-	border: 2px solid #e8ecef;
-	padding: 20px;
-	border-radius: 10px;
-	background: #f9f9f9;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: end;
-}
-
-.comment-form.child-form {
-	margin-top: 0px;
-}
-
-.comment-form textarea {
-	width: 100%;
-	height: 100px;
-	padding: 15px;
-	border: 1px solid #e8ecef;
-	resize: none;
-	font-size: 16px;
-	margin-bottom: 10px;
-}
-
-.comment-footer {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.btn-submit {
-	background: #d3f8ff;
-	color: #848efb;
-	padding: 5px 20px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-}
-
-.btn-back {
-	display: block;
-	margin: 40px auto;
-	background: #4e575e;
-	color: white;
-	padding: 14px 40px;
-	border-radius: 10px;
-	text-align: center;
-	text-decoration: none;
-	font-weight: bold;
-}
-
-.closeReplyBtn {
-	min-inline-size: -webkit-fill-available;
-	text-align-last: center;
-	color: #858E96;
-}
-
-.closeReplyBtn span:hover {
-	cursor: pointer;
-}
-
-.user-profile {
-	width: 65px;
-	height: 65px;
-}
-
-.btn-enter-chat {
-	background-color: #d3f8ff;
-	color: #4a5aff;
-	border: none;
-	border-radius: 8px;
-	padding: 12px 24px;
-	font-size: 16px;
-	font-weight: 600;
-	font-family: 'Noto Sans KR', sans-serif;
-	cursor: pointer;
-	transition: all 0.2s ease-in-out;
-	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-}
-
-.btn-enter-chat:hover {
-	background-color: #c2f0ff;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-}
-
-.btn-enter-chat.entered {
-	background-color: #ff8040;
-	color: #8c0000;
-}
-
-.btn-enter-chat.disabled {
-	background-color: #ffe2e2;
-	color: #cc0000;
-	cursor: not-allowed;
-	box-shadow: none;
-}
-
-.enter-btn-wrapper {
-	margin-top: 30px;
-	text-align: center;
-}
-
-.std-group-info-box {
-	border: 2px solid #e8ecef;
-	border-radius: 10px;
-	padding: 30px;
-	margin: 30px auto;
-	width: 95%;
-	background: #fefefe;
-	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-}
-
-.info-title {
-	font-size: 20px;
-	font-weight: 700;
-	margin-bottom: 20px;
-	color: #333;
-}
-
-.info-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	font-size: 16px;
-	line-height: 2;
-	color: #555;
-}
-
-.info-list li strong {
-	display: inline-block;
-	width: 100px;
-	color: #222;
-}
-
-.group-description {
-	margin-top: 30px;
-	padding-top: 20px;
-	border-top: 1px dashed #ccc;
-}
-
-.desc-title {
-	font-size: 18px;
-	font-weight: 600;
-	margin-bottom: 10px;
-	color: #444;
-}
-
-.group-description p {
-	font-size: 15px;
-	line-height: 1.6;
-	color: #333;
-	white-space: pre-line;
-}
-
-:root {
-	--card-border: #e8ecef;
-	--card-radius: 10px;
-	--card-bg: #fff;
-	--text-dark: #333;
-	--text-mid: #555;
-	--text-light: #858e96;
-	--gap: 20px;
-}
-
-/* ─── 카드 래퍼 ─── */
-.detail-wrapper {
-	max-width: 1160px;
-	background: var(--card-bg);
-	border: 2px solid var(--card-border);
-	border-radius: var(--card-radius);
-	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-	padding: 30px;
-	padding-top: 15px;
-}
-
-/* ─── 1) 제목·프로필·메타 ─── */
-.post-header {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 10px;
-	border-bottom: 2px solid var(--card-border);
-	padding-bottom: 20px;
-	margin-bottom: 30px;
-}
-
-.detailMainContent {
-	padding: 50px 0;
-	border-bottom: 2px solid var(--card-border);
-}
-
-.post-title {
-	font-size: 1.75rem;
-	font-weight: 700;
-	color: var(--text-dark);
-	flex: 1 1 auto;
-}
-
-.author-meta {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
-
-.author-nickname {
-	font-weight: 600;
-	color: var(--text-mid);
-}
-
-/* ─── 2) 핵심 정보 그리드 ─── */
-.info-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-	gap: var(--gap);
-	margin-bottom: 30px;
-}
-
-.info-item dt {
-	font-weight: 600;
-	color: var(--text-dark);
-	margin-bottom: 6px;
-}
-
-.info-item dd {
-	margin: 0;
-	color: var(--text-mid);
-	font-size: 1rem;
-	line-height: 1.4;
-}
-
-/* ─── 3) 본문 ─── */
-.group-description {
-	border-top: 2px solid var(--card-border);
-	padding-top: 30px;
-}
-
-.desc-title {
-	font-size: 1.25rem;
-	font-weight: 600;
-	color: var(--text-dark);
-	margin-bottom: 16px;
-}
-
-.group-description p {
-	font-size: 1rem;
-	color: var(--text-mid);
-	line-height: 1.6;
-	white-space: pre-line;
-}
-
-.char-count {
-	padding-right: 30px;
-}
-
-.etcBtn {
-	float: right;
-}
-
-.etcBtn:hover {
-	cursor: pointer;
-	font-size: 1.05rem;
-}
-
-.reply-child-btn {
-	border: none;
-	background: none;
-	color: #858E96;
-}
-
-.reply-child-btn:hover {
-	cursor: pointer;
-}
-
-.child-count {
-	font-size: 13px
-}
-
-/* 신고창 영역 */
-.etc-container {
-	box-sizing: border-box;
-	display: none;
+/* 파일 다운로드 영역 - teenDetail.css 스타일 적용 */
+.detailFile {
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: 2px 2px;
-	width: 70px;
-	background: #FFFFFF;
-	border: 2px solid #E8ECEF;
-	border-radius: 10px;
-	float: right;
-	clear: right;
-	margin-top: -2px;
-}
-
-.etc-container hr {
-	margin: 4px;
-	width: 70%;
-	border-style: groove;
-}
-
-.etc-container.etc-open {
-	display: flex;
-}
-
-.etc-container .etc-act-btn:hover {
-	cursor: pointer;
-	font-weight: 500;
-	color: #414141;
-}
-
-.etc-act-btn {
-	color: #969696;
-	width: 100%;
-	text-align: center;
-}
-
-.boardEtcBtn {
-	float: right;
-	color: #969696;
-}
-
-.boardEtcBtn:hover {
-	cursor: pointer;
-	color: #414141;
-}
-
-.boardEtcContainer {
-	box-sizing: border-box;
-	display: none;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
-	background: #FFFFFF;
-	border: 2px solid #E8ECEF;
-	border-radius: 10px;
-	position: absolute;
-	justify-self: right;
-	margin-top: 30px;
-	margin-right: -10px;
-	z-index: 10;
-}
-
-.boardEtcContainer.board-etc-open {
-	display: flex;
-}
-
-.boardEtcContainer hr {
-	width: 70%;
-	margin: 2px;
-	border-color: #E8ECEF;
-	border-style: solid;
-}
-
-.boardEtcActionBtn {
-	height: 40px;
-	width: 80px;
-	color: #969696;
-	text-align: center;
-	align-content: center;
-}
-
-.boardEtcActionBtn:hover {
-	cursor: pointer;
-	color: #555555;
-}
-
-.reply-modify-input {
-	width: 80%;
-	height: 20px;
-	border-radius: 9px;
-	border: 2.5px solid rgba(127, 140, 141, 0.4);
-	color: #636363;
-	place-content: space-evenly;
-	padding-left: 10px;
-	resize: none;
-}
-
-.reply-modify-input::placeholder {
-	color: #969696;
-}
-
-.button-group {
-	display: inline-block;
-	float: right;
-	height: 27px;
-}
-
-.button-group button {
-	height: 100%;
-	border-radius: 8px;
-	border: 1px;
-	width: 45px;
-}
-
-.button-group button:hover {
-	cursor: pointer;
-	font-weight: 500;
-}
-
-.button-group .modify-btn {
-	background: #d3f8ff;
-	color: #848efb;
-}
-
-.button-group .cancel-btn {
-	background: #d3f8ff;
-	color: #fe81a0;
 }
 
 .fileClass {
-	padding-top: 10px;
+	padding: 20px 0;
+	border-bottom: 1px solid rgba(120, 129, 245, 0.1);
+	margin-bottom: 30px;
 }
 
-/* ===================신고모달 css================= */
-
-/* 모달 오버레이 (배경) */
-.modal-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.6);
-	display: none; /* 기본적으로 숨김 */
-	justify-content: center;
-	align-items: center;
-	z-index: 1000;
-}
-
-/* 모달이 보일 때의 스타일 */
-.modal-overlay.show {
+.file-header {
 	display: flex;
-}
-
-/* 모달 콘텐츠 (흰색 박스) */
-.modal-content {
-	background-color: white;
-	padding: 30px 40px;
-	border-radius: 12px;
-	width: 100%;
-	max-width: 500px;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-	position: relative;
-	text-align: center;
-}
-
-.modal-content.interests-modal {
-	max-width: 700px;
-	max-height: 500px;
-}
-
-.modal-content h3 {
-	margin-top: 0;
-	font-size: 1.5rem;
-	color: #333;
-}
-
-.modal-content p {
-	color: #666;
-	margin-bottom: 24px;
-}
-
-.modal-close-btn {
-	position: absolute;
-	top: 10px;
-	right: 15px;
-	background: none;
-	border: none;
-	font-size: 2rem;
-	color: #999;
-	cursor: pointer;
-}
-
-.modal-form textarea {
-	width: 94.5%;
-	padding: 12px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	font-size: 1rem;
-	margin-bottom: 8px;
-	resize: none;
-	height: 100px;
-}
-
-.modal-error-msg {
-	display: block;
-	color: #e53e3e;
-	font-size: 0.9rem;
-	height: 1.2em; /* 에러 메시지가 없을 때도 공간 유지 */
-	margin-bottom: 12px;
-}
-
-.modal-form .btn-primary {
-	width: 100%;
-	padding: 12px;
-}
-
-.btn {
-	border: 1px solid transparent;
-	padding: 6px 18px;
-	border-radius: 8px;
-	cursor: pointer;
-	font-weight: 600;
-	font-size: 0.9rem;
-	transition: all 0.3s ease;
-}
-
-.btn-primary {
-	background-color: #7881f5;
-	color: white;
-}
-
-.btn-primary:hover {
-	transform: scale(1.03);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-	background-color: #5c68d9; /* 더 진한 파랑 */
-}
-
-/* ─── 파일 입력창 스타일 ─── */
-.modal-form input[type="file"] {
-	width: 100%;
-	padding: 12px;
-	margin-bottom: 12px;
-	font-size: 1rem;
-	color: #333;
-	background-color: #fff;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	cursor: pointer;
-	box-sizing: border-box;
-}
-
-/* ─── 파일 선택 버튼 커스텀 ─── */
-.modal-form input[type="file"]::file-selector-button {
-	padding: 8px 16px;
-	margin-right: 8px;
-	background-color: #7881f5;
-	color: #fff;
-	border: none;
-	border-radius: 8px;
-	font-size: 0.9rem;
-	font-weight: 600;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-}
-
-/* ─── 버튼 호버 효과 ─── */
-.modal-form input[type="file"]::file-selector-button:hover {
-	background-color: #5c68d9;
-}
-
-/* ===================신고모달 css 끝================ */
-
-/* ... 기존 CSS 코드 맨 아래에 이 내용을 추가하세요 ... */
-.detailFile {
-    display: flex;
-    justify-content: space-between;
+    width: 100%;
     align-items: center;
-    padding: 10px 0;
-    flex-wrap: wrap; 
-    border-bottom: 1px solid #f0f0f0;
+    justify-content: space-between;
+}
+
+.file-info {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex: 1;
+}
+
+.file-icon {
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(120, 129, 245, 0.1);
+	border-radius: 6px;
+	color: #7881f5;
+	font-size: 14px;
 }
 
 .file-name {
+	color: #4a5568;
 	font-size: 14px;
-	margin-right: 16px;
 	font-weight: 500;
+	text-decoration: none;
+	transition: color 0.2s ease;
+	cursor: pointer;
+}
+
+.file-name:hover {
+	color: #7881f5;
 }
 
 .file-btn-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* 버튼 사이의 간격 */
-    flex-shrink: 0; /* 창이 줄어들어도 버튼 영역이 줄어들지 않도록 함 */
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
 }
 
-/* 미리보기/다운로드 버튼 스타일 */
-.btn-pdf-preview, .btn-pdf-download {
-	padding: 4px 12px;
-	border: 1px solid #ccc;
-	border-radius: 6px;
-	background-color: #f8f9fa;
-	cursor: pointer;
-	font-size: 13px;
+/* 미리보기/다운로드 버튼 스타일 - teenDetail.css 스타일 적용 */
+.btn-pdf-preview {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 16px;
+	background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+	color: #4a5568;
 	text-decoration: none;
-	color: #333;
-	margin-right: 8px;
+	border: 2px solid rgba(120, 129, 245, 0.2);
+	border-radius: 8px;
+	font-size: 13px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.btn-pdf-preview:hover, .btn-pdf-download:hover {
-	background-color: #e9ecef;
+.btn-pdf-preview:hover {
+	background: linear-gradient(135deg, #e9ecef, #dee2e6);
+	color: #7881f5;
+	border-color: #7881f5;
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-pdf-download {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 16px;
+	background: #7881f5;
+	color: white;
+	text-decoration: none;
+	border-radius: 8px;
+	font-size: 13px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	border: none;
+	cursor: pointer;
+	box-shadow: 0 2px 8px rgba(120, 129, 245, 0.3);
+}
+
+.btn-pdf-download:hover {
+	background-color: #5c68d9;
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 다운로드 링크 기본 스타일 */
@@ -780,106 +155,37 @@
 
 /* PDF 미리보기가 표시될 컨테이너 */
 .pdf-preview-container {
-	display: none; /* 기본적으로 숨김 */
 	width: 100%;
-	margin-top: 12px;
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	/* 부드러운 애니메이션을 위한 속성들 */
+	max-height: 0;
+	opacity: 0;
+	transition: max-height 0.5s ease-out, opacity 0.3s ease-out, margin-top
+		0.3s ease-out;
+}
+
+/* 미리보기가 열린 상태 */
+.pdf-preview-container.open {
+	margin-top: 20px;
+	max-height: 800px; /* iframe 높이 + 여백 */
+	opacity: 1;
 }
 
 .pdf-preview-container iframe {
 	width: 100%;
 	height: 800px;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-}
-
-/* ... 기존 CSS 코드 맨 아래에 이 내용을 추가하세요 ... */
-.like-button {
-	position: relative;
-	width: 24px;
-	height: 24px;
-	padding: 0;
 	border: none;
-	background: none;
-	cursor: pointer;
-	vertical-align: middle;
 }
 
-/* SVG 아이콘 자체의 크기 */
-.like-button svg {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 20px;
-	height: 20px;
-	transition: all 0.2s ease-in-out;
-}
-
-/* 채워진 하트는 기본적으로 숨김 (작고 투명하게) */
-.heart-filled {
-	color: #e74c3c;
-	transform: translate(-50%, -50%) scale(0);
-	opacity: 0;
-}
-
-/* 비어있는 하트는 기본적으로 보임 */
-.heart-outline {
-	color: #555;
-	transform: translate(-50%, -50%) scale(1);
-	opacity: 1;
-}
-
-/* 'liked' 클래스가 버튼에 추가되었을 때의 스타일 */
-.like-button.liked .heart-filled {
-	transform: translate(-50%, -50%) scale(1); /* 채워진 하트가 나타남 */
-	opacity: 1;
-}
-
-.like-button.liked .heart-outline {
-	transform: translate(-50%, -50%) scale(0); /* 비어있는 하트가 사라짐 */
-	opacity: 0;
-}
-
-.like-cnt {
-	vertical-align: middle; /* 버튼과 정렬을 맞춤 */
-	margin-left: 4px; /* 버튼과의 간격 */
-}
-
-.bookmark-btn {
-    display: flex;           
-    align-items: center;     
-    justify-content: center; 
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    
-    /* 버튼의 크기를 명시적으로 지정하여 정렬 기준을 잡아줍니다. */
-    width: 36px; 
-    height: 36px;
-}
-
-/* 활성 아이콘은 기본적으로 숨깁니다. */
-.bookmark-btn .icon-active {
-	display: none;
-}
-
-/* 비활성 아이콘은 기본적으로 보입니다. */
-.bookmark-btn .icon-inactive {
-    display: inline-block;
-}
-
-.bookmark-btn span img {
-    width: 30px;
-    height: 30px;
-    display: block;
-}
-
-/* .active 클래스가 없는 경우 (비활성화 상태) */
-.bookmark-btn.active .icon-active {
-	display: inline-block; /* 비활성 아이콘을 보여줍니다. */
-}
-
-.bookmark-btn.active .icon-inactive {
-	display: none; /* 활성 아이콘을 숨깁니다. */
+/* 파일이 없을 때 */
+.no-files {
+	text-align: center;
+	color: #718096;
+	font-size: 14px;
+	padding: 20px;
+	background: rgba(120, 129, 245, 0.05);
+	border-radius: 8px;
+	border: 1px dashed rgba(120, 129, 245, 0.2);
 }

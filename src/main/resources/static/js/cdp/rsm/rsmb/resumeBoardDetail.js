@@ -619,8 +619,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				const targetId = button.dataset.targetId;
 				const previewContainer = document.getElementById(targetId);
 
-				// 컨테이너가 현재 보이지 않는 상태라면, 미리보기를 생성하고 보여줌
-				if (previewContainer.style.display !== 'block') {
+				// 컨테이너가 현재 열려있지 않은 상태라면, 미리보기를 생성하고 보여줌
+				if (!previewContainer.classList.contains('open')) {
+					// iframe이 아직 생성되지 않았다면 생성
 					if (previewContainer.innerHTML === '') {
 						const iframe = document.createElement('iframe');
 
@@ -636,12 +637,13 @@ document.addEventListener("DOMContentLoaded", function() {
 						previewContainer.appendChild(iframe);
 					}
 
-					previewContainer.style.display = 'block';
+					// 부드럽게 열기
+					previewContainer.classList.add('open');
 					button.textContent = '미리보기 닫기';
 
 					// 컨테이너가 이미 보이는 상태라면, 숨김
 				} else {
-					previewContainer.style.display = 'none';
+					previewContainer.classList.remove('open');
 					button.textContent = '미리보기 보기';
 				}
 			}
