@@ -20,7 +20,7 @@ public class PenaltyManagementController {
 
 	@Autowired
     private PenaltyManagementService penaltyManagementService;
-    
+
     /**
      * 대시보드 기본 통계 조회
      * @return ResponseEntity
@@ -37,7 +37,7 @@ public class PenaltyManagementController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
-    
+
     /**
      * 제재 유형 분포 통계 조회
      * @param filterType 필터 타입 (daily/monthly)
@@ -49,14 +49,14 @@ public class PenaltyManagementController {
      */
     @GetMapping("/getPenaltyStats.do")
     public ResponseEntity<Map<String, Object>> getPenaltyTypeStats(
-            @RequestParam(value = "filterType", defaultValue = "daily") String filterType,
+            @RequestParam(value = "filterType", defaultValue = "monthly") String filterType,
             @RequestParam(value = "startDate", required = false) String startDate,
             @RequestParam(value = "endDate", required = false) String endDate,
             @RequestParam(value = "month", required = false) Integer month,
             @RequestParam(value = "gender", required = false) String gender) {
-        
+
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("filterType", filterType);
@@ -64,15 +64,15 @@ public class PenaltyManagementController {
             params.put("endDate", endDate);
             params.put("month", month);
             params.put("gender", gender);
-            
+
             List<Map<String, Object>> stats = penaltyManagementService.getPenaltyTypeStats(params);
-            
+
             response.put("success", true);
             response.put("data", stats);
             response.put("totalCount", stats.size());
-            
+
             return ResponseEntity.ok(response);
-            
+
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", "제재 통계 조회 중 오류가 발생했습니다.");
