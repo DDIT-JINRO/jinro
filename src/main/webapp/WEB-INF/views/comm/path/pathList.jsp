@@ -1,19 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/comm/peer/teen/teenList.css">
-<!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
-	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
-		<!-- 대분류 -->
 		<div class="channel-title-text">커뮤니티</div>
 	</div>
 	<div class="channel-sub-sections">
-		<!-- 중분류 -->
 		<div class="channel-sub-section-item">
 			<a href="/comm/peer/teen/teenList.do">또래 게시판</a>
 		</div>
-		<!-- 중분류 -->
 		<div class="channel-sub-section-itemIn">
 			<a href="/comm/path/pathList.do">진로/진학 게시판</a>
 		</div>
@@ -22,10 +17,10 @@
 <div>
 	<div class="public-wrapper">
 		<div class="public-wrapper-main">
-		<div class="teenListTop">
-		<p class="textmessage">해당 게시판은 진로/진학을 고민하고 논의하는 게시판입니다.</p>
-		<button id=btnWrite>글작성</button>
-		</div>
+			<div class="teenListTop">
+				<p class="textmessage">해당 게시판은 진로/진학을 고민하고 논의하는 게시판입니다.</p>
+				<button id=btnWrite>글작성</button>
+			</div>
 			<form method="get" action="/comm/path/pathList.do">
 				<div class="com-default-search">
 					<div class="com-select-wrapper">
@@ -77,24 +72,24 @@
 			<ul class="pagination">
 				<li>
 					<a href="${articlePage.url}?currentPage=${articlePage.startPage - 5}&keyword=${param.keyword}&status=${param.status}" class="
-							<c:if test='${articlePage.startPage < 6}'>
-								disabled
-							</c:if>"> ← Previous </a>
+					<c:if test='${articlePage.startPage < 6}'>
+						disabled
+					</c:if>"> ← Previous </a>
 				</li>
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 					<li>
 						<a href="${articlePage.url}?currentPage=${pNo}&keyword=${param.keyword}&status=${param.status}" class="page-num
-								<c:if test='${pNo == articlePage.currentPage}'>
-									active
-								</c:if>"> ${pNo} </a>
+						<c:if test='${pNo == articlePage.currentPage}'>
+							active
+						</c:if>"> ${pNo} </a>
 					</li>
 				</c:forEach>
 
 				<li>
 					<a href="${articlePage.url}?currentPage=${articlePage.startPage + 5}&keyword=${param.keyword}&status=${param.status}" class="
-							<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
-								disabled
-							</c:if>"> Next → </a>
+					<c:if test='${articlePage.endPage >= articlePage.totalPages}'>
+						disabled
+					</c:if>"> Next → </a>
 				</li>
 			</ul>
 		</div>
