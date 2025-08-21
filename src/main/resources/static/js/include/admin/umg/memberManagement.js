@@ -1130,7 +1130,6 @@ function memberManagement() {
 						gender: genderValue||gender,
 						ageGroup: ageGroupValue||'',
 					}
-		console.log(params);
 
 		// 차트 캔버스 높이 설정 (안정적인 렌더링을 위해 추가)
 		ctx.canvas.style.minHeight = '400px';
@@ -1240,7 +1239,6 @@ function memberManagement() {
 						gender: genderValue||gender,
 						ageGroup: ageGroupValue||'',
 					}
-		console.log(params);
 
 		// 기존 차트 파괴 및 최소 높이 설정
 		if (window.pageVisitChartInstance) {
@@ -1489,7 +1487,6 @@ function memberManagement() {
 
 	// 일별, 월별, 기간선택에 대해서 이벤트 바인딩
 	function eventDateRangeSelect(e){
-		console.log(e);
 		// 공용으로 사용할 숨겨둔 input. flatpickr가 input 요소인지 점검한다고 함.(select에 못줌)
 		const selectEl = e.target.nodeName == "SELECT" ? e.target : e.target.closest('select');
 		const dateValue = selectEl.value;
