@@ -80,8 +80,6 @@
 			style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 reportListBtnGroup">
-				<button class="public-toggle-button active"
-					id="ReportListSortByRpId" data-sort-by="plId">신고ID</button>
 				<button class="public-toggle-button" id="ReportListSortByMemId"
 					data-sort-by="memId">신고자명</button>
 				<button class="public-toggle-button" id="ReportListSortByTargetName"
@@ -211,8 +209,6 @@
 			style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 penalListBtnGroup">
-				<button class="public-toggle-button active"
-					id="penaltyListSortByRpId" data-sort-by="mpId">이력ID</button>
 				<button class="public-toggle-button" id="penaltyListSortByMemId"
 					data-sort-by="memId">회원ID</button>
 				<button class="public-toggle-button"
@@ -311,7 +307,7 @@
 	</div>
 </div>
 
-<div id="penaltyModal" class="penalty-modal-overlay">
+<div id="penaltyModal" class="penalty-modal-overlay" style="display: none;">
 	<div class="penalty-modal-content">
 		<h3>신규 제재 등록</h3>
 		<div style="margin-bottom: 1rem;">
