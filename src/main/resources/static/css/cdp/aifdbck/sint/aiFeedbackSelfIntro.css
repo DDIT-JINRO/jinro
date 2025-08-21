@@ -53,8 +53,9 @@
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	min-height: 500px;
+	height: 80vh; /* 화면 높이의 80%를 차지하도록 설정 */
 	box-sizing: border-box;
+	overflow-y: auto;
 }
 
 /* 섹션 헤더 (자소서 / 피드백 공통) */

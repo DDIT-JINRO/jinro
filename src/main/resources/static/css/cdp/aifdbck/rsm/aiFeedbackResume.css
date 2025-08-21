@@ -53,8 +53,9 @@
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	min-height: 500px;
+	height: 80vh; /* 화면 높이의 80%를 차지하도록 설정 */
 	box-sizing: border-box;
+	overflow-y: auto;
 }
 
 /* 섹션 헤더 (이력서 / 피드백 공통) */
@@ -160,6 +161,110 @@
 .aifb-button.proofread:hover {
 	background-color: #7881f5;
 	color: #fff;
+}
+
+
+
+/* 스피너 구현 */
+.spinner-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 40px 20px;
+	min-height: 250px;
+	text-align: center;
+	color: #666;
+}
+
+.spinner-border {
+	display: inline-block;
+	width: 2.5rem;
+	height: 2.5rem;
+	vertical-align: -0.125em;
+	border: 0.25em solid #7881f5;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: spinner-spin .75s linear infinite;
+}
+
+@keyframes spinner-spin {
+	to { transform:rotate(360deg); }
+}
+
+
+/* ===== Modal ===== */
+.ai-modal-backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(20, 24, 28, 0.45);
+	display: none;
+	z-index: 3000; /* 캐릭터 이미지 등 어떤 요소보다 위로 (요청 이력 반영) */
+}
+
+.ai-modal {
+	position: fixed;
+	left: 50%;
+	top: 80px; /* 원하는 상단 위치 */
+	transform: translateX(-50%);
+	width: 420px;
+	max-width: 90vw;
+	background: #fff;
+	border-radius: 16px;
+	padding: 20px;
+	display: none;
+	z-index: 3010;
+	box-shadow: 0 30px 90px rgba(0, 0, 0, 0.25), 0 8px 24px
+		rgba(0, 0, 0, 0.2);
+}
+
+.ai-modal h4 {
+	margin: 2px 0 16px;
+	font-size: 18px;
+	font-weight: 800;
+	text-align: center;	
+}
+
+.ai-modal p {
+	color: #4f5965;
+	line-height: 1.5;
+}
+
+.ai-modal .row {
+	display: flex;
+	gap: 10px;
+	margin-top: 16px;
+	justify-content: flex-end;
+}
+
+.ai-kv {
+	margin: 10px 0;
+	background: #f8fafb;
+	border: 1px dashed #e4e9ee;
+	border-radius: 12px;
+	padding: 10px 12px;
+	color: #47515b;
+}
+
+.ai-kv > div + div {
+    margin-top: 12px;
+}
+.btn {
+    appearance: none;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 18px;
+    font-weight: 800;
+    cursor: pointer;
+    background: #6a82fb;
+    color: #fff;
+    transition: all .15s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.btn.secondary {
+    background: #f3f5f7;
+    color: #202427;
 }
 
 /* ========================================================================== */
@@ -421,106 +526,4 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	gap: 5px 10px;
-}
-
-/* 스피너 구현 */
-.spinner-wrapper {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: 40px 20px;
-	min-height: 250px;
-	text-align: center;
-	color: #666;
-}
-
-.spinner-border {
-	display: inline-block;
-	width: 2.5rem;
-	height: 2.5rem;
-	vertical-align: -0.125em;
-	border: 0.25em solid #7881f5;
-	border-right-color: transparent;
-	border-radius: 50%;
-	animation: spinner-spin .75s linear infinite;
-}
-
-@keyframes spinner-spin {
-	to { transform:rotate(360deg); }
-}
-
-
-/* ===== Modal ===== */
-.ai-modal-backdrop {
-	position: fixed;
-	inset: 0;
-	background: rgba(20, 24, 28, 0.45);
-	display: none;
-	z-index: 3000; /* 캐릭터 이미지 등 어떤 요소보다 위로 (요청 이력 반영) */
-}
-
-.ai-modal {
-	position: fixed;
-	left: 50%;
-	top: 80px; /* 원하는 상단 위치 */
-	transform: translateX(-50%);
-	width: 420px;
-	max-width: 90vw;
-	background: #fff;
-	border-radius: 16px;
-	padding: 20px;
-	display: none;
-	z-index: 3010;
-	box-shadow: 0 30px 90px rgba(0, 0, 0, 0.25), 0 8px 24px
-		rgba(0, 0, 0, 0.2);
-}
-
-.ai-modal h4 {
-	margin: 2px 0 16px;
-	font-size: 18px;
-	font-weight: 800;
-	text-align: center;	
-}
-
-.ai-modal p {
-	color: #4f5965;
-	line-height: 1.5;
-}
-
-.ai-modal .row {
-	display: flex;
-	gap: 10px;
-	margin-top: 16px;
-	justify-content: flex-end;
-}
-
-.ai-kv {
-	margin: 10px 0;
-	background: #f8fafb;
-	border: 1px dashed #e4e9ee;
-	border-radius: 12px;
-	padding: 10px 12px;
-	color: #47515b;
-}
-
-.ai-kv > div + div {
-    margin-top: 12px;
-}
-.btn {
-    appearance: none;
-    border: none;
-    border-radius: 12px;
-    padding: 11px 18px;
-    font-weight: 800;
-    cursor: pointer;
-    background: #6a82fb;
-    color: #fff;
-    transition: all .15s ease;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-}
-
-.btn.secondary {
-    background: #f3f5f7;
-    color: #202427;
 }
