@@ -13,7 +13,7 @@
 
 		<!-- 리스트 패널 상단: 필터 영역 -->
 		<div class="filter-box vacSearch" >
-			<form action="/csc/admin/noticeList.do" method="get" >
+			<form>
 				<select name="status">
 				    <option value="counselor">상담사명</option>
 				    <!-- … -->
