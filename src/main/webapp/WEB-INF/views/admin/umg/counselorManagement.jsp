@@ -124,7 +124,7 @@
 		<div class="template-panel cnsCompleteAndReviewList">
 			<div class="middleTitle">상담사별 처리 건수 및 만족도 평가</div>
 			<div class="public-listSearch">
-				<select name="status" id="activityFilter">
+				<select name="status" id="">
 					<option value="1">전체</option>
 					<option value="2">이름</option>
 					<option value="3">이메일</option>
@@ -132,32 +132,31 @@
 				<input id="search" name="keyword" placeholder="검색어를 입력하세요" />
 				<button class="btn-save searchUserBtn">조회</button>
 			</div>
-			<div style="display: flex; justify-content: space-between; margin-top: 60px;">
-				<div class="btn-group flex gap5 userListBtnGroup">
-					<button class="public-toggle-button active" id="userListId">ID</button>
-					<button class="public-toggle-button" id="userListName">이름</button>
-					<button class="public-toggle-button" id="userListEmail">이메일</button>
-					<select class="public-toggle-select" id="userListSortOrder">
+			<div class="search-filter-bar">
+				<p class="ptag-list">
+					총
+					<span id="cnsList-count"></span>
+					건
+				</p>
+			</div>
+			<div style="display: flex; justify-content: space-between;">
+				<div class="btn-group flex gap5 cnsCompleteAndReviewBtnGroup" style="margin-bottom: 10px;">
+					<button class="public-toggle-button active" id="cnsListId">ID</button>
+					<button class="public-toggle-button" id="cnsListName">이름</button>
+					<button class="public-toggle-button" id="cnsListEmail">이메일</button>
+					<select class="public-toggle-select" id="cnsListSortOrder">
 						<option value="asc">오름차순</option>
 						<option value="desc">내림차순</option>
 					</select>
 				</div>
-				<select class="public-toggle-select selectUserList-top" id="userListStatus">
+				<select class="public-toggle-select selectCnsList-top" id="cnsListStatus">
 					<option value="">전체</option>
 					<option value="online">활동중</option>
 					<option value="offline">비활동</option>
 					<option value="suspended">정지상태</option>
-
 				</select>
 			</div>
 			<div class="cnsListSpace">
-				<div class="search-filter-bar">
-					<p class="ptag-list">
-						총
-						<span id="cnsList-count"></span>
-						건
-					</p>
-				</div>
 				<table id="cnsListTable">
 					<thead>
 						<tr>
@@ -223,9 +222,24 @@
 				<div class="middleTitle">상담사 상세정보</div>
 				<div id="cns-detail-box">
 					<div class="cns-header-section flex">
-						<div class="cns-profile">
-							<img id="cns-profile-img" src="/images/defaultProfileImg.png" alt="프로필 이미지">
+						<div class="profile-container">
+							<div class="profileFlex">
+								<div class="profile-image-wrapper">
+									<img id="cns-profile-img" class="profile-image" src="/images/defaultProfileImg.png" alt="프로필 이미지">
+								</div>
+							</div>
+							<div class="profile-info">
+								<label for="cns-nickname">
+									<i class="fa-solid fa-pencil"></i>
+								</label>
+								<input type="text" id="cns-id" style="display: none">
+								<input id="cns-nickname" class="profile-nickname">
+							</div>
 						</div>
+
+
+
+
 						<div class="cns-info-grid">
 							<span style="display: none">
 								<input type="text" id="mem-id" style="display: none">
@@ -233,10 +247,6 @@
 							<div class="info-field">
 								<label>이름</label>
 								<input type="text" id="mem-name">
-							</div>
-							<div class="info-field">
-								<label>닉네임</label>
-								<input type="text" id="mem-nickname">
 							</div>
 							<div class="info-field">
 								<label>이메일</label>
@@ -264,27 +274,31 @@
 								</select>
 							</div>
 							<div class="info-field">
-								<label>로그인 타입</label>
-								<input type="text" id="mem-logType" disabled="disabled">
+								<label>상담 횟수</label>
+								<input type="text" id="counselor-cns-count" disabled="disabled">
+							</div>
+							<div class="info-field">
+								<label>휴가 횟수</label>
+								<input type="text" id="counselor-vac-count" disabled="disabled">
+							</div>
+							<div class="info-field">
+								<label>상담 평점</label>
+								<input type="text" id="counselor-review-point" disabled="disabled">
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="info-second-space2 flex">
+					<div class="info-history2">
+						<span>최근 상담 기록 :</span>
+						<div id="recentLoginDate"><i class="fa-regular fa-clock"></i>2025. 08. 21</div>
+					</div>
+					<div class="info-history2">
+						<span>최근 휴가 기록 :</span>
+						<div id="recentPenaltyDate"><i class="fa-regular fa-clock"></i>2025. 08. 21</div>
+					</div>
+				</div>
 
-				</div>
-				<div class="cns-detail-info-count">
-					<p>
-						<span class="info-history2">상담 횟수:</span>
-						<span id="counselor-cns-count">1회</span>
-					</p>
-					<p>
-						<span class="info-history2">휴가 횟수:</span>
-						<span id="counselor-vac-count"></span>
-					</p>
-					<p>
-						<span class="info-history2">상담 평점:</span>
-						<span id="counselor-review-point"></span>
-					</p>
-				</div>
 				<div class="flex" style="justify-content: flex-end; margin-top: auto;">
 					<button class="btn-primary" id="cnsModify">
 						<i class="fas fa-save"></i>저장
@@ -293,6 +307,31 @@
 			</div>
 			<div class="template-panel cnsDetailListSpace">
 				<div class="middleTitle">상담 내역</div>
+				<div class="search-filter-bar">
+					<p class="ptag-list">
+						총
+						<span id="cnsList-count"></span>
+						건
+					</p>
+				</div>
+				<div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+
+					<div class="btn-group flex gap5 userListBtnGroup">
+						<button class="public-toggle-button active" id="userListId">ID</button>
+						<button class="public-toggle-button" id="userListName">이름</button>
+						<button class="public-toggle-button" id="userListEmail">이메일</button>
+						<select class="public-toggle-select" id="userListSortOrder">
+							<option value="asc">오름차순</option>
+							<option value="desc">내림차순</option>
+						</select>
+					</div>
+					<select class="public-toggle-select selectUserList-top" id="userListStatus">
+						<option value="">전체</option>
+						<option value="online">활동중</option>
+						<option value="offline">비활동</option>
+						<option value="suspended">정지상태</option>
+					</select>
+				</div>
 				<table id="cnsDetailListTable">
 					<thead>
 						<tr>
@@ -349,7 +388,7 @@
 				</table>
 			</div>
 			<div class="card-footer clearfix">
-				<div class="panel-footer pagination" id="cnsListPagenation"></div>
+				<div class="panel-footer pagination" id="cnsDetailListPagenation"></div>
 			</div>
 		</div>
 

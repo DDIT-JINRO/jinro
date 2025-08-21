@@ -169,7 +169,7 @@ function counselorManagement() {
 				const countEl = document.getElementById('userList-count');
 				if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
 
-				const listEl = document.getElementById('userList');
+				const listEl = document.getElementById('cnsList');
 				if (!listEl) return;
 
 				if (data.content.length < 1 && keyword.trim() !== '') {
@@ -278,18 +278,17 @@ function counselorManagement() {
 		axios.post('/admin/umg/getMemberDetail.do', formData)
 			.then(res => {
 				const { memberDetail, filePath, countVO, interestCn, vacByCns, counseling, avgRate } = res.data;
-				const profileImgEl = document.getElementById('member-profile-img');
+				const profileImgEl = document.getElementById('cns-profile-img');
 				profileImgEl.src = filePath ? filePath : '/images/defaultProfileImg.png';
 
 
-				document.getElementById('mem-id').value = memberDetail.memId || '-';
+				document.getElementById('cns-id').value = memberDetail.memId || '-';
 				document.getElementById('mem-name').value = memberDetail.memName || '-';
-				document.getElementById('mem-nickname').value = memberDetail.memNickname || '-';
+				document.getElementById('cns-nickname').value = memberDetail.memNickname || '-';
 				document.getElementById('mem-email').value = memberDetail.memEmail || '-';
 				document.getElementById('mem-phone').value = memberDetail.memPhoneNumber || '-';
 				document.getElementById('mem-gen').value = memberGender(memberDetail.memGen) || '-';
 				document.getElementById('mem-birth').value = formatDate(memberDetail.memBirth) || '-';
-				document.getElementById('mem-logType').value = convertLoginType(memberDetail.loginType) || '-';
 
 				const selectElement = document.getElementById("mem-role");
 

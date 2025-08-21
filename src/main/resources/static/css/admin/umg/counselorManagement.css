@@ -82,8 +82,34 @@
 	align-items: center; /* 항목 세로 중앙 정렬 */
 }
 
+.profileFlex {
+	display: flex;
+	justify-content: center;
+}
+
+.info-second-space2 {
+	justify-content: flex-end;
+	margin-right: 50px;
+	margin-top: 20px;
+	min-height: 52px;
+	gap: 60px;
+}
+
+.cnsList tr td {
+	height: 30px;
+}
+
+.fa-regular {
+	margin-right: 5px;
+}
+
+.cnsDetailList tr td{
+	height: 20px;
+}
+
 /* 프로필 이미지 컨테이너 */
 .cns-profile {
+	margin-left: 50px;
 	justify-self: center; /* 이미지를 가로 중앙 정렬 */
 }
 
@@ -105,11 +131,22 @@
 
 /* 상세 정보 개수 컨테이너 */
 .cns-detail-info-count {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr); /* 3개의 항목을 가로로 정렬 */
-	gap: 10px; /* 항목 사이 간격 */
-	text-align: center; /* 텍스트 가로 중앙 정렬 */
-	margin-top: 20px; /* 위쪽 여백 */
+	margin-left: 20px;
+	display: flex;
+	gap: 100px; /* 항목 사이 간격 */
+	margin-top: 10px; /* 위쪽 여백 */
+}
+
+.profile-nickname {
+	width: 90px;
+	border: none;
+	border-radius: 4px;
+	font-weight: bold;
+	font-size: 16px;
+	color: #333;
+	height: 24px;
+	margin-bottom: 5px;
+	text-align: center;
 }
 
 #cns-detail-box {
@@ -146,7 +183,7 @@
 	margin: 0;
 	font-size: 14px;
 	font-weight: 600;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	align-content: center;
 }
 
