@@ -123,6 +123,22 @@ public class CounselManagementServiceImpl implements CounselManagementService {
 		
 		return articlePage;
 	}
+
+	@Override
+	public List<Map<String, Object>> selectConsultMethodStatistics(Map<String, Object> map) {
+		
+		List<Map<String, Object>> methodStatisticsMap = counselManagementMapper.selectConsultMethodStatistics(map);
+		
+		return methodStatisticsMap;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectTopCounselorList(Map<String, Object> map) {
+		
+		List<Map<String, Object>> list = counselManagementMapper.selectTopCounselorList(map);
+		
+		return list;
+	}
 	
 	
 	

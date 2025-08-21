@@ -164,57 +164,140 @@
 	        counsel = #{counselor}
 	</select>
 	    
-        <select id="selectCounselingList" parameterType="map" resultType="map">
-	        SELECT
-				*
-		        FROM (
-		            SELECT
-		                a.counsel_id,
-		                b.cc_name as COUNSEL_CATEGORY,
-		                c.cc_name as COUNSEL_METHOD,
-		                a.counsel_req_datetime,
-		                e.CR_RATE,
-		                d.cc_name as COUNSEL_STATUS,
-		                ROW_NUMBER() OVER (
-		                    <choose>
-		                        <when test="sortBy == 'counselId'">
-		                            ORDER BY a.counsel_id
-		                        </when>
-		                        <when test="sortBy == 'crRate'">
-		                            ORDER BY e.CR_RATE
-		                        </when>
-		                        <when test="sortBy == 'counselReqDatetime'">
-		                            ORDER BY a.counsel_req_datetime
-		                        </when>
-		                        <otherwise>
-		                            ORDER BY a.counsel_req_datetime DESC
-		                        </otherwise>
-		                    </choose>
-		                    <if test="sortOrder == 'desc'">
-		                        DESC
-		                    </if>
-		                ) AS rnum
-		            FROM
-		                counseling a
-		            JOIN com_code b ON a.counsel_category = b.cc_id
-		            JOIN com_code c ON a.counsel_method = c.cc_id
-		            JOIN com_code d ON a.COUNSEL_STATUS = d.cc_id
-		            LEFT JOIN COUNSELING_REVIEW e ON a.counsel_id = e.cr_id
-		            WHERE
-		                a.counsel = #{counselor}
-		            
-		            <if test="counselCategory != null and counselCategory != ''">
-		                AND a.counsel_category = #{counselCategory}
-		            </if>
-		            <if test="counselMethod != null and counselMethod != ''">
-		                AND a.counsel_method = #{counselMethod}
-		            </if>
-		            <if test="counselStatus != null and counselStatus != ''">
-		                AND a.COUNSEL_STATUS = #{counselStatus}
-		            </if>
-		        )
-		        WHERE
-		            rnum BETWEEN #{startNo} AND #{endNo}
-   		 </select>
+    <select id="selectCounselingList" parameterType="map" resultType="map">
+	       SELECT
+			*
+	        FROM (
+	            SELECT
+	                a.counsel_id,
+	                b.cc_name as COUNSEL_CATEGORY,
+	                c.cc_name as COUNSEL_METHOD,
+	                a.counsel_req_datetime,
+	                e.CR_RATE,
+	                d.cc_name as COUNSEL_STATUS,
+	                ROW_NUMBER() OVER (
+	                    <choose>
+	                        <when test="sortBy == 'counselId'">
+	                            ORDER BY a.counsel_id
+	                        </when>
+	                        <when test="sortBy == 'crRate'">
+	                            ORDER BY e.CR_RATE
+	                        </when>
+	                        <when test="sortBy == 'counselReqDatetime'">
+	                            ORDER BY a.counsel_req_datetime
+	                        </when>
+	                        <otherwise>
+	                            ORDER BY a.counsel_req_datetime DESC
+	                        </otherwise>
+	                    </choose>
+	                    <if test="sortOrder == 'desc'">
+	                        DESC
+	                    </if>
+	                ) AS rnum
+	            FROM
+	                counseling a
+	            JOIN com_code b ON a.counsel_category = b.cc_id
+	            JOIN com_code c ON a.counsel_method = c.cc_id
+	            JOIN com_code d ON a.COUNSEL_STATUS = d.cc_id
+	            LEFT JOIN COUNSELING_REVIEW e ON a.counsel_id = e.cr_id
+	            WHERE
+	                a.counsel = #{counselor}
+	            
+	            <if test="counselCategory != null and counselCategory != ''">
+	                AND a.counsel_category = #{counselCategory}
+	            </if>
+	            <if test="counselMethod != null and counselMethod != ''">
+	                AND a.counsel_method = #{counselMethod}
+	            </if>
+	            <if test="counselStatus != null and counselStatus != ''">
+	                AND a.COUNSEL_STATUS = #{counselStatus}
+	            </if>
+	        )
+	        WHERE
+	            rnum BETWEEN #{startNo} AND #{endNo}
+ 	</select>
+   		 
+	<select id="selectConsultMethodStatistics" parameterType="map" resultType="map">
+	    SELECT
+	        CASE
+	            WHEN A.COUNSEL_METHOD = 'G08001' THEN '대면상담'
+	            WHEN A.COUNSEL_METHOD = 'G08002' THEN '채팅상담'
+	            WHEN A.COUNSEL_METHOD = 'G08003' THEN '화상상담'
+	            ELSE '기타'
+	        END AS CONSULTATION_TYPE,
+	        COUNT(*) AS CONSULTATION_COUNT
+	    FROM
+	        COUNSELING A
+	    INNER JOIN
+	        MEMBER B ON A.mem_id = B.mem_id
+	    
+	    <where>
+	        <choose>
+	            <when test='selectUserInquiry == "daily"'>
+	                AND TRUNC(A.COUNSEL_REQ_DATETIME) = TRUNC(SYSDATE)
+	            </when>
+	            <when test='selectUserInquiry == "monthly"'>
+	                AND TO_CHAR(A.COUNSEL_REQ_DATETIME, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+	            </when>
+	            <when test='selectUserInquiry == "selectDays"'>
+	                AND A.COUNSEL_REQ_DATETIME BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+	            </when>
+	        </choose>
 	
+	        <if test='gender != null and gender != ""'>
+	            AND B.MEM_GEN = #{gender}
+	        </if>
+	
+			<if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
+		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, B.MEM_BIRTH) / 12) &lt;= 19
+		    </if>
+		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
+		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, B.MEM_BIRTH) / 12) &gt;= 20
+		    </if>
+	    </where>
+	    
+	    GROUP BY
+	        A.COUNSEL_METHOD
+	    ORDER BY
+	        CONSULTATION_TYPE DESC
+	</select>
+	
+	<select id="selectTopCounselorList" parameterType="map" resultType="map">
+	    SELECT
+		        M.mem_id,
+		        M.mem_name,
+		        COUNT(A.COUNSEL_ID) AS consultation_count,
+		        COUNT(R.CR_ID) AS review_count,
+		        TRUNC(AVG(R.CR_RATE), 2) AS avg_satisfaction
+		    FROM
+		        MEMBER M
+		    LEFT OUTER JOIN
+		        COUNSELING A ON M.mem_id = A.COUNSEL
+		    LEFT OUTER JOIN
+		        COUNSELING_REVIEW R ON A.COUNSEL_ID = R.CR_ID
+		    <where>
+		        <if test='selectUserInquiry == "selectDays"'>
+		            AND A.counsel_req_datetime BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+		        </if>
+		    </where>
+		    GROUP BY
+		        M.mem_id,
+		        M.mem_name
+		    ORDER BY
+		        <choose>
+		            <when test='filter == "satisfaction"'>
+		                avg_satisfaction DESC NULLS LAST
+		            </when>
+		            <when test='filter == "reviews"'>
+		                review_count DESC
+		            </when>
+		            <when test='filter == "consultations"'>
+		                consultation_count DESC
+		            </when>
+		            <otherwise>
+		                consultation_count DESC
+		            </otherwise>
+		        </choose>
+		    FETCH FIRST 3 ROWS ONLY
+	</select>
 </mapper>

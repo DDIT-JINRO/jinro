@@ -13,4 +13,8 @@ public interface CounselManagementService {
 	Map<String, Object> selectCounselorDetail(int counselor);
 	
 	ArticlePage<Map<String, Object>> selectCounselingList(Map<String, Object> map);
+	
+	List<Map<String, Object>> selectConsultMethodStatistics(Map<String, Object> map);
+	
+	List<Map<String, Object>> selectTopCounselorList(Map<String, Object> map);
 }

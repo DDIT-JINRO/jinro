@@ -87,4 +87,50 @@ public class CounselManagementController {
 		
 		return articlePage;
 	}
+	
+	@GetMapping("/selectConsultMethodStatistics.do")
+	public List<Map<String, Object>> selectConsultMethodStatistics(
+			@RequestParam String selectUserInquiry,
+			@RequestParam String gender,
+			@RequestParam String ageGroup,
+			@RequestParam(required = false) String startDate,
+			@RequestParam(required = false) String endDate
+			){
+		
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("selectUserInquiry", selectUserInquiry);
+		paramMap.put("gender", gender);
+		paramMap.put("ageGroup", ageGroup);
+		if(paramMap.get("selectUserInquiry").equals("selectDays")) {
+			paramMap.put("startDate", startDate);
+			paramMap.put("endDate", endDate);
+		}
+		
+		List<Map<String, Object>> list = counselManagementService.selectConsultMethodStatistics(paramMap);
+		
+		return list;
+	}
+	
+	@GetMapping("/selectTopCounselorList.do")
+	public List<Map<String, Object>> selectTopCounselorList(
+			@RequestParam String selectUserInquiry,
+			@RequestParam(required = false) String startDate,
+			@RequestParam(required = false) String endDate,
+			@RequestParam(defaultValue = "satisfaction") String filter
+			){
+		
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("selectUserInquiry", selectUserInquiry);
+		paramMap.put("filter", filter);
+		
+		if(paramMap.get("selectUserInquiry").equals("selectDays")) {
+			paramMap.put("startDate", startDate);
+			paramMap.put("endDate", endDate);
+		}
+		
+		List<Map<String, Object>> list = counselManagementService.selectTopCounselorList(paramMap);
+		
+		return list;
+	}
+	
 }
