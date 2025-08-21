@@ -3,7 +3,7 @@
  */
 document.addEventListener('DOMContentLoaded', function() {
 	
-	const cardList = document.querySelectorAll('.group-card');
+	const cardList = document.querySelectorAll('.content-list__item');
 	cardList.forEach(card => {
 		card.addEventListener('click', function() {
 			
