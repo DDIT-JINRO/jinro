@@ -52,18 +52,21 @@ public class PenaltyManagementController {
             @RequestParam(value = "filterType", defaultValue = "monthly") String filterType,
             @RequestParam(value = "startDate", required = false) String startDate,
             @RequestParam(value = "endDate", required = false) String endDate,
-            @RequestParam(value = "month", required = false) Integer month,
-            @RequestParam(value = "gender", required = false) String gender) {
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "ageGroup", required = false) String ageGroup) {
 
         Map<String, Object> response = new HashMap<>();
+
+        if("male".equals(gender)) gender = "G11001";
+        if("female".equals(gender)) gender = "G11002";
 
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("filterType", filterType);
             params.put("startDate", startDate);
             params.put("endDate", endDate);
-            params.put("month", month);
             params.put("gender", gender);
+            params.put("ageGroup", ageGroup);
 
             List<Map<String, Object>> stats = penaltyManagementService.getPenaltyTypeStats(params);
 

@@ -47,9 +47,7 @@
 	    filtered_penalty AS (
 	        SELECT mp.MP_WARN_REASON, mp.MEM_ID
 	        FROM member_penalty mp
-	        <if test="gender != null and gender != ''">
-	            INNER JOIN member m ON mp.MEM_ID = m.MEM_ID
-	        </if>
+            INNER JOIN member m ON mp.MEM_ID = m.MEM_ID
 	        <where>
 	            AND EXTRACT(YEAR FROM mp.MP_WARN_DATE) = EXTRACT(YEAR FROM SYSDATE)
 
