@@ -323,6 +323,12 @@ function paymentStatistics() {
             window.revenueChartInstance.destroy();
         }
         
+		// --- 그라데이션 적용 시작 ---
+		const gradientRevenue = ctx.createLinearGradient(0, 0, 0, 400);
+		gradientRevenue.addColorStop(0, 'rgba(114, 124, 245, 0.5)');
+		gradientRevenue.addColorStop(1, 'rgba(114, 124, 245, 0)');
+		// --- 그라데이션 적용 끝 ---
+		
 		axios.get('/admin/las/payment/revenue-stats', { params })
 	        .then(res => {
 	            const responseData = res.data;
@@ -348,7 +354,7 @@ function paymentStatistics() {
 	                        data: dataValues,
 	                        fill: true,
 	                        borderColor: 'rgb(114, 124, 245)',
-	                        backgroundColor: 'rgba(114, 124, 245, 0.2)',
+	                        backgroundColor: gradientRevenue,
 	                        tension: 0.4,
 	                        pointRadius: 3,
 	                        pointHoverRadius: 6,
@@ -550,7 +556,13 @@ function paymentStatistics() {
             window.subscriberChartInstance.destroy();
         }
         
-        ctx.canvas.style.maxHeight = '400px';
+        ctx.canvas.style.maxHeight = '600px';
+		
+		// --- 그라데이션 적용 시작 ---
+		const gradientSubscriber = ctx.createLinearGradient(0, 0, 0, 600);
+		gradientSubscriber.addColorStop(0, 'rgba(45, 207, 151, 0.5)');
+		gradientSubscriber.addColorStop(1, 'rgba(45, 207, 151, 0)');
+		// --- 그라데이션 적용 끝 ---
         
 		axios.get('/admin/las/payment/subscriber-stats', { params })
 	        .then(res => {
@@ -577,7 +589,7 @@ function paymentStatistics() {
 	                        data: dataValues,
 	                        fill: true,
 	                        borderColor: 'rgb(45, 207, 151)',
-	                        backgroundColor: 'rgba(45, 207, 151, 0.2)',
+	                        backgroundColor: gradientSubscriber, // 수정된 부분
 	                        tension: 0.4,
 	                        pointRadius: 3,
 	                        pointHoverRadius: 6,
@@ -670,6 +682,24 @@ function paymentStatistics() {
         }
         
         ctx.canvas.style.maxHeight = '400px';
+		
+		// --- 그라데이션 적용 시작 ---
+		const gradientResume = ctx.createLinearGradient(0, 0, 0, 400);
+		gradientResume.addColorStop(0, 'rgba(45, 207, 151, 0.5)');
+		gradientResume.addColorStop(1, 'rgba(45, 207, 151, 0)');
+		
+		const gradientCover = ctx.createLinearGradient(0, 0, 0, 400);
+		gradientCover.addColorStop(0, 'rgba(255, 199, 90, 0.5)');
+		gradientCover.addColorStop(1, 'rgba(255, 199, 90, 0)');
+		
+		const gradientMock = ctx.createLinearGradient(0, 0, 0, 400);
+		gradientMock.addColorStop(0, 'rgba(114, 124, 245, 0.5)');
+		gradientMock.addColorStop(1, 'rgba(114, 124, 245, 0)');
+		
+		const gradientCounseling = ctx.createLinearGradient(0, 0, 0, 400);
+		gradientCounseling.addColorStop(0, 'rgba(255, 99, 132, 0.5)');
+		gradientCounseling.addColorStop(1, 'rgba(255, 99, 132, 0)');
+		// --- 그라데이션 적용 끝 ---
         
 		axios.get('/admin/las/payment/ai-service-usage', { params })
 	        .then(res => {
@@ -693,7 +723,7 @@ function paymentStatistics() {
 	                    label: '이력서 첨삭',
 	                    data: aiResumeData,
 	                    borderColor: 'rgb(45, 207, 151)',
-	                    backgroundColor: 'rgba(45, 207, 151, 0.1)',
+	                    backgroundColor: gradientResume,
 	                    tension: 0.4,
 	                    pointRadius: 3,
 	                    pointHoverRadius: 6,
@@ -708,7 +738,7 @@ function paymentStatistics() {
 	                    label: '자기소개서 첨삭',
 	                    data: aiCoverData,
 	                    borderColor: 'rgb(255, 199, 90)',
-	                    backgroundColor: 'rgba(255, 199, 90, 0.1)',
+	                    backgroundColor: gradientCover,
 	                    tension: 0.4,
 	                    pointRadius: 3,
 	                    pointHoverRadius: 6,
@@ -723,7 +753,7 @@ function paymentStatistics() {
 	                    label: '모의면접',
 	                    data: aiMockData,
 	                    borderColor: 'rgb(114, 124, 245)',
-	                    backgroundColor: 'rgba(114, 124, 245, 0.1)',
+	                    backgroundColor: gradientMock,
 	                    tension: 0.4,
 	                    pointRadius: 3,
 	                    pointHoverRadius: 6,
@@ -738,7 +768,7 @@ function paymentStatistics() {
 	                    label: 'AI 상담',
 	                    data: aiCounselingData,
 	                    borderColor: 'rgb(255, 99, 132)',
-	                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
+	                    backgroundColor: gradientCounseling,
 	                    tension: 0.4,
 	                    pointRadius: 3,
 	                    pointHoverRadius: 6,
