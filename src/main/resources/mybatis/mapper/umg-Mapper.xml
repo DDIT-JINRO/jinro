@@ -282,11 +282,11 @@
 	      , ROW_NUMBER() OVER (
 	          ORDER BY
 	            /* --- 정렬 컬럼 화이트리스트 --- */
-	            <if test="filter == null or filter == ''"> t.REPORT_STATUS ASC , </if>
 	            <choose>
 	              <when test="sortBy == 'memId'">           t.MEM_ID </when>                <!-- 신고자 ID -->
 	              <when test="sortBy == 'plTitle'">         t.REPORTED_NAME </when>         <!-- 신고대상자명 -->
 	              <when test="sortBy == 'plCreatedAt'">     t.REPORT_CREATED_AT </when>     <!-- 신고 접수일 -->
+	              <when test="sortBy == 'status'">     t.REPORT_STATUS </when>     <!-- 신고 접수일 -->
 	              <otherwise>                               t.REPORT_CREATED_AT </otherwise> <!-- 기본 -->
 	            </choose>
 	            <choose>

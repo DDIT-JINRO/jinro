@@ -84,8 +84,8 @@ function sanctionsDescription() {
 
 			const data = {
 				labels: [
-					'비제재 회원',
-					'제재 회원'
+					'활성 계정',
+					'정지 계정'
 				],
 				datasets: [{
 					data: [nonSuspendedMemberRatio, suspendedMemberRatio],
@@ -409,17 +409,19 @@ function sanctionsDescription() {
 	let reportSortBy = null;
 	let reportSortOrder = 'asc';
 
-	function fetchReportList(page = 1) {
+	function fetchReportList(page = 1, isFirst = false) {
 		const pageSize = 10;
 		const keyword = document.querySelector('input[name="keywordReport"]').value;
 		const status = document.querySelector('select[name="statusReport"]').value;
-		const sortByVal = reportSortBy ||  document.querySelector('.reportListBtnGroup .public-toggle-button.active').dataset.sortBy;
-		const sortOrderVal = reportSortOrder || document.getElementById('ReportListSortOrder').value;
+		let sortByVal = reportSortBy ||  document.querySelector('.reportListBtnGroup .public-toggle-button.active').dataset.sortBy;
+		let sortOrderVal = reportSortOrder || document.getElementById('ReportListSortOrder').value;
 		const filter = document.getElementById('ReportListFilter').value;
 
-		// 신고자, 신고대상, 일시 정렬기준
-		// 오름차순,내림차순 정렬기준
-		// 상태 필터
+		// 첫번째 호출 일때에는 상태값 접수부터 출력
+		if(isFirst) {
+			sortByVal = "status";
+			sortOrderVal = "asc";
+		}
 
 		axios.get('/admin/umg/getReportList.do', {
 			params: {
@@ -860,7 +862,7 @@ function sanctionsDescription() {
 		if (stat === 'G14001') return '경고';
 		if (stat === 'G14002') return '<span class="penalty-정지">정지</span>';
 	}
-	fetchReportList();
+	fetchReportList(1, true);
 	fetchPenaltyList();
 }
 
