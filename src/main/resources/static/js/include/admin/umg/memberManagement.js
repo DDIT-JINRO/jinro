@@ -4,160 +4,105 @@ function memberManagement() {
 	let currentSortBy = 'id';
 	let currentPage = 1;
 
+	const hiddenInput = document.getElementById('comCalendarInput');
+
 	const userListIdBtn = document.getElementById('userListId');
 	const userListNameBtn = document.getElementById('userListName');
 	const userListEmailBtn = document.getElementById('userListEmail');
+	const userListSortOrder = document.getElementById('userListSortOrder');
 
 	const boardListIdBtn = document.getElementById('memDetailBoardList-orderBtn-id');
 	const boardListDateBtn = document.getElementById('memDetailBoardList-orderBtn-date');
 	const boardListdelYnBtn = document.getElementById('memDetailBoardList-orderBtn-delYn');
+	const boardListSortOrder = document.getElementById("memDetailSortOrder");
 
 	const replyListIdBtn = document.getElementById('memDetailReplyList-orderBtn-id');
 	const replyListDateBtn = document.getElementById('memDetailReplyList-orderBtn-date');
 	const replyListDelYnBtn = document.getElementById('memDetailReplyList-orderBtn-delYn');
+	const replyListSortOrder = document.getElementById("memDetailReplySortOrder");
 
-	const userOnlineChartDayBtn = document.getElementById('userOnlineChartDayBtn');
-	const userOnlineChartMonthBtn = document.getElementById('userOnlineChartMonthBtn');
-	const userOnlineChartMaleBtn = document.getElementById('userOnlineChartMaleBtn');
-	const userOnlineChartFemaleBtn = document.getElementById('userOnlineChartFemaleBtn');
-	const userOnlineChartCalendarBtn = document.getElementById('userOnlineChartCalender');
-	
-	const pageVisitChartDayBtn = document.getElementById('pageVisitChartDayBtn');
-	const pageVisitChartMonthBtn = document.getElementById('pageVisitChartMonthBtn');
-	const pageVisitChartMaleBtn = document.getElementById('pageVisitChartMaleBtn');
-	const pageVisitChartFemaleBtn = document.getElementById('pageVisitChartFemaleBtn');
-	const pageVisitChartCalendarBtn = document.getElementById('pageVisitChartCalender');
+	/* 사용자 접속 통계 셀렉트 요소로 수정 */
+	const userOnlineChartDaySel = document.getElementById('userOnlineChartDay');
+	const userOnlineChartGenderSel = document.getElementById('userOnlineChartGender');
+	const userOnlineChartAgeGroupSel = document.getElementById('userOnlineChartAgeGroup');
+
+	/* 페이지 방문 통계 셀렉트 요소로 수정 */
+	const pageVisitChartDaySel = document.getElementById('pageVisitChartDay');
+	const pageVisitChartGenderSel = document.getElementById('pageVisitChartGender');
+	const pageVisitChartAgeGroupSel = document.getElementById('pageVisitChartAgeGroup');
 
 	const selector = document.getElementById('tableSelector');
 	const table1 = document.getElementById('tableContainer1');
 	const table2 = document.getElementById('tableContainer2');
 	const table3 = document.getElementById('tableContainer3');
 
-	userOnlineChartDayBtn.addEventListener('click', () => {
-		setActiveButton(userOnlineChartDayBtn);
-		userOnlineChart("daily");
-	});
+	userOnlineChartDaySel.addEventListener('change', eventDateRangeSelect);
+	userOnlineChartGenderSel.addEventListener('change', userOnlineChart);
+	userOnlineChartAgeGroupSel.addEventListener('change', userOnlineChart);
 
-	// 월별 버튼 클릭 시
-	userOnlineChartMonthBtn.addEventListener('click', () => {
-		setActiveButton(userOnlineChartMonthBtn);
-		userOnlineChart("monthly");
-	});
+	pageVisitChartDaySel.addEventListener('change', eventDateRangeSelect);
+	pageVisitChartGenderSel.addEventListener('change', pageVisitChart);
+	pageVisitChartAgeGroupSel.addEventListener('change', pageVisitChart);
 
-	// 남성 버튼 클릭 시
-	userOnlineChartMaleBtn.addEventListener('click', () => {
-		setActiveButton(userOnlineChartMaleBtn);
-		userOnlineChart("daily", "", "", "G11001");
-	});
-
-	// 여성 버튼 클릭 시
-	userOnlineChartFemaleBtn.addEventListener('click', () => {
-		setActiveButton(userOnlineChartFemaleBtn);
-		userOnlineChart("daily", "", "", "G11002");
-	});
-
-	userOnlineChartCalendarBtn.addEventListener('click', () => {
-		const canvas = document.getElementById('userOnlineChartCanvas');
-		// flatpickr 중복 초기화 방지 (필요시)
-		if (userOnlineChartCalendarBtn._flatpickr) {
-			userOnlineChartCalendarBtn._flatpickr.destroy();
+	replyListSortOrder.addEventListener('click', function() {
+		const userId = document.getElementById('mem-id').value;
+		if (!userId) {
+			alert('회원을 선택하세요.');
 		}
+	})
 
-		flatpickr(userOnlineChartCalendarBtn, {
-			mode: "range",
-			maxDate: "today",
-			disable: [date => date > new Date()],
-			onChange: function(selectedDates) {
-				if (selectedDates.length === 2) {
-					const startDate = selectedDates[0];
-					const endDate = selectedDates[1];
-
-					const formattedStartDate = startDate.toISOString().split('T')[0];
-					const formattedEndDate = endDate.toISOString().split('T')[0];
-
-					// 기존 차트가 있으면 삭제
-					if (window.userOnlineChartInstance) {
-						window.userOnlineChartInstance.destroy();
-					}
-
-					axios.get('/admin/las/userInquiry.do', {
-						params: { startDate: formattedStartDate, endDate: formattedEndDate }
-					})
-						.then(response => {
-
-							const serverData = response.data;
-
-							const labels = serverData.map(vo => {
-								const date = new Date(vo.loginDate);
-								return `${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
-							});
-							const dataPoints = serverData.map(vo => vo.userCount);
-
-							const data = {
-								labels,
-								datasets: [{
-									label: '접속자 수',
-									data: dataPoints,
-									borderColor: 'rgb(142, 110, 228)',
-									backgroundColor: 'rgba(142, 110, 228, 0.2)',
-									tension: 0.4,
-									pointRadius: 3,
-									pointHoverRadius: 6,
-									pointStyle: 'circle',
-									fill: true
-								}]
-							};
-
-							const config = {
-								type: 'line',
-								data,
-								options: {
-									responsive: true,
-									interaction: { mode: 'index', intersect: false },
-									plugins: {
-										legend: { position: 'top' },
-										title: {
-											display: true,
-											text: [
-												`${formattedStartDate} ~ ${formattedEndDate} 기간`,
-												'사용자 접속 통계'
-											]
-										},
-										tooltip: {
-											callbacks: {
-												label: ctx => ` ${ctx.parsed.y}명`
-											},
-										},
-									},
-									scales: {
-										x: { grid: { display: false } },
-										y: {
-											beginAtZero: true,
-											ticks: {
-												stepSize: 1,
-												callback: value => value + '명'
-											},
-											grid: {
-												borderDash: [3],
-												color: '#e5e5e5'
-											}
-										}
-									}
-								}
-							};
-
-							// 새 차트 생성 및 공통 변수에 저장
-							window.userOnlineChartInstance = new Chart(canvas.getContext('2d'), config);
-						})
-						.catch(error => console.error('서버 오류:', error));
+	replyListSortOrder.addEventListener('change', function(e){
+		const userId = document.getElementById('mem-id').value;
+		const currentSortValEl = e.target.closest('.userDetailBtnGroup').querySelector('.public-toggle-button.active');
+		switch (currentSortValEl.id){
+					case "memDetailReplyList-orderBtn-id" :
+						handleReplySortClick('replyId',userId);
+						break;
+					case "memDetailReplyList-orderBtn-delYn" :
+						handleReplySortClick('replyDelYn',userId);
+						break;
+					case "memDetailReplyList-orderBtn-date" :
+						handleReplySortClick('replyCreatedAt',userId);
+						break;
 				}
-			}
-		});
+	})
 
-		userOnlineChartCalendarBtn._flatpickr.open();
-		userOnlineChartCalendarBtn._flatpickr.clear();
+	boardListSortOrder.addEventListener('click', function(){
+		const userId = document.getElementById('mem-id').value;
+		if(!userId){
+			alert('회원을 선택하세요.');
+		}
+	})
+	boardListSortOrder.addEventListener('change', function(e){
+		const userId = document.getElementById('mem-id').value;
+		const currentSortValEl = e.target.closest('.userDetailBtnGroup').querySelector('.public-toggle-button.active');
+		switch (currentSortValEl.id){
+					case "memDetailBoardList-orderBtn-id" :
+						handleBoardSortClick('boardId',userId);
+						break;
+					case "memDetailBoardList-orderBtn-delYn" :
+						handleBoardSortClick('boardDelYn',userId);
+						break;
+					case "memDetailBoardList-orderBtn-date" :
+						handleBoardSortClick('boardCreatedAt',userId);
+						break;
+				}
+	})
 
-	});
+	userListSortOrder.addEventListener('change', function(e){
+		const currentSortValEl = e.target.closest('.userListBtnGroup').querySelector('.public-toggle-button.active');
+		switch (currentSortValEl.id){
+			case "userListId" :
+				handleSortClick('id');
+				break;
+			case "userListName" :
+				handleSortClick('name');
+				break;
+			case "userListEmail" :
+				handleSortClick('email');
+				break;
+		}
+	})
 
 	selector.addEventListener('change', function() {
 		// 모든 테이블을 숨김
@@ -294,49 +239,40 @@ function memberManagement() {
 	// 유저 목록 정렬 처리
 	function handleSortClick(sortBy) {
 
-		if (currentSortBy !== sortBy) {
-			currentSortBy = sortBy;
-			currentSortOrder = 'asc';
-		} else {
-
-			currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
-		}
+		const sortOrder = document.getElementById("userListSortOrder").value;
 
 		// 2. handleSortClick에서 fetchUserList를 호출할 때 inFilter 값을 가져와서 전달
 		const userListInFilter = document.getElementById('userListStatus').value;
-		fetchUserList(currentPage, currentSortBy, currentSortOrder, userListInFilter);
+		fetchUserList(currentPage, sortBy, sortOrder, userListInFilter);
 	}
 
 	// 게시글 목록 정렬 처리
 	function handleBoardSortClick(sortBy, userId, element) {
 		const boardTbody = document.getElementById('userDetailBoardList');
-
-		let sortOrder = 'asc';
-		if (boardTbody.dataset.sortBy === sortBy) {
-			sortOrder = boardTbody.dataset.sortOrder === 'asc' ? 'desc' : 'asc';
-		}
+		const boardSortOrder = document.getElementById('memDetailSortOrder').value;
 
 		boardTbody.dataset.sortBy = sortBy;
-		boardTbody.dataset.sortOrder = sortOrder;
+		boardTbody.dataset.sortOrder = boardSortOrder;
 
-		setActiveButton(element);
+		if(element){
+			setActiveButton(element);
+		}
 		const category = document.getElementById('boardListCategory').value;
+		const sortOrder = boardTbody.dataset.sortOrder;
 		userDetailBoardList(userId, 1, sortBy, sortOrder, category);
 	}
 
 	// 댓글 목록 정렬 처리 함수
 	function handleReplySortClick(sortBy, userId, element) {
 		const replyTbody = document.getElementById('userDetailReplyList');
-
-		let sortOrder = 'asc';
-		if (replyTbody.dataset.sortBy === sortBy) {
-			sortOrder = replyTbody.dataset.sortOrder === 'asc' ? 'desc' : 'asc';
-		}
+		const replySortOrder = document.getElementById('memDetailReplySortOrder').value;
 
 		replyTbody.dataset.sortBy = sortBy;
-		replyTbody.dataset.sortOrder = sortOrder;
-
-		setActiveButton(element);
+		replyTbody.dataset.sortOrder = replySortOrder;
+		if(element){
+			setActiveButton(element);
+		}
+		const sortOrder = replyTbody.dataset.sortOrder;
 		userDetailReplyList(userId, 1, sortBy, sortOrder);
 	}
 
@@ -1171,9 +1107,30 @@ function memberManagement() {
 	}
 
 	// userOnlineChart 함수를 재정의하여 공통 변수를 사용하도록 수정
-	function userOnlineChart(selectUserInquiry = "daily", startDate = "", endDate = "", gender = "") {
+	function userOnlineChart(selectUserInquiry = "daily", chartRange = "", startDate = "", endDate = "", gender = "") {
 		const ctx = document.getElementById('userOnlineChartCanvas').getContext('2d');
-		
+
+		let dateValue = document.getElementById("userOnlineChartDay").value;
+		const genderValue = document.getElementById("userOnlineChartGender").value;
+		const ageGroupValue = document.getElementById("userOnlineChartAgeGroup").value;
+		const startDateValue = document.getElementById("userOnlineChartStartDay").value;
+		const endDateValue = document.getElementById("userOnlineChartEndDay").value;
+		if(dateValue == 'selectDays' && !startDateValue){
+			document.getElementById("userOnlineChartDay").value = "daily";
+			dateValue = "daily";
+		}
+		if(startDateValue && endDateValue && !chartRange){
+			chartRange = formatDateRange(startDateValue, endDateValue);
+		}
+
+		const params = {
+						selectUserInquiry: dateValue || selectUserInquiry,
+						startDate: startDateValue||startDate,
+						endDate: endDateValue||endDate,
+						gender: genderValue||gender,
+						ageGroup: ageGroupValue||'',
+					}
+
 		// 차트 캔버스 높이 설정 (안정적인 렌더링을 위해 추가)
 		ctx.canvas.style.minHeight = '400px';
 
@@ -1183,12 +1140,7 @@ function memberManagement() {
 		}
 
 		axios.get('/admin/las/userInquiry.do', {
-			params: {
-				selectUserInquiry: selectUserInquiry,
-				startDate: startDate,
-				endDate: endDate,
-				gender: gender
-			}
+			params: params
 		})
 			.then(res => {
 				const responseData = res.data;
@@ -1202,7 +1154,7 @@ function memberManagement() {
 					labels = responseData.map(item => formatDailyDate(item.loginDate));
 					chartLabel = '일별 접속자 수';
 				}
-				
+
 				const dataValues = responseData.map(item => item.userCount);
 
 				// 새 차트 생성 및 공통 변수에 저장
@@ -1232,7 +1184,10 @@ function memberManagement() {
 							},
 							title: {
 								display: true,
-								text: '사용자 접속 통계',
+								text: [
+									'사용자 접속 통계',
+									chartRange
+								],
 							},
 						},
 						scales: {
@@ -1260,53 +1215,31 @@ function memberManagement() {
 
 	// === 페이지별 방문자 수 차트 함수 시작 ===
 	// HTML에 캔버스 ID 추가 필요: <canvas id="pageVisitChartCanvas"></canvas>
-	pageVisitChartDayBtn.addEventListener('click', () => {
-		setActiveButton(pageVisitChartDayBtn);
-		pageVisitChart("daily");
-	});
 
-	pageVisitChartMonthBtn.addEventListener('click', () => {
-		setActiveButton(pageVisitChartMonthBtn);
-		pageVisitChart("monthly");
-	});
+	function pageVisitChart(selectVisitCount = "daily", chartRange = "", startDate = "", endDate = "", gender = "") {
+		const ctx = document.getElementById('pageVisitChartCanvas').getContext('2d');
 
-	pageVisitChartMaleBtn.addEventListener('click', () => {
-		setActiveButton(pageVisitChartMaleBtn);
-		pageVisitChart("daily", "", "", "G11001");
-	});
-
-	pageVisitChartFemaleBtn.addEventListener('click', () => {
-		setActiveButton(pageVisitChartFemaleBtn);
-		pageVisitChart("daily", "", "", "G11002");
-	});
-
-	pageVisitChartCalendarBtn.addEventListener('click', () => {
-		const canvas = document.getElementById('pageVisitChartCanvas');
-		if (pageVisitChartCalendarBtn._flatpickr) {
-			pageVisitChartCalendarBtn._flatpickr.destroy();
+		let dateValue = document.getElementById("pageVisitChartDay").value;
+		const genderValue = document.getElementById("pageVisitChartGender").value;
+		const ageGroupValue = document.getElementById("pageVisitChartAgeGroup").value;
+		const startDateValue = document.getElementById("pageVisitChartStartDay").value;
+		const endDateValue = document.getElementById("pageVisitChartEndDay").value;
+		if(dateValue == 'selectDays' && !startDateValue){
+			document.getElementById("pageVisitChartDay").value = "daily";
+			dateValue = "daily";
+		}
+		if(startDateValue && endDateValue && !chartRange){
+			chartRange = formatDateRange(startDateValue, endDateValue);
 		}
 
-		flatpickr(pageVisitChartCalendarBtn, {
-			mode: "range",
-			maxDate: "today",
-			disable: [date => date > new Date()],
-			onChange: function(selectedDates) {
-				if (selectedDates.length === 2) {
-					const startDate = selectedDates[0];
-					const endDate = selectedDates[1];
-					const formattedStartDate = startDate.toISOString().split('T')[0];
-					const formattedEndDate = endDate.toISOString().split('T')[0];
-					pageVisitChart("selectDays", formattedStartDate, formattedEndDate);
-				}
-			}
-		});
-		pageVisitChartCalendarBtn._flatpickr.open();
-		pageVisitChartCalendarBtn._flatpickr.clear();
-	});
+		const params = {
+						selectVisitCount: dateValue || selectUserInquiry,
+						startDate: startDateValue||startDate,
+						endDate: endDateValue||endDate,
+						gender: genderValue||gender,
+						ageGroup: ageGroupValue||'',
+					}
 
-	function pageVisitChart(selectVisitCount = "daily", startDate = "", endDate = "", gender = "") {
-		const ctx = document.getElementById('pageVisitChartCanvas').getContext('2d');
-		
 		// 기존 차트 파괴 및 최소 높이 설정
 		if (window.pageVisitChartInstance) {
 			window.pageVisitChartInstance.destroy();
@@ -1314,20 +1247,15 @@ function memberManagement() {
 		ctx.canvas.style.minHeight = '400px';
 
 		axios.get('/admin/las/visitCount.do', {
-			params: {
-				selectVisitCount: selectVisitCount,
-				startDate: startDate,
-				endDate: endDate,
-				gender: gender
-			}
+			params: params
 		}).then(res => {
-			
+
 			const responseData = res.data;
-			
+
 			// 데이터를 'plTitle'과 'userCount'로 매핑
 			const labels = responseData.map(item => item.plTitle);
 			const dataValues = responseData.map(item => item.userCount);
-			
+
 			// 막대 차트 생성
 			window.pageVisitChartInstance = new Chart(ctx, {
 				type: 'bar',
@@ -1352,7 +1280,7 @@ function memberManagement() {
 					},
 					plugins: {
 						legend: { display: true, position: 'top' },
-						title: { display: true, text: '페이지별 방문자 수' },
+						title: { display: true, text: [ '페이지별 방문자 수', chartRange ] },
 						tooltip: {
 							callbacks: {
 								label: function(context) {
@@ -1449,14 +1377,14 @@ function memberManagement() {
 			} else {
 				pageLogTbody.innerHTML = `<tr><td colspan='5' style="text-align: center;">조회된 페이지 방문 기록이 없습니다.</td></tr>`;
 			}
-			
+
 			// 페이지네이션 렌더링
 			let paginationHtml = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 			for (let p = startPage; p <= endPage; p++) {
 				paginationHtml += `<a href="#" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
 			}
 			paginationHtml += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
-			
+
 			pageLogPaginationEl.innerHTML = paginationHtml;
 		})
 		.catch(err => {
@@ -1467,7 +1395,7 @@ function memberManagement() {
 			}
 		});
 	}
-	
+
 	function formatDateTime(isoString) {
 		const date = new Date(isoString);
 		const year = date.getFullYear();
@@ -1498,7 +1426,7 @@ function memberManagement() {
 				const sortBy = this.dataset.sortBy;
 				setActiveButton(this);
 				pageLogCurrentSortBy = sortBy;
-				
+
 				const keyword = document.getElementById('pageLogKeyword').value;
 				fetchPageLogList(1, keyword, pageLogCurrentSortBy, pageLogCurrentSortOrder);
 			});
@@ -1518,7 +1446,7 @@ function memberManagement() {
 			e.preventDefault();
 			const link = e.target.closest('a[data-page]');
 			if (!link || link.classList.contains('disabled')) return;
-			
+
 			const newPage = parseInt(link.dataset.page, 10);
 			if (!isNaN(newPage) && newPage > 0) {
 				const keyword = document.getElementById('pageLogKeyword').value;
@@ -1544,6 +1472,90 @@ function memberManagement() {
 
 
 	setInterval(fetchDailyStats, 10000);
+
+	//=== flatpicker 달력 선택된 날자 yyyy-mm-dd 문자열로 포맷팅
+	function formatDateCal(d){
+		const y = d.getFullYear();
+		const m = String(d.getMonth() + 1).padStart(2, '0');
+		const day = String(d.getDate()).padStart(2, '0');
+		return `${y}-${m}-${day}`;
+	}
+
+	function formatDateRange(fS, fE){
+		return `${fS} ~ ${fE} 기간`
+	}
+
+	// 일별, 월별, 기간선택에 대해서 이벤트 바인딩
+	function eventDateRangeSelect(e){
+		// 공용으로 사용할 숨겨둔 input. flatpickr가 input 요소인지 점검한다고 함.(select에 못줌)
+		const selectEl = e.target.nodeName == "SELECT" ? e.target : e.target.closest('select');
+		const dateValue = selectEl.value;
+
+		// 선택 값 (일별&월별&기간선택) 확인하고 무슨차트인지 중첩조건문에서 확인
+		if(dateValue == 'daily'){
+			if(selectEl.id == 'userOnlineChartDay'){
+				document.getElementById("userOnlineChartStartDay").value = '';
+				document.getElementById("userOnlineChartEndDay").value ='';
+				userOnlineChart("daily");
+			}else if(selectEl.id == 'pageVisitChartDay'){
+				document.getElementById("pageVisitChartStartDay").value = '';
+				document.getElementById("pageVisitChartEndDay").value ='';
+				pageVisitChart("daily");
+			}
+		}else if(dateValue == 'monthly'){
+			if(selectEl.id == 'userOnlineChartDay'){
+				document.getElementById("userOnlineChartStartDay").value = '';
+				document.getElementById("userOnlineChartEndDay").value ='';
+				userOnlineChart("monthly");
+			}else if(selectEl.id == 'pageVisitChartDay'){
+				document.getElementById("pageVisitChartStartDay").value = '';
+				document.getElementById("pageVisitChartEndDay").value ='';
+				pageVisitChart("monthly");
+			}
+		}else if(dateValue == 'selectDays'){
+			// flatpickr 중복 초기화 방지 (필요시)
+			if (hiddenInput._flatpickr) {
+				hiddenInput._flatpickr.destroy();
+			}
+
+			flatpickr(hiddenInput, {
+				mode: "range",
+				maxDate: "today",
+				disable: [date => date > new Date()],
+				positionElement: selectEl,	//open되는 위치는 변경가능. select요소를 넣어줌.
+				onChange: function(selectedDates) {
+					if (selectedDates.length === 2) {
+						const startDate = selectedDates[0];
+						const endDate = selectedDates[1];
+						// yyyy-mm-dd 형식으로 포맷
+						const formattedStartDate = formatDateCal(startDate);
+						const formattedEndDate = formatDateCal(endDate);
+						if(selectEl.id == 'userOnlineChartDay'){
+							// hidden 날짜 input에 데이터 삽입
+							document.getElementById('userOnlineChartStartDay').value=formattedStartDate;
+							document.getElementById('userOnlineChartEndDay').value=formattedEndDate;
+							// 데이터 조회&차트 출력함수 호출
+							userOnlineChart('selectDays',formatDateRange(formattedStartDate,formattedEndDate));
+							// 기존 차트가 있으면 삭제
+							if (window.userOnlineChartInstance) {
+								window.userOnlineChartInstance.destroy();
+							}
+						}else if(selectEl.id == 'pageVisitChartDay'){
+							document.getElementById('pageVisitChartStartDay').value=formattedStartDate;
+							document.getElementById('pageVisitChartEndDay').value=formattedEndDate;
+							pageVisitChart('selectDays',formatDateRange(formattedStartDate,formattedEndDate));
+							if (window.pageVisitChartInstance) {
+								window.pageVisitChartInstance.destroy();
+							}
+						}
+					}
+				}
+			});
+
+			hiddenInput._flatpickr.open();
+			hiddenInput._flatpickr.clear();
+		}
+	}
 }
 
 memberManagement();

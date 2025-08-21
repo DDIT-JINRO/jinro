@@ -24,6 +24,12 @@
 		<if test="gender != null and gender eq 'G11002'">
 			AND m.MEM_GEN = 'G11002'
 		</if>
+		<if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
+	    	AND TRUNC(MONTHS_BETWEEN(ll.LL_CREATED_AT, m.MEM_BIRTH) / 12) &lt;= 19
+	    </if>
+	    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
+	    	AND TRUNC(MONTHS_BETWEEN(ll.LL_CREATED_AT, m.MEM_BIRTH) / 12) &gt;= 20
+	    </if>
 	    <![CDATA[
 	        GROUP BY TO_CHAR(ll.LL_CREATED_AT, 'YYYY-MM-DD')
 	    )
@@ -61,6 +67,12 @@
 		    <if test="gender != null and gender eq 'G11002'">
 		        AND m.MEM_GEN = 'G11002'
 		    </if>
+		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
+		    	AND TRUNC(MONTHS_BETWEEN(ll.LL_CREATED_AT, m.MEM_BIRTH) / 12) &lt;= 19
+		    </if>
+		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
+		    	AND TRUNC(MONTHS_BETWEEN(ll.LL_CREATED_AT, m.MEM_BIRTH) / 12) &gt;= 20
+		    </if>
 		<![CDATA[
 		    GROUP BY TO_CHAR(ll.LL_CREATED_AT, 'YYYY-MM')
 		)
@@ -80,10 +92,10 @@
 		WITH date_list AS (
 		    SELECT TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD')) + LEVEL - 1 AS login_date
 		    FROM dual
-		    CONNECT BY LEVEL <= TRUNC(TO_DATE(#{endDate}, 'YYYY-MM-DD')) 
+		    CONNECT BY LEVEL <= TRUNC(TO_DATE(#{endDate}, 'YYYY-MM-DD'))
 		                        - TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD')) + 1
 		),
-		
+
 		daily_login_counts AS (
 		    SELECT
 		        TO_CHAR(ll.LL_CREATED_AT, 'YYYY-MM-DD') AS login_date,
@@ -99,6 +111,12 @@
 		    </if>
 		    <if test="gender != null and gender == 'G11002'">
 		        AND m.MEM_GEN = 'G11002'
+		    </if>
+			<if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
+		    	AND TRUNC(MONTHS_BETWEEN(ll.LL_CREATED_AT, m.MEM_BIRTH) / 12) &lt;= 19
+		    </if>
+		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
+		    	AND TRUNC(MONTHS_BETWEEN(ll.LL_CREATED_AT, m.MEM_BIRTH) / 12) &gt;= 20
 		    </if>
 		<![CDATA[
 		    GROUP BY TO_CHAR(ll.LL_CREATED_AT, 'YYYY-MM-DD')
@@ -229,6 +247,12 @@
 	        <if test="gender != null and gender eq 'G11002'">
 	            <![CDATA[ AND m.MEM_GEN = 'G11002' ]]>
 	        </if>
+	        <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
+		    	AND TRUNC(MONTHS_BETWEEN(pl.PL_CREATED_AT, m.MEM_BIRTH) / 12) &lt;= 19
+		    </if>
+		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
+		    	AND TRUNC(MONTHS_BETWEEN(pl.PL_CREATED_AT, m.MEM_BIRTH) / 12) &gt;= 20
+		    </if>
 	    <![CDATA[
 	        GROUP BY PL_TITLE
 	        ORDER BY userCount DESC
@@ -236,8 +260,8 @@
 	    WHERE ROWNUM <= 10
 	    ]]>
 	</select>
-	
-	
+
+
 	<select id="monthlyPageVisitCount" resultType="kr.or.ddit.admin.las.service.VisitVO">
 	    <![CDATA[
 	    SELECT *
@@ -254,6 +278,12 @@
 	        <if test="gender != null and gender eq 'G11002'">
 	            <![CDATA[ AND m.MEM_GEN = 'G11002' ]]>
 	        </if>
+      	    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
+		    	AND TRUNC(MONTHS_BETWEEN(pl.PL_CREATED_AT, m.MEM_BIRTH) / 12) &lt;= 19
+		    </if>
+		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
+		    	AND TRUNC(MONTHS_BETWEEN(pl.PL_CREATED_AT, m.MEM_BIRTH) / 12) &gt;= 20
+		    </if>
 	    <![CDATA[
 	        GROUP BY PL_TITLE
 	        ORDER BY userCount DESC
@@ -262,8 +292,8 @@
 	    ]]>
 	</select>
 
-	
-	
+
+
 	<select id="customPageVisitCount" resultType="kr.or.ddit.admin.las.service.VisitVO">
 	    <![CDATA[
 	    SELECT *
@@ -280,6 +310,12 @@
 	        <if test="gender != null and gender eq 'G11002'">
 	            <![CDATA[ AND m.MEM_GEN = 'G11002' ]]>
 	        </if>
+           	<if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
+		    	AND TRUNC(MONTHS_BETWEEN(pl.PL_CREATED_AT, m.MEM_BIRTH) / 12) &lt;= 19
+		    </if>
+		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
+		    	AND TRUNC(MONTHS_BETWEEN(pl.PL_CREATED_AT, m.MEM_BIRTH) / 12) &gt;= 20
+		    </if>
 	    <![CDATA[
 	        GROUP BY PL_TITLE
 	        ORDER BY userCount DESC
