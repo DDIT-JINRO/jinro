@@ -8,7 +8,7 @@
     <!-- 왼쪽 컬럼 -->
     <div class="left-column" style="flex: 1; display: flex; flex-direction: column; gap: 20px; width: 50%;">
         <!-- 상단 카드 2개 -->
-        <div class="cards-row" style="display: flex; flex-direction: row; gap: 20px; height: 120px;">
+        <div class="cards-row" style="display: flex; flex-direction: row; gap: 20px;">
             <div class="template-panel public-countCard">
                 <div class="public-card-title">총 구독자 수</div>
                 <img class="public-card-icon" alt="" src="/images/admin/admin-image1.png">
@@ -18,7 +18,7 @@
                     <div class="public-span-since">Since last month</div>
                 </div>
             </div>
-            
+
             <div class="template-panel public-countCard back-color-green">
                 <div class="public-card-title color-white">오늘 구독자 수</div>
                 <img class="public-card-icon" alt="" src="/images/admin/admin-image4.png">
@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- 첫 번째 큰 div - 구독 결제 매출 -->
         <div class="template-panel large-panel">
             <div class="middleTitle">구독 결제 매출</div>
@@ -57,7 +57,7 @@
                 <canvas id="revenueChartCanvas"></canvas>
             </div>
         </div>
-        
+
         <!-- 두 번째 큰 div - 상품별 인기 통계 -->
         <div class="template-panel large-panel">
             <div class="middleTitle">상품별 인기 통계</div>
@@ -86,7 +86,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 오른쪽 컬럼 -->
     <div class="right-column" style="flex: 1; display: flex; flex-direction: column; gap: 20px; width: 50%;">
         <!-- 첫 번째 큰 div - 구독자 수 통계 -->
@@ -116,7 +116,7 @@
                 <canvas id="subscriberChartCanvas"></canvas>
             </div>
         </div>
-        
+
         <!-- 두 번째 큰 div - 유료 컨텐츠 이용내역 -->
         <div class="template-panel large-panel">
 		    <div class="middleTitle">유료 컨텐츠 이용내역</div>
