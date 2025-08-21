@@ -25,6 +25,7 @@ public class HireVO {
 	private String cpRegion; // 지역이름
 	private String hireTypename;// 고용형태 값
 	private String hireClassCodeName; // 직업대분류
+	private long dday;
 
 	// 필터링
 	private String keyword; // 검색어 (제목 또는 기업명)

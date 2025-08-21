@@ -1,7 +1,11 @@
 package kr.or.ddit.empt.ema.web;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpStatus;
@@ -50,6 +54,24 @@ public class EmploymentAdvertisementController {
 		// 고용 형태별
 		comCodeVO.setClCode("G17");
 		List<ComCodeVO> CodeVOHireTypeList = employmentAdvertisementService.selectCodeVOList(comCodeVO);
+		
+		//마감일 Dday
+		for (HireVO hire : hireVOList) {
+            // 마감일 문자열을 LocalDate 객체로 변환
+			 LocalDate endDate = hire.getHireEndDate().toInstant()
+                     .atZone(ZoneId.systemDefault())
+                     .toLocalDate();
+            
+            // 오늘 날짜
+            LocalDate today = LocalDate.now();
+
+            // 오늘 날짜와 마감일 사이의 일수 차이 계산 (마감일이 포함되도록 +1)
+            // 예를 들어, 오늘이 24일이고 마감일이 25일이면 D-1
+            long dday = ChronoUnit.DAYS.between(today, endDate);
+            
+            // hire 객체에 dday 값 설정
+            hire.setDday(dday);
+        }
 
 		ArticlePage<HireVO> articlePage = new ArticlePage<HireVO>(total, hireVO.getCurrentPage(), hireVO.getSize(),
 				hireVOList, hireVO.getKeyword());
