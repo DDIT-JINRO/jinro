@@ -273,12 +273,22 @@ function createParentReply(replyVO, e) {
 	  </div>
 	</div>
 	  <div class="reply-content">${replyVO.replyContent}</div>
-	  <div>
-	  	<button class="reply-child-btn" id="reply-${replyVO.replyId}">답글</button>
-	  	<span class="child-count"></span>
-		<img alt="" src="/images/likedBean.png" class="liked" data-board-id="${replyVO.boardId}" data-reply-id="${replyVO.replyId}">
-		    							<span class="like-cnt" id="reply-like-cnt-${replyVO.replyId}">0</span>
-	  </div>
+	
+	<div class="reply-action-wrapper">
+		<button class="reply-child-btn" id="reply-${replyVO.replyId}">
+			답글
+		</button>
+		
+		<button class="like-button " data-board-id="${replyVO.boardId}" data-reply-id="${replyVO.replyId}" aria-label="댓글 좋아요 버튼">
+			<svg class="heart-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+			</svg>
+			<svg class="heart-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+			</svg>
+		</button>
+		<span class="like-cnt" id="reply-like-cnt-${replyVO.replyId}">0</span>
+	</div>	
 	`;
 
 	const childReplyContainer = document.createElement('div');
@@ -297,7 +307,7 @@ function createParentReply(replyVO, e) {
 		<div class="closeReplyBtn"><span>답글접기 ▲</span></div>
 		</form>
 	`;
-
+	
 	document.querySelector('.comment-section').prepend(childReplyContainer);
 	document.querySelector('.comment-section').prepend(div);
 	e.target.querySelector('textarea').value = '';
