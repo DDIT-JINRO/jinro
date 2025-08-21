@@ -1,13 +1,13 @@
-let selectedQuestions = [];
+let selectedInterviewQuestions = [];
 
 document.addEventListener('DOMContentLoaded', () => {
 	// 1. JSP에서 직접 전달한 memId를 사용하도록 로직 간소화
 	const currentMemId = (window.currentMemId === 'anonymousUser') ? '' : window.currentMemId;
 
-	const saved = sessionStorage.getItem('selectedQuestions');
+	const saved = sessionStorage.getItem('selectedInterviewQuestions');
 	if (saved) {
-		selectedQuestions = JSON.parse(saved);
-		selectedQuestions.forEach(q => {
+		selectedInterviewQuestions = JSON.parse(saved);
+		selectedInterviewQuestions.forEach(q => {
 			const chk = document.querySelector(`input[type="checkbox"][data-id="${q.id}"]`);
 			if (chk) chk.checked = true;
 		});
@@ -61,13 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
 				return;
 			}
 
-			if (selectedQuestions.length === 0) {
+			if (selectedInterviewQuestions.length === 0) {
 				// 3. 알림 메시지 수정
 				alert('면접 질문을 하나 이상 선택해주세요.');
 				return;
 			}
 
-			sessionStorage.removeItem('selectedQuestions');
+			sessionStorage.removeItem('selectedInterviewQuestions');
 			this.submit(); // 유효성 검사 통과 후 폼 제출
 		});
 	}
@@ -142,15 +142,15 @@ window.resetJobFilters = function() {
 
 // 선택 토글 함수
 function toggleQuestion(checkbox, id, content) {
-	const existing = selectedQuestions.find(q => q.id === id);
+	const existing = selectedInterviewQuestions.find(q => q.id === id);
 	if (checkbox.checked) {
-		if (!existing) selectedQuestions.push({ id, content });
+		if (!existing) selectedInterviewQuestions.push({ id, content });
 	} else {
-		selectedQuestions = selectedQuestions.filter(q => q.id !== id);
+		selectedInterviewQuestions = selectedInterviewQuestions.filter(q => q.id !== id);
 	}
 	updateCartSidebar();
 	updateQuestionIdsInput();
-	sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
+	sessionStorage.setItem('selectedInterviewQuestions', JSON.stringify(selectedInterviewQuestions));
 }
 
 // 사이드바 렌더링
@@ -158,12 +158,12 @@ function updateCartSidebar() {
 	const cartSidebar = document.getElementById('cartSidebar');
 	cartSidebar.innerHTML = '';
 
-	if (selectedQuestions.length === 0) {
+	if (selectedInterviewQuestions.length === 0) {
 		cartSidebar.innerHTML = '<div class="empty-cart-message">선택된 질문이 없습니다.</div>';
 		return;
 	}
 
-	selectedQuestions.forEach(q => {
+	selectedInterviewQuestions.forEach(q => {
 		const item = document.createElement('div');
 		item.className = 'question-panel-item';
 		item.setAttribute('data-id', q.id);
@@ -185,17 +185,17 @@ function updateCartSidebar() {
 
 // × 버튼 클릭 시 제거
 function removeQuestionFromCart(id) {
-	selectedQuestions = selectedQuestions.filter(q => q.id !== id);
+	selectedInterviewQuestions = selectedInterviewQuestions.filter(q => q.id !== id);
 	const chk = document.querySelector(`input[type="checkbox"][data-id="${id}"]`);
 	if (chk) chk.checked = false;
 	updateCartSidebar();
 	updateQuestionIdsInput();
-	sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
+	sessionStorage.setItem('selectedInterviewQuestions', JSON.stringify(selectedInterviewQuestions));
 }
 
 // 숨겨진 input 갱신
 function updateQuestionIdsInput() {
-	document.getElementById('questionIds').value = selectedQuestions.map(q => q.id).join(',');
+	document.getElementById('questionIds').value = selectedInterviewQuestions.map(q => q.id).join(',');
 }
 
 window.toggleQuestion = toggleQuestion;
