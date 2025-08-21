@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="/js/include/admin/las/paymentStatistics.js"></script>
 <h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">회원 관리</h2>
+<input type="hidden" id="comCalendarInput" style="display: none;"/>
 <div class="main-container" style="display: flex !important; flex-direction: row !important; gap: 20px; width: 100%;">
     <!-- 왼쪽 컬럼 -->
     <div class="left-column" style="flex: 1; display: flex; flex-direction: column; gap: 20px; width: 50%;">

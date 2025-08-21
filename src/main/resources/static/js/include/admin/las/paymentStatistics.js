@@ -1,6 +1,708 @@
-function init() {
-	// Axios 기본 설정
-    axios.defaults.baseURL = '/admin/las/payment';
+function paymentStatistics() {
+    
+    // 공용 달력 input 요소
+    const hiddenInput = document.getElementById('comCalendarInput');
+    
+    // 각 차트별 select 요소들
+    const revenueChartDaySel = document.getElementById('revenueChartDay');
+    const revenueChartGenderSel = document.getElementById('revenueChartGender');
+    const revenueChartAgeGroupSel = document.getElementById('revenueChartAgeGroup');
+    const revenueChartResetBtn = document.getElementById('revenueChartReset');
+    
+    const productChartDaySel = document.getElementById('productChartDay');
+    const productChartGenderSel = document.getElementById('productChartGender');
+    const productChartAgeGroupSel = document.getElementById('productChartAgeGroup');
+    const productChartResetBtn = document.getElementById('productChartReset');
+    
+    const subscriberChartDaySel = document.getElementById('subscriberChartDay');
+    const subscriberChartGenderSel = document.getElementById('subscriberChartGender');
+    const subscriberChartAgeGroupSel = document.getElementById('subscriberChartAgeGroup');
+    const subscriberChartResetBtn = document.getElementById('subscriberChartReset');
+    
+    const aiServiceChartDaySel = document.getElementById('aiServiceChartDay');
+    const aiServiceChartGenderSel = document.getElementById('aiServiceChartGender');
+    const aiServiceChartAgeGroupSel = document.getElementById('aiServiceChartAgeGroup');
+    const aiServiceChartResetBtn = document.getElementById('aiServiceChartReset');
+
+    // 이벤트 리스너 등록
+    setupEventListeners();
+    
+    function setupEventListeners() {
+        // 구독 결제 매출 차트 이벤트
+        revenueChartDaySel.addEventListener('change', eventDateRangeSelect);
+        revenueChartGenderSel.addEventListener('change', loadRevenueChart);
+        revenueChartAgeGroupSel.addEventListener('change', loadRevenueChart);
+        revenueChartResetBtn.addEventListener('click', function() {
+            resetChartFilters('revenue');
+        });
+        
+        // 상품별 인기 통계 차트 이벤트
+        productChartDaySel.addEventListener('change', eventDateRangeSelect);
+        productChartGenderSel.addEventListener('change', loadProductChart);
+        productChartAgeGroupSel.addEventListener('change', loadProductChart);
+        productChartResetBtn.addEventListener('click', function() {
+            resetChartFilters('product');
+        });
+        
+        // 구독자 수 통계 차트 이벤트
+        subscriberChartDaySel.addEventListener('change', eventDateRangeSelect);
+        subscriberChartGenderSel.addEventListener('change', loadSubscriberChart);
+        subscriberChartAgeGroupSel.addEventListener('change', loadSubscriberChart);
+        subscriberChartResetBtn.addEventListener('click', function() {
+            resetChartFilters('subscriber');
+        });
+        
+        // 유료 컨텐츠 이용내역 차트 이벤트
+        aiServiceChartDaySel.addEventListener('change', eventDateRangeSelect);
+        aiServiceChartGenderSel.addEventListener('change', loadAiServiceChart);
+        aiServiceChartAgeGroupSel.addEventListener('change', loadAiServiceChart);
+        aiServiceChartResetBtn.addEventListener('click', function() {
+            resetChartFilters('aiService');
+        });
+    }
+    
+    // 차트 필터 리셋 함수
+    function resetChartFilters(chartType) {
+        switch(chartType) {
+            case 'revenue':
+                document.getElementById('revenueChartDay').value = 'daily';
+                document.getElementById('revenueChartGender').value = '';
+                document.getElementById('revenueChartAgeGroup').value = '';
+                document.getElementById('revenueChartStartDay').value = '';
+                document.getElementById('revenueChartEndDay').value = '';
+                loadRevenueChart();
+                break;
+            case 'product':
+                document.getElementById('productChartDay').value = '6month';
+                document.getElementById('productChartGender').value = '';
+                document.getElementById('productChartAgeGroup').value = '';
+                document.getElementById('productChartStartDay').value = '';
+                document.getElementById('productChartEndDay').value = '';
+                loadProductChart();
+                break;
+            case 'subscriber':
+                document.getElementById('subscriberChartDay').value = 'daily';
+                document.getElementById('subscriberChartGender').value = '';
+                document.getElementById('subscriberChartAgeGroup').value = '';
+                document.getElementById('subscriberChartStartDay').value = '';
+                document.getElementById('subscriberChartEndDay').value = '';
+                loadSubscriberChart();
+                break;
+            case 'aiService':
+                document.getElementById('aiServiceChartDay').value = 'weekly';
+                document.getElementById('aiServiceChartGender').value = '';
+                document.getElementById('aiServiceChartAgeGroup').value = '';
+                document.getElementById('aiServiceChartStartDay').value = '';
+                document.getElementById('aiServiceChartEndDay').value = '';
+                loadAiServiceChart();
+                break;
+        }
+    }
+    
+    // 날짜 형식 변환을 위한 헬퍼 함수들
+    function formatDateCal(d) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+    
+    function formatDateRange(fS, fE) {
+        return `${fS} ~ ${fE} 기간`;
+    }
+    
+    function formatDailyDate(isoString) {
+        const date = new Date(isoString);
+        return `${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+    }
+    
+    function formatMonthlyDate(isoString) {
+        const date = new Date(isoString);
+        return `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}`;
+    }
+    
+    // 일별, 월별, 기간선택에 대해서 이벤트 바인딩
+    function eventDateRangeSelect(e) {
+        const selectEl = e.target.nodeName == "SELECT" ? e.target : e.target.closest('select');
+        const dateValue = selectEl.value;
+        
+        if(dateValue == 'daily') {
+            if(selectEl.id == 'revenueChartDay') {
+                document.getElementById("revenueChartStartDay").value = '';
+                document.getElementById("revenueChartEndDay").value = '';
+                loadRevenueChart();
+            } else if(selectEl.id == 'productChartDay') {
+                document.getElementById("productChartStartDay").value = '';
+                document.getElementById("productChartEndDay").value = '';
+                loadProductChart();
+            } else if(selectEl.id == 'subscriberChartDay') {
+                document.getElementById("subscriberChartStartDay").value = '';
+                document.getElementById("subscriberChartEndDay").value = '';
+                loadSubscriberChart();
+            } else if(selectEl.id == 'aiServiceChartDay') {
+                document.getElementById("aiServiceChartStartDay").value = '';
+                document.getElementById("aiServiceChartEndDay").value = '';
+                loadAiServiceChart();
+            }
+        } else if(dateValue == 'monthly' || dateValue == '6month' || dateValue == '1year') {
+            if(selectEl.id == 'revenueChartDay') {
+                document.getElementById("revenueChartStartDay").value = '';
+                document.getElementById("revenueChartEndDay").value = '';
+                loadRevenueChart();
+            } else if(selectEl.id == 'productChartDay') {
+                document.getElementById("productChartStartDay").value = '';
+                document.getElementById("productChartEndDay").value = '';
+                loadProductChart();
+            } else if(selectEl.id == 'subscriberChartDay') {
+                document.getElementById("subscriberChartStartDay").value = '';
+                document.getElementById("subscriberChartEndDay").value = '';
+                loadSubscriberChart();
+            } else if(selectEl.id == 'aiServiceChartDay') {
+                document.getElementById("aiServiceChartStartDay").value = '';
+                document.getElementById("aiServiceChartEndDay").value = '';
+                loadAiServiceChart();
+            }
+        } else if(dateValue == 'weekly') {
+            if(selectEl.id == 'aiServiceChartDay') {
+                document.getElementById("aiServiceChartStartDay").value = '';
+                document.getElementById("aiServiceChartEndDay").value = '';
+                loadAiServiceChart();
+            }
+        } else if(dateValue == 'selectDays') {
+            // flatpickr 중복 초기화 방지
+            if (hiddenInput._flatpickr) {
+                hiddenInput._flatpickr.destroy();
+            }
+            
+            flatpickr(hiddenInput, {
+                mode: "range",
+                maxDate: "today",
+                disable: [date => date > new Date()],
+                positionElement: selectEl,
+                onChange: function(selectedDates) {
+                    if (selectedDates.length === 2) {
+                        const startDate = selectedDates[0];
+                        const endDate = selectedDates[1];
+                        const formattedStartDate = formatDateCal(startDate);
+                        const formattedEndDate = formatDateCal(endDate);
+                        
+                        if(selectEl.id == 'revenueChartDay') {
+                            document.getElementById('revenueChartStartDay').value = formattedStartDate;
+                            document.getElementById('revenueChartEndDay').value = formattedEndDate;
+                            loadRevenueChart();
+                            if (window.revenueChartInstance) {
+                                window.revenueChartInstance.destroy();
+                            }
+                        } else if(selectEl.id == 'productChartDay') {
+                            document.getElementById('productChartStartDay').value = formattedStartDate;
+                            document.getElementById('productChartEndDay').value = formattedEndDate;
+                            loadProductChart();
+                            if (window.productChartInstance) {
+                                window.productChartInstance.destroy();
+                            }
+                        } else if(selectEl.id == 'subscriberChartDay') {
+                            document.getElementById('subscriberChartStartDay').value = formattedStartDate;
+                            document.getElementById('subscriberChartEndDay').value = formattedEndDate;
+                            loadSubscriberChart();
+                            if (window.subscriberChartInstance) {
+                                window.subscriberChartInstance.destroy();
+                            }
+                        } else if(selectEl.id == 'aiServiceChartDay') {
+                            document.getElementById('aiServiceChartStartDay').value = formattedStartDate;
+                            document.getElementById('aiServiceChartEndDay').value = formattedEndDate;
+                            loadAiServiceChart();
+                            if (window.aiServiceChartInstance) {
+                                window.aiServiceChartInstance.destroy();
+                            }
+                        }
+                    }
+                }
+            });
+            
+            hiddenInput._flatpickr.open();
+            hiddenInput._flatpickr.clear();
+        }
+    }
+    
+    // 구독자 요약 정보 로드 (카드 1, 2번)
+    async function loadSubscriberSummary() {
+        try {
+            const response = await axios.get('/admin/las/payment/subscriber-summary');
+            const data = response.data;
+            
+            // 총 구독자 수
+            document.getElementById('totalSubscribersCount').textContent = data.totalSubscribers?.toLocaleString() || '0';
+            document.getElementById('totalSubscribersRate').textContent = `${data.totalSubscribersStatus === 'increase' ? '+' : data.totalSubscribersStatus === 'decrease' ? '-' : ''}${data.totalSubscribersRate || 0}%`;
+            
+            // 오늘 구독자 수
+            document.getElementById('todaySubscribersCount').textContent = data.newSubscribersToday?.toLocaleString() || '0';
+            document.getElementById('todaySubscribersRate').textContent = `${data.newSubscribersTodayStatus === 'increase' ? '+' : data.newSubscribersTodayStatus === 'decrease' ? '-' : ''}${data.newSubscribersTodayRate || 0}%`;
+            
+            // 상태에 따른 스타일 적용
+            updateRateStyleByStatus('totalSubscribersRate', data.totalSubscribersStatus);
+            updateRateStyleByStatus('todaySubscribersRate', data.newSubscribersTodayStatus);
+            
+        } catch (error) {
+            console.error('구독자 요약 정보 로드 실패:', error);
+            document.getElementById('totalSubscribersCount').textContent = '0';
+            document.getElementById('todaySubscribersCount').textContent = '0';
+            document.getElementById('totalSubscribersRate').textContent = '0%';
+            document.getElementById('todaySubscribersRate').textContent = '0%';
+        }
+    }
+    
+    // 구독 결제 매출 차트 로드
+    function loadRevenueChart() {
+        const ctx = document.getElementById('revenueChartCanvas').getContext('2d');
+        
+        const dateValue = document.getElementById("revenueChartDay").value;
+        const genderValue = document.getElementById("revenueChartGender").value;
+        const ageGroupValue = document.getElementById("revenueChartAgeGroup").value;
+        const startDateValue = document.getElementById("revenueChartStartDay").value;
+        const endDateValue = document.getElementById("revenueChartEndDay").value;
+        
+        let chartRange = "";
+        if(startDateValue && endDateValue) {
+            chartRange = formatDateRange(startDateValue, endDateValue);
+        }
+        
+        const params = {
+            period: dateValue,
+            startDate: startDateValue,
+            endDate: endDateValue,
+            gender: genderValue,
+            ageGroup: ageGroupValue
+        };
+        
+        // 기존 차트 파괴
+        if (window.revenueChartInstance) {
+            window.revenueChartInstance.destroy();
+        }
+        
+        ctx.canvas.style.minHeight = '400px';
+        
+        axios.get('/admin/las/payment/revenue-stats', { params })
+            .then(res => {
+                const responseData = res.data;
+                
+                let labels;
+                let chartLabel;
+                if (dateValue === 'monthly') {
+                    labels = responseData.map(item => formatMonthlyDate(item.dt));
+                    chartLabel = '월별 매출';
+                } else {
+                    labels = responseData.map(item => formatDailyDate(item.dt));
+                    chartLabel = '일별 매출';
+                }
+                
+                const dataValues = responseData.map(item => item.revenue || 0);
+                
+                window.revenueChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: chartLabel,
+                            data: dataValues,
+                            fill: true,
+                            borderColor: 'rgb(114, 124, 245)',
+                            backgroundColor: 'rgba(114, 124, 245, 0.2)',
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 6,
+                            pointStyle: 'circle'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: [
+                                    '구독 결제 매출',
+                                    chartRange
+                                ],
+                            },
+                        },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: value => value.toLocaleString() + '원'
+                                },
+                                grid: {
+                                    borderDash: [3],
+                                    color: '#e5e5e5'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("구독 결제 매출 데이터 조회 중 에러:", error);
+            });
+    }
+    
+    // 상품별 인기 통계 차트 로드
+    function loadProductChart() {
+        const ctx = document.getElementById('productChartCanvas').getContext('2d');
+        
+        const dateValue = document.getElementById("productChartDay").value;
+        const genderValue = document.getElementById("productChartGender").value;
+        const ageGroupValue = document.getElementById("productChartAgeGroup").value;
+        const startDateValue = document.getElementById("productChartStartDay").value;
+        const endDateValue = document.getElementById("productChartEndDay").value;
+        
+        let chartRange = "";
+        if(startDateValue && endDateValue) {
+            chartRange = formatDateRange(startDateValue, endDateValue);
+        }
+        
+        const params = {
+            period: dateValue,
+            startDate: startDateValue,
+            endDate: endDateValue,
+            gender: genderValue,
+            ageGroup: ageGroupValue
+        };
+        
+        // 기존 차트 파괴
+        if (window.productChartInstance) {
+            window.productChartInstance.destroy();
+        }
+        
+        ctx.canvas.style.minHeight = '400px';
+        
+        axios.get('/admin/las/payment/product-popularity', { params })
+            .then(res => {
+                const responseData = res.data;
+                
+                // 상품별로 데이터 그룹화
+                const products = {};
+                responseData.forEach(item => {
+                    const productName = item.subName;
+                    const period = item.dt;
+                    const count = item.count || 0;
+                    
+                    if (!products[productName]) {
+                        products[productName] = [];
+                    }
+                    products[productName].push({
+                        period: period,
+                        count: count
+                    });
+                });
+                
+                // 라벨 추출
+                const allPeriods = [...new Set(responseData.map(item => item.dt))].sort();
+                
+                // 데이터셋 생성
+                const datasets = [];
+                const colors = ['#2DCF97', '#727cf5', '#FFC75A', '#FF6B6B', '#9C88FF'];
+                let colorIndex = 0;
+                
+                Object.keys(products).forEach(productName => {
+                    const productData = allPeriods.map(period => {
+                        const found = products[productName].find(item => item.period === period);
+                        return found ? found.count : 0;
+                    });
+                    
+                    datasets.push({
+                        label: productName,
+                        data: productData,
+                        backgroundColor: colors[colorIndex % colors.length],
+                        borderRadius: 4
+                    });
+                    colorIndex++;
+                });
+                
+                window.productChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: allPeriods,
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            title: {
+                                display: true,
+                                text: [
+                                    '상품별 인기 통계',
+                                    chartRange
+                                ],
+                            },
+                        },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    borderDash: [3],
+                                    color: '#e5e5e5'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("상품별 인기 통계 데이터 조회 중 에러:", error);
+            });
+    }
+    
+    // 구독자 수 차트 로드
+    function loadSubscriberChart() {
+        const ctx = document.getElementById('subscriberChartCanvas').getContext('2d');
+        
+        const dateValue = document.getElementById("subscriberChartDay").value;
+        const genderValue = document.getElementById("subscriberChartGender").value;
+        const ageGroupValue = document.getElementById("subscriberChartAgeGroup").value;
+        const startDateValue = document.getElementById("subscriberChartStartDay").value;
+        const endDateValue = document.getElementById("subscriberChartEndDay").value;
+        
+        let chartRange = "";
+        if(startDateValue && endDateValue) {
+            chartRange = formatDateRange(startDateValue, endDateValue);
+        }
+        
+        const params = {
+            period: dateValue,
+            startDate: startDateValue,
+            endDate: endDateValue,
+            gender: genderValue,
+            ageGroup: ageGroupValue
+        };
+        
+        // 기존 차트 파괴
+        if (window.subscriberChartInstance) {
+            window.subscriberChartInstance.destroy();
+        }
+        
+        ctx.canvas.style.minHeight = '400px';
+        
+        axios.get('/admin/las/payment/subscriber-stats', { params })
+            .then(res => {
+                const responseData = res.data;
+                
+                let labels;
+                let chartLabel;
+                if (dateValue === 'monthly') {
+                    labels = responseData.map(item => formatMonthlyDate(item.dt));
+                    chartLabel = '월별 구독자 수';
+                } else {
+                    labels = responseData.map(item => formatDailyDate(item.dt));
+                    chartLabel = '일별 구독자 수';
+                }
+                
+                const dataValues = responseData.map(item => item.count || 0);
+                
+                window.subscriberChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: chartLabel,
+                            data: dataValues,
+                            fill: true,
+                            borderColor: 'rgb(45, 207, 151)',
+                            backgroundColor: 'rgba(45, 207, 151, 0.2)',
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 6,
+                            pointStyle: 'circle'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: [
+                                    '구독자 수 통계',
+                                    chartRange
+                                ],
+                            },
+                        },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: value => value + '명'
+                                },
+                                grid: {
+                                    borderDash: [3],
+                                    color: '#e5e5e5'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("구독자 수 통계 데이터 조회 중 에러:", error);
+            });
+    }
+    
+    // 유료 컨텐츠 이용내역 차트 로드 (라인 차트로 변경)
+    function loadAiServiceChart() {
+        const ctx = document.getElementById('aiServiceChartCanvas').getContext('2d');
+        
+        const dateValue = document.getElementById("aiServiceChartDay").value;
+        const genderValue = document.getElementById("aiServiceChartGender").value;
+        const ageGroupValue = document.getElementById("aiServiceChartAgeGroup").value;
+        const startDateValue = document.getElementById("aiServiceChartStartDay").value;
+        const endDateValue = document.getElementById("aiServiceChartEndDay").value;
+        
+        let chartRange = "";
+        if(startDateValue && endDateValue) {
+            chartRange = formatDateRange(startDateValue, endDateValue);
+        }
+        
+        const params = {
+            period: dateValue,
+            startDate: startDateValue,
+            endDate: endDateValue,
+            gender: genderValue,
+            ageGroup: ageGroupValue
+        };
+        
+        // 기존 차트 파괴
+        if (window.aiServiceChartInstance) {
+            window.aiServiceChartInstance.destroy();
+        }
+        
+        ctx.canvas.style.minHeight = '400px';
+        
+        axios.get('/admin/las/payment/ai-service-usage', { params })
+            .then(res => {
+                const responseData = res.data;
+                
+                // 날짜별로 데이터 정리
+                const labels = responseData.map(item => {
+                    if (dateValue === 'monthly') {
+                        return formatMonthlyDate(item.dt);
+                    } else {
+                        return formatDailyDate(item.dt);
+                    }
+                });
+                
+                // 각 AI 서비스별 데이터셋 생성
+                const aiFirstdakData = responseData.map(item => parseInt(item.resumeCnt) || 0);
+                const aiInterviewData = responseData.map(item => parseInt(item.mockCnt) || 0);
+                const aiCounselingData = responseData.map(item => parseInt(item.coverCnt) || 0);
+                
+                window.aiServiceChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'AI 첨삭',
+                            data: aiFirstdakData,
+                            borderColor: 'rgb(45, 207, 151)',
+                            backgroundColor: 'rgba(45, 207, 151, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 6
+                        }, {
+                            label: '모의면접',
+                            data: aiInterviewData,
+                            borderColor: 'rgb(114, 124, 245)',
+                            backgroundColor: 'rgba(114, 124, 245, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 6
+                        }, {
+                            label: 'AI 상담',
+                            data: aiCounselingData,
+                            borderColor: 'rgb(255, 199, 90)',
+                            backgroundColor: 'rgba(255, 199, 90, 0.1)',
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            title: {
+                                display: true,
+                                text: [
+                                    '유료 컨텐츠 이용내역',
+                                    chartRange
+                                ],
+                            },
+                        },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: value => value + '회'
+                                },
+                                grid: {
+                                    borderDash: [3],
+                                    color: '#e5e5e5'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("AI 서비스 이용내역 데이터 조회 중 에러:", error);
+            });
+    }
+    
+    // 상태에 따른 스타일 업데이트
+    function updateRateStyleByStatus(elementId, status) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        element.classList.remove('public-span-increase', 'public-span-decrease', 'public-span-equal', 'public-span-new');
+        
+        switch(status) {
+            case 'increase':
+                element.classList.add('public-span-increase');
+                break;
+            case 'decrease':
+                element.classList.add('public-span-decrease');
+                break;
+            case 'equal':
+                element.classList.add('public-span-equal');
+                break;
+            case 'new_entry':
+                element.classList.add('public-span-new');
+                break;
+            default:
+                element.classList.add('public-span-equal');
+        }
+    }
     
     // 초기 데이터 로드
     loadSubscriberSummary();
@@ -9,465 +711,10 @@ function init() {
     loadSubscriberChart();
     loadAiServiceChart();
     
-    // 버튼 이벤트 리스너 등록
-    setupButtonEvents();
+    // 데이터 자동 새로고침 (5분마다)
+    setInterval(() => {
+        loadSubscriberSummary();
+    }, 5 * 60 * 1000);
 }
 
-// 구독자 요약 정보 로드 (카드 1, 2번)
-async function loadSubscriberSummary() {
-    try {
-        const response = await axios.get('/subscriber-summary');
-        const data = response.data;
-        
-		console.log("data", data);
-		
-        // 총 구독자 수
-        document.getElementById('totalSubscribersCount').textContent = data.totalSubscribers?.toLocaleString() || '0';
-        document.getElementById('totalSubscribersRate').textContent = `${data.totalSubscribersStatus === 'increase' ? '+' : data.totalSubscribersStatus === 'decrease' ? '-' : ''}${data.totalSubscribersRate || 0}%`;
-        
-        // 오늘 구독자 수 (newSubscribersToday로 수정)
-        document.getElementById('todaySubscribersCount').textContent = data.newSubscribersToday?.toLocaleString() || '0';
-        document.getElementById('todaySubscribersRate').textContent = `${data.newSubscribersTodayStatus === 'increase' ? '+' : data.newSubscribersTodayStatus === 'decrease' ? '-' : ''}${data.newSubscribersTodayRate || 0}%`;
-        
-        // 상태에 따른 스타일 적용
-        updateRateStyleByStatus('totalSubscribersRate', data.totalSubscribersStatus);
-        updateRateStyleByStatus('todaySubscribersRate', data.newSubscribersTodayStatus);
-        
-    } catch (error) {
-        console.error('구독자 요약 정보 로드 실패:', error);
-        // 에러 시 기본값 표시
-        document.getElementById('totalSubscribersCount').textContent = '0';
-        document.getElementById('todaySubscribersCount').textContent = '0';
-        document.getElementById('totalSubscribersRate').textContent = '0%';
-        document.getElementById('todaySubscribersRate').textContent = '0%';
-    }
-}
-
-// 구독 결제 매출 차트 로드 (왼쪽 큰 div 1)
-async function loadRevenueChart(params = {}) {
-    try {
-        const response = await axios.get('/revenue-stats', { params });
-        const data = response.data;
-        
-        console.log("Revenue chart data:", data); // 디버깅용
-        
-        // 데이터 변환 (백엔드 응답 구조에 맞게 수정)
-        const labels = data.map(item => item.dt); // dt 사용
-        const revenues = data.map(item => item.revenue || 0);
-        
-        const ctx = document.getElementById('revenueChartCanvas').getContext('2d');
-        
-        // 기존 차트 파괴
-        const existingChart = Chart.getChart('revenueChartCanvas');
-        if (existingChart) {
-            existingChart.destroy();
-        }
-        
-        const revenueChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '매출 (원)',
-                    data: revenues,
-                    borderColor: '#727cf5',
-                    backgroundColor: 'rgba(114, 124, 245, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `매출: ${context.raw.toLocaleString()}원`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return value.toLocaleString() + '원';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-    } catch (error) {
-        console.error('매출 차트 로드 실패:', error);
-        createErrorChart('revenueChartCanvas', '매출 데이터를 불러올 수 없습니다.');
-    }
-}
-
-// 상품별 인기 통계 차트 로드 (왼쪽 큰 div 2)
-async function loadProductChart(params = {}) {
-    try {
-        const response = await axios.get('/product-popularity', { params });
-        const data = response.data;
-        
-        console.log("Product chart data:", data); // 디버깅용
-        
-        // 상품별로 데이터 그룹화 (백엔드 응답 구조에 맞게 수정)
-        const products = {};
-        data.forEach(item => {
-            const productName = item.subName; // subName 사용
-            const period = item.dt; // dt 사용
-            const count = item.count || 0;
-            
-            if (!products[productName]) {
-                products[productName] = [];
-            }
-            products[productName].push({
-                period: period,
-                count: count
-            });
-        });
-        
-        // 라벨 추출 (모든 기간)
-        const allPeriods = [...new Set(data.map(item => item.dt))].sort();
-        
-        // 데이터셋 생성
-        const datasets = [];
-        const colors = ['#2DCF97', '#727cf5', '#FFC75A', '#FF6B6B', '#9C88FF'];
-        let colorIndex = 0;
-        
-        Object.keys(products).forEach(productName => {
-            const productData = allPeriods.map(period => {
-                const found = products[productName].find(item => item.period === period);
-                return found ? found.count : 0;
-            });
-            
-            datasets.push({
-                label: productName,
-                data: productData,
-                backgroundColor: colors[colorIndex % colors.length],
-                borderRadius: 4
-            });
-            colorIndex++;
-        });
-        
-        const ctx = document.getElementById('productChartCanvas').getContext('2d');
-        
-        // 기존 차트 파괴
-        const existingChart = Chart.getChart('productChartCanvas');
-        if (existingChart) {
-            existingChart.destroy();
-        }
-        
-        const productChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: allPeriods,
-                datasets: datasets
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-        
-    } catch (error) {
-        console.error('상품 인기 차트 로드 실패:', error);
-        createErrorChart('productChartCanvas', '상품 통계 데이터를 불러올 수 없습니다.');
-    }
-}
-
-// 구독자 수 차트 로드 (오른쪽 큰 div 1)
-async function loadSubscriberChart(params = {}) {
-    try {
-        const response = await axios.get('/subscriber-stats', { params });
-        const data = response.data;
-        
-        console.log("Subscriber chart data:", data); // 디버깅용
-        
-        // 데이터 변환 (백엔드 응답 구조에 맞게 수정)
-        const labels = data.map(item => item.dt); // dt 사용
-        const subscribers = data.map(item => item.count || 0); // count 사용
-        
-        const ctx = document.getElementById('subscriberChartCanvas').getContext('2d');
-        
-        // 기존 차트 파괴
-        const existingChart = Chart.getChart('subscriberChartCanvas');
-        if (existingChart) {
-            existingChart.destroy();
-        }
-        
-        const subscriberChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '구독자 수',
-                    data: subscribers,
-                    borderColor: '#2DCF97',
-                    backgroundColor: 'rgba(45, 207, 151, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-        
-    } catch (error) {
-        console.error('구독자 차트 로드 실패:', error);
-        createErrorChart('subscriberChartCanvas', '구독자 데이터를 불러올 수 없습니다.');
-    }
-}
-
-// AI 서비스 이용내역 차트 로드 (오른쪽 큰 div 2)
-async function loadAiServiceChart(params = {}) {
-    try {
-        const response = await axios.get('/ai-service-usage', { params });
-        const data = response.data;
-        
-        console.log("AI Service chart data:", data); // 디버깅용
-        
-        // 백엔드 응답 구조에 맞게 데이터 변환
-        let totalResume = 0;
-        let totalCover = 0;
-        let totalMock = 0;
-        
-        data.forEach(item => {
-            totalResume += parseInt(item.resumeCnt) || 0;
-            totalCover += parseInt(item.coverCnt) || 0;
-            totalMock += parseInt(item.mockCnt) || 0;
-        });
-        
-        const labels = ['이력서 AI', '자기소개서 AI', '모의면접 AI'];
-        const usageCounts = [totalResume, totalCover, totalMock];
-        const colors = ['#2DCF97', '#727cf5', '#FFC75A'];
-        
-        // 0인 데이터는 제외
-        const filteredLabels = [];
-        const filteredCounts = [];
-        const filteredColors = [];
-        
-        labels.forEach((label, index) => {
-            if (usageCounts[index] > 0) {
-                filteredLabels.push(label);
-                filteredCounts.push(usageCounts[index]);
-                filteredColors.push(colors[index]);
-            }
-        });
-        
-        const ctx = document.getElementById('aiServiceChartCanvas').getContext('2d');
-        
-        // 기존 차트 파괴
-        const existingChart = Chart.getChart('aiServiceChartCanvas');
-        if (existingChart) {
-            existingChart.destroy();
-        }
-        
-        // 데이터가 없는 경우 처리
-        if (filteredCounts.length === 0) {
-            createErrorChart('aiServiceChartCanvas', 'AI 서비스 이용 데이터가 없습니다.');
-            return;
-        }
-        
-        const aiServiceChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: filteredLabels,
-                datasets: [{
-                    data: filteredCounts,
-                    backgroundColor: filteredColors
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const total = context.dataset.data.reduce((sum, value) => sum + value, 0);
-                                const percentage = ((context.raw / total) * 100).toFixed(1);
-                                return `${context.label}: ${context.raw.toLocaleString()}회 (${percentage}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-    } catch (error) {
-        console.error('AI 서비스 차트 로드 실패:', error);
-        createErrorChart('aiServiceChartCanvas', 'AI 서비스 데이터를 불러올 수 없습니다.');
-    }
-}
-
-// 에러 차트 생성
-function createErrorChart(canvasId, message) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['오류'],
-            datasets: [{
-                label: message,
-                data: [0],
-                backgroundColor: '#dc3545'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        }
-    });
-}
-
-// 상태에 따른 스타일 업데이트 (백엔드 상태값 사용)
-function updateRateStyleByStatus(elementId, status) {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-    
-    // 기존 클래스 제거
-    element.classList.remove('public-span-increase', 'public-span-decrease', 'public-span-equal', 'public-span-new');
-    
-    // 상태에 따른 클래스 추가
-    switch(status) {
-        case 'increase':
-            element.classList.add('public-span-increase');
-            break;
-        case 'decrease':
-            element.classList.add('public-span-decrease');
-            break;
-        case 'equal':
-            element.classList.add('public-span-equal');
-            break;
-        case 'new_entry':
-            element.classList.add('public-span-new');
-            break;
-        default:
-            element.classList.add('public-span-equal');
-    }
-}
-
-// 버튼 이벤트 설정
-function setupButtonEvents() {
-    // 매출 차트 버튼들
-    document.querySelectorAll('.revenueChart .public-toggle-button').forEach(button => {
-        button.addEventListener('click', function() {
-            updateActiveButton(this);
-            const params = getChartParams(this);
-            loadRevenueChart(params);
-        });
-    });
-    
-    // 상품 차트 버튼들
-    document.querySelectorAll('.productChart .public-toggle-button').forEach(button => {
-        button.addEventListener('click', function() {
-            updateActiveButton(this);
-            const params = getChartParams(this);
-            loadProductChart(params);
-        });
-    });
-    
-    // 구독자 차트 버튼들
-    document.querySelectorAll('.subscriberChart .public-toggle-button').forEach(button => {
-        button.addEventListener('click', function() {
-            updateActiveButton(this);
-            const params = getChartParams(this);
-            loadSubscriberChart(params);
-        });
-    });
-    
-    // AI 서비스 차트 버튼들
-    document.querySelectorAll('.aiServiceChart .public-toggle-button').forEach(button => {
-        button.addEventListener('click', function() {
-            updateActiveButton(this);
-            const params = getChartParams(this);
-            loadAiServiceChart(params);
-        });
-    });
-}
-
-// 활성 버튼 업데이트
-function updateActiveButton(clickedButton) {
-    const group = clickedButton.closest('.btn-group');
-    if (group) {
-        group.querySelectorAll('.public-toggle-button').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        clickedButton.classList.add('active');
-    }
-}
-
-// 차트 파라미터 추출
-function getChartParams(button) {
-    const id = button.id;
-    const params = {};
-    
-    if (id.includes('Day')) {
-        params.period = 'daily';
-    } else if (id.includes('Month') || id.includes('6Month') || id.includes('1Year')) {
-        params.period = 'monthly';
-    } else if (id.includes('Week')) {
-        params.period = 'weekly';
-    }
-    
-    if (id.includes('Male')) {
-        params.gender = 'M';
-    } else if (id.includes('Female')) {
-        params.gender = 'F';
-    }
-    
-    if (id.includes('6Month')) {
-        params.months = 6;
-    } else if (id.includes('1Year')) {
-        params.months = 12;
-    }
-    
-    return params;
-}
-
-// 데이터 자동 새로고침 (5분마다)
-setInterval(() => {
-    loadSubscriberSummary();
-}, 5 * 60 * 1000);
-
-init();
+paymentStatistics();
