@@ -25,7 +25,7 @@ public class QualificationExamController {
 	public String qlfexmListPage(Model model,
 		    @RequestParam(required = false) String keyword,
 		    @RequestParam(value="currentPage",required=false,defaultValue="1") int currentPage,
-		    @RequestParam(value="size",required=false,defaultValue="10") int size ) {
+		    @RequestParam(value="size",required=false,defaultValue="5") int size ) {
 
 		// 목록 조회
 		ArticlePage<QualficationExamVO> articlePage= qualificationExamService.getList(keyword,currentPage,size);
