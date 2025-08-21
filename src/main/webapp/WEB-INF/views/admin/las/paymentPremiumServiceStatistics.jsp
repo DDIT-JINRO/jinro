@@ -88,9 +88,9 @@
     </div>
 
     <!-- 오른쪽 컬럼 -->
-    <div class="right-column" style="flex: 1; display: flex; flex-direction: column; gap: 20px; width: 50%;">
+    <div class="right-column" style="flex: 1; display: grid; flex-direction: column; gap: 20px; width: 50%;">
         <!-- 첫 번째 큰 div - 구독자 수 통계 -->
-        <div class="template-panel large-panel">
+        <div class="template-panel large-panel panel-right">
             <div class="middleTitle">구독자 수 통계</div>
             <div class="btn-group flex gap5 subscriberChart">
                 <input type="hidden" id="subscriberChartStartDay" />
@@ -112,13 +112,13 @@
                     <option value="youth">청년</option>
                 </select>
             </div>
-            <div class="chart-container">
+            <div class="chart-container" style="height: -webkit-fill-available;">
                 <canvas id="subscriberChartCanvas"></canvas>
             </div>
         </div>
 
         <!-- 두 번째 큰 div - 유료 컨텐츠 이용내역 -->
-        <div class="template-panel large-panel">
+        <div class="template-panel large-panel panel-right">
 		    <div class="middleTitle">유료 컨텐츠 이용내역</div>
 		    <div class="btn-group flex gap5 aiServiceChart">
 		        <input type="hidden" id="aiServiceChartStartDay" />
@@ -148,7 +148,7 @@
 		            <option value="counseling">AI 상담</option>
 		        </select>
 		    </div>
-		    <div class="chart-container">
+		    <div class="chart-container" style="height: -webkit-fill-available;">
 		        <canvas id="aiServiceChartCanvas"></canvas>
 		    </div>
 		</div>
