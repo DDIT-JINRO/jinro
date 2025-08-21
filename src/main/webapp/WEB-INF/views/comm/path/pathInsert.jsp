@@ -21,6 +21,9 @@
 </section>
 <div>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<h3 class="page-title-bar__title">진로/진학 게시판</h3>
+		</div>
 		<div class="public-wrapper-main">
 			<div class="titleSpace">
 				<div class="insertTitle">제목</div>
