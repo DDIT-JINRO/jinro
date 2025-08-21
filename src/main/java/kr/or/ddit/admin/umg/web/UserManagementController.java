@@ -136,12 +136,15 @@ public class UserManagementController {
 
 	@GetMapping("/getPenaltyList.do")
 	public ArticlePage<MemberPenaltyVO> getPenaltyList(
-			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
-			@RequestParam(value = "size", required = false, defaultValue = "10") int size,
-			@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "status", required = false) String status) {
+	        @RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+	        @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+	        @RequestParam(value = "keyword", required = false) String keyword,
+	        @RequestParam(value = "status", required = false) String status,
+	        @RequestParam(value = "sortBy", required = false) String sortBy,
+	        @RequestParam(value = "sortOrder", required = false) String sortOrder,
+	        @RequestParam(value = "mpType", required = false) String mpType) {
 
-		return userManagementService.getPenaltyList(currentPage, size, keyword, status);
+	    return userManagementService.getPenaltyList(currentPage, size, keyword, status, sortBy, sortOrder, mpType);
 	}
 
 	@PostMapping("/submitPenalty.do")

@@ -623,47 +623,93 @@ function sanctionsDescription() {
 		const fullYear = String(d.getFullYear());
 		return `${fullYear}-${mm}-${dd}`;
 	}
+	
+	let penaltySortBy = '';
+	let penaltySortOrder = 'desc';
 
 	function fetchPenaltyList(page = 1) {
 		const pageSize = 10;
 		const keyword = document.querySelector('input[name="keywordPenalty"]').value;
 		const status = document.querySelector('select[name="statusPenalty"]').value;
+		const mpType = document.getElementById('penaltyTypeFilter').value;
 
 		axios.get('/admin/umg/getPenaltyList.do', {
 			params: {
 				currentPage: page,
 				size: pageSize,
 				keyword: keyword,
-				status: status
+				status: status,
+				sortBy: penaltySortBy,
+	            sortOrder: penaltySortOrder,
+	            mpType: mpType
 			}
 		})
-			.then(({ data }) => {
+		.then(({ data }) => {
+	        const countEl = document.getElementById('penaltyList-count');
+	        if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
 
-				const countEl = document.getElementById('penaltyList-count');
-				if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();
+	        const listEl = document.getElementById('penaltyList');
+	        if (!listEl) return;
 
-				const listEl = document.getElementById('penaltyList');
-				if (!listEl) return;
-
-				if (data.content.length < 1 && keyword.trim() !== '') {
-					listEl.innerHTML = `<tr><td colspan='2' style="text-align: center;">검색 결과를 찾을 수 없습니다.</td></tr>`;
-
-				} else {
-					const rows = data.content.map(item => `
-						          <tr>
-						            <td>${item.mpId}</td>
-						            <td>${item.memId}</td>
-						            <td>${item.memName}</td>
-						            <td>${penaltyStatusCng(item.mpType)}</td>
-						            <td>${formatDateMMDD(item.mpWarnDate)}</td>
-
-						          </tr>`).join('');
-					listEl.innerHTML = rows;
-				}
-				renderPaginationPenalty(data);
-			})
-			.catch(err => console.error('유저 목록 조회 중 에러:', err));
+	        if (data.content.length < 1 && keyword.trim() !== '') {
+	            listEl.innerHTML = `<tr><td colspan='5' style="text-align: center;">검색 결과를 찾을 수 없습니다.</td></tr>`;
+	        } else {
+	            const rows = data.content.map(item => `
+	                <tr>
+	                    <td>${item.mpId}</td>
+	                    <td>${item.memId}</td>
+	                    <td>${item.memName}</td>
+	                    <td>${penaltyStatusCng(item.mpType)}</td>
+	                    <td>${formatDateMMDD(item.mpWarnDate)}</td>
+	                </tr>`).join('');
+	            listEl.innerHTML = rows;
+	        }
+	        renderPaginationPenalty(data);
+	    })
+	    .catch(err => console.error('제재 목록 조회 중 에러:', err));
 	}
+
+	document.getElementById('penaltyListSortByTargetName').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handlePenaltySortClick(sortBy, this);
+	});
+
+	document.getElementById('penaltyListSortByRpCreatedAt').addEventListener('click', function() {
+	    const sortBy = this.getAttribute('data-sort-by');
+	    handlePenaltySortClick(sortBy, this);
+	});
+	
+	// 정렬 클릭 처리 함수
+	function handlePenaltySortClick(sortBy, clickedButton) {
+	    // 같은 버튼을 다시 클릭하면 정렬 순서 변경
+	    if (penaltySortBy === sortBy) {
+	        penaltySortOrder = penaltySortOrder === 'asc' ? 'desc' : 'asc';
+	    } else {
+	        penaltySortBy = sortBy;
+	        penaltySortOrder = 'asc';
+	    }
+	    
+	    // 정렬 순서 셀렉트 박스 업데이트
+	    document.getElementById('penaltyListSortOrder').value = penaltySortOrder;
+	    
+	    // 버튼 활성화 상태 업데이트
+	    document.querySelectorAll('.penalListBtnGroup .public-toggle-button').forEach(btn => btn.classList.remove('active'));
+	    clickedButton.classList.add('active');
+	    
+	    // 첫 페이지로 이동하여 정렬된 결과 조회
+	    fetchPenaltyList(1);
+	}
+
+	// 제재 목록 정렬 순서 셀렉트 박스 이벤트 리스너
+	document.getElementById('penaltyListSortOrder').addEventListener('change', function() {
+	    penaltySortOrder = this.value;
+	    fetchPenaltyList(1);
+	});
+
+	// 제재 유형 필터 이벤트 리스너
+	document.getElementById('penaltyTypeFilter').addEventListener('change', function() {
+	    fetchPenaltyList(1);
+	});
 
 	document.getElementById("penaltyList").addEventListener("click", function(e) {
 		const tr = e.target.closest("tr");

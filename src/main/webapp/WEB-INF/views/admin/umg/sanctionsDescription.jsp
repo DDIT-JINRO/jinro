@@ -199,7 +199,7 @@
 			<select name="statusPenalty" id="">
 				<option value="1">전체</option>
 				<option value="2">회원명</option>
-			</select> <input id="search" name="keywordPenalty" placeholder="검색어를 입력하세요" />
+			</select> <input id="search" name="keywordPenalty" placeholder="회원명을 입력하세요" />
 			<button class="btn-save searchPenaltyBtn">조회</button>
 		</div>
 
@@ -212,8 +212,6 @@
 			style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 penalListBtnGroup">
-				<button class="public-toggle-button" id="penaltyListSortByMemId"
-					data-sort-by="memId">회원ID</button>
 				<button class="public-toggle-button"
 					id="penaltyListSortByTargetName" data-sort-by="memName">회원명</button>
 				<button class="public-toggle-button"
@@ -224,10 +222,10 @@
 				</select>
 			</div>
 			<div>
-				<select class="public-toggle-select">
+				<select class="public-toggle-select" id="penaltyTypeFilter">
 					<option value="">유형</option>
-					<option value="">경고</option>
-					<option value="">정지</option>
+					<option value="G14001">경고</option>
+					<option value="G14002">정지</option>
 				</select>
 			</div>
 		</div>

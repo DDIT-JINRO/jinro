@@ -24,8 +24,9 @@ public interface UserManagementService {
 
 	Map<String, Object> getReportDetail(String id);
 
-	ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status);
-
+	ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status, 
+	        String sortBy, String sortOrder, String mpType);
+	
 	Map<String, Object> getPenaltyDetail(String id);
 
 	int reportModify(ReportVO reportVO);

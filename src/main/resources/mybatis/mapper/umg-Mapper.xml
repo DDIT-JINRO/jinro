@@ -398,71 +398,95 @@
 		WHERE REPORT_ID = #{reportId}
 	</select>
 
-	<select id="getPenaltyList"
-		resultType="kr.or.ddit.account.lgn.service.MemberPenaltyVO"
-		parameterType="kr.or.ddit.account.lgn.service.MemberPenaltyVO">
-		SELECT * FROM (
-		SELECT ROWNUM AS RNUM, B.*
-		FROM (
-		SELECT
-		MP.MP_ID
-		,
-		MP.REPORT_ID
-		, MP.MP_WARN_REASON
-		,
-		MP.MP_WARN_DATE
-		, MP.MEM_ID
-		, M.MEM_NAME
-		, MP.MP_TYPE
-		, MP.MP_STARTED_AT
-		,
-		MP.MP_COMPLETE_AT
-		, MP.FILE_GROUP_NO
-		FROM
-		MEMBER_PENALTY MP
-		JOIN MEMBER M
-		ON MP.MEM_ID = M.MEM_ID
-		<where>
-			MP.MP_ID IS NOT NULL
-			<if test="keyword != null and keyword != '' and status == 1">
-				AND (M.MEM_NAME LIKE '%' || #{keyword} || '%' OR
-				MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%')
-			</if>
-			<if test="keyword != null and keyword != '' and status == 2">
-				AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="keyword != null and keyword != '' and status == 3">
-				AND MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%'
-			</if>
-		</where>
-		ORDER BY MP.MP_WARN_DATE DESC) B
-		WHERE ROWNUM &lt;= #{endNo}
-		)
-		WHERE
-		RNUM
-		&gt;= #{startNo}
+	<select id="getPenaltyList" 
+	        resultType="kr.or.ddit.account.lgn.service.MemberPenaltyVO" 
+	        parameterType="kr.or.ddit.account.lgn.service.MemberPenaltyVO">
+	    SELECT * FROM (
+	        SELECT ROWNUM AS RNUM, B.*
+	        FROM (
+	            SELECT
+	                MP.MP_ID,
+	                MP.REPORT_ID,
+	                MP.MP_WARN_REASON,
+	                MP.MP_WARN_DATE,
+	                MP.MEM_ID,
+	                M.MEM_NAME,
+	                MP.MP_TYPE,
+	                MP.MP_STARTED_AT,
+	                MP.MP_COMPLETE_AT,
+	                MP.FILE_GROUP_NO
+	            FROM MEMBER_PENALTY MP
+	            JOIN MEMBER M ON MP.MEM_ID = M.MEM_ID
+	            <where>
+	                MP.MP_ID IS NOT NULL
+	                
+	                <!-- 키워드 검색 조건 -->
+	                <if test="keyword != null and keyword != '' and status == 1">
+	                    AND (M.MEM_NAME LIKE '%' || #{keyword} || '%' OR
+	                         MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%')
+	                </if>
+	                <if test="keyword != null and keyword != '' and status == 2">
+	                    AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
+	                </if>
+	                <if test="keyword != null and keyword != '' and status == 3">
+	                    AND MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%'
+	                </if>
+	                
+	                <!-- 제재 유형별 필터링 -->
+	                <if test="mpType != null and mpType != ''">
+	                    AND MP.MP_TYPE = #{mpType}
+	                </if>
+	            </where>
+	            
+	            <!-- 정렬 조건 -->
+	            <choose>
+	                <when test="sortBy != null and sortBy != ''">
+	                    ORDER BY
+	                    <choose>
+	                        <when test="sortBy == 'memberName'">M.MEM_NAME</when>
+	                        <when test="sortBy == 'warnDate'">MP.MP_WARN_DATE</when>
+	                        <when test="sortBy == 'mpType'">MP.MP_TYPE</when>
+	                        <when test="sortBy == 'startedAt'">MP.MP_STARTED_AT</when>
+	                        <when test="sortBy == 'completeAt'">MP.MP_COMPLETE_AT</when>
+	                        <otherwise>MP.MP_WARN_DATE</otherwise>
+	                    </choose>
+	                    <if test="sortOrder == 'desc'">DESC</if>
+	                    <if test="sortOrder == 'asc' or sortOrder == null">ASC</if>
+	                </when>
+	                <otherwise>
+	                    ORDER BY MP.MP_WARN_DATE DESC
+	                </otherwise>
+	            </choose>
+	        ) B
+	        WHERE ROWNUM <![CDATA[<=]]> #{endNo}
+	    )
+	    WHERE RNUM <![CDATA[>=]]> #{startNo}
 	</select>
 
 	<select id="getAllMemberPenaltyList" resultType="int">
-		SELECT
-		COUNT(*)
-		FROM
-		MEMBER_PENALTY MP
-		JOIN MEMBER M ON MP.MEM_ID =
-		M.MEM_ID
-		<where>
-			MP.MP_ID IS NOT NULL
-			<if test="keyword != null and keyword != '' and status == 1">
-				AND (M.MEM_NAME LIKE '%' || #{keyword} || '%' OR
-				MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%')
-			</if>
-			<if test="keyword != null and keyword != '' and status == 2">
-				AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="keyword != null and keyword != '' and status == 3">
-				AND MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%'
-			</if>
-		</where>
+	    SELECT COUNT(*)
+	    FROM MEMBER_PENALTY MP
+	    JOIN MEMBER M ON MP.MEM_ID = M.MEM_ID
+	    <where>
+	        MP.MP_ID IS NOT NULL
+	        
+	        <!-- 키워드 검색 조건 -->
+	        <if test="keyword != null and keyword != '' and status == 1">
+	            AND (M.MEM_NAME LIKE '%' || #{keyword} || '%' OR
+	                 MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%')
+	        </if>
+	        <if test="keyword != null and keyword != '' and status == 2">
+	            AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
+	        </if>
+	        <if test="keyword != null and keyword != '' and status == 3">
+	            AND MP.MP_WARN_REASON LIKE '%' || #{keyword} || '%'
+	        </if>
+	        
+	        <!-- 제재 유형별 필터링 (새로 추가) -->
+	        <if test="mpType != null and mpType != ''">
+	            AND MP.MP_TYPE = #{mpType}
+	        </if>
+	    </where>
 	</select>
 
 	<select id="getMemIdByReport" parameterType="int"

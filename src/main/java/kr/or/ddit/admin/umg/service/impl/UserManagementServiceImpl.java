@@ -220,27 +220,33 @@ public class UserManagementServiceImpl implements UserManagementService {
 	}
 
 	@Override
-	public ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status) {
+	public ArticlePage<MemberPenaltyVO> getPenaltyList(int currentPage, int size, String keyword, String status, 
+	        String sortBy, String sortOrder, String mpType) {
 
-		int startNo = (currentPage - 1) * size + 1;
-		int endNo = currentPage * size;
+	    int startNo = (currentPage - 1) * size + 1;
+	    int endNo = currentPage * size;
 
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("keyword", keyword);
-		map.put("status", status);
-		map.put("currentPage", currentPage);
-		map.put("startNo", startNo);
-		map.put("endNo", endNo);
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    map.put("keyword", keyword);
+	    map.put("status", status);
+	    map.put("currentPage", currentPage);
+	    map.put("startNo", startNo);
+	    map.put("endNo", endNo);
+	    
+	    // 새로운 파라미터들 추가
+	    map.put("sortBy", sortBy);
+	    map.put("sortOrder", sortOrder);
+	    map.put("mpType", mpType);
 
-		List<MemberPenaltyVO> penaltyVOList = userManagementMapper.getPenaltyList(map);
+	    List<MemberPenaltyVO> penaltyVOList = userManagementMapper.getPenaltyList(map);
 
-		// 건수
-		int total = userManagementMapper.getAllMemberPenaltyList(map);
-		// 페이지 네이션
-		ArticlePage<MemberPenaltyVO> articlePage = new ArticlePage<MemberPenaltyVO>(total, currentPage, size,
-				penaltyVOList, keyword);
+	    // 건수
+	    int total = userManagementMapper.getAllMemberPenaltyList(map);
+	    // 페이지 네이션
+	    ArticlePage<MemberPenaltyVO> articlePage = new ArticlePage<MemberPenaltyVO>(total, currentPage, size,
+	            penaltyVOList, keyword);
 
-		return articlePage;
+	    return articlePage;
 	}
 
 	@Override
