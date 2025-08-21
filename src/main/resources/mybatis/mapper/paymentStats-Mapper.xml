@@ -49,16 +49,24 @@
         JOIN MEMBER_SUBSCRIPTION ms ON p.MS_ID = ms.MS_ID
         JOIN MEMBER m ON ms.MEM_ID = m.MEM_ID
         WHERE p.PAY_AMOUNT > 0
-          <if test="from != null and from != ''">AND p.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-          <if test="to != null and to != ''">AND p.PAY_DATE	<![CDATA[ < ]]>TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
-          <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+          <if test="startDate != null and startDate != ''">AND p.PAY_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')</if>
+          <if test="endDate != null and endDate != ''">AND p.PAY_DATE	<![CDATA[ < ]]>TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1</if>
+          <if test="gender != null and gender == 'male'">AND m.MEM_GEN = 'G11001'</if>
+          <if test="gender != null and gender == 'female'">AND m.MEM_GEN = 'G11002'</if>
+          <if test="ageGroup != null and ageGroup != '' and ageGroup == 'teen'">
+            AND m.MEM_BIRTH IS NOT NULL
+            AND TRUNC(MONTHS_BETWEEN(p.PAY_DATE, m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+          </if>
+          <if test="ageGroup != null and ageGroup != '' and ageGroup == 'youth'">
+            AND m.MEM_BIRTH IS NOT NULL
+            AND TRUNC(MONTHS_BETWEEN(p.PAY_DATE, m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+          </if>
         GROUP BY 
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(p.PAY_DATE, 'YYYY-MM')</when>
                 <otherwise>TO_CHAR(p.PAY_DATE, 'YYYY-MM-DD')</otherwise>
             </choose>
         ORDER BY "dt" ASC
-	   
     </select>
 	
 	<!-- 
@@ -76,9 +84,18 @@
         JOIN PAYMENT P ON P.MS_ID = MS.MS_ID
         JOIN MEMBER M ON M.MEM_ID = MS.MEM_ID
         WHERE 1=1
-            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-            <if test="to != null and to != ''">AND P.PAY_DATE <![CDATA[ < ]]> TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
-            <if test="gender != null and gender != '' and gender != 'ALL'">AND M.MEM_GEN = #{gender}</if>
+            <if test="startDate != null and startDate != ''">AND P.PAY_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')</if>
+            <if test="endDate != null and endDate != ''">AND P.PAY_DATE <![CDATA[ < ]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1</if>
+            <if test="gender != null and gender == 'male'">AND M.MEM_GEN = 'G11001'</if>
+            <if test="gender != null and gender == 'female'">AND M.MEM_GEN = 'G11002'</if>
+            <if test="ageGroup != null and ageGroup != '' and ageGroup == 'teen'">
+              AND M.MEM_BIRTH IS NOT NULL
+              AND TRUNC(MONTHS_BETWEEN(P.PAY_DATE, M.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+            </if>
+            <if test="ageGroup != null and ageGroup != '' and ageGroup == 'youth'">
+              AND M.MEM_BIRTH IS NOT NULL
+              AND TRUNC(MONTHS_BETWEEN(P.PAY_DATE, M.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+            </if>
         GROUP BY 
             <choose>
                 <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -88,7 +105,7 @@
     </select>
 	
 	 <!-- 
-	 // 상품별 인기 통계 (수정됨: 나이 조건 추가)
+	 // 상품별 인기 통계
 	public List<Map<String, Object>> selectProductPopularityStats(Map<String, Object> params);
 	  -->
 	<select id="selectProductPopularityStats" parameterType="map" resultType="map">
@@ -104,15 +121,17 @@
         JOIN SUBSCRIBE S ON S.SUB_ID = MS.SUB_ID
         JOIN MEMBER M ON M.MEM_ID = MS.MEM_ID
         WHERE 1=1
-            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-            <if test="to != null and to != ''">AND P.PAY_DATE <![CDATA[ < ]]> TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
-            <if test="gender != null and gender != '' and gender != 'ALL'">AND M.MEM_GEN = #{gender}</if>
-            <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+            <if test="startDate != null and startDate != ''">AND P.PAY_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')</if>
+            <if test="endDate != null and endDate != ''">AND P.PAY_DATE <![CDATA[ < ]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1</if>
+            <if test="gender != null and gender == 'male'">AND M.MEM_GEN = 'G11001'</if>
+            <if test="gender != null and gender == 'female'">AND M.MEM_GEN = 'G11002'</if>
+            <if test="ageGroup != null and ageGroup != '' and ageGroup == 'teen'">
               AND M.MEM_BIRTH IS NOT NULL
-              AND CASE
-                    WHEN FLOOR(MONTHS_BETWEEN(TRUNC(P.PAY_DATE), M.MEM_BIRTH)/12) BETWEEN 10 AND 19 THEN '청소년'
-                    ELSE '청년'
-                  END = #{ageBand}
+              AND TRUNC(MONTHS_BETWEEN(P.PAY_DATE, M.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+            </if>
+            <if test="ageGroup != null and ageGroup != '' and ageGroup == 'youth'">
+              AND M.MEM_BIRTH IS NOT NULL
+              AND TRUNC(MONTHS_BETWEEN(P.PAY_DATE, M.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
             </if>
         GROUP BY 
             <choose>
@@ -124,7 +143,7 @@
     </select>
 	
 	<!-- 
-	// AI 기능 이용 내역 (수정됨: 나이 구분 변경)
+	// AI 기능 이용 내역
 	public List<Map<String, Object>> selectAiServiceUsageStats(Map<String, Object> params);
 	 -->
 	<select id="selectAiServiceUsageStats" parameterType="map" resultType="map">
@@ -148,15 +167,17 @@
 	    WHERE 
 	        l.PL_TITLE IN ('이력서AI요청', '자기소개서AI요청', '모의면접AI요청')
 	        
-	        <if test="from != null and from != ''">AND l.PL_CREATED_AT >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	        <if test="to != null and to != ''">AND l.PL_CREATED_AT <![CDATA[ < ]]> TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
-	        <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
-	        <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	        <if test="startDate != null and startDate != ''">AND l.PL_CREATED_AT >= TO_DATE(#{startDate}, 'YYYY-MM-DD')</if>
+	        <if test="endDate != null and endDate != ''">AND l.PL_CREATED_AT <![CDATA[ < ]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1</if>
+	        <if test="gender != null and gender == 'male'">AND m.MEM_GEN = 'G11001'</if>
+	        <if test="gender != null and gender == 'female'">AND m.MEM_GEN = 'G11002'</if>
+	        <if test="ageGroup != null and ageGroup != '' and ageGroup == 'teen'">
 	          AND m.MEM_BIRTH IS NOT NULL
-	          AND CASE
-	                WHEN FLOOR(MONTHS_BETWEEN(TRUNC(l.PL_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 10 AND 19 THEN '청소년'
-	                ELSE '청년'
-	              END = #{ageBand}
+	          AND TRUNC(MONTHS_BETWEEN(l.PL_CREATED_AT, m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	        </if>
+	        <if test="ageGroup != null and ageGroup != '' and ageGroup == 'youth'">
+	          AND m.MEM_BIRTH IS NOT NULL
+	          AND TRUNC(MONTHS_BETWEEN(l.PL_CREATED_AT, m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
 	        </if>
 	        
 	    GROUP BY 
@@ -211,8 +232,8 @@
 	            COUNT(*) AS "newMemberCount"
 	        FROM MEMBER
 	        WHERE 1=1
-	            <if test="from != null and from != ''">AND CREATED_AT >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	            <if test="to != null and to != ''">AND CREATED_AT < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	            <if test="startDate != null and startDate != ''">AND CREATED_AT >= TO_DATE(#{startDate}, 'YYYY-MM-DD')</if>
+	            <if test="endDate != null and endDate != ''">AND CREATED_AT < TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1</if>
 	        GROUP BY 
 	            <choose>
 	                <when test="period == 'monthly'">TO_CHAR(CREATED_AT, 'YYYY-MM')</when>
@@ -235,8 +256,8 @@
 	                JOIN MEMBER_SUBSCRIPTION MS2 ON P2.MS_ID = MS2.MS_ID
 	                WHERE MS2.MEM_ID = MS.MEM_ID
 	            )
-	            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	            <if test="startDate != null and startDate != ''">AND P.PAY_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')</if>
+	            <if test="endDate != null and endDate != ''">AND P.PAY_DATE < TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1</if>
 	        GROUP BY
 	            <choose>
 	                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -257,8 +278,6 @@
 	    ]]>
 	</select>
 	
-	
-	
 	<!-- 
 	// 총 구독 결제 대비하여 신규 구독 결제 비율 - 대시보드용
 	public List<Map<String, Object>> selectNewRevenueRateStats();
@@ -274,8 +293,8 @@
 	            SUM(P.PAY_AMOUNT) AS "totalRevenue"
 	        FROM PAYMENT P
 	        WHERE 1=1
-	            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	            <if test="startDate != null and startDate != ''">AND P.PAY_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')</if>
+	            <if test="endDate != null and endDate != ''">AND P.PAY_DATE < TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1</if>
 	        GROUP BY 
 	            <choose>
 	                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -298,8 +317,8 @@
 	                JOIN MEMBER_SUBSCRIPTION MS2 ON P2.MS_ID = MS2.MS_ID
 	                WHERE MS2.MEM_ID = MS.MEM_ID
 	            )
-	            <if test="from != null and from != ''">AND P.PAY_DATE >= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-	            <if test="to != null and to != ''">AND P.PAY_DATE < TO_DATE(#{to}, 'YYYY-MM-DD') + 1</if>
+	            <if test="startDate != null and startDate != ''">AND P.PAY_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')</if>
+	            <if test="endDate != null and endDate != ''">AND P.PAY_DATE < TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1</if>
 	        GROUP BY
 	            <choose>
 	                <when test="period == 'monthly'">TO_CHAR(P.PAY_DATE, 'YYYY-MM')</when>
@@ -357,8 +376,6 @@
 	    FROM DUAL
 	    ]]>
 	</select>
-	
-	
 	
 	<!-- 
 	// 대시보드 하단 그래프 통계 (전체사용자 vs 구독자)
