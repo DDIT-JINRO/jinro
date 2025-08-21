@@ -376,6 +376,11 @@
   color: #4a5568;
 }
 
+.reply-action-wrapper {
+	display: flex;
+    align-items: center;
+}
+
 /* 대댓글 버튼 개선 */
 .reply-child-btn {
   border: none;
@@ -388,6 +393,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid rgba(120, 129, 245, 0.2);
+  margin-right: 16px;
 }
 
 .reply-child-btn:hover {
@@ -395,12 +401,6 @@
   color: #fff;
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(120, 129, 245, 0.3);
-}
-
-.child-count {
-  font-size: 13px;
-  color: #718096;
-  margin-left: 8px;
 }
 
 .closeReplyBtn {
@@ -499,6 +499,9 @@
 .etc-container {
   box-sizing: border-box;
   display: none;
+  position: absolute;
+  top: 65px;
+  right: 25px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -507,8 +510,6 @@
   background: #FFFFFF;
   border: 2px solid #E8ECEF;
   border-radius: 12px;
-  float: right;
-  clear: right;
   margin-top: -2px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
@@ -602,7 +603,8 @@
 /* 댓글 수정 관련 */
 .reply-modify-input {
   width: 80%;
-  height: 20px;
+  min-height: 60px;
+  height: auto;
   border-radius: 9px;
   border: 2.5px solid rgba(120, 129, 245, 0.3);
   color: #636363;
