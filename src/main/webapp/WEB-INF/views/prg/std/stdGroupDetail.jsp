@@ -52,10 +52,6 @@
 				<div class="author-meta">
 					<div class="profile-wrapper user-profile">
 						<img class="profile-img" src="<c:out value="${not empty stdBoardVO.fileProfileStr ? stdBoardVO.fileProfileStr : '/images/defaultProfileImg.png' }"/>" alt="프로필" />
-						<img class="badge-img" src="<c:out value="${not empty stdBoardVO.fileBadgeStr ? stdBoardVO.fileBadgeStr : '/images/defaultBorderImg.png' }"/>" alt="테두리" />
-						<c:if test="${stdBoardVO.fileSubStr != null }">
-							<img class="effect-img sparkle" src="${stdBoardVO.fileSubStr }" alt="테두리" />
-						</c:if>
 					</div>
 					<span class="author-nickname">${stdBoardVO.memNickname}</span>
 				</div>
@@ -144,10 +140,6 @@
 						<div class="reply-profile">
 							<div class="profile-wrapper user-profile">
 								<img class="profile-img" src="<c:out value="${not empty reply.fileProfileStr ? reply.fileProfileStr : '/images/defaultProfileImg.png' }"/>" alt="profile" />
-								<img class="badge-img" src="<c:out value="${not empty reply.fileBadgeStr ? reply.fileBadgeStr : '/images/defaultBorderImg.png' }"/>" alt="badge" />
-								<c:if test="${reply.fileSubStr != null }">
-									<img class="effect-img sparkle" src="${reply.fileSubStr }" alt="테두리" />
-								</c:if>
 							</div>
 							<div class="writer-info">
 								<div class="reply-nickname">${reply.memNickname}</div>
@@ -187,10 +179,6 @@
 								<div class="reply-profile">
 									<div class="profile-wrapper user-profile">
 										<img class="profile-img" src="<c:out value="${not empty child.fileProfileStr ? child.fileProfileStr : '/images/defaultProfileImg.png' }"/>" />
-										<img class="badge-img" src="<c:out value="${not empty child.fileBadgeStr ? child.fileBadgeStr : '/images/defaultBorderImg.png' }"/>" />
-										<c:if test="${reply.fileSubStr != null }">
-											<img class="effect-img sparkle" src="${reply.fileSubStr }" alt="테두리" />
-										</c:if>
 									</div>
 									<div class="writer-info">
 										<div class="reply-nickname">${child.memNickname}</div>

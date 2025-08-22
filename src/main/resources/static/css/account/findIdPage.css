@@ -117,6 +117,7 @@ button.disabled-btn {
 .public-wrapper-main {
 	display: flex;
 	justify-content: center;
+	box-shadow: none;
 }
 
 .findEmail-container {

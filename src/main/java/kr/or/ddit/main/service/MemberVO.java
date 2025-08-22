@@ -40,6 +40,7 @@ public class MemberVO {
 	
 	private List<ComCodeVO> interests;
 	private String subName;
+	private String subDetail;
 	private int remainingDays;
 	
 	private Date veriCreatedAt;

@@ -13,6 +13,7 @@
 		<result property="memBirth" column="MEM_BIRTH" />
 		<result property="memPoint" column="MEM_POINT" />
 		<result property="subName" column="SUB_NAME" />
+		<result property="subDetail" column="SUB_DETAIL" />
 		<result property="remainingDays" column="REMAINING_DAYS" />
 		<result property="veriCreatedAt" column="VERI_CREATED_AT" />
 		<result property="veriStatus" column="VERI_STATUS" />
@@ -48,6 +49,12 @@
 		  , A.MEM_BIRTH
 		  , A.MEM_POINT
 		  , S.SUB_NAME
+          , CASE S.SUB_NAME
+                WHEN 'BASIC' THEN SUBSTR(S.SUB_BENEFIT, 1, INSTR(S.SUB_BENEFIT, ',') - 1) || '.'
+                WHEN 'PLUS' THEN SUBSTR(S.SUB_BENEFIT, 1, INSTR(S.SUB_BENEFIT, ',') - 1) || '.'
+                WHEN 'PRO' THEN SUBSTR(S.SUB_BENEFIT, 1, INSTR(S.SUB_BENEFIT, ',') - 1) || '.'
+                ELSE '구독 중인 상품이 없습니다.'
+            END AS SUB_DETAIL
 		  , TRUNC(MS.SUB_END_DT) - TRUNC(SYSDATE) AS REMAINING_DAYS
 		  , B.VERI_CREATED_AT
 		  , B.VERI_STATUS

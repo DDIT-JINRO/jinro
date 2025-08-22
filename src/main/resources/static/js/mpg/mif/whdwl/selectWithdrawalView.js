@@ -11,10 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (successMessage) alert(successMessage);
         if (errorMessage) alert(errorMessage);
     }
-
     const withdrawalForm = document.querySelector(".withdrawal-form");
+	const passwordCheckMessage = document.getElementById("password-check-message");
 
     withdrawalForm.addEventListener("submit", (e) => {
+		
         e.preventDefault();
 
         const data = {
@@ -29,14 +30,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
-        }).then(response => {
+        }).then(async response => {
+			if (!response.ok) {
+			    const errorData = await response.json();
+                return await Promise.reject(errorData);
+			}
 			return response.json();
 		}).then(result => {
 			alert(result.message);
-		    window.location.href = "/logout"; 
+		    window.location.href = "/logout";
 		}).catch(error => {
 			console.error("회원 탈퇴 중 에러 발생 :", error);
-			alert("회원 탈퇴 처리 중 오류가 발생했습니다.");
+			const errorMessage = error.message || "회원 탈퇴 처리 중 오류가 발생했습니다.";
+			
+			if(!passwordCheckMessage.classList.contains("is-active")) {
+				passwordCheckMessage.classList.add("is-active");
+			}
+			
+			passwordCheckMessage.textContent = errorMessage;
 		})
     });
+	
+	document.getElementById("password").addEventListener("input", () => {
+		passwordCheckMessage.classList.remove("is-active");
+	})
 });

@@ -1,5 +1,6 @@
 package kr.or.ddit.mpg.mat.bmk.web;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.mpg.mat.bmk.service.BookMarkService;
@@ -45,25 +45,28 @@ public class BookMarkController {
 	
 	@GetMapping("/mat/bmk/selectBookMarkDetail.do")
 	public String selectBookMarkDetail (@ModelAttribute BookMarkVO bookMarkVO) {
-		
 		int bmTargetId = bookMarkVO.getBmTargetId();
 		String bmCategoryId = bookMarkVO.getBmCategoryId();
+		String bmTitle = URLEncoder.encode(bookMarkVO.getTitle());
 		
 		switch (bmCategoryId) {
 		case "G03001": {
-			return "redirect:/ertds/univ/uvsrch/selectDetail.do";
+			return "redirect:/ertds/univ/uvsrch/selectDetail.do?univId=" + bmTargetId;
 		}
 		case "G03002": {
-			return "redirect:/empt/enp/enterprisePosting.do";
+			return "redirect:/empt/enp/enterprisePosting.do?keyword=" + bmTitle;
 		}
 		case "G03003": {
-			return "redirect:/empt/ema/employmentAdvertisement.do";
+			return "redirect:/empt/ema/employmentAdvertisement.do?keyword=" + bmTitle;
 		}
 		case "G03004": {
-			return "redirect:/pse/cr/crl/selectCareerDetail.do";
+			return "redirect:/pse/cr/crl/selectCareerDetail.do?jobCode=" + bookMarkVO.getJobCode();
 		}
 		case "G03005": {
-			return "redirect:/cdp/rsm/rsmb/detail.do";
+			return "redirect:/cdp/rsm/rsmb/resumeBoardDetail.do?boardId=" + bmTargetId;
+		}
+		case "G03006": {
+			return "redirect:/ertds/univ/dpsrch/selectDetail.do?uddId=" + bmTargetId;
 		}
 		default:
 			return "mpg/mat/bmk/selectBookmarkList";
