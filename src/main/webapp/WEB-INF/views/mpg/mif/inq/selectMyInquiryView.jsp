@@ -101,31 +101,6 @@
 										<fmt:formatDate pattern="yyyy년 MM월 dd일" value="${member.memBirth}" />
 									</span>
 								</div>
-								<div class="info-item">
-									<label>포인트</label>
-									<span class="info-value point-value">${member.memPoint} 포인트</span>
-								</div>
-								<div class="info-item">
-									<label>학생 여부</label>
-									<c:choose>
-										<c:when test="${member.veriStatus == 'S05001'}">
-											<span class="status-badge status-badge--pending">신청 중</span>
-											<small class="status-date"> <fmt:formatDate pattern="(yyyy년 MM월 dd일)" value="${member.veriCreatedAt}" />
-											</small>
-										</c:when>
-										<c:when test="${member.veriStatus == 'S05002'}">
-											<span class="status-badge status-badge--verified">인증</span>
-										</c:when>
-										<c:when test="${member.veriStatus == 'S05003'}">
-											<span class="status-badge status-badge--rejected">반려</span>
-											<button type="button" id="reject-reason-btn" class="detail__action-button detail__action-button--secondary">반려 이유</button>
-										</c:when>
-										<c:otherwise>
-											<span class="status-badge status-badge--unverified">미인증</span>
-											<button type="button" id="auth-student" class="detail__action-button detail__action-button--auth">학생 인증</button>
-										</c:otherwise>
-									</c:choose>
-								</div>
 							</div>
 						</form>
 					</div>
@@ -169,80 +144,6 @@
 								<p class="plan-desc">${member.subDetail}</p>
 							</div>
 						</c:if>
-					</div>
-				</div>
-
-				<div class="profile-card tiers-info-card">
-					<div class="card-header">
-						<h3 class="card-title">커리어패스 등급 소개</h3>
-					</div>
-					<div class="tiers-table">
-						<div class="tiers-row is-header">
-							<div class="tier-cell feature-title"></div>
-							<div class="tier-cell">
-								💎&nbsp;DIAMOND <br> <small>5,000,000 P</small>
-							</div>
-							<div class="tier-cell">
-								🏆&nbsp;PLATINUM <br> <small>2,500,000 P</small>
-							</div>
-							<div class="tier-cell">
-								🥇&nbsp;GOLD <br> <small>500,000 P</small>
-							</div>
-							<div class="tier-cell">
-								🥈&nbsp;SILVER <br> <small>100,000 P</small>
-							</div>
-							<div class="tier-cell">
-								🥉&nbsp;BRONZE <br> <small>50,000 P</small>
-							</div>
-							<div class="tier-cell">
-								🌱&nbsp;SEED <br> <small>0 P</small>
-							</div>
-						</div>
-						<div class="tiers-row">
-							<div class="tier-cell feature-title">무제한 이용권</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">✔</div>
-						</div>
-						<div class="tiers-row">
-							<div class="tier-cell feature-title">전용 게시판</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-						</div>
-						<div class="tiers-row">
-							<div class="tier-cell feature-title">전용 서비스</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-						</div>
-						<div class="tiers-row">
-							<div class="tier-cell feature-title">광고 제거</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-						</div>
-						<div class="tiers-row">
-							<div class="tier-cell feature-title">전용 이벤트</div>
-							<div class="tier-cell">✔</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-							<div class="tier-cell">-</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -298,8 +199,8 @@
 							<c:set var="currentCat" value="${allKeyword.ccEtc}"/>					
 							
 							<c:if test="${status.last or currentCat != interetsKeywordList[status.index + 1].ccEtc}">
+									</div>
 								</div>
-							</div>
 							</c:if>
 						</c:forEach>
 					</div>
@@ -317,19 +218,6 @@
 				</div>
 				<button type="submit" class="detail__action-button">수정</button>
 			</form>
-		</div>
-	</div>
-</div>
-
-<div class="modal-overlay" id="student-modal-overlay">
-	<div class="modal-content">
-		<button class="modal-close-btn" type="button">&times;</button>
-		<h3>학생 인증 신청</h3>
-		<p>학생 회원 인증을 위하여 증빙서류를 첨부해주세요.</p>
-		<div class="modal-form">
-			<input type="file" id="student-auth-input" class="form-input">
-			<span class="modal-error-msg" id="modal-error-msg"></span>
-			<button class="detail__action-button" id="student-confirm-btn" type="button">인증</button>
 		</div>
 	</div>
 </div>

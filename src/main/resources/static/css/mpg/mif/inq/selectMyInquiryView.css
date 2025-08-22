@@ -1,5 +1,5 @@
 body.scroll-lock {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 /* 카드 레이아웃 */
@@ -64,7 +64,7 @@ body.scroll-lock {
 .profile-photo-card {
 	flex-basis: 240px;
 	flex-grow: 0;
-	gap: 32px;
+	gap: 20px;
 	align-items: center;
 }
 
@@ -92,6 +92,7 @@ body.scroll-lock {
 	grid-template-columns: 1fr 1fr;
 	gap: 25px;
 	padding: 24px;
+	height: 100%;
 }
 
 .info-item {
@@ -114,57 +115,6 @@ body.scroll-lock {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-}
-
-.point-value {
-	background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-	color: #92400e;
-	padding: 4px 12px;
-	border-radius: 8px;
-	font-weight: 600;
-	border: 1px solid rgba(245, 158, 11, 0.2);
-}
-
-/* 상태 뱃지 */
-.status-badge {
-	display: inline-flex;
-	align-items: center;
-	padding: 4px 12px;
-	border-radius: 12px;
-	font-size: 12px;
-	font-weight: 600;
-	text-transform: uppercase;
-}
-
-.status-badge--verified {
-	background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-	color: #155724;
-	border: 1px solid #b8daff;
-}
-
-.status-badge--pending {
-	background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-	color: #856404;
-	border: 1px solid #ffeaa7;
-}
-
-.status-badge--rejected {
-	background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-	color: #721c24;
-	border: 1px solid #f5c6cb;
-}
-
-.status-badge--unverified {
-	background: linear-gradient(135deg, #e2e3e5 0%, #d6d8db 100%);
-	color: #383d41;
-	border: 1px solid #d6d8db;
-}
-
-.status-date {
-	color: #6b7280;
-	font-weight: 500;
-	font-size: 0.85em;
-	margin-left: 8px;
 }
 
 /* 3. 나의 관심 분야 카드 */
@@ -243,92 +193,22 @@ body.scroll-lock {
 	margin: 0;
 }
 
-/* 5. 커리어패스 등급 소개 카드 */
-.tiers-info-card {
-	flex-basis: 100%;
-}
-
-.tiers-table {
-	border: 2px solid #e5e7eb;
-	border-radius: 12px;
-	overflow: hidden;
-	font-size: 0.9rem;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.tiers-row {
-	display: flex;
-	border-bottom: 1px solid #e5e7eb;
-	transition: background-color 0.3s ease;
-}
-
-.tiers-row:last-child {
-	border-bottom: none;
-}
-
-.tiers-row.is-header {
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-	color: white;
-	font-weight: 600;
-}
-
-.tiers-row:not(.is-header):hover {
-	background-color: #f8fafc;
-}
-
-.tier-cell {
-	flex: 1;
-	padding: 16px 12px;
-	text-align: center;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-left: 1px solid #e5e7eb;
-	flex-direction: column;
-}
-
-.tier-cell:first-child {
-	border-left: none;
-}
-
-.tier-cell small {
-	color: rgba(255, 255, 255, 0.8);
-	font-weight: 500;
-}
-
-.tiers-row:not(.is-header) .tier-cell small {
-	color: #6b7280;
-}
-
-.tier-cell.feature-title {
-	flex: 1.8;
-	justify-content: flex-start;
-	font-weight: 600;
-	color: #374151;
-	background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-}
-
-.is-header .tier-cell.feature-title {
-	color: white;
-	background: none;
-}
-
-/* 버튼 스타일 - userCommon.css detail__action-button 확장 */
+/* 버튼 스타일 */
 .detail__action-button {
-    padding: 8px 20px;
-    border: none;
-    border-radius: 8px;
-    background-color: #7881f5;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+	padding: 8px 20px;
+	border: none;
+	border-radius: 8px;
+	background-color: #7881f5;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.3s ease;
 }
 
 .detail__action-button:hover {
 	transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .detail__action-button:disabled {
@@ -379,22 +259,6 @@ body.scroll-lock {
 
 .profile-update {
 	margin-left: auto;
-}
-
-/* 구독상태효과 */
-.sparkle {
-	animation: sparkle 2s infinite ease-in-out;
-}
-
-@keyframes sparkle {
-	0%, 100% {
-		opacity: 0.4;
-		transform: scale(1) rotate(0deg);
-	}
-	50% {
-		opacity: 1;
-		transform: scale(1.05) rotate(5deg);
-	}
 }
 
 /* 모달 스타일 */
@@ -529,15 +393,15 @@ body.scroll-lock {
 
 .interest-modal__keyword-group {
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 }
 
 .interest-modal__keyword-title {
-    text-align: left;
-    padding-bottom: 7px;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #ccc;
-    font-weight: 600;
+	text-align: left;
+	padding-bottom: 7px;
+	margin-bottom: 15px;
+	border-bottom: 2px solid #ccc;
+	font-weight: 600;
 }
 
 .interest-modal__keyword-items {
@@ -639,9 +503,7 @@ body.scroll-lock {
 		gap: 20px;
 		padding: 0px;
 	}
-	.form-input,
-	.info-item label,
-	.info-value {
+	.form-input, .info-item label, .info-value {
 		font-size: 0.8rem;
 	}
 	.info-item label {
@@ -659,25 +521,6 @@ body.scroll-lock {
 		width: auto;
 		font-size: 12px;
 		padding: 6px 12px;
-	}
-	.tiers-info-card {
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
-	}
-	
-	.tiers-table {
-		min-width: 800px; /* 테이블 최소 너비 강제 */
-	}
-	
-	.tier-cell {
-		padding: 12px 8px;
-		font-size: 0.8rem;
-		white-space: nowrap; /* 텍스트 줄바꿈 방지 */
-	}
-	
-	.tier-cell.feature-title {
-		min-width: 120px;
-		white-space: normal; /* 기능 제목은 줄바꿈 허용 */
 	}
 	.modal-content {
 		margin: 20px;

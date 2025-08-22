@@ -22,10 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	const moveSubBtn = document.querySelector("#move-sub-btn");
-	moveSubBtn.addEventListener("click", () => {
-		location.href = "/mpg/pay/selectPaymentView.do";
-	});
-
+	if(moveSubBtn) {
+		moveSubBtn.addEventListener("click", () => {
+			location.href = "/mpg/pay/selectPaymentView.do";
+		});
+	}
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -275,80 +276,6 @@ document.addEventListener('DOMContentLoaded', function () {
 				alert("관심사 최대 5개 까지만 선택 가능합니다.");
 				event.target.checked = false;
 			}
-		});
-	});
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-	const studentAuthBtn = document.querySelector("#auth-student");
-
-	const modalOverlay = document.querySelector('#student-modal-overlay');
-	const closeModalBtn = modalOverlay.querySelector('.modal-close-btn');
-	
-	const studentAuthInput = document.querySelector("#student-auth-input");
-	const studentComfirmBtn = document.querySelector("#student-confirm-btn");
-	const errorMsg = document.querySelector('#modal-error-msg');
-
-	const openModal = () => {
-		document.body.classList.add('scroll-lock');
-		modalOverlay.classList.add('show');
-	}
-
-	const closeModal = () => {
-		document.body.classList.remove('scroll-lock');
-		modalOverlay.classList.remove('show');
-		errorMsg.textContent = '';
-	};
-
-	studentAuthBtn.addEventListener('click', (e) => {
-		e.preventDefault();
-		openModal();
-	})
-
-	closeModalBtn.addEventListener('click', closeModal);
-
-	modalOverlay.addEventListener('click', function (e) {
-		if (e.target === modalOverlay) {
-			closeModal();
-		}
-	});
-
-	studentComfirmBtn.addEventListener("click", () => {
-		const files = studentAuthInput.files;
-
-		if (files.length === 0) {
-			alert("파일이 선택되지 않았습니다.");
-			return;
-		}
-
-		const selectedFile = files[0];
-
-		if (selectedFile.type !== "image/jpeg" && selectedFile.type !== "image/png" && selectedFile.type !== "application/pdf") {
-			alert("파일은 png, jpg 또는 pdf 형식만 가능합니다.");
-			return;
-		}
-
-		let formData = new FormData();
-		formData.append("authFile", selectedFile);
-
-		fetch("insertStudentAuth.do", {
-			method: "POST",
-			body: formData
-		}).then(response => {
-			return response.json();
-		}).then(result => {
-			if (result.status === "success") {
-				alert(result.message);
-				closeModal();
-				location.reload();
-			} else {
-				alert(result.message || "학생 인증 신청에 실패했습니다.");
-				closeModal();
-			}
-		})
-		.catch(error => {
-			console.error("학생 인증 신청 중 에러 발생 : ", error);
-			alert("신청 중 오류가 발생했습니다.");
 		});
 	});
 });
