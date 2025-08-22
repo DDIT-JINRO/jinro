@@ -1,16 +1,19 @@
 package kr.or.ddit.you.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.ddit.you.service.YoutubeService;
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@RestController
 @Slf4j
 public class YoutubeApiController {
 
@@ -20,26 +23,25 @@ public class YoutubeApiController {
 	@Value("${DEV.YOUTUBE.API_KEY}")
 	private String API_KEY;
 
-	@GetMapping("/main/youtubeJsp")
-	public String youtube(@AuthenticationPrincipal String memId, Model model) {	
+	@GetMapping("/main/youtube")
+	public Map<String, Object> youtube(@AuthenticationPrincipal String memId, Model model) {	
 		log.info(memId);	
 		
 		// 채널 검색 ID
-		String channelId = "UCFCtZJTuJhE18k8IXwmXTYQ";
+		String channelId = "UC7veJl4E23uPDXoVu-0qYAA";
 		// 키워드
 		String result ="";
+		Map<String, Object> map= new HashMap<String, Object>();
 		
 		if(!memId.equals("anonymousUser")) {
-			log.info("서비스 진행");
-			result  = service.getKeyword(memId)+"적성";
-			log.info("result : "+result);
+			map = service.getKeyword(memId);
+			
 		}else {
-			result ="적성|진로";
+			result ="직업";
+			map.put("RESULT",result);
 		}
-		
-		model.addAttribute("result", result);
-		model.addAttribute("channelId", channelId);
-		
-		return "you/youtube";
+		map.put("channelId", channelId);
+		map.put("apikey", API_KEY);
+		return map;
 	}
 }

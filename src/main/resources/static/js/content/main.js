@@ -76,6 +76,13 @@ function resetSlideTimer() {
     resumeSlide();
 }
 
+const slideColors = [
+    '#CCDCFE', 
+    '#FFF4CC', 
+    '#FFE5E5', 
+
+];
+const banner = document.querySelector('.main-banner');
 // --- 슬라이드 이동 함수 ---
 function showSlide(index) {
     slidesContainer.style.transition = "transform 0.5s ease-in-out";
@@ -88,6 +95,10 @@ function showSlide(index) {
     if (dotIndex < 0) dotIndex = totalSlides - 1;
     if (dotIndex >= totalSlides) dotIndex = 0;
     if (dots[dotIndex]) dots[dotIndex].classList.add("active");
+	
+	if (slideColors[dotIndex]) {
+	       banner.style.backgroundColor = slideColors[dotIndex];
+	}
 }
 
 // --- transition 끝나면 클론 보정 ---
@@ -350,3 +361,97 @@ const fn_checkLoginBeforeAI = () =>{
 		})
 	})
 }
+
+
+// 유튜브
+async function yotubeInMain() {
+	let channelId = "";
+	let result = "";
+	let apiKey = "";
+	let jobCode = "";
+	let jobName = "";
+	try {
+		await axios.get("/main/youtube")
+			.then(response => {
+
+				channelId = response.data.channelId;
+				result = response.data.RESULT;
+				apiKey = response.data.apikey;
+				jobCode = response.data.JOBCODE;
+				jobName = response.data.JOB;
+				if(result != '직업' && jobCode != null){
+					document.getElementById("goToTestJobName").innerText= jobName;					
+					document.getElementById("getKeyword").style.display = "flex";
+					document.getElementById("nonKeyword").style.display = "none";
+					let btn = document.getElementById("getKeywordBtn");
+					btn.value=jobCode;
+				}else{
+					document.getElementById("getKeyword").style.display = "none";
+					document.getElementById("nonKeyword").style.display = "flex";
+				}
+				
+				
+			});
+		await axios.get('https://youtube.googleapis.com/youtube/v3/search', {
+			params: {
+				"part": "snippet",
+				"maxResults": 4,
+				"channelId": channelId,
+				"q": result,
+				type: "video",
+				"regionCode": "kr",
+				"key": apiKey
+			}
+		})
+			.then(response => {
+				
+				let html = "";
+
+				const arr = response.data.items;
+
+				arr.forEach(item => {
+					let id = item.id.videoId;			
+					let title = item.snippet.title;
+					
+					if(title.length>22){
+						if (title.indexOf("(") !== -1) {
+						    title = title.substring(0, title.indexOf("(")).trim();
+						} else if (title.indexOf("&quot;") !== -1) {
+						    title = title.substring(0, title.indexOf("&quot;")).trim();
+						}
+						title=textLengthOverCut(title, 22, "...");	
+					}
+				
+					html += `
+						<div class="content-card">
+							<p style ="margin-bottom:16px; font-size: 14px; line-height: 1.25; color: #1f2d3d; font-weight: 600;">${title}</p>			
+							<iframe width="300px" height="215px"
+						    	src="https://www.youtube.com/embed/${id}"
+						    	frameborder="0"
+						    	allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						    	allowfullscreen>
+							</iframe>
+						</div>
+					`;
+					document.querySelector(".content-showcase__list").innerHTML = html;
+				})
+			});
+	} catch (err) {
+		console.log("error : ", err);
+	}
+}
+
+function textLengthOverCut(txt, len, lastTxt) {
+	if (txt.length > len) {
+		txt = txt.substr(0, len) + lastTxt;
+	}
+	return txt;
+}
+
+// 임시로 주석처리 중
+// yotubeInMain();
+
+getKeywordBtn.addEventListener("click", function() {
+    const jobCode = this.value;
+    location.href = `/pse/cr/crl/selectCareerDetail.do?jobCode=${jobCode}`;
+});
