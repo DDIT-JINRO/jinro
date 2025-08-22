@@ -84,7 +84,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
-	white-space: pre-wrap;
 	font-family: 'Noto Sans KR', sans-serif;
 	font-size: 14px;
 	line-height: 1.35;
@@ -92,8 +91,8 @@
 
 /* 불러온 자소서 질문/답변 블록 스타일 */
 .qa-block {
-	padding-bottom: 1px; /* 기존보다 줄임 */
-	margin-bottom: 2px; /* 추가: 블록 간 간격 */
+	padding-bottom: 8px; /* 기존보다 줄임 */
+	margin-bottom: 20px; /* 추가: 블록 간 간격 */
 	border-bottom: 1px solid #f3f4f6;
 }
 
@@ -118,22 +117,28 @@
 	font-size: 15px;
 	font-weight: 600;
 	color: #374151;
-	margin-bottom: 8px;
+	margin-bottom: 16px;
+	line-height: 1.8;
+	
 }
 
 .answer-block p {
-	margin: 0 0 2px 0;
-	line-height: 1.4;
+	line-height: 1.8;
 	color: #4b5563;
 }
 
 .char-count {
-	margin-top: 0;
-	margin-bottom: 0 !important;
+	margin-top: 16px;
+	margin-bottom: 16px;
 	padding-bottom: 0 !important;
 	font-size: 12px;
 	color: #9ca3af;
 	text-align: right;
+}
+
+.feedback-section {
+	line-height: 1.8;
+	margin-bottom: 12px;
 }
 
 /* 버튼 그룹 */
@@ -318,10 +323,5 @@
 	min-height: auto; /* 기존 100px 제거하여 불필요한 높이 제거 */
 	padding: 0; /* 패딩도 제거 */
 	height: auto;
-}
-
-.char-count {
-	margin-bottom: 0 !important; /* 강제 여백 제거 */
-	padding-bottom: 0 !important;
 }
 

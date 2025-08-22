@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					data.questions.forEach((qvo, index) => {
 						const cvo = originalData.contents[index];
 						questionsHtml += `
-                    <div class="qa-block" data-index="${index}" onclick="displayFeedback(${index}, this)">
+                    <div class="qa-block" data-index="${index}">
                         <div class="question-block">
                             <span class="question-number">${index + 1}.</span>
                             <span class="question-text">${qvo.siqContent}</span>
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="answer-block">
                             <p>${cvo.sicContent}</p>
                             <div class="char-count">
-                                글자 수: <span>${cvo.sicContent.length}</span> / 2000
+                                글자 수 : <span>${cvo.sicContent.length}</span> / 2000
                             </div>
                         </div>
                     </div>
