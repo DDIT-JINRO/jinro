@@ -24,8 +24,6 @@ public class AdminMoveController {
 	@GetMapping("/adminMoveController.do")
 	public String movePage(@RequestParam String target) {
 
-		log.info("movePage : "+target);
-
 		return "admin/"+target;
 	}
 
