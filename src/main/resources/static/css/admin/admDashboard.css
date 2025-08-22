@@ -48,6 +48,10 @@ to {
 	animation: slideInFromTop 0.5s ease-out;
 }
 
+.space-between {
+	justify-content: space-between;
+}
+
 /********************공통 부분 *********************/
 .overflow-wrap {
 	overflow-wrap: break-word;
