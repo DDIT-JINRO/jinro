@@ -20,11 +20,21 @@ public class InterviewReviewVO {
 
 	private String targetName;
 	private String memNickname;
+	private String memName;
+	
+	private Date veriCreatedAt;
+	private Long fileGroupId;
+	private String veriReason;
+	
+	private String savePath;
+	private String fileOrgName;
 	
 	// 필터조건
 	private String keyword;
 	private String status;
-
+	private String sortBy;
+	private String order = "DESC";
+	
 	// 페이징
 	private int currentPage = 1;
 	private int size = 5;

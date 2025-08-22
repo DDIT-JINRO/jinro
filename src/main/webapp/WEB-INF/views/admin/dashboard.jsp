@@ -10,6 +10,7 @@
 <body>
 	<!-- 메인 콘텐츠 영역 -->
 	<div class="main-content">
+	<div class="admin-logoutBtn" id="admin-logout">로그아웃</div>
 		<div id="content">
 			<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">대시 보드</h2>
 			<div class="dashboard-1 overflow-wrap">

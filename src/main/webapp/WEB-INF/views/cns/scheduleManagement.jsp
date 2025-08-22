@@ -16,6 +16,7 @@
 
 	<!-- 메인 콘텐츠 영역 -->
 	<div class="main-content">
+		<div class="cns-logoutBtn" id="cns-logout">로그아웃</div>
 		<div id="content">
 			<h3>상담 스케줄 관리</h3>
 			<div class="template-container">

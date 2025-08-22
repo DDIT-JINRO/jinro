@@ -214,11 +214,15 @@
 	        
 	        -- 해당 UDD_ID의 전국 평균 취업률 (예: "85.6")
 	        (SELECT ROUND(AVG(
-	            CASE 
-	                WHEN UD_EMP_RATE IS NOT NULL 
-	                THEN TO_NUMBER(UD_EMP_RATE)
-	            END
-	        ), 1)
+			   CASE 
+			     WHEN UD_EMP_RATE IS NOT NULL
+			          AND TRIM(UD_EMP_RATE) IS NOT NULL
+			          AND LENGTH(TRIM(UD_EMP_RATE)) > 0
+			          AND REGEXP_LIKE(TRIM(REGEXP_REPLACE(UD_EMP_RATE, '%|,|\s', '')), '^[0-9]*\.?[0-9]+$')
+			          AND TO_NUMBER(TRIM(REGEXP_REPLACE(UD_EMP_RATE, '%|,|\s', ''))) >= 0
+			     THEN TO_NUMBER(TRIM(REGEXP_REPLACE(UD_EMP_RATE, '%|,|\s', '')))
+			   END
+			 ), 1)
 	         FROM UNIV_DEPT 
 	         WHERE UDD_ID = UD.UDD_ID 
 	           AND UD_EMP_RATE IS NOT NULL) AS AVG_EMP_RATE

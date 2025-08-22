@@ -81,4 +81,160 @@
 		    A.CP_ID = #{cpId}
 	</select>
 	
+	<select id="selectReviewList" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO" resultType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+		SELECT
+		    IR.IR_ID
+		    , IR.MEM_ID
+		    , IR.IR_TYPE
+		    , IR.TARGET_ID
+		    , IR.IR_CONTENT
+		    , IR.IR_CREATED_AT
+		    , IR.IR_MOD_AT
+		    , IR.IR_RATING
+		    , IR.IR_APPLICATION
+		    , IR.IR_INTERVIEW_AT
+		    , IR.IR_STATUS
+		    , CASE IR_TYPE
+		        WHEN 'G02001' THEN U.UNIV_NAME
+		        WHEN 'G02002' THEN C.CP_NAME
+		    END AS TARGET_NAME
+		    , M.MEM_NAME AS MEM_NAME
+		    , V.VERI_CREATED_AT
+		    , V.FILE_GROUP_ID
+		    , V.VERI_REASON
+		FROM
+		    INTERVIEW_REVIEW IR
+		    JOIN MEMBER M ON IR.MEM_ID = M.MEM_ID
+		    LEFT JOIN COMPANY C ON IR.TARGET_ID = C.CP_ID
+		    LEFT JOIN UNIVERSITY U ON IR.TARGET_ID = U.UNIV_ID
+		    LEFT JOIN VERIFICATION V ON IR.IR_ID = V.VERI_ID
+		WHERE
+			1 = 1
+		    <if test="keyword != null and keyword != ''">
+			    <choose>
+			        <when test = "status == 'target'">
+						AND TARGET_NAME LIKE '%' || #{keyword} || '%'
+			        </when>
+			        <when test = "status == 'writer'">
+						AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
+			        </when>
+			        <when test = "status == 'content'">
+						AND IR.IR_CONTENT LIKE '%' || #{keyword} || '%'
+			        </when>
+			        <otherwise>
+			        </otherwise>
+			    </choose>
+		    </if>
+		ORDER BY
+			<choose>
+				<when test="sortBy != null and sortBy != ''">
+					${sortBy} ${order}
+				</when>
+				<otherwise>
+					IR_ID ${order}
+				</otherwise>
+			</choose>
+		OFFSET #{startRow} - 1 ROWS FETCH NEXT #{endRow} - #{startRow} + 1 ROWS ONLY
+	</select>
+	
+	<select id="selectReviewListTotal" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO" resultType="int">
+		SELECT
+		    COUNT(*)
+		FROM
+		    INTERVIEW_REVIEW IR
+		    JOIN MEMBER M ON IR.MEM_ID = M.MEM_ID
+		    LEFT JOIN COMPANY C ON IR.TARGET_ID = C.CP_ID
+		    LEFT JOIN UNIVERSITY U ON IR.TARGET_ID = U.UNIV_ID
+		    LEFT JOIN VERIFICATION V ON IR.IR_ID = V.VERI_ID
+		WHERE
+			1 = 1
+		    <if test="keyword != null and keyword != ''">
+			    <choose>
+			        <when test = "status == 'target'">
+						AND TARGET_NAME LIKE '%' || #{keyword} || '%'
+			        </when>
+			        <when test = "status == 'writer'">
+						AND M.MEM_NAME LIKE '%' || #{keyword} || '%'
+			        </when>
+			        <when test = "status == 'content'">
+						AND IR.IR_CONTENT LIKE '%' || #{keyword} || '%'
+			        </when>
+			        <otherwise>
+						AND (
+							TITLE LIKE '%' || #{keyword} || '%'
+								OR CONTENT_1 LIKE '%' || #{keyword} || '%'
+								OR CONTENT_2 LIKE '%' || #{keyword} || '%'
+						)
+			        </otherwise>
+			    </choose>
+		    </if>
+	</select>
+	
+	<select id="selectIrStatusList" resultType="map">
+		SELECT
+		    CC_ID
+		    , CC_NAME
+		FROM
+		    COM_CODE
+		WHERE
+		    CL_CODE = 'S06'
+	</select>
+	
+	<select id="selectReviewDetail" parameterType="String" resultType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+		SELECT
+		    IR.IR_ID
+		    , IR.MEM_ID
+		    , IR.IR_TYPE
+		    , IR.TARGET_ID
+		    , IR.IR_CONTENT
+		    , IR.IR_CREATED_AT
+		    , IR.IR_MOD_AT
+		    , IR.IR_RATING
+		    , IR.IR_APPLICATION
+		    , IR.IR_INTERVIEW_AT
+		    , IR.IR_STATUS
+		    , CASE IR_TYPE
+		        WHEN 'G02001' THEN U.UNIV_NAME
+		        WHEN 'G02002' THEN C.CP_NAME
+		    END AS TARGET_NAME
+		    , M.MEM_NAME AS MEM_NAME
+		    , V.VERI_CREATED_AT
+		    , V.FILE_GROUP_ID
+		    , V.VERI_REASON
+		FROM
+		    INTERVIEW_REVIEW IR
+		    JOIN MEMBER M ON IR.MEM_ID = M.MEM_ID
+		    LEFT JOIN COMPANY C ON IR.TARGET_ID = C.CP_ID
+		    LEFT JOIN UNIVERSITY U ON IR.TARGET_ID = U.UNIV_ID
+		    LEFT JOIN VERIFICATION V ON IR.IR_ID = V.VERI_ID
+		WHERE
+			IR_ID = #{irId}
+	</select>
+
+	<update id="updateInterviewReviewStatus" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+	    UPDATE INTERVIEW_REVIEW
+	    SET
+	        IR_STATUS = #{irStatus}
+	    WHERE
+	        IR_ID = #{irId}
+	</update>
+	
+	<update id="updateVerification" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+	    UPDATE VERIFICATION
+	    <set>
+	        VERI_REASON = #{veriReason},
+	        VERI_STATUS = #{irStatus},
+	        VERI_CATEGORY = 
+	        <choose>
+	            <when test="irType == 'G02002'">
+	                'G38001'
+	            </when>
+	            <when test="irType == 'G02001'">
+	                'G38002'
+	            </when>
+	        </choose>
+	    </set>
+	    WHERE
+	        VERI_ID = #{irId}
+	</update>
 </mapper>

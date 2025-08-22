@@ -303,7 +303,6 @@ function updateLocalTime() {
 	if (timeSection) {
 		timeSection.textContent = timeString;
 	}
-
 }
 
 function animateNumberChange(elementId, newValue) {
@@ -343,6 +342,10 @@ function getRateStatus(status) {
 	}
 	return { symbol, className };
 }
+
+document.getElementById('admin-logout').addEventListener('click', function() {
+	location.href = '/logoutProcess';
+});
 
 // 1초(1000밀리초)마다 updateLocalTime 함수를 실행하여 시간을 갱신
 setInterval(updateLocalTime, 1000);

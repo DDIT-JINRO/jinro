@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				<li>
 					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=cmg/activityManagement">대외활동 관리</a>
 				</li>
+				<li>
+					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=cmg/reviewManagement">후기 관리</a>
+				</li>
 			</ul>
 		</li>
 
