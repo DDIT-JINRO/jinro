@@ -354,7 +354,7 @@ function contentUsageStatistics() {
 						plugins: {
 							legend: {
 								display: true,
-								position: 'top',
+								position: 'bottom',
 							},
 							title: {
 								display: true,
@@ -512,7 +512,7 @@ function contentUsageStatistics() {
 						plugins: {
 							legend: {
 								display: true,
-								position: 'top',
+								position: 'bottom',
 							},
 							title: {
 								display: true,
@@ -696,9 +696,19 @@ function contentUsageStatistics() {
 						datasets: [{
 							label: '북마크 수',
 							data: counts,
-							// 이 부분의 색상을 보라색 계열로 변경했습니다.
-							backgroundColor: 'rgba(153, 102, 255, 0.4)',
-							borderColor: 'rgba(153, 102, 255, 0.7)',
+
+							backgroundColor: [
+								'rgba(255, 99, 132, 0.8)',
+								'rgba(54, 162, 235, 0.8)',
+								'rgba(255, 205, 86, 0.8)',
+								'rgba(75, 192, 192, 0.8)',
+								'rgba(153, 102, 255, 0.8)'],
+							borderColor: [
+								'rgba(255, 99, 132, 1)',
+								'rgba(54, 162, 235, 1)',
+								'rgba(255, 205, 86, 1)',
+								'rgba(75, 192, 192, 1)',
+								'rgba(153, 102, 255, 1)'],
 							borderWidth: 1,
 							borderRadius: 4,
 							barPercentage: 0.4,
