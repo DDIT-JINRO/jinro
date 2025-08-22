@@ -46,6 +46,11 @@ public class UniversitySearchController {
 			universityVO.setSize(size);
 		if (universityVO != null && universityVO.getCurrentPage() == 0)
 			universityVO.setCurrentPage(currentPage);
+		
+		if (principal != null && !principal.getName().equals("anonymousUser")) {
+			int memId = Integer.parseInt(principal.getName());
+			universityVO.setMemId(memId);
+		}
 
 		List<UniversityVO> list = this.universityService.selectUniversityList(universityVO);
 		int totalCount = this.universityService.selectUniversityTotalCount(universityVO);

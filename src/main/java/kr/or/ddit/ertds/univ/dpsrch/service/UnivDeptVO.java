@@ -17,7 +17,8 @@ public class UnivDeptVO {
 	private String admissionRate;
 	private String empRate;
 	private String avgSalary;
-
+	private int memId;
+	
 	private String keyword;
 	private List<String> lClassIds; // 대학 위치 선택
 

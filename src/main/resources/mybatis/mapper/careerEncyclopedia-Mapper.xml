@@ -131,7 +131,7 @@
 		                    </foreach>
 		                </if>
 		                ORDER BY
-		                    JOB_SATIS DESC, JOB_NAME ASC
+		                    IS_BOOKMARK,JOB_SATIS DESC, JOB_NAME ASC
 		            ) B
 	            WHERE ROWNUM <![CDATA[<=]]> #{endRow} 
 	        )

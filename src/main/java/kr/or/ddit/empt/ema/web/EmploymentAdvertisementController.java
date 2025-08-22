@@ -40,6 +40,12 @@ public class EmploymentAdvertisementController {
 	public String emplymentAdvertisementList(@ModelAttribute HireVO hireVO, Model model, Principal principal) {
 
 		int total = employmentAdvertisementService.selectFilteredHireTotalCount(hireVO);
+		
+		if (principal != null && !principal.getName().equals("anonymousUser")) {
+			int memId = Integer.parseInt(principal.getName());
+			hireVO.setMemId(memId);
+		}
+		
 		// 실제 검색된 hire
 		List<HireVO> hireVOList = employmentAdvertisementService.selectFilteredHireList(hireVO);
 

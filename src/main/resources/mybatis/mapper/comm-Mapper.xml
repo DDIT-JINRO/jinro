@@ -106,7 +106,7 @@
 					AND B.BOARD_CONTENT LIKE '%'||#{keyword}||'%'
 				</if>
 				ORDER BY
-					B.BOARD_CREATED_AT DESC
+					IS_BOOKMARK ,B.BOARD_CREATED_AT DESC
 			) C
 			WHERE ROWNUM &lt;= #{endNo}
 		)
