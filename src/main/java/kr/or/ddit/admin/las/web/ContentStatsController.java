@@ -20,6 +20,27 @@ public class ContentStatsController {
 
 	@Autowired
 	private ContentStatsService contentStatsService;
+	
+	// 상단 증감 내용들
+	@GetMapping("/daily-summary")
+	public Map<String, Object> getDailySummary() {
+	    return contentStatsService.getDailySummary();
+	}
+	
+	// 로드맵 진행단계별 분포 통계
+	@GetMapping("/roadmap/step-distribution")
+	public Map<String, Object> getRoadmapStepDistribution() {
+	    return contentStatsService.getRoadmapStepDistribution();
+	}
+	
+	/**
+	 * 커뮤니티 활동 통계 (주간/월간 증감률 포함)
+	 * @param period 'week' 또는 'month' (기본값: week)
+	 */
+	@GetMapping("/community/activity-stats")
+	public Map<String, Object> getCommunityActivityStats(@RequestParam(defaultValue = "week") String period) {
+	    return contentStatsService.getCommunityActivityStats(period);
+	}
 
 	@GetMapping("/bookmark/category-stacked")
 	public List<Map<String, Object>> bookmarkCategoryCounts(@RequestParam Map<String, Object> param){

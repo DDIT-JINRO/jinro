@@ -956,5 +956,196 @@
 		 ORDER BY BOARD_CNT DESC
 		 FETCH FIRST 5 ROWS ONLY
 	</select>
-
+	
+	<!-- 일일 게시글 작성 수 (오늘) - G09003 제외 -->
+	<select id="selectDailyPostCountToday" resultType="int">
+	  SELECT COUNT(*)
+	  FROM BOARD
+	  WHERE BOARD_DEL_YN = 'N'
+	    AND CC_ID != 'G09003'
+	    AND TRUNC(BOARD_CREATED_AT) = TRUNC(SYSDATE)
+	</select>
+	
+	<!-- 일일 게시글 작성 수 (어제) - G09003 제외 -->
+	<select id="selectDailyPostCountYesterday" resultType="int">
+	  SELECT COUNT(*)
+	  FROM BOARD
+	  WHERE BOARD_DEL_YN = 'N'
+	    AND CC_ID != 'G09003'
+	    AND TRUNC(BOARD_CREATED_AT) = TRUNC(SYSDATE - 1)
+	</select>
+	
+	<!-- 일일 북마크 수 (오늘) -->
+	<select id="selectDailyBookmarkCountToday" resultType="int">
+	  SELECT COUNT(*)
+	  FROM BOOKMARK
+	  WHERE TRUNC(BM_CREATED_AT) = TRUNC(SYSDATE)
+	</select>
+	
+	<!-- 일일 북마크 수 (어제) -->
+	<select id="selectDailyBookmarkCountYesterday" resultType="int">
+	  SELECT COUNT(*)
+	  FROM BOOKMARK
+	  WHERE TRUNC(BM_CREATED_AT) = TRUNC(SYSDATE - 1)
+	</select>
+	
+	<!-- 일일 채팅방 개설 수 (오늘) - G09005 -->
+	<select id="selectDailyChatRoomCountToday" resultType="int">
+	  SELECT COUNT(*)
+	  FROM BOARD
+	  WHERE BOARD_DEL_YN = 'N'
+	    AND CC_ID = 'G09005'
+	    AND TRUNC(BOARD_CREATED_AT) = TRUNC(SYSDATE)
+	</select>
+	
+	<!-- 일일 채팅방 개설 수 (어제) - G09005 -->
+	<select id="selectDailyChatRoomCountYesterday" resultType="int">
+	  SELECT COUNT(*)
+	  FROM BOARD
+	  WHERE BOARD_DEL_YN = 'N'
+	    AND CC_ID = 'G09005'
+	    AND TRUNC(BOARD_CREATED_AT) = TRUNC(SYSDATE - 1)
+	</select>
+	
+	<!-- 로드맵 진행단계별 분포 통계 -->
+	<select id="selectRoadmapStepDistribution" resultType="map">
+	  WITH 
+	  TOTAL_MEMBERS AS (
+	    SELECT COUNT(*) AS total_count
+	    FROM MEMBER
+	    WHERE MEM_ROLE = 'G01001'
+	  ),
+	  MAX_STEP_PER_MEMBER AS (
+	    SELECT 
+	      r.MEM_ID,
+	      MAX(r.RS_ID) AS max_rs_id
+	    FROM ROADMAP r
+	    JOIN MEMBER m ON m.MEM_ID = r.MEM_ID
+	    WHERE m.MEM_ROLE = 'G01001'
+	    GROUP BY r.MEM_ID
+	  ),
+	  MEMBER_CURRENT_STEP AS (
+	    SELECT 
+	      mspm.MEM_ID,
+	      rs.RS_STEP
+	    FROM MAX_STEP_PER_MEMBER mspm
+	    JOIN ROADMAP r ON r.MEM_ID = mspm.MEM_ID AND r.RS_ID = mspm.max_rs_id
+	    JOIN ROADMAP_STEP rs ON rs.RS_ID = r.RS_ID
+	  ),
+	  STEP_DISTRIBUTION AS (
+	    SELECT 
+	      mcs.RS_STEP,
+	      cc.CC_NAME AS step_name,
+	      COUNT(*) AS member_count
+	    FROM MEMBER_CURRENT_STEP mcs
+	    JOIN COM_CODE cc ON cc.CC_ID = mcs.RS_STEP
+	    GROUP BY mcs.RS_STEP, cc.CC_NAME
+	  )
+	  SELECT 
+	    sd.RS_STEP AS "stepId",
+	    sd.step_name AS "stepName", 
+	    sd.member_count AS "memberCount",
+	    ROUND((sd.member_count * 100.0 / tm.total_count), 2) AS "percentage",
+	    tm.total_count AS "totalMembers"
+	  FROM STEP_DISTRIBUTION sd
+	  CROSS JOIN TOTAL_MEMBERS tm
+	  ORDER BY sd.RS_STEP
+	</select>
+	
+	<!-- 로드맵 미참여 회원 수 계산 -->
+	<select id="selectNonParticipatingMembers" resultType="map">
+	  WITH 
+	  TOTAL_MEMBERS AS (
+	    SELECT COUNT(*) AS total_count
+	    FROM MEMBER
+	    WHERE MEM_ROLE = 'G01001'
+	  ),
+	  PARTICIPATING_MEMBERS AS (
+	    SELECT COUNT(DISTINCT r.MEM_ID) AS participating_count
+	    FROM ROADMAP r
+	    JOIN MEMBER m ON m.MEM_ID = r.MEM_ID
+	    WHERE m.MEM_ROLE = 'G01001'
+	  )
+	  SELECT 
+	    (tm.total_count - pm.participating_count) AS "nonParticipatingCount",
+	    ROUND(((tm.total_count - pm.participating_count) * 100.0 / tm.total_count), 2) AS "nonParticipatingPercentage",
+	    tm.total_count AS "totalMembers"
+	  FROM TOTAL_MEMBERS tm
+	  CROSS JOIN PARTICIPATING_MEMBERS pm
+	</select>
+	
+	<!-- 커뮤니티 활동 통계 - 주간/월간 -->
+	<select id="selectCommunityActivityStats" parameterType="map" resultType="map">
+	  WITH ACTIVITY_DATA AS (
+	    -- 게시글 데이터
+	    SELECT 
+	      'POST' AS activity_type,
+	      CASE 
+	        WHEN TRUNC(BOARD_CREATED_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '6' DAY AND TRUNC(SYSDATE) THEN 'current_week'
+	        WHEN TRUNC(BOARD_CREATED_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '13' DAY AND TRUNC(SYSDATE) - INTERVAL '7' DAY THEN 'previous_week'
+	        WHEN TRUNC(BOARD_CREATED_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '29' DAY AND TRUNC(SYSDATE) THEN 'current_month'
+	        WHEN TRUNC(BOARD_CREATED_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '59' DAY AND TRUNC(SYSDATE) - INTERVAL '30' DAY THEN 'previous_month'
+	      END AS period_type
+	    FROM BOARD 
+	    WHERE BOARD_DEL_YN = 'N'
+	      AND TRUNC(BOARD_CREATED_AT) >= TRUNC(SYSDATE) - INTERVAL '59' DAY
+	    
+	    UNION ALL
+	    
+	    -- 게시글 좋아요 데이터
+	    SELECT 
+	      'POST_LIKE' AS activity_type,
+	      CASE 
+	        WHEN TRUNC(bl.LIKE_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '6' DAY AND TRUNC(SYSDATE) THEN 'current_week'
+	        WHEN TRUNC(bl.LIKE_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '13' DAY AND TRUNC(SYSDATE) - INTERVAL '7' DAY THEN 'previous_week'
+	        WHEN TRUNC(bl.LIKE_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '29' DAY AND TRUNC(SYSDATE) THEN 'current_month'
+	        WHEN TRUNC(bl.LIKE_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '59' DAY AND TRUNC(SYSDATE) - INTERVAL '30' DAY THEN 'previous_month'
+	      END AS period_type
+	    FROM BOARD_LIKE bl
+	    JOIN BOARD b ON b.BOARD_ID = bl.BOARD_ID
+	    WHERE b.BOARD_DEL_YN = 'N'
+	      AND TRUNC(bl.LIKE_AT) >= TRUNC(SYSDATE) - INTERVAL '59' DAY
+	    
+	    UNION ALL
+	    
+	    -- 댓글 데이터
+	    SELECT 
+	      'REPLY' AS activity_type,
+	      CASE 
+	        WHEN TRUNC(r.REPLY_CREATED_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '6' DAY AND TRUNC(SYSDATE) THEN 'current_week'
+	        WHEN TRUNC(r.REPLY_CREATED_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '13' DAY AND TRUNC(SYSDATE) - INTERVAL '7' DAY THEN 'previous_week'
+	        WHEN TRUNC(r.REPLY_CREATED_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '29' DAY AND TRUNC(SYSDATE) THEN 'current_month'
+	        WHEN TRUNC(r.REPLY_CREATED_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '59' DAY AND TRUNC(SYSDATE) - INTERVAL '30' DAY THEN 'previous_month'
+	      END AS period_type
+	    FROM REPLY r
+	    JOIN BOARD b ON b.BOARD_ID = r.BOARD_ID
+	    WHERE b.BOARD_DEL_YN = 'N'
+	      AND TRUNC(r.REPLY_CREATED_AT) >= TRUNC(SYSDATE) - INTERVAL '59' DAY
+	    
+	    UNION ALL
+	    
+	    -- 댓글 좋아요 데이터
+	    SELECT 
+	      'REPLY_LIKE' AS activity_type,
+	      CASE 
+	        WHEN TRUNC(rl.LIKE_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '6' DAY AND TRUNC(SYSDATE) THEN 'current_week'
+	        WHEN TRUNC(rl.LIKE_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '13' DAY AND TRUNC(SYSDATE) - INTERVAL '7' DAY THEN 'previous_week'
+	        WHEN TRUNC(rl.LIKE_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '29' DAY AND TRUNC(SYSDATE) THEN 'current_month'
+	        WHEN TRUNC(rl.LIKE_AT) BETWEEN TRUNC(SYSDATE) - INTERVAL '59' DAY AND TRUNC(SYSDATE) - INTERVAL '30' DAY THEN 'previous_month'
+	      END AS period_type
+	    FROM REPLY_LIKE rl
+	    JOIN REPLY r ON r.REPLY_ID = rl.REPLY_ID
+	    JOIN BOARD b ON b.BOARD_ID = r.BOARD_ID
+	    WHERE b.BOARD_DEL_YN = 'N'
+	      AND TRUNC(rl.LIKE_AT) >= TRUNC(SYSDATE) - INTERVAL '59' DAY
+	  )
+	  SELECT 
+	    activity_type AS "activityType",
+	    period_type AS "periodType",
+	    COUNT(*) AS "count"
+	  FROM ACTIVITY_DATA
+	  WHERE period_type IS NOT NULL
+	  GROUP BY activity_type, period_type
+	  ORDER BY activity_type, period_type
+	</select>
 </mapper>
