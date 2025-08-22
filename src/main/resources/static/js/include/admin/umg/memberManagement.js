@@ -1027,7 +1027,7 @@ function memberManagement() {
 					monthlyWithdrawalUsersRate,
 					monthlyWithdrawalUsersStatus
 				} = res.data;
-				console.log(res.data);
+				
 				// 일일 사용자 현황
 				const dailyUsersCountEl = document.getElementById('dailyActiveUsersCount');
 				if (dailyUsersCountEl) {
