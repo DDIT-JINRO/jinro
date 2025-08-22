@@ -46,6 +46,12 @@ document.addEventListener('DOMContentLoaded', function(){
 			location.href = '/login';
 			return;
 		}
+		
+		const consultCount = document.getElementById('usage-data').dataset.consultCnt;
+		if(consultCount<=0){
+			alert('상담권이 없습니다.');
+			return;
+		}
 
 		if (localStorage.getItem("AICNS_OPEN")=== '1') {
 			alert('이미 상담이 진행중입니다. 먼저 완료해주세요.');

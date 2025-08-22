@@ -166,21 +166,21 @@
 	    WHERE 1=1
 		<choose>
 			<when test="status == 'title'">
-				AND JOB_NAME LIKE '%' || '' || '%'
-			</when>
-			<when test="status == 'content'">
-				AND (
-					JOB_MAIN_DUTY LIKE '%' || '' || '%'
-					OR JOB_WAY LIKE '%' || '' || '%'
-				)
-			</when>
+                AND JOB_NAME LIKE '%' || UPPER(#{keyword}) || '%'
+            </when>
+            <when test="status == 'content'">
+                AND (
+                    JOB_MAIN_DUTY LIKE '%' || UPPER(#{keyword}) || '%'
+                    OR JOB_WAY LIKE '%' || UPPER(#{keyword}) || '%'
+                )
+            </when>
 			<otherwise>
-				AND (
-					JOB_NAME LIKE '%' || '' || '%'
-					OR JOB_MAIN_DUTY LIKE '%' || '' || '%'
-					OR JOB_WAY LIKE '%' || '' || '%'
-				)
-			</otherwise>
+                AND (
+                    JOB_NAME LIKE '%' || UPPER(#{keyword}) || '%'
+                    OR JOB_MAIN_DUTY LIKE '%' || UPPER(#{keyword}) || '%'
+                    OR JOB_WAY LIKE '%' || UPPER(#{keyword}) || '%'
+                )
+            </otherwise>
 		</choose>
         <if test="jobSal != null and !jobSal.isEmpty()">
             AND (
