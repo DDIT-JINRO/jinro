@@ -14,8 +14,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	document.getElementById('btnWrite').addEventListener('click', function() {
 		if (!memId || memId == 'anonymousUser') {
-			sessionStorage.setItem("redirectUrl", location.href);
-			location.href = "/login";
+			showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+				() => {
+					sessionStorage.setItem("redirectUrl", location.href);
+					location.href = "/login";
+				},
+				() => {
+
+				}
+			);
 		} else {
 			location.href = "/cnslt/rvw/insertCnsReviewView.do";
 		}
@@ -46,8 +53,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			const crId = this.dataset.crId;
 			
 			if (dataMemId != memId) {
-				alert("허용되지 않은 접근입니다.")
-				return;
+				showConfirm2("허용되지 않은 접근입니다.",
+					() => {
+					return;
+					},
+					() => {
+
+					}
+				);
 			}
 			
 			location.href = `/cnslt/rvw/updateCnsReviewView.do?crId=${crId}` 
@@ -100,8 +113,14 @@ function deleteCounselingReview(crId) {
         })
         .then(data => {
             if (data.success) {
-                alert('상담 후기가 성공적으로 삭제되었습니다.');
-                location.reload(); // 페이지 새로고침
+				showConfirm2("상담 후기가 성공적으로 삭제되었습니다.",
+					() => {
+						location.reload(); // 페이지 새로고침
+					},
+					() => {
+
+					}
+				);
             } else {
                 alert('삭제 중 오류가 발생했습니다: ' + (data.message || '알 수 없는 오류'));
             }

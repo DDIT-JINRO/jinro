@@ -11,8 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
   if (btnWrite) {
     btnWrite.addEventListener('click', () => {
       if (!memId || memId === 'anonymousUser') {
-        sessionStorage.setItem('redirectUrl', location.href);
-        location.href = '/login';
+		showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+			() => {
+				sessionStorage.setItem("redirectUrl", location.href);
+				location.href = "/login";
+			},
+			() => {
+
+			}
+		);
+
       } else {
         location.href = '/prg/std/createStdGroup.do';
       }

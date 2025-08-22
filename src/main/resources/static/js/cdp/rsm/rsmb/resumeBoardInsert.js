@@ -19,7 +19,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		const content = editorInstance.getData();
 
 		if (!title || !content) {
-			alert("제목과 내용을 모두 입력해 주세요.");
+			showConfirm2("제목과 내용을 모두 입력해 주세요.",
+				() => {
+				},
+				() => {
+
+				}
+			);
 			return;
 		}
 
@@ -29,7 +35,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		const files = fileInput.files;
 		if (files.length == 0) {
-			alert("템플릿 파일을 등록해주세요.")
+			showConfirm2("템플릿 파일을 등록해주세요.",
+				() => {
+				},
+				() => {
+
+				}
+			);
 			return;
 		}
 
@@ -44,7 +56,14 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 			});
 			if (response.status === 200) {
-				alert("등록 성공");
+				showConfirm2("등록 성공",
+					() => {
+					},
+					() => {
+
+					}
+				);
+
 				window.location.href = "/cdp/rsm/rsmb/resumeBoardList.do";
 			}
 		} catch (error) {

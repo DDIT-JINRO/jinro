@@ -41,10 +41,17 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	btnStart.addEventListener('click', () => {
 		if(memId == null || 'anonymousUser' == memId){
-			alert('로그인이 필요한 서비스입니다');
-			sessionStorage.setItem('redirectUrl', location.href);
-			location.href = '/login';
-			return;
+			showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+				() => {
+					sessionStorage.setItem("redirectUrl", location.href);
+					location.href = "/login";
+
+					return;
+				},
+				() => {
+
+				}
+			);
 		}
 		
 		const consultCount = document.getElementById('usage-data').dataset.consultCnt;
@@ -54,12 +61,19 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 
 		if (localStorage.getItem("AICNS_OPEN")=== '1') {
-			alert('이미 상담이 진행중입니다. 먼저 완료해주세요.');
-			try {
-				const win = window.open('', 'aiCounselWindow'); // 기존 창 핸들 가져오기
-				win && win.focus();
-			} catch (e) { /* 무시 - 기존 창 선택가능하면 포커싱 맞춰줌. 실패해도 무관 */ }
-			return;
+			showConfirm2('이미 상담이 진행중입니다. 먼저 완료해주세요.',
+				() => {
+					try {
+						const win = window.open('', 'aiCounselWindow'); // 기존 창 핸들 가져오기
+						win && win.focus();
+					} catch (e) { /* 무시 - 기존 창 선택가능하면 포커싱 맞춰줌. 실패해도 무관 */ }
+					return;
+				},
+				() => {
+
+				}
+			);
+
 		}
 
 		if (!selectedType) return;
@@ -115,8 +129,15 @@ document.addEventListener('DOMContentLoaded', function(){
 	       resizable=no, scrollbars=yes, menubar=no, toolbar=no, location=no, status=no`);
 
 	    if (!popup || popup.closed) {
-	      alert('팝업이 차단되었습니다. 브라우저의 팝업 차단을 해제해 주세요.');
-	      return;
+		  showConfirm2('팝업이 차단되었습니다. 브라우저의 팝업 차단을 해제해 주세요.',
+		  	() => {
+
+				return;
+		  	},
+		  	() => {
+
+		  	}
+		  );
 	    }
 
 		// 기존 윈도우 선택상태 정리

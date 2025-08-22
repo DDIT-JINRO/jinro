@@ -73,7 +73,13 @@ document.addEventListener('DOMContentLoaded', function() {
 				document.body.appendChild(form);
 				form.submit();
 			} else {
-				alert('게시글 ID를 불러올 수 없습니다.');
+				showConfirm2('게시글 ID를 불러올 수 없습니다.',
+					() => {
+					},
+					() => {
+
+					}
+				);
 			}
 		})
 	}
@@ -95,7 +101,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 					if (!resp.ok) throw new Error('에러');
 					else {
-						alert("성공적으로 삭제되었습니다.")
+						showConfirm2("성공적으로 삭제되었습니다.",
+							() => {
+							},
+							() => {
+
+							}
+						);
+
 						window.location.href = "/cdp/rsm/rsmb/resumeBoardList.do";
 					}
 				})
@@ -170,7 +183,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (boardReportBtn) {
 		boardReportBtn.addEventListener('click', async () => {
 			if (!memId || memId == 'anonymousUser') {
-				alert('로그인이 필요합니다');
+				showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+					() => {
+						sessionStorage.setItem("redirectUrl", location.href);
+						location.href = "/login";
+					},
+					() => {
+
+					}
+				);
 				return;
 			}
 			const targetId = boardReportBtn.closest('.boardEtcContainer').dataset.boardId;
@@ -181,7 +202,13 @@ document.addEventListener('DOMContentLoaded', function() {
 			// @@@@@@@@@ fetch()로 해당 게시글 신고한적 있는지 체크하고 신고한적 있으면 alert 이미 신고한 게시물
 			const resp = await fetch('/api/report/selectReport', { method: 'POST', body: formData });
 			if (resp.status == 200) {
-				alert('이미 신고한 게시글입니다');
+				showConfirm2("이미 신고한 게시글입니다",
+					() => {
+					},
+					() => {
+
+					}
+				);
 				return;
 			} else {
 				setReportModal(targetId, 'G10001');
@@ -225,7 +252,13 @@ function confirmReport() {
 		})
 		.then(result => {
 			if (result) {
-				alert('신고 완료');
+				showConfirm2("신고 완료",
+					() => {
+					},
+					() => {
+
+					}
+				);
 				// 신고 완료 시 새로고침
 				location.reload();
 			}
@@ -463,9 +496,24 @@ function eventEtcContainerClicked(e) {
 	if (!e.target.classList.contains('etc-act-btn')) return;
 
 	const action = el.textContent.trim();
-	if (!confirm(`이 댓글을 정말로 ${action} 하시겠습니까?`)) return;
+	showConfirm2("이 댓글을 정말로 ${action} 하시겠습니까?",
+		() => {
+		},
+		() => {
+			return;
+		}
+	);
 	if (!memId || memId == 'anonymousUser') {
-		alert('로그인이 필요합니다');
+		showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+			() => {
+				sessionStorage.setItem("redirectUrl", location.href);
+				location.href = "/login";
+			},
+			() => {
+
+			}
+		);;
+		
 		return;
 	}
 	const targetReply = el.closest('.reply-box');
@@ -499,7 +547,15 @@ function eventEtcContainerClicked(e) {
 					}
 
 					targetReply.remove();
-					setTimeout(() => { alert('삭제되었습니다') })
+					setTimeout(() => {
+						showConfirm2("삭제되었습니다",
+							() => {
+							},
+							() => {
+
+							}
+						);
+					})
 				}
 			})
 			.catch(err => {
@@ -515,7 +571,14 @@ function eventEtcContainerClicked(e) {
 			formData.append('targetType', 'G10002');
 			const resp = await fetch('/api/report/selectReport', { method: 'POST', body: formData });
 			if (resp.status == 200) {
-				alert('이미 신고한 댓글입니다');
+
+				showConfirm2("이미 신고한 댓글입니다.",
+					() => {
+					},
+					() => {
+
+					}
+				);
 				return;
 			} else {
 				setReportModal(targetReplyId, 'G10002');
@@ -699,7 +762,13 @@ const handleBookmarkToggle = (button) => {
 		})
 		.then(data => {
 			if (data.success) {
-				alert(data.message);
+				showConfirm2(data.message,
+					() => {
+					},
+					() => {
+
+					}
+				);
 				button.classList.toggle('is-active');
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');

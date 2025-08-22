@@ -1,3 +1,40 @@
+function showConfirm(message1,message2, onOk, onCancel) {
+    const confirmBox = document.getElementById("customConfirm");
+    const confirmMessage1 = document.getElementById("confirmMessage1");
+    const confirmMessage2 = document.getElementById("confirmMessage2");
+    confirmMessage1.textContent = message1; // 메시지 표시
+    confirmMessage2.textContent = message2; // 메시지 표시
+    confirmBox.style.display = "flex";
+
+    const okBtn = document.getElementById("confirmOk");
+    const cancelBtn = document.getElementById("confirmCancel");
+
+    okBtn.onclick = () => {
+        confirmBox.style.display = "none";
+        if (onOk) onOk();
+    };
+
+    cancelBtn.onclick = () => {
+        confirmBox.style.display = "none";
+        if (onCancel) onCancel();
+    };
+}
+
+function showConfirm2(message,onOk, onCancel) {
+    const confirmBox = document.getElementById("customConfirm2");
+    const confirmMessage3 = document.getElementById("confirmMessage3");
+    confirmMessage3.textContent = message; // 메시지 표시
+    confirmBox.style.display = "flex";
+
+    const okBtn = document.getElementById("confirmOk2");
+
+    okBtn.onclick = () => {
+        confirmBox.style.display = "none";
+        if (onOk) onOk();
+    };
+}
+
+
 function header() {
 	// --- 모바일 슬라이드 메뉴 로직 ---
 	const mobileMenuTrigger = document.getElementById('mobileMenuTrigger');
@@ -36,7 +73,41 @@ function header() {
 			}
 		});
 	}
+	// 경력관리 로직
+	const careerButtons = [
+	    "goTologin1",
+	    "goTologin2",
+	    "goTologin3",
+	    "goTologin4",
+	    "goTologin5",
+	    "goTologin6",
+	    "goTologin7",
+	    "goTologin8",
+	    "goTologin9",
+	    "goTologin10"
+	];
 
+	careerButtons.forEach(id => {
+	    const btn = document.getElementById(id);
+	    if (!btn) return;
+
+	    btn.addEventListener("click", (e) => {
+	        if (!memId || memId === 'anonymousUser') {
+	            e.preventDefault(); // 기본 이동 막기
+	            showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+	                () => {
+	                    // 확인 클릭 시 컨트롤러 이동
+	                    location.href = btn.getAttribute('href');
+	                },
+	                () => {
+	                    // 취소 클릭 시 아무 동작 없음
+	                }
+	            );
+	        }
+	    });
+	});
+
+	
 	// --- 사이드바 버튼 로직 ---
 	const worldcup = document.getElementById("worldcup");
 	const roadmap = document.getElementById("roadmap");
@@ -44,8 +115,15 @@ function header() {
 	if (roadmap) {
 		roadmap.addEventListener("click", () => {
 			if (!memId || memId == 'anonymousUser') {
-				sessionStorage.setItem("redirectUrl", location.href);
-				location.href = "/login";
+				showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+					() => {
+						sessionStorage.setItem("redirectUrl", location.href);
+						location.href = "/login";
+					},
+					() => {
+
+					}
+				);
 			} else {
 				const roadmapUrl = 'http://localhost:5173/roadmap';
 				const width = 1084;
@@ -79,8 +157,15 @@ function header() {
 	if (worldcup) {
 		worldcup.addEventListener("click", () => {
 			if (!memId || memId == 'anonymousUser') {
-				sessionStorage.setItem("redirectUrl", location.href);
-				location.href = "/login";
+				showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+					() => {
+						sessionStorage.setItem("redirectUrl", location.href);
+						location.href = "/login";
+					},
+					() => {
+
+					}
+				);
 			} else {
 				axios.post("/admin/las/worldCupVisitLog.do")
 				const worldcupUrl = 'http://localhost:5173/worldcup';
@@ -95,3 +180,4 @@ function header() {
 		});
 	}
 }
+

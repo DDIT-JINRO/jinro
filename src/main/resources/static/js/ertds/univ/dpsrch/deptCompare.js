@@ -25,7 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const handleBookmarkToggle = (button) => {
 	if (memId == "" || memId == "anonymousUser") {
-        alert("북마크는 로그인 후 이용 하실 수 있습니다.");
+
+		showConfirm2("북마크는 로그인 후 이용 하실 수 있습니다.",
+			() => {
+			},
+			() => {
+
+			}
+		);
         return;
     }
 	
@@ -57,7 +64,13 @@ const handleBookmarkToggle = (button) => {
 		})
 		.then(data => {
 			if (data.success) {
-				alert(data.message);
+				showConfirm2(data.message,
+					() => {
+					},
+					() => {
+
+					}
+				);
 				button.classList.toggle('is-active');
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');
@@ -275,7 +288,13 @@ function handleRemoveColumn(event) {
 	const allHeaderCells = Array.from(document.querySelectorAll('.comparison-table__header .comparison-table__job-col-header'));
 
 	if (allHeaderCells.length <= 2) {
-	    alert("비교를 위해 최소 2개의 학과가 필요합니다.");
+		showConfirm2("비교를 위해 최소 2개의 학과가 필요합니다.",
+			() => {
+			},
+			() => {
+
+			}
+		);
 	    return;
 	}
 

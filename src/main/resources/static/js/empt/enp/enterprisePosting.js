@@ -150,9 +150,23 @@ const bookmarkButtons = document.querySelectorAll('.bookmark-button');
 		button.addEventListener('click', function(event) {
 			event.preventDefault();
 			event.stopPropagation()
+			
+			const memId = document.getElementById('memId').textContent.trim();
 
-			// 함수 전달
-			handleBookmarkToggle(this);
+			if (!memId || memId === 'anonymousUser') {
+				showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+					() => {
+						sessionStorage.setItem("redirectUrl", location.href);
+						location.href = "/login";
+					},
+					() => {
+
+					}
+				);
+			} else {
+				// 함수 전달
+				handleBookmarkToggle(this);
+			}
 		});
 	});
 
@@ -188,7 +202,13 @@ const handleBookmarkToggle = (button) => {
 		.then(data => {
 			console.log(data);
 			if (data.success) {
-				alert(data.message);
+				showConfirm2(data.message,
+					() => {
+					},
+					() => {
+
+					}
+				);
 				button.classList.toggle('is-active');
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');

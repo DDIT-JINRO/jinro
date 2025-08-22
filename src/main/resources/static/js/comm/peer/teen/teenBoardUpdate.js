@@ -22,8 +22,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		const file = document.getElementById("fileInput");
 
 		if (!title || !content) {
-			alert("제목과 내용을 모두 입력해 주세요.");
-			return;
+
+			showConfirm2("제목과 내용을 모두 입력해 주세요.s",
+				() => {
+					return;
+				},
+				() => {
+
+				}
+			);
 		}
 
 		const formData = new FormData();
@@ -43,8 +50,14 @@ document.addEventListener("DOMContentLoaded", function () {
 				}
 			});
 			if (response.status === 200) {
-				alert("등록 성공");
-				window.location.href = "/comm/peer/teen/teenList.do";
+				showConfirm2("등록 성공",
+					() => {
+						window.location.href = "/comm/peer/teen/teenList.do";
+					},
+					() => {
+
+					}
+				);
 			}
 		} catch (error) {
 			console.error("등록 중 오류:", error);

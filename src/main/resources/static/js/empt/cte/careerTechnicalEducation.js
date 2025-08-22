@@ -187,8 +187,14 @@ const handleBookmarkToggle = (button) => {
 		.then(data => {
 			console.log(data);
 			if (data.success) {
-				alert(data.message);
-				button.classList.toggle('active');
+				showConfirm2(data.message,
+					() => {
+						button.classList.toggle('active');
+					},
+					() => {
+
+					}
+				);
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');
 			}

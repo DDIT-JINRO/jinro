@@ -100,8 +100,15 @@ document.addEventListener('DOMContentLoaded', function() {
 		// 클릭 이벤트도 로그인 페이지로 이동하도록 변경합니다.
 		nextBtn.addEventListener('click', function(event) {
 			event.preventDefault();
-			alert('로그인이 필요한 서비스입니다.');
-			window.location.href = '/login';
+			showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+				() => {
+					sessionStorage.setItem("redirectUrl", location.href);
+					location.href = "/login";
+				},
+				() => {
+
+				}
+			);
 		});
 	} else {
 
@@ -111,15 +118,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			const counsel = document.getElementById('counselorSelect').value;
 
-
 			if (!memId || memId === 'anonymousUser') {
-				alert('로그인 해주세요');
+				showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+					() => {
+						sessionStorage.setItem("redirectUrl", location.href);
+						location.href = "/login";
+					},
+					
+					() => {
+
+					}
+				);
 				return;
 			}
 
 			if (!selectedTime) {
-				alert('모든 필수 정보를 선택해주세요.');
-				return;
+
+				showConfirm2('모든 필수 정보를 선택해주세요.',
+					() => {
+						return;
+					},
+					() => {
+
+					}
+				);
 			}
 
 			if (selectedDate && selectedTime) {
@@ -158,7 +180,13 @@ document.addEventListener('DOMContentLoaded', function() {
 						});
 				}
 			} else {
-				alert("날짜와 시간을 선택해주세요.");
+				showConfirm2("날짜와 시간을 선택해주세요.",
+					() => {
+					},
+					() => {
+
+					}
+				);
 			}
 
 		});

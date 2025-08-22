@@ -189,17 +189,36 @@ document.addEventListener("DOMContentLoaded", function() {
 			const resumeId = document.querySelector("#resumeId").value;
 
 			if (!resumeId || resumeId === "0") {
-				alert("삭제할 이력서가 없습니다.");
-				return;
+				showConfirm2("삭제할 이력서가 없습니다.",
+					() => {
+					return;
+					},
+					() => {
+
+					}
+				);
 			}
 
-			if (!confirm("정말 삭제하시겠습니까?")) return;
+			showConfirm2("정말 삭제하시겠습니까?",
+				() => {
+				return;
+				},
+				() => {
+				}
+			);
 
 			axios.post("/cdp/rsm/rsm/deleteResume.do", { resumeId: resumeId })
 				.then(response => {
 					if (response.data.status === 'success') {
-						alert("이력서가 삭제되었습니다.");
-						location.href = "/cdp/rsm/rsm/resumeList.do"; // 삭제 후 목록 페이지 등으로 이동
+						showConfirm2("이력서가 삭제되었습니다.",
+							() => {
+								location.href = "/cdp/rsm/rsm/resumeList.do"; // 삭제 후 목록 페이지 등으로 이동
+							},
+							() => {
+
+							}
+						);
+						
 					} else {
 						alert("삭제에 실패했습니다.");
 					}
@@ -222,9 +241,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				//제목 검사
 				if (resumeTitle.hasAttribute("required") && !resumeTitleVal.trim()) {
-					alert("제목을 입력해주세요.");
-					resumeTitle.focus();
-					return;
+	
+					showConfirm2("제목을 입력해주세요.",
+						() => {
+							resumeTitle.focus();
+							return;
+						},
+						() => {
+
+						}
+					);
 				}
 
 				for (let i = 0; i < objs.length; i++) {
@@ -241,9 +267,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 					// 'required'가 있고 값이 비어 있다면
 					if (updatedInput.hasAttribute("required") && !value) {
-						alert("필수 입력 항목을 입력해주세요.");
-						updatedInput.focus();
-						return; // 함수 종료하여 submit 중단
+						showConfirm2("필수 입력 항목을 입력해주세요.",
+							() => {
+								updatedInput.focus();
+								return; // 함수 종료하여 submit 중단
+							},
+							() => {
+
+							}
+						);
+						
 					}
 
 
@@ -251,7 +284,10 @@ document.addEventListener("DOMContentLoaded", function() {
 					if (updatedInput.name === "email") {
 						const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 						if (!emailRegex.test(value)) {
-							alert("이메일 형식이 올바르지 않습니다.");
+							showConfirm2("이메일 형식이 올바르지 않습니다.",
+								() => {
+								}
+							);
 							updatedInput.focus();
 							return;
 						}
@@ -260,7 +296,10 @@ document.addEventListener("DOMContentLoaded", function() {
 					if (updatedInput.name === "phone" || updatedInput.name === "mobile-phone") {
 						const phoneRegex = /^010\d{4}\d{4}$/; // 예: 010-1234-5678
 						if (value && !phoneRegex.test(value)) {
-							alert("전화번호 형식이 올바르지 않습니다. 예: 01012345678");
+							showConfirm2("전화번호 형식이 올바르지 않습니다. 예: 01012345678",
+								() => {
+								}
+							);
 							updatedInput.focus();
 							return;
 						}

@@ -68,12 +68,12 @@
 					</div>
 				</li>
 				<li class="main-nav__item main-nav__item--priority-low">
-					<a href="/cdp/rsm/rsm/resumeList.do" class="main-nav__link">경력관리</a>
+					<a href="/cdp/rsm/rsm/resumeList.do" class="main-nav__link" id="goTologin6">경력관리</a>
 					<div class="dropdown-submenu">
-						<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
-						<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
-						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의 면접</a>
-						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>
+						<a href="/cdp/rsm/rsm/resumeList.do" id="goTologin7">이력서</a>
+						<a href="/cdp/sint/qestnlst/questionList.do" id="goTologin8">자기소개서</a>
+						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do" id="goTologin9">모의 면접</a>
+						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do" id="goTologin10">AI 피드백</a>
 					</div>
 				</li>
 				<li class="main-nav__item">
@@ -160,7 +160,7 @@
 					<a href="/empt/ema/employmentAdvertisement.do">취업</a>
 				</li>
 				<li>
-					<a href="/cdp/rsm/rsm/resumeList.do">경력관리</a>
+					<a href="/cdp/rsm/rsm/resumeList.do" id="goTologin1">경력관리</a>
 				</li>
 				<li>
 					<a href="/cnslt/resve/crsv/reservation.do">상담</a>
@@ -250,16 +250,16 @@
 				<div class="mega-menu__category">
 					<div class="mega-menu__category-title">경력관리</div>
 					<div class="mega-menu__links">
-						<a href="/cdp/rsm/rsm/resumeList.do">
+						<a href="/cdp/rsm/rsm/resumeList.do" id="goTologin2" >
 							<span>이력서</span>
 						</a>
-						<a href="/cdp/sint/qestnlst/questionList.do">
+						<a href="/cdp/sint/qestnlst/questionList.do" id="goTologin3" >
 							<span>자기소개서</span>
 						</a>
-						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">
+						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do" id="goTologin4" >
 							<span>모의 면접</span>
 						</a>
-						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">
+						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do" id="goTologin5" >
 							<span>AI 피드백</span>
 						</a>
 					</div>
@@ -338,6 +338,27 @@
 			<img src="/images/roadmapicon.png" alt="진로탐색">
 		</button>
 	</div>
+
+    <!-- 모달 -->
+    <div id="customConfirm" class="custom-confirm" style="display: none;">
+        <div class="custom-confirm__content">
+            <p id="confirmMessage1" style="margin-bottom: 0px;"></p>
+            <p id="confirmMessage2"style="margin-top: 0px;">></p>
+            <div class="custom-confirm__buttons">
+                <button id="confirmCancel">취소</button>
+                <button id="confirmOk">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="customConfirm2" class="custom-confirm2" style="display: none;">
+        <div class="custom-confirm__content2">
+            <p id="confirmMessage3"></p>
+            <div class="custom-confirm__buttons2">
+                <button id="confirmOk2">확인</button>
+            </div>
+        </div>
+    </div>
 
 	<%@ include file="/WEB-INF/views/include/chatModal.jsp"%>
 	<%@ include file="/WEB-INF/views/include/alarmModal.jsp"%>

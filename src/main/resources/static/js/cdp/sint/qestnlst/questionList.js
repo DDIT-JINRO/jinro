@@ -165,8 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		submitCart.addEventListener("click", function() {
 
 			if (selectedQuestions.length === 0) {
-				alert('자기소개서 작성을 위해 질문을 선택해주세요.');
-				return;
+				showConfirm2('자기소개서 작성을 위해 질문을 선택해주세요.',
+					() => {
+						return;
+					},
+					() => {
+
+					}
+				);
 			}
 			// 필요하다면 여기서 sessionStorage.removeItem('selectedQuestions');
 			document.getElementById('cartForm').submit();
