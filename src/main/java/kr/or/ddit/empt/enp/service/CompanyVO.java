@@ -17,6 +17,7 @@ public class CompanyVO {
 	private String cpImgUrl;
 	private String cpRegion;
 	private Long fileGroupId;
+	private int memId;
 	
 //	새로받는 값
 	private String cpHiringStatus; // 현재 채용 여부

@@ -29,6 +29,7 @@
 		</div>
 
 		<div class="public-wrapper-main">
+			<span class="detail-header__meta-item detail-header__meta-item--source">[ 출처 : 한국직업능력연구원 국가진로교육연구센터 (커리어넷) ]</span>
 			<div class="detail-page">
 				<section class="detail-header">
 					<div class="detail-header__main">

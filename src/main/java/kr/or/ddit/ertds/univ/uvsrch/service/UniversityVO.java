@@ -19,6 +19,7 @@ public class UniversityVO {
 	private List<String> regionIds; // 대학 위치 선택
 	private List<String> typeIds; // 대학 타입 선택
 	private List<String> gubunIds; // 대학 구분 선택
+	private int memId;
 
 	private int deptCount;
 

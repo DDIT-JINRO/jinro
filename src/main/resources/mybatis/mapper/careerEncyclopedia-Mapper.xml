@@ -131,6 +131,9 @@
 		                    </foreach>
 		                </if>
 		                ORDER BY
+		                 <if test="memId != null and memId !=''">
+		                    IS_BOOKMARK,
+		                 </if>  
 		                    JOB_SATIS DESC, JOB_NAME ASC
 		            ) B
 	            WHERE ROWNUM <![CDATA[<=]]> #{endRow} 

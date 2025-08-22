@@ -94,8 +94,10 @@
 					</div>
 				</div>
 			</form>
-			<p class="content-list__total-count">총 ${articlePage.total}건</p>
-
+			<div class="source-div">
+				<span class="list-header__meta-item list-header__meta-item--source">[ 출처 : 한국고용정보원 고용24 (구 워크넷) ]</span>
+				<p class="content-list__total-count">총 ${articlePage.total}건</p>
+			</div>
 			<div class="content-list">
 				<div class="accordion-list__header">
 					<span class="accordion-list__col accordion-list__col--title">공고명</span>

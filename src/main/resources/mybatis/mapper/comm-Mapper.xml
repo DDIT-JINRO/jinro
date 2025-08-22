@@ -106,6 +106,9 @@
 					AND B.BOARD_CONTENT LIKE '%'||#{keyword}||'%'
 				</if>
 				ORDER BY
+				<if test="memId != null and memId != ''">
+					IS_BOOKMARK ,
+				</if>
 					B.BOARD_CREATED_AT DESC
 			) C
 			WHERE ROWNUM &lt;= #{endNo}

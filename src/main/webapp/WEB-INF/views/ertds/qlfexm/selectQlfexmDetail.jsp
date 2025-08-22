@@ -38,6 +38,7 @@
 					작성일:
 					<fmt:formatDate value="${qualficationExamVO.examNotiDate}" pattern="yyyy-MM-dd" />
 				</span>
+				<span class="detail-header__meta-item detail-header__meta-item--source">[ 출처 : 국가평생교육진흥원 검정고시지원센터 ]</span>
 			</div>
 		</div>
 			<hr class="detail__divider" />

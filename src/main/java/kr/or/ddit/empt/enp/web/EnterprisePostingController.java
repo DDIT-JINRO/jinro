@@ -43,6 +43,11 @@ public class EnterprisePostingController {
 		companyVO.setCurrentPage(currentPage);
 		companyVO.setSize(5);
 		int total = enterprisePostingService.selectCompanyListCount(companyVO);
+		
+		if (principal != null && !principal.getName().equals("anonymousUser")) {
+			int memId = Integer.parseInt(principal.getName());
+			companyVO.setMemId(memId);
+		}
 
 		List<CompanyVO> companyVOList = enterprisePostingService.selectCompanyList(companyVO);
 

@@ -111,7 +111,7 @@
 						</div>
 					</div>
 				</form>
-
+				<span class="list-header__meta-item list-header__meta-item--source">[ 출처 : 한국고용정보원 고용24 (구 워크넷) ]</span>
 				<c:choose>
 					<c:when test="${empty articlePage.content || articlePage.content == null }">
 						<p class="content-list__no-results">해당 직업 목록이 없습니다.</p>

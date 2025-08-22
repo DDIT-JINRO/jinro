@@ -91,7 +91,7 @@
 					</div>
 				</div>
 			</form>
-
+			<span class="list-header__meta-item list-header__meta-item--source">[ 출처 : 나이스 교육정보 개방 포털(NEIS) ]</span>
 			<div class="content-list">
 				<div class="content-list__header">
 					<span class="content-list__col content-list__col--school-name">학교명</span>

@@ -36,8 +36,10 @@
 					</div>
 				</div>
 			</form>
-			<p class="content-list__total-count">총 ${getTotal}건</p>
-
+			<div class="source-div">
+				<span class="list-header__meta-item list-header__meta-item--source">[ 출처 : 국가평생교육진흥원 검정고시지원센터 ]</span>
+				<p class="content-list__total-count">총 ${getTotal}건</p>
+			</div>
 			<div class="content-list">
 				<div class="content-list__header">
 					<span class="content-list__col content-list__col--no">번호</span>

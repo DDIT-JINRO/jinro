@@ -19,7 +19,13 @@
 				  , UNIV_URL
 				  , UNIV_REGION
 				  , UNIV_ADDR
-				FROM UNIVERSITY U
+				  <if test="memId != null and memId != ''">
+				  , B.BM_ID
+				  </if>
+				FROM UNIVERSITY U 
+				<if test="memId != null and memId != ''">
+				LEFT JOIN (SELECT BM_ID, BM_TARGET_ID FROM BOOKMARK WHERE BM_CATEGORY_ID='G03001' AND MEM_ID=#{memId})B ON U.UNIV_ID = B.BM_TARGET_ID
+				</if>
 				LEFT JOIN COM_CODE CC1 ON U.UNIV_TYPE = CC1.CC_ID
 				LEFT JOIN COM_CODE CC2 ON U.UNIV_GUBUN = CC2.CC_ID
 				<where>
@@ -48,7 +54,11 @@
 			            )
 			        </if>
 		        </where>
-		        ORDER BY U.UNIV_ID
+		        ORDER BY 
+		        <if test="memId != null and memId != ''">
+		        	B.BM_ID, 
+		        </if>
+		        U.UNIV_ID
 		
 			) sub
 			WHERE ROWNUM <![CDATA[<=]]> #{endNo}

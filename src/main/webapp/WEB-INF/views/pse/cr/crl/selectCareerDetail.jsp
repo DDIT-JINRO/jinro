@@ -41,7 +41,7 @@
 					<div class="detail-header__divider"></div>
 					<div class="detail-header__meta">
 						<span class="detail-header__meta-item">${jobs.jobLcl} > ${jobs.jobMcl}</span>
-						<span class="detail-header__meta-item detail-header__meta-item--source">[ 정보제공 : 한국고용정보원 고용24 (구 워크넷) ]</span>
+						<span class="detail-header__meta-item detail-header__meta-item--source">[ 출처 : 한국고용정보원 고용24 (구 워크넷) ]</span>
 					</div>
 				</section>
 

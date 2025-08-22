@@ -24,6 +24,7 @@
 			<h3 class="page-title-bar__title">고등학교 정보</h3>
 		</div>
 		<div class="public-wrapper-main">
+			<span class="detail-header__meta-item detail-header__meta-item--source">[ 출처 : 나이스 교육정보 개방 포털(NEIS) ]</span>
 			<div class="detail-page" id="highSchoolDetailContainer" data-hs-name="${highSchool.hsName}" data-hs-addr="${highSchool.hsAddr}" data-hs-tel="${highSchool.hsTel}" data-hs-lat="${empty highSchool.hsLat ? 0 : highSchool.hsLat}" data-hs-lot="${empty highSchool.hsLot ? 0 : highSchool.hsLot}">
 
 				<section class="detail-header">
