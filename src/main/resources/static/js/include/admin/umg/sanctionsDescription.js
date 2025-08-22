@@ -172,13 +172,9 @@ function sanctionsDescription() {
 			window.penaltyStatsChartInstance.destroy();
 		}
 
-		console.log(params);
-
 		axios.get('/admin/pmg/getPenaltyStats.do', {params : params})
 			.then(res => {
 				const penaltyData = res.data.data;
-
-				console.log(res);
 
 				// 라벨을 직접 분할하는 대신, Chart.js의 콜백 함수에서 처리하도록 수정
 				const labels = penaltyData.map(item => item.PENALTYTYPE);
@@ -436,8 +432,6 @@ function sanctionsDescription() {
 		})
 			.then(({ data }) => {
 				reportListCache = data.content;
-
-				console.log(reportListCache);
 
 				const countEl = document.getElementById('reportList-count');
 				if (countEl) countEl.textContent = parseInt(data.total, 10).toLocaleString();

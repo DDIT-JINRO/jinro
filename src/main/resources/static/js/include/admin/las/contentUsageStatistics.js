@@ -570,7 +570,6 @@ function contentUsageStatistics() {
 		axios.get('/admin/las/cont/bookmark/category-stacked', { params })
 			.then(res => {
 				const responseData = res.data;
-				console.log('북마크 카테고리 API 응답:', responseData);
 
 				// 고정된 5개 카테고리 정의 (ServiceImpl 참고)
 				const fixedCategories = ['대학', '기업', '직업', '이력서템플릿', '학과'];
@@ -587,9 +586,6 @@ function contentUsageStatistics() {
 
 				// 고정된 순서로 데이터 구성 (없는 카테고리는 0으로 설정)
 				const counts = fixedCategories.map(category => categoryDataMap[category] || 0);
-
-				console.log('북마크 카테고리 고정 라벨:', fixedCategories);
-				console.log('북마크 카테고리 매핑된 데이터:', counts);
 
 				window.bookmarkCategoryChartInstance = new Chart(ctx, {
 					type: 'bar',

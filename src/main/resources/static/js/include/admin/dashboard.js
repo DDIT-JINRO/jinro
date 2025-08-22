@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	/************************ 월별 사용자 통계 및 카드 데이터 *******************************/
 	axios.get('/admin/chart/getAdminDashboard.do').then(res => {
 		const chartData = res.data;
-		console.log(chartData);
 
 		// --- 카드 데이터 UI 업데이트 ---
 		const liveUserCount = document.getElementById('liveUserCount');
