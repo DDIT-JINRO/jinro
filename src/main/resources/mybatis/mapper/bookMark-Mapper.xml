@@ -14,6 +14,7 @@
 		        , U.UNIV_ADDR         AS CONTENT_2       <!-- 내용2 (상세 주소) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID    <!-- 원본 기본키 -->
 		        , B.BM_CREATED_AT     AS BM_CREATED_AT   <!-- 북마크 생성일 -->
+		        , NULL AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -33,6 +34,7 @@
 		        , TO_CHAR(C.CP_DESCRIPTION)    AS CONTENT_2 <!-- 내용2 (기업 설명) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT     AS BM_CREATED_AT
+		        , NULL AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -52,6 +54,7 @@
 		        , '공고 기간: ' || TO_CHAR(H.HIRE_START_DATE, 'YYYY-MM-DD') || ' ~ ' || TO_CHAR(H.HIRE_END_DATE, 'YYYY-MM-DD') AS CONTENT_2 <!-- 내용2 (공고 기간) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT     AS BM_CREATED_AT
+		        , NULL AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -68,9 +71,10 @@
 		        , CC.CC_NAME          AS CATEGORY_NAME
 		        , J.JOB_NAME          AS TITLE           <!-- 직업명 -->
 		        , (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = J.JOB_LCL) || ' > ' || (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = J.JOB_MCL) AS CONTENT_1 <!-- 직업 대분류 -->
-		        , J.JOB_MAIN_DUTY AS CONTENT_2           <!-- 주요 업무 -->
+		        , J.JOB_MAIN_DUTY     AS CONTENT_2           <!-- 주요 업무 -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT
+		        , J.JOB_CODE          AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -90,6 +94,7 @@
 		        , '조회수 : ' || BRD.BOARD_CNT AS CONTENT_2 <!-- 내용2 (조회수) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT
+		        , NULL AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -99,6 +104,27 @@
 		        AND B.MEM_ID = #{memId}
 		        AND BRD.CC_ID = 'G09004' <!-- 이력서 템플릿 게시판 타입 -->
 		        AND BRD.BOARD_DEL_YN = 'N'
+		        
+		    UNION ALL
+		
+		    <!-- 6. 학과정보 북마크 (G03006) -->
+		    SELECT
+		        B.BM_ID
+		        , B.BM_CATEGORY_ID
+		        , CC.CC_NAME          AS CATEGORY_NAME
+		        , (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = UDD.UDD_M_CLASS) AS TITLE 
+		        , (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = UDD.UDD_L_CLASS) AS CONTENT_1
+		        , UDD.UDD_SUM         AS CONTENT_2
+		        , B.BM_TARGET_ID      AS BM_TARGET_ID
+		        , B.BM_CREATED_AT
+		        , NULL AS JOB_CODE
+		    FROM
+		        BOOKMARK B
+		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
+		        JOIN UNIV_DEPT_DETAIL UDD ON B.BM_TARGET_ID = UDD.UDD_ID
+		    WHERE
+		        B.BM_CATEGORY_ID = 'G03006'
+		        AND B.MEM_ID = #{memId}
 		)
 
 	    SELECT
@@ -117,6 +143,7 @@
 					, CONTENT_2
 					, BM_TARGET_ID
 					, BM_CREATED_AT
+					, JOB_CODE
 				FROM
 					ALL_BOOKMARKS
 				WHERE
@@ -162,6 +189,7 @@
 		        , U.UNIV_ADDR         AS CONTENT_2       <!-- 내용2 (상세 주소) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID    <!-- 원본 기본키 -->
 		        , B.BM_CREATED_AT     AS BM_CREATED_AT   <!-- 북마크 생성일 -->
+		        , NULL AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -181,6 +209,7 @@
 		        , TO_CHAR(C.CP_DESCRIPTION)    AS CONTENT_2 <!-- 내용2 (기업 설명) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT     AS BM_CREATED_AT
+		        , NULL AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -200,6 +229,7 @@
 		        , '공고 기간: ' || TO_CHAR(H.HIRE_START_DATE, 'YYYY-MM-DD') || ' ~ ' || TO_CHAR(H.HIRE_END_DATE, 'YYYY-MM-DD') AS CONTENT_2 <!-- 내용2 (공고 기간) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT     AS BM_CREATED_AT
+		        , NULL AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -219,6 +249,7 @@
 		        , J.JOB_MAIN_DUTY AS CONTENT_2           <!-- 주요 업무 -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT
+		        , J.JOB_CODE          AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -238,6 +269,7 @@
 		        , '조회수 : ' || BRD.BOARD_CNT AS CONTENT_2 <!-- 내용2 (조회수) -->
 		        , B.BM_TARGET_ID      AS BM_TARGET_ID
 		        , B.BM_CREATED_AT
+		        , NULL AS JOB_CODE
 		    FROM
 		        BOOKMARK B
 		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
@@ -247,6 +279,27 @@
 		        AND B.MEM_ID = #{memId}
 		        AND BRD.CC_ID = 'G09004' <!-- 이력서 템플릿 게시판 타입 -->
 		        AND BRD.BOARD_DEL_YN = 'N'
+		        
+   		    UNION ALL
+		
+		    <!-- 6. 학과정보 북마크 (G03006) -->
+		    SELECT
+		        B.BM_ID
+		        , B.BM_CATEGORY_ID
+		        , CC.CC_NAME          AS CATEGORY_NAME
+		        , (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = UDD.UDD_M_CLASS) AS TITLE 
+		        , (SELECT CC_NAME FROM COM_CODE WHERE CC_ID = UDD.UDD_L_CLASS) AS CONTENT_1
+		        , UDD.UDD_SUM         AS CONTENT_2
+		        , B.BM_TARGET_ID      AS BM_TARGET_ID
+		        , B.BM_CREATED_AT
+		        , NULL AS JOB_CODE
+		    FROM
+		        BOOKMARK B
+		        JOIN COM_CODE CC ON B.BM_CATEGORY_ID = CC.CC_ID
+		        JOIN UNIV_DEPT_DETAIL UDD ON B.BM_TARGET_ID = UDD.UDD_ID
+		    WHERE
+		        B.BM_CATEGORY_ID = 'G03006'
+		        AND B.MEM_ID = #{memId}
 		)
 		
 	    SELECT
