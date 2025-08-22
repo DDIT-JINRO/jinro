@@ -58,14 +58,32 @@ function loginBtn(){
 	  }) 
 	  .then(response => response.json())  
 	  .then(data => {
-	    if(data.status=='success'){
+		if(data.status=='success'){
 			const redirectUrl = sessionStorage.getItem("redirectUrl");
 			if (redirectUrl) {
 				sessionStorage.removeItem("redirectUrl");
 				location.href = redirectUrl;
-			} else {
-				location.href = "/";
 			}
+			
+			const memRole = data.memRole;
+			
+			switch(memRole) {
+				case "R01001":
+					location.href = "/";
+					break;
+				case "R01002":
+					location.href = "/admin";
+					break;
+				case "R01003":
+					location.href = "/cns";
+					break;
+				case "R01004":
+					location.href = "/cnsLeader";
+					break;
+				default:
+					location.href = "/";
+			}
+						
 	    }
 	  })
 	  .catch(error => {
