@@ -7,39 +7,39 @@
 <body>
 	<div class="flex gap cnsMg-1" style="margin-bottom: 20px;">
 		<div class="template-panel public-countCard ">
-			<div class="public-card-title">월별 상담 신청 수</div>
+			<div class="public-card-title">월간 상담 신청 수</div>
 			<img class="public-card-icon" alt="" src="/images/admin/admin-image1.png">
 			<div class="public-card-count" id="monthlyCnsCount">123</div>
 			<div class="public-span-space">
 				<span id="monthlyCnsApp" class="public-span-increase">▲13.5%</span>
-				<div class=public-span-since>Since last day</div>
+				<div class=public-span-since>Since last month</div>
 			</div>
 		</div>
 		<div class="template-panel public-countCard back-color-red">
-			<div class="public-card-title color-white">일일 대면상담 신청수</div>
+			<div class="public-card-title color-white">월간 대면상담 신청수</div>
 			<img class="public-card-icon" alt="" src="/images/admin/admin-offlineCns.png">
 			<div class="public-card-count color-white" id="dailyOffCnsCount">123</div>
 			<div class="public-span-space">
 				<span class="public-span-increase color-white" id="dailyOffCnsRate">▲13.5%</span>
-				<div class="public-span-since color-white">Since last day</div>
+				<div class="public-span-since color-white">Since last month</div>
 			</div>
 		</div>
 		<div class="template-panel public-countCard back-color-green">
-			<div class="public-card-title color-white">일일 채팅상담 신청수</div>
+			<div class="public-card-title color-white">월간 채팅상담 신청수</div>
 			<img class="public-card-icon" alt="" src="/images/admin/admin-chatCns.png">
 			<div class="public-card-count color-white" id="dailyChatCnsCount">123</div>
 			<div class="public-span-space">
 				<span class="public-span-increase color-white" id="dailyChatCnsRate">▲13.5%</span>
-				<div class="public-span-since color-white">Since last day</div>
+				<div class="public-span-since color-white">Since last month</div>
 			</div>
 		</div>
 		<div class="template-panel public-countCard back-color-purple">
-			<div class="public-card-title color-white">일일 화상상담 신청수</div>
+			<div class="public-card-title color-white">월간 화상상담 신청수</div>
 			<img class="public-card-icon" alt="" src="/images/admin/admin-videoCns.png">
 			<div class="public-card-count color-white" id="dailyVideoCnsCount">123</div>
 			<div class="public-span-space">
 				<span class="public-span-increase color-white" id="dailyVideoCnsRate">▲13.5%</span>
-				<div class="public-span-since color-white">Since last day</div>
+				<div class="public-span-since color-white">Since last month</div>
 			</div>
 		</div>
 	</div>
