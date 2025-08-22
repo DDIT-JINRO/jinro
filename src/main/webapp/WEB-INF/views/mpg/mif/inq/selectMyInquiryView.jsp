@@ -39,13 +39,6 @@
 						<div class="profile-photo-area">
 							<div class="profile-wrapper">
 								<img class="profile-img" src="<c:out value="${!empty member.profileFilePath ? member.profileFilePath : '/images/defaultProfileImg.png' }"/>" alt="프로필이미지" />
-								
-								<c:if test="${!empty member.badgeFilePath}">
-									<img class="badge-img" src="${member.badgeFilePath}" alt="테두리이미지"/>
-								</c:if>
-								<c:if test="${!empty member.subFilePath}">
-								    <img class="effect-img" src="${member.subFilePath}" alt="효과이미지"/>
-								</c:if>
 							</div>
 							
 
