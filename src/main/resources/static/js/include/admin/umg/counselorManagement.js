@@ -189,7 +189,7 @@ function counselorManagement() {
 	      if (hiddenInput._flatpickr) hiddenInput._flatpickr.destroy();
 	      flatpickr(hiddenInput, {
 	        mode: 'range',
-	        maxDate: 'today',
+	        //maxDate: 'today',
 	        positionElement: selectEl,
 	        onChange: (arr) => {
 	          if (arr.length === 2) {
@@ -502,9 +502,9 @@ function counselorManagement() {
 			flatpickr(hiddenInput, {
 				mode: 'range',
 				dateFormat: 'Y-m-d',
-				maxDate: 'today',
+				//maxDate: 'today',
 				positionElement: selectEl,  // 달력을 해당 셀렉트 바로 위에 띄움
-				disable: [d => d > new Date()],
+				//disable: [d => d > new Date()],
 				onChange: (arr) => {
 					if (arr.length === 2) {
 						const s = formatDateCal(arr[0]);
@@ -1016,7 +1016,7 @@ function counselorManagement() {
 		};
 		const HOVER_POINT = '#8E6EE4'; // 공통 hover 포인트 컬러(보라계열)
 
-		const SHOW_ZERO_AS_GAP = true;  // 0은 끊김(null) 처리해서 요동 줄임
+		const SHOW_ZERO_AS_GAP = false;  // 0은 끊김(null) 처리해서 요동 줄임
 
 		const rangeTitle = (params.selectUserInquiry === 'selectDays' && params.startDate && params.endDate)
 		    ? `${params.startDate.replace(/-/g, '.')} ~ ${params.endDate.replace(/-/g, '.')}`
