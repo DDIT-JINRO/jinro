@@ -610,8 +610,6 @@ function appendMessage(msgVO) {
 		      ${isMine ? `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` : '' }
 		      <div class="profile-wrapper chat-profile">
 		        <img class="profile-img" src="${msgVO.fileProfileStr ? msgVO.fileProfileStr : '/images/defaultProfileImg.png'}" />
-		        <img class="badge-img" src="${msgVO.fileBadgeStr ? msgVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
-		        ${msgVO.fileSubStr ? `<img class="effect-img sparkle" src="${msgVO.fileSubStr}"/>` : ''}
 		      </div>
 		      ${isMine ? '' : `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` }
 		    </div>
@@ -640,8 +638,6 @@ function appendMessage(msgVO) {
 		      ${isMine ? `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` : '' }
 		      <div class="profile-wrapper chat-profile">
 		        <img class="profile-img" src="${msgVO.fileProfileStr ? msgVO.fileProfileStr : '/images/defaultProfileImg.png'}" />
-		        <img class="badge-img" src="${msgVO.fileBadgeStr ? msgVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
-		        ${msgVO.fileSubStr ? `<img class="effect-img sparkle" src="${msgVO.fileSubStr}"/>` : ''}
 		      </div>
 		      ${isMine ? '' : `<span class="chat-nickname">${msgVO.memNickname ?? ''}</span>` }
 		    </div>
@@ -668,8 +664,6 @@ function appendMessage(msgVO) {
 			${isMine ? `<span class="chat-nickname">${msgVO.memNickname}</span>` : '' }
 			<div class="profile-wrapper chat-profile">
 				<img class="profile-img" src="${msgVO.fileProfileStr ? msgVO.fileProfileStr : '/images/defaultProfileImg.png'}" />
-				<img class="badge-img" src="${msgVO.fileBadgeStr ? msgVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
-				${msgVO.fileSubStr ? `<img class="effect-img sparkle" src="${msgVO.fileSubStr}"/>` : ''}
 			</div>
 			${isMine ? '' : `<span class="chat-nickname">${msgVO.memNickname}</span>` }
 		</div>

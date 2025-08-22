@@ -264,8 +264,6 @@ function createParentReply(replyVO, e) {
 	<div class="reply-profile">
 	  <div class="profile-wrapper user-profile">
 	    <img class="profile-img" src="${replyVO.fileProfileStr ? replyVO.fileProfileStr : '/images/defaultProfileImg.png'}" alt="profile"/>
-	    <img class="badge-img" src="${replyVO.fileBadgeStr ? replyVO.fileBadgeStr : '/images/defaultBorderImg.png'}" alt="badge"/>
-		${replyVO.fileSubStr ? `<img class="effect-img sparkle" src=${replyVO.fileSubStr} />` : ""}
 	  </div>
 	  <div class="writer-info">
 	    <div class="reply-nickname">${replyVO.memNickname}</div>
@@ -334,8 +332,6 @@ function createChildReply(replyVO, e) {
 		<div class="reply-profile">
 		  <div class="profile-wrapper user-profile">
 		    <img class="profile-img" src="${replyVO.fileProfileStr ? replyVO.fileProfileStr : '/images/defaultProfileImg.png'}"/>
-		    <img class="badge-img" src="${replyVO.fileBadgeStr ? replyVO.fileBadgeStr : '/images/defaultBorderImg.png'}" />
-			${replyVO.fileSubStr ? `<img class="effect-img sparkle" src=${replyVO.fileSubStr} />` : ""}
 		  </div>
 		  <div class="writer-info">
 		    <div class="reply-nickname">${replyVO.memNickname}</div>
