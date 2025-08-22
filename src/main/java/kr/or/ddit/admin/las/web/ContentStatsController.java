@@ -20,6 +20,47 @@ public class ContentStatsController {
 
 	@Autowired
 	private ContentStatsService contentStatsService;
+	
+	// 상단 증감 내용들
+	@GetMapping("/daily-summary")
+	public Map<String, Object> getDailySummary() {
+	    return contentStatsService.getDailySummary();
+	}
+	
+	// 로드맵 진행단계별 분포 통계
+	@GetMapping("/roadmap/step-distribution")
+	public Map<String, Object> getRoadmapStepDistribution() {
+	    return contentStatsService.getRoadmapStepDistribution();
+	}
+	
+	/**
+	 * 커뮤니티 활동 통계 (주간/월간 증감률 포함)
+	 * @param period 'week' 또는 'month' (기본값: week)
+	 */
+	@GetMapping("/community/activity-stats")
+	public Map<String, Object> getCommunityActivityStats(@RequestParam(defaultValue = "week") String period) {
+	    return contentStatsService.getCommunityActivityStats(period);
+	}
+	
+	/**
+	 * 커뮤니티 이용통계 (게시판별)
+	 * @param params 필터 조건 파라미터
+	 * @return 기간별 각 게시판의 게시글 수 통계
+	 */
+	@GetMapping("/community/usage-stats")
+	public List<Map<String, Object>> getCommunityUsageStats(@RequestParam Map<String, Object> params) {
+	    return contentStatsService.getCommunityUsageStats(params);
+	}
+	
+	/**
+	 * 월드컵/로드맵 이용현황 통계
+	 * @param params 필터 조건 파라미터
+	 * @return 기간별 월드컵/로드맵 이용 현황 통계
+	 */
+	@GetMapping("/worldcup-roadmap/usage-stats")
+	public List<Map<String, Object>> getWorldcupRoadmapUsageStats(@RequestParam Map<String, Object> params) {
+	    return contentStatsService.getWorldcupRoadmapUsageStats(params);
+	}
 
 	@GetMapping("/bookmark/category-stacked")
 	public List<Map<String, Object>> bookmarkCategoryCounts(@RequestParam Map<String, Object> param){

@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	/************************ 월별 사용자 통계 및 카드 데이터 *******************************/
 	axios.get('/admin/chart/getAdminDashboard.do').then(res => {
 		const chartData = res.data;
-		console.log(chartData);
 
 		// --- 카드 데이터 UI 업데이트 ---
 		const liveUserCount = document.getElementById('liveUserCount');
@@ -20,13 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (chartData.monthUserCountStatus === "increase") {
 			monthUserRate.innerHTML = `&#9650;&nbsp;${chartData.monthUserCountRate}%`;
 			monthUserRate.classList.add('public-span-increase');
-			monthUserRate.classList.remove('public-span-decrease');
+			monthUserRate.classList.remove('public-span-decrease', 'public-span-equal');
 		} else if (chartData.monthUserCountStatus === "decrease") {
 			monthUserRate.innerHTML = `&#9660;&nbsp;${chartData.monthUserCountRate}%`;
 			monthUserRate.classList.add('public-span-decrease');
-			monthUserRate.classList.remove('public-span-increase');
+			monthUserRate.classList.remove('public-span-increase', 'public-span-equal');
 		} else {
 			monthUserRate.innerHTML = `${chartData.monthUserCountRate}%`;
+			monthUserRate.classList.add('public-span-equal');
 			monthUserRate.classList.remove('public-span-increase', 'public-span-decrease');
 		}
 		if (chartData.allUserCountStatus === "increase") {

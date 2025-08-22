@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 .roadmapAndWorldCupSpace {
-	height: 540px;
+	height: 580px;
 }
 
 .contentUsage-1-1 {
@@ -17,8 +17,8 @@
 }
 
 .constentUsage-1-2-1 {
-	width: 390px;	
-	height: 275px;
+	width: 386.25px;
+	height: 250px;
 	margin-bottom: 20px;
 }
 
@@ -48,15 +48,19 @@
 }
 
 .roadmapStepCount {
-	height: 415px;
+	height: 480px;
 }
 
 .roadmapStepCount-stepCount {
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 .roadmapStepCount-step {
-	margin-left: 30px;
+	margin-left: 15px;
+}
+
+.roadmapStepCount-step-cnt {
+	margin-left: 25px;
 }
 
 .roadmapStepCount-stepTitle {
@@ -73,7 +77,7 @@
 }
 
 .borderBottom {
-	margin-top: 20px;
+	margin-top: 10px;
 	border-bottom: 1px solid #eeeeee;
 }
 
@@ -84,7 +88,7 @@
 }
 
 .commOnceView {
-	width: 390px;
+	width: 800px;
 }
 
 .commOnceView-box {
@@ -110,6 +114,52 @@
 
 .newBodrdList {
 	width: 390px;
+}
+
+.roadPercentSpace {
+	margin-top: 5px;
+}
+
+.commOnceView-1 {
+	justify-content: space-between;
+}
+
+.newCommListTableTbody tr {
+	opacity: 0;
+	transform: translateY(20px);
+	transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
+.newCommListTableTbody tr.visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.newCommListTableTbody.fade-out tr {
+	opacity: 0;
+	transform: translateY(20px);
+	transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+}
+
+.newCommListTitle {
+	/* 1. 최대 너비 지정 (가장 중요!) */
+	max-width: 100px; /* 이 너비는 실제 레이아웃에 맞게 조절하세요 */
+	/* 2. 아래 3개 속성은 세트로 사용합니다 */
+	white-space: nowrap; /* 텍스트가 길어져도 줄바꿈을 하지 않음 */
+	overflow: hidden; /* 지정된 너비를 넘어가는 내용을 숨김 */
+	text-overflow: ellipsis; /* 숨겨진 부분에 ... 을 표시 */
+}
+
+.commOnceView-left-box {
+	width: 50%;
+}
+
+.commOnceView-right-box {
+	width: 50%;
+}
+
+.commOnceView-rate {
+	margin-top: 10px;
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -142,8 +192,6 @@
 .left-column .template-panel, .right-column .template-panel {
 	flex: 1;
 }
-
-
 
 /* ──────────────────────────────────────────────────────────
    패널 헤더
@@ -421,6 +469,71 @@ select.compact {
 .rank-table thead th {
 	background: #f7f9fc;
 	color: #07223D;
+}
+
+.newCommListTable {
+	margin-top: 20px;
+}
+
+.newCommListTableTbody tr {
+	height: 70px;
+}
+
+.newCommListTableTbody tr {
+	cursor: pointer;
+}
+
+.commUsageChartSelectGroup {
+	justify-content: flex-end;
+}
+
+.commUsageChartSpace {
+	width: 800px;
+}
+
+.public-countCard {
+	width: 386.25px;
+}
+
+.contentUsage-2 {
+	margin-bottom: 20px;
+}
+
+.bookmarkCateChartSpace {
+	width: 792.84px;
+	height: 475px;
+}
+
+.roadmapAndWorldSelectGroupChart {
+	display: flex;
+	margin-top: auto;
+	height: 500px;
+	flex-direction: column-reverse;
+}
+
+.commChartUsageHeader {
+	display: flex;
+	justify-content: space-between;
+}
+
+.commUsageChartDraw {
+	display: flex;
+	flex-direction: column-reverse;
+	margin-top: auto;
+}
+
+.bookmarkCategoryChartDraw {
+	height: 400px; display : flex;
+	flex-direction: column-reverse;
+	margin-top: auto;
+	display: flex;
+}
+
+.bookmarkTopChartSpace {
+	height: 500px;
+	display: flex;
+	flex-direction: column-reverse;
+	margin-top: auto;
 }
 
 /* panel-header에 이미 쓰는 active 톤과 동일하게 */

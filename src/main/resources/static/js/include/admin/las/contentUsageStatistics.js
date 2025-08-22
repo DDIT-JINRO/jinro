@@ -1,502 +1,994 @@
-/* contentUsageStatistics.js — accessUsageStatistics.js 스타일 재작성 (덮어쓰기용) */
+function contentUsageStatistics() {
+	// 공용 달력 input 요소
+	const hiddenInput = document.getElementById('comCalendarInput');
 
-/* ========================= 공통 유틸 ========================= */
-( function(){
+	// 각 차트별 select 요소들 (payment.js 패턴과 동일)
+	const roadmapChartDaySel = document.getElementById('roadmapChartDay');
+	const roadmapChartGenderSel = document.getElementById('roadmapChartGender');
+	const roadmapChartAgeGroupSel = document.getElementById('roadmapChartAgeGroup');
+	const roadmapAndWorldCupChartResetBtn = document.getElementById('roadmapAndWorldCupChartReset');
 
-function toArray(data) {
-  // 서버가 [ ... ] 대신 { list:[...]} / {rows:[...]} / {...} 등으로 줄 때 대비
-  if (Array.isArray(data)) return data;
-  if (data && Array.isArray(data.list)) return data.list;
-  if (data && Array.isArray(data.rows)) return data.rows;
-  if (data && Array.isArray(data.items)) return data.items;
-  return []; // 배열 아니면 안전하게 빈배열
-}
+	const commUsageChartDaySel = document.getElementById('commUsageChartDay');
+	const commUsageChartGenderSel = document.getElementById('commUsageChartGender');
+	const commUsageChartAgeGroupSel = document.getElementById('commUsageChartAgeGroup');
+	const commUsageChartCategorySel = document.getElementById('commUsageChartCategory');
+	const commUsageChartResetBtn = document.getElementById('commUsageChartReset');
 
-function getEl(id) { return document.getElementById(id); }
+	const bookmarkCategoryChartDaySel = document.getElementById('bookmarkCategoryChartDay');
+	const bookmarkCategoryChartGenderSel = document.getElementById('bookmarkCategoryChartGender');
+	const bookmarkCategoryChartAgeGroupSel = document.getElementById('bookmarkCategoryChartAgeGroup');
+	const bookmarkCategoryChartResetBtn = document.getElementById('bookmarkCategoryChartReset');
 
-function destroyIfExists(canvasId) {
-  const el = getEl(canvasId);
-  if (!el) return;
-  const inst = Chart.getChart(el);
-  if (inst) inst.destroy();
-}
+	const bookmarkTopChartDaySel = document.getElementById('bookmarkTopChartDay');
+	const bookmarkTopChartGenderSel = document.getElementById('bookmarkTopChartGender');
+	const bookmarkTopChartAgeGroupSel = document.getElementById('bookmarkTopChartAgeGroup');
+	const bookmarkTopChartResetBtn = document.getElementById('bookmarkTopChartReset');
 
-function getFilters() {
-  // 기간 라벨에서 from/to 읽기 (flatpickr에서 두 날짜 선택되면 라벨에 들어감)
-  const label = getEl('cusDateLabel');
-  const range = (label && label.dataset.range) ? label.dataset.range : '';
-  const [from, to] = range.split('~').map(s => s && s.trim());
+	// 이벤트 리스너 등록
+	setupEventListeners();
 
-  return {
-    from: from || '',
-    to: to || '',
-    gender:  (getEl('cusGender')  && getEl('cusGender').value)  || 'ALL',
-    ageBand: (getEl('cusAgeBand') && getEl('cusAgeBand').value) || 'ALL',
-    ccId:    (getEl('cusCcId')    && getEl('cusCcId').value)    || 'ALL',
-  };
-}
+	function setupEventListeners() {
+		// 월드컵 로드맵 차트 이벤트
+		roadmapChartDaySel.addEventListener('change', eventDateRangeSelect);
+		roadmapChartGenderSel.addEventListener('change', loadWorldcupRoadmapChart);
+		roadmapChartAgeGroupSel.addEventListener('change', loadWorldcupRoadmapChart);
+		roadmapAndWorldCupChartResetBtn.addEventListener('click', function() {
+			resetChartFilters('roadmapAndWorldCup');
+		});
 
-function apiGet(url, paramsObj) {
-  // access 스타일: axios.get(url, { params })
-  return axios.get(url, { params: paramsObj }).then(res => res.data).catch(err => {
-    console.error('API 실패:', url, err);
-    return []; // 실패 시에도 안전하게 배열 반환
-  });
-}
+		// 커뮤니티 이용통계 차트 이벤트
+		commUsageChartDaySel.addEventListener('change', eventDateRangeSelect);
+		commUsageChartGenderSel.addEventListener('change', loadCommunityUsageChart);
+		commUsageChartAgeGroupSel.addEventListener('change', loadCommunityUsageChart);
+		commUsageChartCategorySel.addEventListener('change', loadCommunityUsageChart);
+		commUsageChartResetBtn.addEventListener('click', function() {
+			resetChartFilters('communityUsage');
+		});
 
-/* ========================= API 엔드포인트 ========================= */
-const API = {
-  bmStacked:   '/admin/las/cont/bookmark/category-stacked',  // categoryId,categoryName,maleCnt,femaleCnt
-  bmTopN:      '/admin/las/cont/bookmark/top',               // categoryId,categoryName,targetId,targetName,cnt
-  commPosts:   '/admin/las/cont/community/postDaily',        // dt,ccId,ccName,postCnt,uniqueAuthors
-  commReact:   '/admin/las/cont/community/reactionDaily',    // dt,ccId,ccName,type,cnt
-  wrSummary:   '/admin/las/cont/worldcup-roadmap/summary',
-  wrTrend:     '/admin/las/cont/worldcup-roadmap/daily',    // dt,feature,cnt
-  commTopMembers: '/admin/las/cont/community/top-members',   // nickname,postCnt,replyCnt,likeCnt,score
-  commTopPosts:   '/admin/las/cont/community/top-posts',     // title,ccName,replyCnt,likeCnt,engageCnt
-  worldcupTopJobs:'/admin/las/cont/worldcup/top-jobs',        // jobName,jobCode,cnt
-  roadmapCreateCompleteSummary: '/admin/las/cont/roadmap/create-complete/summary',
-  roadmapCreateCompleteDaily:   '/admin/las/cont/roadmap/create-complete/daily'
-};
+		// 북마크 카테고리 차트 이벤트
+		bookmarkCategoryChartDaySel.addEventListener('change', eventDateRangeSelect);
+		bookmarkCategoryChartGenderSel.addEventListener('change', loadBookmarkCategoryChart);
+		bookmarkCategoryChartAgeGroupSel.addEventListener('change', loadBookmarkCategoryChart);
+		bookmarkCategoryChartResetBtn.addEventListener('click', function() {
+			resetChartFilters('bookmarkCategory');
+		});
 
-/* ========================= 차트/뷰 렌더 ========================= */
-
-// 좌상단: 북마크 카테고리별 (남/여 스택, 또는 단일 성별)
-function drawBookmarkCategoryStacked() {
-	const from 	= document.getElementById('fromBMC').value;
-	const to 	= document.getElementById('toBMC').value;
-	const ageBand 	= document.getElementById('cusAgeBand').value;
-	const gender = document.querySelector('#bmGenderGroup .btn-gender.active').dataset.gender;
-	const filters = {
-		from : from ? from : '',
-		to	 : to ? to : '',
-		ageBand : ageBand,
-		gender : gender? gender : 'ALL'
-	};
-  return apiGet(API.bmStacked, filters).then(data => {
-    const rows = toArray(data);
-    const labels = rows.map(r => r.categoryName);
-    const male   = rows.map(r => r.maleCnt || 0);
-    const female = rows.map(r => r.femaleCnt || 0);
-
-    destroyIfExists('bmCategoryChart');
-    const ctx = getEl('bmCategoryChart').getContext('2d');
-
-    const datasets = [];
-    if (filters.gender === 'ALL') {
-      datasets.push({ label:'남', data: male,   backgroundColor:'#01AEBC' });
-      datasets.push({ label:'여', data: female, backgroundColor:'#FF6B8A' });
-    } else if (filters.gender === 'G11001') {
-      datasets.push({ label:'남', data: male,   backgroundColor:'#01AEBC' });
-    } else {
-      datasets.push({ label:'여', data: female, backgroundColor:'#FF6B8A' });
-    }
-
-    new Chart(ctx, {
-      type: 'bar',
-      data: { labels, datasets },
-      options: {
-        indexAxis:'y',
-        responsive:true,
-        plugins:{ legend:{ display:true }},
-        scales:{ x:{ stacked:true, beginAtZero:true }, y:{ stacked:true } }
-      }
-    });
-  });
-}
-
-// 좌하단: 북마크 상세 TOP N
-function drawBookmarkTopN() {
-  	const category = document.getElementById('bmTopCategory').value;
-  	const limit = document.getElementById('bmTopLimit').value;
-	const gender = document.querySelector('#bmkGroup .btn-gender.active').dataset.gender;
-	const from 	= document.getElementById('fromBMT').value;
-	const to 	= document.getElementById('toBMT').value;
-	const ageBand = document.getElementById('bmtAgeBand').value;
-
-	const filters = {
-		limit : limit,
-		categoryId : category,
-		gender:gender,
-		from : from ? from : '',
-		to : to ? to : '',
-		ageBand : ageBand ? ageBand : '',
-	};
-
-  return apiGet(API.bmTopN, filters).then(data => {
-    const rows = toArray(data);
-    const labels = rows.map(r => `(${r.CATEGORYNAME})${r.TARGETNAME}`);
-    const values = rows.map(r => `${r.CNT || 0}`);
-
-    destroyIfExists('bmTopChart');
-    const ctx = getEl('bmTopChart').getContext('2d');
-    let myChart = new Chart(ctx, {
-      type:'bar',
-      data:{ labels, datasets:[{ label:'북마크 수', data: values, backgroundColor:'#07223D' }]},
-      options:{
-		 indexAxis:'y',
-		 responsive:true,
-		 plugins:{ legend:{ display:false }},
-		 scales:{ x:{ beginAtZero:true }},
-		 onClick : function(event, elements) {
-			if (elements.length > 0) {
-				const idx =  elements[0].index;
-				const label = myChart.data.labels[idx];
-				const dataTable = document.getElementById('bmTopTable');
-				const hiddenData =dataTable.querySelector(`tr td[data-label="${label}"`);
-				openURL(hiddenData.textContent.trim());
-            }
-		 }
-	 }
-    });
-
-    const tbody = getEl('bmTopTable');
-    if (tbody) {
-      tbody.innerHTML = rows.map(r => `<tr><td data-label='(${r.CATEGORYNAME})${r.TARGETNAME}'>${r.TARGET_URL}</td><td>${r.CNT || 0}</td></tr>`).join('');
-    }
-  });
-}
-
-// 우상단: 커뮤니티 작성 추이
-function drawCommunityPostDaily() {
-  const filters = getFilters();
-  // 선택된 게시판
-  filters.ccId = (getEl('cusCcId') && getEl('cusCcId').value) || 'ALL';
-
-  return apiGet(API.commPosts, filters).then(data => {
-    const rows = toArray(data);
-    const grouped = {}; // dt -> {postCnt, uniqueAuthors}
-    rows.forEach(r => {
-      const d = (r.dt && String(r.dt).slice(0,10)) || r.dt || '';
-      if (!grouped[d]) grouped[d] = { postCnt:0, uniqueAuthors:0 };
-      grouped[d].postCnt += (r.postCnt || 0);
-      grouped[d].uniqueAuthors += (r.uniqueAuthors || 0);
-    });
-
-    const labels = Object.keys(grouped).sort();
-    const post = labels.map(d => grouped[d].postCnt);
-    const uniq = labels.map(d => grouped[d].uniqueAuthors);
-
-    destroyIfExists('communityPostChart');
-	getEl('communityPostWrap').style.display = 'block';
-    getEl('communityReactWrap').style.display = 'none';
-    getEl('communityTopMembersWrap').style.display = 'none';
-    getEl('communityTopPostsWrap').style.display = 'none';
-
-    const ctx = getEl('communityPostChart').getContext('2d');
-    new Chart(ctx, {
-      type:'line',
-      data:{ labels, datasets:[
-        { label:'게시글 수',   data: post, borderColor:'#07223D', backgroundColor:'rgba(7,34,61,.12)', tension:.35, fill:true },
-        { label:'고유 작성자', data: uniq, borderColor:'#01AEBC', backgroundColor:'rgba(1,174,188,.15)', tension:.35, fill:true }
-      ]},
-      options:{ responsive:true, plugins:{ legend:{ position:'top' }}, scales:{ y:{ beginAtZero:true, ticks:{ precision:0 }}} }
-    });
-  });
-}
-
-// 우상단: 커뮤니티 반응 추이
-function drawCommunityReactionDaily() {
-  const filters = getFilters();
-  filters.ccId = (getEl('cusCcId') && getEl('cusCcId').value) || 'ALL';
-
-  return apiGet(API.commReact, filters).then(data => {
-    const rows = toArray(data);
-    const byType = { REPLY:{}, LIKE:{} }; // dt -> cnt
-
-    rows.forEach(r => {
-      const t = r.type || 'REPLY';
-      const d = (r.dt && String(r.dt).slice(0,10)) || r.dt || '';
-      if (!byType[t][d]) byType[t][d] = 0;
-      byType[t][d] += (r.cnt || 0);
-    });
-
-    const labels = Array.from(new Set([...Object.keys(byType.REPLY), ...Object.keys(byType.LIKE)])).sort();
-    const reply = labels.map(d => byType.REPLY[d] || 0);
-    const like  = labels.map(d => byType.LIKE[d]  || 0);
-
-    destroyIfExists('communityReactChart');
-	getEl('communityPostWrap').style.display = 'none';
-	getEl('communityReactWrap').style.display = 'block';
-	getEl('communityTopMembersWrap').style.display = 'none';
-	getEl('communityTopPostsWrap').style.display = 'none';
-
-    const ctx = getEl('communityReactChart').getContext('2d');
-    new Chart(ctx, {
-      type:'line',
-      data:{ labels, datasets:[
-        { label:'댓글',  data: reply, borderColor:'#01AEBC', backgroundColor:'rgba(1,174,188,.15)', tension:.35, fill:true },
-        { label:'좋아요', data: like,  borderColor:'#FFC107', backgroundColor:'rgba(255,193,7,.18)', tension:.35, fill:true }
-      ]},
-      options:{ responsive:true, plugins:{ legend:{ position:'top' }}, scales:{ y:{ beginAtZero:true, ticks:{ precision:0 }}} }
-    });
-  });
-}
-
-// 우상단: 활동 회원 TOP
-function drawCommunityTopMembers() {
-  const filters = getFilters();
-  filters.ccId = (getEl('cusCcId') && getEl('cusCcId').value) || 'ALL';
-  filters.limit = parseInt((getEl('topMembersLimit') && getEl('topMembersLimit').value) || '5', 10);
-
-  return apiGet(API.commTopMembers, filters).then(data => {
-    const rows = toArray(data);
-
-    getEl('communityPostWrap').style.display = 'none';
-    getEl('communityReactWrap').style.display = 'none';
-    getEl('communityTopMembersWrap').style.display = 'block';
-    getEl('communityTopPostsWrap').style.display = 'none';
-
-    const tb = getEl('communityTopMembersBody');
-    tb.innerHTML = rows.map(r =>
-      `<tr><td>${r.nickname || '-'}</td><td>${r.postCnt || 0}</td><td>${r.replyCnt || 0}</td><td>${r.likeCnt || 0}</td><td>${r.score || 0}</td></tr>`
-    ).join('');
-  });
-}
-
-// 우상단: 반응 글 TOP
-function drawCommunityTopPosts() {
-  const filters = getFilters();
-  filters.ccId = (getEl('cusCcId') && getEl('cusCcId').value) || 'ALL';
-  filters.limit = parseInt((getEl('topPostsLimit') && getEl('topPostsLimit').value) || '5', 10);
-
-  return apiGet(API.commTopPosts, filters).then(data => {
-    const rows = toArray(data);
-
-    getEl('communityPostWrap').style.display = 'none';
-    getEl('communityReactWrap').style.display = 'none';
-    getEl('communityTopMembersWrap').style.display = 'none';
-    getEl('communityTopPostsWrap').style.display = 'block';
-
-    const tb = getEl('communityTopPostsBody');
-    tb.innerHTML = rows.map(r =>
-      `<tr><td>${r.title || '-'}</td><td>${r.ccName || '-'}</td><td>${r.replyCnt || 0}</td><td>${r.likeCnt || 0}</td><td>${r.engageCnt || 0}</td></tr>`
-    ).join('');
-  });
-}
-
-// 우하단: 요약 도넛 (BOOKMARK vs WORLDCUP)
-function drawWRSummary() {
-  const filters = getFilters();
-  return apiGet(API.wrSummary, filters).then(data => {
-    const rows = toArray(data);
-    const labels = rows.map(r => (r.feature === 'WORLDCUP' ? '월드컵' : '로드맵'));
-    const values = rows.map(r => r.cnt || 0);
-
-    destroyIfExists('bwSummaryChart');
-    const ctx = getEl('bwSummaryChart').getContext('2d');
-    new Chart(ctx, {
-      type:'doughnut',
-      data:{ labels, datasets:[{ data: values, backgroundColor:['#01AEBC', '#07223D'] }]}, // 월드컵=teal, 로드맵=navy
-      options:{ responsive:true, plugins:{ legend:{ position:'bottom' }}}
-    });
-  });
-}
-
-// 우하단: 일자별 추이
-function drawWRTrend() {
-  const filters = getFilters();
-  return apiGet(API.wrTrend, filters).then(data => {
-    const rows = toArray(data);
-    const byFeat = { WORLDCUP:{}, ROADMAP:{} };
-
-    rows.forEach(r => {
-      const feat = (r.feature === 'ROADMAP' ? 'ROADMAP' : 'WORLDCUP');
-      const d = (r.dt && String(r.dt).slice(0,10)) || r.dt || '';
-      if (!byFeat[feat][d]) byFeat[feat][d] = 0;
-      byFeat[feat][d] += (r.cnt || 0);
-    });
-
-    const labels = Array.from(new Set([...Object.keys(byFeat.WORLDCUP), ...Object.keys(byFeat.ROADMAP)])).sort();
-    const wc = labels.map(d => byFeat.WORLDCUP[d] || 0);
-    const rm = labels.map(d => byFeat.ROADMAP[d]  || 0);
-
-    destroyIfExists('bwTrendChart');
-    const ctx = getEl('bwTrendChart').getContext('2d');
-    new Chart(ctx, {
-      type:'line',
-      data:{ labels, datasets:[
-        { label:'월드컵', data: wc, borderColor:'#01AEBC', backgroundColor:'rgba(1,174,188,.15)', tension:.35, fill:true },
-        { label:'로드맵', data: rm, borderColor:'#07223D', backgroundColor:'rgba(7,34,61,.12)',  tension:.35, fill:true }
-      ]},
-      options:{ responsive:true, plugins:{ legend:{ position:'top' }}, scales:{ y:{ beginAtZero:true, ticks:{ precision:0 }}} }
-    });
-  });
-}
-
-// 우하단: 월드컵 인기 직업 TOP
-function drawWorldcupTop() {
-  const filters = getFilters();
-  filters.limit = parseInt((getEl('worldcupTopLimit') && getEl('worldcupTopLimit').value) || '5', 10);
-
-  return apiGet(API.worldcupTopJobs, filters).then(data => {
-    const rows = toArray(data);
-    const labels = rows.map(r => r.jobName || r.jobCode);
-    const values = rows.map(r => r.cnt || 0);
-
-    destroyIfExists('worldcupTopChart');
-    getEl('worldcupTopWrap').style.display = 'block';
-
-    const ctx = getEl('worldcupTopChart').getContext('2d');
-    new Chart(ctx, {
-      type:'bar',
-      data:{ labels, datasets:[{ label:'참여 수', data: values, backgroundColor:'#01AEBC' }]},
-      options:{ indexAxis:'y', responsive:true, plugins:{ legend:{ display:false }}, scales:{ x:{ beginAtZero:true }} }
-    });
-  });
-}
-
-/* ========================= 초기 바인딩/초기화 ========================= */
-
-function openURL(url){
-	const aEl =document.createElement('a');
-	aEl.href = url;
-	aEl.target = "_blank";
-	document.body.appendChild(aEl);
-	aEl.click();
-	aEl.remove();
-}
-
-function refreshAll() {
-  // 순서 무관; 각 함수 내부에서 기존 차트 destroy 처리
-  drawBookmarkCategoryStacked();
-  drawBookmarkTopN();
-
-  // 커뮤니티: 현재 활성 탭 감지
-  const activeTab = document.querySelector('.btn-tab.active')?.dataset.tab || 'post';
-  if (activeTab === 'react')      drawCommunityReactionDaily();
-  else if (activeTab === 'topMembers') drawCommunityTopMembers();
-  else if (activeTab === 'topPosts')   drawCommunityTopPosts();
-  else drawCommunityPostDaily();
-
-  drawWRSummary();
-  drawWRTrend();
-}
-
-function bindEvents() {
-  // 중복 바인딩 방지 (사이드바가 같은 스크립트 여러 번 append할 수 있어서)
-  if (window.__CUS_BOUND__) return;
-  window.__CUS_BOUND__ = true;
-
-  // 기간/성별·연령 각각 적용
-  getEl('cusDateApply')?.addEventListener('click', refreshAll);
-  getEl('cusDemoApply')?.addEventListener('click', refreshAll);
-
-  // 성별 토글(해당 패널 내부 버튼만)
-  document.addEventListener('click', (e) => {
-    const bmcbtn = e.target.closest('#bmGenderGroup .btn-gender');
-	const bmkbtn = e.target.closest('#bmkGroup .btn-gender');
-    if (bmcbtn) {
-	    document.querySelectorAll('#bmGenderGroup .btn-gender').forEach(b => b.classList.remove('active'));
-	    bmcbtn.classList.add('active');
-		const __bmGender = bmcbtn.dataset.gender;
-	    drawBookmarkCategoryStacked(__bmGender);
+		// 북마크 TOP 차트 이벤트
+		bookmarkTopChartDaySel.addEventListener('change', eventDateRangeSelect);
+		bookmarkTopChartGenderSel.addEventListener('change', loadBookmarkTopChart);
+		bookmarkTopChartAgeGroupSel.addEventListener('change', loadBookmarkTopChart);
+		bookmarkTopChartResetBtn.addEventListener('click', function() {
+			resetChartFilters('bookmarkTop');
+		});
 	}
 
-	if(bmkbtn){
-		document.querySelectorAll('#bmkGroup .btn-gender').forEach(b => b.classList.remove('active'));
-	    bmkbtn.classList.add('active');
-		// 함수 호출
-		drawBookmarkTopN();
+	// 차트 필터 리셋 함수 (payment.js 패턴과 동일)
+	function resetChartFilters(chartType) {
+		const defaultRange = getRecentDaysRange(7); // 기본적으로 최근 7일
+
+		switch (chartType) {
+			case 'communityUsage':
+				document.getElementById('commUsageChartDay').value = 'daily';
+				document.getElementById('commUsageChartGender').value = '';
+				document.getElementById('commUsageChartAgeGroup').value = '';
+				document.getElementById('commUsageChartCategory').value = '';
+				document.getElementById('commUsageChartStartDay').value = defaultRange.start;
+				document.getElementById('commUsageChartEndDay').value = defaultRange.end;
+				loadCommunityUsageChart();
+				break;
+			case 'bookmarkCategory':
+				document.getElementById('bookmarkCategoryChartDay').value = 'daily';
+				document.getElementById('bookmarkCategoryChartGender').value = '';
+				document.getElementById('bookmarkCategoryChartAgeGroup').value = '';
+				document.getElementById('bookmarkCategoryChartStartDay').value = defaultRange.start;
+				document.getElementById('bookmarkCategoryChartEndDay').value = defaultRange.end;
+				loadBookmarkCategoryChart();
+				break;
+			case 'bookmarkTop':
+				document.getElementById('bookmarkTopChartDay').value = 'daily';
+				document.getElementById('bookmarkTopChartGender').value = '';
+				document.getElementById('bookmarkTopChartAgeGroup').value = '';
+				document.getElementById('bookmarkTopChartStartDay').value = defaultRange.start;
+				document.getElementById('bookmarkTopChartEndDay').value = defaultRange.end;
+				loadBookmarkTopChart();
+				break;
+			case 'roadmapAndWorldCup':
+				document.getElementById('roadmapChartDay').value = 'daily';
+				document.getElementById('roadmapChartGender').value = '';
+				document.getElementById('roadmapChartAgeGroup').value = '';
+				document.getElementById('roadmapChartStartDay').value = defaultRange.start;
+				document.getElementById('roadmapChartEndDay').value = defaultRange.end;
+				loadWorldcupRoadmapChart();
+				break;
+		}
 	}
 
+	// 날짜 형식 변환을 위한 헬퍼 함수들 (payment.js와 동일)
+	function formatDateCal(d) {
+		const y = d.getFullYear();
+		const m = String(d.getMonth() + 1).padStart(2, '0');
+		const day = String(d.getDate()).padStart(2, '0');
+		return `${y}-${m}-${day}`;
+	}
 
-  });
+	function formatDateRange(fS, fE) {
+		return `${fS} ~ ${fE} 기간`;
+	}
 
+	function formatDailyDate(isoString) {
+		const date = new Date(isoString);
+		return `${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+	}
 
+	function formatMonthlyDate(isoString) {
+		const date = new Date(isoString);
+		return `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}`;
+	}
 
-  // 연력 셀렉트 이벤트
-  document.getElementById('cusAgeBand').addEventListener('change', drawBookmarkCategoryStacked);
-  document.getElementById('bmtAgeBand').addEventListener('change', drawBookmarkTopN);
+	// 기본 날짜 범위 계산 함수들 (payment.js와 동일)
+	function getRecentDaysRange(days = 7) {
+		const today = new Date();
+		const startDate = new Date(today);
+		startDate.setDate(today.getDate() - (days - 1));
 
-  // 커뮤니티 탭 전환
-  document.addEventListener('click', (e) => {
-    const t = e.target.closest('.btn-tab');
-    if (!t) return;
-    document.querySelectorAll('.btn-tab').forEach(b => b.classList.remove('active'));
-    t.classList.add('active');
-    const tab = t.dataset.tab;
-    if (tab === 'react')      drawCommunityReactionDaily();
-    else if (tab === 'topMembers') drawCommunityTopMembers();
-    else if (tab === 'topPosts')   drawCommunityTopPosts();
-    else drawCommunityPostDaily();
-  });
+		return {
+			start: formatDateCal(startDate),
+			end: formatDateCal(today)
+		};
+	}
 
-  // 좌하단: 카테고리/limit 변경 즉시 반영
-  getEl('bmTopCategory')?.addEventListener('change', drawBookmarkTopN);
-  getEl('bmTopLimit')?.addEventListener('change', drawBookmarkTopN);
+	function getCurrentYearRange() {
+		const today = new Date();
+		const startDate = new Date(today.getFullYear(), 0, 1); // 올해 1월 1일
 
-  // 우상단 랭킹 limit 변경
-  getEl('topMembersLimit')?.addEventListener('change', drawCommunityTopMembers);
-  getEl('topPostsLimit')?.addEventListener('change', drawCommunityTopPosts);
+		return {
+			start: formatDateCal(startDate),
+			end: formatDateCal(today)
+		};
+	}
 
-  // 우상단 게시판 선택 즉시 반영
-  getEl('cusCcId')?.addEventListener('change', () => {
-    const tab = document.querySelector('.btn-tab.active')?.dataset.tab || 'post';
-    if (tab === 'react')      drawCommunityReactionDaily();
-    else if (tab === 'topMembers') drawCommunityTopMembers();
-    else if (tab === 'topPosts')   drawCommunityTopPosts();
-    else drawCommunityPostDaily();
-  });
+	// 차트 로드 시 기본 날짜 범위 설정 (payment.js와 동일)
+	function setDefaultDateRange() {
+		const weekRange = getRecentDaysRange(7); // 최근 7일
 
-  // 우하단 월드컵 인기 직업
-  getEl('btnWorldcupTop')?.addEventListener('click', drawWorldcupTop);
-  getEl('worldcupTopLimit')?.addEventListener('change', drawWorldcupTop);
-}
+		// 모든 차트의 시작일과 종료일을 최근 7일로 설정
+		document.getElementById('roadmapChartStartDay').value = weekRange.start;
+		document.getElementById('roadmapChartEndDay').value = weekRange.end;
+		document.getElementById('commUsageChartStartDay').value = weekRange.start;
+		document.getElementById('commUsageChartEndDay').value = weekRange.end;
+		document.getElementById('bookmarkCategoryChartStartDay').value = weekRange.start;
+		document.getElementById('bookmarkCategoryChartEndDay').value = weekRange.end;
+		document.getElementById('bookmarkTopChartStartDay').value = weekRange.start;
+		document.getElementById('bookmarkTopChartEndDay').value = weekRange.end;
 
-// 초기화 (access 스타일과 동일하게 마지막에 1회 호출)
-function initContentUsageStatistics() {
-  // 이 페이지에만 존재하는 루트가 없으면 스킵
-  if (!document.getElementById('cus-root')) return;
-  bindEvents();
-  refreshAll();
-}
+		return weekRange;
+	}
 
-//========달력 동작==========
-// 북마크 카테고리
-const calBtnBMC = document.getElementById('calBtnBMC');
-calBtnBMC.addEventListener('click', function(){
-	flatpickr(calBtnBMC, {
-			mode: "range",
-			maxDate: "today",
-			disable: [date => date > new Date()],
-			onChange: function(selectedDates) {
-				if (selectedDates.length === 2) {
-					const values = calBtnBMC.value.split(' to ');
-					document.getElementById('fromBMC').value = values[0].trim();
-					document.getElementById('toBMC').value = values[1].trim();
+	// 일별, 월별, 기간선택에 대해서 이벤트 바인딩 (payment.js와 동일)
+	function eventDateRangeSelect(e) {
+		const selectEl = e.target.nodeName == "SELECT" ? e.target : e.target.closest('select');
+		const dateValue = selectEl.value;
 
-					const gender = document.querySelector('#bmGenderGroup .btn-gender.active').dataset.gender;
-					drawBookmarkCategoryStacked(gender);
+		if (dateValue == 'daily') {
+			// 일별 선택 시 최근 7일 범위 설정
+			const dailyRange = getRecentDaysRange(7);
+
+			if (selectEl.id == 'roadmapChartDay') {
+				document.getElementById("roadmapChartStartDay").value = dailyRange.start;
+				document.getElementById("roadmapChartEndDay").value = dailyRange.end;
+				loadWorldcupRoadmapChart();
+			} else if (selectEl.id == 'commUsageChartDay') {
+				document.getElementById("commUsageChartStartDay").value = dailyRange.start;
+				document.getElementById("commUsageChartEndDay").value = dailyRange.end;
+				loadCommunityUsageChart();
+			} else if (selectEl.id == 'bookmarkCategoryChartDay') {
+				document.getElementById("bookmarkCategoryChartStartDay").value = dailyRange.start;
+				document.getElementById("bookmarkCategoryChartEndDay").value = dailyRange.end;
+				loadBookmarkCategoryChart();
+			} else if (selectEl.id == 'bookmarkTopChartDay') {
+				document.getElementById("bookmarkTopChartStartDay").value = dailyRange.start;
+				document.getElementById("bookmarkTopChartEndDay").value = dailyRange.end;
+				loadBookmarkTopChart();
+			}
+		} else if (dateValue == 'monthly') {
+			// 월별 선택 시 올해 1월부터 현재까지 범위 설정
+			const monthlyRange = getCurrentYearRange();
+
+			if (selectEl.id == 'roadmapChartDay') {
+				document.getElementById("roadmapChartStartDay").value = monthlyRange.start;
+				document.getElementById("roadmapChartEndDay").value = monthlyRange.end;
+				loadWorldcupRoadmapChart();
+			} else if (selectEl.id == 'commUsageChartDay') {
+				document.getElementById("commUsageChartStartDay").value = monthlyRange.start;
+				document.getElementById("commUsageChartEndDay").value = monthlyRange.end;
+				loadCommunityUsageChart();
+			} else if (selectEl.id == 'bookmarkCategoryChartDay') {
+				document.getElementById("bookmarkCategoryChartStartDay").value = monthlyRange.start;
+				document.getElementById("bookmarkCategoryChartEndDay").value = monthlyRange.end;
+				loadBookmarkCategoryChart();
+			} else if (selectEl.id == 'bookmarkTopChartDay') {
+				document.getElementById("bookmarkTopChartStartDay").value = monthlyRange.start;
+				document.getElementById("bookmarkTopChartEndDay").value = monthlyRange.end;
+				loadBookmarkTopChart();
+			}
+		} else if (dateValue == 'selectDays') {
+			// flatpickr 중복 초기화 방지 (payment.js와 동일)
+			if (hiddenInput._flatpickr) {
+				hiddenInput._flatpickr.destroy();
+			}
+
+			flatpickr(hiddenInput, {
+				mode: "range",
+				maxDate: "today",
+				disable: [date => date > new Date()],
+				positionElement: selectEl,
+				onChange: function(selectedDates) {
+					if (selectedDates.length === 2) {
+						const startDate = selectedDates[0];
+						const endDate = selectedDates[1];
+						const formattedStartDate = formatDateCal(startDate);
+						const formattedEndDate = formatDateCal(endDate);
+
+						if (selectEl.id == 'roadmapChartDay') {
+							document.getElementById('roadmapChartStartDay').value = formattedStartDate;
+							document.getElementById('roadmapChartEndDay').value = formattedEndDate;
+							loadWorldcupRoadmapChart();
+							if (window.worldcupRoadmapChartInstance) {
+								window.worldcupRoadmapChartInstance.destroy();
+							}
+						} else if (selectEl.id == 'commUsageChartDay') {
+							document.getElementById('commUsageChartStartDay').value = formattedStartDate;
+							document.getElementById('commUsageChartEndDay').value = formattedEndDate;
+							loadCommunityUsageChart();
+							if (window.communityUsageChartInstance) {
+								window.communityUsageChartInstance.destroy();
+							}
+						} else if (selectEl.id == 'bookmarkCategoryChartDay') {
+							document.getElementById('bookmarkCategoryChartStartDay').value = formattedStartDate;
+							document.getElementById('bookmarkCategoryChartEndDay').value = formattedEndDate;
+							loadBookmarkCategoryChart();
+							if (window.bookmarkCategoryChartInstance) {
+								window.bookmarkCategoryChartInstance.destroy();
+							}
+						} else if (selectEl.id == 'bookmarkTopChartDay') {
+							document.getElementById('bookmarkTopChartStartDay').value = formattedStartDate;
+							document.getElementById('bookmarkTopChartEndDay').value = formattedEndDate;
+							loadBookmarkTopChart();
+							if (window.bookmarkTopChartInstance) {
+								window.bookmarkTopChartInstance.destroy();
+							}
+						}
+					}
 				}
+			});
+
+			hiddenInput._flatpickr.open();
+			hiddenInput._flatpickr.clear();
+		}
+	}
+
+	// ========================= 월드컵 로드맵 차트 (payment.js 패턴 적용) =========================
+	function loadWorldcupRoadmapChart() {
+		const ctx = document.getElementById('roadmapAndWorldSelectGroupChartCanvas').getContext('2d');
+
+		const dateValue = document.getElementById("roadmapChartDay").value;
+		const genderValue = document.getElementById("roadmapChartGender").value;
+		const ageGroupValue = document.getElementById("roadmapChartAgeGroup").value;
+		const startDateValue = document.getElementById("roadmapChartStartDay").value;
+		const endDateValue = document.getElementById("roadmapChartEndDay").value;
+
+		let chartRange = "";
+		if (startDateValue && endDateValue) {
+			chartRange = formatDateRange(startDateValue, endDateValue);
+		}
+
+		const params = {
+			period: dateValue,
+			startDate: startDateValue,
+			endDate: endDateValue,
+			gender: genderValue,
+			ageGroup: ageGroupValue
+		};
+
+		// 기존 차트 파괴 (payment.js 패턴)
+		if (window.worldcupRoadmapChartInstance) {
+			window.worldcupRoadmapChartInstance.destroy();
+		}
+
+
+
+
+		axios.get('/admin/las/cont/worldcup-roadmap/usage-stats', { params })
+			.then(res => {
+				const responseData = res.data;
+
+				let labels;
+				let chartLabel1, chartLabel2;
+				if (dateValue === 'monthly') {
+					labels = responseData.map(item => formatMonthlyDate(item.dt));
+					chartLabel1 = '월별 월드컵 이용';
+					chartLabel2 = '월별 로드맵 이용';
+				} else {
+					labels = responseData.map(item => formatDailyDate(item.dt));
+					chartLabel1 = '일별 월드컵 이용';
+					chartLabel2 = '일별 로드맵 이용';
+				}
+
+				const worldcupData = responseData.map(item => item.worldcupCnt || 0);
+				const roadmapData = responseData.map(item => item.roadmapCnt || 0);
+
+				window.worldcupRoadmapChartInstance = new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: labels,
+						datasets: [{
+							label: chartLabel1,
+							data: worldcupData,
+							borderColor: 'rgb(255, 99, 132)',
+							backgroundColor: 'rgba(255, 99, 132, 0.2)',
+							tension: 0.4,
+							pointRadius: 3,
+							pointHoverRadius: 6,
+							pointStyle: 'circle',
+							fill: false
+						}, {
+							label: chartLabel2,
+							data: roadmapData,
+							borderColor: 'rgb(54, 162, 235)',
+							backgroundColor: 'rgba(54, 162, 235, 0.2)',
+							tension: 0.4,
+							pointRadius: 3,
+							pointHoverRadius: 6,
+							pointStyle: 'circle',
+							fill: false
+						}]
+					},
+					options: {
+						animation: {
+							duration: 1000, // 애니메이션이 1초(1000ms) 동안 실행됩니다.
+							easing: 'easeInOutQuad', // 애니메이션 효과의 속도 곡선을 설정합니다.
+							// onComplete, onProgress 등 다양한 콜백 함수도 사용할 수 있습니다.
+						},
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: true,
+								position: 'bottom',
+							},
+							title: {
+								display: true,
+								text: [
+									chartRange
+								],
+							}
+						},
+						scales: {
+							x: { grid: { display: false } },
+							y: {
+								beginAtZero: true,
+								// y축 tick 설정 개선
+								ticks: {
+									stepSize: Math.ceil(Math.max(...worldcupData, ...roadmapData) / 10) || 1,
+									callback: function(value) {
+										return value.toLocaleString();
+									}
+								},
+								grid: {
+									borderDash: [3],
+									color: '#e5e5e5'
+								}
+							}
+						}
+					}
+				});
+			})
+			.catch(error => {
+				console.error("월드컵 로드맵 데이터 조회 중 에러:", error);
+			});
+	}
+
+	// ========================= 커뮤니티 이용통계 차트 =========================
+	function loadCommunityUsageChart() {
+		const ctx = document.getElementById('communityUsageChart').getContext('2d');
+
+		const dateValue = document.getElementById("commUsageChartDay").value;
+		const genderValue = document.getElementById("commUsageChartGender").value;
+		const ageGroupValue = document.getElementById("commUsageChartAgeGroup").value;
+		const categoryValue = document.getElementById("commUsageChartCategory").value;
+		const startDateValue = document.getElementById("commUsageChartStartDay").value;
+		const endDateValue = document.getElementById("commUsageChartEndDay").value;
+
+		let chartRange = "";
+		if (startDateValue && endDateValue) {
+			chartRange = formatDateRange(startDateValue, endDateValue);
+		}
+
+		const params = {
+			period: dateValue,
+			startDate: startDateValue,
+			endDate: endDateValue,
+			gender: genderValue,
+			ageGroup: ageGroupValue,
+			category: categoryValue  // 카테고리 파라미터 추가
+		};
+
+		// 기존 차트 파괴
+		if (window.communityUsageChartInstance) {
+			window.communityUsageChartInstance.destroy();
+		}
+
+		ctx.canvas.style.maxHeight = '300px';
+
+		axios.get('/admin/las/cont/community/usage-stats', { params })
+			.then(res => {
+				const responseData = res.data;
+
+
+				let labels;
+				if (dateValue === 'monthly') {
+					labels = responseData.map(item => formatMonthlyDate(item.dt));
+				} else {
+					labels = responseData.map(item => formatDailyDate(item.dt));
+				}
+
+				// 카테고리 필터링이 있는 경우와 없는 경우 구분
+				let datasets = [];
+
+				if (categoryValue && categoryValue !== '') {
+					// 특정 카테고리만 선택된 경우
+					const categoryNames = {
+						'G09006': '청년 커뮤니티',
+						'G09001': '청소년 커뮤니티',
+						'G09002': '진로진학 커뮤니티',
+						'G09004': '이력서 템플릿',
+						'G09005': '스터디그룹'
+					};
+					const categoryFields = {
+						'G09006': 'youthCnt',
+						'G09001': 'teenCnt',
+						'G09002': 'noticeCnt',
+						'G09004': 'resumeTemplateCnt',
+						'G09005': 'studyGroupCnt'
+					};
+
+					datasets = [{
+						label: categoryNames[categoryValue] || '선택된 카테고리',
+						data: responseData.map(item => item[categoryFields[categoryValue]] || 0),
+						borderColor: 'rgb(255, 99, 132)',
+						backgroundColor: 'rgba(255, 99, 132, 0.1)',
+						tension: 0.1,
+						fill: false
+					}];
+				} else {
+					// 전체 카테고리 표시
+					datasets = [{
+						label: '청년 커뮤니티',
+						data: responseData.map(item => item.youthCnt || 0),
+						borderColor: 'rgb(255, 99, 132)',
+						backgroundColor: 'rgba(255, 99, 132, 0.1)',
+						tension: 0.1,
+						fill: false
+					}, {
+						label: '청소년 커뮤니티',
+						data: responseData.map(item => item.teenCnt || 0),
+						borderColor: 'rgb(54, 162, 235)',
+						backgroundColor: 'rgba(54, 162, 235, 0.1)',
+						tension: 0.1,
+						fill: false
+					}, {
+						label: '진로진학 커뮤니티',
+						data: responseData.map(item => item.noticeCnt || 0),
+						borderColor: 'rgb(255, 205, 86)',
+						backgroundColor: 'rgba(255, 205, 86, 0.1)',
+						tension: 0.1,
+						fill: false
+					}, {
+						label: '이력서 템플릿',
+						data: responseData.map(item => item.resumeTemplateCnt || 0),
+						borderColor: 'rgb(75, 192, 192)',
+						backgroundColor: 'rgba(75, 192, 192, 0.1)',
+						tension: 0.1,
+						fill: false
+					}, {
+						label: '스터디그룹',
+						data: responseData.map(item => item.studyGroupCnt || 0),
+						borderColor: 'rgb(153, 102, 255)',
+						backgroundColor: 'rgba(153, 102, 255, 0.1)',
+						tension: 0.1,
+						fill: false
+					}];
+				}
+
+				window.communityUsageChartInstance = new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: labels,
+						datasets: datasets
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: true,
+								position: 'bottom',
+							},
+							title: {
+								display: true,
+								text: [
+									chartRange
+								],
+							}
+						},
+						scales: {
+							x: { grid: { display: false } },
+							y: {
+								beginAtZero: true,
+								grid: {
+									borderDash: [3],
+									color: '#e5e5e5'
+								}
+							}
+						}
+					}
+				});
+			})
+			.catch(error => {
+				console.error("커뮤니티 이용통계 데이터 조회 중 에러:", error);
+			});
+	}
+
+	// ========================= 북마크 카테고리별 통계현황 차트 =========================
+	function loadBookmarkCategoryChart() {
+		const ctx = document.getElementById('bookmarkCategoryChart').getContext('2d');
+
+		const dateValue = document.getElementById("bookmarkCategoryChartDay").value;
+		const genderValue = document.getElementById("bookmarkCategoryChartGender").value;
+		const ageGroupValue = document.getElementById("bookmarkCategoryChartAgeGroup").value;
+		const startDateValue = document.getElementById("bookmarkCategoryChartStartDay").value;
+		const endDateValue = document.getElementById("bookmarkCategoryChartEndDay").value;
+
+		let chartRange = "";
+		if (startDateValue && endDateValue) {
+			chartRange = formatDateRange(startDateValue, endDateValue);
+		}
+
+		const params = {
+			period: dateValue,
+			startDate: startDateValue,
+			endDate: endDateValue,
+			gender: genderValue,
+			ageGroup: ageGroupValue
+		};
+
+		// 기존 차트 파괴
+		if (window.bookmarkCategoryChartInstance) {
+			window.bookmarkCategoryChartInstance.destroy();
+		}
+
+		axios.get('/admin/las/cont/bookmark/category-stacked', { params })
+			.then(res => {
+				const responseData = res.data;
+
+				// 고정된 5개 카테고리 정의 (ServiceImpl 참고)
+				const fixedCategories = ['대학', '기업', '직업', '이력서템플릿', '학과'];
+				const categoryIds = ['G03001', 'G03002', 'G03004', 'G03005', 'G03006'];
+
+				// API 응답 데이터를 카테고리별로 매핑
+				const categoryDataMap = {};
+				responseData.forEach(item => {
+					const categoryName = item.categoryName;
+					const maleCnt = item.maleCnt || 0;
+					const femaleCnt = item.femaleCnt || 0;
+					categoryDataMap[categoryName] = maleCnt + femaleCnt;
+				});
+
+				// 고정된 순서로 데이터 구성 (없는 카테고리는 0으로 설정)
+				const counts = fixedCategories.map(category => categoryDataMap[category] || 0);
+
+				window.bookmarkCategoryChartInstance = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: fixedCategories, // 고정된 카테고리 사용
+						datasets: [{
+							label: '북마크 수',
+							data: counts, // 고정된 순서의 데이터
+							backgroundColor: [
+								'rgba(255, 99, 132, 0.8)',
+								'rgba(54, 162, 235, 0.8)',
+								'rgba(255, 205, 86, 0.8)',
+								'rgba(75, 192, 192, 0.8)',
+								'rgba(153, 102, 255, 0.8)'
+							],
+							borderColor: [
+								'rgba(255, 99, 132, 1)',
+								'rgba(54, 162, 235, 1)',
+								'rgba(255, 205, 86, 1)',
+								'rgba(75, 192, 192, 1)',
+								'rgba(153, 102, 255, 1)'
+							],
+							borderWidth: 1,
+							borderRadius: 4,
+							barPercentage: 0.4,
+							categoryPercentage: 0.8
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: false
+							},
+							title: {
+								display: true,
+								text: [
+									chartRange
+								],
+							}
+						},
+						scales: {
+							x: { grid: { display: false } },
+							y: {
+								beginAtZero: true,
+								grid: {
+									borderDash: [3],
+									color: '#e5e5e5'
+								}
+							}
+						}
+					}
+				});
+			})
+			.catch(error => {
+				console.error("북마크 카테고리 데이터 조회 중 에러:", error);
+			});
+	}
+
+	// ========================= 북마크 상세 현황(TOP) 차트 =========================
+	function loadBookmarkTopChart() {
+		const ctx = document.getElementById('bookmarkTopChart').getContext('2d');
+
+		const dateValue = document.getElementById("bookmarkTopChartDay").value;
+		const genderValue = document.getElementById("bookmarkTopChartGender").value;
+		const ageGroupValue = document.getElementById("bookmarkTopChartAgeGroup").value;
+		const startDateValue = document.getElementById("bookmarkTopChartStartDay").value;
+		const endDateValue = document.getElementById("bookmarkTopChartEndDay").value;
+
+		let chartRange = "";
+		if (startDateValue && endDateValue) {
+			chartRange = formatDateRange(startDateValue, endDateValue);
+		}
+
+		const params = {
+			period: dateValue,
+			startDate: startDateValue,
+			endDate: endDateValue,
+			gender: genderValue,
+			ageGroup: ageGroupValue
+		};
+
+		// 기존 차트 파괴
+		if (window.bookmarkTopChartInstance) {
+			window.bookmarkTopChartInstance.destroy();
+		}
+
+		axios.get('/admin/las/cont/bookmark/top', { params })
+			.then(res => {
+				const responseData = res.data;
+
+				const labels = responseData.map(item =>
+					item.TARGETNAME || item.targetName
+				);
+				const counts = responseData.map(item =>
+					item.CNT || item.cnt
+				);
+
+				window.bookmarkTopChartInstance = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: labels,
+						datasets: [{
+							label: '북마크 수',
+							data: counts,
+
+							backgroundColor: [
+								'rgba(255, 99, 132, 0.8)',
+								'rgba(54, 162, 235, 0.8)',
+								'rgba(255, 205, 86, 0.8)',
+								'rgba(75, 192, 192, 0.8)',
+								'rgba(153, 102, 255, 0.8)'],
+							borderColor: [
+								'rgba(255, 99, 132, 1)',
+								'rgba(54, 162, 235, 1)',
+								'rgba(255, 205, 86, 1)',
+								'rgba(75, 192, 192, 1)',
+								'rgba(153, 102, 255, 1)'],
+							borderWidth: 1,
+							borderRadius: 4,
+							barPercentage: 0.4,
+							categoryPercentage: 0.8
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						indexAxis: 'y',
+						plugins: {
+							legend: {
+								display: false
+							},
+							title: {
+								display: true,
+								text: [
+									chartRange
+								],
+							}
+						},
+						scales: {
+							x: {
+								beginAtZero: true,
+								grid: {
+									borderDash: [3],
+									color: '#e5e5e5'
+								}
+							},
+							y: { grid: { display: false } }
+						}
+					}
+				});
+			})
+			.catch(error => {
+				console.error("북마크 TOP 데이터 조회 중 에러:", error);
+			});
+	}
+
+	// ========================= 기존 함수들 =========================
+	function loadDailySummary() {
+		axios.get('/admin/las/cont/daily-summary')
+			.then(res => {
+				const chartData = res.data;
+				updateDailySummary(chartData);
+			})
+			.catch(err => {
+				console.error('일일 요약 데이터 로드 실패:', err);
+			});
+	}
+
+	function loadRoadmapStepDistribution() {
+		axios.get('/admin/las/cont/roadmap/step-distribution')
+			.then(res => {
+				displayStepPercentages(res.data);
+				const worldcupTopJobs = res.data.worldcupTopJobs;
+				if (worldcupTopJobs) {
+					displayTopJobs(worldcupTopJobs);
+				}
+			})
+			.catch(err => {
+				console.error('로드맵 단계 분포 데이터 로드 실패:', err);
+			});
+	}
+
+	function setupCommunityStatsEvents() {
+		fetchAndDisplayCommunityStats();
+
+		const weekBtn = document.getElementById('commOnceView-weekBtn');
+		const monthBtn = document.getElementById('commOnceView-monthBtn');
+
+		if (weekBtn) {
+			weekBtn.addEventListener('click', function() {
+				setActiveButton(this);
+				fetchAndDisplayCommunityStats('week');
+			});
+		}
+
+		if (monthBtn) {
+			monthBtn.addEventListener('click', function() {
+				setActiveButton(this);
+				fetchAndDisplayCommunityStats('month');
+			});
+		}
+	}
+
+	function fetchAndDisplayCommunityStats(period) {
+		const params = {};
+		if (period) {
+			params.period = period;
+		}
+		axios.get('/admin/las/cont/community/activity-stats', { params })
+			.then(res => {
+				updateCommunityStats(res.data.stats, period || 'week');
+			})
+			.catch(err => {
+				console.error('커뮤니티 통계 데이터 로드 실패:', err);
+			});
+	}
+
+	function updateDailySummary(chartData) {
+		const summaryMap = {
+			'dailyPosts': {
+				countId: 'dailyPosts',
+				rateId: 'dailyPostsRate'
+			},
+			'dailyBookmarks': {
+				countId: 'dailyBookmarks',
+				rateId: 'dailyBookmarksRate'
+			},
+			'dailyChatRooms': {
+				countId: 'dailyChatRooms',
+				rateId: 'dailyChatRoomsRate'
+			}
+		};
+
+		for (const key in summaryMap) {
+			const count = chartData[key];
+			const status = chartData[key + 'Status'];
+			const rate = chartData[key + 'Rate'];
+
+			const ids = summaryMap[key];
+
+			const countElement = document.getElementById(ids.countId);
+			const rateElement = document.getElementById(ids.rateId);
+
+			if (countElement && typeof formatNumberWithCommasByAdminDashboard === 'function') {
+				countElement.innerHTML = formatNumberWithCommasByAdminDashboard(count);
+			}
+			if (rateElement) {
+				updateStatusUI(rateElement, status, rate);
+			}
+		}
+	}
+
+	function updateStatusUI(element, status, rate) {
+		element.classList.remove('public-span-increase', 'public-span-decrease', 'public-span-equal');
+
+		if (status === "increase") {
+			element.innerHTML = `&#9650;&nbsp;${rate}%`;
+			element.classList.add('public-span-increase');
+		} else if (status === "decrease") {
+			element.innerHTML = `&#9660;&nbsp;${rate}%`;
+			element.classList.add('public-span-decrease');
+		} else if (status === "equal") {
+			element.innerHTML = `- ${rate}%`;
+			element.classList.add('public-span-equal');
+		} else {
+			element.innerHTML = `NEW`;
+			element.classList.add('public-span-increase');
+		}
+	}
+
+	function updateCommunityStats(stats, period) {
+		const statsMap = {
+			'POST': 'stats-box-post',
+			'POST_LIKE': 'stats-box-post-like',
+			'REPLY': 'stats-box-reply',
+			'REPLY_LIKE': 'stats-box-reply-like'
+		};
+
+		const sinceText = period === 'month' ? 'Since last month' : 'Since last week';
+		for (const key in statsMap) {
+			if (stats.hasOwnProperty(key)) {
+				const data = stats[key];
+				const boxId = statsMap[key];
+
+				const boxElement = document.getElementById(boxId);
+
+				if (boxElement) {
+					const countElement = boxElement.querySelector('.commOnceView-box-cnt');
+					const rateElement = boxElement.querySelector('.commOnceView-rate span');
+					const sinceElement = boxElement.querySelector('.public-span-since');
+
+					if (countElement) {
+						countElement.textContent = data.currentPeriod.toLocaleString();
+					}
+					if (rateElement) {
+						updateRateUI(rateElement, data.growthStatus, data.growthRate);
+					}
+					if (sinceElement) {
+						sinceElement.textContent = sinceText;
+					}
+				}
+			}
+		}
+	}
+
+	function updateRateUI(element, status, rate) {
+		element.classList.remove('public-span-increase', 'public-span-decrease', 'public-span-equal');
+
+		if (status === "increase") {
+			element.innerHTML = `&#9650;&nbsp;${rate}%`;
+			element.classList.add('public-span-increase');
+		} else if (status === "decrease") {
+			element.innerHTML = `&#9660;&nbsp;${rate}%`;
+			element.classList.add('public-span-decrease');
+		} else {
+			element.innerHTML = `- ${rate}%`;
+			element.classList.add('public-span-equal');
+		}
+	}
+
+	function displayTopJobs(jobsArray) {
+		const container = document.getElementById('worldcupRn');
+
+		if (!container) {
+			console.error('ID가 "worldcupRn"인 요소를 찾을 수 없습니다.');
+			return;
+		}
+
+		container.innerHTML = '';
+
+		if (jobsArray && jobsArray.length > 0) {
+			jobsArray.forEach(job => {
+				const p = document.createElement('p');
+				p.textContent = `${job.RN}. ${job.JOBNAME}`;
+				container.appendChild(p);
+			});
+		} else {
+			const p = document.createElement('p');
+			p.textContent = '데이터가 없습니다.';
+			container.appendChild(p);
+		}
+	}
+
+	function displayStepPercentages(responseData) {
+		const noStepElement = document.getElementById('roadmapStepCount-noStep');
+		if (noStepElement) {
+			const percentage = responseData.nonParticipatingPercentage;
+			noStepElement.textContent = `${parseFloat(percentage).toFixed(1)}%`;
+		}
+
+		const apiNameToIdMap = {
+			'1단계': 'roadmapStepCount-step1',
+			'2단계': 'roadmapStepCount-step2',
+			'3단계': 'roadmapStepCount-step3',
+			'4단계': 'roadmapStepCount-step4',
+			'완성': 'roadmapStepCount-complete'
+		};
+
+		const stepIds = [
+			'roadmapStepCount-step1',
+			'roadmapStepCount-step2',
+			'roadmapStepCount-step3',
+			'roadmapStepCount-step4',
+			'roadmapStepCount-complete'
+		];
+		stepIds.forEach(id => {
+			const element = document.getElementById(id);
+			if (element) {
+				element.textContent = '0%';
 			}
 		});
 
-	calBtnBMC._flatpickr.open();
-	calBtnBMC._flatpickr.clear();
-})
-const calBtnBMT = document.getElementById('calBtnBMT');
-calBtnBMT.addEventListener('click', function(){
-	flatpickr(calBtnBMT, {
-			mode: "range",
-			maxDate: "today",
-			disable: [date => date > new Date()],
-			onChange: function(selectedDates) {
-				if (selectedDates.length === 2) {
-					const values = calBtnBMT.value.split(' to ');
-					document.getElementById('fromBMT').value = values[0].trim();
-					document.getElementById('toBMT').value = values[1].trim();
-					drawBookmarkTopN();
+		if (responseData.stepDistribution) {
+			responseData.stepDistribution.forEach(stepData => {
+				const stepName = stepData.stepName;
+				const elementId = apiNameToIdMap[stepName];
+
+				if (elementId) {
+					const targetElement = document.getElementById(elementId);
+					if (targetElement) {
+						targetElement.textContent = `${parseFloat(stepData.percentage).toFixed(1)}%`;
+					}
 				}
-			}
-		});
+			});
+		}
+	}
 
-	calBtnBMT._flatpickr.open();
-	calBtnBMT._flatpickr.clear();
-})
-//=========================
+	// 초기 데이터 로드 (payment.js 패턴과 동일)
+	setDefaultDateRange(); // 기본적으로 이번주 범위 설정
+	loadDailySummary();
+	loadRoadmapStepDistribution();
+	setupCommunityStatsEvents();
+	loadWorldcupRoadmapChart();
+	loadCommunityUsageChart();
+	loadBookmarkCategoryChart();
+	loadBookmarkTopChart();
+}
 
-
-initContentUsageStatistics();
-
-})();
+// DOM이 완전히 로드된 후 함수 실행
+if (document.readyState === 'loading') {
+	document.addEventListener('DOMContentLoaded', contentUsageStatistics);
+} else {
+	contentUsageStatistics();
+}

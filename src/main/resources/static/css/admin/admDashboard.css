@@ -48,6 +48,28 @@ to {
 	animation: slideInFromTop 0.5s ease-out;
 }
 
+.space-between {
+	justify-content: space-between;
+}
+
+/* 스크롤바 전체 스타일 */
+::-webkit-scrollbar {
+    width: 8px; /* 세로 스크롤바의 폭 */
+    height: 8px; /* 가로 스크롤바의 높이 */
+}
+
+/* 스크롤바 배경 트랙 */
+::-webkit-scrollbar-track {
+    background: #F0F0F0;
+    border-radius: 10px;
+}
+
+/* 스크롤바 엄지 (움직이는 부분) */
+::-webkit-scrollbar-thumb {
+    background: #D3D3D3;
+    border-radius: 10px;
+}
+
 /********************공통 부분 *********************/
 .overflow-wrap {
 	overflow-wrap: break-word;
@@ -353,7 +375,6 @@ to {
 	display: flex;
 	font-size: 15px;
 	font-weight: 600;
-	color: rgba(10, 207, 151, 1);
 }
 
 .public-span-since {
@@ -378,6 +399,7 @@ to {
 	justify-content: center;
 	align-items: center;
 	width: fit-content;
+	line-height: 1;
 }
 
 .public-toggle-select {
@@ -546,6 +568,10 @@ tbody tr:hover {
 
 .color-green {
 	color: #0ACF97;
+}
+
+.color-yello {
+	color: #FFC35A;
 }
 
 .back-color-red {
