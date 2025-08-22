@@ -1,5 +1,6 @@
 package kr.or.ddit.admin.cmg.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import kr.or.ddit.admin.cmg.service.ContentsManagementService;
 import kr.or.ddit.empt.enp.service.CompanyVO;
+import kr.or.ddit.empt.enp.service.InterviewReviewVO;
 import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.util.file.service.FileDetailVO;
 import kr.or.ddit.util.file.service.FileService;
@@ -37,12 +39,10 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 	public Map<String, Object> entDetail(String id) {
 		CompanyVO companyVO = contentsManagementMapper.entDetail(id);
 		String filePath = "";
-		log.info("companyVO @@@@@@@@ : {}", companyVO);
 
 		if (companyVO != null) {
 			
 			if (null != companyVO.getFileGroupId()) {
-				log.error("여기 들어왔음@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				FileDetailVO file = fileService.getFileDetail(companyVO.getFileGroupId(), 0);
 				filePath = fileService.getSavePath(file);
 			}
@@ -60,4 +60,18 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 		
 		return articlePage;
 	}
+
+	@Override
+	public Map<String, String> selectIrStatusList() {
+		Map<String, String> response = new HashMap<>();
+		
+		List<Map<String, String>> irStatusList = contentsManagementMapper.selectIrStatusList();
+		
+		for(Map<String, String> irStatus : irStatusList) {
+			response.put(irStatus.get("CC_ID"), irStatus.get("CC_NAME"));
+		}
+		
+		return response;
+	}
+
 }

@@ -180,4 +180,14 @@
 			    </choose>
 		    </if>
 	</select>
+	
+	<select id="selectIrStatusList" resultType="map">
+		SELECT
+		    CC_ID
+		    , CC_NAME
+		FROM
+		    COM_CODE
+		WHERE
+		    CL_CODE = 'S06'
+	</select>
 </mapper>
