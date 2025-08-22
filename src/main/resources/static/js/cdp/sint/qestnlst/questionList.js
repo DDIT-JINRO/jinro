@@ -170,7 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 			// 필요하다면 여기서 sessionStorage.removeItem('selectedQuestions');
 			document.getElementById('cartForm').submit();
-			sessionStorage.clear();
+			uncheckAllQuestionCheckboxes();
+			sessionStorage.removeItem('selectedQuestions');
 		})
 });
 
@@ -241,6 +242,17 @@ function removeQuestionFromCart(id) {
 function updateQuestionIdsInput() {
 	document.getElementById('questionIds').value =
 		selectedQuestions.map(q => q.id).join(',');
+}
+
+// 질문 checkbox 초기화
+function uncheckAllQuestionCheckboxes() {
+  // 클래스가 'question-item__checkbox'인 모든 체크박스를 선택합니다.
+  const checkboxes = document.querySelectorAll('.question-item__checkbox');
+
+  // 반복문을 돌면서 모든 체크박스의 'checked' 속성을 false로 만듭니다.
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = false;
+  });
 }
 
 // 전역 함수로 노출 (JSP에서 onclick으로 호출하기 위해)

@@ -38,6 +38,13 @@
     align-items: center;
 }
 
+.accordion-list__col--hireEndDate {
+	flex: 0.8;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .accordion-list__col--bookmark {
 	display: flex;
 	flex: 0 0 80px;
@@ -60,6 +67,13 @@
 }
 
 .accordion-list__type {
+	flex: 0.8;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.accordion-list__hireEndDate {
 	flex: 0.8;
 	display: flex;
     justify-content: center;

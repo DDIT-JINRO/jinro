@@ -102,6 +102,7 @@
 					<div class="accordion-list__col accordion-list__col--meta">
 						<span class="accordion-list__col accordion-list__col--company">기업명</span>
 						<span class="accordion-list__col accordion-list__col--type">고용형태</span>
+						<span class="accordion-list__col accordion-list__col--hireEndDate">마감일</span>
 						<span class="accordion-list__col accordion-list__col--bookmark">북마크</span>
 					</div>
 					<span class="accordion-list__col accordion-list__col--toggle"></span>
@@ -114,6 +115,12 @@
 							<div class="accordion-list__col accordion-list__col--meta">
 								<div class="accordion-list__col accordion-list__company">${hire.cpName}</div>
 								<div class="accordion-list__col accordion-list__type">${hire.hireTypename}</div>
+								<div class="accordion-list__col accordion-list__hireEndDate">
+									<c:choose>
+										<c:when test="${hire.dday >= 0}">D-${hire.dday}</c:when>
+										<c:when test="${hire.dday < 0}">마감</c:when>
+									</c:choose>
+								</div>
 								<div class="accordion-list__col accordion-list__bookmark">
 									<c:set var="isBookmarked" value="false" />
 									<c:forEach var="bookmark" items="${bookMarkVOList}">

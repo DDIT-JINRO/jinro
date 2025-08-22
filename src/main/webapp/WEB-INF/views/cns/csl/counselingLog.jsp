@@ -13,7 +13,7 @@
 
 		<!-- 리스트 패널 상단: 필터 영역 -->
 		<div class="filter-box">
-			<form action="/csc/admin/noticeList.do" method="get">
+			<form>
 				<select name="year">
 				    <option value="">전체기간</option>
 				    <option value="2025">2025</option>

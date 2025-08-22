@@ -206,7 +206,7 @@
 	<section class="feature-slider">
 		<div class="feature-slider__header">
 			<h2 class="feature-slider__title">Career Path</h2>
-			<p class="feature-slider__subtitle">우리는 <strong>진로와 진학, 취업</strong>의 모든 과정을 지원합니다. 자신의 꿈을 이룰 수 있도록 다양한 정보를 제공합니다
+			<p class="feature-slider__subtitle">나만의 길을 찾고 있나요? 진로 고민은 이제 그만! 당신의 잠재력을 깨울 <strong> 최신 공모전, 대외활동</strong>으로 새로운 기회를 경험해 보세요.
 			</p>
 		</div>
 		<div class="feature-slider__container">
@@ -264,9 +264,9 @@
 						<img src="/images/main/charactor4.png" alt="캐릭터" class="promo-card__character promo-card__character--2" />
 					</div>
 					<div class="promo-card__text-content">
-						<p>총 64개의 직업들 중<br />자신이 선호하는 직업이 무엇인지,
+						<p>500여 개의 직업 중<br />자신이 선호하는 직업은 무엇인지,
 						</p>
-						<p>다른 사람들의 선호 직업은<br />무엇인지 확인할 수 있습니다
+						<p>선택의 순간마다,<br /> 당신의 직업 가치관이 드러납니다<br /> 직업 월드컵을 통해 꿈을 찾아보세요!
 						</p>
 						<button class="promo-card__button" id="worldcupBtn">직업 이상형 월드컵</button>
 					</div>

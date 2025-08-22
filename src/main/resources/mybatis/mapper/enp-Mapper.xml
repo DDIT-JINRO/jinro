@@ -59,10 +59,15 @@
 			            CASE 
 			                WHEN c.cp_id IS NOT NULL THEN 'Y'
 			                ELSE 'N'
-			            END AS cp_hiring_status
+			            END AS cp_hiring_status,
+			            CASE 
+		                	WHEN i.target_id IS NOT NULL THEN 1
+		                	ELSE 0
+		            	END AS has_review
 			        FROM company a
 			        LEFT JOIN com_code b ON a.cp_scale = b.cc_id
 			        LEFT JOIN (SELECT DISTINCT cp_id FROM hire) c ON a.cp_id = c.cp_id
+			        LEFT JOIN (SELECT DISTINCT target_id FROM INTERVIEW_REVIEW WHERE ir_type = 'G02002') i ON a.cp_id = i.target_id
 			        WHERE 1=1
 			            <if test="keyword != null and keyword != ''">
 						    AND a.cp_name LIKE '%' || #{keyword} || '%'
@@ -91,7 +96,7 @@
 				                #{status}
 				            </foreach>
 			        	</if>
-			        ORDER BY a.cp_id
+			        ORDER BY has_review DESC, a.cp_id
 			    ) sub
 			    WHERE ROWNUM <![CDATA[<]]>= #{endNo}
 			)

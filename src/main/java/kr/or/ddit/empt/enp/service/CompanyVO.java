@@ -28,6 +28,7 @@ public class CompanyVO {
 	private List<String> scaleId; // 기업 규모 선택
 	private List<String> regionId; // 기업 위치 선택
 	private List<String> hiringStatus; // 채용 상태 선택
+	private boolean hasReview;
 
 	//
 	private List<InterviewReviewVO> interviewReviewList; // 채용 상태 선택
