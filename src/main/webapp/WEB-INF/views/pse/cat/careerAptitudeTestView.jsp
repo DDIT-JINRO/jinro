@@ -31,6 +31,7 @@
 		<div class="public-wrapper-main">
 			
 			<div class="test-intro">
+				<span class="list-header__meta-item list-header__meta-item--source">[ 출처 : 한국직업능력연구원 국가진로교육연구센터 (커리어넷) ]</span>
 				<h2 class="test-intro__title">진로 심리검사 안내</h2>
 				<p class="test-intro__subtitle">
 					나를 바로 알면 <strong>성공한 미래</strong>가 보인다!

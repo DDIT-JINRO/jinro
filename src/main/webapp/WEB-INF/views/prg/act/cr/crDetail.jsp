@@ -34,6 +34,8 @@
 						게시일:
 						<fmt:formatDate value="${crDetail.contestCreatedAt}" pattern="yyyy.MM.dd" />
 					</span>
+					<span class="divider">|</span>
+					<span class="detail-header__meta-item detail-header__meta-item--source">[ 출처: 씽굿(Thinkcontest.com), 대학문화신문사 ]</span>
 				</div>
 			</div>
 
