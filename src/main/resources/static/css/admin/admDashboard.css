@@ -536,6 +536,22 @@ tbody tr:hover {
 	color: white;
 }
 
+.color-purple {
+	color: #727CF5;
+}
+
+.color-red {
+	color: #FA5C7C;
+}
+
+.color-green {
+	color: #0ACF97;
+}
+
+.back-color-red {
+	background-color: #FA5C7C;
+}
+
 .back-color-green {
 	background-color: #0ACF97;
 }
