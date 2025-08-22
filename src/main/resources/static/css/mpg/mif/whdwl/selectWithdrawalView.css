@@ -45,21 +45,18 @@
 
 /* 폼 스타일 - 이전 테마와 동일한 스타일 적용 */
 .withdrawal-form {
-	background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
-	border: 2px solid rgba(120, 129, 245, 0.1);
+	border: 1px solid #e5e7eb;
 	border-radius: 16px;
 	padding: 40px;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 	transition: all 0.3s ease;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .withdrawal-form:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 12px 40px rgba(120, 129, 245, 0.15);
-	border-color: rgba(120, 129, 245, 0.2);
+    border-color: #d1d5db;
 }
 
 #password-check-message {

@@ -15,8 +15,7 @@ body.scroll-lock {
 }
 
 .profile-card {
-	background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
-	border: 2px solid rgba(120, 129, 245, 0.1);
+    border: 1px solid #e5e7eb;
 	border-radius: 16px;
 	padding: 32px;
 	flex-grow: 1;
@@ -27,9 +26,8 @@ body.scroll-lock {
 }
 
 .profile-card:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 8px 30px rgba(120, 129, 245, 0.15);
-	border-color: rgba(120, 129, 245, 0.2);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #d1d5db;
 }
 
 .card-header {
@@ -207,8 +205,9 @@ body.scroll-lock {
 }
 
 .detail__action-button:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #5c68d9;
 }
 
 .detail__action-button:disabled {
