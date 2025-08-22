@@ -94,7 +94,7 @@
 					</div>
 					<div class="detail-item">
 						<span class="detail-label">구분</span>
-						<input type="text" id="review-detail-irType" class="detail-input" readonly="">
+						<input type="text" id="review-detail-irType" class="detail-input" readonly="" data-ir-type="">
 					</div>
 				</div>
 				<div class="detail-item-group">

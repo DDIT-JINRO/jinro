@@ -110,9 +110,6 @@
 		    LEFT JOIN VERIFICATION V ON IR.IR_ID = V.VERI_ID
 		WHERE
 			1 = 1
-			<if test="irStatus != null and irStatus != ''">
-				AND IR.IR_STATUS = #{irStatus}
-			</if>
 		    <if test="keyword != null and keyword != ''">
 			    <choose>
 			        <when test = "status == 'target'">
@@ -125,11 +122,6 @@
 						AND IR.IR_CONTENT LIKE '%' || #{keyword} || '%'
 			        </when>
 			        <otherwise>
-						AND (
-							TITLE LIKE '%' || #{keyword} || '%'
-								OR CONTENT_1 LIKE '%' || #{keyword} || '%'
-								OR CONTENT_2 LIKE '%' || #{keyword} || '%'
-						)
 			        </otherwise>
 			    </choose>
 		    </if>
@@ -221,4 +213,31 @@
 		WHERE
 			IR_ID = #{irId}
 	</select>
+
+	<update id="updateInterviewReviewStatus" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+	    UPDATE INTERVIEW_REVIEW
+	    SET
+	        IR_STATUS = #{irStatus}
+	    WHERE
+	        IR_ID = #{irId}
+	</update>
+	
+	<update id="updateVerification" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+	    UPDATE VERIFICATION
+	    <set>
+	        VERI_REASON = #{veriReason},
+	        VERI_STATUS = #{irStatus},
+	        VERI_CATEGORY = 
+	        <choose>
+	            <when test="irType == 'G02002'">
+	                'G38001'
+	            </when>
+	            <when test="irType == 'G02001'">
+	                'G38002'
+	            </when>
+	        </choose>
+	    </set>
+	    WHERE
+	        VERI_ID = #{irId}
+	</update>
 </mapper>

@@ -7,6 +7,41 @@ function reviewManagement() {
 			const irId = target.dataset.irId
 			selectReviewDetail(irId);
 		}
+	});
+	
+	document.getElementById('review-modify-button').addEventListener('click', function() {
+	    updateReviewDetail();
+	});
+	
+	const updateReviewDetail = () => {
+	    const irId = document.getElementById('review-detail-irId').value;
+	    const irStatus = document.getElementById('review-detail-status-select').value;
+	    const veriReason = document.getElementById('review-detail-reject-reason').value;
+	    
+	    const irType = document.getElementById('review-detail-irType').dataset.irType;
+
+	    const updateData = {
+	        irId: irId,
+	        irStatus: irStatus,
+	        veriReason: veriReason,
+	        irType: irType
+	    };
+	    
+	    axios.post('/admin/cmg/updateReviewDetail', updateData)
+	        .then(response => {
+	            if (response.data.success) {
+	                alert('후기 정보가 성공적으로 수정되었습니다.');
+	                selectReviewList();
+	            } else {
+	                alert('후기 정보 수정에 실패했습니다.');
+	            }
+	        })
+	        .catch(error => {
+	            console.error('수정 요청 중 오류 발생:', error);
+	            alert('후기 정보 수정 중 문제가 발생했습니다.');
+	        });
+	};
+
 	const selectReviewDetail = (irId) => {
 		axios.get(`/admin/cmg/selectReviewDetail?irId=${irId}`)
 			.then(({ data }) => {
@@ -33,6 +68,18 @@ function reviewManagement() {
 				document.getElementById('review-detail-modAt').value = formatDate(data.irModAt);
 				document.getElementById('review-detail-createdAt').value = formatDate(data.irCreatedAt);
 				document.getElementById('review-detail-content').value = data.irContent;
+				document.getElementById('review-detail-reject-reason').value = data.veriReason;
+				
+				const irTypeInput = document.getElementById('review-detail-irType');
+				irTypeInput.value = (data.irType === 'G02001' ? '대학' : '기업');
+				irTypeInput.dataset.irType = data.irType;
+				
+				const rejectReasonContainer = document.getElementById('reject-reason-container');
+				if (data.irStatus === 'S06004') {
+				    rejectReasonContainer.style.display = 'block';
+				} else {
+				    rejectReasonContainer.style.display = 'none';
+				}
 
 				// 증빙 자료 파일 링크 및 미리보기 처리
 				const fileLinkElement = document.getElementById('review-detail-file-link');
@@ -54,19 +101,13 @@ function reviewManagement() {
 	};
 
 	const selectReviewList = (page = 1) => {
-		const status = document.querySelector("select[name='status']").value;
 		const keyword = document.querySelector("input[name='keyword']").value;
-		const order = document.querySelector("select[name='order']").value;
-		const irStatus = document.querySelector("select[name='irStatus']").value;
 
 		axios.get("/admin/cmg/selectReviewList", {
 			params: {
 				size: 10,
 				currentPage: page,
-				status: status,
 				keyword: keyword,
-				order: order,
-				irStatus: irStatus
 			}
 		}).then(({ data }) => {
 			const reviewList = document.querySelector("#reviewList");
@@ -138,18 +179,6 @@ function reviewManagement() {
 		if (footer) footer.innerHTML = html;
 	}
 
-	const filterData = () => {
-		const sortButtons = document.querySelectorAll(".sort-button");
-
-		if (sortButtons) {
-			sortButtons.forEach(button => {
-				button.addEventListener("click", function() {
-					setActiveButton(this);
-				});
-			})
-		}
-	}
-
 	const reviewListPangingFn = () => {
 		const reviewListPaginationContainer = document.querySelector('.panel-footer.pagination');
 		if (reviewListPaginationContainer) {
@@ -170,6 +199,16 @@ function reviewManagement() {
 			});
 		}
 	}
+	
+	document.getElementById('review-detail-status-select').addEventListener('change', function() {
+	    const rejectReasonContainer = document.getElementById('reject-reason-container');
+	    if (this.value === 'S06004') {
+	        rejectReasonContainer.style.display = 'block';
+	    } else {
+	        rejectReasonContainer.style.display = 'none';
+	    }
+	});
+
 	const formatDate = (date) => {
 		const year = date.getFullYear();
 		const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -178,7 +217,6 @@ function reviewManagement() {
 		return `${year}-${month}-${day}`;
 	}
 
-	filterData();
 	reviewListPangingFn();
 	selectReviewList();
 }

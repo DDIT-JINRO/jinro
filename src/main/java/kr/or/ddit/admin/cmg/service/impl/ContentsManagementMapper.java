@@ -25,4 +25,8 @@ public interface ContentsManagementMapper {
 
 	InterviewReviewVO selectReviewDetail(String irId);
 
+    int updateInterviewReviewStatus(InterviewReviewVO interviewReviewVO);
+    
+    int updateVerification(InterviewReviewVO interviewReviewVO);
+
 }

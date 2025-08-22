@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.admin.cmg.service.ContentsManagementService;
 import kr.or.ddit.empt.enp.service.CompanyVO;
@@ -54,6 +55,7 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 	@Override
 	public ArticlePage<InterviewReviewVO> selectReviewList(InterviewReviewVO interviewReviewVO) {
 		List<InterviewReviewVO> interviewReviewList = contentsManagementMapper.selectReviewList(interviewReviewVO);
+		
 		int total = contentsManagementMapper.selectReviewListTotal(interviewReviewVO);
 		
 		ArticlePage<InterviewReviewVO> articlePage = new ArticlePage<>(total, interviewReviewVO.getCurrentPage(), interviewReviewVO.getSize(), interviewReviewList, interviewReviewVO.getKeyword());
@@ -88,5 +90,16 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 		
 		return interviewReview;
 	}
-
+	
+    @Override
+    @Transactional
+    public int updateReviewDetail(InterviewReviewVO interviewReviewVO) {
+        int result = 0;
+        
+        result += contentsManagementMapper.updateInterviewReviewStatus(interviewReviewVO);
+        
+        result += contentsManagementMapper.updateVerification(interviewReviewVO);
+        
+        return result;
+    }
 }

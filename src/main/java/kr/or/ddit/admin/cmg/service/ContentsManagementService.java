@@ -18,4 +18,6 @@ public interface ContentsManagementService {
 
 	InterviewReviewVO selectReviewDetail(String irId);
 
+	int updateReviewDetail(InterviewReviewVO interviewReviewVO);
+
 }
