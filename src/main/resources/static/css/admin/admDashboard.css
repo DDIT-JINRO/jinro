@@ -353,7 +353,6 @@ to {
 	display: flex;
 	font-size: 15px;
 	font-weight: 600;
-	color: rgba(10, 207, 151, 1);
 }
 
 .public-span-since {
@@ -378,6 +377,7 @@ to {
 	justify-content: center;
 	align-items: center;
 	width: fit-content;
+	line-height: 1;
 }
 
 .public-toggle-select {
@@ -546,6 +546,10 @@ tbody tr:hover {
 
 .color-green {
 	color: #0ACF97;
+}
+
+.color-yello {
+	color: #FFC35A;
 }
 
 .back-color-red {

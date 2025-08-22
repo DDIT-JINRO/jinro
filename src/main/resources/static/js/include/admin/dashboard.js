@@ -20,13 +20,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (chartData.monthUserCountStatus === "increase") {
 			monthUserRate.innerHTML = `&#9650;&nbsp;${chartData.monthUserCountRate}%`;
 			monthUserRate.classList.add('public-span-increase');
-			monthUserRate.classList.remove('public-span-decrease');
+			monthUserRate.classList.remove('public-span-decrease', 'public-span-equal');
 		} else if (chartData.monthUserCountStatus === "decrease") {
 			monthUserRate.innerHTML = `&#9660;&nbsp;${chartData.monthUserCountRate}%`;
 			monthUserRate.classList.add('public-span-decrease');
-			monthUserRate.classList.remove('public-span-increase');
+			monthUserRate.classList.remove('public-span-increase', 'public-span-equal');
 		} else {
 			monthUserRate.innerHTML = `${chartData.monthUserCountRate}%`;
+			monthUserRate.classList.add('public-span-equal');
 			monthUserRate.classList.remove('public-span-increase', 'public-span-decrease');
 		}
 		if (chartData.allUserCountStatus === "increase") {
