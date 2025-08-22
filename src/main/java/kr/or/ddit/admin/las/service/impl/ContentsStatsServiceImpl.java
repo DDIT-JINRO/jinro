@@ -2,6 +2,7 @@ package kr.or.ddit.admin.las.service.impl;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -219,6 +220,94 @@ public class ContentsStatsServiceImpl implements ContentStatsService{
             case "REPLY_LIKE": return "총 댓글 좋아요 수";
             default: return activityType;
         }
+    }
+    
+    /**
+     * 커뮤니티 이용통계 (게시판별)
+     * @param params 필터 조건 (period, startDate, endDate, gender, ageGroup, serviceType)
+     * @return 기간별 각 게시판의 게시글 수 통계
+     */
+    @Override
+    public List<Map<String, Object>> getCommunityUsageStats(Map<String, Object> params) {
+        // 파라미터 유효성 검사 및 기본값 설정
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        
+        // period 기본값 설정 (daily)
+        if (params.get("period") == null || "".equals(params.get("period"))) {
+            params.put("period", "daily");
+        }
+                
+        List<Map<String, Object>> result = contentStatsMapper.selectCommunityUsageStats(params);
+        
+        // 결과에 게시판명 추가 및 데이터 가공
+        return processCommunityUsageStats(result);
+    }
+
+    /**
+     * 커뮤니티 이용통계 데이터 후처리
+     * @param rawStats 원본 통계 데이터
+     * @return 가공된 통계 데이터 (게시판명 포함)
+     */
+    private List<Map<String, Object>> processCommunityUsageStats(List<Map<String, Object>> rawStats) {
+        List<Map<String, Object>> processedStats = new ArrayList<>();
+        
+        for (Map<String, Object> stat : rawStats) {
+            Map<String, Object> processedStat = new HashMap<>(stat);
+            
+            // 각 게시판별 데이터를 배열 형태로 구성
+            List<Map<String, Object>> boardStats = new ArrayList<>();
+            
+            // 청소년 커뮤니티
+            Map<String, Object> teenBoard = new HashMap<>();
+            teenBoard.put("boardId", "G09001");
+            teenBoard.put("boardName", "청소년 커뮤니티");
+            teenBoard.put("count", stat.get("teenCnt"));
+            boardStats.add(teenBoard);
+            
+            // 공지사항
+            Map<String, Object> noticeBoard = new HashMap<>();
+            noticeBoard.put("boardId", "G09002");
+            noticeBoard.put("boardName", "공지사항");
+            noticeBoard.put("count", stat.get("noticeCnt"));
+            boardStats.add(noticeBoard);
+            
+            // 이력서 템플릿
+            Map<String, Object> resumeBoard = new HashMap<>();
+            resumeBoard.put("boardId", "G09004");
+            resumeBoard.put("boardName", "이력서 템플릿");
+            resumeBoard.put("count", stat.get("resumeTemplateCnt"));
+            boardStats.add(resumeBoard);
+            
+            // 스터디그룹
+            Map<String, Object> studyBoard = new HashMap<>();
+            studyBoard.put("boardId", "G09005");
+            studyBoard.put("boardName", "스터디그룹");
+            studyBoard.put("count", stat.get("studyGroupCnt"));
+            boardStats.add(studyBoard);
+            
+            // 청년 커뮤니티
+            Map<String, Object> youthBoard = new HashMap<>();
+            youthBoard.put("boardId", "G09006");
+            youthBoard.put("boardName", "청년 커뮤니티");
+            youthBoard.put("count", stat.get("youthCnt"));
+            boardStats.add(youthBoard);
+            
+            // 전체 게시글 수 계산
+            int totalCount = ((Number) stat.get("teenCnt")).intValue() +
+                            ((Number) stat.get("noticeCnt")).intValue() +
+                            ((Number) stat.get("resumeTemplateCnt")).intValue() +
+                            ((Number) stat.get("studyGroupCnt")).intValue() +
+                            ((Number) stat.get("youthCnt")).intValue();
+            
+            processedStat.put("boardStats", boardStats);
+            processedStat.put("totalCount", totalCount);
+            
+            processedStats.add(processedStat);
+        }
+        
+        return processedStats;
     }
 
 	@Override

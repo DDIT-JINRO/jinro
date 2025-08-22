@@ -41,6 +41,16 @@ public class ContentStatsController {
 	public Map<String, Object> getCommunityActivityStats(@RequestParam(defaultValue = "week") String period) {
 	    return contentStatsService.getCommunityActivityStats(period);
 	}
+	
+	/**
+	 * 커뮤니티 이용통계 (게시판별)
+	 * @param params 필터 조건 파라미터
+	 * @return 기간별 각 게시판의 게시글 수 통계
+	 */
+	@GetMapping("/community/usage-stats")
+	public List<Map<String, Object>> getCommunityUsageStats(@RequestParam Map<String, Object> params) {
+	    return contentStatsService.getCommunityUsageStats(params);
+	}
 
 	@GetMapping("/bookmark/category-stacked")
 	public List<Map<String, Object>> bookmarkCategoryCounts(@RequestParam Map<String, Object> param){

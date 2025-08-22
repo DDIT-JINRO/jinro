@@ -74,4 +74,7 @@ public interface ContentStatsMapper {
 	// 커뮤니티 내용
 	List<Map<String, Object>> selectCommunityActivityStats(Map<String, Object> params);
 
+	// 커뮤니티 사용량 차트
+	List<Map<String, Object>> selectCommunityUsageStats(Map<String, Object> params);
+
 }

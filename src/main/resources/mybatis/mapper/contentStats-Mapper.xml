@@ -1148,4 +1148,141 @@
 	  GROUP BY activity_type, period_type
 	  ORDER BY activity_type, period_type
 	</select>
+	
+	<!-- 커뮤니티 이용통계 -->
+	<select id="selectCommunityUsageStats" parameterType="map" resultType="map">
+	    <choose>
+	        <when test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+	            <!-- 기간이 지정된 경우: 날짜 범위 생성 후 LEFT JOIN -->
+	            WITH DATE_RANGE AS (
+	                SELECT 
+	                    <choose>
+	                        <when test="period == 'monthly'">
+	                            ADD_MONTHS(TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'MM'), LEVEL - 1) AS dt
+	                        </when>
+	                        <otherwise>
+	                            TO_DATE(#{startDate}, 'YYYY-MM-DD') + LEVEL - 1 AS dt
+	                        </otherwise>
+	                    </choose>
+	                FROM DUAL
+	                CONNECT BY 
+	                    <choose>
+	                        <when test="period == 'monthly'">
+	                            ADD_MONTHS(TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'MM'), LEVEL - 1) <![CDATA[ <= ]]> TRUNC(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 'MM')
+	                        </when>
+	                        <otherwise>
+	                            LEVEL <![CDATA[ <= ]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') - TO_DATE(#{startDate}, 'YYYY-MM-DD') + 1
+	                        </otherwise>
+	                    </choose>
+	            ),
+	            COMMUNITY_DATA AS (
+	                SELECT
+	                    <choose>
+	                        <when test="period == 'monthly'">TRUNC(b.BOARD_CREATED_AT, 'MM')</when>
+	                        <otherwise>TRUNC(b.BOARD_CREATED_AT)</otherwise>
+	                    </choose> AS dt,
+	                    
+	                    <!-- 각 게시판별 카운트 -->
+	                    COUNT(CASE WHEN b.CC_ID = 'G09001' THEN 1 END) AS teenCnt,
+	                    COUNT(CASE WHEN b.CC_ID = 'G09002' THEN 1 END) AS noticeCnt,
+	                    COUNT(CASE WHEN b.CC_ID = 'G09004' THEN 1 END) AS resumeTemplateCnt,
+	                    COUNT(CASE WHEN b.CC_ID = 'G09005' THEN 1 END) AS studyGroupCnt,
+	                    COUNT(CASE WHEN b.CC_ID = 'G09006' THEN 1 END) AS youthCnt
+	                    
+	                FROM BOARD b
+	                JOIN MEMBER m ON b.MEM_ID = m.MEM_ID
+	                JOIN COM_CODE cc ON b.CC_ID = cc.CC_ID
+	                WHERE b.BOARD_DEL_YN = 'N'
+	                  AND b.CC_ID != 'G09003'  <!-- G09003 제외 -->
+	                  AND b.BOARD_CREATED_AT >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	                  AND b.BOARD_CREATED_AT <![CDATA[ < ]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
+	                  
+	                  <!-- 성별 필터 -->
+	                  <if test="gender != null and gender == 'male'">AND m.MEM_GEN = 'G11001'</if>
+	                  <if test="gender != null and gender == 'female'">AND m.MEM_GEN = 'G11002'</if>
+	                  
+	                  <!-- 연령 필터 -->
+	                  <if test="ageGroup != null and ageGroup != '' and ageGroup == 'teen'">
+	                    AND m.MEM_BIRTH IS NOT NULL
+	                    AND TRUNC(MONTHS_BETWEEN(b.BOARD_CREATED_AT, m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	                  </if>
+	                  <if test="ageGroup != null and ageGroup != '' and ageGroup == 'youth'">
+	                    AND m.MEM_BIRTH IS NOT NULL
+	                    AND TRUNC(MONTHS_BETWEEN(b.BOARD_CREATED_AT, m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	                  </if>
+	                  
+	                  <!-- 특정 게시판 카테고리 필터 -->
+	                  <if test="serviceType != null and serviceType != '' and serviceType != 'all'">
+	                    AND b.CC_ID = #{serviceType}
+	                  </if>
+	                  
+	                GROUP BY 
+	                    <choose>
+	                        <when test="period == 'monthly'">TRUNC(b.BOARD_CREATED_AT, 'MM')</when>
+	                        <otherwise>TRUNC(b.BOARD_CREATED_AT)</otherwise>
+	                    </choose>
+	            )
+	            SELECT
+	                <choose>
+	                    <when test="period == 'monthly'">TO_CHAR(dr.dt, 'YYYY-MM')</when>
+	                    <otherwise>TO_CHAR(dr.dt, 'YYYY-MM-DD')</otherwise>
+	                </choose> AS "dt",
+	                NVL(cd.teenCnt, 0) AS "teenCnt",
+	                NVL(cd.noticeCnt, 0) AS "noticeCnt", 
+	                NVL(cd.resumeTemplateCnt, 0) AS "resumeTemplateCnt",
+	                NVL(cd.studyGroupCnt, 0) AS "studyGroupCnt",
+	                NVL(cd.youthCnt, 0) AS "youthCnt"
+	            FROM DATE_RANGE dr
+	            LEFT JOIN COMMUNITY_DATA cd ON dr.dt = cd.dt
+	            ORDER BY dr.dt ASC
+	        </when>
+	        <otherwise>
+	            <!-- 기간이 지정되지 않은 경우: 기본 쿼리 -->
+	            SELECT
+	                <choose>
+	                    <when test="period == 'monthly'">TO_CHAR(b.BOARD_CREATED_AT, 'YYYY-MM')</when>
+	                    <otherwise>TO_CHAR(b.BOARD_CREATED_AT, 'YYYY-MM-DD')</otherwise>
+	                </choose> AS "dt",
+	                
+	                <!-- 각 게시판별 카운트 -->
+	                COUNT(CASE WHEN b.CC_ID = 'G09001' THEN 1 END) AS "teenCnt",
+	                COUNT(CASE WHEN b.CC_ID = 'G09002' THEN 1 END) AS "noticeCnt",
+	                COUNT(CASE WHEN b.CC_ID = 'G09004' THEN 1 END) AS "resumeTemplateCnt", 
+	                COUNT(CASE WHEN b.CC_ID = 'G09005' THEN 1 END) AS "studyGroupCnt",
+	                COUNT(CASE WHEN b.CC_ID = 'G09006' THEN 1 END) AS "youthCnt"
+	                
+	            FROM BOARD b
+	            JOIN MEMBER m ON b.MEM_ID = m.MEM_ID
+	            JOIN COM_CODE cc ON b.CC_ID = cc.CC_ID
+	            WHERE b.BOARD_DEL_YN = 'N'
+	              AND b.CC_ID != 'G09003'  <!-- G09003 제외 -->
+	              
+	              <!-- 성별 필터 -->
+	              <if test="gender != null and gender == 'male'">AND m.MEM_GEN = 'G11001'</if>
+	              <if test="gender != null and gender == 'female'">AND m.MEM_GEN = 'G11002'</if>
+	              
+	              <!-- 연령 필터 -->
+	              <if test="ageGroup != null and ageGroup != '' and ageGroup == 'teen'">
+	                AND m.MEM_BIRTH IS NOT NULL
+	                AND TRUNC(MONTHS_BETWEEN(b.BOARD_CREATED_AT, m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	              </if>
+	              <if test="ageGroup != null and ageGroup != '' and ageGroup == 'youth'">
+	                AND m.MEM_BIRTH IS NOT NULL
+	                AND TRUNC(MONTHS_BETWEEN(b.BOARD_CREATED_AT, m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	              </if>
+	              
+	              <!-- 특정 게시판 카테고리 필터 -->
+	              <if test="serviceType != null and serviceType != '' and serviceType != 'all'">
+	                AND b.CC_ID = #{serviceType}
+	              </if>
+	              
+	            GROUP BY 
+	                <choose>
+	                    <when test="period == 'monthly'">TO_CHAR(b.BOARD_CREATED_AT, 'YYYY-MM')</when>
+	                    <otherwise>TO_CHAR(b.BOARD_CREATED_AT, 'YYYY-MM-DD')</otherwise>
+	                </choose>
+	            ORDER BY "dt" ASC
+	        </otherwise>
+	    </choose>
+	</select>
 </mapper>
