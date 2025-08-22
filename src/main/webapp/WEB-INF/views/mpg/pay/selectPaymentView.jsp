@@ -24,6 +24,10 @@
 <div>
 	<div class="public-wrapper">
 		<!-- 여기부터 작성해 주시면 됩니다 -->
+		<div class="tab-container" id="tabs">
+			<h3 class="page-title-bar__title">결제/구독내역</h3>
+		</div>
+		
 		<div class="public-wrapper-main">
 			<div class="content-container">
 				<div class="section-header"
