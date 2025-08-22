@@ -15,4 +15,7 @@ public interface ContentsManagementMapper {
 
 	CompanyVO entDetail(String id);
 
+	List<InterviewReviewVO> selectReviewList(InterviewReviewVO interviewReviewVO);
+
+	int selectReviewListTotal(InterviewReviewVO interviewReviewVO);
 }

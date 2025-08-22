@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.or.ddit.admin.cmg.service.ContentsManagementService;
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.empt.enp.service.CompanyVO;
+import kr.or.ddit.empt.enp.service.InterviewReviewVO;
 import kr.or.ddit.prg.act.cr.service.ActivityCareerExpService;
 import kr.or.ddit.prg.act.service.ActivityVO;
 import kr.or.ddit.prg.act.sup.service.ActivitySupportersService;
@@ -208,6 +210,19 @@ public class ContentsManagementController {
 		
 		response.put("success", true);
 		response.put("cttDetail", cttDetail);
+		
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping("/selectReviewList")
+	public ResponseEntity<Map<String, Object>> selectReviewList(@ModelAttribute InterviewReviewVO interviewReviewVO) {
+		Map<String, Object> response = new HashMap<>();
+		
+		ArticlePage<InterviewReviewVO> articlePage = contentsManagementService.selectReviewList(interviewReviewVO);
+		Map<String, String> irStatus = contentsManagementService.selectIrStatusList();
+		
+		response.put("articlePage", articlePage);
+		response.put("irStatus", irStatus);
 		
 		return ResponseEntity.ok(response);
 	}

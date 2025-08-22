@@ -51,4 +51,13 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 		return Map.of("companyVO", companyVO, "filePath", filePath);
 	}
 
+	@Override
+	public ArticlePage<InterviewReviewVO> selectReviewList(InterviewReviewVO interviewReviewVO) {
+		List<InterviewReviewVO> interviewReviewList = contentsManagementMapper.selectReviewList(interviewReviewVO);
+		int total = contentsManagementMapper.selectReviewListTotal(interviewReviewVO);
+		
+		ArticlePage<InterviewReviewVO> articlePage = new ArticlePage<>(total, interviewReviewVO.getCurrentPage(), interviewReviewVO.getSize(), interviewReviewList, interviewReviewVO.getKeyword());
+		
+		return articlePage;
+	}
 }
