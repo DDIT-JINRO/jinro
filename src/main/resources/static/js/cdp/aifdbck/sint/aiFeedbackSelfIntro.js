@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const feedbackArea = document.getElementById('feedbackArea');
 		feedbackArea.innerHTML = `
 		  <div class="spinner-wrapper">
-		    <div class="spinner-border text-primary" role="status">
+		    <div class="spinner-border text-primary" role="status" style="display: block;">
 		    </div>
 		    <div class="text-center mt-2">AI가 피드백을 생성 중입니다...<br>잠시만 기다려주세요.</div>
 		  </div>
