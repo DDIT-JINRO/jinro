@@ -16,4 +16,6 @@ public interface ContentsManagementService {
 
 	Map<String, String> selectIrStatusList();
 
+	InterviewReviewVO selectReviewDetail(String irId);
+
 }

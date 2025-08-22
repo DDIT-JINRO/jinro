@@ -190,4 +190,35 @@
 		WHERE
 		    CL_CODE = 'S06'
 	</select>
+	
+	<select id="selectReviewDetail" parameterType="String" resultType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
+		SELECT
+		    IR.IR_ID
+		    , IR.MEM_ID
+		    , IR.IR_TYPE
+		    , IR.TARGET_ID
+		    , IR.IR_CONTENT
+		    , IR.IR_CREATED_AT
+		    , IR.IR_MOD_AT
+		    , IR.IR_RATING
+		    , IR.IR_APPLICATION
+		    , IR.IR_INTERVIEW_AT
+		    , IR.IR_STATUS
+		    , CASE IR_TYPE
+		        WHEN 'G02001' THEN U.UNIV_NAME
+		        WHEN 'G02002' THEN C.CP_NAME
+		    END AS TARGET_NAME
+		    , M.MEM_NAME AS MEM_NAME
+		    , V.VERI_CREATED_AT
+		    , V.FILE_GROUP_ID
+		    , V.VERI_REASON
+		FROM
+		    INTERVIEW_REVIEW IR
+		    JOIN MEMBER M ON IR.MEM_ID = M.MEM_ID
+		    LEFT JOIN COMPANY C ON IR.TARGET_ID = C.CP_ID
+		    LEFT JOIN UNIVERSITY U ON IR.TARGET_ID = U.UNIV_ID
+		    LEFT JOIN VERIFICATION V ON IR.IR_ID = V.VERI_ID
+		WHERE
+			IR_ID = #{irId}
+	</select>
 </mapper>

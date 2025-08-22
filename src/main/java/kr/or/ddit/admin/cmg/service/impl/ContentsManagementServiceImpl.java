@@ -74,4 +74,11 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 		return response;
 	}
 
+	@Override
+	public InterviewReviewVO selectReviewDetail(String irId) {
+		InterviewReviewVO interviewReview = contentsManagementMapper.selectReviewDetail(irId);
+		
+		return interviewReview;
+	}
+
 }

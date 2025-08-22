@@ -226,4 +226,12 @@ public class ContentsManagementController {
 		
 		return ResponseEntity.ok(response);
 	}
+	
+	@GetMapping("/selectReviewDetail")
+	public ResponseEntity<InterviewReviewVO> selectReviewDetail(@RequestParam String irId) {
+		
+		InterviewReviewVO interviewReview = contentsManagementService.selectReviewDetail(irId);
+		
+		return ResponseEntity.ok(interviewReview);
+	}
 }

@@ -23,4 +23,6 @@ public interface ContentsManagementMapper {
 
 	List<Map<String, String>> selectIrStatusList();
 
+	InterviewReviewVO selectReviewDetail(String irId);
+
 }
