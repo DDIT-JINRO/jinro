@@ -106,7 +106,7 @@
 		            <if test="counselCategory != null and counselCategory != ''">
 		            	AND A.COUNSEL_CATEGORY = #{counselCategory}
 		            </if>
-		            <if test="counselStatus != null and counselCategory != ''">
+		            <if test="counselStatus != null and counselStatus != ''">
 		            	AND A.COUNSEL_STATUS = #{counselStatus}
 		            </if>
 		            ORDER BY
