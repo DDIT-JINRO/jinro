@@ -1,6 +1,11 @@
 var calendarInstance = null; // 전역 변수로 선언
 var selectedDate = null;
-var currentViewMonth = null; 
+var currentViewMonth = null;
+
+document.getElementById('cns-logout').addEventListener('click', function() {
+	location.href = '/logoutProcess';
+});
+
 	function initCalendar() {
 		var calendarEl = document.getElementById('calendar');
 		if (!calendarEl) {

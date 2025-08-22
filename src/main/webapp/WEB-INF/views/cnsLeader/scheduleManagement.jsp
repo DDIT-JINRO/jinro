@@ -16,6 +16,7 @@
 
 	<!-- 메인 콘텐츠 영역 -->
 	<div class="main-content">
+	<div class="cnsLd-logoutBtn" id="cnsLd-logout">로그아웃</div>
 		<div id="content">
 			<h3>스케줄 관리</h3>
 		<div class="template-container">

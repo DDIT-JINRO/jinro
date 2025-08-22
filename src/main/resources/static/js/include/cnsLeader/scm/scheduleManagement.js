@@ -1,6 +1,10 @@
 var calendarInstance = null; // 전역 변수로 선언
 (function() {
 
+	document.getElementById('cnsLd-logout').addEventListener('click', function() {
+		location.href = '/logoutProcess';
+	});
+
 	var selectedDate = null;
 
 
@@ -23,146 +27,146 @@ var calendarInstance = null; // 전역 변수로 선언
 		}
 
 		calendarInstance = new FullCalendar.Calendar(calendarEl, {
-		    locale: 'ko',
-		    initialView: 'dayGridMonth',
-		    displayEventTime: false,
-		    headerToolbar: {
-		        left: 'prev',
-		        center: 'title',
-		        right: 'next'
-		    },
-		    height: parent,
-		    
-		    // 월이 변경될 때마다 호출되는 이벤트
-		    datesSet: function(info) {
-		        const colorPalette = [
-		            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
-		            '#FF9F40', '#E7E9ED', '#A0A2A6', '#C751A5', '#7F3C8D'
-		        ];
-		        const assignedColors = {};
-		        let colorIndex = 0;
-		        
-		        const title = info.view.title;
-		        const match = title.match(/(\d+)년 (\d+)월/);
-		        if (!match) {
-		            console.error("캘린더 제목에서 날짜를 파싱할 수 없습니다:", title);
-		            return;
-		        }
-		        const viewyear = match[1];
-		        const viewmonth = match[2].padStart(2, '0');
-		        const currentViewMonth = `${viewyear}-${viewmonth}`;
+			locale: 'ko',
+			initialView: 'dayGridMonth',
+			displayEventTime: false,
+			headerToolbar: {
+				left: 'prev',
+				center: 'title',
+				right: 'next'
+			},
+			height: parent,
 
-		        axios.get('/api/cnsld/counselingLd/monthly-counts.do', {
-		            params: {
-		                counselReqDatetime: `${currentViewMonth}-01`
-		            }
-		        })
-		        .then(response => {
-		            const data = response.data;
-		            const events = [];
-		            
-		            // 날짜별로 상담사 이름과 건수를 그룹화할 객체
-		            const dailyCounts = {};
+			// 월이 변경될 때마다 호출되는 이벤트
+			datesSet: function(info) {
+				const colorPalette = [
+					'#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+					'#FF9F40', '#E7E9ED', '#A0A2A6', '#C751A5', '#7F3C8D'
+				];
+				const assignedColors = {};
+				let colorIndex = 0;
 
-		            if (data && data.length > 0) {
-		                data.forEach(item => {
-		                    const dateStr = item.counselReqDatetime;
-		                    const counselorName = item.counselName;
-		                    const count = item.count;
-		                    
-		                    if (!dailyCounts[dateStr]) {
-		                        dailyCounts[dateStr] = [];
-		                    }
-		                    dailyCounts[dateStr].push({
-		                        name: counselorName,
-		                        count: count
-		                    });
-		                });
-		            }
+				const title = info.view.title;
+				const match = title.match(/(\d+)년 (\d+)월/);
+				if (!match) {
+					console.error("캘린더 제목에서 날짜를 파싱할 수 없습니다:", title);
+					return;
+				}
+				const viewyear = match[1];
+				const viewmonth = match[2].padStart(2, '0');
+				const currentViewMonth = `${viewyear}-${viewmonth}`;
 
-		            // 그룹화된 데이터를 기반으로 최종 이벤트 생성
-		            Object.keys(dailyCounts).forEach(dateStr => {
-		                const counts = dailyCounts[dateStr];
-		                
-		                // 툴팁에 표시될 HTML 문자열 생성
-		                const tooltipHtml = counts.map(c => {
-		                    if (!assignedColors[c.name]) {
-		                        assignedColors[c.name] = colorPalette[colorIndex % colorPalette.length];
-		                        colorIndex++;
-		                    }
-		                    return `<span style="color: ${assignedColors[c.name]};">●</span> ${c.name}: ${c.count}건`;
-		                }).join('<br>');
-		                
-		                // 캘린더 칸에 표시될 총 건수 텍스트
-		                const totalCount = counts.reduce((sum, c) => sum + c.count, 0);
+				axios.get('/api/cnsld/counselingLd/monthly-counts.do', {
+					params: {
+						counselReqDatetime: `${currentViewMonth}-01`
+					}
+				})
+					.then(response => {
+						const data = response.data;
+						const events = [];
 
-		                events.push({
-		                    title: tooltipHtml, // 툴팁에 사용될 HTML 문자열
-		                    start: dateStr,
-		                    extendedProps: {
-		                        totalCount: totalCount // eventContent에서 사용할 데이터
-		                    },
-		                    display: 'block'
-		                });
-		            });
-		            
-		            calendarInstance.setOption('events', events);
-		        })
-		        .catch(error => {
-		            console.error("월별 상담 데이터 로드 실패:", error);
-		            calendarInstance.setOption('events', []);
-		        });
-		        
-		        let currentDate = new Date();
-		        let year = currentDate.getFullYear();
-		        let month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-		        let day = currentDate.getDate().toString().padStart(2, '0');
+						// 날짜별로 상담사 이름과 건수를 그룹화할 객체
+						const dailyCounts = {};
 
-		        let todayStr = `${year}-${month}-${day}`;
+						if (data && data.length > 0) {
+							data.forEach(item => {
+								const dateStr = item.counselReqDatetime;
+								const counselorName = item.counselName;
+								const count = item.count;
 
-		        if (!selectedDate) {
-		            selectedDate = todayStr;
-		            document.getElementById('selectedDateText').textContent = selectedDate + "의 상담리스트";
-		            selectCounselSchedules(selectedDate);
-		            const todayEl = document.querySelector(`.fc-day[data-date="${todayStr}"]`);
-		            if (todayEl) {
-		                todayEl.classList.add('selected');
-		            }
-		        }
-		    },
-		    
-		    // *** 이 부분을 추가/수정하여 캘린더 칸의 내용을 제어합니다. ***
-		    eventContent: function(arg) {
-		        // arg.event.extendedProps에서 총 건수 정보를 가져와서
-		        // 캘린더 칸에 표시될 HTML을 반환합니다.
-		        const totalCount = arg.event.extendedProps.totalCount;
-		        return {
-		            html: `<div>총 ${totalCount}건</div>`
-		        };
-		    },
-		    
-		    // *** 이 부분을 추가/수정하여 툴팁을 연결합니다. ***
-		    eventDidMount: function(info) {
-		        // info.el은 이벤트가 표시되는 HTML 요소입니다.
-		        // info.event.title에 저장된 HTML 문자열을 툴팁 내용으로 사용합니다.
-		        tippy(info.el, {
-		            content: info.event.title,
-		            allowHTML: true,
-		            appendTo: document.body,
-		        });
-		    },
-		    
-		    dateClick: function(info) {
-		        const prevSelected = document.querySelector('.fc-day.selected');
-		        if (prevSelected) {
-		            prevSelected.classList.remove('selected');
-		        }
-		        info.dayEl.classList.add('selected');
+								if (!dailyCounts[dateStr]) {
+									dailyCounts[dateStr] = [];
+								}
+								dailyCounts[dateStr].push({
+									name: counselorName,
+									count: count
+								});
+							});
+						}
 
-		        let selectedDate = info.dateStr;
-		        document.getElementById("selectedDateText").textContent = `${selectedDate} 상담 리스트`;
-		        selectCounselSchedules(selectedDate);
-		    },
+						// 그룹화된 데이터를 기반으로 최종 이벤트 생성
+						Object.keys(dailyCounts).forEach(dateStr => {
+							const counts = dailyCounts[dateStr];
+
+							// 툴팁에 표시될 HTML 문자열 생성
+							const tooltipHtml = counts.map(c => {
+								if (!assignedColors[c.name]) {
+									assignedColors[c.name] = colorPalette[colorIndex % colorPalette.length];
+									colorIndex++;
+								}
+								return `<span style="color: ${assignedColors[c.name]};">●</span> ${c.name}: ${c.count}건`;
+							}).join('<br>');
+
+							// 캘린더 칸에 표시될 총 건수 텍스트
+							const totalCount = counts.reduce((sum, c) => sum + c.count, 0);
+
+							events.push({
+								title: tooltipHtml, // 툴팁에 사용될 HTML 문자열
+								start: dateStr,
+								extendedProps: {
+									totalCount: totalCount // eventContent에서 사용할 데이터
+								},
+								display: 'block'
+							});
+						});
+
+						calendarInstance.setOption('events', events);
+					})
+					.catch(error => {
+						console.error("월별 상담 데이터 로드 실패:", error);
+						calendarInstance.setOption('events', []);
+					});
+
+				let currentDate = new Date();
+				let year = currentDate.getFullYear();
+				let month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+				let day = currentDate.getDate().toString().padStart(2, '0');
+
+				let todayStr = `${year}-${month}-${day}`;
+
+				if (!selectedDate) {
+					selectedDate = todayStr;
+					document.getElementById('selectedDateText').textContent = selectedDate + "의 상담리스트";
+					selectCounselSchedules(selectedDate);
+					const todayEl = document.querySelector(`.fc-day[data-date="${todayStr}"]`);
+					if (todayEl) {
+						todayEl.classList.add('selected');
+					}
+				}
+			},
+
+			// *** 이 부분을 추가/수정하여 캘린더 칸의 내용을 제어합니다. ***
+			eventContent: function(arg) {
+				// arg.event.extendedProps에서 총 건수 정보를 가져와서
+				// 캘린더 칸에 표시될 HTML을 반환합니다.
+				const totalCount = arg.event.extendedProps.totalCount;
+				return {
+					html: `<div>총 ${totalCount}건</div>`
+				};
+			},
+
+			// *** 이 부분을 추가/수정하여 툴팁을 연결합니다. ***
+			eventDidMount: function(info) {
+				// info.el은 이벤트가 표시되는 HTML 요소입니다.
+				// info.event.title에 저장된 HTML 문자열을 툴팁 내용으로 사용합니다.
+				tippy(info.el, {
+					content: info.event.title,
+					allowHTML: true,
+					appendTo: document.body,
+				});
+			},
+
+			dateClick: function(info) {
+				const prevSelected = document.querySelector('.fc-day.selected');
+				if (prevSelected) {
+					prevSelected.classList.remove('selected');
+				}
+				info.dayEl.classList.add('selected');
+
+				let selectedDate = info.dateStr;
+				document.getElementById("selectedDateText").textContent = `${selectedDate} 상담 리스트`;
+				selectCounselSchedules(selectedDate);
+			},
 		});
 		calendarInstance.render();
 	}
@@ -206,7 +210,7 @@ var calendarInstance = null; // 전역 변수로 선언
 				} else {
 					// `fetchCounselingLog`처럼 시작 번호를 계산
 					// 번호는 시작 번호부터 1씩 증가
-					let cnt = (page-1) * pageSize +1;
+					let cnt = (page - 1) * pageSize + 1;
 
 					let rows = schedules.map((item, idx) => {
 						const counselReqDate = new Date(item.counselReqDatetime);
@@ -252,18 +256,18 @@ var calendarInstance = null; // 전역 변수로 선언
 
 
 })();
-	function renderPagination({ startPage, endPage, currentPage, totalPages, counselReqDatetime }) {
-		let html = `<a href="#" data-page="${startPage - 1}" onclick="selectCounselSchedules('${counselReqDatetime}',${startPage - 1})" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
+function renderPagination({ startPage, endPage, currentPage, totalPages, counselReqDatetime }) {
+	let html = `<a href="#" data-page="${startPage - 1}" onclick="selectCounselSchedules('${counselReqDatetime}',${startPage - 1})" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 
-		for (let p = startPage; p <= endPage; p++) {
-			html += `<a href="#" onclick="selectCounselSchedules('${counselReqDatetime}',${p})" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
-		}
-
-		html += `<a href="#" data-page="${endPage + 1}" onclick="selectCounselSchedules('${counselReqDatetime}',${endPage + 1})" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
-
-		const footer = document.querySelector('.panel-footer.pagination');
-		if (footer) footer.innerHTML = html;
+	for (let p = startPage; p <= endPage; p++) {
+		html += `<a href="#" onclick="selectCounselSchedules('${counselReqDatetime}',${p})" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
 	}
+
+	html += `<a href="#" data-page="${endPage + 1}" onclick="selectCounselSchedules('${counselReqDatetime}',${endPage + 1})" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
+
+	const footer = document.querySelector('.panel-footer.pagination');
+	if (footer) footer.innerHTML = html;
+}
 
 // 상담 상세 정보 조회 함수
 function counselDetail(counselId) {
