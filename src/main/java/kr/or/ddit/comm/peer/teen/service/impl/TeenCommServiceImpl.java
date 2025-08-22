@@ -30,21 +30,18 @@ public class TeenCommServiceImpl implements TeenCommService {
 
 	@Override
 	public ArticlePage<CommBoardVO> selectTeenList(String ccId, CommBoardVO commBoardVO) {
-		
-		log.info("VO임 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ : " + commBoardVO);
-		
+
+
 		commBoardVO.setCcId(ccId);
-		
+
 		int total = teenCommMapper.selectBoardTotal(commBoardVO);
-		
+
 		List<CommBoardVO> commBoardList = teenCommMapper.selectTeenList(commBoardVO);
-		log.info("commBoardList임 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ : " + commBoardList);
-		
+
 		ArticlePage<CommBoardVO> articlePage = new ArticlePage<>(total, commBoardVO.getCurrentPage(), commBoardVO.getSize(), commBoardList, commBoardVO.getKeyword());
-		
-		log.info("articlePage임 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ : " + articlePage);
-		
-		
+
+
+
 		return articlePage;
 	}
 
@@ -245,7 +242,7 @@ public class TeenCommServiceImpl implements TeenCommService {
 
 	@Override
 	public int selectBoardLikedCnt(int boardId) {
-		
+
 		return teenCommMapper.selectBoardLikedCnt(boardId);
 	}
 
@@ -273,11 +270,11 @@ public class TeenCommServiceImpl implements TeenCommService {
 		CommReplyLikeVO replyLikeVO = new CommReplyLikeVO();
 		replyLikeVO.setBoardId(boardId);
 		replyLikeVO.setReplyId(replyId);
-		
-		
+
+
 		return teenCommMapper.selectReplyLikedCnt(replyLikeVO);
 	}
 
-	
+
 
 }

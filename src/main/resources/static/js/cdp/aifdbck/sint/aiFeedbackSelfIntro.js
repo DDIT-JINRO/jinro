@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					data.questions.forEach((qvo, index) => {
 						const cvo = originalData.contents[index];
 						questionsHtml += `
-                    <div class="qa-block" data-index="${index}" onclick="displayFeedback(${index}, this)">
+                    <div class="qa-block" data-index="${index}">
                         <div class="question-block">
                             <span class="question-number">${index + 1}.</span>
                             <span class="question-text">${qvo.siqContent}</span>
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="answer-block">
                             <p>${cvo.sicContent}</p>
                             <div class="char-count">
-                                글자 수: <span>${cvo.sicContent.length}</span> / 2000
+                                글자 수 : <span>${cvo.sicContent.length}</span> / 2000
                             </div>
                         </div>
                     </div>
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const feedbackArea = document.getElementById('feedbackArea');
 		feedbackArea.innerHTML = `
 		  <div class="spinner-wrapper">
-		    <div class="spinner-border text-primary" role="status">
+		    <div class="spinner-border text-primary" role="status" style="display: block;">
 		    </div>
 		    <div class="text-center mt-2">AI가 피드백을 생성 중입니다...<br>잠시만 기다려주세요.</div>
 		  </div>

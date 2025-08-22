@@ -22,10 +22,16 @@
 	                b.cp_region,
 	                c.cc_name AS hire_type_name,
 	                d.cc_name AS hire_class_code_name
+	                <if test="memId != null and memId != ''">
+	                	,e.BM_ID
+	                </if>
 	            FROM hire a
 	                JOIN company b ON a.cp_id = b.cp_id
 	                JOIN COM_CODE c ON a.HIRE_TYPE = c.CC_ID
 	                LEFT JOIN COM_CODE d ON a.HIRE_CLASS_CODE = d.CC_ID
+	                <if test="memId != null and memId != ''">
+	            	LEFT JOIN (SELECT BM_ID, BM_TARGET_ID FROM BOOKMARK WHERE BM_CATEGORY_ID='G03003' AND MEM_ID=#{memId})e ON a.HIRE_ID = e.BM_TARGET_ID
+	            	</if>
 	            <where>
 	                <if test="keyword != null and keyword != ''">
 	                    (a.hire_title LIKE '%' || #{keyword} || '%' OR b.cp_name LIKE '%' || #{keyword} || '%')
@@ -50,7 +56,10 @@
 	                        )
 	                </if>
 	            </where>
-	            ORDER BY 
+	            ORDER BY
+	            <if test="memId != null and memId != ''"> 
+	            e.BM_ID,
+	            </if>
 	            CASE
 			        WHEN a.hire_end_date >= TRUNC(SYSDATE) THEN 0
 			        ELSE 1

@@ -101,9 +101,11 @@
 						</div>
 					</form>
 				</div>
-
-				<div class="content-list__total-count">총 ${articlePage.total}건</div>
-
+				<div class="source-div">
+					<span class="list-header__meta-item list-header__meta-item--source">[
+						출처: 씽굿(Thinkcontest.com), 대학문화신문사 ]</span>
+					<div class="content-list__total-count">총 ${articlePage.total}건</div>
+				</div>
 				<div class="list-container">
 					<c:if test="${not empty articlePage.content}">
 						<c:forEach var="contest" items="${articlePage.content}">

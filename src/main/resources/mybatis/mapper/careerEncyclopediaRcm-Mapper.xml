@@ -152,7 +152,8 @@
 		                    )
 		                </if>
 						ORDER BY
-							JOB_SATIS DESC
+							 IS_BOOKMARK
+							,JOB_SATIS DESC
 							, JOB_NAME ASC
 					) B
 				WHERE

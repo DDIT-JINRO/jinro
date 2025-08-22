@@ -1690,3 +1690,17 @@ html, body {
 		padding: 16px 20px;
 	}
 }
+
+.list-header__meta-item--source {
+	font-size: 14px;
+	color: #9ca3af;
+	font-style: italic;
+	display: flex;
+	padding: 0 0 10px 0;
+	margin-top: auto;
+}
+
+.source-div {
+	display: flex;
+	justify-content: space-between;
+}

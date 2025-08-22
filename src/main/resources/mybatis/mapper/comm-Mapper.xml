@@ -36,13 +36,13 @@
 		WHERE
 		B.CC_ID = #{ccId}
 		AND B.BOARD_DEL_YN = 'N'
-		<if test="status != null and status != '' and status == '3'">
+		<if test="status != null and status != '' and status == 3">
 			AND (B.BOARD_TITLE LIKE '%'||#{keyword}||'%' OR B.BOARD_CONTENT LIKE '%'||#{keyword}||'%')
 		</if>
-		<if test="status != null and status != '' and status == '1'">
+		<if test="status != null and status != '' and status == 1">
 			AND B.BOARD_TITLE LIKE '%'||#{keyword}||'%'
 		</if>
-		<if test="status != null and status != '' and status == '2'">
+		<if test="status != null and status != '' and status == 2">
 			AND B.BOARD_CONTENT LIKE '%'||#{keyword}||'%'
 		</if>
 
@@ -106,6 +106,9 @@
 					AND B.BOARD_CONTENT LIKE '%'||#{keyword}||'%'
 				</if>
 				ORDER BY
+				<if test="memId != null and memId != ''">
+					IS_BOOKMARK ,
+				</if>
 					B.BOARD_CREATED_AT DESC
 			) C
 			WHERE ROWNUM &lt;= #{endNo}

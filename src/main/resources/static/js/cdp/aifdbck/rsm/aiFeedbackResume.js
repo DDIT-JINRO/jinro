@@ -35,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			return;
 		}
 
-	document.getElementById('resume-count-display').textContent = subscriptionInfo.payResumeCnt;
+		document.getElementById('resume-count-display').textContent = subscriptionInfo.payResumeCnt;
 		// --- 모달 표시 ---
 		bg.style.display = 'block';
 		modal.style.display = 'block';
 		modal.focus();
 	});
-	        
+
 	// 모달의 '확인' 버튼 클릭 -> 실제 AI 분석 및 횟수 차감 요청
 	btnConfirm.addEventListener('click', () => {
 		closeModal();
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const feedbackArea = document.getElementById('feedbackArea');
 		feedbackArea.innerHTML = `
 		<div class="spinner-wrapper">
-			<div class="spinner-border text-primary" role="status">
+			<div class="spinner-border text-primary" role="status" style="display: block;">
 			</div>
 			<div class="text-center mt-2">AI가 피드백을 생성 중입니다...<br>잠시만 기다려주세요.</div>
 		</div>
@@ -171,12 +171,30 @@ document.addEventListener('DOMContentLoaded', () => {
 			})
 			.then(aiResponseText => {
 				const cleanedText = cleanAiResponse(aiResponseText);
+
+				const htmlFormatted = `
+					  <div class="feedback-section">
+					    ${cleanedText
+						.replace(/^##\s*이력서\s*항목별\s*피드백\s*$/gm, '')
+						.replace(/^##\s*이력서\s*피드백\s*$/gm, '')
+						.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  							// 볼드 처리
+						.replace(/^\*\s?/gm, '')                           // * 제거
+						// 상위 소제목(개선할 점 등)은 <h3> 처리
+						.replace(/<strong>(개선할 점|더 나은 표현 제안|누락 또는 과장된 부분):?<\/strong>/g, '<h3>$1</h3>')
+						// 하위 항목 제목에서 콜론(:) 제거
+						.replace(/<strong>([^<]+?):<\/strong>/g, '<strong>$1</strong>')
+						// 연속 줄바꿈 제거 → 1줄만 유지
+						.replace(/\n{2,}/g, '\n')
+					}
+					  </div>
+					`;
+
 				aiFeedbackData = {
 					sections_feedback: [cleanedText], // 배열로 감싸기!
 					questions: ["이력서 전체 피드백"] // 제목만 하나 넣기
 				};
 
-				feedbackArea.innerHTML = aiResponseText.replace(/\n/g, '<br>');
+				feedbackArea.innerHTML = htmlFormatted;
 				subscriptionInfo.payResumeCnt--;
 				alert(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payResumeCnt}회)`);
 

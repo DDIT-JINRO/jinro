@@ -71,7 +71,7 @@
 					</div>
 				</div>
 			</form>
-
+			<span class="list-header__meta-item list-header__meta-item--source">[ 출처 : 한국직업능력연구원 국가진로교육연구센터 (커리어넷) ]</span>
 			<div class="content-list">
 				<div class="content-list__header">
 					<span class="content-list__col content-list__col--dept-name">학과명</span>

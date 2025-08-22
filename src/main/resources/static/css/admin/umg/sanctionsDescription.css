@@ -114,6 +114,13 @@
 	min-width: 80px;
 }
 
+.info-history2 {
+	color: gray;
+	font-size: 13px;
+	font-weight: bold;
+	min-width: 100px;
+}
+
 .detail-input, .detail-input-select {
 	width: 50px;
 	flex-grow: 1;

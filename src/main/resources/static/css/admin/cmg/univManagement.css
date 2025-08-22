@@ -21,6 +21,7 @@
 	height: 720px;
 }
 .admin-univMng-2 {
+	overflow: auto;
 	width: 60%;
 	height: 720px;
 }

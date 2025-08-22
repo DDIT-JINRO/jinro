@@ -87,15 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			<a href="javascript:void(0)">로그 및 통계</a>
 			<ul class="admin-side-submenu" id="adminSideLogMenu">
 				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=las/accessUsageStatistics">접속/이용 통계</a>
-				</li>
-				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=las/memberActivityLog">회원 활동 로그</a>
-				</li>
-				<li>
-					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=las/consultationLogsStatistics">상담 로그 및 통계</a>
-				</li>
-				<li>
 					<a href="#" class="admin-side-menu-link" data-page="<%=request.getContextPath()%>/admin/adminMoveController.do?target=las/contentUsageStatistics">컨텐츠 이용 통계</a>
 				</li>
 				<li>

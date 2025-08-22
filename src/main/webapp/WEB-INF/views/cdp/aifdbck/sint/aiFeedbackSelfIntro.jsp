@@ -65,7 +65,7 @@
 				        <button id="requestAiFeedback" class="aifb-button feedback">AI 피드백 요청</button>
 				        <span class="powered-by-text">Powered by Gemini</span>
 				    </div>
-				    <button class="aifb-button proofread" onclick="requestProofread()">내 이력서 수정하러 가기</button>
+				    <button class="aifb-button proofread" onclick="requestProofread()">내 자기소개서 수정하러 가기</button>
 				</div>
 			</div>
 			

@@ -58,4 +58,26 @@ public interface ContentStatsMapper {
 
 	// 청소년/청년 커뮤니티 인기TOP5 -> 파라미터 : 카테고리번호 ccId (G09001, G09006)
 	List<Map<String,Object>> selectCommunityTop5PostsByMemBirth(Map<String, Object> param);
+	
+	// 상단 증감률 보여주는 데이터
+	int selectDailyPostCountToday();
+	int selectDailyPostCountYesterday();
+	int selectDailyBookmarkCountToday();
+	int selectDailyBookmarkCountYesterday();
+	int selectDailyChatRoomCountToday();
+	int selectDailyChatRoomCountYesterday();
+	
+	// 로드맵 관련 데이터
+	List<Map<String, Object>> selectRoadmapStepDistribution();
+	Map<String, Object> selectNonParticipatingMembers();
+	
+	// 커뮤니티 내용
+	List<Map<String, Object>> selectCommunityActivityStats(Map<String, Object> params);
+
+	// 커뮤니티 사용량 차트
+	List<Map<String, Object>> selectCommunityUsageStats(Map<String, Object> params);
+	
+	// 월드컵, 로드맵 이용량 차트
+	List<Map<String, Object>> selectWorldcupRoadmapUsageStats(Map<String, Object> params);
+
 }

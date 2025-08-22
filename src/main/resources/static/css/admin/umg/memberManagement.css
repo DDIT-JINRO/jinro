@@ -5,7 +5,7 @@
 }
 
 .userListBtnGroup {
-	margin-top: 60px;
+	margin-top: 10px;
 }
 
 .status-dot {
@@ -17,7 +17,7 @@
 }
 
 .userListSpace {
-	margin-top: 30px;
+	margin-top: 10px;
 }
 
 .inputmem-role {
@@ -29,13 +29,16 @@
 	font-weight: 400;
 }
 
+.memberListSearch {
+	margin-top: 30px;
+}
+
 .userList tr td {
 	height: 30px;
 }
 
 .search-filter-bar {
 	display: flex;
-	padding: 0 10px;
 	gap: 10px;
 	justify-content: space-between;
 }
@@ -69,7 +72,6 @@
 	margin: 0;
 	font-size: 14px;
 	font-weight: 600;
-	margin-bottom: 20px;
 }
 
 .profile-container {
@@ -78,7 +80,7 @@
 }
 
 .selectUserList-top {
-	margin-top: 60px;
+	margin-top: 10px;
 }
 
 .profile-image-wrapper {
