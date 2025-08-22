@@ -75,6 +75,7 @@ public class InterviewFeedbackServiceImpl implements InterviewFeedbackService{
 		
 		try {
 			interviewFeedbackMapper.updateInterviewFeedback(interviewReview);
+			verification.setVeriId(interviewReview.getIrId());
 			fileService.uploadFiles(fileGroupId, files);
 			interviewFeedbackMapper.updateVerification(verification);
 		} catch (IOException e) {
