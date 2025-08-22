@@ -3,58 +3,144 @@
 <mapper namespace="kr.or.ddit.admin.las.service.impl.ContentStatsMapper">
 
 	<select id="bookmarkCountsStatistic" parameterType="map" resultType="map">
-		WITH CATS AS (
-		  SELECT 1 ord, 'G03001' cat_id, '대학' AS cat_name FROM dual UNION ALL
-		  SELECT 2, 'G03002', '기업' FROM dual UNION ALL
-		  SELECT 3, 'G03004', '직업' FROM dual UNION ALL
-		  SELECT 4, 'G03005', '이력서템플릿' FROM dual UNION ALL
-		  SELECT 5, 'G03006', '학과' FROM dual
-		),
-		BM AS (
-		  SELECT
-		    b.BM_CATEGORY_ID                          AS cat_id,
-		    m.MEM_GEN                                  AS gender,
-		    COUNT(*)                                   AS cnt
-		  FROM BOOKMARK b
-		  JOIN MEMBER  m ON m.MEM_ID = b.MEM_ID
-		  WHERE b.BM_CATEGORY_ID IN ('G03001','G03002','G03004','G03005','G03006')
-		    <!-- 기간 필터 -->
-		    <if test="from != null and from != ''">AND b.BM_CREATED_AT &gt;= TRUNC(TO_DATE(#{from}, 'YYYY-MM-DD'))</if>
-		    <if test="to   != null and to != ''">AND b.BM_CREATED_AT &lt;  TRUNC(TO_DATE(#{to}, 'YYYY-MM-DD')) + 1</if>
-
-		    <!-- 성별 필터(지정 시 해당 성별만 집계 -> 차트에 단일 막대로 보임) -->
-		    <if test="gender != null and gender != '' and gender != 'ALL'">
-		      AND m.MEM_GEN = #{gender}
-		    </if>
-
-		    <!-- 연령대 필터: 북마크 날짜(BM_CREATED_AT) 기준 나이 -->
-		    <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
-		      AND m.MEM_BIRTH IS NOT NULL
-		      AND CASE
-		            WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
-		            WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
-		            WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
-		            WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
-		            ELSE '30+'
-		          END = #{ageBand}
-		    </if>
-		  GROUP BY b.BM_CATEGORY_ID, m.MEM_GEN
-		)
-		SELECT
-		  c.cat_id   AS "categoryId",
-		  c.cat_name AS "categoryName",
-		  NVL(SUM(CASE WHEN b.gender = 'G11001' THEN b.cnt END), 0) AS "maleCnt",
-		  NVL(SUM(CASE WHEN b.gender = 'G11002' THEN b.cnt END), 0) AS "femaleCnt"
-		FROM CATS c
-		LEFT JOIN BM b ON b.cat_id = c.cat_id
-		GROUP BY c.ord, c.cat_id, c.cat_name
-		ORDER BY c.ord
+	  <choose>
+	    <when test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+	      <!-- 기간이 지정된 경우: 날짜 범위 생성 후 LEFT JOIN -->
+	      WITH DATE_RANGE AS (
+	        SELECT 
+	          <choose>
+	            <when test="period == 'monthly'">
+	              ADD_MONTHS(TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'MM'), LEVEL - 1) AS dt
+	            </when>
+	            <otherwise>
+	              TO_DATE(#{startDate}, 'YYYY-MM-DD') + LEVEL - 1 AS dt
+	            </otherwise>
+	          </choose>
+	        FROM DUAL
+	        CONNECT BY 
+	          <choose>
+	            <when test="period == 'monthly'">
+	              ADD_MONTHS(TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'MM'), LEVEL - 1) <![CDATA[ <= ]]> TRUNC(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 'MM')
+	            </when>
+	            <otherwise>
+	              LEVEL <![CDATA[ <= ]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') - TO_DATE(#{startDate}, 'YYYY-MM-DD') + 1
+	            </otherwise>
+	          </choose>
+	      ),
+	      CATS AS (
+	        SELECT 1 ord, 'G03001' cat_id, '대학' AS cat_name FROM dual UNION ALL
+	        SELECT 2, 'G03002', '기업' FROM dual UNION ALL
+	        SELECT 3, 'G03004', '직업' FROM dual UNION ALL
+	        SELECT 4, 'G03005', '이력서템플릿' FROM dual UNION ALL
+	        SELECT 5, 'G03006', '학과' FROM dual
+	      ),
+	      BM AS (
+	        SELECT
+	          <choose>
+	            <when test="period == 'monthly'">TRUNC(b.BM_CREATED_AT, 'MM')</when>
+	            <otherwise>TRUNC(b.BM_CREATED_AT)</otherwise>
+	          </choose> AS dt,
+	          b.BM_CATEGORY_ID AS cat_id,
+	          m.MEM_GEN AS gender,
+	          COUNT(*) AS cnt
+	        FROM BOOKMARK b
+	        JOIN MEMBER m ON m.MEM_ID = b.MEM_ID
+	        WHERE b.BM_CATEGORY_ID IN ('G03001','G03002','G03004','G03005','G03006')
+	          AND b.BM_CREATED_AT >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	          AND b.BM_CREATED_AT <![CDATA[ < ]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
+	          
+	          <!-- 성별 필터 -->
+	          <if test="gender != null and gender != '' and gender != 'ALL'">
+	            AND m.MEM_GEN = #{gender}
+	          </if>
+	
+	          <!-- 연령대 필터: 청소년(19세 이하) / 청년(20세 이상) -->
+	          <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	            AND m.MEM_BIRTH IS NOT NULL
+	            <if test="ageBand == 'teen'">
+	              AND TRUNC(MONTHS_BETWEEN(b.BM_CREATED_AT, m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	            </if>
+	            <if test="ageBand == 'youth'">
+	              AND TRUNC(MONTHS_BETWEEN(b.BM_CREATED_AT, m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	            </if>
+	          </if>
+	          
+	        GROUP BY 
+	          <choose>
+	            <when test="period == 'monthly'">TRUNC(b.BM_CREATED_AT, 'MM')</when>
+	            <otherwise>TRUNC(b.BM_CREATED_AT)</otherwise>
+	          </choose>,
+	          b.BM_CATEGORY_ID, m.MEM_GEN
+	      )
+	      SELECT
+	        <choose>
+	          <when test="period == 'monthly'">TO_CHAR(dr.dt, 'YYYY-MM')</when>
+	          <otherwise>TO_CHAR(dr.dt, 'YYYY-MM-DD')</otherwise>
+	        </choose> AS "dt",
+	        c.cat_id AS "categoryId",
+	        c.cat_name AS "categoryName",
+	        NVL(SUM(CASE WHEN b.gender = 'G11001' THEN b.cnt END), 0) AS "maleCnt",
+	        NVL(SUM(CASE WHEN b.gender = 'G11002' THEN b.cnt END), 0) AS "femaleCnt"
+	      FROM DATE_RANGE dr
+	      CROSS JOIN CATS c
+	      LEFT JOIN BM b ON dr.dt = b.dt AND b.cat_id = c.cat_id
+	      GROUP BY dr.dt, c.ord, c.cat_id, c.cat_name
+	      ORDER BY dr.dt, c.ord
+	    </when>
+	    <otherwise>
+	      <!-- 기간이 지정되지 않은 경우: 기존 로직 -->
+	      WITH CATS AS (
+	        SELECT 1 ord, 'G03001' cat_id, '대학' AS cat_name FROM dual UNION ALL
+	        SELECT 2, 'G03002', '기업' FROM dual UNION ALL
+	        SELECT 3, 'G03004', '직업' FROM dual UNION ALL
+	        SELECT 4, 'G03005', '이력서템플릿' FROM dual UNION ALL
+	        SELECT 5, 'G03006', '학과' FROM dual
+	      ),
+	      BM AS (
+	        SELECT
+	          b.BM_CATEGORY_ID AS cat_id,
+	          m.MEM_GEN AS gender,
+	          COUNT(*) AS cnt
+	        FROM BOOKMARK b
+	        JOIN MEMBER m ON m.MEM_ID = b.MEM_ID
+	        WHERE b.BM_CATEGORY_ID IN ('G03001','G03002','G03004','G03005','G03006')
+	          <!-- 기간 필터 -->
+	          <if test="from != null and from != ''">AND b.BM_CREATED_AT &gt;= TRUNC(TO_DATE(#{from}, 'YYYY-MM-DD'))</if>
+	          <if test="to   != null and to != ''">AND b.BM_CREATED_AT &lt;  TRUNC(TO_DATE(#{to}, 'YYYY-MM-DD')) + 1</if>
+	
+	          <!-- 성별 필터 -->
+	          <if test="gender != null and gender != '' and gender != 'ALL'">
+	            AND m.MEM_GEN = #{gender}
+	          </if>
+	
+	          <!-- 연령대 필터: 청소년(19세 이하) / 청년(20세 이상) -->
+	          <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	            AND m.MEM_BIRTH IS NOT NULL
+	            <if test="ageBand == 'teen'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	            </if>
+	            <if test="ageBand == 'youth'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	            </if>
+	          </if>
+	        GROUP BY b.BM_CATEGORY_ID, m.MEM_GEN
+	      )
+	      SELECT
+	        c.cat_id AS "categoryId",
+	        c.cat_name AS "categoryName",
+	        NVL(SUM(CASE WHEN b.gender = 'G11001' THEN b.cnt END), 0) AS "maleCnt",
+	        NVL(SUM(CASE WHEN b.gender = 'G11002' THEN b.cnt END), 0) AS "femaleCnt"
+	      FROM CATS c
+	      LEFT JOIN BM b ON b.cat_id = c.cat_id
+	      GROUP BY c.ord, c.cat_id, c.cat_name
+	      ORDER BY c.ord
+	    </otherwise>
+	  </choose>
 	</select>
 
-	<!-- 좌하단: 북마크 상세 TOP N (북마크일 기준 연령 계산, 채용 G03003 제외) -->
+	<!-- 북마크 상세 TOP N (청소년/청년 구분) -->
 	<select id="bookmarkTopN" parameterType="map" resultType="map">
 	  <choose>
-
 	    <!-- 1) ALL: 카테고리 합산에서 TOP N -->
 	    <when test="categoryId == null or categoryId == '' or categoryId == 'ALL'">
 	      SELECT *
@@ -76,16 +162,15 @@
 	          <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
 	          <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
 	            AND m.MEM_BIRTH IS NOT NULL
-	            AND CASE
-	                  WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
-	                  WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
-	                  WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
-	                  WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
-	                  ELSE '30+'
-	                END = #{ageBand}
+	            <if test="ageBand == 'teen'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	            </if>
+	            <if test="ageBand == 'youth'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	            </if>
 	          </if>
 	        GROUP BY b.BM_TARGET_ID, u.UNIV_NAME, '/ertds/univ/uvsrch/selectDetail.do?univId='||u.UNIV_ID
-
+	
 	        UNION ALL
 	        /* 기업 */
 	        SELECT
@@ -104,16 +189,15 @@
 	          <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
 	          <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
 	            AND m.MEM_BIRTH IS NOT NULL
-	            AND CASE
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
-	              ELSE '30+'
-	            END = #{ageBand}
+	            <if test="ageBand == 'teen'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	            </if>
+	            <if test="ageBand == 'youth'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	            </if>
 	          </if>
 	        GROUP BY b.BM_TARGET_ID, c.CP_NAME, '/empt/enp/enterprisePosting.do?keyword='||c.CP_NAME
-
+	
 	        UNION ALL
 	        /* 직업: JOBS.JOB_TARGET_ID 로 매칭 */
 	        SELECT
@@ -132,16 +216,15 @@
 	          <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
 	          <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
 	            AND m.MEM_BIRTH IS NOT NULL
-	            AND CASE
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
-	              ELSE '30+'
-	            END = #{ageBand}
+	            <if test="ageBand == 'teen'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	            </if>
+	            <if test="ageBand == 'youth'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	            </if>
 	          </if>
 	        GROUP BY b.BM_TARGET_ID, j.JOB_NAME, '/pse/cr/crl/selectCareerDetail.do?jobCode='||j.JOB_CODE
-
+	
 	        UNION ALL
 	        /* 이력서 템플릿: BOARD(CC_ID='G09004', 삭제 제외) */
 	        SELECT
@@ -162,16 +245,15 @@
 	          <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
 	          <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
 	            AND m.MEM_BIRTH IS NOT NULL
-	            AND CASE
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
-	              ELSE '30+'
-	            END = #{ageBand}
+	            <if test="ageBand == 'teen'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	            </if>
+	            <if test="ageBand == 'youth'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	            </if>
 	          </if>
 	        GROUP BY b.BM_TARGET_ID, bd.BOARD_TITLE, '/cdp/rsm/rsmb/resumeBoardDetail.do?boardId='||bd.BOARD_ID
-
+	
 	        UNION ALL
 	        /* 학과: 표에 명칭 컬럼이 별도 없어서 UDD_M_CLASS(중분류 코드/명)로 표시 */
 	        SELECT
@@ -191,109 +273,106 @@
 	          <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
 	          <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
 	            AND m.MEM_BIRTH IS NOT NULL
-	            AND CASE
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
-	              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
-	              ELSE '30+'
-	            END = #{ageBand}
+	            <if test="ageBand == 'teen'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	            </if>
+	            <if test="ageBand == 'youth'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	            </if>
 	          </if>
 	        GROUP BY b.BM_TARGET_ID, c.CC_NAME, '/ertds/univ/dpsrch/selectDetail.do?uddId='||ud.UDD_ID
 	      )
 	      ORDER BY cnt DESC
 	      FETCH FIRST ${limit} ROWS ONLY
 	    </when>
-
+	
 	    <!-- 2) 단일 카테고리 TOP N -->
 	    <otherwise>
-		      SELECT *
-		      FROM (
-		        SELECT
-		          b.BM_CATEGORY_ID AS categoryId,
-		          CASE b.BM_CATEGORY_ID
-		            WHEN 'G03001' THEN '대학'
-		            WHEN 'G03002' THEN '기업'
-		            WHEN 'G03004' THEN '직업'
-		            WHEN 'G03005' THEN '이력서템플릿'
-		            WHEN 'G03006' THEN '학과'
-		            ELSE b.BM_CATEGORY_ID
-		          END AS categoryName,
-		          b.BM_TARGET_ID AS targetId,
-		          <choose>
-		            <when test="categoryId == 'G03001'">u.UNIV_NAME</when>
-		            <when test="categoryId == 'G03002'">c.CP_NAME</when>
-		            <when test="categoryId == 'G03004'">j.JOB_NAME</when>
-		            <when test="categoryId == 'G03005'">bd.BOARD_TITLE</when>
-		            <when test="categoryId == 'G03006'">c.CC_NAME</when>
-		            <otherwise>TO_CHAR(b.BM_TARGET_ID)</otherwise>
-		          </choose> AS targetName,
-		          <choose>
-		            <when test="categoryId == 'G03001'">'/ertds/univ/uvsrch/selectDetail.do?univId='||u.UNIV_ID</when>
-		            <when test="categoryId == 'G03002'">'/empt/enp/enterprisePosting.do?keyword='||c.CP_NAME</when>
-		            <when test="categoryId == 'G03004'">'/pse/cr/crl/selectCareerDetail.do?jobCode='||j.JOB_CODE</when>
-		            <when test="categoryId == 'G03005'">'/cdp/rsm/rsmb/resumeBoardDetail.do?boardId='||bd.BOARD_ID</when>
-		            <when test="categoryId == 'G03006'">'/ertds/univ/dpsrch/selectDetail.do?uddId='||ud.UDD_ID</when>
-		            <otherwise>TO_CHAR(b.BM_TARGET_ID)</otherwise>
-		          </choose> AS target_URL,
-		          COUNT(*) AS cnt
-		        FROM BOOKMARK b
-		        JOIN MEMBER m ON m.MEM_ID = b.MEM_ID
-		        <choose>
-		          <when test="categoryId == 'G03001'">
-		            JOIN UNIVERSITY u ON u.UNIV_ID = b.BM_TARGET_ID
-		          </when>
-		          <when test="categoryId == 'G03002'">
-		            JOIN COMPANY c ON c.CP_ID = b.BM_TARGET_ID
-		          </when>
-		          <when test="categoryId == 'G03004'">
-		            JOIN JOBS j ON j.JOB_TARGET_ID = b.BM_TARGET_ID
-		          </when>
-		          <when test="categoryId == 'G03005'">
-		            JOIN BOARD bd ON bd.BOARD_ID = b.BM_TARGET_ID AND bd.CC_ID = 'G09004' AND bd.BOARD_DEL_YN = 'N'
-		          </when>
-		          <when test="categoryId == 'G03006'">
-		            JOIN UNIV_DEPT_DETAIL ud ON ud.UDD_ID = b.BM_TARGET_ID
-		            JOIN COM_CODE c ON ud.UDD_M_CLASS = c.CC_ID
-		          </when>
-		        </choose>
-		        WHERE b.BM_CATEGORY_ID = #{categoryId}
-		          <if test="from != null and from != ''">AND b.BM_CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
-		          <if test="to   != null and to   != ''">AND b.BM_CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
-		          <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
-		          <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
-		            AND m.MEM_BIRTH IS NOT NULL
-		            AND CASE
-		              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) &lt; 15 THEN 'U15'
-		              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 15 AND 19 THEN '15-19'
-		              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 20 AND 24 THEN '20-24'
-		              WHEN FLOOR(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH)/12) BETWEEN 25 AND 29 THEN '25-29'
-		              ELSE '30+'
-		            END = #{ageBand}
-		          </if>
-		        GROUP BY b.BM_CATEGORY_ID, b.BM_TARGET_ID,
-		          <choose>
-		            <when test="categoryId == 'G03001'">u.UNIV_NAME</when>
-		            <when test="categoryId == 'G03002'">c.CP_NAME</when>
-		            <when test="categoryId == 'G03004'">j.JOB_NAME</when>
-		            <when test="categoryId == 'G03005'">bd.BOARD_TITLE</when>
-		            <when test="categoryId == 'G03006'">c.CC_NAME</when>
-		            <otherwise>TO_CHAR(b.BM_TARGET_ID)</otherwise>
-		          </choose>,
-		          <choose>
-		            <when test="categoryId == 'G03001'">'/ertds/univ/uvsrch/selectDetail.do?univId='||u.UNIV_ID</when>
-		            <when test="categoryId == 'G03002'">'/empt/enp/enterprisePosting.do?keyword='||c.CP_NAME</when>
-		            <when test="categoryId == 'G03004'">'/pse/cr/crl/selectCareerDetail.do?jobCode='||j.JOB_CODE</when>
-		            <when test="categoryId == 'G03005'">'/cdp/rsm/rsmb/resumeBoardDetail.do?boardId='||bd.BOARD_ID</when>
-		            <when test="categoryId == 'G03006'">'/ertds/univ/dpsrch/selectDetail.do?uddId='||ud.UDD_ID</when>
-		            <otherwise>TO_CHAR(b.BM_TARGET_ID)</otherwise>
-		          </choose>
-		        ORDER BY cnt DESC
-		      )
-		      WHERE ROWNUM &lt;= #{limit}
-		    </otherwise>
-
-		  </choose>
+	      SELECT *
+	      FROM (
+	        SELECT
+	          b.BM_CATEGORY_ID AS categoryId,
+	          CASE b.BM_CATEGORY_ID
+	            WHEN 'G03001' THEN '대학'
+	            WHEN 'G03002' THEN '기업'
+	            WHEN 'G03004' THEN '직업'
+	            WHEN 'G03005' THEN '이력서템플릿'
+	            WHEN 'G03006' THEN '학과'
+	            ELSE b.BM_CATEGORY_ID
+	          END AS categoryName,
+	          b.BM_TARGET_ID AS targetId,
+	          <choose>
+	            <when test="categoryId == 'G03001'">u.UNIV_NAME</when>
+	            <when test="categoryId == 'G03002'">c.CP_NAME</when>
+	            <when test="categoryId == 'G03004'">j.JOB_NAME</when>
+	            <when test="categoryId == 'G03005'">bd.BOARD_TITLE</when>
+	            <when test="categoryId == 'G03006'">c.CC_NAME</when>
+	            <otherwise>TO_CHAR(b.BM_TARGET_ID)</otherwise>
+	          </choose> AS targetName,
+	          <choose>
+	            <when test="categoryId == 'G03001'">'/ertds/univ/uvsrch/selectDetail.do?univId='||u.UNIV_ID</when>
+	            <when test="categoryId == 'G03002'">'/empt/enp/enterprisePosting.do?keyword='||c.CP_NAME</when>
+	            <when test="categoryId == 'G03004'">'/pse/cr/crl/selectCareerDetail.do?jobCode='||j.JOB_CODE</when>
+	            <when test="categoryId == 'G03005'">'/cdp/rsm/rsmb/resumeBoardDetail.do?boardId='||bd.BOARD_ID</when>
+	            <when test="categoryId == 'G03006'">'/ertds/univ/dpsrch/selectDetail.do?uddId='||ud.UDD_ID</when>
+	            <otherwise>TO_CHAR(b.BM_TARGET_ID)</otherwise>
+	          </choose> AS target_URL,
+	          COUNT(*) AS cnt
+	        FROM BOOKMARK b
+	        JOIN MEMBER m ON m.MEM_ID = b.MEM_ID
+	        <choose>
+	          <when test="categoryId == 'G03001'">
+	            JOIN UNIVERSITY u ON u.UNIV_ID = b.BM_TARGET_ID
+	          </when>
+	          <when test="categoryId == 'G03002'">
+	            JOIN COMPANY c ON c.CP_ID = b.BM_TARGET_ID
+	          </when>
+	          <when test="categoryId == 'G03004'">
+	            JOIN JOBS j ON j.JOB_TARGET_ID = b.BM_TARGET_ID
+	          </when>
+	          <when test="categoryId == 'G03005'">
+	            JOIN BOARD bd ON bd.BOARD_ID = b.BM_TARGET_ID AND bd.CC_ID = 'G09004' AND bd.BOARD_DEL_YN = 'N'
+	          </when>
+	          <when test="categoryId == 'G03006'">
+	            JOIN UNIV_DEPT_DETAIL ud ON ud.UDD_ID = b.BM_TARGET_ID
+	            JOIN COM_CODE c ON ud.UDD_M_CLASS = c.CC_ID
+	          </when>
+	        </choose>
+	        WHERE b.BM_CATEGORY_ID = #{categoryId}
+	          <if test="from != null and from != ''">AND b.BM_CREATED_AT &gt;= TO_DATE(#{from}, 'YYYY-MM-DD')</if>
+	          <if test="to   != null and to   != ''">AND b.BM_CREATED_AT &lt;  TO_DATE(#{to},   'YYYY-MM-DD') + 1</if>
+	          <if test="gender != null and gender != '' and gender != 'ALL'">AND m.MEM_GEN = #{gender}</if>
+	          <if test="ageBand != null and ageBand != '' and ageBand != 'ALL'">
+	            AND m.MEM_BIRTH IS NOT NULL
+	            <if test="ageBand == 'teen'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+	            </if>
+	            <if test="ageBand == 'youth'">
+	              AND TRUNC(MONTHS_BETWEEN(TRUNC(b.BM_CREATED_AT), m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+	            </if>
+	          </if>
+	        GROUP BY b.BM_CATEGORY_ID, b.BM_TARGET_ID,
+	          <choose>
+	            <when test="categoryId == 'G03001'">u.UNIV_NAME</when>
+	            <when test="categoryId == 'G03002'">c.CP_NAME</when>
+	            <when test="categoryId == 'G03004'">j.JOB_NAME</when>
+	            <when test="categoryId == 'G03005'">bd.BOARD_TITLE</when>
+	            <when test="categoryId == 'G03006'">c.CC_NAME</when>
+	            <otherwise>TO_CHAR(b.BM_TARGET_ID)</otherwise>
+	          </choose>,
+	          <choose>
+	            <when test="categoryId == 'G03001'">'/ertds/univ/uvsrch/selectDetail.do?univId='||u.UNIV_ID</when>
+	            <when test="categoryId == 'G03002'">'/empt/enp/enterprisePosting.do?keyword='||c.CP_NAME</when>
+	            <when test="categoryId == 'G03004'">'/pse/cr/crl/selectCareerDetail.do?jobCode='||j.JOB_CODE</when>
+	            <when test="categoryId == 'G03005'">'/cdp/rsm/rsmb/resumeBoardDetail.do?boardId='||bd.BOARD_ID</when>
+	            <when test="categoryId == 'G03006'">'/ertds/univ/dpsrch/selectDetail.do?uddId='||ud.UDD_ID</when>
+	            <otherwise>TO_CHAR(b.BM_TARGET_ID)</otherwise>
+	          </choose>
+	        ORDER BY cnt DESC
+	      )
+	      WHERE ROWNUM &lt;= #{limit}
+	    </otherwise>
+	  </choose>
 	</select>
 
 	<select id="communityPostDailyTrend" parameterType="map" resultType="map">
