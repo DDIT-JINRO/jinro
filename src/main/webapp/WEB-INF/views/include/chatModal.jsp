@@ -4,7 +4,7 @@
 <div id="chat-modal">
 	<div class="chat-header">
 	  <span>채팅</span>
-	  <button onclick="closeChatModal()">X</button>
+	  <button class="chat-modal__close-button" onclick="closeChatModal()">×</button>
 	</div>
 
 	<div class="chat-content">
