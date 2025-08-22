@@ -88,7 +88,7 @@
 				<c:otherwise>
 					<div class="content-list">
 						<c:forEach var="bookmark" items="${articlePage.content}">
-							<div class="content-list__item bookmark-item" data-bm-category="${bookmark.bmCategoryId}" data-bm-target-id="${bookmark.bmTargetId}">
+							<div class="content-list__item bookmark-item" data-bm-category="${bookmark.bmCategoryId}" data-bm-target-id="${bookmark.bmTargetId}" data-job-code="${bookmark.jobCode}">
 								<div class="bookmark-content">
 									<div class="bookmark-header">
 										<span class="bookmark-category-tag">${bookmark.categoryName}</span>

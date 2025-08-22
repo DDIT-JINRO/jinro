@@ -18,6 +18,8 @@ public class BookMarkVO {
 	private String content1;
 	private String content2;
 	
+	private String jobCode;
+	
 	// 필터조건
 	private String keyword;
 	private String status;

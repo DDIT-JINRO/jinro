@@ -31,8 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			
 			const bmCategoryId = bookmarkItem.dataset.bmCategory;
 			const bmTargetId   = bookmarkItem.dataset.bmTargetId;
+			const jobCode      = bookmarkItem.dataset.jobCode;
+			const bmTitle      = bookmarkItem.querySelector(".bookmark-title").innerText;
 			
-			location.href = `/mpg/mat/bmk/selectBookMarkDetail.do?bmCategoryId=${bmCategoryId}&bmTargetId=${bmTargetId}`;
+			location.href = `/mpg/mat/bmk/selectBookMarkDetail.do?bmCategoryId=${bmCategoryId}&bmTargetId=${bmTargetId}&title=${bmTitle}&jobCode=${jobCode}`;
 		})
 	})
 });
