@@ -10,6 +10,32 @@ body {
 	padding: 5 20px;
 }
 
+.cns-logoutBtn {
+	position: absolute;
+	display: flex;
+    justify-content: center;
+    top: 22px;
+    right: 20px;
+    background-color: #07223D;
+    width: 100px;
+    height: 15px;
+    padding: 10px 5px;
+    text-align: center;
+    align-items: center;
+    line-height: 1;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
+.cns-logoutBtn:hover {
+    background-color: #031526;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* ──────────────────────────────────────────────────────────
    컨테이너 & 패널 공통
 ──────────────────────────────────────────────────────────*/
