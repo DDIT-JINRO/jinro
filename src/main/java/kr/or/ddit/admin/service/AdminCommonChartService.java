@@ -9,4 +9,5 @@ public interface AdminCommonChartService {
 
 	List<Map<String, Object>> getContentsUseChart(String param);
 
+	Map<String, Object> calculateGrowthRate(int currentCount, int previousCount);
 }

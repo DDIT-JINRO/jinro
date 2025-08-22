@@ -288,22 +288,60 @@ function setActiveButton(activeBtn) {
 }
 
 function updateLocalTime() {
-    // 새로운 Date 객체를 생성하여 현재 시간을 가져옴
-    const now = new Date();
-    
-    // 시간을 'HH:mm:ss' 형식으로 포맷팅
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    
-    const timeString = `Current time ${hours}:${minutes}:${seconds}`;
-    
-    // HTML 요소에 시간 업데이트
-	const timeSection = document.getElementById('localTimeDisplay') 
+	// 새로운 Date 객체를 생성하여 현재 시간을 가져옴
+	const now = new Date();
+
+	// 시간을 'HH:mm:ss' 형식으로 포맷팅
+	const hours = String(now.getHours()).padStart(2, '0');
+	const minutes = String(now.getMinutes()).padStart(2, '0');
+	const seconds = String(now.getSeconds()).padStart(2, '0');
+
+	const timeString = `Current time ${hours}:${minutes}:${seconds}`;
+
+	// HTML 요소에 시간 업데이트
+	const timeSection = document.getElementById('localTimeDisplay')
 	if (timeSection) {
 		timeSection.textContent = timeString;
 	}
-	
+
+}
+
+function animateNumberChange(elementId, newValue) {
+	const element = document.getElementById(elementId);
+	if (!element) return;
+
+	const currentValue = element.textContent.replace(/[^0-9.]/g, ''); // 숫자만 추출
+	if (currentValue !== String(newValue)) {
+		// 클래스를 토글하여 애니메이션 효과 적용
+		element.classList.add('number-change');
+		setTimeout(() => {
+			element.textContent = newValue;
+			element.classList.remove('number-change');
+		}, 300); // CSS transition 시간과 일치
+	}
+}
+
+function getRateStatus(status) {
+	let symbol = '';
+	let className = '';
+	switch (status) {
+		case 'increase':
+			symbol = '▲';
+			className = 'public-span-increase';
+			break;
+		case 'decrease':
+			symbol = '▼';
+			className = 'public-span-decrease';
+			break;
+		case 'equal':
+			symbol = '-';
+			className = 'public-span-equal';
+			break;
+		default:
+			symbol = '';
+			className = '';
+	}
+	return { symbol, className };
 }
 
 // 1초(1000밀리초)마다 updateLocalTime 함수를 실행하여 시간을 갱신

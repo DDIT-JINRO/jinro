@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="/js/include/admin/umg/memberManagement.js"></script>
 <h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">회원 관리</h2>
-<input type="hidden" id="comCalendarInput" style="display: none;"/>
+<input type="hidden" id="comCalendarInput" style="display: none;" />
 <div class="member-1 flex gap">
 	<div class="template-panel public-countCard">
 		<div class="public-card-title">일일 사용자 현황</div>
@@ -35,7 +35,7 @@
 	<div class="template-panel public-countCard back-color-purple">
 		<div class="public-card-title color-white">월간 사용자 이탈수</div>
 		<img class="public-card-icon" alt="" src="/images/admin/admin-image1.png">
-		<div class="public-card-count color-white" id="monthlyWithdrawalUsersCount">123</div>
+		<div class="public-card-count color-white" id="monthlyWithdrawalUsersCount"></div>
 		<div class="public-span-space">
 			<span class="public-span-increase color-white" id="monthlyWithdrawalUsersRate"></span>
 			<div class="public-span-since color-white">Since last month</div>
@@ -54,6 +54,13 @@
 			</select>
 			<input id="search" name="keyword" placeholder="검색어를 입력하세요" />
 			<button class="btn-save searchUserBtn">조회</button>
+		</div>
+		<div class="search-filter-bar">
+			<p class="ptag-list">
+				총
+				<span id="userList-count"></span>
+				건
+			</p>
 		</div>
 		<div style="display: flex; justify-content: space-between;">
 			<div class="btn-group flex gap5 userListBtnGroup">
@@ -74,13 +81,7 @@
 			</select>
 		</div>
 		<div class="userListSpace">
-			<div class="search-filter-bar">
-				<p class="ptag-list">
-					총
-					<span id="userList-count"></span>
-					건
-				</p>
-			</div>
+
 			<table id="userListTable">
 				<thead>
 					<tr>
@@ -208,9 +209,7 @@
 					</div>
 					<div class="info-history2">
 						<span>최근 로그인 기록 :</span>
-						<div id="recentLoginDate">
-							<i class="fa-regular fa-clock"></i>
-						</div>
+						<div id="recentLoginDate"></div>
 					</div>
 					<div class="info-history2">
 						<span>최근 제재 기록 :</span>
@@ -338,14 +337,12 @@
 			<select class="public-toggle-select" name="userOnlineChartDay" id="userOnlineChartDay">
 				<option value="daily">일별</option>
 				<option value="monthly">월별</option>
-				<option value="selectDays">기간선택</option>
-			</select>
-			<select class="public-toggle-select" name="userOnlineChartGender" id="userOnlineChartGender">
+				<option value="selectDays">기간</option>
+			</select> <select class="public-toggle-select" name="userOnlineChartGender" id="userOnlineChartGender">
 				<option value="">성별전체</option>
 				<option value="male">남자</option>
 				<option value="female">여자</option>
-			</select>
-			<select class="public-toggle-select" name="userOnlineChartAgeGroup" id="userOnlineChartAgeGroup">
+			</select> <select class="public-toggle-select" name="userOnlineChartAgeGroup" id="userOnlineChartAgeGroup">
 				<option value="">연령전체</option>
 				<option value="teen">청소년</option>
 				<option value="youth">청년</option>
@@ -363,14 +360,12 @@
 			<select class="public-toggle-select" name="pageVisitChartDay" id="pageVisitChartDay">
 				<option value="monthly">월간</option>
 				<option value="daily">일간</option>
-				<option value="selectDays">기간선택</option>
-			</select>
-			<select class="public-toggle-select" name="pageVisitChartGender" id="pageVisitChartGender">
+				<option value="selectDays">기간</option>
+			</select> <select class="public-toggle-select" name="pageVisitChartGender" id="pageVisitChartGender">
 				<option value="">성별전체</option>
 				<option value="male">남자</option>
 				<option value="female">여자</option>
-			</select>
-			<select class="public-toggle-select" name="pageVisitChartAgeGroup" id="pageVisitChartAgeGroup">
+			</select> <select class="public-toggle-select" name="pageVisitChartAgeGroup" id="pageVisitChartAgeGroup">
 				<option value="">연령전체</option>
 				<option value="teen">청소년</option>
 				<option value="youth">청년</option>
@@ -432,7 +427,14 @@
 	<div class="template-panel" style="width: 792.5px;">
 		<div class="middleTitle">페이지 방문자 조회</div>
 
-		<div style="display: flex; justify-content: space-between; margin-top: 20px;">
+		<div class="search-filter-bar">
+			<p class="ptag-list pageLogCount">
+				총
+				<span id="pageLog-count"></span>
+				건
+			</p>
+		</div>
+		<div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
 			<div class="btn-group flex gap5 pageVisitList">
 				<button class="public-toggle-button active" id="pageLogSortByPlId" data-sort-by="plId">로그ID</button>
 				<button class="public-toggle-button" id="pageLogSortByMemId" data-sort-by="memId">회원ID</button>
@@ -449,13 +451,6 @@
 			</div>
 		</div>
 		<div class="pageLogListSpace">
-			<div class="search-filter-bar">
-				<p class="ptag-list pageLogCount">
-					총
-					<span id="pageLog-count"></span>
-					건
-				</p>
-			</div>
 			<table id="pageLogTable">
 				<thead>
 					<tr>
