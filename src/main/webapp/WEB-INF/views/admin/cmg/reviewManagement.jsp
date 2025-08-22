@@ -134,10 +134,6 @@
 					<span class="detail-label">증빙 자료</span>
 					<a href="#" id="review-detail-file-link" class="detail-file-link">-</a>
 				</div>
-				<div class="detail-item-file" id="review-detail-preview-container">
-					<img id="review-detail-image-preview" class="detail-preview-image" alt="">
-				</div>
-
 			</div>
 			<button class="btn-save reportModify" id="review-modify-button">수정</button>
 		</div>
