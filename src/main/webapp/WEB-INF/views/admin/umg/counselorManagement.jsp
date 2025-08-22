@@ -380,9 +380,9 @@
 						</tr>
 					</tbody>
 				</table>
-			</div>
-			<div class="card-footer clearfix">
-				<div class="panel-footer pagination" id="cnsDetailListPagenation"></div>
+				<div class="card-footer clearfix">
+					<div class="panel-footer pagination" id="cnsDetailListPagenation"></div>
+				</div>
 			</div>
 		</div>
 

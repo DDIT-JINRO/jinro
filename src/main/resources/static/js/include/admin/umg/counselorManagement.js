@@ -848,7 +848,7 @@ function counselorManagement() {
 		        maintainAspectRatio: false,
 		        interaction: { mode: 'index', intersect: false },
 		        plugins: {
-		          legend: { display: true, position: 'top' },
+		          legend: { display: true, position: 'bottom' },
 					title: {
 						display: !!rangeTitle,
 						text: rangeTitle ? [rangeTitle] : []
@@ -960,7 +960,7 @@ function counselorManagement() {
 						maintainAspectRatio: false,
 						interaction: { mode: 'index', intersect: false },
 						plugins: {
-							legend: { display: true, position: 'top' },
+							legend: { display: true, position: 'bottom' },
 							title: {
 								display: !!rangeTitle,
 								text: rangeTitle ? [rangeTitle] : []
