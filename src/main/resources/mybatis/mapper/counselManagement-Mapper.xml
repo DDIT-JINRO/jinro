@@ -7,8 +7,8 @@
 	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(SYSDATE, 'MM') AND COUNSEL_METHOD = 'G08001' THEN 1 ELSE 0 END) AS current_month_face_to_face,
 	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(SYSDATE, 'MM') AND COUNSEL_METHOD = 'G08002' THEN 1 ELSE 0 END) AS current_month_chat,
 	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(SYSDATE, 'MM') AND COUNSEL_METHOD = 'G08003' THEN 1 ELSE 0 END) AS current_month_video,
-	        
-	
+
+
 	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM') THEN 1 ELSE 0 END) AS previous_month_total,
 	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM') AND COUNSEL_METHOD = 'G08001' THEN 1 ELSE 0 END) AS previous_month_face_to_face,
 	        SUM(CASE WHEN TRUNC(COUNSEL_REQ_DATETIME, 'MM') = TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM') AND COUNSEL_METHOD = 'G08002' THEN 1 ELSE 0 END) AS previous_month_chat,
@@ -18,8 +18,8 @@
 	    WHERE
 	        TRUNC(COUNSEL_REQ_DATETIME, 'MM') IN (TRUNC(SYSDATE, 'MM'), TRUNC(ADD_MONTHS(SYSDATE, -1), 'MM'))
 	</select>
-	
-	
+
+
 	<select id="selectCounselorStatTotalCount" parameterType="map" resultType="int">
 	    SELECT
 	        COUNT(*)
@@ -31,7 +31,7 @@
 	        AND a.MEM_NAME LIKE '%' || #{keyword} || '%'
 	    </if>
 	</select>
-	
+
 	<select id="selectCounselorStatList" parameterType="map" resultType="map">
 	    SELECT
 		        *
@@ -45,7 +45,7 @@
 		                    a.MEM_ID,
 		                    a.MEM_NAME,
 		                    COUNT(b.COUNSEL_ID) AS COUNSEL_COUNT,
-		                    COUNT(c.CR_ID) AS COUNSEL_REVIEW_COUNT, 
+		                    COUNT(c.CR_ID) AS COUNSEL_REVIEW_COUNT,
 		                    ROUND(AVG(c.CR_RATE)) AS RATING_AVERAGE
 		                FROM
 		                    MEMBER a
@@ -89,7 +89,7 @@
 		    ) t2
 		    WHERE RNUM <![CDATA[>=]]> #{startNo}
 	</select>
-	
+
     <select id="selectCounselorDetail" parameterType="int" resultType="map">
     	SELECT
 		    m.mem_name AS "counselorName",
@@ -154,16 +154,58 @@
 		WHERE
 		    m.mem_id = #{counselor}
     </select>
-	    
+
     <select id="selectCounselingListTotalCount" parameterType="map" resultType="int">
 	    SELECT
-	        COUNT(*)
-	    FROM
-	        COUNSELING
-	    WHERE
-	        counsel = #{counselor}
+			count(*)
+	        FROM (
+	            SELECT
+	                a.counsel_id,
+	                b.cc_name as COUNSEL_CATEGORY,
+	                c.cc_name as COUNSEL_METHOD,
+	                a.counsel_req_datetime,
+	                e.CR_RATE,
+	                d.cc_name as COUNSEL_STATUS,
+	                ROW_NUMBER() OVER (
+	                    <choose>
+	                        <when test="sortBy == 'counselId'">
+	                            ORDER BY a.counsel_id
+	                        </when>
+	                        <when test="sortBy == 'crRate'">
+	                            ORDER BY e.CR_RATE
+	                        </when>
+	                        <when test="sortBy == 'counselReqDatetime'">
+	                            ORDER BY a.counsel_req_datetime
+	                        </when>
+	                        <otherwise>
+	                            ORDER BY a.counsel_req_datetime DESC
+	                        </otherwise>
+	                    </choose>
+	                    <if test="sortOrder == 'desc'">
+	                        DESC
+	                    </if>
+	                ) AS rnum
+	            FROM
+	                counseling a
+	            JOIN com_code b ON a.counsel_category = b.cc_id
+	            JOIN com_code c ON a.counsel_method = c.cc_id
+	            JOIN com_code d ON a.COUNSEL_STATUS = d.cc_id
+	            LEFT JOIN COUNSELING_REVIEW e ON a.counsel_id = e.cr_id
+	            WHERE
+	                a.counsel = #{counselor}
+
+	            <if test="counselCategory != null and counselCategory != ''">
+	                AND a.counsel_category = #{counselCategory}
+	            </if>
+	            <if test="counselMethod != null and counselMethod != ''">
+	                AND a.counsel_method = #{counselMethod}
+	            </if>
+	            <if test="counselStatus != null and counselStatus != ''">
+	                AND a.COUNSEL_STATUS = #{counselStatus}
+	            </if>
+	        )
 	</select>
-	    
+
     <select id="selectCounselingList" parameterType="map" resultType="map">
 	       SELECT
 			*
@@ -202,7 +244,7 @@
 	            LEFT JOIN COUNSELING_REVIEW e ON a.counsel_id = e.cr_id
 	            WHERE
 	                a.counsel = #{counselor}
-	            
+
 	            <if test="counselCategory != null and counselCategory != ''">
 	                AND a.counsel_category = #{counselCategory}
 	            </if>
@@ -216,7 +258,7 @@
 	        WHERE
 	            rnum BETWEEN #{startNo} AND #{endNo}
  	</select>
-   		 
+
 	<select id="selectConsultMethodStatistics" parameterType="map" resultType="map">
 	    SELECT
 	        CASE
@@ -230,11 +272,11 @@
 	        COUNSELING A
 	    INNER JOIN
 	        MEMBER B ON A.mem_id = B.mem_id
-	    
+
 	    <where>
 	        <choose>
 	            <when test='selectUserInquiry == "daily"'>
-	                AND TRUNC(A.COUNSEL_REQ_DATETIME) = TRUNC(SYSDATE)
+	                AND A.COUNSEL_REQ_DATETIME BETWEEN TRUNC(SYSDATE-7) and TRUNC(SYSDATE+1)
 	            </when>
 	            <when test='selectUserInquiry == "monthly"'>
 	                AND TO_CHAR(A.COUNSEL_REQ_DATETIME, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
@@ -243,11 +285,11 @@
 	                AND A.COUNSEL_REQ_DATETIME BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
 	            </when>
 	        </choose>
-	
+
 	        <if test='gender != null and gender != ""'>
 	            AND B.MEM_GEN = #{gender}
 	        </if>
-	
+
 			<if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
 		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, B.MEM_BIRTH) / 12) &lt;= 19
 		    </if>
@@ -255,13 +297,13 @@
 		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, B.MEM_BIRTH) / 12) &gt;= 20
 		    </if>
 	    </where>
-	    
+
 	    GROUP BY
 	        A.COUNSEL_METHOD
 	    ORDER BY
 	        CONSULTATION_TYPE DESC
 	</select>
-	
+
 	<select id="selectTopCounselorList" parameterType="map" resultType="map">
 	    SELECT
 		        M.mem_id,
@@ -299,7 +341,7 @@
 		        </choose>
 		    FETCH FIRST 3 ROWS ONLY
 	</select>
-	
+
 	<select id="selectCounselingStatsByCategory" parameterType="map" resultType="map">
 	    SELECT
 	        c.CC_NAME,
@@ -315,7 +357,7 @@
 	        <if test='selectUserInquiry != null and selectUserInquiry != ""'>
 	            <choose>
 	                <when test='selectUserInquiry == "daily"'>
-	                    AND TRUNC(A.counsel_req_datetime) = TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	                    AND A.counsel_req_datetime BETWEEN TRUNC(SYSDATE-7) and TRUNC(SYSDATE+1)
 	                </when>
 	                <when test='selectUserInquiry == "monthly"'>
 	                    AND TO_CHAR(A.COUNSEL_REQ_DATETIME, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
@@ -325,14 +367,14 @@
 	                </when>
 	            </choose>
 	        </if>
-	        
+
 			<if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
 		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, M.MEM_BIRTH) / 12) &lt;= 19
 		    </if>
 		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
 		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, M.MEM_BIRTH) / 12) &gt;= 20
 		    </if>
-	        
+
 	        <if test='gender != null and gender != ""'>
 	            AND M.MEM_GEN = #{gender}
 	        </if>
@@ -341,8 +383,8 @@
 	        c.CC_NAME
 	    ORDER BY c.CC_NAME
 	</select>
-	
-	
+
+
 	<select id="selectCounselingStatsByTime" parameterType="map" resultType="map">
 	    SELECT
 	        CASE
@@ -361,11 +403,11 @@
 	        A.COUNSEL_METHOD IN ('G08001', 'G08002', 'G08003')
 	        AND TO_CHAR(A.COUNSEL_REQ_DATETIME, 'HH24') BETWEEN '09' AND '18'
 	        AND A.COUNSEL_STATUS != 'S04002'
-	        
+
 	        <if test='selectUserInquiry != null and selectUserInquiry != ""'>
 	            <choose>
 	                <when test='selectUserInquiry == "daily"'>
-	                    AND TRUNC(A.counsel_req_datetime) = TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	                    AND A.counsel_req_datetime BETWEEN TRUNC(SYSDATE-7) and TRUNC(SYSDATE+1)
 	                </when>
 	                <when test='selectUserInquiry == "monthly"'>
 	                    AND TO_CHAR(A.COUNSEL_REQ_DATETIME, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
@@ -375,14 +417,14 @@
 	                </when>
 	            </choose>
 	        </if>
-	        
+
 			<if test="ageGroup != null and ageGroup != '' and ageGroup eq 'teen'">
 		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, M.MEM_BIRTH) / 12) &lt;= 19
 		    </if>
 		    <if test="ageGroup != null and ageGroup != '' and ageGroup eq 'youth'">
 		    	AND TRUNC(MONTHS_BETWEEN(A.COUNSEL_REQ_DATETIME, M.MEM_BIRTH) / 12) &gt;= 20
 		    </if>
-	        
+
 	        <if test='gender != null and gender != ""'>
 	            AND M.MEM_GEN = #{gender}
 	        </if>

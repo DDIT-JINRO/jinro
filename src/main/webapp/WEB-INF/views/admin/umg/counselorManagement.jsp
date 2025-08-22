@@ -48,11 +48,12 @@
 			<div class="cnsMg-2-1-1 flex gap" style="margin-bottom: 20px;">
 				<div class="template-panel cnsCateChart">
 					<div class="middleTitle">상담 유형별 통계</div>
+					<input type="hidden" id="cnsCateChartStartDay" />
+					<input type="hidden" id="cnsCateChartEndDay" />
 					<div class="flex gap5" style="justify-content: flex-end;">
-						<input type="hidden" id="cnsCateChartStartDay" />
-						<input type="hidden" id="cnsCateChartEndDay" />
+						<button class="public-toggle-button" id="cnsCateChartReset">전체</button>
 						<select class="public-toggle-select" id="cnsCateChartDateType">
-							<option value="daily">일간</option>
+							<option value="daily">주간</option>
 							<option value="monthly">월간</option>
 							<option value="selectDays">기간</option>
 						</select> <select class="public-toggle-select" id="cnsCateChartGender">
@@ -61,62 +62,84 @@
 							<option value="G11002">여자</option>
 						</select> <select class="public-toggle-select" id="cnsCateChartAgeGroup">
 							<option value="">연령전체</option>
-							<option value="">청년</option>
-							<option value="">청소년</option>
+							<option value="youth">청년</option>
+							<option value="teen">청소년</option>
 						</select>
+					</div>
+					<div style="height: 500px; margin-top: auto;">
+						<canvas id="consultMethodStatisticsChartCanvas"></canvas>
 					</div>
 				</div>
 				<div class="template-panel cnsTop3Chart">
 					<div class="middleTitle">상담사 TOP3</div>
+					<input type="hidden" id="cnsTop3ChartStartDay" />
+					<input type="hidden" id="cnsTop3ChartEndDay" />
 					<div class="flex gap5" style="justify-content: flex-end;">
-						<select class="public-toggle-select" id="cnsTop3ChartType">
-							<option value="">만족도</option>
-							<option value="">후기건수</option>
-							<option value="">상담건수</option>
-						</select> <select class="public-toggle-select" id="cnsTop3ChartDate">
-							<option value="">일간</option>
-							<option value="">월간</option>
-							<option value="">기간</option>
+						<button class="public-toggle-button" id="cnsTop3ChartReset">전체</button>
+						<select class="public-toggle-select" id="cnsTop3ChartDate">
+							<option value="daily">주간</option>
+							<option value="monthly">월간</option>
+							<option value="selectDays">기간</option>
 						</select>
+						<select class="public-toggle-select" id="cnsTop3ChartType">
+							<option value="satisfaction">만족도</option>
+							<option value="reviews">후기건수</option>
+							<option value="consultations">상담건수</option>
+						</select>
+					</div>
+					<div style="height: 500px; margin-top: auto;">
+						<canvas id="topCounselorListChartCanvas"></canvas>
 					</div>
 				</div>
 			</div>
 
 			<div class="template-panel cnsTypeChart">
 				<div class="middleTitle">상담 종류별 통계</div>
+				<input type="hidden" id="cnsTypeChartStartDay" />
+				<input type="hidden" id="cnsTypeChartEndDay" />
 				<div class="flex gap5" style="justify-content: flex-end;">
+					<button class="public-toggle-button" id="cnsTypeChartReset">전체</button>
 					<select class="public-toggle-select" id="cnsTypeChartDate">
-						<option value="">일간</option>
-						<option value="">월간</option>
-						<option value="">기간</option>
-					</select> <select class="public-toggle-select" id="cnsTop3ChartGen">
+						<option value="daily">주간</option>
+						<option value="monthly">월간</option>
+						<option value="selectDays">기간</option>
+					</select> <select class="public-toggle-select" id="cnsTypeChartGen">
 						<option value="">성별전체</option>
-						<option value="">남자</option>
-						<option value="">여자</option>
-					</select> <select class="public-toggle-select" id="cnsTop3ChartAgeGroup">
+						<option value="G11001">남자</option>
+						<option value="G11002">여자</option>
+					</select> <select class="public-toggle-select" id="cnsTypeChartAgeGroup">
 						<option value="">연령전체</option>
-						<option value="">청년</option>
-						<option value="">청소년</option>
+						<option value="youth">청년</option>
+						<option value="teen">청소년</option>
 					</select>
+				</div>
+				<div style="height: 500px; margin-top: auto;">
+					<canvas id="counselingStatsByCategoryChartCanvas"></canvas>
 				</div>
 			</div>
 		</div>
 		<div class="cnsMg-2-2 template-panel">
 			<div class="middleTitle">상담 시간대 통계</div>
+			<input type="hidden" id="cnsHoursChartStartDay" />
+			<input type="hidden" id="cnsHoursChartEndDay" />
 			<div class="flex gap5" style="justify-content: flex-end;">
+				<button class="public-toggle-button" id="cnsHoursChartReset">전체</button>
 				<select class="public-toggle-select" id="cnsHoursChartDate">
-					<option value="">일간</option>
-					<option value="">월간</option>
-					<option value="">기간</option>
+					<option value="daily">주간</option>
+					<option value="monthly">월간</option>
+					<option value="selectDays">기간</option>
 				</select> <select class="public-toggle-select" id="cnsHoursChartGen">
 					<option value="">성별전체</option>
-					<option value="">남자</option>
-					<option value="">여자</option>
+					<option value="G11001">남자</option>
+					<option value="G11002">여자</option>
 				</select> <select class="public-toggle-select" id="cnsHoursChartAgeGroup">
 					<option value="">연령전체</option>
-					<option value="">청년</option>
-					<option value="">청소년</option>
+					<option value="youth">청년</option>
+					<option value="teen">청소년</option>
 				</select>
+			</div>
+			<div style="height: 620px; margin-top: auto;">
+				<canvas id="counselingStatsByTimeChartCanvas"></canvas>
 			</div>
 		</div>
 	</div>
@@ -124,12 +147,10 @@
 		<div class="template-panel cnsCompleteAndReviewList">
 			<div class="middleTitle">상담사별 처리 건수 및 만족도 평가</div>
 			<div class="public-listSearch">
-				<select name="status" id="">
-					<option value="1">전체</option>
-					<option value="2">이름</option>
-					<option value="3">이메일</option>
+				<select name="status" id="cnsListStatus">
+					<option value="1">이름</option>
 				</select>
-				<input id="search" name="keyword" placeholder="검색어를 입력하세요" />
+				<input id="search" name="keyword" placeholder="이름을 입력하세요" />
 				<button class="btn-save searchUserBtn">조회</button>
 			</div>
 			<div class="search-filter-bar">
@@ -141,20 +162,15 @@
 			</div>
 			<div style="display: flex; justify-content: space-between;">
 				<div class="btn-group flex gap5 cnsCompleteAndReviewBtnGroup" style="margin-bottom: 10px;">
-					<button class="public-toggle-button active" id="cnsListId">ID</button>
 					<button class="public-toggle-button" id="cnsListName">이름</button>
-					<button class="public-toggle-button" id="cnsListEmail">이메일</button>
+					<button class="public-toggle-button" id="cnsListCnsCnt">상담건수</button>
+					<button class="public-toggle-button" id="cnsListReviewCnt">후기건수</button>
+					<button class="public-toggle-button" id="cnsListRating">만족도</button>
 					<select class="public-toggle-select" id="cnsListSortOrder">
 						<option value="asc">오름차순</option>
 						<option value="desc">내림차순</option>
 					</select>
 				</div>
-				<select class="public-toggle-select selectCnsList-top" id="cnsListStatus">
-					<option value="">전체</option>
-					<option value="online">활동중</option>
-					<option value="offline">비활동</option>
-					<option value="suspended">정지상태</option>
-				</select>
 			</div>
 			<div class="cnsListSpace">
 				<table id="cnsListTable">
@@ -310,27 +326,42 @@
 				<div class="search-filter-bar">
 					<p class="ptag-list">
 						총
-						<span id="cnsList-count"></span>
+						<span id="cnsHistory-count"></span>
 						건
 					</p>
 				</div>
 				<div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
 
 					<div class="btn-group flex gap5 userListBtnGroup">
-						<button class="public-toggle-button active" id="userListId">ID</button>
-						<button class="public-toggle-button" id="userListName">이름</button>
-						<button class="public-toggle-button" id="userListEmail">이메일</button>
-						<select class="public-toggle-select" id="userListSortOrder">
+						<button class="public-toggle-button" id="cnsDetailListReqTime">상담일시</button>
+						<button class="public-toggle-button" id="cnsDetailListRating">만족도</button>
+						<select class="public-toggle-select" id="cnsDetailListOrder">
 							<option value="asc">오름차순</option>
 							<option value="desc">내림차순</option>
 						</select>
 					</div>
-					<select class="public-toggle-select selectUserList-top" id="userListStatus">
-						<option value="">전체</option>
-						<option value="online">활동중</option>
-						<option value="offline">비활동</option>
-						<option value="suspended">정지상태</option>
-					</select>
+					<div class="filter-group">
+						<select class="public-toggle-select selectUserList-top" id="cnsCateFilter">
+							<option value="">유형</option>
+							<option value="G08001">대면</option>
+							<option value="G08002">채팅</option>
+							<option value="G08003">화상</option>
+						</select>
+						<select class="public-toggle-select selectUserList-top" id="cnsTypeFilter">
+							<option value="">종류</option>
+							<option value="G07001">취업</option>
+							<option value="G07002">학업</option>
+							<option value="G07003">심리</option>
+						</select>
+						<select class="public-toggle-select selectUserList-top" id="cnsStatusFilter">
+							<option value="">상태</option>
+							<option value="S04001">신청</option>
+							<option value="S04002">취소</option>
+							<option value="S04003">확정</option>
+							<option value="S04004">완료</option>
+							<option value="S04005">개설</option>
+						</select>
+					</div>
 				</div>
 				<table id="cnsDetailListTable">
 					<thead>
@@ -345,44 +376,7 @@
 					</thead>
 					<tbody class="cnsDetailList" id="cnsDetailList">
 						<tr>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td><span class="star-rating">★★★★★</span></td>
-							<td>asd</td>
-						</tr>
-						<tr>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td><span class="star-rating">★★★★★</span></td>
-							<td>asd</td>
-						</tr>
-						<tr>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td><span class="star-rating">★★★★★</span></td>
-							<td>asd</td>
-						</tr>
-						<tr>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td><span class="star-rating">★★★★★</span></td>
-							<td>asd</td>
-						</tr>
-						<tr>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td>asd</td>
-							<td><span class="star-rating">★★★★★</span></td>
-							<td>asd</td>
+							<td colspan="6"> 상담사를 선택해주세요 </td>
 						</tr>
 					</tbody>
 				</table>
