@@ -89,7 +89,6 @@
 }
 
 .find-links {
-	justify-content: space-between;
 	text-align: right;
 	font-size: 13px;
 	margin-top: 10px;
@@ -173,4 +172,16 @@
 	text-decoration: none;
 	margin-left: 6px;
 	font-weight: bold;
+}
+
+@media ( max-width : 768px) {
+	.find-links {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.signup-box {
+		display: flex;
+		flex-direction: column;
+	}
 }
