@@ -138,7 +138,7 @@
 						<b>선택 주제</b> : <span id="kvType">-</span>
 					</div>
 					<div>
-						<b>남은 이용권 수</b> : ${usageCounts.payConsultCnt}</span>회
+						<b>남은 이용권 수</b> : ${usageCounts.payConsultCnt != null ? usageCounts.payConsultCnt : 0}</span>회
 					</div>
 				</div>
 				<p>확인을 누르면 이용권이 차감되며, 새 팝업 창에서 상담이 시작됩니다.</p>
