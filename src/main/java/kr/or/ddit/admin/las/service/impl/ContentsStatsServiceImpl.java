@@ -309,6 +309,82 @@ public class ContentsStatsServiceImpl implements ContentStatsService{
         
         return processedStats;
     }
+    
+    /**
+     * 월드컵/로드맵 이용현황 통계
+     * @param params 필터 조건 (period, startDate, endDate, gender, ageGroup, serviceType)
+     * @return 기간별 월드컵/로드맵 이용 현황 통계
+     */
+    @Override
+    public List<Map<String, Object>> getWorldcupRoadmapUsageStats(Map<String, Object> params) {
+        // 파라미터 유효성 검사 및 기본값 설정
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        
+        // period 기본값 설정 (daily)
+        if (params.get("period") == null || "".equals(params.get("period"))) {
+            params.put("period", "daily");
+        }
+                
+        List<Map<String, Object>> result = contentStatsMapper.selectWorldcupRoadmapUsageStats(params);
+        
+        // 결과 데이터 후처리
+        return processWorldcupRoadmapUsageStats(result);
+    }
+
+    /**
+     * 월드컵/로드맵 이용현황 데이터 후처리
+     * @param rawStats 원본 통계 데이터
+     * @return 가공된 통계 데이터 (서비스명 포함)
+     */
+    private List<Map<String, Object>> processWorldcupRoadmapUsageStats(List<Map<String, Object>> rawStats) {
+        List<Map<String, Object>> processedStats = new ArrayList<>();
+        
+        for (Map<String, Object> stat : rawStats) {
+            Map<String, Object> processedStat = new HashMap<>(stat);
+            
+            // 각 서비스별 데이터를 배열 형태로 구성
+            List<Map<String, Object>> serviceStats = new ArrayList<>();
+            
+            // 월드컵 서비스
+            Map<String, Object> worldcupService = new HashMap<>();
+            worldcupService.put("serviceId", "worldcup");
+            worldcupService.put("serviceName", "월드컵");
+            worldcupService.put("count", stat.get("worldcupCnt"));
+            serviceStats.add(worldcupService);
+            
+            // 로드맵 서비스
+            Map<String, Object> roadmapService = new HashMap<>();
+            roadmapService.put("serviceId", "roadmap");
+            roadmapService.put("serviceName", "로드맵");
+            roadmapService.put("count", stat.get("roadmapCnt"));
+            serviceStats.add(roadmapService);
+            
+            // 전체 이용 수 계산
+            int totalCount = ((Number) stat.get("worldcupCnt")).intValue() +
+                            ((Number) stat.get("roadmapCnt")).intValue();
+            
+            processedStat.put("serviceStats", serviceStats);
+            processedStat.put("totalCount", totalCount);
+            
+            // 비율 계산 (백분율)
+            if (totalCount > 0) {
+                double worldcupPercentage = (((Number) stat.get("worldcupCnt")).doubleValue() / totalCount) * 100;
+                double roadmapPercentage = (((Number) stat.get("roadmapCnt")).doubleValue() / totalCount) * 100;
+                
+                processedStat.put("worldcupPercentage", Math.round(worldcupPercentage * 100.0) / 100.0);
+                processedStat.put("roadmapPercentage", Math.round(roadmapPercentage * 100.0) / 100.0);
+            } else {
+                processedStat.put("worldcupPercentage", 0.0);
+                processedStat.put("roadmapPercentage", 0.0);
+            }
+            
+            processedStats.add(processedStat);
+        }
+        
+        return processedStats;
+    }
 
 	@Override
 	public List<Map<String, Object>> bookmarkCountsStatistic(Map<String, Object> param) {

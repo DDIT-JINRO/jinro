@@ -51,6 +51,16 @@ public class ContentStatsController {
 	public List<Map<String, Object>> getCommunityUsageStats(@RequestParam Map<String, Object> params) {
 	    return contentStatsService.getCommunityUsageStats(params);
 	}
+	
+	/**
+	 * 월드컵/로드맵 이용현황 통계
+	 * @param params 필터 조건 파라미터
+	 * @return 기간별 월드컵/로드맵 이용 현황 통계
+	 */
+	@GetMapping("/worldcup-roadmap/usage-stats")
+	public List<Map<String, Object>> getWorldcupRoadmapUsageStats(@RequestParam Map<String, Object> params) {
+	    return contentStatsService.getWorldcupRoadmapUsageStats(params);
+	}
 
 	@GetMapping("/bookmark/category-stacked")
 	public List<Map<String, Object>> bookmarkCategoryCounts(@RequestParam Map<String, Object> param){

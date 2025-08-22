@@ -14,6 +14,8 @@ public interface ContentStatsService {
 	
 	List<Map<String, Object>> getCommunityUsageStats(Map<String, Object> params);
 	
+	List<Map<String, Object>> getWorldcupRoadmapUsageStats(Map<String, Object> params);
+	
 	// 기존 함수들
 	List<Map<String, Object>> bookmarkCountsStatistic(Map<String, Object> param);
 

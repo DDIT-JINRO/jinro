@@ -76,5 +76,8 @@ public interface ContentStatsMapper {
 
 	// 커뮤니티 사용량 차트
 	List<Map<String, Object>> selectCommunityUsageStats(Map<String, Object> params);
+	
+	// 월드컵, 로드맵 이용량 차트
+	List<Map<String, Object>> selectWorldcupRoadmapUsageStats(Map<String, Object> params);
 
 }
