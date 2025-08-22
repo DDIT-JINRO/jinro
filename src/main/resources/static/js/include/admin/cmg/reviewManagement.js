@@ -1,5 +1,58 @@
 function reviewManagement() {
 	let irStatusObj = "";
+
+	document.querySelector("#reviewList").addEventListener("click", function(e) {
+		const target = e.target.closest(".review-item");
+		if (target) {
+			const irId = target.dataset.irId
+			selectReviewDetail(irId);
+		}
+	const selectReviewDetail = (irId) => {
+		axios.get(`/admin/cmg/selectReviewDetail?irId=${irId}`)
+			.then(({ data }) => {
+				console.log(data);
+
+				// 날짜 형식 변환 함수 (기존 코드와 동일)
+				const formatDate = (dateString) => {
+					if (!dateString) return '';
+					const date = new Date(dateString);
+					const year = date.getFullYear();
+					const month = String(date.getMonth() + 1).padStart(2, '0');
+					const day = String(date.getDate()).padStart(2, '0');
+					return `${year}-${month}-${day}`;
+				};
+
+				// DOM 요소에 데이터 바인딩 (기존 코드와 동일)
+				document.getElementById('review-detail-irId').value = data.irId;
+				document.getElementById('review-detail-memName').value = data.memName;
+				document.getElementById('review-detail-targetName').value = data.targetName;
+				document.getElementById('review-detail-application').value = data.irApplication;
+				document.getElementById('review-detail-interviewAt').value = formatDate(data.irInterviewAt);
+				document.getElementById('review-detail-irType').value = (data.irType === 'G02001' ? '대학' : '기업');
+				document.getElementById('review-detail-status-text').value = irStatusObj[data.irStatus];
+				document.getElementById('review-detail-modAt').value = formatDate(data.irModAt);
+				document.getElementById('review-detail-createdAt').value = formatDate(data.irCreatedAt);
+				document.getElementById('review-detail-content').value = data.irContent;
+
+				// 증빙 자료 파일 링크 및 미리보기 처리
+				const fileLinkElement = document.getElementById('review-detail-file-link');
+
+				if (data.fileGroupId) {
+					// 다운로드 링크 설정
+					fileLinkElement.textContent = '파일 다운로드';
+					fileLinkElement.href = `/download?fileGroupId=${data.fileGroupId}`;
+				} else {
+					// 파일이 없을 경우
+					fileLinkElement.textContent = '-';
+					fileLinkElement.href = '#';
+				}
+			})
+			.catch(error => {
+				console.error("데이터를 가져오는 중 오류 발생:", error);
+				alert("후기 상세 정보를 불러오는 데 실패했습니다.");
+			});
+	};
+
 	const selectReviewList = (page = 1) => {
 		const status = document.querySelector("select[name='status']").value;
 		const keyword = document.querySelector("input[name='keyword']").value;

@@ -77,6 +77,14 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 	@Override
 	public InterviewReviewVO selectReviewDetail(String irId) {
 		InterviewReviewVO interviewReview = contentsManagementMapper.selectReviewDetail(irId);
+		Long fileGroupId = interviewReview.getFileGroupId();
+		
+		if(null != fileGroupId && fileGroupId != 0) {
+			FileDetailVO fileDetail = fileService.getFileDetail(fileGroupId, 1);
+			
+			interviewReview.setFileOrgName(fileDetail.getFileOrgName());
+			interviewReview.setSavePath(fileService.getSavePath(fileDetail));
+		}
 		
 		return interviewReview;
 	}
