@@ -1,40 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
 	// 토글 버튼
-	const toggleButton = document.getElementById('com-accordion-toggle');
+	const toggleButton = document.getElementById('accordion-toggle');
+	const panel = document.getElementById('accordion-panel');
 
-	// 필터 패널 
-	const panel = document.getElementById('com-accordion-panel');
-
-	// 아코디언 코드
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
-			this.classList.toggle('active');
-			panel.classList.toggle('open');
-
-			if (panel.style.maxHeight) {
-				panel.style.maxHeight = null;
-			} else {
-				panel.style.maxHeight = panel.scrollHeight + 'px';
-			}
+			// is-active 클래스 토글
+			this.classList.toggle('is-active');
+			panel.classList.toggle('is-open');
 		});
 	}
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+	// 모든 북마크 버튼에 이벤트 리스너 추가
+	const bookmarkButtons = document.querySelectorAll('.bookmark-button');
 
-    // 모든 북마크 버튼
-    const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
+	bookmarkButtons.forEach(button => {
+		button.addEventListener('click', function(event) {
+			event.preventDefault(); 
+			handleBookmarkToggle(this);
+		});
+	});
+});
 
-    // 이벤트 추가
-    bookmarkButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault(); 
-            
-            // 함수 전달
-            handleBookmarkToggle(this);
-        });
-    });
-
+document.addEventListener('DOMContentLoaded', function() {
+	document.querySelectorAll(".bookmark-item").forEach(items => {
+		items.addEventListener('click', (e) => {
+			const bookmarkItem = e.target.closest(".bookmark-item");
+			
+			const bmCategoryId = bookmarkItem.dataset.bmCategory;
+			const bmTargetId   = bookmarkItem.dataset.bmTargetId;
+			
+			location.href = `/mpg/mat/bmk/selectBookMarkDetail.do?bmCategoryId=${bmCategoryId}&bmTargetId=${bmTargetId}`;
+		})
+	})
 });
 
 const handleBookmarkToggle = (button) => {
@@ -42,7 +42,7 @@ const handleBookmarkToggle = (button) => {
     const bmTargetId = button.dataset.targetId;
 
     // 현재 버튼이 'active' 클래스를 가지고 있는지 확인
-    const isBookmarked = button.classList.contains('active');
+    const isBookmarked = button.classList.contains('is-active');
     
     const data = {
         bmCategoryId: bmCategoryId,
@@ -68,7 +68,7 @@ const handleBookmarkToggle = (button) => {
 		console.log(data);
         if (data.success) {
 			alert(data.message);
-            button.classList.toggle('active');
+            button.classList.toggle('is-active');
         } else {
             alert(data.message || '북마크 처리에 실패했습니다.');
         }
