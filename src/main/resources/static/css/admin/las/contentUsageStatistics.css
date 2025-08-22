@@ -158,22 +158,9 @@
 	width: 50%;
 }
 
-
 .commOnceView-rate {
 	margin-top: 10px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ──────────────────────────────────────────────────────────
    컨테이너 & 패널 공통
@@ -515,6 +502,38 @@ select.compact {
 .bookmarkCateChartSpace {
 	width: 792.84px;
 	height: 475px;
+}
+
+.roadmapAndWorldSelectGroupChart {
+	display: flex;
+	margin-top: auto;
+	height: 500px;
+	flex-direction: column-reverse;
+}
+
+.commChartUsageHeader {
+	display: flex;
+	justify-content: space-between;
+}
+
+.commUsageChartDraw {
+	display: flex;
+	flex-direction: column-reverse;
+	margin-top: auto;
+}
+
+.bookmarkCategoryChartDraw {
+	height: 400px; display : flex;
+	flex-direction: column-reverse;
+	margin-top: auto;
+	display: flex;
+}
+
+.bookmarkTopChartSpace {
+	height: 500px;
+	display: flex;
+	flex-direction: column-reverse;
+	margin-top: auto;
 }
 
 /* panel-header에 이미 쓰는 active 톤과 동일하게 */

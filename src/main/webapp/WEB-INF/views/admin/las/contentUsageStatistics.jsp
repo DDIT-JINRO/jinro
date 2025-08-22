@@ -35,25 +35,26 @@
 			</div>
 		</div>
 		<div class="contentUsage-1-1-2 template-panel roadmapAndWorldCupSpace">
-			<div class="middleTitle">월드컵 로드맵 이용 현황</div>
-			<div class="btn-group flex gap5 roadmapAndWorldSelectGroup">
-				<input type="hidden" id="roadmapChartStartDay" />
-				<input type="hidden" id="roadmapChartEndDay" />
-				<select class="public-toggle-select" name="roadmapChartDay" id="roadmapChartDay">
-					<option value="daily">일별</option>
-					<option value="monthly">월별</option>
-					<option value="selectDays">기간</option>
-				</select> 
-				<select class="public-toggle-select" name="roadmapChartGender" id="roadmapChartGender">
-					<option value="">성별전체</option>
-					<option value="male">남자</option>
-					<option value="female">여자</option>
-				</select> 
-				<select class="public-toggle-select" name="roadmapChartAgeGroup" id="roadmapChartAgeGroup">
-					<option value="">연령전체</option>
-					<option value="teen">청소년</option>
-					<option value="youth">청년</option>
-				</select>
+			<div class="flex space-between">
+				<div class="middleTitle">월드컵 로드맵 이용 현황</div>
+				<div class="btn-group flex gap5 roadmapAndWorldSelectGroup">
+					<button class="public-toggle-button" id="roadmapAndWorldCupChartReset">전체</button>
+					<input type="hidden" id="roadmapChartStartDay" />
+					<input type="hidden" id="roadmapChartEndDay" />
+					<select class="public-toggle-select" name="roadmapChartDay" id="roadmapChartDay">
+						<option value="daily">일별</option>
+						<option value="monthly">월별</option>
+						<option value="selectDays">기간</option>
+					</select> <select class="public-toggle-select" name="roadmapChartGender" id="roadmapChartGender">
+						<option value="">성별전체</option>
+						<option value="male">남자</option>
+						<option value="female">여자</option>
+					</select> <select class="public-toggle-select" name="roadmapChartAgeGroup" id="roadmapChartAgeGroup">
+						<option value="">연령전체</option>
+						<option value="teen">청소년</option>
+						<option value="youth">청년</option>
+					</select>
+				</div>
 			</div>
 			<div class="roadmapAndWorldSelectGroupChart">
 				<canvas id="roadmapAndWorldSelectGroupChartCanvas"></canvas>
@@ -211,36 +212,35 @@
 	</div>
 
 	<div class="template-panel commUsageChartSpace">
-		<div class="middleTitle">커뮤니티 이용통계</div>
-		<div class="btn-group flex gap5 commUsageChartSelectGroup">
-			<input type="hidden" id="commUsageChartStartDay" />
-			<input type="hidden" id="commUsageChartEndDay" />
-			<button class="public-toggle-button" id="commUsageChartReset">전체</button>
-			<select class="public-toggle-select" name="commUsageChartDay" id="commUsageChartDay">
-				<option value="daily">일별</option>
-				<option value="monthly">월별</option>
-				<option value="selectDays">기간</option>
-			</select> 
-			<select class="public-toggle-select" name="commUsageChartGender" id="commUsageChartGender">
-				<option value="">성별전체</option>
-				<option value="male">남자</option>
-				<option value="female">여자</option>
-			</select> 
-			<select class="public-toggle-select" name="commUsageChartAgeGroup" id="commUsageChartAgeGroup">
-				<option value="">연령전체</option>
-				<option value="teen">청소년</option>
-				<option value="youth">청년</option>
-			</select> 
-			<select class="public-toggle-select" name="commUsageChartCategory" id="commUsageChartCategory">
-				<option value="">카테고리</option>
-				<option value="G09006">청년 커뮤니티</option>
-				<option value="G09001">청소년 커뮤니티</option>
-				<option value="G09002">진로진학 커뮤니티</option>
-				<option value="G09004">이력서 템플릿</option>
-				<option value="G09005">스터디그룹</option>
-			</select>
+		<div class="flex commChartUsageHeader">
+			<div class="middleTitle">커뮤니티 이용통계</div>
+			<div class="btn-group flex gap5 commUsageChartSelectGroup">
+				<input type="hidden" id="commUsageChartStartDay" />
+				<input type="hidden" id="commUsageChartEndDay" />
+				<button class="public-toggle-button" id="commUsageChartReset">전체</button>
+				<select class="public-toggle-select" name="commUsageChartDay" id="commUsageChartDay">
+					<option value="daily">일별</option>
+					<option value="monthly">월별</option>
+					<option value="selectDays">기간</option>
+				</select> <select class="public-toggle-select" name="commUsageChartGender" id="commUsageChartGender">
+					<option value="">성별전체</option>
+					<option value="male">남자</option>
+					<option value="female">여자</option>
+				</select> <select class="public-toggle-select" name="commUsageChartAgeGroup" id="commUsageChartAgeGroup">
+					<option value="">연령전체</option>
+					<option value="teen">청소년</option>
+					<option value="youth">청년</option>
+				</select> <select class="public-toggle-select" name="commUsageChartCategory" id="commUsageChartCategory">
+					<option value="">카테고리</option>
+					<option value="G09006">청년 커뮤니티</option>
+					<option value="G09001">청소년 커뮤니티</option>
+					<option value="G09002">진로진학 커뮤니티</option>
+					<option value="G09004">이력서 템플릿</option>
+					<option value="G09005">스터디그룹</option>
+				</select>
+			</div>
 		</div>
-		<div class="chart-container">
+		<div class="chart-container commUsageChartDraw">
 			<canvas id="communityUsageChart"></canvas>
 		</div>
 	</div>
@@ -248,55 +248,55 @@
 
 <div class="contentUsage-2 flex gap">
 	<div class="template-panel bookmarkCateChartSpace">
-		<div class="middleTitle">북마크 카테고리별 통계현황</div>
-		<div class="btn-group flex gap5 bookmarkCateChartSelectGroup">
-			<input type="hidden" id="bookmarkCategoryChartStartDay" />
-			<input type="hidden" id="bookmarkCategoryChartEndDay" />
-			<button class="public-toggle-button" id="bookmarkCategoryChartReset">전체</button>
-			<select class="public-toggle-select" name="bookmarkCategoryChartDay" id="bookmarkCategoryChartDay">
-				<option value="daily">일별</option>
-				<option value="monthly">월별</option>
-				<option value="selectDays">기간</option>
-			</select> 
-			<select class="public-toggle-select" name="bookmarkCategoryChartGender" id="bookmarkCategoryChartGender">
-				<option value="">성별전체</option>
-				<option value="male">남자</option>
-				<option value="female">여자</option>
-			</select> 
-			<select class="public-toggle-select" name="bookmarkCategoryChartAgeGroup" id="bookmarkCategoryChartAgeGroup">
-				<option value="">연령전체</option>
-				<option value="teen">청소년</option>
-				<option value="youth">청년</option>
-			</select>
+		<div class="flex space-between">
+			<div class="middleTitle">북마크 카테고리별 통계현황</div>
+			<div class="btn-group flex gap5 bookmarkCateChartSelectGroup">
+				<input type="hidden" id="bookmarkCategoryChartStartDay" />
+				<input type="hidden" id="bookmarkCategoryChartEndDay" />
+				<button class="public-toggle-button" id="bookmarkCategoryChartReset">전체</button>
+				<select class="public-toggle-select" name="bookmarkCategoryChartDay" id="bookmarkCategoryChartDay">
+					<option value="daily">일별</option>
+					<option value="monthly">월별</option>
+					<option value="selectDays">기간</option>
+				</select> <select class="public-toggle-select" name="bookmarkCategoryChartGender" id="bookmarkCategoryChartGender">
+					<option value="">성별전체</option>
+					<option value="male">남자</option>
+					<option value="female">여자</option>
+				</select> <select class="public-toggle-select" name="bookmarkCategoryChartAgeGroup" id="bookmarkCategoryChartAgeGroup">
+					<option value="">연령전체</option>
+					<option value="teen">청소년</option>
+					<option value="youth">청년</option>
+				</select>
+			</div>
 		</div>
-		<div class="chart-container">
+		<div class="chart-container bookmarkCategoryChartDraw">
 			<canvas id="bookmarkCategoryChart"></canvas>
 		</div>
 	</div>
 
 	<div class="template-panel bookmarkCateChartSpace">
-		<div class="middleTitle">북마크 상세 현황(TOP)</div>
-		<div class="btn-group flex gap5 bookmarkCateChartSelectGroup">
-			<input type="hidden" id="bookmarkTopChartStartDay" />
-			<input type="hidden" id="bookmarkTopChartEndDay" />
-			<button class="public-toggle-button" id="bookmarkTopChartReset">전체</button>
-			<select class="public-toggle-select" name="bookmarkTopChartDay" id="bookmarkTopChartDay">
-				<option value="daily">일별</option>
-				<option value="monthly">월별</option>
-				<option value="selectDays">기간</option>
-			</select> 
-			<select class="public-toggle-select" name="bookmarkTopChartGender" id="bookmarkTopChartGender">
-				<option value="">성별전체</option>
-				<option value="male">남자</option>
-				<option value="female">여자</option>
-			</select> 
-			<select class="public-toggle-select" name="bookmarkTopChartAgeGroup" id="bookmarkTopChartAgeGroup">
-				<option value="">연령전체</option>
-				<option value="teen">청소년</option>
-				<option value="youth">청년</option>
-			</select>
+		<div class="flex space-between">
+			<div class="middleTitle">북마크 상세 현황(TOP)</div>
+			<div class="btn-group flex gap5 bookmarkCateChartSelectGroup">
+				<input type="hidden" id="bookmarkTopChartStartDay" />
+				<input type="hidden" id="bookmarkTopChartEndDay" />
+				<button class="public-toggle-button" id="bookmarkTopChartReset">전체</button>
+				<select class="public-toggle-select" name="bookmarkTopChartDay" id="bookmarkTopChartDay">
+					<option value="daily">일별</option>
+					<option value="monthly">월별</option>
+					<option value="selectDays">기간</option>
+				</select> <select class="public-toggle-select" name="bookmarkTopChartGender" id="bookmarkTopChartGender">
+					<option value="">성별전체</option>
+					<option value="G11001">남자</option>
+					<option value="G11002">여자</option>
+				</select> <select class="public-toggle-select" name="bookmarkTopChartAgeGroup" id="bookmarkTopChartAgeGroup">
+					<option value="">연령전체</option>
+					<option value="teen">청소년</option>
+					<option value="youth">청년</option>
+				</select>
+			</div>
 		</div>
-		<div class="chart-container">
+		<div class="chart-container bookmarkTopChartSpace">
 			<canvas id="bookmarkTopChart"></canvas>
 		</div>
 	</div>

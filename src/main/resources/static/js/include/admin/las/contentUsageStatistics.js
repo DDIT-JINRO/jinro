@@ -1,23 +1,24 @@
 function contentUsageStatistics() {
 	// 공용 달력 input 요소
 	const hiddenInput = document.getElementById('comCalendarInput');
-	
+
 	// 각 차트별 select 요소들 (payment.js 패턴과 동일)
 	const roadmapChartDaySel = document.getElementById('roadmapChartDay');
 	const roadmapChartGenderSel = document.getElementById('roadmapChartGender');
 	const roadmapChartAgeGroupSel = document.getElementById('roadmapChartAgeGroup');
-	
+	const roadmapAndWorldCupChartResetBtn = document.getElementById('roadmapAndWorldCupChartReset');
+
 	const commUsageChartDaySel = document.getElementById('commUsageChartDay');
 	const commUsageChartGenderSel = document.getElementById('commUsageChartGender');
 	const commUsageChartAgeGroupSel = document.getElementById('commUsageChartAgeGroup');
 	const commUsageChartCategorySel = document.getElementById('commUsageChartCategory');
 	const commUsageChartResetBtn = document.getElementById('commUsageChartReset');
-	
+
 	const bookmarkCategoryChartDaySel = document.getElementById('bookmarkCategoryChartDay');
 	const bookmarkCategoryChartGenderSel = document.getElementById('bookmarkCategoryChartGender');
 	const bookmarkCategoryChartAgeGroupSel = document.getElementById('bookmarkCategoryChartAgeGroup');
 	const bookmarkCategoryChartResetBtn = document.getElementById('bookmarkCategoryChartReset');
-	
+
 	const bookmarkTopChartDaySel = document.getElementById('bookmarkTopChartDay');
 	const bookmarkTopChartGenderSel = document.getElementById('bookmarkTopChartGender');
 	const bookmarkTopChartAgeGroupSel = document.getElementById('bookmarkTopChartAgeGroup');
@@ -25,13 +26,16 @@ function contentUsageStatistics() {
 
 	// 이벤트 리스너 등록
 	setupEventListeners();
-	
+
 	function setupEventListeners() {
 		// 월드컵 로드맵 차트 이벤트
 		roadmapChartDaySel.addEventListener('change', eventDateRangeSelect);
 		roadmapChartGenderSel.addEventListener('change', loadWorldcupRoadmapChart);
 		roadmapChartAgeGroupSel.addEventListener('change', loadWorldcupRoadmapChart);
-		
+		roadmapAndWorldCupChartResetBtn.addEventListener('click', function() {
+			resetChartFilters('roadmapAndWorldCup');
+		});
+
 		// 커뮤니티 이용통계 차트 이벤트
 		commUsageChartDaySel.addEventListener('change', eventDateRangeSelect);
 		commUsageChartGenderSel.addEventListener('change', loadCommunityUsageChart);
@@ -40,7 +44,7 @@ function contentUsageStatistics() {
 		commUsageChartResetBtn.addEventListener('click', function() {
 			resetChartFilters('communityUsage');
 		});
-		
+
 		// 북마크 카테고리 차트 이벤트
 		bookmarkCategoryChartDaySel.addEventListener('change', eventDateRangeSelect);
 		bookmarkCategoryChartGenderSel.addEventListener('change', loadBookmarkCategoryChart);
@@ -48,7 +52,7 @@ function contentUsageStatistics() {
 		bookmarkCategoryChartResetBtn.addEventListener('click', function() {
 			resetChartFilters('bookmarkCategory');
 		});
-		
+
 		// 북마크 TOP 차트 이벤트
 		bookmarkTopChartDaySel.addEventListener('change', eventDateRangeSelect);
 		bookmarkTopChartGenderSel.addEventListener('change', loadBookmarkTopChart);
@@ -57,12 +61,12 @@ function contentUsageStatistics() {
 			resetChartFilters('bookmarkTop');
 		});
 	}
-	
+
 	// 차트 필터 리셋 함수 (payment.js 패턴과 동일)
 	function resetChartFilters(chartType) {
 		const defaultRange = getRecentDaysRange(7); // 기본적으로 최근 7일
-		
-		switch(chartType) {
+
+		switch (chartType) {
 			case 'communityUsage':
 				document.getElementById('commUsageChartDay').value = 'daily';
 				document.getElementById('commUsageChartGender').value = '';
@@ -88,9 +92,17 @@ function contentUsageStatistics() {
 				document.getElementById('bookmarkTopChartEndDay').value = defaultRange.end;
 				loadBookmarkTopChart();
 				break;
+			case 'roadmapAndWorldCup':
+				document.getElementById('roadmapChartDay').value = 'daily';
+				document.getElementById('roadmapChartGender').value = '';
+				document.getElementById('roadmapChartAgeGroup').value = '';
+				document.getElementById('roadmapChartStartDay').value = defaultRange.start;
+				document.getElementById('roadmapChartEndDay').value = defaultRange.end;
+				loadWorldcupRoadmapChart();
+				break;
 		}
 	}
-	
+
 	// 날짜 형식 변환을 위한 헬퍼 함수들 (payment.js와 동일)
 	function formatDateCal(d) {
 		const y = d.getFullYear();
@@ -98,47 +110,47 @@ function contentUsageStatistics() {
 		const day = String(d.getDate()).padStart(2, '0');
 		return `${y}-${m}-${day}`;
 	}
-	
+
 	function formatDateRange(fS, fE) {
 		return `${fS} ~ ${fE} 기간`;
 	}
-	
+
 	function formatDailyDate(isoString) {
 		const date = new Date(isoString);
 		return `${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
 	}
-	
+
 	function formatMonthlyDate(isoString) {
 		const date = new Date(isoString);
 		return `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}`;
 	}
-	
+
 	// 기본 날짜 범위 계산 함수들 (payment.js와 동일)
 	function getRecentDaysRange(days = 7) {
 		const today = new Date();
 		const startDate = new Date(today);
 		startDate.setDate(today.getDate() - (days - 1));
-		
+
 		return {
 			start: formatDateCal(startDate),
 			end: formatDateCal(today)
 		};
 	}
-	
+
 	function getCurrentYearRange() {
 		const today = new Date();
 		const startDate = new Date(today.getFullYear(), 0, 1); // 올해 1월 1일
-		
+
 		return {
 			start: formatDateCal(startDate),
 			end: formatDateCal(today)
 		};
 	}
-	
+
 	// 차트 로드 시 기본 날짜 범위 설정 (payment.js와 동일)
 	function setDefaultDateRange() {
 		const weekRange = getRecentDaysRange(7); // 최근 7일
-		
+
 		// 모든 차트의 시작일과 종료일을 최근 7일로 설정
 		document.getElementById('roadmapChartStartDay').value = weekRange.start;
 		document.getElementById('roadmapChartEndDay').value = weekRange.end;
@@ -148,63 +160,63 @@ function contentUsageStatistics() {
 		document.getElementById('bookmarkCategoryChartEndDay').value = weekRange.end;
 		document.getElementById('bookmarkTopChartStartDay').value = weekRange.start;
 		document.getElementById('bookmarkTopChartEndDay').value = weekRange.end;
-		
+
 		return weekRange;
 	}
-	
+
 	// 일별, 월별, 기간선택에 대해서 이벤트 바인딩 (payment.js와 동일)
 	function eventDateRangeSelect(e) {
 		const selectEl = e.target.nodeName == "SELECT" ? e.target : e.target.closest('select');
 		const dateValue = selectEl.value;
-		
-		if(dateValue == 'daily') {
+
+		if (dateValue == 'daily') {
 			// 일별 선택 시 최근 7일 범위 설정
 			const dailyRange = getRecentDaysRange(7);
-			
-			if(selectEl.id == 'roadmapChartDay') {
+
+			if (selectEl.id == 'roadmapChartDay') {
 				document.getElementById("roadmapChartStartDay").value = dailyRange.start;
 				document.getElementById("roadmapChartEndDay").value = dailyRange.end;
 				loadWorldcupRoadmapChart();
-			} else if(selectEl.id == 'commUsageChartDay') {
+			} else if (selectEl.id == 'commUsageChartDay') {
 				document.getElementById("commUsageChartStartDay").value = dailyRange.start;
 				document.getElementById("commUsageChartEndDay").value = dailyRange.end;
 				loadCommunityUsageChart();
-			} else if(selectEl.id == 'bookmarkCategoryChartDay') {
+			} else if (selectEl.id == 'bookmarkCategoryChartDay') {
 				document.getElementById("bookmarkCategoryChartStartDay").value = dailyRange.start;
 				document.getElementById("bookmarkCategoryChartEndDay").value = dailyRange.end;
 				loadBookmarkCategoryChart();
-			} else if(selectEl.id == 'bookmarkTopChartDay') {
+			} else if (selectEl.id == 'bookmarkTopChartDay') {
 				document.getElementById("bookmarkTopChartStartDay").value = dailyRange.start;
 				document.getElementById("bookmarkTopChartEndDay").value = dailyRange.end;
 				loadBookmarkTopChart();
 			}
-		} else if(dateValue == 'monthly') {
+		} else if (dateValue == 'monthly') {
 			// 월별 선택 시 올해 1월부터 현재까지 범위 설정
 			const monthlyRange = getCurrentYearRange();
-			
-			if(selectEl.id == 'roadmapChartDay') {
+
+			if (selectEl.id == 'roadmapChartDay') {
 				document.getElementById("roadmapChartStartDay").value = monthlyRange.start;
 				document.getElementById("roadmapChartEndDay").value = monthlyRange.end;
 				loadWorldcupRoadmapChart();
-			} else if(selectEl.id == 'commUsageChartDay') {
+			} else if (selectEl.id == 'commUsageChartDay') {
 				document.getElementById("commUsageChartStartDay").value = monthlyRange.start;
 				document.getElementById("commUsageChartEndDay").value = monthlyRange.end;
 				loadCommunityUsageChart();
-			} else if(selectEl.id == 'bookmarkCategoryChartDay') {
+			} else if (selectEl.id == 'bookmarkCategoryChartDay') {
 				document.getElementById("bookmarkCategoryChartStartDay").value = monthlyRange.start;
 				document.getElementById("bookmarkCategoryChartEndDay").value = monthlyRange.end;
 				loadBookmarkCategoryChart();
-			} else if(selectEl.id == 'bookmarkTopChartDay') {
+			} else if (selectEl.id == 'bookmarkTopChartDay') {
 				document.getElementById("bookmarkTopChartStartDay").value = monthlyRange.start;
 				document.getElementById("bookmarkTopChartEndDay").value = monthlyRange.end;
 				loadBookmarkTopChart();
 			}
-		} else if(dateValue == 'selectDays') {
+		} else if (dateValue == 'selectDays') {
 			// flatpickr 중복 초기화 방지 (payment.js와 동일)
 			if (hiddenInput._flatpickr) {
 				hiddenInput._flatpickr.destroy();
 			}
-			
+
 			flatpickr(hiddenInput, {
 				mode: "range",
 				maxDate: "today",
@@ -216,29 +228,29 @@ function contentUsageStatistics() {
 						const endDate = selectedDates[1];
 						const formattedStartDate = formatDateCal(startDate);
 						const formattedEndDate = formatDateCal(endDate);
-						
-						if(selectEl.id == 'roadmapChartDay') {
+
+						if (selectEl.id == 'roadmapChartDay') {
 							document.getElementById('roadmapChartStartDay').value = formattedStartDate;
 							document.getElementById('roadmapChartEndDay').value = formattedEndDate;
 							loadWorldcupRoadmapChart();
 							if (window.worldcupRoadmapChartInstance) {
 								window.worldcupRoadmapChartInstance.destroy();
 							}
-						} else if(selectEl.id == 'commUsageChartDay') {
+						} else if (selectEl.id == 'commUsageChartDay') {
 							document.getElementById('commUsageChartStartDay').value = formattedStartDate;
 							document.getElementById('commUsageChartEndDay').value = formattedEndDate;
 							loadCommunityUsageChart();
 							if (window.communityUsageChartInstance) {
 								window.communityUsageChartInstance.destroy();
 							}
-						} else if(selectEl.id == 'bookmarkCategoryChartDay') {
+						} else if (selectEl.id == 'bookmarkCategoryChartDay') {
 							document.getElementById('bookmarkCategoryChartStartDay').value = formattedStartDate;
 							document.getElementById('bookmarkCategoryChartEndDay').value = formattedEndDate;
 							loadBookmarkCategoryChart();
 							if (window.bookmarkCategoryChartInstance) {
 								window.bookmarkCategoryChartInstance.destroy();
 							}
-						} else if(selectEl.id == 'bookmarkTopChartDay') {
+						} else if (selectEl.id == 'bookmarkTopChartDay') {
 							document.getElementById('bookmarkTopChartStartDay').value = formattedStartDate;
 							document.getElementById('bookmarkTopChartEndDay').value = formattedEndDate;
 							loadBookmarkTopChart();
@@ -249,7 +261,7 @@ function contentUsageStatistics() {
 					}
 				}
 			});
-			
+
 			hiddenInput._flatpickr.open();
 			hiddenInput._flatpickr.clear();
 		}
@@ -258,18 +270,18 @@ function contentUsageStatistics() {
 	// ========================= 월드컵 로드맵 차트 (payment.js 패턴 적용) =========================
 	function loadWorldcupRoadmapChart() {
 		const ctx = document.getElementById('roadmapAndWorldSelectGroupChartCanvas').getContext('2d');
-		
+
 		const dateValue = document.getElementById("roadmapChartDay").value;
 		const genderValue = document.getElementById("roadmapChartGender").value;
 		const ageGroupValue = document.getElementById("roadmapChartAgeGroup").value;
 		const startDateValue = document.getElementById("roadmapChartStartDay").value;
 		const endDateValue = document.getElementById("roadmapChartEndDay").value;
-		
+
 		let chartRange = "";
-		if(startDateValue && endDateValue) {
+		if (startDateValue && endDateValue) {
 			chartRange = formatDateRange(startDateValue, endDateValue);
 		}
-		
+
 		const params = {
 			period: dateValue,
 			startDate: startDateValue,
@@ -277,19 +289,19 @@ function contentUsageStatistics() {
 			gender: genderValue,
 			ageGroup: ageGroupValue
 		};
-		
+
 		// 기존 차트 파괴 (payment.js 패턴)
 		if (window.worldcupRoadmapChartInstance) {
 			window.worldcupRoadmapChartInstance.destroy();
 		}
-		
-		// 캔버스 크기 고정
-		ctx.canvas.style.maxHeight = '400px';
-		
+
+
+
+
 		axios.get('/admin/las/cont/worldcup-roadmap/usage-stats', { params })
 			.then(res => {
 				const responseData = res.data;
-				
+
 				let labels;
 				let chartLabel1, chartLabel2;
 				if (dateValue === 'monthly') {
@@ -301,10 +313,10 @@ function contentUsageStatistics() {
 					chartLabel1 = '일별 월드컵 이용';
 					chartLabel2 = '일별 로드맵 이용';
 				}
-				
+
 				const worldcupData = responseData.map(item => item.worldcupCnt || 0);
 				const roadmapData = responseData.map(item => item.roadmapCnt || 0);
-				
+
 				window.worldcupRoadmapChartInstance = new Chart(ctx, {
 					type: 'line',
 					data: {
@@ -332,6 +344,11 @@ function contentUsageStatistics() {
 						}]
 					},
 					options: {
+						animation: {
+							duration: 1000, // 애니메이션이 1초(1000ms) 동안 실행됩니다.
+							easing: 'easeInOutQuad', // 애니메이션 효과의 속도 곡선을 설정합니다.
+							// onComplete, onProgress 등 다양한 콜백 함수도 사용할 수 있습니다.
+						},
 						responsive: true,
 						maintainAspectRatio: false,
 						plugins: {
@@ -342,7 +359,6 @@ function contentUsageStatistics() {
 							title: {
 								display: true,
 								text: [
-									'월드컵 로드맵 이용 현황',
 									chartRange
 								],
 							}
@@ -375,19 +391,19 @@ function contentUsageStatistics() {
 	// ========================= 커뮤니티 이용통계 차트 =========================
 	function loadCommunityUsageChart() {
 		const ctx = document.getElementById('communityUsageChart').getContext('2d');
-		
+
 		const dateValue = document.getElementById("commUsageChartDay").value;
 		const genderValue = document.getElementById("commUsageChartGender").value;
 		const ageGroupValue = document.getElementById("commUsageChartAgeGroup").value;
 		const categoryValue = document.getElementById("commUsageChartCategory").value;
 		const startDateValue = document.getElementById("commUsageChartStartDay").value;
 		const endDateValue = document.getElementById("commUsageChartEndDay").value;
-		
+
 		let chartRange = "";
-		if(startDateValue && endDateValue) {
+		if (startDateValue && endDateValue) {
 			chartRange = formatDateRange(startDateValue, endDateValue);
 		}
-		
+
 		const params = {
 			period: dateValue,
 			startDate: startDateValue,
@@ -396,36 +412,34 @@ function contentUsageStatistics() {
 			ageGroup: ageGroupValue,
 			category: categoryValue  // 카테고리 파라미터 추가
 		};
-		
+
 		// 기존 차트 파괴
 		if (window.communityUsageChartInstance) {
 			window.communityUsageChartInstance.destroy();
 		}
-		
+
 		ctx.canvas.style.maxHeight = '300px';
-		
-		console.log('커뮤니티 이용통계 API 호출 파라미터:', params);
-		
+
 		axios.get('/admin/las/cont/community/usage-stats', { params })
 			.then(res => {
 				const responseData = res.data;
-				console.log('커뮤니티 이용통계 API 응답:', responseData);
-				
+
+
 				let labels;
 				if (dateValue === 'monthly') {
 					labels = responseData.map(item => formatMonthlyDate(item.dt));
 				} else {
 					labels = responseData.map(item => formatDailyDate(item.dt));
 				}
-				
+
 				// 카테고리 필터링이 있는 경우와 없는 경우 구분
 				let datasets = [];
-				
+
 				if (categoryValue && categoryValue !== '') {
 					// 특정 카테고리만 선택된 경우
 					const categoryNames = {
 						'G09006': '청년 커뮤니티',
-						'G09001': '청소년 커뮤니티', 
+						'G09001': '청소년 커뮤니티',
 						'G09002': '진로진학 커뮤니티',
 						'G09004': '이력서 템플릿',
 						'G09005': '스터디그룹'
@@ -433,11 +447,11 @@ function contentUsageStatistics() {
 					const categoryFields = {
 						'G09006': 'youthCnt',
 						'G09001': 'teenCnt',
-						'G09002': 'noticeCnt', 
+						'G09002': 'noticeCnt',
 						'G09004': 'resumeTemplateCnt',
 						'G09005': 'studyGroupCnt'
 					};
-					
+
 					datasets = [{
 						label: categoryNames[categoryValue] || '선택된 카테고리',
 						data: responseData.map(item => item[categoryFields[categoryValue]] || 0),
@@ -485,7 +499,7 @@ function contentUsageStatistics() {
 						fill: false
 					}];
 				}
-				
+
 				window.communityUsageChartInstance = new Chart(ctx, {
 					type: 'line',
 					data: {
@@ -503,7 +517,6 @@ function contentUsageStatistics() {
 							title: {
 								display: true,
 								text: [
-									'커뮤니티 이용통계',
 									chartRange
 								],
 							}
@@ -529,18 +542,18 @@ function contentUsageStatistics() {
 	// ========================= 북마크 카테고리별 통계현황 차트 =========================
 	function loadBookmarkCategoryChart() {
 		const ctx = document.getElementById('bookmarkCategoryChart').getContext('2d');
-		
+
 		const dateValue = document.getElementById("bookmarkCategoryChartDay").value;
 		const genderValue = document.getElementById("bookmarkCategoryChartGender").value;
 		const ageGroupValue = document.getElementById("bookmarkCategoryChartAgeGroup").value;
 		const startDateValue = document.getElementById("bookmarkCategoryChartStartDay").value;
 		const endDateValue = document.getElementById("bookmarkCategoryChartEndDay").value;
-		
+
 		let chartRange = "";
-		if(startDateValue && endDateValue) {
+		if (startDateValue && endDateValue) {
 			chartRange = formatDateRange(startDateValue, endDateValue);
 		}
-		
+
 		const params = {
 			period: dateValue,
 			startDate: startDateValue,
@@ -548,23 +561,21 @@ function contentUsageStatistics() {
 			gender: genderValue,
 			ageGroup: ageGroupValue
 		};
-		
+
 		// 기존 차트 파괴
 		if (window.bookmarkCategoryChartInstance) {
 			window.bookmarkCategoryChartInstance.destroy();
 		}
-		
-		ctx.canvas.style.maxHeight = '300px';
-		
+
 		axios.get('/admin/las/cont/bookmark/category-stacked', { params })
 			.then(res => {
 				const responseData = res.data;
 				console.log('북마크 카테고리 API 응답:', responseData);
-				
+
 				// 고정된 5개 카테고리 정의 (ServiceImpl 참고)
 				const fixedCategories = ['대학', '기업', '직업', '이력서템플릿', '학과'];
 				const categoryIds = ['G03001', 'G03002', 'G03004', 'G03005', 'G03006'];
-				
+
 				// API 응답 데이터를 카테고리별로 매핑
 				const categoryDataMap = {};
 				responseData.forEach(item => {
@@ -573,13 +584,13 @@ function contentUsageStatistics() {
 					const femaleCnt = item.femaleCnt || 0;
 					categoryDataMap[categoryName] = maleCnt + femaleCnt;
 				});
-				
+
 				// 고정된 순서로 데이터 구성 (없는 카테고리는 0으로 설정)
 				const counts = fixedCategories.map(category => categoryDataMap[category] || 0);
-				
+
 				console.log('북마크 카테고리 고정 라벨:', fixedCategories);
 				console.log('북마크 카테고리 매핑된 데이터:', counts);
-				
+
 				window.bookmarkCategoryChartInstance = new Chart(ctx, {
 					type: 'bar',
 					data: {
@@ -602,7 +613,9 @@ function contentUsageStatistics() {
 								'rgba(153, 102, 255, 1)'
 							],
 							borderWidth: 1,
-							borderRadius: 4
+							borderRadius: 4,
+							barPercentage: 0.4,
+							categoryPercentage: 0.8
 						}]
 					},
 					options: {
@@ -615,7 +628,6 @@ function contentUsageStatistics() {
 							title: {
 								display: true,
 								text: [
-									'북마크 카테고리별 통계현황',
 									chartRange
 								],
 							}
@@ -641,18 +653,18 @@ function contentUsageStatistics() {
 	// ========================= 북마크 상세 현황(TOP) 차트 =========================
 	function loadBookmarkTopChart() {
 		const ctx = document.getElementById('bookmarkTopChart').getContext('2d');
-		
+
 		const dateValue = document.getElementById("bookmarkTopChartDay").value;
 		const genderValue = document.getElementById("bookmarkTopChartGender").value;
 		const ageGroupValue = document.getElementById("bookmarkTopChartAgeGroup").value;
 		const startDateValue = document.getElementById("bookmarkTopChartStartDay").value;
 		const endDateValue = document.getElementById("bookmarkTopChartEndDay").value;
-		
+
 		let chartRange = "";
-		if(startDateValue && endDateValue) {
+		if (startDateValue && endDateValue) {
 			chartRange = formatDateRange(startDateValue, endDateValue);
 		}
-		
+
 		const params = {
 			period: dateValue,
 			startDate: startDateValue,
@@ -660,26 +672,23 @@ function contentUsageStatistics() {
 			gender: genderValue,
 			ageGroup: ageGroupValue
 		};
-		
+
 		// 기존 차트 파괴
 		if (window.bookmarkTopChartInstance) {
 			window.bookmarkTopChartInstance.destroy();
 		}
-		
-		ctx.canvas.style.maxHeight = '300px';
-		
+
 		axios.get('/admin/las/cont/bookmark/top', { params })
 			.then(res => {
 				const responseData = res.data;
-				
-				const labels = responseData.map(item => 
-					item.title || item.name || item.jobName || item.boardTitle || 
-					`Item ${item.rank || item.rn || ''}`
+
+				const labels = responseData.map(item =>
+					item.TARGETNAME || item.targetName
 				);
-				const counts = responseData.map(item => 
-					item.bookmarkCount || item.count || item.cnt || 0
+				const counts = responseData.map(item =>
+					item.CNT || item.cnt
 				);
-				
+
 				window.bookmarkTopChartInstance = new Chart(ctx, {
 					type: 'bar',
 					data: {
@@ -687,10 +696,13 @@ function contentUsageStatistics() {
 						datasets: [{
 							label: '북마크 수',
 							data: counts,
-							backgroundColor: 'rgba(54, 162, 235, 0.8)',
-							borderColor: 'rgba(54, 162, 235, 1)',
+							// 이 부분의 색상을 보라색 계열로 변경했습니다.
+							backgroundColor: 'rgba(153, 102, 255, 0.4)',
+							borderColor: 'rgba(153, 102, 255, 0.7)',
 							borderWidth: 1,
-							borderRadius: 4
+							borderRadius: 4,
+							barPercentage: 0.4,
+							categoryPercentage: 0.8
 						}]
 					},
 					options: {
@@ -704,7 +716,6 @@ function contentUsageStatistics() {
 							title: {
 								display: true,
 								text: [
-									'북마크 상세 현황(TOP)',
 									chartRange
 								],
 							}
