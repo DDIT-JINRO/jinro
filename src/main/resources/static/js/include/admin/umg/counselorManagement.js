@@ -868,20 +868,27 @@ function counselorManagement() {
 		            }
 		          }
 		        },
-		        scales: {
-		          y: {
-		            beginAtZero: true,
-		            // 만족도는 보통 0~5 범위
-		            suggestedMax: (filter === 'satisfaction') ? 5 : undefined,
-		            ticks: {
-		              callback: (v) => {
-		                if (filter === 'satisfaction') {
-		                  return `${Number(v).toFixed(0)}점`;
-		                }
-		                return `${Number(v).toLocaleString()}건`;
-		              }
-		            }
-		          },
+				  scales: {
+					  y: (filter === 'satisfaction')
+						  ? {
+							  beginAtZero: true,
+							  min: 0,
+							  max: 5,               // or suggestedMax: 5
+							  ticks: {
+								  stepSize: 1,        // ← 정수 간격 강제
+								  precision: 0,
+								  callback: (v) => `${v}점`
+							  },
+							  grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false }
+						  }
+						  : {
+							  beginAtZero: true,
+							  ticks: {
+								  precision: 0,
+								  callback: (v) => `${Number(v).toLocaleString()}건`
+							  },
+							  grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false }
+						  },
 		          x: {
 		            grid: { display: false },
 		            ticks: {
