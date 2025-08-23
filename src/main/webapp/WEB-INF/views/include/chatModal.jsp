@@ -15,7 +15,7 @@
 	  <!-- 오른쪽: 채팅 메시지 및 입력 -->
 	  <div class="chat-message-area">
 	  	<div class="chat-room-meta">
-        	<div class="chat-title" id="chat-title">제목영역</div>
+        	<div class="chat-title" id="chat-room-title">제목영역</div>
 		</div>
 	    <div id="chat-container">
 	    	<p class="chat-room-no-selected">목록에서 채팅방을 선택해주세요</p>
