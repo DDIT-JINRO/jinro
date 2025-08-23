@@ -48,6 +48,10 @@
 	height: 30px;
 }
 
+.userList tr td:hover {
+	cursor: pointer;
+}
+
 .search-filter-bar {
 	display: flex;
 	gap: 10px;

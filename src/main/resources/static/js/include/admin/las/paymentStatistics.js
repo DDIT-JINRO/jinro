@@ -325,7 +325,7 @@ function paymentStatistics() {
         
 		// --- 그라데이션 적용 시작 ---
 		const gradientRevenue = ctx.createLinearGradient(0, 0, 0, 400);
-		gradientRevenue.addColorStop(0, 'rgba(114, 124, 245, 0.5)');
+		gradientRevenue.addColorStop(0, 'rgba(114, 124, 245, 0.2)');
 		gradientRevenue.addColorStop(1, 'rgba(114, 124, 245, 0)');
 		// --- 그라데이션 적용 끝 ---
 		
@@ -367,12 +367,11 @@ function paymentStatistics() {
 	                    plugins: {
 	                        legend: {
 	                            display: true,
-	                            position: 'top',
+	                            position: 'bottom',
 	                        },
 	                        title: {
 	                            display: true,
 	                            text: [
-	                                '구독 결제 매출',
 	                                chartRange
 	                            ],
 	                        },
@@ -470,7 +469,7 @@ function paymentStatistics() {
                 
                 // 데이터셋 생성
                 const datasets = [];
-                const colors = ['#2DCF97', '#727cf5', '#FFC75A', '#FF6B6B', '#9C88FF'];
+                const colors = ['#2DCF97', '#727cf5', '#FE849C', '#FF6B6B', '#9C88FF'];
                 let colorIndex = 0;
                 
                 Object.keys(products).forEach(productName => {
@@ -500,12 +499,11 @@ function paymentStatistics() {
                         plugins: {
                             legend: {
                                 display: true,
-                                position: 'top'
+                                position: 'bottom'
                             },
                             title: {
                                 display: true,
                                 text: [
-                                    '상품별 인기 통계',
                                     chartRange
                                 ],
                             },
@@ -560,7 +558,7 @@ function paymentStatistics() {
 		
 		// --- 그라데이션 적용 시작 ---
 		const gradientSubscriber = ctx.createLinearGradient(0, 0, 0, 600);
-		gradientSubscriber.addColorStop(0, 'rgba(45, 207, 151, 0.5)');
+		gradientSubscriber.addColorStop(0, 'rgba(45, 207, 151, 0.2)');
 		gradientSubscriber.addColorStop(1, 'rgba(45, 207, 151, 0)');
 		// --- 그라데이션 적용 끝 ---
         
@@ -602,12 +600,11 @@ function paymentStatistics() {
 	                    plugins: {
 	                        legend: {
 	                            display: true,
-	                            position: 'top',
+	                            position: 'bottom',
 	                        },
 	                        title: {
 	                            display: true,
 	                            text: [
-	                                '구독자 수 통계',
 	                                chartRange
 	                            ],
 	                        },
@@ -685,19 +682,19 @@ function paymentStatistics() {
 		
 		// --- 그라데이션 적용 시작 ---
 		const gradientResume = ctx.createLinearGradient(0, 0, 0, 400);
-		gradientResume.addColorStop(0, 'rgba(45, 207, 151, 0.5)');
+		gradientResume.addColorStop(0, 'rgba(45, 207, 151, 0.1)');
 		gradientResume.addColorStop(1, 'rgba(45, 207, 151, 0)');
 		
 		const gradientCover = ctx.createLinearGradient(0, 0, 0, 400);
-		gradientCover.addColorStop(0, 'rgba(255, 199, 90, 0.5)');
+		gradientCover.addColorStop(0, 'rgba(255, 199, 90, 0.1)');
 		gradientCover.addColorStop(1, 'rgba(255, 199, 90, 0)');
 		
 		const gradientMock = ctx.createLinearGradient(0, 0, 0, 400);
-		gradientMock.addColorStop(0, 'rgba(114, 124, 245, 0.5)');
+		gradientMock.addColorStop(0, 'rgba(114, 124, 245, 0.1)');
 		gradientMock.addColorStop(1, 'rgba(114, 124, 245, 0)');
 		
 		const gradientCounseling = ctx.createLinearGradient(0, 0, 0, 400);
-		gradientCounseling.addColorStop(0, 'rgba(255, 99, 132, 0.5)');
+		gradientCounseling.addColorStop(0, 'rgba(255, 99, 132, 0.1)');
 		gradientCounseling.addColorStop(1, 'rgba(255, 99, 132, 0)');
 		// --- 그라데이션 적용 끝 ---
         
@@ -809,7 +806,6 @@ function paymentStatistics() {
 	                        title: {
 	                            display: true,
 	                            text: [
-	                                chartTitle,
 	                                chartRange
 	                            ],
 	                        },
@@ -840,7 +836,7 @@ function paymentStatistics() {
 	                        y: {
 	                            beginAtZero: true,
 	                            ticks: {
-	                                stepSize: 1,
+	                                stepSize: 10,
 	                                callback: value => value + '회'
 	                            },
 	                            grid: {

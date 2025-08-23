@@ -51,6 +51,34 @@ function memberManagement() {
 		}
 	})
 
+	function getBoardUrl(ccId, boardId) {
+		let url;
+		switch (ccId) {
+			case 'G09001': // 청소년 커뮤니티
+				url = `/comm/peer/teen/teenDetail.do?boardId=${boardId}`;
+				break;
+			case 'G09002': // 진로 진학 커뮤니티
+				url = `/comm/path/pathDetail.do?boardId=${boardId}`;
+				break;
+			case 'G09003': // 면접후기 커뮤니티
+				url = `/empt/ivfb/interViewFeedback.do?boardId=${boardId}`;
+				break;
+			case 'G09004': // 이력서 템플릿 게시판
+				url = `/cdp/rsm/rsmb/resumeBoardDetail.do?boardId=${boardId}`;
+				break;
+			case 'G09005': // 스터디 그룹 게시글
+				url = `/prg/std/stdGroupDetail.do?stdGroupId=${boardId}`;
+				break;
+			case 'G09006': // 청년 커뮤니티
+				url = `/comm/peer/youth/youthDetail.do?boardId=${boardId}`;
+				break;
+			default:
+				url = `javascript:void(0);`; // 링크가 없는 경우
+				break;
+		}
+		return url;
+	}
+
 	replyListSortOrder.addEventListener('change', function(e) {
 		const userId = document.getElementById('mem-id').value;
 		const currentSortValEl = e.target.closest('.userDetailBtnGroup').querySelector('.public-toggle-button.active');
@@ -415,11 +443,11 @@ function memberManagement() {
 		currentPage,
 		totalPages
 	}) {
-		let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← 이전</a>`;
+		let html = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 		for (let p = startPage; p <= endPage; p++) {
 			html += `<a href="#" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
 		}
-		html += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">다음 →</a>`;
+		html += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
 		const footer = document.getElementById('memDetailBoardListPagenation');
 		if (footer) footer.innerHTML = html;
 	}
@@ -811,15 +839,24 @@ function memberManagement() {
 
 			// 테이블 내용 렌더링
 			if (content && content.length > 0) {
-				const rows = content.map(item => `
-					<tr>
-						<td>${item.boardId}</td>
-						<td>${convertCcIdToCategory(item.ccId)}</td>
-						<td>${item.boardCnt}</td>
-						<td>${formatDateMMDD(item.boardCreatedAt)}</td>
-						<td>${renderBoardStatus(item.boardDelYn)}</td>
-					</tr>
-				`).join('');
+				const rows = content.map(item => {
+					// getBoardUrl 함수를 사용하여 URL을 가져옵니다.
+					const boardUrl = getBoardUrl(item.ccId, item.boardId);
+
+					// boardUrl이 있는 경우에만 onclick 속성을 추가합니다.
+					const onClickHandler = boardUrl ? `onclick="window.open('${boardUrl}', '_blank')"` : '';
+					const cursorStyle = boardUrl ? `style="cursor:pointer;"` : '';
+
+					return `
+			            <tr ${onClickHandler} ${cursorStyle}>
+			                <td>${item.boardId}</td>
+			                <td>${convertCcIdToCategory(item.ccId)}</td>
+			                <td>${item.boardCnt}</td>
+			                <td>${formatDateMMDD(item.boardCreatedAt)}</td>
+			                <td>${renderBoardStatus(item.boardDelYn)}</td>
+			            </tr>
+			        `;
+				}).join('');
 				tbodyEl.innerHTML = rows;
 			} else {
 				tbodyEl.innerHTML = `<tr><td colspan='5' style="text-align: center;">작성한 게시글이 없습니다.</td></tr>`;
@@ -827,11 +864,11 @@ function memberManagement() {
 
 			// 페이지네이션 렌더링
 			if (boardPaginationEl) {
-				let paginationHtml = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← 이전</a>`;
+				let paginationHtml = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previus</a>`;
 				for (let p = startPage; p <= endPage; p++) {
 					paginationHtml += `<a href="#" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
 				}
-				paginationHtml += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">다음 →</a>`;
+				paginationHtml += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
 				boardPaginationEl.innerHTML = paginationHtml;
 
 				// 기존 이벤트 리스너 제거
@@ -1027,7 +1064,7 @@ function memberManagement() {
 					monthlyWithdrawalUsersRate,
 					monthlyWithdrawalUsersStatus
 				} = res.data;
-				
+
 				// 일일 사용자 현황
 				const dailyUsersCountEl = document.getElementById('dailyActiveUsersCount');
 				if (dailyUsersCountEl) {

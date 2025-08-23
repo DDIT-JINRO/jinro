@@ -125,7 +125,7 @@
 							</div>
 						</div>
 						<div class="profile-info">
-							<label for="mem-nickname"> <i class="fa-solid fa-pencil"></i>
+							<label for="mem-nickname">
 							</label> <input type="text" id="mem-id" style="display: none"> <input
 								id="mem-nickname" class="profile-nickname">
 							<div id="profile-status" class="profile-status">
@@ -137,7 +137,7 @@
 				<div class="profileInfo-1-2">
 					<div class="info-field">
 						<label for="mem-name">이름</label> <input id="mem-name" type="text"
-							value="">
+							value="" disabled="disabled">
 					</div>
 					<div class="info-field">
 						<label for="mem-phone">휴대전화</label> <input id="mem-phone"
@@ -149,7 +149,7 @@
 					</div>
 					<div class="info-field">
 						<label>로그인 타입</label> <input id="mem-logType" type="text" value=""
-							readonly="readonly">
+							disabled="disabled">
 					</div>
 				</div>
 				<div class="profileInfo-1-3">
