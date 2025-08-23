@@ -104,7 +104,7 @@
     top: 20px;               /* 맨 위에서 살짝 띄움 */
     left: 50%;               /* 가로 중앙 */
     transform: translateX(-50%);
-    width: 300px;            /* 창 너비 */
+    width: 400px;            /* 창 너비 */
     z-index: 9999;
     padding: 12px 20px;
     animation: slideDown 0.3s ease;

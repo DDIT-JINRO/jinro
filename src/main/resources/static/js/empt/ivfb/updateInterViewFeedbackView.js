@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	            if (result.success) {
 					showConfirm2("후기 수정이 완료되었습니다.",
 						() => {
+							window.location.href = "/empt/ivfb/interViewFeedback.do";
 							return;
 
 						},
@@ -62,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 						}
 					);
-	                window.location.href = "/empt/ivfb/interViewFeedback.do";
 	            } else {
 	                alert(result.message || "수정에 실패했습니다.");
 	            }

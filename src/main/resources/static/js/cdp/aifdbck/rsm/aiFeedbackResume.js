@@ -23,15 +23,36 @@ document.addEventListener('DOMContentLoaded', () => {
 	requestAiFeedbackBtn.addEventListener('click', () => {
 		// --- 사전 조건 검사 ---
 		if (!subscriptionInfo || !subscriptionInfo.payId) {
-			alert('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.');
+			showConfirm2('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.', 
+			    () => {
+					return;
+			    },
+			    () => {
+			        
+			    }
+			);
 			return;
 		}
 		if (!originalData) {
-			alert('먼저 피드백을 받을 이력서를 선택해주세요.');
+			showConfirm2('먼저 피드백을 받을 이력서를 선택해주세요.', 
+			    () => {
+					return;
+			    },
+			    () => {
+			        
+			    }
+			);
 			return;
 		}
 		if (subscriptionInfo.payResumeCnt <= 0) {
-			alert('이력서 첨삭 횟수를 모두 사용했습니다.');
+			showConfirm2('이력서 첨삭 횟수를 모두 사용했습니다.', 
+			    () => {
+					return;
+			    },
+			    () => {
+			        
+			    }
+			);
 			return;
 		}
 
@@ -69,7 +90,15 @@ document.addEventListener('DOMContentLoaded', () => {
 			.then(data => {
 				subscriptionInfo = data;
 				if (!subscriptionInfo || !subscriptionInfo.payId) {
-					alert('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.');
+					showConfirm2('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.', 
+					    () => {
+							
+					    },
+					    () => {
+					        
+					    }
+					);
+					
 					resumeList.disabled = true;
 					requestAiFeedbackBtn.disabled = true;
 				}
@@ -196,8 +225,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				feedbackArea.innerHTML = htmlFormatted;
 				subscriptionInfo.payResumeCnt--;
-				alert(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payResumeCnt}회)`);
-
+				showConfirm2(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payResumeCnt}회)`, 
+				    () => {
+						
+				    },
+				    () => {
+				        
+				    }
+				);
 				axios.post('/admin/las/aiResumeVisitLog.do')
 				// 화면 표시
 				//document.getElementById('feedbackArea').innerHTML = cleanedText.replace(/\n/g, '<br>');
@@ -217,7 +252,14 @@ function requestProofread() {
 	if (selectedResumeId) {
 		window.location.href = `/cdp/rsm/rsm/resumeWriter.do?resumeId=${selectedResumeId}`;
 	} else {
-		alert('먼저 이력서를 선택해주세요.');
+		showConfirm2('먼저 이력서를 선택해주세요.', 
+		    () => {
+				
+		    },
+		    () => {
+		        
+		    }
+		);
 	}
 }
 
@@ -231,7 +273,14 @@ downloadPdfBtn?.addEventListener("click", downloadPdfFromAI);
 
 function previewPdfFromAI() {
 	if (!aiFeedbackData || !aiFeedbackData.sections_feedback) {
-		alert("AI 피드백 결과가 없습니다. 먼저 피드백을 요청하세요.");
+		showConfirm2("AI 피드백 결과가 없습니다. 먼저 피드백을 요청하세요.", 
+		    () => {
+				
+		    },
+		    () => {
+		        
+		    }
+		);
 		return;
 	}
 
@@ -269,6 +318,7 @@ function previewPdfFromAI() {
 function downloadPdfFromAI() {
 	if (!aiFeedbackData || !aiFeedbackData.sections_feedback) {
 		alert("AI 피드백 결과가 없습니다. 먼저 피드백을 요청하세요.");
+		
 		return;
 	}
 
