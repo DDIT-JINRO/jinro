@@ -107,7 +107,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 초기화 함수들 실행
     initializeSearchListeners();
-    initializeDeptLinkListeners();
 	processCompetitionRates();
 
     // 페이지 로드 완료 시 검색창에 포커스 (선택사항)
