@@ -1,5 +1,16 @@
 @charset "UTF-8";
 
+.userOnlineChartCanvasSpace {
+	height: 550px;
+	margin-top: auto;
+}
+
+
+.pageVisitChartCanvasSpace {
+	height: 550px;
+	margin-top: auto;
+}
+
 .member-1 {
 	margin-bottom: 20px;
 }
@@ -37,6 +48,10 @@
 	height: 30px;
 }
 
+.userList tr td:hover {
+	cursor: pointer;
+}
+
 .search-filter-bar {
 	display: flex;
 	gap: 10px;
@@ -56,6 +71,14 @@
 	font-size: 14px;
 	margin: 0;
 	font-weight: 600;
+}
+
+.body-boardCnt {
+	width: 80px;
+}
+
+.body-boardId {
+	width: 90px;
 }
 
 .user-detail-listSelect:hover {
@@ -167,7 +190,7 @@
 .info-second-space2 {
 	min-height: 52px;
 	margin-left: 20px;
-	gap: 60px;
+	gap: 80px;
 }
 
 .loginDate {
@@ -238,6 +261,10 @@
 	align-items: center;
 	width: 50px;
 	height: 19px;
+}
+
+.userListPtagList {
+	margin-top: 50px;
 }
 
 .profile-status {
@@ -409,7 +436,7 @@
 }
 
 .pageLogCount {
-	margin: 10px 0;
+	margin-top: 20px;
 	
 }
 
@@ -425,7 +452,11 @@
 }
 
 .insertMember {
-	width: 800px;
+	width: 792.5px;
+}
+
+.pageVisitList {
+	margin-top: 10px;
 }
 
 .listMemberBody {

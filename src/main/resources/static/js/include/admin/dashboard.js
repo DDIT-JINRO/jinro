@@ -191,7 +191,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			const doughnutLabels = contentData.map(item => item.title);
 			const doughnutDataValues = contentData.map(item => item.cnt);
 			const purplePalette = [
-				'#F56F36', '#EBEFF2', '#0ACF97', '#FA5C7C', '#727CF5'
+				'rgba(153, 102, 255, 0.8)',
+				'rgba(75, 192, 192, 0.8)',
+				'rgba(255, 205, 86, 0.8)',
+				'rgba(54, 162, 235, 0.8)',
+				'rgba(255, 99, 132, 0.8)',
 			];
 
 			doughnutChart = new Chart(ctxDoughnut, {

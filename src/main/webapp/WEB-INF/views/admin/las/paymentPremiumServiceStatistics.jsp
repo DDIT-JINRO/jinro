@@ -26,7 +26,7 @@
 			<div class="template-panel public-countCard back-color-green">
 				<div class="public-card-title color-white">오늘 구독자 수</div>
 				<img class="public-card-icon" alt=""
-					src="/images/admin/admin-image4.png">
+					src="/images/admin/admin-green-plus.png">
 				<div class="public-card-count color-white"
 					id="todaySubscribersCount">0</div>
 				<div class="public-span-space">

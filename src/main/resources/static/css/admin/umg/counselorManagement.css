@@ -20,6 +20,11 @@
 	height: 150px;
 	padding: 10px;
 }
+
+.topcnsListChartSpace {
+	height: 270px;
+	margin-top: auto;
+}
 /*******************************상담사 관리-1 끝 *************************************/
 
 /*******************************상담사 관리-2 시작 *************************************/
@@ -41,6 +46,16 @@
 .cnsMg-2-2 {
 	width: 800px;
 }
+
+.counselingStatsByTimeChartCanvasSpace {
+	height: 620px;
+	margin-top: auto;
+}
+
+.counselingStatsByCategoryChartCanvasSpace {
+	height: 300px;
+	margin-top: auto;
+}
 /*******************************상담사 관리-2 끝 *************************************/
 
 /*******************************상담사 관리-3 시작 *************************************/
@@ -57,14 +72,14 @@
 }
 
 .btn-primary i {
-    margin-right: 5px;
+	margin-right: 5px;
 }
 
 .info-history2 {
-    color: gray;
-    font-size: 13px;
-    font-weight: bold;
-    min-width: 100px;
+	color: gray;
+	font-size: 13px;
+	font-weight: bold;
+	min-width: 100px;
 }
 
 .cns-info-detail {
@@ -103,7 +118,7 @@
 	margin-right: 5px;
 }
 
-.cnsDetailList tr td{
+.cnsDetailList tr td {
 	height: 20px;
 }
 
@@ -115,7 +130,8 @@
 
 /* 정보 그리드 컨테이너 */
 .cns-info-grid {
-	margin-top: 20px; margin-left : 50px;
+	margin-top: 20px;
+	margin-left: 50px;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr); /* 2개의 열로 나눔 */
 	gap: 10px 80px;
@@ -178,7 +194,8 @@
 }
 
 .ptag-list {
-	margin-top: 20px; align-content : center;
+	margin-top: 20px;
+	align-content: center;
 	padding: 0;
 	margin: 0;
 	font-size: 14px;
@@ -221,12 +238,16 @@
 	object-fit: cover;
 }
 
-.cnsDetailListSpace{
+.cnsDetailListSpace {
 	height: 520px;
 }
 
-.filter-group{
+.filter-group {
 	display: flex;
 	flex-direction: row;
 	gap: 5px;
+}
+
+.recentLoginDateSpace {
+	margin-right: 44px;
 }
