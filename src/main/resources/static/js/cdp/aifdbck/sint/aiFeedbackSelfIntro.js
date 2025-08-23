@@ -27,15 +27,37 @@ document.addEventListener('DOMContentLoaded', () => {
 		requestAiFeedbackBtn.addEventListener('click', () => {
 			// --- 사전 조건 검사 ---
 			if (!subscriptionInfo || !subscriptionInfo.payId) {
-				alert('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.');
+				showConfirm2('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.', 
+				    () => {
+						
+				    },
+				    () => {
+				        
+				    }
+				);
 				return;
 			}
 			if (!originalData) {
-				alert('먼저 피드백을 받을 자기소개서를 선택해주세요.');
+				showConfirm2('먼저 피드백을 받을 자기소개서를 선택해주세요.', 
+				    () => {
+						
+				    },
+				    () => {
+				        
+				    }
+				);
 				return;
 			}
 			if (subscriptionInfo.payCoverCnt <= 0) {
-				alert('자기소개서 첨삭 횟수를 모두 사용했습니다.');
+				showConfirm2('자기소개서 첨삭 횟수를 모두 사용했습니다.', 
+				    () => {
+						
+				    },
+				    () => {
+				        
+				    }
+				);
+
 				return;
 			}
 			document.getElementById('cover-count-display').textContent = subscriptionInfo.payCoverCnt;
@@ -75,9 +97,16 @@ document.addEventListener('DOMContentLoaded', () => {
 				subscriptionInfo = data;
 				// 구독 정보가 없거나 유효하지 않으면 경고창을 띄우고 기능 비활성화
 				if (!subscriptionInfo || !subscriptionInfo.payId) {
-					alert('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.');
-					selfIntroList.disabled = true;
-					requestAiFeedbackBtn.disabled = true;
+					showConfirm2('유효한 구독 정보가 없습니다. AI 피드백 기능을 사용하시려면 이용권을 구매해주세요.', 
+					    () => {
+							selfIntroList.disabled = true;
+							requestAiFeedbackBtn.disabled = true;
+							
+					    },
+					    () => {
+					        
+					    }
+					);
 				}
 			})
 			.catch(error => {
@@ -205,7 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				// ⭐️ 성공 시 로컬 자소서 횟수 1 차감 후 알림
 				subscriptionInfo.payCoverCnt--;
-				alert(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payCoverCnt}회)`);
+				showConfirm2(`AI 피드백이 완료되었습니다. (남은 횟수: ${subscriptionInfo.payCoverCnt}회)`, 
+				    () => {
+						
+				    },
+				    () => {
+				        
+				    }
+				);
 
 			})
 			.catch(error => {
@@ -266,7 +302,14 @@ function requestProofread() {
 	if (selectedSiId) {
 		window.location.href = `/cdp/sint/sintwrt/selfIntroWriting.do?siId=${selectedSiId}`;
 	} else {
-		alert('먼저 자기소개서를 선택해주세요.');
+		showConfirm2('먼저 자기소개서를 선택해주세요.', 
+		    () => {
+				
+		    },
+		    () => {
+		        
+		    }
+		);
 	}
 }
 
