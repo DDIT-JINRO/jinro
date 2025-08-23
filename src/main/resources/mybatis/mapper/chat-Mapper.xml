@@ -11,12 +11,14 @@
 		     , CR_TITLE
 		     , CR_MAX_CNT
 		     , CREATED_AT
+		     , CM.JOINED_AT AS MEM_JOINED_AT
 		  FROM CHAT_ROOM CR
 		 INNER JOIN CHAT_MEMBER CM
 		          ON CR.CR_ID = CM.CR_ID
 		 WHERE CM.MEM_ID = #{memId}
 		   AND CR.CC_ID = 'G04001'
 		   AND CM.IS_EXITED = 'N'
+		 ORDER BY CM.JOINED_AT DESC --가장 최근에 입장한 채팅방 위로 올리기
 	</select>
 
 	<!-- 채팅방 개설. ccId와 targetId를 전달 받아야함. 종류가 상담인 경우에는 crTitle과 crMaxCnt는 null, 2 로 각각 처리-->

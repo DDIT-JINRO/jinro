@@ -74,7 +74,7 @@ public class StudyGroupServiceImpl implements StudyGroupService {
 	}
 
 	@Override
-	public int insertStdBoard(StdBoardVO stdBoardVO) {
+	public Map<String, Integer> insertStdBoard(StdBoardVO stdBoardVO) {
 		int result = 0;
 		int boardId = 0;
 		result += this.studyGroupMapper.insertStdBoard(stdBoardVO);
@@ -102,7 +102,10 @@ public class StudyGroupServiceImpl implements StudyGroupService {
 		}
 		this.chatService.participateChatRoom(chatMemberVO);
 
-		return boardId;
+		Map<String, Integer> resultMap = new HashMap<>();
+		resultMap.put("boardId", boardId);
+		resultMap.put("crId", chatRoomVO.getCrId());
+		return resultMap;
 	}
 
 	@Override
@@ -112,7 +115,7 @@ public class StudyGroupServiceImpl implements StudyGroupService {
 
 	@Override
 	public Map<String, String> getInterestsMap() {
-		Map<String, String> interestMap = Map.ofEntries(Map.entry("study.general", "공부"), 
+		Map<String, String> interestMap = Map.ofEntries(Map.entry("study.general", "공부"),
 				Map.entry("study.exam", "수능준비"), Map.entry("study.assignment", "과제"),
 				Map.entry("career.path", "진로"), Map.entry("career.admission", "진학"),
 				Map.entry("job.prepare", "취업준비"), Map.entry("job.concern", "취업고민"),

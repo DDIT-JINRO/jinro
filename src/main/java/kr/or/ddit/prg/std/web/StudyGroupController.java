@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.or.ddit.chat.service.ChatMemberVO;
 import kr.or.ddit.chat.service.ChatMessageVO;
@@ -187,9 +188,12 @@ public class StudyGroupController {
 	}
 
 	@PostMapping("/createStdGroup.do")
-	public String createStdGroupPost(StdBoardVO stdBoardVO) {
-		int resultBoardId = this.studyGroupService.insertStdBoard(stdBoardVO);
+	public String createStdGroupPost(StdBoardVO stdBoardVO, RedirectAttributes rttr) {
+		Map<String, Integer> resultMap = this.studyGroupService.insertStdBoard(stdBoardVO);
+		int resultBoardId = resultMap.get("boardId");
+		int resultCrId = resultMap.get("crId");
 		if (resultBoardId > 0) {
+			rttr.addFlashAttribute("newChatRoom", resultCrId);
 			return "redirect:/prg/std/stdGroupDetail.do?stdGroupId=" + resultBoardId;
 		}
 

@@ -83,7 +83,9 @@
 			style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 reportListBtnGroup">
-				<button class="public-toggle-button active" id="ReportListSortByMemId"
+				<input class="public-toggle-button active" type="hidden" id="ReportListSortByStatus"
+						data-sort-by="status" />
+				<button class="public-toggle-button" id="ReportListSortByMemId"
 					data-sort-by="memId">신고자명</button>
 				<button class="public-toggle-button" id="ReportListSortByTargetName"
 					data-sort-by="plTitle">신고대상명</button>
