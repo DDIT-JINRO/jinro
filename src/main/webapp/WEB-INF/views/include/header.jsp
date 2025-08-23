@@ -269,17 +269,14 @@
 				<div class="mega-menu__category">
 					<div class="mega-menu__category-title">상담</div>
 					<div class="mega-menu__links">
-						<a href="cdp/rsm/rsm/resumeList.do">
-							<span>오프라인 상담</span>
+						<a href="/cnslt/resve/crsv/reservation.do">
+							<span>상담 예약</span>
 						</a>
-						<a href="/cdp/sint/qestnlst/questionList.do">
-							<span>화상 상담</span>
-						</a>
-						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">
-							<span>채팅 상담</span>
-						</a>
-						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">
+						<a href="/cnslt/rvw/cnsReview.do">
 							<span>상담 후기</span>
+						</a>
+						<a href="/cnslt/aicns/aicns.do">
+							<span>AI 상담</span>
 						</a>
 					</div>
 				</div>

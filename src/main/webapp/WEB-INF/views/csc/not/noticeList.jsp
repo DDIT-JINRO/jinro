@@ -19,7 +19,7 @@
 			<a href="/csc/faq/faqList.do">FAQ</a>
 		</div>
 		<div class="channel-sub-section-item">
-			<a href="/csc/inq/inqryList.do">1:1문의</a>
+			<a href="/csc/inq/inqryList.do" id="goToInq">1:1문의</a>
 		</div>
 	</div>
 </section>
