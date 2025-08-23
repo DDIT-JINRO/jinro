@@ -339,8 +339,11 @@
     <!-- 모달 -->
     <div id="customConfirm" class="custom-confirm" style="display: none;">
         <div class="custom-confirm__content">
-            <p id="confirmMessage1" style="margin-bottom: 0px;"></p>
-            <p id="confirmMessage2"style="margin-top: 0px;">></p>
+        	<h4>알 림</h4>
+        	<div class ="pData">
+	            <p id="confirmMessage1" style="margin-bottom: 0px;"></p>
+	            <p id="confirmMessage2"style="margin-top: 0px;">></p>
+            </div>
             <div class="custom-confirm__buttons">
                 <button id="confirmCancel">취소</button>
                 <button id="confirmOk">확인</button>
@@ -348,14 +351,18 @@
         </div>
     </div>
 
-    <div id="customConfirm2" class="custom-confirm2" style="display: none;">
-        <div class="custom-confirm__content2">
-            <p id="confirmMessage3"></p>
-            <div class="custom-confirm__buttons2">
-                <button id="confirmOk2">확인</button>
-            </div>
-        </div>
-    </div>
+	<div id="customConfirm2" class="custom-confirm2" style="display: none;">
+
+		<div class="custom-confirm__content2">
+			<h4>알 림</h4>
+			<div class ="pData">
+				<p id="confirmMessage3"></p>
+			</div>
+			<div class="custom-confirm__buttons2">
+				<button id="confirmOk2">확인</button>
+			</div>
+		</div>
+	</div>
 
 	<%@ include file="/WEB-INF/views/include/chatModal.jsp"%>
 	<%@ include file="/WEB-INF/views/include/alarmModal.jsp"%>

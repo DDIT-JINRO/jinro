@@ -16,6 +16,12 @@
     animation: slideDown 0.3s ease;
 }
 
+.custom-confirm h4 {
+	margin: 2px 0 16px;
+	font-size: 18px;
+	font-weight: 800;
+	text-align: center;
+}
 
 /* 모달 박스 */
 .custom-confirm__content {
@@ -23,14 +29,15 @@
 	padding: 20px 30px;
 	border-radius: 10px;
 	text-align: center;
-	width: 300px;
+	width: 400px;
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
 .custom-confirm__buttons {
-	margin-top: 20px;
-	display: flex;
-	justify-content: space-around;
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    justify-content: flex-end;
 }
 
 .custom-confirm__buttons button {
@@ -41,13 +48,40 @@
 }
 
 #confirmOk {
-	background-color: #007bff;
+	appearance: none;
+	border: none;
+	border-radius: 12px;
+	padding: 11px 18px;
+	font-weight: 800;
+	cursor: pointer;
+	background: #6a82fb;
 	color: #fff;
+	transition: all 0.15s ease;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 #confirmCancel {
-	background-color: #6c757d;
-	color: #fff;
+	background: #f3f5f7;
+	color: #202427
+}
+#confirmOk, #confirmCancel :hover{
+	opacity: 0.92;
+	transform: translateY(-1px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+.pData{
+	margin: 10px 0;
+    background: #f8fafb;
+    border: 1px dashed #e4e9ee;
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: #47515b;
+}
+.custom-confirm {
+   display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    justify-content: flex-end;
 }
 
 .custom-confirm {
@@ -56,20 +90,7 @@
     top: 20px;               /* 맨 위에서 살짝 띄움 */
     left: 50%;               /* 가로 중앙 */
     transform: translateX(-50%);
-    width: 300px;            /* 창 너비 */
-    z-index: 9999;
-    padding: 12px 20px;
-    animation: slideDown 0.3s ease;
-}
-
-
-.custom-confirm {
-    display: none;
-    position: fixed;
-    top: 20px;               /* 맨 위에서 살짝 띄움 */
-    left: 50%;               /* 가로 중앙 */
-    transform: translateX(-50%);
-    width: 300px;            /* 창 너비 */
+    width: 400px;            /* 창 너비 */
     z-index: 9999;
     padding: 12px 20px;
     animation: slideDown 0.3s ease;
@@ -88,19 +109,27 @@
     padding: 12px 20px;
     animation: slideDown 0.3s ease;
 }
+.custom-confirm h4{
+	margin: 2px 0 16px;
+	font-size: 18px;
+	font-weight: 800;
+	text-align: center;
+}
+
 .custom-confirm__content2 {
 	background: #fff;
 	padding: 20px 30px;
 	border-radius: 10px;
 	text-align: center;
-	width: 300px;
+	width: 400px;
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
 .custom-confirm__buttons2 {
-	margin-top: 20px;
-	display: flex;
-	justify-content: space-around;
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    justify-content: flex-end;
 }
 
 .custom-confirm__buttons2 button {
@@ -110,22 +139,27 @@
 	cursor: pointer;
 }
 
+
+
 #confirmOk2 {
-	background-color: #007bff;
+	appearance: none;
+	border: none;
+	border-radius: 12px;
+	padding: 11px 18px;
+	font-weight: 800;
+	cursor: pointer;
+	background: #6a82fb;
 	color: #fff;
+	transition: all 0.15s ease;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
-.custom-confirm2 {
-    display: none;
-    position: fixed;
-    top: 20px;               /* 맨 위에서 살짝 띄움 */
-    left: 50%;               /* 가로 중앙 */
-    transform: translateX(-50%);
-    width: 300px;            /* 창 너비 */
-    z-index: 9999;
-    padding: 12px 20px;
-    animation: slideDown 0.3s ease;
+#confirmOk :hover{
+	opacity: 0.92;
+	transform: translateY(-1px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
+
 
 
 
