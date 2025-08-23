@@ -851,6 +851,7 @@ function memberManagement() {
 			            <tr ${onClickHandler} ${cursorStyle}>
 			                <td>${item.boardId}</td>
 			                <td>${convertCcIdToCategory(item.ccId)}</td>
+			                <td>${truncateTitle(item.boardTitle)}</td>
 			                <td>${item.boardCnt}</td>
 			                <td>${formatDateMMDD(item.boardCreatedAt)}</td>
 			                <td>${renderBoardStatus(item.boardDelYn)}</td>
@@ -859,7 +860,7 @@ function memberManagement() {
 				}).join('');
 				tbodyEl.innerHTML = rows;
 			} else {
-				tbodyEl.innerHTML = `<tr><td colspan='5' style="text-align: center;">작성한 게시글이 없습니다.</td></tr>`;
+				tbodyEl.innerHTML = `<tr><td colspan='6' style="text-align: center;">작성한 게시글이 없습니다.</td></tr>`;
 			}
 
 			// 페이지네이션 렌더링
@@ -907,6 +908,13 @@ function memberManagement() {
 		});
 	}
 
+	function truncateTitle(title) {
+		const maxLength = 14;
+		if (title.length > maxLength) {
+			return title.substring(0, maxLength) + '...';
+		}
+		return title;
+	}
 
 	function userDetailReplyList(userId, page = 1, sortBy = 'replyId', sortOrder = 'asc') {
 
@@ -962,11 +970,11 @@ function memberManagement() {
 
 			// 페이지네이션 렌더링
 			if (replyPaginationEl) {
-				let paginationHtml = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← 이전</a>`;
+				let paginationHtml = `<a href="#" data-page="${startPage - 1}" class="page-link ${startPage <= 1 ? 'disabled' : ''}">← Previous</a>`;
 				for (let p = startPage; p <= endPage; p++) {
 					paginationHtml += `<a href="#" data-page="${p}" class="page-link ${p === currentPage ? 'active' : ''}">${p}</a>`;
 				}
-				paginationHtml += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">다음 →</a>`;
+				paginationHtml += `<a href="#" data-page="${endPage + 1}" class="page-link ${endPage >= totalPages ? 'disabled' : ''}">Next →</a>`;
 				replyPaginationEl.innerHTML = paginationHtml;
 
 				// 기존 이벤트 리스너를 제거하고 새로운 이벤트 리스너를 추가

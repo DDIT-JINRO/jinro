@@ -73,6 +73,14 @@
 	font-weight: 600;
 }
 
+.body-boardCnt {
+	width: 80px;
+}
+
+.body-boardId {
+	width: 90px;
+}
+
 .user-detail-listSelect:hover {
 	cursor: pointer;
 }
