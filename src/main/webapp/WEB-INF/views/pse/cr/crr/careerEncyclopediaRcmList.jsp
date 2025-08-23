@@ -2,19 +2,23 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/pse/cr/crl/selectCareerList.css">
 
-<section class="channel" data-error-message="${errorMessage}" data-server-error="${serverError}">
-	<div class="channel-title">
-		<div class="channel-title-text">진로 탐색</div>
-	</div>
-	<div class="channel-sub-sections">
-		<div class="channel-sub-section-item">
-			<a href="/pse/cat/careerAptitudeTest.do">진로 심리검사</a>
-		</div>
-		<div class="channel-sub-section-itemIn">
-			<a href="/pse/cr/crl/selectCareerList.do">직업백과</a>
-		</div>
-	</div>
-</section>
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/pse/cat/careerAptitudeTest.do">진로탐색</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/pse/cr/crl/selectCareerList.do">직업백과</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 
 <div>
 	<div class="public-wrapper">
