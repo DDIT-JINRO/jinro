@@ -14,13 +14,27 @@ document.addEventListener("DOMContentLoaded", function() {
 		const interviewRating = window.getInterviewRating();
 		
 		if (interviewRating === 0) {
-			alert("기업 평가를 선택해 주세요.");
-			return;
+			showConfirm2("기업 평가를 선택해 주세요.",
+				() => {
+					return;
+
+				},
+				() => {
+
+				}
+			);
 		}
 	    
 	    if (!interviewDetail) {
-	        alert("면접 후기를 입력해 주세요.");
-	        return;
+			showConfirm2("면접 후기를 입력해 주세요.",
+				() => {
+					return;
+
+				},
+				() => {
+
+				}
+			);
 	    }
 
 	    // FormData 생성
@@ -39,7 +53,15 @@ document.addEventListener("DOMContentLoaded", function() {
 	            const result = await response.json();
 	            
 	            if (result.success) {
-	                alert("후기 수정이 완료되었습니다");
+					showConfirm2("후기 수정이 완료되었습니다.",
+						() => {
+							return;
+
+						},
+						() => {
+
+						}
+					);
 	                window.location.href = "/empt/ivfb/interViewFeedback.do";
 	            } else {
 	                alert(result.message || "수정에 실패했습니다.");

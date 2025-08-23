@@ -104,7 +104,7 @@
 					<div class="dropdown-submenu">
 						<a href="/csc/not/noticeList.do">공지사항</a>
 						<a href="/csc/faq/faqList.do">FAQ</a>
-						<a href="/csc/inq/inqryList.do">1:1 문의</a>
+						<a href="/csc/inq/inqryList.do" id="goTologin11">1:1 문의</a>
 					</div>
 				</li>
 			</ul>
@@ -317,7 +317,7 @@
 						<a href="/csc/faq/faqList.do">
 							<span>자주 묻는 질문</span>
 						</a>
-						<a href="/csc/inq/inqryList.do">
+						<a href="/csc/inq/inqryList.do" id="goTologin12">
 							<span>1:1 문의</span>
 						</a>
 					</div>

@@ -44,3 +44,5 @@ function toggleCard(header) {
 		currentToggle.classList.remove('is-active');
 	}
 }
+
+//id="goToInq"

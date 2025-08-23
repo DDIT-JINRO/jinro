@@ -23,7 +23,7 @@
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
 			<a class="tab active" href="/cnslt/resve/crsv/reservation.do">상담 예약</a>
-			<a class="tab" href="/cnslt/resve/cnsh/counselingReserveHistory.do">상담 내역</a>
+			<a class="tab" href="/cnslt/resve/cnsh/counselingReserveHistory.do" id="goToCounselingReserveHistory">상담 내역</a>
 		</div>
 
 		<div class="public-wrapper-main">

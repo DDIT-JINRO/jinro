@@ -84,7 +84,9 @@ function header() {
 	    "goTologin7",
 	    "goTologin8",
 	    "goTologin9",
-	    "goTologin10"
+	    "goTologin10",
+	    "goTologin11",
+	    "goTologin12"
 	];
 
 	careerButtons.forEach(id => {

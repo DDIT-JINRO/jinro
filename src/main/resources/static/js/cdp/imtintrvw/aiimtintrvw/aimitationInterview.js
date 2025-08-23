@@ -316,7 +316,14 @@ function startMockInterview() {
     
     // 미디어 장치 확인
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        alert('이 브라우저는 카메라/마이크 기능을 지원하지 않습니다. 최신 브라우저를 사용해주세요.');
+		showConfirm2('이 브라우저는 카메라/마이크 기능을 지원하지 않습니다. 최신 브라우저를 사용해주세요.', 
+		    () => {
+				
+		    },
+		    () => {
+		        
+		    }
+		);
         resetButton();
         return;
     }
@@ -354,8 +361,14 @@ function startMockInterview() {
             } else {
                 errorMessage += '미디어 장치에 접근할 수 없습니다.';
             }
-            
-            alert(errorMessage);
+			showConfirm2(errorMessage, 
+			    () => {
+					
+			    },
+			    () => {
+			        
+			    }
+			);
             resetButton();
         });
 }
@@ -390,9 +403,15 @@ function openMockInterviewPopup(interviewSettings) {
         );
         
         if (!popup) {
-            alert('팝업이 차단되었습니다. 팝업 차단을 해제한 후 다시 시도해주세요.');
-            resetButton();
-            return;
+			showConfirm2('팝업이 차단되었습니다. 팝업 차단을 해제한 후 다시 시도해주세요.', 
+			    () => {
+					resetButton();
+					return;
+			    },
+			    () => {
+			        
+			    }
+			);
         }
         
         popup.focus();

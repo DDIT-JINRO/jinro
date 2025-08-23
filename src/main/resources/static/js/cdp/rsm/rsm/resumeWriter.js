@@ -586,7 +586,15 @@ function submitResume(resumeTitle, resumeContent, resumeId, photoFile, fileGroup
 			if (data.status === 'success') {
 				location.href = `/cdp/rsm/rsm/resumeList.do`;//resumeWriter?resumeId=${data.resumeId}`;
 			} else {
-				location.href = '/login';
+				showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+					() => {
+						sessionStorage.setItem("redirectUrl", location.href);
+						location.href = "/login";
+					},
+					() => {
+
+					}
+				);
 			}
 		})
 		.catch(err => console.error('에러 발생:', err));

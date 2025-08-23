@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import kr.or.ddit.csc.not.service.NoticeService;
 import kr.or.ddit.csc.not.service.NoticeVO;
@@ -34,13 +35,15 @@ public class NoticeController {
 	public String noticeList(Model model,
 			@RequestParam(value="currentPage",required=false,defaultValue="1") int currentPage,
 			@RequestParam(value="size",required=false,defaultValue="5") int size,
-			@RequestParam(value="keyword",required=false) String keyword) {
+			@RequestParam(value="keyword",required=false) String keyword,
+			@AuthenticationPrincipal String memId) {
 
 		
 	    ArticlePage<NoticeVO> articlePage = noticeService.getUserNoticePage(currentPage, size, keyword);
 	    model.addAttribute("articlePage", articlePage);
 	    model.addAttribute("getAllNotice", articlePage.getTotal());
 	    model.addAttribute("getList", articlePage.getContent());
+	    model.addAttribute("memId", memId);
 		
 		return "csc/not/noticeList";
 	}

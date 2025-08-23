@@ -8,6 +8,26 @@ let selectedCounselorId; // 이 변수에는 DOM 로드 후 값이 할당될 것
 document.addEventListener('DOMContentLoaded', function() {
 	// 이 안의 코드는 HTML 문서가 완전히 로드된 후에 실행됩니다.
 
+	const btn = document.getElementById('goToCounselingReserveHistory');
+	if (btn) {
+	    btn.addEventListener("click", (e) => {
+	        if (!memId || memId === 'anonymousUser') {
+	            e.preventDefault(); // 기본 이동 막기
+	            showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+	                () => {
+	                    // 확인 클릭 시 컨트롤러 이동
+	                    location.href = btn.getAttribute('href');
+	                },
+	                () => {
+	                    // 취소 클릭 시 아무 동작 없음
+	                }
+	            );
+	        }
+	    });
+	}
+	
+	
+	
 	// 1. HTML 요소에 접근해서 변수에 할당
 	let counselorSelect = document.getElementById('counselorSelect');
 	selectedCounselorId = counselorSelect.value;
@@ -234,6 +254,3 @@ function renderTimeSlots(availableTimes) {
 		timeSlotButtonsContainer.innerHTML = '<div>예약 가능한 시간이 없습니다.</div>';
 	}
 }
-
-
-
