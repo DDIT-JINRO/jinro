@@ -1104,9 +1104,9 @@
 	    GROUP BY r.MEM_ID
 	  ),
 	  MEMBER_CURRENT_STEP AS (
-	    SELECT 
-	      mspm.MEM_ID,
-	      rs.RS_STEP
+	    SELECT DISTINCT
+	        mspm.MEM_ID,
+	        rs.RS_STEP
 	    FROM MAX_STEP_PER_MEMBER mspm
 	    JOIN ROADMAP r ON r.MEM_ID = mspm.MEM_ID AND r.RS_ID = mspm.max_rs_id
 	    JOIN ROADMAP_STEP rs ON rs.RS_ID = r.RS_ID
