@@ -17,4 +17,6 @@ public class ChatRoomVO {
 	private String crDelYn;
 
 	private List<ChatMemberVO> chatMemberVOList;
+
+	private String memJoinedAt;	// 채팅방 출력시 최초 정렬기준. 입장순 정렬을 위함
 }

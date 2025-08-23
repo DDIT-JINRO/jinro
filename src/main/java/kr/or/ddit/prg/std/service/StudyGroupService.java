@@ -23,9 +23,9 @@ public interface StudyGroupService {
 		    "maxPeople": 20
 		  }'
 	 * @param stdBoardVO
-	 * @return 생성 완료된 게시글 번호를 반환합니다
+	 * @return 생성 완료된 게시글 번호를 반환합니다 -> boardId, crId를 Map으로 반환합니다.
 	 */
-	int insertStdBoard(StdBoardVO stdBoardVO);
+	Map<String, Integer> insertStdBoard(StdBoardVO stdBoardVO);
 
 	/**
 	 * 목록 조회 -> 조회된 갯수만 가져오기

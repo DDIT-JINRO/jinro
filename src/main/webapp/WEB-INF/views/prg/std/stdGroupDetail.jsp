@@ -25,7 +25,7 @@
 		<div class="tab-container" id="tabs">
 			<h3 class="page-title-bar__title">스터디 그룹</h3>
 		</div>
-		
+
 		<div class="public-wrapper-main">
 			<div class="boardEtcBtn" id="boardEtcBtn">...</div>
 			<div class="boardEtcContainer" data-board-id="${stdBoardVO.boardId }">
@@ -48,7 +48,7 @@
 			</div>
 			<!-- 1) 제목 + 프로필 + 메타 -->
 			<div class="post-header">
-				<h1 class="post-title">${stdBoardVO.boardTitle}</h1>
+				<h1 class="post-title" id="post-title" <c:if test="${newChatRoom != null}">data-new-room="${newChatRoom }"</c:if> >${stdBoardVO.boardTitle}</h1>
 				<div class="author-meta">
 					<div class="profile-wrapper user-profile">
 						<img class="profile-img" src="<c:out value="${not empty stdBoardVO.fileProfileStr ? stdBoardVO.fileProfileStr : '/images/defaultProfileImg.png' }"/>" alt="프로필" />

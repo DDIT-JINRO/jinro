@@ -3,6 +3,17 @@
  */
 document.addEventListener('DOMContentLoaded', function(){
 
+
+	setTimeout(()=>{
+		const postTitle = document.getElementById('post-title');
+		if(postTitle && postTitle.dataset.newRoom){
+			const newCrId = postTitle.dataset.newRoom;
+			const chatModalBtn = document.getElementById('chatRooms');
+			localStorage.setItem('newCrId', newCrId);
+			chatModalBtn.click();
+		}
+	}, 100);// 모달 로딩에 소켓연결 이것저것 걸려있어서 약간의 시간차를 줘서 최대한 오류안나도록.
+
 	// 게시글 수정버튼 클릭 시 게시글 수정 페이지로 이동 이벤트
 	const boardModifyBtn = document.getElementById('boardModifyBtn');
 	if(boardModifyBtn){

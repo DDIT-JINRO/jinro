@@ -333,36 +333,68 @@ async function printChatRoomList() {
 		list.innerHTML = emptyRoomMsg;
 		return;
 	}
-    chatRoomList.forEach(chatRoom =>{
-		const wrapper = document.createElement("div");
-		wrapper.classList.add("chat-room-entry");
-		wrapper.dataset.crId = chatRoom.crId;
 
-		// 왼쪽: 채팅방 제목
-		const title = document.createElement("span");
-		title.textContent = chatRoom.crTitle;
-		title.classList.add("chat-room-title");
 
-		// 오른쪽: 읽지 않은 메시지 수 뱃지 (초기엔 숨김)
-		const badge = document.createElement("span");
-		badge.classList.add("chat-unread-badge");
+	// 안정적 정렬을 위해 원래 인덱스 보관 (서버 정렬 유지용 타이브레이커)
+	const indexed = chatRoomList.map((room, idx) => {
+	  const unread = unreadMap[room.crId] || 0;
+	  // ⚠️ 프로젝트 필드명에 맞게 수정: enteredAt / joinAt / lastEnterAt 등
+	  const memJoinedAt = room.memJoinedAt ? new Date(room.memJoinedAt).getTime() : 0;
+	  return { room, unread, memJoinedAt, idx };
+	});
 
-		const unreadCnt = unreadMap[chatRoom.crId];
+	// 정렬 규칙: unread 내림차순 -> enteredAt 내림차순 -> 원래 순서(idx) asc
+	indexed.sort((a, b) => {
+	  if (a.unread !== b.unread) return b.unread - a.unread;
+	  if (a.enteredAt !== b.enteredAt) return b.enteredAt - a.enteredAt;
+	  return a.idx - b.idx;
+	});
 
-		if(unreadCnt && unreadCnt > 0){
-			badge.style.display = 'inline-block';
-			badge.textContent = unreadCnt;
-		}else{
-			badge.style.display = 'none'; // 초기엔 숨김
-			badge.textContent = "0";
+	console.log(indexed);
+	// DOM 빌드: 리플로우 최소화를 위해 fragment 사용
+	const frag = document.createDocumentFragment();
+
+	indexed.forEach(({ room, unread }) => {
+	  const wrapper = document.createElement("div");
+	  wrapper.classList.add("chat-room-entry");
+	  wrapper.dataset.crId = room.crId;
+
+	  // 왼쪽: 채팅방 제목
+	  const title = document.createElement("span");
+	  title.textContent = room.crTitle;
+	  title.classList.add("chat-room-title");
+
+	  // 오른쪽: 읽지 않은 메시지 수 뱃지
+	  const badge = document.createElement("span");
+	  badge.classList.add("chat-unread-badge");
+	  if (unread > 0) {
+	    badge.style.display = "inline-block";
+	    badge.textContent = String(unread);
+	    // 접근성/툴팁용
+	    badge.title = `읽지 않은 메시지 ${unread}건`;
+	  } else {
+	    badge.style.display = "none";
+	    badge.textContent = "0";
+	  }
+
+	  wrapper.appendChild(title);
+	  wrapper.appendChild(badge);
+	  wrapper.onclick = () => printFetchMessages(wrapper);
+
+	  frag.appendChild(wrapper);
+	});
+
+	list.appendChild(frag);
+	// 채팅방 새로 개설한 사람 오픈해주기 위한 이벤트
+	const newCrId = localStorage.getItem('newCrId');
+	if(newCrId){
+		const targetChatRoom = document.querySelector(`.chat-room-entry[data-cr-id="${newCrId}"]`);
+		console.log("targetChatRoom", targetChatRoom);
+		if(targetChatRoom){
+			targetChatRoom.click();
 		}
-
-		wrapper.appendChild(title);
-		wrapper.appendChild(badge);
-
-		wrapper.onclick = () => printFetchMessages(wrapper);
-		list.appendChild(wrapper);
-    })
+		localStorage.removeItem('newCrId');
+	}
 }
 
 // 참여중인 채팅방 별 안읽은 갯수 받아오기 구독 -> 모달 열때 호출
@@ -390,7 +422,7 @@ async function printFetchMessages(el) {
     const crId = el.dataset.crId;
 	document.getElementById('exitBtn').dataset.crId = crId;
 	const chatTitle = el.querySelector('.chat-room-title').textContent;
-	document.getElementById('chat-title').textContent=chatTitle;
+	document.getElementById('chat-room-title').textContent=chatTitle;
 	// 채팅방 제목 띄워주기
 	document.querySelector('.chat-room-meta').style.display='flex';
 
@@ -466,6 +498,7 @@ function connectSocket() {
 
 		// 플로팅 뱃지에 전체 안읽음 갯수를 세팅하기 위한 구독
 		stompClient.subscribe(`/sub/chat/unread/summary/${memId}`, (message) => {
+			console.log(message);
 			const data = JSON.parse(message.body);
 		    const { unreadCnt } = JSON.parse(message.body);
 		    updateFloatingBadge(unreadCnt);
@@ -683,14 +716,18 @@ function appendMessage(msgVO) {
 
 // 안읽음 UI 반영 (채팅방 목록)
 function showUnreadBadge(roomId) {
+	const listEl = document.getElementById('chatRoomList');
     const roomEl = document.querySelector(`.chat-room-entry[data-cr-id="${roomId}"]`);
     if (!roomEl) return;
 
+	const unread = parseInt(unreadCounts[roomId] || 0, 10);
     const badge = roomEl.querySelector('.chat-unread-badge');
     if (badge) {
         badge.textContent = unreadCounts[roomId];
         badge.style.display = 'inline-block';
     }
+
+	listEl.prepend(roomEl);
 }
 
 // 안읽음 UI 제거 (채팅방 목록)
@@ -712,6 +749,8 @@ async function removeUnreadBadge(roomId) {
 	}).catch(err => {
 	    console.error("읽음 처리 오류:", err);
 	});
+
+	console.log(unreadCounts);
 }
 
 // 플로팅 버튼 안읽음 업데이트
