@@ -34,8 +34,8 @@ function contestManagementInit () {
 				const listEl = document.getElementById('cctList');
 				if (!listEl) return;
 				
-				if (articlePage.content.length < 1 && keyword.trim() !== '') {
-					listEl.innerHTML = `<tr><td colspan='2' style="text-align: center;">검색 결과를 찾을 수 없습니다.</td></tr>`;
+				if (articlePage.content.length < 1 && keyword.trim() != '') {
+					listEl.innerHTML = `<tr><td colspan='4' style="text-align: center;">검색 결과를 찾을 수 없습니다.</td></tr>`;
 				} else {
 					const rows = articlePage.content.map(item =>{
 						

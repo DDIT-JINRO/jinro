@@ -174,11 +174,11 @@ public class ContentsManagementController {
 
 		List<ContestVO> contestList = contestService.selectCttList(contestVO);
 		
-		if(contestList == null || contestList.isEmpty()) {
-			response.put("success", false);
-			response.put("message", "리스트 불러오는 중 에러 발생");
-			return ResponseEntity.ok(response);
-		}
+//		if(contestList == null || contestList.isEmpty()) {
+//			response.put("success", false);
+//			response.put("message", "리스트 불러오는 중 에러 발생");
+//			return ResponseEntity.ok(response);
+//		}
 		
 		int total = contestService.selectCttCount(contestVO);
 		List<ComCodeVO> contestTypeList = contestService.getContestTypeList();
