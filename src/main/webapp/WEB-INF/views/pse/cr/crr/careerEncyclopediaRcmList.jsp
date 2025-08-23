@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/pse/cr/crl/selectCareerList.css">
 
-<div class="breadcrumb-container-space">
+<div class="breadcrumb-container-space"  data-error-message="${errorMessage}" data-server-error="${serverError}">
 	<nav class="breadcrumb-container" aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item">

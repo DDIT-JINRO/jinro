@@ -3,7 +3,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-	const channelSection = document.querySelector(".channel");
+	const channelSection = document.querySelector(".breadcrumb-container-space");
 	if (channelSection) {
 	    const errorMessage = channelSection.dataset.errorMessage;
 	    if (errorMessage) {
