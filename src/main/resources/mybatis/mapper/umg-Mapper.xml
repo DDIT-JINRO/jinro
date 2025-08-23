@@ -340,96 +340,44 @@
 	</select>
 
 	<select id="getAllReportList"
-		parameterType="kr.or.ddit.com.report.service.ReportVO"
-		resultType="int">
-		SELECT COUNT(*)
-		FROM REPORT R
-		LEFT JOIN BOARD B
-		ON R.TARGET_TYPE =
-		'G10001'
-		AND R.TARGET_ID = B.BOARD_ID
-		LEFT JOIN REPLY RP
-		ON R.TARGET_TYPE
-		= 'G10002'
-		AND R.TARGET_ID = RP.REPLY_ID
-		LEFT JOIN MEMBER M1
-		ON R.MEM_ID
-		= M1.MEM_ID
-		LEFT JOIN MEMBER M2
-		ON (CASE
-		WHEN R.TARGET_TYPE = 'G10001'
-		THEN B.MEM_ID
-		WHEN R.TARGET_TYPE = 'G10002' THEN RP.MEM_ID
-		END) =
-		M2.MEM_ID
-		<where>
-			R.REPORT_ID IS NOT NULL
-			<if test="keyword != null and keyword != '' and status == 1">
-				AND (M1.MEM_NAME LIKE '%' || #{keyword} || '%'
-				OR
-				M2.MEM_NAME LIKE '%' || #{keyword} || '%'
-				OR R.REPORT_REASON LIKE '%'
-				|| #{keyword} || '%')
-			</if>
-			<if test="keyword != null and keyword != '' and status == 2">
-				AND M1.MEM_NAME LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="keyword != null and keyword != '' and status == 3">
-				AND M2.MEM_NAME LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="keyword != null and keyword != '' and status == 4">
-				AND R.REPORT_REASON LIKE '%' || #{keyword} || '%'
-			</if>
-		</where>
-	</select>
+    parameterType="kr.or.ddit.com.report.service.ReportVO"
+    resultType="int">
+    SELECT COUNT(*)
+    FROM REPORT R
+    LEFT JOIN BOARD B
+        ON R.TARGET_TYPE = 'G10001' AND R.TARGET_ID = B.BOARD_ID
+    LEFT JOIN REPLY RP
+        ON R.TARGET_TYPE = 'G10002' AND R.TARGET_ID = RP.REPLY_ID
+    LEFT JOIN MEMBER M1
+        ON R.MEM_ID = M1.MEM_ID
+    LEFT JOIN MEMBER M2
+        ON (CASE WHEN R.TARGET_TYPE = 'G10001' THEN B.MEM_ID
+                 WHEN R.TARGET_TYPE = 'G10002' THEN RP.MEM_ID
+            END) = M2.MEM_ID
+    <where>
+        R.REPORT_ID IS NOT NULL
+        <if test="filter != null and filter != ''">
+            AND R.REPORT_STATUS = #{filter}
+        </if>
+        
+        <if test="keyword != null and keyword != '' and status == 1">
+            AND (M1.MEM_NAME LIKE '%' || #{keyword} || '%'
+            OR M2.MEM_NAME LIKE '%' || #{keyword} || '%'
+            OR R.REPORT_REASON LIKE '%' || #{keyword} || '%')
+        </if>
+        <if test="keyword != null and keyword != '' and status == 2">
+            AND M1.MEM_NAME LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="keyword != null and keyword != '' and status == 3">
+            AND M2.MEM_NAME LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="keyword != null and keyword != '' and status == 4">
+            AND R.REPORT_REASON LIKE '%' || #{keyword} || '%'
+        </if>
+    </where>
+</select>
 
-	<select id="getReportVO" parameterType="String"
-		resultType="kr.or.ddit.com.report.service.ReportVO">
-		SELECT
-		R.REPORT_ID
-		, R.TARGET_TYPE
-		, R.TARGET_ID
-		,
-		R.REPORT_REASON
-		, R.REPORT_STATUS
-		, R.REPORT_CREATED_AT
-		,
-		R.REPORT_COMPLETE_AT
-		, R.REPORT_COMPLETE_ID
-		, R.MEM_ID
-		, M1.MEM_NAME AS
-		REPORTER_NAME
-		, R.FILE_GROUP_NO
-		, CASE
-		WHEN R.TARGET_TYPE = 'G10001' THEN
-		B.MEM_ID
-		WHEN R.TARGET_TYPE = 'G10002' THEN RP.MEM_ID
-		END AS
-		REPORTED_MEM_ID
-		, M2.MEM_NAME AS REPORTED_NAME
-		FROM REPORT R
-		LEFT JOIN
-		BOARD B
-		ON R.TARGET_TYPE = 'G10001'
-		AND R.TARGET_ID = B.BOARD_ID
-		LEFT
-		JOIN REPLY RP
-		ON R.TARGET_TYPE = 'G10002'
-		AND R.TARGET_ID = RP.REPLY_ID
-		LEFT JOIN MEMBER M1
-		ON R.MEM_ID = M1.MEM_ID
-		LEFT JOIN MEMBER M2
-		ON (CASE
-		WHEN R.TARGET_TYPE = 'G10001' THEN B.MEM_ID
-		WHEN R.TARGET_TYPE =
-		'G10002' THEN RP.MEM_ID
-		END) = M2.MEM_ID
-		WHERE REPORT_ID = #{reportId}
-	</select>
-
-	<select id="getPenaltyList"
-	        resultType="kr.or.ddit.account.lgn.service.MemberPenaltyVO"
-	        parameterType="kr.or.ddit.account.lgn.service.MemberPenaltyVO">
+	<select id="getPenaltyList" resultType="kr.or.ddit.account.lgn.service.MemberPenaltyVO" parameterType="kr.or.ddit.account.lgn.service.MemberPenaltyVO">
 	    SELECT * FROM (
 	        SELECT ROWNUM AS RNUM, B.*
 	        FROM (

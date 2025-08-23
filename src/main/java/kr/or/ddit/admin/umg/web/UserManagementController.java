@@ -1,6 +1,5 @@
 package kr.or.ddit.admin.umg.web;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import kr.or.ddit.account.join.service.MemberJoinService;
 import kr.or.ddit.account.lgn.service.MemberPenaltyVO;
 import kr.or.ddit.admin.las.service.PageLogVO;
 import kr.or.ddit.admin.umg.service.UserManagementService;
 import kr.or.ddit.com.report.service.ReportVO;
-import kr.or.ddit.comm.peer.teen.service.TeenCommService;
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
 import kr.or.ddit.main.service.MemberVO;
