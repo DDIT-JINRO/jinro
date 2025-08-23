@@ -244,6 +244,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 document.addEventListener('click', function(e){
+	if (window.__chatModalDragging) return; // 드래그 중엔 닫지 않기
 	// 모달 바깥쪽 클릭시 모달창 닫기
 	if(!e.target.closest('#chat-modal')&&!e.target.closest('#chatRooms')){
 		closeChatModal();
@@ -310,8 +311,72 @@ async function openChatModal(){
 		axios.post("/admin/las/chatVisitLog.do");
 		await printChatRoomList();
 		subscribeToUnreadDetail();
-		document.getElementById('chat-modal').style.display = 'flex';
+		const modal = document.getElementById('chat-modal');
+		restoreChatModalState(modal);
+		modal.style.display = 'flex';
+		requestAnimationFrame(()=>{
+		  clampIntoViewport(modal);
+		  enableChatModalDragAndResize();
+		});
 	}
+}
+
+function restoreChatModalState(modal) {
+  if (!modal) return;
+
+  try {
+    const st = JSON.parse(localStorage.getItem('chatModal.state') || '{}');
+
+    // width/height는 무조건 복원
+    if (st.width)  modal.style.width  = st.width;
+    if (st.height) modal.style.height = st.height;
+
+	// ⬇️ 좌표 복원 규칙: 'auto'나 '0px' 같은 비정상 값은 버리고 CSS 기본 앵커 유지
+	const isValidPx = v => typeof v === 'string' && v !== 'auto' && !isNaN(parseFloat(v));
+	if (isValidPx(st.left) && isValidPx(st.top)) {
+	  modal.style.left   = st.left;
+	  modal.style.top    = st.top;
+	  modal.style.right  = 'auto';
+	  modal.style.bottom = 'auto';
+	} else {
+	  modal.style.left   = 'auto';
+	  modal.style.top    = 'auto';
+	  // CSS에 이미 right/bottom 기본값 있음
+	}
+  } catch(e) {
+    // 오류 나면 그냥 CSS 기본값 쓰도록 방치
+    modal.style.left = 'auto';
+    modal.style.top  = 'auto';
+  }
+}
+
+function clampIntoViewport(modal) {
+  // left/top(px) 좌표계를 쓸 때만 동작 (auto면 스킵)
+  const hasLeft = modal.style.left && modal.style.left !== 'auto';
+  const hasTop  = modal.style.top  && modal.style.top  !== 'auto';
+  if (!hasLeft || !hasTop) return;
+
+  const PAD = 200;
+
+  // ✅ inline 스타일 값을 기준으로 클램프 (rect.left/top은 초기 프레임에서 0이 나올 수 있음)
+  const leftNow = parseFloat(modal.style.left) || 0;
+  const topNow  = parseFloat(modal.style.top)  || 0;
+
+  // 크기는 rect에서 가져와도 OK (width/height는 신뢰 가능)
+  const rect = modal.getBoundingClientRect();
+  const maxL = window.innerWidth  - rect.width  - PAD;
+  const maxT = window.innerHeight - rect.height - PAD;
+
+  const L = Math.max(PAD, Math.min(leftNow, maxL));
+  const T = Math.max(PAD, Math.min(topNow,  maxT));
+
+  // 디버깅 원하면 주석 해제
+  // console.log({ leftNow, topNow, maxL, maxT, L, T });
+
+  modal.style.left   = `${L}px`;
+  modal.style.top    = `${T}px`;
+  modal.style.right  = 'auto';
+  modal.style.bottom = 'auto';
 }
 
 // 채팅방 목록 채우기 -> 모달 열때 호출
@@ -801,4 +866,87 @@ function hookMediaAutoScroll(container, messageEl) {
       }
     }
   });
+}
+
+// 1) 전역에 노출(필요시)되도록 이름 있는 함수로
+function enableChatModalDragAndResize() {
+  const modal  = document.getElementById('chat-modal');
+  const header = modal?.querySelector('.chat-header');
+  if (!modal || !header) return;
+
+  // 1) 먼저 필요 상수
+  const PAD = 8;
+
+  // 2) 유틸 함수들
+  function saveState(){
+	const left  = modal.style.left;
+	const top   = modal.style.top;
+	const width = modal.style.width;
+	const height= modal.style.height;
+	const st = {
+	  left:  (left  && left  !== 'auto') ? left  : null,
+	  top:   (top   && top   !== 'auto') ? top   : null,
+	  width: width  || null,
+	  height:height || null,
+	};
+    localStorage.setItem('chatModal.state', JSON.stringify(st));
+  }
+
+
+  // 4) 이벤트 바인딩은 1회만
+  if (modal.dataset.dragInit === '1') return;
+  modal.dataset.dragInit = '1';
+
+  let dragging = false;
+  let startX=0, startY=0, startLeft=0, startTop=0;
+
+  header.addEventListener('mousedown', (e)=>{
+    if (e.button !== 0) return;
+    dragging = true;
+    window.__chatModalDragging = true;
+    modal.classList.add('dragging');
+
+    const r = modal.getBoundingClientRect();
+    startLeft = r.left; startTop = r.top;
+    startX = e.clientX; startY = e.clientY;
+
+    // bottom/right 앵커 -> left/top 좌표계 전환
+    modal.style.left   = `${r.left}px`;
+    modal.style.top    = `${r.top}px`;
+    modal.style.right  = 'auto';
+    modal.style.bottom = 'auto';
+
+    const onMove = (ev)=>{
+      if (!dragging) return;
+      let L = startLeft + (ev.clientX - startX);
+      let T = startTop  + (ev.clientY - startY);
+      const maxL = window.innerWidth  - modal.offsetWidth  - PAD;
+      const maxT = window.innerHeight - modal.offsetHeight - PAD;
+      modal.style.left = `${Math.max(PAD, Math.min(L, maxL))}px`;
+      modal.style.top  = `${Math.max(PAD, Math.min(T, maxT))}px`;
+    };
+    const onUp = ()=>{
+      if (!dragging) return;
+      dragging = false;
+      modal.classList.remove('dragging');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      saveState();
+      setTimeout(()=>{ window.__chatModalDragging = false; }, 0);
+    };
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    e.preventDefault();
+  });
+
+  if (!modal.__resizeObserver){
+    modal.__resizeObserver = new ResizeObserver(()=>{
+      clampIntoViewport(modal);
+      saveState();
+    });
+    modal.__resizeObserver.observe(modal);
+  }
+
+  window.addEventListener('resize', ()=> clampIntoViewport(modal));
 }
