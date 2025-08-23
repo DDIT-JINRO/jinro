@@ -332,6 +332,8 @@ public class RoadmapServiceImpl implements RoadmapService {
 		prompt.append("- 상담 대상에게 전하는 추가 제언은 각 planner, experience, enhance별로 200자 제한으로 상세하게 적어주세요.\n");
 		prompt.append("- interestDataType의 경우 INTEREST_CN뿐만이 아니라 다양한 데이터의 분석을 통하여 결정되어야 합니다.\n");
 
+		// 메시지 포멧 사용 방법이 아래와 같이 있습니다.
+//		MessageFormat.format(prompt.toString(), roadmapResultRequest.getMemName());
     	return prompt.toString();
     }
 

@@ -431,6 +431,7 @@ function sanctionsDescription() {
 			}
 		})
 			.then(({ data }) => {
+				
 				reportListCache = data.content;
 
 				const countEl = document.getElementById('reportList-count');
@@ -440,7 +441,7 @@ function sanctionsDescription() {
 				if (!listEl) return;
 
 				if (data.content.length < 1 && keyword.trim() !== '') {
-					listEl.innerHTML = `<tr><td colspan='2' style="text-align: center;">검색 결과를 찾을 수 없습니다.</td></tr>`;
+					listEl.innerHTML = `<tr><td colspan='5' style="text-align: center;">검색 결과를 찾을 수 없습니다.</td></tr>`;
 
 				} else {
 					const rows = data.content.map(item => `

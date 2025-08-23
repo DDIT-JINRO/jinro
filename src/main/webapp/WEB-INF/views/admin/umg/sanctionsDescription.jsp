@@ -104,7 +104,7 @@
 			</div>
 		</div>
 
-		<table id="penaltyTable">
+		<table id="reportTable">
 			<thead>
 				<tr>
 					<th>신고ID</th>
