@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <link rel="stylesheet" href="/css/account/join/joinPage.css">
 <!-- 스타일 여기 적어주시면 가능 -->
 
@@ -75,7 +76,7 @@
 						<div class="input-row">
 							<label for="phone">핸드폰 번호</label> <input type="tel"
 								class="inputWt" id="phone" placeholder="핸드폰 번호를 입력해주세요." />
-							<button type="button">전화번호 인증</button>
+							<button type="button" id="phoneAccess">전화번호 인증</button>
 						</div>
 
 						<!-- 						<div class="input-gen"> -->
@@ -123,7 +124,7 @@
 		</div>
 	</div>
 </div>
-</div>
+
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>
