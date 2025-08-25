@@ -51,6 +51,7 @@
 
 .content-list__col--count {
 	flex: 0 0 80px;
+	justify-content: right;
 }
 
 .content-list__col--date {
