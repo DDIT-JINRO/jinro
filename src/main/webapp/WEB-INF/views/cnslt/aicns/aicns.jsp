@@ -21,8 +21,32 @@
 		</div>
 	</div>
 </section>
+
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/cnslt/resve/crsv/reservation.do">상담</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/cnslt/aicns/aicns.do">AI 상담</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
 <div>
 	<div class="public-wrapper">
+	
+		<div class="tab-container" id="tabs">
+			<a class="tab active" href="#">AI 상담</a>
+		</div>
+	
 		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="public-wrapper-main">
 			<div class="ai-wrap">
