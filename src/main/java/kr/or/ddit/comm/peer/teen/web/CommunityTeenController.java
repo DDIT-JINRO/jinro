@@ -8,7 +8,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,38 +69,46 @@ public class CommunityTeenController {
 
 	@GetMapping("/teenDetail.do")
 	public String selectTeenDetail(@RequestParam int boardId, Principal principal,
-			@AuthenticationPrincipal String memId, Model model) {
+	        @AuthenticationPrincipal String memId, Model model) {
 
-		if (principal == null || principal.getName().equals("anonymousUser")) {
-			return "redirect:/error/logReq";
-		}
+	    if (principal == null || principal.getName().equals("anonymousUser")) {
+	        return "redirect:/error/logReq";
+	    }
 
-		boolean isTeen = teenCommService.isTeen(memId);
-		if (!isTeen) {
-			model.addAttribute("message", "청소년만 접근 가능합니다.");
-			return "comm/peer/alert";
-		}
+	    // 현재 사용자가 관리자(ROLE_ADMIN)인지 확인
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    boolean isAdmin = authentication.getAuthorities().stream()
+	                                  .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-		teenCommService.cntPlus(boardId);
+	    // 관리자가 아니면서 청소년이 아닌 경우 접근 제한
+	    if (!isAdmin) {
+	        boolean isTeen = teenCommService.isTeen(memId);
+	        if (!isTeen) {
+	            model.addAttribute("message", "청소년만 접근 가능합니다.");
+	            return "comm/peer/alert";
+	        }
+	    }
 
-		CommBoardVO boardVO = teenCommService.selectTeenDetail(boardId, memId);
+	    teenCommService.cntPlus(boardId);
 
-		List<CommReplyVO> replyVO = teenCommService.selectBoardReply(boardId, memId);
+	    CommBoardVO boardVO = teenCommService.selectTeenDetail(boardId, memId);
 
-		MemberVO memVO = (MemberVO) myInquiryService.selectMyInquiryView(boardVO.getMemId() + "").get("member");
-		memVO = myInquiryService.getProfileFile(memVO);
+	    List<CommReplyVO> replyVO = teenCommService.selectBoardReply(boardId, memId);
 
-		Long fileGruopId = boardVO.getFileGroupId();
+	    MemberVO memVO = (MemberVO) myInquiryService.selectMyInquiryView(boardVO.getMemId() + "").get("member");
+	    memVO = myInquiryService.getProfileFile(memVO);
 
-		List<FileDetailVO> fileList = fileService.getFileList(fileGruopId);
+	    Long fileGruopId = boardVO.getFileGroupId();
 
-		model.addAttribute("fileList", fileList);
-		model.addAttribute("memId", memId);
-		model.addAttribute("memVO", memVO);
-		model.addAttribute("boardVO", boardVO);
-		model.addAttribute("replyVO", replyVO);
+	    List<FileDetailVO> fileList = fileService.getFileList(fileGruopId);
 
-		return "comm/peer/teen/teenDetail";
+	    model.addAttribute("fileList", fileList);
+	    model.addAttribute("memId", memId);
+	    model.addAttribute("memVO", memVO);
+	    model.addAttribute("boardVO", boardVO);
+	    model.addAttribute("replyVO", replyVO);
+
+	    return "comm/peer/teen/teenDetail";
 	}
 
 	@GetMapping("/teenInsert.do")
