@@ -56,7 +56,14 @@ document.addEventListener('DOMContentLoaded', function(){
 		
 		const consultCount = document.getElementById('usage-data').dataset.consultCnt;
 		if(consultCount<=0){
-			alert('상담권이 없습니다.');
+			showConfirm2('상담권이 없습니다.',
+				() => {
+					return;
+				},
+				() => {
+
+				}
+			);
 			return;
 		}
 

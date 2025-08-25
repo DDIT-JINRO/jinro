@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (btnDelete) {
 		btnDelete.addEventListener("click", () => {
 
-			showConfirm("정말 삭제하시겠습니까?",
+			showConfirm("정말 삭제하시겠습니까?","",
 				() => {
 					mainForm.action = "/cdp/imtintrvw/intrvwqestnmn/delete.do";
 					mainForm.submit();
