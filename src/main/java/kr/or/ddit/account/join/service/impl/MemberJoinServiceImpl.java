@@ -56,8 +56,6 @@ public class MemberJoinServiceImpl implements MemberJoinService {
 	@Override
 	public Map<String, Object> identityCheck(String imp_uid) {
 
-		log.info("imp_uid : @@@@@" + imp_uid);
-
 		if (imp_uid == null || imp_uid.isEmpty()) {
 			Map<String, Object> result = new HashMap<>();
 			result.put("success", false);
@@ -91,7 +89,6 @@ public class MemberJoinServiceImpl implements MemberJoinService {
 			Map tokenRes = (Map) tokenResponse.getBody().get("response");
 			accessToken = (String) tokenRes.get("access_token");
 
-			log.info("accessToken @@@@" + accessToken);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,14 +112,10 @@ public class MemberJoinServiceImpl implements MemberJoinService {
 			finalResult.put("success", true);
 			finalResult.put("message", "본인 인증 정보 조회 성공");
 			finalResult.put("data", responseBody); // 인증 정보 데이터
-			log.info("@@@@ 인증 정보,birthday : " + responseBody);
-			log.info("@@@@ 인증 정보,birthday : " + responseBody.get("birthday"));
-			log.info("@@@@ 인증 정보,gender : " + responseBody.get("gender"));
-			log.info("@@@@ 인증 정보,name : " + responseBody.get("name"));
 
 		} else { // 본인 인증 실패 시 finalResult.put("success", false);
 			finalResult.put("message", "본인 인증 정보 조회 실패");
-			log.error("@@@@ 인증 정보 조회 실패: " + certificationResponse.getBody());
+			log.error("인증 정보 조회 실패: " + certificationResponse.getBody());
 		}
 
 		return finalResult;
@@ -131,7 +124,6 @@ public class MemberJoinServiceImpl implements MemberJoinService {
 	@Override
 	public int memberJoin(MemberVO memberVO) {
 
-		log.info("회원가입 정보" + memberVO);
 		memberVO.setMemPassword(bCryptPasswordEncoder.encode(memberVO.getMemPassword()));
 		memberVO.setMemPhoneNumber(formatPhoneNumber(memberVO.getMemPhoneNumber()));
 		return memberJoinMapper.memberJoin(memberVO);

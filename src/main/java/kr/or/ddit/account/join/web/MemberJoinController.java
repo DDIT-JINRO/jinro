@@ -57,7 +57,6 @@ public class MemberJoinController {
 	// 1. 인증 메일 전송
 	@PostMapping("/sendMail.do")
 	public ResponseEntity<?> sendEmail(@RequestBody Map<String, String> body, HttpSession session) {
-		log.info("메일전송 도착");
 		String email = body.get("email");
 		String authCode = emailService.sendAuthCode(email);
 
