@@ -152,9 +152,21 @@
 		                    )
 		                </if>
 						ORDER BY
-							 IS_BOOKMARK
-							,JOB_SATIS DESC
-							, JOB_NAME ASC
+							 IS_BOOKMARK,
+							<choose>
+			                 	<when test="sortOrder == 'salDesc'">
+			                 		A.AVG_SALARY DESC, JOB_NAME ASC
+			                 	</when>
+			                 	<when test="sortOrder == 'prospectDesc'">
+			                 		PROSPECT_SCORE DESC, JOB_NAME DESC
+			                 	</when>
+			                 	<when test="sortOrder == 'staisDesc'">
+			                 		JOB_SATIS DESC, JOB_NAME ASC
+			                 	</when>
+			                 	<otherwise>
+			                    	JOB_SATIS DESC, JOB_NAME ASC
+			                 	</otherwise>
+			                 </choose>
 					) B
 				WHERE
 					ROWNUM <![CDATA[<=]]> #{endRow}
@@ -162,7 +174,7 @@
 		WHERE
 			RNUM <![CDATA[>=]]> #{startRow}
 	</select>
-	
+
 	<select id="selectCareerRcmTotal" parameterType="kr.or.ddit.worldcup.service.JobsVO" resultType="int">
 		WITH INTEREST_KEYWORD AS (
 			SELECT
