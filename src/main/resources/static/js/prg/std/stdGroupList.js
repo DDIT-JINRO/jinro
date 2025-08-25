@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'gender':    return '성별';
       case 'interestItems':  return '관심사';
       case 'maxPeople': return '인원제한';
+      case 'sortOrder': return '정렬';
       default:          return name;
     }
   }

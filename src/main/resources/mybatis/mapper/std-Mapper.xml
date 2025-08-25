@@ -155,17 +155,20 @@
 		      AND LOWER(JSON_VALUE(B.BOARD_CONTENT, '$.content')) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 		    </if>
 		  </where>
-		  <if test="sortBy == null or sortBy == '' or sortBy == 'createDesc'">
+		  <if test="sortOrder  == null or sortOrder  == '' or sortOrder  == 'createDesc'">
 			  ORDER BY B.BOARD_CREATED_AT DESC
 		  </if>
-		  <if test="sortBy == 'createAsc'">
+		  <if test="sortOrder  == 'createAsc'">
 			  ORDER BY B.BOARD_CREATED_AT ASC
 		  </if>
-		  <if test="sortBy == 'viewCntDesc'">
+		  <if test="sortOrder  == 'viewCntDesc'">
 			  ORDER BY B.BOARD_CNT DESC, B.BOARD_CREATED_AT DESC
 		  </if>
-		  <if test="sortBy == 'enteredMemDesc'">
+		  <if test="sortOrder  == 'enteredMemDesc'">
 			  ORDER BY CUR_CNT DESC, B.BOARD_CREATED_AT DESC
+		  </if>
+	      <if test="sortOrder == 'replyCntDesc'">
+		      ORDER BY REPLY_COUNT DESC, B.BOARD_CREATED_AT DESC
 		  </if>
 		  	) A
 		   ) X

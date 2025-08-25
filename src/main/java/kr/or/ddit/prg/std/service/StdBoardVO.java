@@ -53,7 +53,7 @@ public class StdBoardVO {
 	private List<String> interestItems;
 
 	// 정렬용 필드 추가
-	private String sortBy;
+	private String sortOrder;
 
 	// 목록 조회시 페이징 처리를 위한 필드 추가
 	private int currentPage;

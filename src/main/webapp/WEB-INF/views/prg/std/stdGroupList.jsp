@@ -43,17 +43,6 @@
                 </svg>
 						</button>
 					</div>
-					<div class="search-filter__select-wrapper">
-						<select name="sortBy" class="search-filter__select">
-							<option value="createDesc" ${sortBy=='createDesc' ? 'selected' : ''}>최신순</option>
-							<option value="createAsc" ${sortBy=='createAsc' ? 'selected' : ''}>과거순</option>
-							<option value="viewCntDesc" ${sortBy=='viewCntDesc' ? 'selected' : ''}>조회순</option>
-							<option value="enteredMemDesc" ${sortBy=='enteredMemDesc' ? 'selected' : ''}>입장인원순</option>
-						</select>
-						<svg class="search-filter__select-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-            </svg>
-					</div>
 				</div>
 
 				<div class="search-filter__accordion">
@@ -193,6 +182,32 @@
 							</div>
 
 							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="createDesc" <c:if test="${sortOrder == null or sortOrder == 'createDesc'}">checked</c:if>>
+										<span>최신순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="createAsc" <c:if test="${sortOrder == 'createAsc'}">checked</c:if>>
+										<span>오래된순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="viewCntDesc" <c:if test="${sortOrder == 'viewCntDesc'}">checked</c:if>>
+										<span>조회수순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="enteredMemDesc" <c:if test="${sortOrder == 'enteredMemDesc'}">checked</c:if>>
+										<span>입장인원순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="replyCntDesc" <c:if test="${sortOrder == 'replyCntDesc'}">checked</c:if>>
+										<span>댓글순</span>
+									</label>
+								</div>
+							</div>
+
+							<div class="search-filter__group">
 								<div class="search-filter__group-header">
 									<label class="search-filter__group-title">선택된 필터</label>
 									<button type="button" class="search-filter__reset-button">초기화</button>
@@ -283,15 +298,15 @@
 
 			<ul class="pagination">
 				<li>
-					<a href="${articlePage.url}&currentPage=${articlePage.startPage - 5}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
+					<a href="${articlePage.url}&currentPage=${articlePage.startPage - 5}&sortOrder=${sortOrder}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
 				</li>
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 					<li>
-						<a href="${articlePage.url}&currentPage=${pNo}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
+						<a href="${articlePage.url}&currentPage=${pNo}&sortOrder=${sortOrder}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
 					</li>
 				</c:forEach>
 				<li>
-					<a href="${articlePage.url}&currentPage=${articlePage.startPage + 5}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
+					<a href="${articlePage.url}&currentPage=${articlePage.startPage + 5}&sortOrder=${sortOrder}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
 				</li>
 			</ul>
 		</div>

@@ -65,7 +65,7 @@ public class StudyGroupController {
 		    						@RequestParam(required = false) String searchKeyword,
 		    						@RequestParam(required = false, defaultValue = "1") int currentPage,
 		    						@RequestParam(required = false, defaultValue = "5") int size,
-		    						@RequestParam(required = false, defaultValue = "createDesc") String sortBy,
+		    						@RequestParam(required = false, defaultValue = "createDesc") String sortOrder,
 		    						StdBoardVO stdBoardVO,
 		    						Principal principal,
 		    						Model model) {
@@ -78,7 +78,7 @@ public class StudyGroupController {
 		List<StdBoardVO> list = this.studyGroupService.selectStudyGroupList(stdBoardVO);
 
 		ArticlePage<StdBoardVO> articlePage = new ArticlePage<>(totalCount, currentPage, size, list, searchKeyword);
-		String baseUrl = buildQueryString(region, gender, interestItems, maxPeople, searchType, searchKeyword, size, sortBy);
+		String baseUrl = buildQueryString(region, gender, interestItems, maxPeople, searchType, searchKeyword, size, sortOrder);
 		articlePage.setUrl(baseUrl);
 		articlePage.setPagingArea("");
 
@@ -104,7 +104,7 @@ public class StudyGroupController {
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("size", size);
-		model.addAttribute("sortBy", sortBy);
+		model.addAttribute("sortOrder", sortOrder);
 		return "prg/std/stdGroupList";
 	}
 
@@ -130,7 +130,7 @@ public class StudyGroupController {
 
 	// page번호 버튼에 url 입력을 위한 base 쿼리스트링 구성
 	private String buildQueryString(String region,String gender, List<String> interestItems, Integer maxPeople
-								, String searchType, String searchKeyword, int size, String sortBy) {
+								, String searchType, String searchKeyword, int size, String sortOrder) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("/prg/std/stdGroupList.do");
 		sb.append("?").append("region=").append(region == null ? "" : region);
@@ -138,6 +138,7 @@ public class StudyGroupController {
 		sb.append("&").append("maxPeople=").append(maxPeople == null ? "" : maxPeople);
 		sb.append("&").append("searchType=").append(searchType == null ? "" : searchType);
 		sb.append("&").append("searchKeyword=").append(searchKeyword == null ? "" : searchKeyword);
+		sb.append("&").append("sortOrder=").append(sortOrder == null ? "" : sortOrder);
 		sb.append("&").append("size=").append(size);
 
 		if (interestItems == null || interestItems.size() == 0)
