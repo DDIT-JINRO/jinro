@@ -748,7 +748,7 @@ function counselorManagement() {
 			const purplePalette = [
 				'#B8A5F5', '#8A6BEF', '#6C4DDC'
 			];
-			// 막대 차트 생성
+			// 도넛 차트 생성
 			window.consultMethodStatisticsChartInstance = new Chart(ctx, {
 				type: 'doughnut',
 				data: {
@@ -762,16 +762,30 @@ function counselorManagement() {
 						hoverOffset: 20
 					}]
 				},
+				plugins: [ChartDataLabels],
 				options: {
 					responsive: true,
 					maintainAspectRatio: false,
 					cutout: '60%',
 					layout: { padding: { top: 25, bottom: 25, left: 25, right: 25 } },
+
 					plugins: {
 						legend: { display: true, position: 'bottom' },
 						title: {
 							display: !!rangeTitle,
 							text: rangeTitle ? [rangeTitle] : []
+						},
+						datalabels: {
+							formatter: (value, ctx) => {
+								const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+								const pct = (value / sum * 100).toFixed(0) ;
+								if(pct <3){
+									return null;
+								}
+								return pct+'%';
+							},
+							color: '#fff',
+							font: { weight: 'bold' }
 						}
 					},
 				}

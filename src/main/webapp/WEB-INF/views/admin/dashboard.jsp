@@ -42,7 +42,12 @@
 					</div>
 				</div>
 				<div class="template-panel dashboard-1-2 overflow-wrap">
-					<div class="middleTitle">월별 이용자 통계</div>
+					<div class="middleTitle">
+						<div>월별 이용자 통계</div>
+						<div>
+							<button class="middleTitleBtn" id="monthPng">다운로드</button>
+						</div>
+					</div>
 					<div style="width: 100%; height: 100%; margin-top: 15px;">
 						<canvas id="lineChart"></canvas>
 					</div>
@@ -50,7 +55,12 @@
 			</div>
 			<div class="dash2Flex">
 				<div class="template-panel dashboard-2 overflow-wrap">
-					<div class="middleTitle">결제/구독 통계</div>
+					<div class="middleTitle">
+						결제/구독 통계
+						<div>
+							<button class="middleTitleBtn" id="moneyPng">다운로드</button>
+						</div>
+					</div>
 					<div class="dashboard-2-1">
 
 						<div class="stat-item">
