@@ -28,7 +28,7 @@
 		UPDATE	PAYMENT
 		SET		PAY_RESUME_CNT  = PAY_RESUME_CNT  - 1
 		WHERE	PAY_ID = #{payId} 
-		AND		PAY_CONSULT_CNT > 0
+		AND		PAY_RESUME_CNT > 0
 	</update>
 	
 </mapper>
