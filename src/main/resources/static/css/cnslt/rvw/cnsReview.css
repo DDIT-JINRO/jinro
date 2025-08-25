@@ -89,7 +89,6 @@
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 16px;
-	margin-bottom: 20px;
 }
 
 .feedback-content {
