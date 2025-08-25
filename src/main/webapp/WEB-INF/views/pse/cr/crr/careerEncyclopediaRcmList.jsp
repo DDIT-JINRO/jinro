@@ -89,15 +89,15 @@
 									<label class="search-filter__group-title">정렬 순서</label>
 									<div class="search-filter__options">
 										<label class="search-filter__option">
-											<input type="radio" name="sortOrder" value="salDesc">
+											<input type="radio" name="sortOrder" value="salDesc" <c:if test="${paramValues.sortOrder[0] == 'satisDesc'}">checked</c:if> >
 											<span>연봉 높은 순</span>
 										</label>
 										<label class="search-filter__option">
-											<input type="radio" name="sortOrder" value="prospectDesc">
+											<input type="radio" name="sortOrder" value="prospectDesc" <c:if test="${paramValues.sortOrder[0] == 'prospectDesc'}">checked</c:if> >
 											<span>전망 높은 순</span>
 										</label>
 										<label class="search-filter__option">
-											<input type="radio" name="sortOrder" value="staisDesc">
+											<input type="radio" name="sortOrder" value="staisDesc" <c:if test="${paramValues.sortOrder[0] == 'staisDesc'}">checked</c:if> >
 											<span>만족도 높은 순</span>
 										</label>
 									</div>
@@ -118,6 +118,13 @@
 											<c:set var="salLabels" value="${{'sal1':'3000천만원 미만', 'sal2':'3천만원 이상 5천만원 미만', 'sal3':'5천만원 이상 1억원 미만', 'sal4':'1억원 이상'}}" />
 											<span class="search-filter__tag" data-group="jobSals" data-value="${submittedSal}">
 												연봉 > ${salLabels[submittedSal]}
+												<button type="button" class="search-filter__tag-remove">×</button>
+											</span>
+										</c:forEach>
+										<c:forEach var="sortOrder" items="${paramValues.sortOrder}">
+											<span class="search-filter__tag" data-group="sortOrder" data-value="${sortOrder}">
+											<c:set var="sortLabels" value="${{'salDesc':'연봉 높은 순', 'prospectDesc':'전망 높은 순', 'staisDesc':'만족도 높은 순'}}" />
+												정렬 > ${sortLabels[sortOrder]}
 												<button type="button" class="search-filter__tag-remove">×</button>
 											</span>
 										</c:forEach>

@@ -88,6 +88,27 @@
 									</c:forEach>
 								</div>
 							</div>
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬 순서</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="nameAsc" <c:if test="${paramValues.sortOrder[0] == 'nameAsc'}">checked</c:if> >
+										<span>대학명 오름차순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="nameDesc" <c:if test="${paramValues.sortOrder[0] == 'nameDesc'}">checked</c:if> >
+										<span>대학명 내림차순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="deptCountDesc" <c:if test="${paramValues.sortOrder[0] == 'deptCountDesc'}">checked</c:if> >
+										<span>학과 많은 순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="deptCountAsc" <c:if test="${paramValues.sortOrder[0] == 'deptCountAsc'}">checked</c:if> >
+										<span>학과 적은 순</span>
+									</label>
+								</div>
+							</div>
 
 							<div class="search-filter__group">
 								<div class="search-filter__group-header">
