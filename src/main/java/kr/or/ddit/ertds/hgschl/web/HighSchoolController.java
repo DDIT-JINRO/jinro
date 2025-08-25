@@ -2,6 +2,8 @@ package kr.or.ddit.ertds.hgschl.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 
 import kr.or.ddit.com.ComCodeVO;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolDeptVO;
@@ -22,6 +25,12 @@ import kr.or.ddit.ertds.hgschl.service.HighSchoolService;
 import kr.or.ddit.ertds.hgschl.service.HighSchoolVO;
 import kr.or.ddit.util.ArticlePage;
 import lombok.extern.slf4j.Slf4j;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RequestMapping("/ertds")
 @Controller
@@ -95,7 +104,58 @@ public class HighSchoolController {
 
 		return "ertds/hgschl/HighSchoolDetail"; // /WEB-INF/views/erds/hgschl/detail.jsp
 	}
+	
+	@GetMapping(value = "/hgschl/static-map", produces = MediaType.IMAGE_PNG_VALUE)
+	public ResponseEntity<byte[]> staticMap(@RequestParam double lat, @RequestParam double lon,
+	        @RequestParam(defaultValue = "800") int w, @RequestParam(defaultValue = "350") int h,
+	        @RequestParam(defaultValue = "3") int level, @RequestParam(defaultValue = "") String label) {
+	    try {
+	        // 1. markers 파라미터의 좌표 부분은 그대로 사용합니다.
+	        String markerParam = lon + "," + lat;
 
+	        // 2. label이 공백이 아닐 경우, URLEncoder.encode()를 사용하여 한글을 인코딩합니다.
+	        //    @RequestParam이 자동 디코딩하는 환경이라면 label은 한글 원본 문자열일 것입니다.
+	        if (!label.isBlank()) {
+	        	markerParam += "|" + label; // ← label만 인코딩!
+	        }
+
+	        // 3. UriComponentsBuilder를 사용하여 URL을 안전하게 구성합니다.
+	        //    queryParam()에 markerParam을 전달하면, UriComponentsBuilder가
+	        //    내부적으로 URL 인코딩을 처리합니다.
+	        String url = UriComponentsBuilder.fromHttpUrl("https://dapi.kakao.com/v2/maps/staticmap")
+	                .queryParam("center", lon + "," + lat)
+	                .queryParam("level", level)
+	                .queryParam("w", w)
+	                .queryParam("h", h)
+	                .queryParam("markers", markerParam)
+	                .build(false)
+	                .toUriString();
+
+	        log.info("Final Static Map URL: " + url);
+
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.set("Authorization", "KakaoAK 93ed54875d1a01d4b0bbff0a0ce2f716");
+	        HttpEntity<Void> req = new HttpEntity<>(headers);
+
+	        RestTemplate rt = new RestTemplate();
+	        ResponseEntity<byte[]> resp = rt.exchange(url, HttpMethod.GET, req, byte[].class);
+
+	        if (!resp.getStatusCode().is2xxSuccessful() || resp.getBody() == null) {
+	            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+	        }
+
+	        HttpHeaders out = new HttpHeaders();
+	        out.setContentType(MediaType.IMAGE_PNG);
+	        out.setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic());
+
+	        return new ResponseEntity<>(resp.getBody(), out, HttpStatus.OK);
+
+	    } catch (Exception e) {
+	        log.error("Static map API 호출 중 예외 발생", e);
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
 	// ----------------------------------------------------------------------
 	// 고등학교 정보 CRUD
 	// ----------------------------------------------------------------------

@@ -154,4 +154,188 @@ document.addEventListener('DOMContentLoaded', () => {
 			document.body.removeChild(form);
 		});
 	}
+
+	//화면그대로 미리보기
+	const screenPreviewBtn = document.getElementById('pdf-screen-preview-btn');
+	// 화면 상단 채널 섹션(캡처에서만 제외할 대상)
+	const channel = document.querySelector('.channel');
+	const actions = document.querySelector('.page-actions');
+
+	function beforeCapture() {
+		channel?.setAttribute('data-html2canvas-ignore', 'true');
+		actions?.setAttribute('data-html2canvas-ignore', 'true');
+		channel?.classList.add('h2c-hide');   // ← 레이아웃 제거
+		actions?.classList.add('h2c-hide');   // ← 레이아웃 제거
+	}
+	function afterCapture() {
+		channel?.removeAttribute('data-html2canvas-ignore');
+		actions?.removeAttribute('data-html2canvas-ignore');
+		channel?.classList.remove('h2c-hide');
+		actions?.classList.remove('h2c-hide');
+	}
+
+
+	if (screenPreviewBtn) {
+
+		screenPreviewBtn.addEventListener('click', async () => {
+			const root = document.getElementById('highSchoolDetailContainer');
+
+			console.log('root.scrollWidth:', root.scrollWidth);
+			console.log('root.offsetWidth:', root.offsetWidth);
+			const schoolName = document.querySelector('.detail-header__title')?.textContent?.trim() || 'document';
+
+			if (document.fonts?.ready) { try { await document.fonts.ready; } catch (_) { } }
+
+			const swap = swapMapToStatic(root, true); // 지도 치환
+			await waitImageLoaded(swap.placeholder);
+
+			await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+			beforeCapture();
+
+			await new Promise(r => requestAnimationFrame(r));
+
+			try {
+				const opt = makePdfOptions(root, `${schoolName}.pdf`);
+				const worker = html2pdf().set(opt).from(root).toPdf();
+				const pdf = await worker.get('pdf');
+				const url = pdf.output('bloburl');
+				const win = window.open(url, '_blank');
+				if (!win) alert('팝업이 차단되었습니다. 팝업 허용 후 다시 시도하세요.');
+			} finally {
+				afterCapture();
+				// 원복
+				if (swap.placeholder && swap.backup) swap.placeholder.replaceWith(swap.backup);
+			}
+		});
+	}
+
+
+
+	//화면그대로 pdf 다운로드
+	const screenBtn = document.getElementById('pdf-screen-btn');
+
+	if (screenBtn) {
+		screenBtn.addEventListener('click', async () => {
+			const root = document.getElementById('highSchoolDetailContainer');
+			const schoolName = document.querySelector('.detail-header__title')?.textContent?.trim() || 'document';
+
+			if (document.fonts?.ready) { try { await document.fonts.ready; } catch (_) { } }
+
+			const swap = swapMapToStatic(root, true);
+
+			await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+			beforeCapture();
+
+			await new Promise(r => requestAnimationFrame(r));
+
+			try {
+				const opt = makePdfOptions(root, `${schoolName}.pdf`);
+				await html2pdf().set(opt).from(root).save();
+			} finally {
+				afterCapture();
+				if (swap.placeholder && swap.backup) swap.placeholder.replaceWith(swap.backup);
+			}
+		});
+	}
+
+
+
+	// 1) 공통: 지도 치환/원복
+	function swapMapToStatic(root, toStatic = true) {
+		const mapEl = document.getElementById('map');
+		if (!mapEl) return { backup: null, placeholder: null };
+
+		const lat = parseFloat(root.dataset.hsLat);
+		const lon = parseFloat(root.dataset.hsLot);
+		if (!toStatic || Number.isNaN(lat) || Number.isNaN(lon)) {
+			return { backup: null, placeholder: null };
+		}
+
+		const backup = mapEl.cloneNode(true);
+		const name = (root.dataset.hsName || '').trim();
+		const shortLabel = name.length > 2 ? name.substring(0, 2) : name; // ← 2글자 이하로 제한
+
+		const img = document.createElement('img');
+		img.setAttribute('crossorigin', 'anonymous'); // 동일 출처라 상관없지만 안전하게
+		img.style.cssText = 'width:100%;height:350px;object-fit:cover;border:1px solid #dee2e6;border-radius:8px;';
+		img.src = `/ertds/hgschl/static-map?lat=${lat}&lon=${lon}&w=800&h=350&level=3&label=${encodeURIComponent(shortLabel)}`;
+
+		mapEl.replaceWith(img);
+		return { backup, placeholder: img };
+	}
+
+	// 캡처 전에 이미지 로딩 대기 (빈칸 방지)
+	function waitImageLoaded(img) {
+		return new Promise((res) => {
+			if (!img || img.complete) return res();
+			img.addEventListener('load', res, { once: true });
+			img.addEventListener('error', res, { once: true });
+		});
+	}
+
+	function makePdfOptions(root, filename) {
+		// 스크롤 0으로 (상단 여백 방지)
+		window.scrollTo(0, 0);
+
+		const rect = root.getBoundingClientRect();
+		const x = rect.left + window.scrollX;
+		const y = rect.top + window.scrollY;
+		const width = root.scrollWidth;
+		const height = root.scrollHeight;
+
+		return {
+			margin: [10, 20, 10, 20],                         // 좌우 잘림 방지용 여백
+			filename,
+			image: { type: 'jpeg', quality: 0.95 },
+			html2canvas: {
+				scale: 2,
+				useCORS: true,
+				allowTaint: false,
+				logging: false,
+				backgroundColor: '#ffffff',
+				scrollX: 0,
+				scrollY: 0
+			},
+			jsPDF: { unit: 'mm', format: [220, 600], orientation: 'portrait' },
+			pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+		};
+	}
+
+	// 2) 공통: html2pdf 실행 래퍼
+	async function buildPdfBlobUrl(root, filename) {
+		// 스크롤 0 보정
+		window.scrollTo(0, 0);
+		await new Promise(r => requestAnimationFrame(r));
+
+		// 루트의 실제 좌표/크기 계산
+		const rect = root.getBoundingClientRect();
+		const x = rect.left + window.scrollX;
+		const y = rect.top + window.scrollY;
+		const width = root.scrollWidth;
+		const height = root.scrollHeight;
+
+		const opt = {
+			margin: [10, 20, 10, 20],
+			filename,
+			image: { type: 'jpeg', quality: 0.95 },
+			html2canvas: {
+				scale: 2,
+				useCORS: true,
+				allowTaint: false,
+				logging: false,
+				// 스크롤 오프셋 제거 (큰 상단 여백 방지)
+				scrollX: 0,
+				scrollY: 0
+			},
+			jsPDF: { unit: 'mm', format: [220, 600], orientation: 'portrait' },
+			pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+		};
+		const worker = html2pdf().set(opt).from(root).toPdf();
+		const pdf = await worker.get('pdf');
+		return pdf.output('bloburl');
+	}
+
+
 });

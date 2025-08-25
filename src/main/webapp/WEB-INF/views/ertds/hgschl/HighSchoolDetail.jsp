@@ -104,9 +104,11 @@
 					</c:if>
 				</section>
 
-				<div class="page-actions page-actions--center">
+				<div class="page-actions page-actions--center" data-html2canvas-ignore="true">
 					<button type="button" id="pdf-preview-btn" class="page-actions__button page-actions__button--secondary">PDF 미리보기</button>
 					<button type="button" id="pdf-download-btn" class="page-actions__button page-actions__button--primary">PDF 다운로드</button>
+					<button id="pdf-screen-btn" class="page-actions__button page-actions__button--secondary">화면 그대로 PDF 다운</button>
+					<button type="button" id="pdf-screen-preview-btn" class="page-actions__button page-actions__button--secondary">화면 그대로 미리보기</button>
 					<a href="/ertds/hgschl/selectHgschList.do" class="page-actions__button page-actions__button--dark">목록</a>
 				</div>
 			</div>
@@ -116,5 +118,6 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1881066df7ed9e16e4315953d2419995&libraries=services,clusterer,drawing"></script>
 <script src="/js/ertds/hgschl/HighSchoolDetail.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.11.1/dist/html2pdf.bundle.min.js"></script>
 </body>
 </html>

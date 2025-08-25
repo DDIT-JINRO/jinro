@@ -101,3 +101,47 @@
 		text-align: center;
 	}
 }
+
+/* 강제 페이지 나눔이 필요할 때 */
+.page-break {
+	page-break-before: always;
+	break-before: page;
+}
+
+/* 캡처 시 인쇄 품질 개선 */
+@media print {
+	body {
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+}
+/* html2pdf 캡처 전 임시로 A4 폭을 강제할 때 사용할 클래스 */
+.detail-page.a4-width {
+	width: 794px; /* A4 width @96dpi 기준 */
+	margin: 0 auto;
+}
+
+.detail-content__section, .detail-header, .detail-content {
+	break-inside: avoid;
+	page-break-inside: avoid;
+}
+
+/* 잘리는 섹션 방지 */
+.detail-content__section {
+	break-inside: avoid;
+	page-break-inside: avoid;
+}
+
+/* 지도 섹션만 확실히 고정하고 싶다면 */
+#map, #map+* {
+	break-inside: avoid;
+	page-break-inside: avoid;
+}
+
+/* 캡처용으로 레이아웃까지 없애기 */
+.h2c-hide { display: none !important; }
+
+.detail-header__title {
+  background: none !important;  /* 또는 transparent */
+}
+
