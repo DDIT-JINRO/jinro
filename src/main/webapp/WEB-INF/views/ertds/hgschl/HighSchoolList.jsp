@@ -80,6 +80,19 @@
 								</div>
 							</div>
 							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬 순서</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="nameAsc" <c:if test="${paramValues.sortOrder[0] == 'nameAsc'}">checked</c:if> >
+										<span>학교명 오름차순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="nameDesc" <c:if test="${paramValues.sortOrder[0] == 'nameDesc'}">checked</c:if> >
+										<span>학교명 내림차순</span>
+									</label>
+								</div>
+							</div>
+							<div class="search-filter__group">
 								<div class="search-filter__group-header">
 									<label class="search-filter__group-title">선택된 필터</label>
 									<button type="button" class="search-filter__reset-button">초기화</button>
@@ -131,6 +144,9 @@
 					<c:forEach var="coedTypeValue" items="${paramValues.coedTypeFilter}">
 						<c:param name="coedTypeFilter" value="${coedTypeValue}" />
 					</c:forEach>
+					<c:if test="${not empty param.sortOrder}">
+						<c:param name="sortOrder" value="${param.sortOrder}" />
+					</c:if>
 				</c:url>
 				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
 
@@ -149,6 +165,9 @@
 						<c:forEach var="coedTypeValue" items="${paramValues.coedTypeFilter}">
 							<c:param name="coedTypeFilter" value="${coedTypeValue}" />
 						</c:forEach>
+						<c:if test="${not empty param.sortOrder}">
+							<c:param name="sortOrder" value="${param.sortOrder}" />
+						</c:if>
 					</c:url>
 					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
 				</c:forEach>
@@ -167,6 +186,9 @@
 					<c:forEach var="coedTypeValue" items="${paramValues.coedTypeFilter}">
 						<c:param name="coedTypeFilter" value="${coedTypeValue}" />
 					</c:forEach>
+					<c:if test="${not empty param.sortOrder}">
+						<c:param name="sortOrder" value="${param.sortOrder}" />
+					</c:if>
 				</c:url>
 				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
 			</div>

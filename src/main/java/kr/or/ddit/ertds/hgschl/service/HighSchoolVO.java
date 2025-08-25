@@ -35,6 +35,8 @@ public class HighSchoolVO {
 	// 검색
 	private String keyword;
 
+	private String sortOrder;
+
 	// CEG-D02-004: 지역별 필터
 	private List<String> regionFilter;
 

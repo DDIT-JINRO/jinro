@@ -37,10 +37,9 @@ public class HighSchoolController {
 			@RequestParam(required = false) String keyword,
 			@RequestParam(value = "regionFilter", required = false) List<String> regionFilter,
 			@RequestParam(value = "schoolType", required = false) List<String> schoolType,
-			@RequestParam(value = "coedTypeFilter", required = false) List<String> coedTypeFilter, Model model) {
-		log.info("regionFilter : " + regionFilter);
-		log.info("schoolType : " + schoolType);
-		log.info("coedTypeFilter : " + coedTypeFilter);
+			@RequestParam(value = "coedTypeFilter", required = false) List<String> coedTypeFilter,
+			@RequestParam(value = "sortOrder", required = false) String sortOrder,
+			 Model model) {
 
 		int size = 5; // 한 페이지에 5개
 		int startRow = (currentPage - 1) * size;
@@ -55,6 +54,7 @@ public class HighSchoolController {
 		highSchoolVO.setRegionFilter(regionFilter);
 		highSchoolVO.setSchoolType(schoolType);
 		highSchoolVO.setCoedTypeFilter(coedTypeFilter);
+		highSchoolVO.setSortOrder(sortOrder);
 		highSchoolVO.setStartRow(startRow);
 		highSchoolVO.setEndRow(endRow);
 
@@ -102,7 +102,7 @@ public class HighSchoolController {
 
 	/**
 	 * 고등학교 정보를 DB에 추가하는 메서드
-	 * 
+	 *
 	 * @param highSchoolVO JSON 형식의 HighSchoolVO 객체
 	 * @return 성공 여부를 담은 ResponseEntity
 	 */
@@ -121,7 +121,7 @@ public class HighSchoolController {
 
 	/**
 	 * 고등학교 정보를 수정하는 메서드
-	 * 
+	 *
 	 * @param highSchoolVO JSON 형식의 HighSchoolVO 객체
 	 * @return 성공 여부를 담은 ResponseEntity
 	 */
@@ -140,7 +140,7 @@ public class HighSchoolController {
 
 	/**
 	 * 고등학교 정보를 논리적으로 삭제하는 메서드
-	 * 
+	 *
 	 * @param highSchoolVO JSON 형식의 HighSchoolVO 객체 (hsId 포함)
 	 * @return 성공 여부를 담은 ResponseEntity
 	 */
@@ -159,7 +159,7 @@ public class HighSchoolController {
 
 	/**
 	 * 고등학교 학과 정보를 DB에 추가하는 메서드
-	 * 
+	 *
 	 * @param highSchoolDeptVO JSON 형식의 HighSchoolDeptVO 객체
 	 * @return 성공 여부를 담은 ResponseEntity
 	 */
@@ -178,7 +178,7 @@ public class HighSchoolController {
 
 	/**
 	 * 고등학교 학과 정보를 수정하는 메서드
-	 * 
+	 *
 	 * @param highSchoolDeptVO JSON 형식의 HighSchoolDeptVO 객체
 	 * @return 성공 여부를 담은 ResponseEntity
 	 */
@@ -197,7 +197,7 @@ public class HighSchoolController {
 
 	/**
 	 * 고등학교 학과 정보를 논리적으로 삭제하는 메서드
-	 * 
+	 *
 	 * @param hsdId 삭제할 학과의 ID
 	 * @return 성공 여부를 담은 ResponseEntity
 	 */
