@@ -24,6 +24,25 @@
 		</div>
 	</div>
 </section>
+
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/comm/peer/teen/teenList.do">커뮤니티</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/comm/peer/teen/teenList.do">또래 게시판</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
