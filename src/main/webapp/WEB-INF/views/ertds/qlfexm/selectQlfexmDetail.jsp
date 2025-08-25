@@ -2,9 +2,12 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/ertds/qlfexm/selectQlfexmDetail.css">
 <section class="channel">
+	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
+		<!-- 대분류 -->
 		<div class="channel-title-text">진학 정보</div>
 	</div>
+	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-item">
 			<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
@@ -17,12 +20,28 @@
 		</div>
 	</div>
 </section>
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/ertds/univ/uvsrch/selectUnivList.do">진학 정보</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 
 <div class="public-wrapper">
 	<div class="tab-container" id="tabs">
-		<h3 class="page-title-bar__title">검정고시</h3>
+		<a class="tab active" href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a>
 	</div>
-
 	<div class="public-wrapper-main">
 		<div class="detail__header-wrapper">
 			<div class="detail__header">
@@ -41,12 +60,12 @@
 				<span class="detail-header__meta-item detail-header__meta-item--source">[ 출처 : 국가평생교육진흥원 검정고시지원센터 ]</span>
 			</div>
 		</div>
-			<hr class="detail__divider" />
-			
+		<hr class="detail__divider" />
+
 		<div class="detail__content">
 			<div class="exam-notice notice-content">${qualficationExamVO.examContent}</div>
 		</div>
-		
+
 		<div class="detail__back-to-list">
 			<a href="/ertds/qlfexm/selectQlfexmList.do" class="detail__action-button">목 록</a>
 		</div>

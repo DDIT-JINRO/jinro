@@ -2,9 +2,12 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/ertds/univ/dpsrch/deptList.css">
 <section class="channel">
+	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
+		<!-- 대분류 -->
 		<div class="channel-title-text">진학 정보</div>
 	</div>
+	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-itemIn">
 			<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
@@ -17,6 +20,23 @@
 		</div>
 	</div>
 </section>
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/ertds/univ/uvsrch/selectUnivList.do">진학 정보</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">

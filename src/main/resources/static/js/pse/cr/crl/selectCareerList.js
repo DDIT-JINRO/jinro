@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-	const channelSection = document.querySelector(".channel");
+	const channelSection = document.querySelector(".breadcrumb-container-space");
+	
+	console.log(channelSection);
+	
 	if (channelSection) {
 	    const errorMessage = channelSection.dataset.errorMessage;
 	    const serverError = channelSection.dataset.serverError;

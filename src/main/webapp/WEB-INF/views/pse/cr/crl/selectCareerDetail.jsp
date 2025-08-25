@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/common/selectDetailPage.css">
-
-<section class="channel" data-error-message="${errorMessage}">
+<section class="channel">
+	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
+		<!-- 대분류 -->
 		<div class="channel-title-text">진로 탐색</div>
 	</div>
+	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-item">
 			<a href="/pse/cat/careerAptitudeTest.do">진로 심리검사</a>
@@ -16,10 +18,28 @@
 	</div>
 </section>
 
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/pse/cat/careerAptitudeTest.do">진로 탐색</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/pse/cr/crl/selectCareerList.do">직업백과</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">직업 상세</h3>
+			<a class="tab active" href="#">직업 상세</a>
 		</div>
 
 		<div class="public-wrapper-main">

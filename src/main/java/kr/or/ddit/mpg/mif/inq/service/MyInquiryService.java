@@ -25,4 +25,6 @@ public interface MyInquiryService {
 	void insertVerification(String memId, String vCategory, MultipartFile authFile);
 	
 	MemberVO getProfileFile(MemberVO member);
+
+	int updateMemberPhone(String imp_uid, String memId);
 }

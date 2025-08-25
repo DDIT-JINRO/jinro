@@ -20,12 +20,29 @@
 		</div>
 	</div>
 </section>
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/empt/ema/employmentAdvertisement.do">취업 정보</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/empt/enp/enterprisePosting.do">기업정보</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">기업 정보</h3>
+			<a class="tab active" href="/empt/enp/enterprisePosting.do">기업정보</a>
 		</div>
-		
+
 		<div class="public-wrapper-main">
 			<form method="get" action="/empt/enp/enterprisePosting.do" class="search-filter__form">
 				<div class="search-filter__bar">
@@ -165,7 +182,9 @@
 									<h4>현재 채용 여부</h4>
 									<c:choose>
 										<c:when test="${company.cpHiringStatus eq 'Y'}">
-											<p><a href="/empt/ema/employmentAdvertisement.do?keyword=${fn:escapeXml(company.cpName)}" class="hiring-link">채용 중 (채용공고 바로가기)</a></p>
+											<p>
+												<a href="/empt/ema/employmentAdvertisement.do?keyword=${fn:escapeXml(company.cpName)}" class="hiring-link">채용 중 (채용공고 바로가기)</a>
+											</p>
 										</c:when>
 										<c:otherwise>
 											<p>채용 없음</p>
@@ -193,7 +212,7 @@
 															<span class="review-rating-text">${interviewReview.irRating} / 5.0</span>
 														</div>
 													</div>
-													
+
 													<p class="review-date">
 														<fmt:formatDate value="${interviewReview.irCreatedAt}" pattern="yyyy. MM. dd" />
 													</p>

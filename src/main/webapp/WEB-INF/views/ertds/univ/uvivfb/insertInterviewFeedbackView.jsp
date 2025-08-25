@@ -22,6 +22,23 @@
 		</div>
 	</div>
 </section>
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/ertds/univ/uvsrch/selectUnivList.do">진학 정보</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 <div>
 	<div class="public-wrapper">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->

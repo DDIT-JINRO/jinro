@@ -20,12 +20,28 @@
 		</div>
 	</div>
 </section>
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/empt/ema/employmentAdvertisement.do">취업 정보</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/empt/ema/employmentAdvertisement.do">채용공고</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">채용 공고</h3>
+			<a class="tab active" href="/empt/ema/employmentAdvertisement.do">채용공고</a>
 		</div>
-	
 		<div class="public-wrapper-main">
 			<form method="get" action="/empt/ema/employmentAdvertisement.do" class="search-filter__form">
 				<div class="search-filter__bar">

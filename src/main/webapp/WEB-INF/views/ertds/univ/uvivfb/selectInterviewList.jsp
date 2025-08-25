@@ -2,9 +2,12 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/ertds/univ/uvivfb/selectInterviewList.css">
 <section class="channel">
+	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
+		<!-- 대분류 -->
 		<div class="channel-title-text">진학 정보</div>
 	</div>
+	<!-- 중분류 -->
 	<div class="channel-sub-sections">
 		<div class="channel-sub-section-itemIn">
 			<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
@@ -17,6 +20,23 @@
 		</div>
 	</div>
 </section>
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/ertds/univ/uvsrch/selectUnivList.do">진학 정보</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
@@ -48,10 +68,10 @@
 					</div>
 				</div>
 			</form>
-			
+
 			<div class="content-list">
 				<div class="accordion-list__header">
-						<span class="accordion-list__col accordion-list__col--univ-name">대학명</span>
+					<span class="accordion-list__col accordion-list__col--univ-name">대학명</span>
 					<div class="accordion-list__col accordion-list__col--meta">
 						<span class="accordion-list__col accordion-list__col--author">작성자</span>
 						<span class="accordion-list__col accordion-list__col--date">작성일</span>
@@ -146,12 +166,8 @@
 								</div>
 								<c:if test="${pageContext.request.userPrincipal.principal == content.memId}">
 									<div class="card-actions">
-										<button type="button" class="card-actions__button card-actions__button--edit" data-mem-id="${content.memId}" data-ir-id="${content.irId}">
-										수정
-										</button>
-										<button type="button" class="card-actions__button card-actions__button--delete" data-ir-id="${content.irId}">
-										삭제
-										</button>
+										<button type="button" class="card-actions__button card-actions__button--edit" data-mem-id="${content.memId}" data-ir-id="${content.irId}">수정</button>
+										<button type="button" class="card-actions__button card-actions__button--delete" data-ir-id="${content.irId}">삭제</button>
 									</div>
 								</c:if>
 							</div>
@@ -162,11 +178,11 @@
 					<p class="content-list__no-results">면접 후기가 없습니다.</p>
 				</c:if>
 			</div>
-			
+
 			<div class="page-actions">
 				<button id="btnWrite" class="page-actions__button">면접 후기 공유하기</button>
 			</div>
-			
+
 			<div class="pagination">
 				<c:url var="prevUrl" value="${articlePage.url}">
 					<c:param name="currentPage" value="${articlePage.startPage - 5}" />
@@ -178,10 +194,8 @@
 						</c:if>
 					</c:forEach>
 				</c:url>
-				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}">
-					← Previous
-				</a>
-			
+				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
+
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
 					<c:url var="pageUrl" value="${articlePage.url}">
 						<c:param name="currentPage" value="${pNo}" />
@@ -193,11 +207,9 @@
 							</c:if>
 						</c:forEach>
 					</c:url>
-					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}">
-						${pNo}
-					</a>
+					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
 				</c:forEach>
-			
+
 				<c:url var="nextUrl" value="${articlePage.url}">
 					<c:param name="currentPage" value="${articlePage.startPage + 5}" />
 					<c:forEach var="p" items="${param}">
@@ -208,9 +220,7 @@
 						</c:if>
 					</c:forEach>
 				</c:url>
-				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}">
-					Next →
-				</a>
+				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
 			</div>
 		</div>
 	</div>

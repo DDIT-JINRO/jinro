@@ -20,6 +20,23 @@
 		</div>
 	</div>
 </section>
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/cdp/rsm/rsm/resumeList.do">경력 관리</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">

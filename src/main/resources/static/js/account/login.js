@@ -37,6 +37,16 @@ async function kakaoLogin() {
 
   window.location.href = kakaoAuthURL;
 }
+document.addEventListener("DOMContentLoaded", () => {
+	checkRegist();
+})
+
+function checkRegist() {
+	const registMessage = document.querySelector("#public-wrapper-main-login").dataset.registMessage;
+	if(registMessage) {
+		alert(registMessage);
+	}
+}
 
 function loginBtn(){
 	

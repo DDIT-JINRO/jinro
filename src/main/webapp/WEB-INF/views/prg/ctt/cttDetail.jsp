@@ -17,10 +17,29 @@
 		</div>
 	</div>
 </section>
+
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/prg/ctt/cttList.do">프로그램</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/prg/ctt/cttList.do">공모전</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">공모전</h3>
+			<a class="tab active" href="/prg/ctt/cttList.do">공모전</a>
 		</div>
 		<div class="public-wrapper-main">
 			<div class="detail-title-wrapper">

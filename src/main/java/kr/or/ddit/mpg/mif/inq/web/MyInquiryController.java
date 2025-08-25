@@ -171,4 +171,19 @@ public class MyInquiryController {
 			return new ResponseEntity<>(response, errorCode.getStatus());
 		}
 	}
+	
+	@PostMapping("/mif/inq/updateMemberPhone.do")
+	@ResponseBody
+	public String updateMemberPhone(@AuthenticationPrincipal String memId, @RequestBody Map<String, Object> requestBody, Model model) {
+		String imp_uid = (String) requestBody.get("imp_uid");
+		int res = myInquiryService.updateMemberPhone(imp_uid, memId);
+		
+		if(res > 0) {
+			return "번호 변경이 완료되었습니다.";
+		} else {
+			return "번호 변경이 실패하였습니다.";
+		}
+		
+		 
+	}
 }

@@ -14,7 +14,7 @@
 		<!-- 		    <div class="tab">입시 정보</div> -->
 		<!--   		</div> -->
 		<!-- 여기부터 작성해 주시면 됩니다 -->
-		<div class="public-wrapper-main-login">
+		<div class="public-wrapper-main-login" id="public-wrapper-main-login" data-regist-message="${registMessage}">
 			<div class="login-container">
 				<div class="login-container-imgBox">
 					<img alt="" src="/images/logo.png">

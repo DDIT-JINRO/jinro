@@ -11,4 +11,6 @@ public interface MemberJoinMapper {
 
 	String isNicknameExists(String nickname);
 
+	int memberJoin(MemberVO memberVO);
+
 }

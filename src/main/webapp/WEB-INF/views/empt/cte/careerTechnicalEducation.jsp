@@ -20,10 +20,27 @@
 		</div>
 	</div>
 </section>
+<div class="breadcrumb-container-space" data-error-message="${errorMessage}">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/empt/ema/employmentAdvertisement.do">취업 정보</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/empt/cte/careerTechnicalEducation.do">직업교육</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">직업교육</h3>
+			<a class="tab active" href="/empt/cte/careerTechnicalEducation.do">직업교육</a>
 		</div>
 
 		<div class="public-wrapper-main">

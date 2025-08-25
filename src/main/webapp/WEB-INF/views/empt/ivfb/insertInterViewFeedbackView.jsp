@@ -1,19 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/common/insertInterviewFeedbackView.css">
-<!-- 스타일 여기 적어주시면 가능 -->
 <section class="channel">
-	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
-		<!-- 대분류 -->
 		<div class="channel-title-text">취업 정보</div>
 	</div>
 	<div class="channel-sub-sections">
-		<!-- 중분류 -->
 		<div class="channel-sub-section-item">
 			<a href="/empt/ema/employmentAdvertisement.do">채용공고</a>
 		</div>
-		<!-- 중분류 -->
 		<div class="channel-sub-section-item">
 			<a href="/empt/enp/enterprisePosting.do">기업정보</a>
 		</div>
@@ -25,10 +20,30 @@
 		</div>
 	</div>
 </section>
+
+<!-- 스타일 여기 적어주시면 가능 -->
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/empt/ema/employmentAdvertisement.do">취업 정보</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/empt/ivfb/interViewFeedback.do">면접후기</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">면접 후기</h3>
+			<a class="tab active" href="/empt/ivfb/interViewFeedback.do">면접후기</a>
 		</div>
 		<div class="public-wrapper-main">
 			<div class="feedback-form">
