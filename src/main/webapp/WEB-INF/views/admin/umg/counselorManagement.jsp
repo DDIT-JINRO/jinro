@@ -1,20 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="/css/admin/umg/counselorManagement.css">
 
 <script src="/js/include/admin/umg/counselorManagement.js"></script>
-<div class="flex">
+<div class="flex dkwnrrhtlvek">
 	<h2 class="topTitle">사용자 관리</h2>
 	<div class="breadcrumb-item"></div>
 	<h2 class="topTitle">상담사 관리</h2>
+	<div class="flex gap5 topBtnGroup">
+		<button class="btn-primary topBtn" id="cnsChartAllBtn">현황</button>
+		<button class="btn-primary topBtn" id="cnsMngBtn">관리</button>
+	</div>
 </div>
 <input type="hidden" id="comCalendarInput" style="display: none;" />
-<body>
+
+<div id="cnsChartAllSpace">
 	<div class="flex gap cnsMg-1" style="margin-bottom: 20px;">
 		<div class="template-panel public-countCard ">
 			<div class="public-card-title">월간 상담 신청 수</div>
-			<img class="public-card-icon" alt=""
-				src="/images/admin/admin-image1.png">
+			<img class="public-card-icon" alt="" src="/images/admin/admin-image1.png">
 			<div class="public-card-count" id="monthlyCnsCount">123</div>
 			<div class="public-span-space">
 				<span id="monthlyCnsApp" class="public-span-increase">▲13.5%</span>
@@ -23,8 +26,7 @@
 		</div>
 		<div class="template-panel public-countCard back-color-red">
 			<div class="public-card-title color-white">월간 대면상담 신청수</div>
-			<img class="public-card-icon" alt=""
-				src="/images/admin/admin-offlineCns.png">
+			<img class="public-card-icon" alt="" src="/images/admin/admin-offlineCns.png">
 			<div class="public-card-count color-white" id="dailyOffCnsCount">123</div>
 			<div class="public-span-space">
 				<span class="public-span-increase color-white" id="dailyOffCnsRate">▲13.5%</span>
@@ -33,8 +35,7 @@
 		</div>
 		<div class="template-panel public-countCard back-color-green">
 			<div class="public-card-title color-white">월간 채팅상담 신청수</div>
-			<img class="public-card-icon" alt=""
-				src="/images/admin/admin-chatCns.png">
+			<img class="public-card-icon" alt="" src="/images/admin/admin-chatCns.png">
 			<div class="public-card-count color-white" id="dailyChatCnsCount">123</div>
 			<div class="public-span-space">
 				<span class="public-span-increase color-white" id="dailyChatCnsRate">▲13.5%</span>
@@ -43,12 +44,10 @@
 		</div>
 		<div class="template-panel public-countCard back-color-purple">
 			<div class="public-card-title color-white">월간 화상상담 신청수</div>
-			<img class="public-card-icon" alt=""
-				src="/images/admin/admin-videoCns.png">
+			<img class="public-card-icon" alt="" src="/images/admin/admin-videoCns.png">
 			<div class="public-card-count color-white" id="dailyVideoCnsCount">123</div>
 			<div class="public-span-space">
-				<span class="public-span-increase color-white"
-					id="dailyVideoCnsRate">▲13.5%</span>
+				<span class="public-span-increase color-white" id="dailyVideoCnsRate">▲13.5%</span>
 				<div class="public-span-since color-white">Since last month</div>
 			</div>
 		</div>
@@ -59,8 +58,8 @@
 				<div class="template-panel cnsCateChart">
 					<div class="flex space-between">
 						<div class="middleTitle">상담 유형별</div>
-						<input type="hidden" id="cnsCateChartStartDay" /> <input
-							type="hidden" id="cnsCateChartEndDay" />
+						<input type="hidden" id="cnsCateChartStartDay" />
+						<input type="hidden" id="cnsCateChartEndDay" />
 						<div class="flex gap5" style="justify-content: flex-end;">
 							<button class="public-toggle-button" id="cnsCateChartReset">전체</button>
 							<select class="public-toggle-select" id="cnsCateChartDateType">
@@ -85,8 +84,8 @@
 				<div class="template-panel cnsTop3Chart">
 					<div class="flex space-between">
 						<div class="middleTitle">상담사 TOP3</div>
-						<input type="hidden" id="cnsTop3ChartStartDay" /> <input
-							type="hidden" id="cnsTop3ChartEndDay" />
+						<input type="hidden" id="cnsTop3ChartStartDay" />
+						<input type="hidden" id="cnsTop3ChartEndDay" />
 						<div class="flex gap5" style="justify-content: flex-end;">
 							<button class="public-toggle-button" id="cnsTop3ChartReset">전체</button>
 							<select class="public-toggle-select" id="cnsTop3ChartDate">
@@ -109,8 +108,8 @@
 			<div class="template-panel cnsTypeChart">
 				<div class="flex space-between">
 					<div class="middleTitle">상담 종류별</div>
-					<input type="hidden" id="cnsTypeChartStartDay" /> <input
-						type="hidden" id="cnsTypeChartEndDay" />
+					<input type="hidden" id="cnsTypeChartStartDay" />
+					<input type="hidden" id="cnsTypeChartEndDay" />
 					<div class="flex gap5" style="justify-content: flex-end;">
 						<button class="public-toggle-button" id="cnsTypeChartReset">전체</button>
 						<select class="public-toggle-select" id="cnsTypeChartDate">
@@ -136,8 +135,8 @@
 		<div class="cnsMg-2-2 template-panel">
 			<div class="flex space-between">
 				<div class="middleTitle">상담 시간대 통계</div>
-				<input type="hidden" id="cnsHoursChartStartDay" /> <input
-					type="hidden" id="cnsHoursChartEndDay" />
+				<input type="hidden" id="cnsHoursChartStartDay" />
+				<input type="hidden" id="cnsHoursChartEndDay" />
 				<div class="flex gap5" style="justify-content: flex-end;">
 					<button class="public-toggle-button" id="cnsHoursChartReset">전체</button>
 					<select class="public-toggle-select" id="cnsHoursChartDate">
@@ -160,6 +159,8 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div id="cnsMngSpace" style="display: none;">
 	<div class="cnsMg-3 flex gap" style="margin-bottom: 20px;">
 		<div class="template-panel cnsCompleteAndReviewList">
 			<div class="flex space-between">
@@ -167,20 +168,17 @@
 				<div class="public-listSearch">
 					<select name="status" id="cnsListStatus">
 						<option value="1">이름</option>
-					</select> <input id="search" name="keyword" placeholder="이름을 입력하세요" />
+					</select>
+					<input id="search" name="keyword" placeholder="이름을 입력하세요" />
 					<button class="btn-save searchUserBtn">조회</button>
 				</div>
 			</div>
 			<div class="search-filter-bar">
-				<p class="ptag-list">
-					총
-					<span id="cnsList-count"></span>
-					건
+				<p class="ptag-list">총 <span id="cnsList-count"></span> 건
 				</p>
 			</div>
 			<div style="display: flex; justify-content: space-between;">
-				<div class="btn-group flex gap5 cnsCompleteAndReviewBtnGroup"
-					style="margin-bottom: 10px;">
+				<div class="btn-group flex gap5 cnsCompleteAndReviewBtnGroup" style="margin-bottom: 10px;">
 					<button class="public-toggle-button" id="cnsListName">이름</button>
 					<button class="public-toggle-button" id="cnsListCnsCnt">상담건수</button>
 					<button class="public-toggle-button" id="cnsListReviewCnt">후기건수</button>
@@ -260,14 +258,15 @@
 						<div class="profile-container">
 							<div class="profileFlex">
 								<div class="profile-image-wrapper">
-									<img id="cns-profile-img" class="profile-image"
-										src="/images/defaultProfileImg.png" alt="프로필 이미지">
+									<img id="cns-profile-img" class="profile-image" src="/images/defaultProfileImg.png" alt="프로필 이미지">
 								</div>
 							</div>
 							<div class="profile-info">
-								<label for="cns-nickname"> <i class="fa-solid fa-pencil"></i>
-								</label> <input type="text" id="cns-id" style="display: none"> <input
-									id="cns-nickname" class="profile-nickname">
+								<label for="cns-nickname">
+									<i class="fa-solid fa-pencil"></i>
+								</label>
+								<input type="text" id="cns-id" style="display: none">
+								<input id="cns-nickname" class="profile-nickname">
 							</div>
 						</div>
 
@@ -279,26 +278,28 @@
 								<input type="text" id="mem-id" style="display: none">
 							</span>
 							<div class="info-field">
-								<label>이름</label> <input type="text" id="mem-name">
+								<label>이름</label>
+								<input type="text" id="mem-name">
 							</div>
 							<div class="info-field">
-								<label>이메일</label> <input type="text" id="mem-email"
-									disabled="disabled">
+								<label>이메일</label>
+								<input type="text" id="mem-email" disabled="disabled">
 							</div>
 							<div class="info-field">
-								<label>전화번호</label> <input type="text" id="mem-phone"
-									disabled="disabled">
+								<label>전화번호</label>
+								<input type="text" id="mem-phone" disabled="disabled">
 							</div>
 							<div class="info-field">
-								<label>생년월일</label> <input type="date" id="mem-birth"
-									disabled="disabled">
+								<label>생년월일</label>
+								<input type="date" id="mem-birth" disabled="disabled">
 							</div>
 							<div class="info-field">
-								<label>성별</label> <input type="text" id="mem-gen"
-									disabled="disabled">
+								<label>성별</label>
+								<input type="text" id="mem-gen" disabled="disabled">
 							</div>
 							<div class="info-field">
-								<label>권한</label> <select id="mem-role">
+								<label>권한</label>
+								<select id="mem-role">
 									<option value="R01001">회원</option>
 									<option value="R01002">관리자</option>
 									<option value="R01003">상담사</option>
@@ -306,16 +307,16 @@
 								</select>
 							</div>
 							<div class="info-field">
-								<label>상담 횟수</label> <input type="text" id="counselor-cns-count"
-									disabled="disabled">
+								<label>상담 횟수</label>
+								<input type="text" id="counselor-cns-count" disabled="disabled">
 							</div>
 							<div class="info-field">
-								<label>휴가 횟수</label> <input type="text" id="counselor-vac-count"
-									disabled="disabled">
+								<label>휴가 횟수</label>
+								<input type="text" id="counselor-vac-count" disabled="disabled">
 							</div>
 							<div class="info-field">
-								<label>상담 평점</label> <input type="text"
-									id="counselor-review-point" disabled="disabled">
+								<label>상담 평점</label>
+								<input type="text" id="counselor-review-point" disabled="disabled">
 							</div>
 						</div>
 					</div>
@@ -335,8 +336,7 @@
 					</div>
 				</div>
 
-				<div class="flex"
-					style="justify-content: flex-end; margin-top: auto;">
+				<div class="flex" style="justify-content: flex-end; margin-top: auto;">
 					<button class="btn-primary" id="cnsModify">
 						<i class="fas fa-save"></i>저장
 					</button>
@@ -345,14 +345,10 @@
 			<div class="template-panel cnsDetailListSpace">
 				<div class="middleTitle">상담 내역</div>
 				<div class="search-filter-bar">
-					<p class="ptag-list">
-						총
-						<span id="cnsHistory-count"></span>
-						건
+					<p class="ptag-list">총 <span id="cnsHistory-count"></span> 건
 					</p>
 				</div>
-				<div
-					style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+				<div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
 
 					<div class="btn-group flex gap5 userListBtnGroup">
 						<button class="public-toggle-button" id="cnsDetailListReqTime">상담일시</button>
@@ -363,20 +359,17 @@
 						</select>
 					</div>
 					<div class="filter-group">
-						<select class="public-toggle-select selectUserList-top"
-							id="cnsCateFilter">
+						<select class="public-toggle-select selectUserList-top" id="cnsCateFilter">
 							<option value="">유형</option>
 							<option value="G08001">대면</option>
 							<option value="G08002">채팅</option>
 							<option value="G08003">화상</option>
-						</select> <select class="public-toggle-select selectUserList-top"
-							id="cnsTypeFilter">
+						</select> <select class="public-toggle-select selectUserList-top" id="cnsTypeFilter">
 							<option value="">종류</option>
 							<option value="G07001">취업</option>
 							<option value="G07002">학업</option>
 							<option value="G07003">심리</option>
-						</select> <select class="public-toggle-select selectUserList-top"
-							id="cnsStatusFilter">
+						</select> <select class="public-toggle-select selectUserList-top" id="cnsStatusFilter">
 							<option value="">상태</option>
 							<option value="S04001">신청</option>
 							<option value="S04002">취소</option>
@@ -408,7 +401,5 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
-</body>
-
+</div>

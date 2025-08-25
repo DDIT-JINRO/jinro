@@ -120,6 +120,22 @@ function counselorManagement() {
 	const cnsHoursChartReset = document.getElementById('cnsHoursChartReset');
 	const cnsTypeChartReset = document.getElementById('cnsTypeChartReset');
 
+	const cnsChartAllBtn = document.getElementById('cnsChartAllBtn');
+	const cnsMngBtn = document.getElementById('cnsMngBtn');
+	
+	const cnsChartAllSpace = document.getElementById('cnsChartAllSpace');
+	const cnsMngSpace = document.getElementById('cnsMngSpace');
+	
+	cnsMngBtn.addEventListener('click', function() {
+		cnsChartAllSpace.style = "display:none;"
+		cnsMngSpace.style = "display:block;"
+	});
+
+	cnsChartAllBtn.addEventListener('click', function() {
+		cnsMngSpace.style = "display:none;"
+		cnsChartAllSpace.style = "display:block;"
+	});
+
 	cnsCateChartReset.addEventListener('click', () => {
 		cateGenderSel.value = '';
 		cateAgeSel.value = '';
