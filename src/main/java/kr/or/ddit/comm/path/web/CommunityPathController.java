@@ -172,4 +172,11 @@ public class CommunityPathController {
 
 		return ResponseEntity.ok(newReplyVO);
 	}
+	
+	@PostMapping("/pathBoardUpdate.do")
+	public String goUpdateForm(@RequestParam("boardId") int boardId, Model model) {
+		CommBoardVO board = teenCommService.selectTeenBoard(boardId);
+		model.addAttribute("board", board);
+		return "comm/path/pathBoardUpdate";
+	}
 }
