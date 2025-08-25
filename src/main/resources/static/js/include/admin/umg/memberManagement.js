@@ -60,8 +60,6 @@ function memberManagement() {
 		memberChartAllSpace.style = "display:block;"
 	});
 
-
-
 	replyListSortOrder.addEventListener('click', function() {
 		const userId = document.getElementById('mem-id').value;
 		if (!userId) {
@@ -609,7 +607,9 @@ function memberManagement() {
 				if (recentPenaltyDateEl) {
 					recentPenaltyDateEl.innerHTML = `<i class="fa-regular fa-clock"></i>&nbsp;` + (recentPenaltyDate ? formatDateMMDD(recentPenaltyDate) : '-');
 				}
-
+				
+				fetchPageLogList();
+				
 			})
 			.catch(error => {
 				console.error('회원 정보 불러오기 실패', error);
@@ -1418,7 +1418,7 @@ function memberManagement() {
 		const pageLogTbody = document.getElementById('pageLogList');
 		const pageLogCountEl = document.getElementById('pageLog-count');
 		const pageLogPaginationEl = document.getElementById('pageLogPagination');
-
+		const memId = document.getElementById('mem-id').value;
 		if (!pageLogTbody || !pageLogCountEl || !pageLogPaginationEl) {
 			console.error("페이지 로그 요소를 찾을 수 없습니다.");
 			return;
@@ -1430,7 +1430,8 @@ function memberManagement() {
 				size: pageSize,
 				keyword: keyword,
 				sortBy: sortBy,
-				sortOrder: sortOrder
+				sortOrder: sortOrder,
+				memId: memId
 			}
 		})
 			.then(res => {
@@ -1534,7 +1535,6 @@ function memberManagement() {
 
 	userOnlineChart();
 	pageVisitChart();
-	fetchPageLogList(); // 페이지 로드 시 페이지 로그 리스트 불러오기
 
 	nicknameDbCkFn();
 	emailDbCkFn();

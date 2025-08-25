@@ -203,9 +203,10 @@ public class UserManagementController {
 			@RequestParam(value = "size", required = false, defaultValue = "5") int size,
 			@RequestParam(value = "keyword", required = false) String keyword,
 			@RequestParam(value = "sortBy", required = false) String sortBy,
-			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder) {
+			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder,
+			@RequestParam(value = "memId", required = true) String memId) {
 
-		return userManagementService.getMemberPageLogList(currentPage, size, keyword, sortBy, sortOrder);
+		return userManagementService.getMemberPageLogList(currentPage, size, keyword, sortBy, sortOrder, memId);
 	}
 
 }

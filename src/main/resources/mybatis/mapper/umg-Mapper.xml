@@ -989,7 +989,7 @@
 		        LEFT JOIN
 		        	MEMBER M ON PL.MEM_ID = M.MEM_ID
 		        <where>
-		        	1=1
+		        	PL.MEM_ID = #{memId}
 		            <if test="keyword != null and keyword != ''">
 		                AND (
 		                    PL.PL_TITLE LIKE '%' || #{keyword} || '%'
@@ -1028,7 +1028,7 @@
 	    LEFT JOIN
 		MEMBER M ON PL.MEM_ID = M.MEM_ID
 	    <where>
-	    	1=1
+	    	PL.MEM_ID = #{memId}
 	        <if test="keyword != null and keyword != ''">
 	            AND (
 	                PL.PL_TITLE LIKE '%' || #{keyword} || '%'

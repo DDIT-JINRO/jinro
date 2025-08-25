@@ -45,6 +45,6 @@ public interface UserManagementService {
 			int userId);
 
 	ArticlePage<PageLogVO> getMemberPageLogList(int currentPage, int size, String keyword, String sortBy,
-			String sortOrder);
+			String sortOrder, String memId);
 
 }

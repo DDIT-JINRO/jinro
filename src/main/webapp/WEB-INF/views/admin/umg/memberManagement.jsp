@@ -436,7 +436,7 @@
 			</div>
 		</div>
 		<div class="template-panel" style="width: 796px;">
-			<div class="middleTitle">페이지 방문자 조회</div>
+			<div class="middleTitle">페이지 방문 조회</div>
 
 			<div class="search-filter-bar">
 				<p class="ptag-list pageLogCount">총 <span id="pageLog-count"></span> 건

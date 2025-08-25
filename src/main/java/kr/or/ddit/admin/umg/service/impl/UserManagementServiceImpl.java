@@ -483,11 +483,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	@Override
 	public ArticlePage<PageLogVO> getMemberPageLogList(int currentPage, int size, String keyword, String sortBy,
-			String sortOrder) {
+			String sortOrder, String memId) {
 		int startNo = (currentPage - 1) * size + 1;
 		int endNo = currentPage * size;
 
 		Map<String, Object> map = new HashMap<>();
+		map.put("memId", memId);
 		map.put("currentPage", currentPage);
 		map.put("size", size);
 		map.put("startNo", startNo);
