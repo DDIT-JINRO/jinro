@@ -89,7 +89,7 @@
 								<label class="search-filter__group-title">정렬 순서</label>
 								<div class="search-filter__options">
 									<label class="search-filter__option">
-										<input type="radio" name="sortOrder" value="deadline" ${checkedFilters.sortOrder == 'deadline' or empty checkedFilters.sortOrder ? 'checked' : ''} />
+										<input type="radio" name="sortOrder" value="deadline" ${checkedFilters.sortOrder == 'deadline' ? 'checked' : ''} />
 										<span>마감일 임박순</span>
 									</label>
 									<label class="search-filter__option">

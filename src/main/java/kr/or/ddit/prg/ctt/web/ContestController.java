@@ -33,10 +33,10 @@ public class ContestController {
 
 	@Autowired
 	private ContestService contestService;
-	
+
 	@Autowired
 	private FileService fileService;
-	
+
 	@GetMapping("/cttList.do")
 	public String cttList(Model model, @RequestParam(defaultValue = "1") int currentPage,
 			@RequestParam(required = false) String keyword,
@@ -44,7 +44,7 @@ public class ContestController {
 			@RequestParam(value = "contestTargetFilter", required = false) List<String> contestTargetFilter,
 			@RequestParam(value = "contestTypeFilter", required = false) List<String> contestTypeFilter,
 			@RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter,
-			@RequestParam(value = "sortOrder", defaultValue = "deadline") String sortOrder) {
+			@RequestParam(value = "sortOrder", required = false) String sortOrder) {
 
 		log.info(
 				"cttList : contestGubunFilter={}, contestTargetFilter={}, contestTypeFilter={}, contestStatusFilter={}",
@@ -54,7 +54,7 @@ public class ContestController {
 		contestVO.setKeyword(keyword);
 		contestVO.setCurrentPage(currentPage);
 		contestVO.setSize(6);
-		
+
 		//필터
 		contestVO.setContestGubunFilter(contestGubunFilter);
 		contestVO.setContestTargetFilter(contestTargetFilter);
@@ -98,28 +98,28 @@ public class ContestController {
 	    @RequestParam(required = false) String contestData,
 	    @RequestParam(required = false) MultipartFile contestFiles,
 	    @RequestParam(required = false) String contestId) {
-	    
+
 	    try {
 	        ContestVO contestVO;
-	        
+
 	        if (contestData != null) {
 	            ObjectMapper mapper = new ObjectMapper();
 	            contestVO = mapper.readValue(contestData, ContestVO.class);
 	        } else {
 	            contestVO = new ContestVO();
 	        }
-	        
+
 	        if (contestId != null && !"".equals(contestId)) {
 	        	contestVO.setContestId(contestId);
 	        }
-	        
+
 	        // 파일 처리
 	        if (contestFiles != null && !contestFiles.isEmpty()) {
 	            List<MultipartFile> fileList = new ArrayList<>();
 	            fileList.add(contestFiles);
 
 	            Long fileGroupId = null;
-	            
+
 	            // 기존 파일이 있는지 확인 (수정 모드인 경우)
 	            if (contestId != null && !"".equals(contestId)) {
 	                ContestVO cttDetail = contestService.selectCttDetail(contestId);
@@ -142,9 +142,9 @@ public class ContestController {
 
 	            contestVO.setFileGroupId(fileGroupId);
 	        }
-	        
+
 	        int result = contestService.updateContest(contestVO);
-	        
+
 	        if (result > 0) {
 	            return ResponseEntity.ok("성공적으로 저장되었습니다.");
 	        } else {

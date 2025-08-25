@@ -1,12 +1,12 @@
 /**
- * 
+ *
  */
 
 document.addEventListener('DOMContentLoaded', function() {
 	// 토글 버튼
 	const toggleButton = document.getElementById('search-filter-toggle');
 
-	// 필터 패널 
+	// 필터 패널
 	const panel = document.getElementById('search-filter-panel');
 
 	// 필터 입력 요소들
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	filterRadios.forEach(radio => {
 		radio.addEventListener('change', (e) => {
 			removeFilterTagByInputName(e.target.name);
-			if (e.target.checked && !(e.target.name === 'sortOrder' && e.target.value === 'deadline')) {
+			if (e.target.checked) {
 				const labelText = e.target.nextElementSibling.textContent;
 				createFilterTag(labelText, e.target.name);
 			}
@@ -103,9 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			filterInputs.forEach(input => {
 				input.checked = false;
 			});
-			const defaultSort = document.querySelector('input[name="sortOrder"][value="deadline"]');
-			if (defaultSort) defaultSort.checked = true;
-
 			if (selectedFiltersContainer) selectedFiltersContainer.innerHTML = '';
 		});
 	}
@@ -131,10 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			if (isSelected) {
 				input.checked = true;
-				if (!(input.name === 'sortOrder' && input.value === 'deadline')) {
-					const labelText = input.nextElementSibling.textContent;
-					createFilterTag(labelText, input.name);
-				}
+				const labelText = input.nextElementSibling.textContent;
+				createFilterTag(labelText, input.name);
 			}
 		});
 	}
