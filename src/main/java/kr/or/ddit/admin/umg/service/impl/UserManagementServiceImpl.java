@@ -61,7 +61,6 @@ public class UserManagementServiceImpl implements UserManagementService {
 		int total = userManagementMapper.getAlluserList(map);
 		// 페이지 네이션
 		ArticlePage<MemberVO> articlePage = new ArticlePage<MemberVO>(total, currentPage, size, list, keyword,10);
-
 		return articlePage;
 	}
 
@@ -429,9 +428,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 		List<MemberVO> list = userManagementMapper.getMemberActivityList(map);
 		int total = userManagementMapper.getAllMemberActivityList(map);
-
+		log.info(size+"");
 		ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword,10);
-
+		log.info(articlePage.getContent()+"");
 		return articlePage;
 	}
 

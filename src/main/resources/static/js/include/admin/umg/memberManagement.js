@@ -329,7 +329,7 @@ function memberManagement() {
 	function fetchUserList(page = 1, sortBy = 'id', sortOrder = 'asc', inFilter = '') {
 		currentPage = page;
 
-		const pageSize = 5;
+		const pageSize = 10;
 		const keyword = document.querySelector('input[name="keyword"]').value;
 		const status = document.querySelector('select[name="status"]').value;
 		// fetchUserList 함수 내에서 userListStatus의 최신 값을 가져오도록 수정
