@@ -27,6 +27,7 @@ public class CounselingReviewVO {
 	// 필터조건
 	private String keyword;
 	private String status;
+	private String sortOrder;
 
 	// 페이징
 	private int currentPage = 1;

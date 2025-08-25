@@ -65,8 +65,20 @@
 		        )
 		    </if>
 		ORDER BY
-			CR_CREATED_AT DESC
-			, CR_ID DESC
+        <choose>
+            <when test="sortOrder == 'oldest'">
+                A.CR_CREATED_AT ASC
+            </when>
+            <when test="sortOrder == 'rateDesc'">
+                A.CR_RATE DESC, A.CR_CREATED_AT DESC
+            </when>
+            <when test="sortOrder == 'rateAsc'">
+                A.CR_RATE ASC, A.CR_CREATED_AT DESC
+            </when>
+            <otherwise>
+                A.CR_CREATED_AT DESC
+            </otherwise>
+        </choose>
 		OFFSET #{startRow} - 1 ROWS FETCH NEXT #{endRow} - #{startRow} + 1 ROWS ONLY
 	</select>
 

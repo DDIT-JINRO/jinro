@@ -90,6 +90,29 @@
 									</c:forEach>
 								</div>
 							</div>
+
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬 순서</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="latest" ${param.sortOrder == 'latest' ? 'checked' : ''} />
+										<span>최신순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="oldest" ${param.sortOrder == 'oldest' ? 'checked' : ''} />
+										<span>오래된순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="rateDesc" ${param.sortOrder == 'rateDesc' ? 'checked' : ''} />
+										<span>평점 높은순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="rateAsc" ${param.sortOrder == 'rateAsc' ? 'checked' : ''} />
+										<span>평점 낮은순</span>
+									</label>
+								</div>
+							</div>
+
 							<div class="search-filter__group">
 								<div class="search-filter__group-header">
 									<label class="search-filter__group-title">선택된 필터</label>

@@ -133,7 +133,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 필터 키워드
 	const allCheckboxGroups = {
 	    counselMethods: document.querySelectorAll('.search-filter__option input[name="counselMethods"]'),
-		counselCategorys: document.querySelectorAll('.search-filter__option input[name="counselCategorys"]'),
+	    counselCategorys: document.querySelectorAll('.search-filter__option input[name="counselCategorys"]'),
+	};
+	
+	const allRadioGroups = {
+		sortOrder: document.querySelectorAll('.search-filter__option input[name="sortOrder"]')
 	};
 	
 	// 선택 필터 영역
@@ -156,25 +160,31 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedFiltersContainer.innerHTML = ''
 
 	    // 정의된 순서(filterOrder)대로 각 필터 그룹을 확인합니다.
-	    filterOrder.forEach(groupName => {
-	        const checkboxList = allCheckboxGroups[groupName];
+		Object.keys(allCheckboxGroups).forEach(groupName => {
+		    const checkboxList = allCheckboxGroups[groupName];
+		    const selectedCheckboxes = Array.from(checkboxList).filter(cb => cb.checked);
 
-	        const selectedCheckboxes = Array.from(checkboxList).filter(checkBox => checkBox.checked);
-
-            // 선택된 모든 체크박스에 대해 반복 실행
-            selectedCheckboxes.forEach(checkbox => {
-                let text = checkbox.nextElementSibling.textContent;
-
-                if (groupName === "counselCategory") {
-                    text = "상담 분류 > " + text;
-                } else if (groupName === "counselMethod") {
-                    text = "상담 방법 > " + text;
-                }
-                
-                const filterTagHTML = `<span class="search-filter__tag" data-group="${groupName}" data-value="${checkbox.value}">${text}<button type="button" class="com-remove-filter">×</button></span>`;
-                selectedFiltersContainer.innerHTML += filterTagHTML;
-            });
-	    });
+		    selectedCheckboxes.forEach(checkbox => {
+		        let text = checkbox.nextElementSibling.textContent;
+		        let prefix = groupName === "counselCategorys" ? "상담 분류" : "상담 방법";
+		        text = `${prefix} > ${text}`;
+		        
+		        const tagHTML = `<span class="search-filter__tag" data-group="${groupName}" data-value="${checkbox.value}">${text}<button type="button" class="search-filter__tag-remove">×</button></span>`;
+		        selectedFiltersContainer.innerHTML += tagHTML;
+		    });
+		});
+		
+		Object.keys(allRadioGroups).forEach(groupName => {
+		    const radioList = allRadioGroups[groupName];
+		    const selectedRadio = Array.from(radioList).find(radio => radio.checked);
+		    
+		    if (selectedRadio) {
+		        let text = selectedRadio.nextElementSibling.textContent;
+		        text = `정렬 > ${text}`;
+		        const tagHTML = `<span class="search-filter__tag" data-group="${groupName}" data-value="${selectedRadio.value}">${text}<button type="button" class="search-filter__tag-remove">×</button></span>`;
+		        selectedFiltersContainer.innerHTML += tagHTML;
+		    }
+		});
 	};
 
 	// 체크 박스 선택 시 이벤트
@@ -188,6 +198,12 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.addEventListener('change', handleCheckboxChange);
         });
     });
+	
+	Object.values(allRadioGroups).forEach(radioList => {
+	    radioList.forEach(radio => {
+	        radio.addEventListener('change', updateSelectedFiltersDisplay);
+	    });
+	});
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
 	selectedFiltersContainer.addEventListener('click', (e) => {
@@ -196,11 +212,15 @@ document.addEventListener('DOMContentLoaded', function() {
 			const groupName = tag.dataset.group;
             const value = tag.dataset.value;
 
-	        const checkboxToUncheck = Array.from(allCheckboxGroups[groupName]).find(checkbox => checkbox.value === value);
+	        const checkboxToUncheck = allCheckboxGroups[groupName] ? Array.from(allCheckboxGroups[groupName]).find(checkbox => checkbox.value === value) : null;
+			const radioToUncheck = allRadioGroups[groupName] ? Array.from(allRadioGroups[groupName]).find(radio => radio.value === value) : null;
 
 	        if (checkboxToUncheck) {
 	            checkboxToUncheck.checked = false;
 	        }
+			if (radioToUncheck) {
+			     radioToUncheck.checked = false;
+			 }
 
 			// 화면을 다시 그립니다.
 			updateSelectedFiltersDisplay();
@@ -215,8 +235,16 @@ document.addEventListener('DOMContentLoaded', function() {
 					checkbox.checked = false;
 				});
 			});
+			
+			Object.values(allRadioGroups).forEach(radioList => {
+			     radioList.forEach(radio => {
+			         radio.checked = false;
+			     });
+			 });
 
 			selectedFiltersContainer.innerHTML = '';
 		});
 	}
+	
+	updateSelectedFiltersDisplay();
 });
