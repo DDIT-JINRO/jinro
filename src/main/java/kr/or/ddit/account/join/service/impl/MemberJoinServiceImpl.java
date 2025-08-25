@@ -129,7 +129,7 @@ public class MemberJoinServiceImpl implements MemberJoinService {
 		return memberJoinMapper.memberJoin(memberVO);
 	}
 
-	public static String formatPhoneNumber(String phoneNum) {
+	public String formatPhoneNumber(String phoneNum) {
 
 		if (phoneNum == null || phoneNum.length() != 11) {
 			return null;
