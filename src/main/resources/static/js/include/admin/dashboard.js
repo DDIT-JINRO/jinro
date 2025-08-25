@@ -301,7 +301,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		setActiveButton(this);
 	});
 
-
+	document.getElementById('contentBtn').onclick = () =>{
+	    downloadCanvas(newMoneyChart, '컨텐츠 이용 통계.png', 'image/png');
+	}
 
 });
 

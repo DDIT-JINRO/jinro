@@ -89,6 +89,7 @@
 					<div class="flex gap10 endflex btn-group">
 						<button class="public-toggle-button active" id="teenBtn">청소년</button>
 						<button class="public-toggle-button" id="youthBtn">청년</button>
+						<button class="public-toggle-button" id="contentBtn">다운로드</button>
 					</div>
 					<div class="chart-container-doughnut">
 						<canvas id="nestedDoughnutChart"></canvas>
