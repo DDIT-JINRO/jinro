@@ -3,10 +3,10 @@ package kr.or.ddit.comm.peer.teen.service.impl;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.ddit.comm.peer.teen.service.TeenCommService;
 import kr.or.ddit.comm.vo.CommBoardLikeVO;
@@ -184,9 +184,12 @@ public class TeenCommServiceImpl implements TeenCommService {
 		return teenCommMapper.selectTeenBoard(boardId);
 	}
 
+	@Transactional
 	@Override
-	public void updateBoard(CommBoardVO commBoardVO) {
+	public String updateBoard(CommBoardVO commBoardVO) {
 		teenCommMapper.updateBoard(commBoardVO);
+		commBoardVO = teenCommMapper.selectTeenBoard(commBoardVO.getBoardId());
+		return commBoardVO.getCcId();
 	}
 
 	@Override

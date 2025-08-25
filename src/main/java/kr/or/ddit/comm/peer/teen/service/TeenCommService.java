@@ -1,7 +1,6 @@
 package kr.or.ddit.comm.peer.teen.service;
 
 import java.util.List;
-import java.util.Map;
 
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
@@ -23,7 +22,7 @@ public interface TeenCommService {
 
 	public CommBoardVO selectTeenBoard(int boardId);
 
-	public void updateBoard(CommBoardVO commBoardVO);
+	public String updateBoard(CommBoardVO commBoardVO);
 
 	public void deleteteenBoard(CommBoardVO commBoardVO);
 

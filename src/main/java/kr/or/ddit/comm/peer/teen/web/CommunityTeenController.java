@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
-import kr.or.ddit.cdp.sint.service.SelfIntroVO;
 import kr.or.ddit.comm.peer.teen.service.TeenCommService;
 import kr.or.ddit.comm.vo.CommBoardVO;
 import kr.or.ddit.comm.vo.CommReplyVO;
@@ -171,10 +170,9 @@ public class CommunityTeenController {
 
 	@PostMapping("/teenBoardInUpdate.do")
 	@ResponseBody
-	public ResponseEntity<String> teenBoardInUpdate(@RequestParam("title") String title,
+	public ResponseEntity<Map<String, Object>> teenBoardInUpdate(@RequestParam("title") String title,
 			@RequestParam("content") String content, @RequestParam("boardId") int boardId,
 			@RequestParam(value = "files", required = false) MultipartFile[] files, Principal principal) {
-
 		int memId = Integer.parseInt(principal.getName());
 
 		Long fileGroupId = null;
@@ -200,12 +198,11 @@ public class CommunityTeenController {
 		try {
 			fileService.uploadFiles(fileGroupId, fileList);
 		} catch (IOException e) {
-			return ResponseEntity.ok("파일업로드 실패");
+			return ResponseEntity.ok(Map.of("success", false));
 		}
 
-		teenCommService.updateBoard(commBoardVO);
-
-		return ResponseEntity.ok("success");
+		String ccId = teenCommService.updateBoard(commBoardVO);
+		return ResponseEntity.ok(Map.of("success", true, "ccId", ccId));
 	}
 
 	@PostMapping("/createTeenReply.do")
