@@ -23,6 +23,25 @@
 		</div>
 	</div>
 </section>
+
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/mpg/mif/inq/selectMyInquiryView.do">마이페이지</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/mpg/mif/inq/selectMyInquiryView.do">내 정보</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
 <div>
 	<div class="public-wrapper" data-success-message="${successMessage}" data-error-message="${errorMessage}">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->

@@ -19,6 +19,24 @@
 	</div>
 </section>
 
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/mpg/mif/inq/selectMyInquiryView.do">마이페이지</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/mpg/mat/bmk/selectBookMarkList.do">나의 활동</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
 <div class="public-wrapper">
 	<div class="tab-container" id="tabs">
 		<a class="tab" href="/mpg/mat/bmk/selectBookMarkList.do">북마크</a>

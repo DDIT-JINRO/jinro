@@ -21,11 +21,29 @@
 		</div>
 	</div>
 </section>
+
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/mpg/mif/inq/selectMyInquiryView.do">마이페이지</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/mpg/pay/selectPaymentView.do">결제 구독내역</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
 <div>
 	<div class="public-wrapper">
-		<!-- 여기부터 작성해 주시면 됩니다 -->
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">결제/구독내역</h3>
+			<a class="tab active" href="/mpg/pay/selectPaymentView.do">결제/구독내역</a>
 		</div>
 		
 		<div class="public-wrapper-main">
