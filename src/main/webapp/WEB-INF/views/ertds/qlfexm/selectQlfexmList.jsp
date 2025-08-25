@@ -35,6 +35,37 @@
 						</button>
 					</div>
 				</div>
+				<div class="search-filter__accordion">
+					<button type="button" class="search-filter__accordion-header is-active">
+						<span>상세검색</span>
+						<span class="search-filter__accordion-arrow">▲</span>
+					</button>
+					<div class="search-filter__accordion-panel">
+						<div class="search-filter__accordion-content">
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬 순서</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="createdAtDesc" <c:if test="${paramValues.sortOrder[0] == 'createdAtDesc'}">checked</c:if> >
+										<span>작성일 내림차순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="createdAtAsc" <c:if test="${paramValues.sortOrder[0] == 'createdAtAsc'}">checked</c:if> >
+										<span>작성일 오름차순</span>
+									</label>
+								</div>
+							</div>
+							<div class="search-filter__group">
+								<div class="search-filter__group-header">
+									<label class="search-filter__group-title">선택된 필터</label>
+									<button type="button" class="search-filter__reset-button">초기화</button>
+								</div>
+								<div class="search-filter__selected-tags"></div>
+							</div>
+							<button type="submit" class="search-filter__submit-button">검색</button>
+						</div>
+					</div>
+				</div>
 			</form>
 			<div class="source-div">
 				<span class="list-header__meta-item list-header__meta-item--source">[ 출처 : 국가평생교육진흥원 검정고시지원센터 ]</span>

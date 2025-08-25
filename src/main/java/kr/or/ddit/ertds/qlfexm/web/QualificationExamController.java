@@ -19,20 +19,21 @@ public class QualificationExamController {
 
 	@Autowired
 	QualificationExamService qualificationExamService;
-	
+
 	// 검정고시
 	@GetMapping("/qlfexm/selectQlfexmList.do")
 	public String qlfexmListPage(Model model,
 		    @RequestParam(required = false) String keyword,
 		    @RequestParam(value="currentPage",required=false,defaultValue="1") int currentPage,
-		    @RequestParam(value="size",required=false,defaultValue="5") int size ) {
+		    @RequestParam(value="size",required=false,defaultValue="5") int size,
+		    @RequestParam(value="sortOrder",required=false) String sortOrder) {
 
 		// 목록 조회
-		ArticlePage<QualficationExamVO> articlePage= qualificationExamService.getList(keyword,currentPage,size);
+		ArticlePage<QualficationExamVO> articlePage= qualificationExamService.getList(keyword,currentPage,size,sortOrder);
 	    model.addAttribute("articlePage", articlePage);
 	    model.addAttribute("getTotal", articlePage.getTotal());
 	    model.addAttribute("getList", articlePage.getContent());
-		
+
 		return "ertds/qlfexm/selectQlfexmList"; // /WEB-INF/views/erds/qlfexm/list.jsp
 	}
 
@@ -44,5 +45,5 @@ public class QualificationExamController {
 	    model.addAttribute("qualficationExamVO", qualficationExamVO);
 		return "ertds/qlfexm/selectQlfexmDetail"; // /WEB-INF/views/erds/qlfexm/list.jsp
 	}
-	
+
 }

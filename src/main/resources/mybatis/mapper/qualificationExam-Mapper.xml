@@ -13,14 +13,14 @@
 			</if>
 		</where>
 	</select>
-	
+
 	<select id="getList" parameterType="kr.or.ddit.ertds.qlfexm.service.QualficationExamVO" resultType="kr.or.ddit.ertds.qlfexm.service.QualficationExamVO">
 		SELECT * FROM (
 	        SELECT ROWNUM AS RNUM, B.*
 	        FROM (
-	             SELECT EXAM_ID, EXAM_TITLE, EXAM_CONTENT, EXAM_APPLY_START, 
-				 EXAM_APPLY_END, EXAM_ONLINE_START, EXAM_ONLINE_END, EXAM_URL, EXAM_NOTI_DATE, 
-				 CASE 
+	             SELECT EXAM_ID, EXAM_TITLE, EXAM_CONTENT, EXAM_APPLY_START,
+				 EXAM_APPLY_END, EXAM_ONLINE_START, EXAM_ONLINE_END, EXAM_URL, EXAM_NOTI_DATE,
+				 CASE
 				    WHEN EXAM_AREA_CODE ='G22001' THEN '서울특별시교육청'
 				    WHEN EXAM_AREA_CODE ='G22002' THEN '부산광역시교육청'
 				    WHEN EXAM_AREA_CODE ='G22003' THEN '대구광역시교육청'
@@ -48,13 +48,24 @@
 	                    OR  EXAM_CONTENT LIKE '%' || #{keyword} || '%'
 	                </if>
 	            </where>
-	            ORDER BY EXAM_ID 
+	            ORDER BY
+	            <choose>
+	            	<when test="sortOrder == 'createdAtDesc' ">
+	            	EXAM_NOTI_DATE DESC
+	            	</when>
+	            	<when test="sortOrder == 'createdAtAsc' ">
+	            	EXAM_NOTI_DATE ASC
+	            	</when>
+	            	<otherwise>
+		            EXAM_ID
+	            	</otherwise>
+	            </choose>
 	        ) B
 	        WHERE ROWNUM &lt;= #{endNo}
 	    )
 	    WHERE RNUM &gt;= #{startNo}
 	</select>
-	
+
 	<select id="getDetail" parameterType="int" resultType="kr.or.ddit.ertds.qlfexm.service.QualficationExamVO">
 		SELECT EXAM_ID, EXAM_TITLE, EXAM_CONTENT, EXAM_APPLY_START,
 		EXAM_APPLY_END, EXAM_ONLINE_START, EXAM_ONLINE_END, EXAM_URL,
@@ -69,7 +80,7 @@
 			WHEN EXAM_AREA_CODE ='G22007' THEN '울산광역시교육청'
 			WHEN EXAM_AREA_CODE ='G22008' THEN '세종특별자치시교육청'
 			WHEN EXAM_AREA_CODE ='G22009' THEN '경기도교육청'
-			WHEN EXAM_AREA_CODE ='G22010' THEN '강원특별자치도교육청' 
+			WHEN EXAM_AREA_CODE ='G22010' THEN '강원특별자치도교육청'
 			WHEN EXAM_AREA_CODE ='G22011' THEN '충청북도교육청'
 			WHEN EXAM_AREA_CODE ='G22012' THEN '충청남도교육청'
 			WHEN EXAM_AREA_CODE ='G22013' THEN '전북특별자치도교육청'
@@ -83,5 +94,5 @@
 		WHERE EXAM_ID = #{examId}
 		ORDER BY EXAM_NOTI_DATE DESC
 	</select>
-	
+
 </mapper>

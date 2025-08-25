@@ -18,16 +18,18 @@ public class QualficationExamVO {
 	private String examAreaCode;	//관할교육청코드
 	private int examYear;			//시행년도
 	private int examAttempt;		//시행회차
-	
+
 	// 필터조건
 	private String keyword;
-	
+
+	private String sortOrder;
+
 	//페이징
 	private int currentPage;
 	private int size;
 	private int startNo;
 	private int endNo;
-	
+
 	public int getStartNo() {
 		return (this.currentPage - 1) * size;
 	}
