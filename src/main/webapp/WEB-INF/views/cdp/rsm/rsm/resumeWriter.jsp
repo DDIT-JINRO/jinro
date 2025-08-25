@@ -44,6 +44,17 @@
 							<p class="required-info">* 필수 입력 정보입니다.</p>
 						</div>
 						<div class="form-profile-grid">
+						
+							<div class="form-group photo-group">
+								<label for="photo-upload" class="photo-upload-area drop-zone">
+									<div class="upload-placeholder">
+										<i class="fa fa-plus" aria-hidden="true"></i> <span>사진추가</span>
+									</div> <img id="photo-preview" src="" alt="" /> <input type="file"
+									id="photo-upload" name="files" accept="image/*" class="sr-only">
+								</label>
+								<button id="photo-delete-btn" type="button">삭제</button>
+							</div>
+
 							<div class="form-group name-group">
 								<label for="name">
 									이름
@@ -51,15 +62,6 @@
 								</label>
 								<input type="text" id="name" name="name" placeholder="이름을 입력해주세요." required>
 								<span class="error-message" id="name-error">이름을 입력해주세요.</span>
-							</div>
-
-							<div class="form-group dob-group">
-								<label for="dob">
-									생년월일
-									<span class="required-asterisk">*</span>
-								</label>
-								<input type="date" id="dob" name="dob" required>
-								<span class="error-message" id="dob-error">생년월일을 입력해주세요.</span>
 							</div>
 
 							<div class="form-group gender-group">
@@ -74,20 +76,16 @@
 								</select>
 								<span class="error-message" id="gender-error">성별을 선택해주세요.</span>
 							</div>
-
-							<div class="form-group photo-group">
-								<label for="photo-upload" class="photo-upload-area drop-zone">
-									<div class="upload-placeholder">
-										<i class="fa fa-plus" aria-hidden="true"></i>
-										<span>사진추가</span>
-									</div>
-									<img id="photo-preview" src="" alt="" />
-
-									<input type="file" id="photo-upload" name="files" accept="image/*" class="sr-only">
-								</label>
-								<button id="photo-delete-btn" type="button">삭제</button>
-							</div>
 							
+							<div class="form-group dob-group">
+								<label for="dob">
+									생년월일
+									<span class="required-asterisk">*</span>
+								</label>
+								<input type="date" id="dob" name="dob" required>
+								<span class="error-message" id="dob-error">생년월일을 입력해주세요.</span>
+							</div>
+
 							<div class="form-group email-group">
 								<label for="email">
 									이메일
@@ -96,7 +94,6 @@
 								<input type="email" id="email" name="email" placeholder="이메일" value="" required>
 								<span class="error-message" id="email-error">이메일을 입력해주세요.</span>
 							</div>
-
 
 							<div class="form-group mobile-phone-group">
 								<label for="mobile-phone">
