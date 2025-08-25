@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			removeFilterTagByInputName(e.target.name);
 
 			// 2. 새로 선택된 항목의 태그를 추가 (기본값은 제외)
-			if (e.target.checked && !(e.target.name === 'sortOrder' && e.target.value === 'deadline')) {
+			if (e.target.checked) {
 				const labelText = e.target.nextElementSibling.textContent;
 				createFilterTag(labelText, e.target.name);
 			}
@@ -100,9 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			filterCheckboxes.forEach(input => {
 				input.checked = false;
 			});
-			// 정렬 라디오 버튼은 기본값(마감일순)으로 다시 체크해줍니다.
-			const defaultSort = document.querySelector('input[name="sortOrder"][value="deadline"]');
-			if (defaultSort) defaultSort.checked = true;
 
 			selectedFiltersContainer.innerHTML = '';
 		});
@@ -138,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					input.checked = true;
 
 					// 5. '선택된 필터' 영역에 태그도 함께 생성합니다. (단, 기본 정렬값은 제외)
-					if (!(input.name === 'sortOrder' && input.value === 'deadline')) {
+					if (!(input.name === 'sortOrder')) {
 						const labelText = input.nextElementSibling.textContent;
 						createFilterTag(labelText, input.name);
 					}
