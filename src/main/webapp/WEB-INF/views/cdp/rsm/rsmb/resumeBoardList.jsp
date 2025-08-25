@@ -61,6 +61,7 @@
 					<span class="content-list__header-col content-list__header-col--author">작성자</span>
 					<span class="content-list__header-col content-list__header-col--date">작성일</span>
 					<span class="content-list__header-col content-list__header-col--views">조회수</span>
+					<span class="content-list__header-col content-list__header-col--replys">댓글수</span>
 					<span class="content-list__header-col content-list__header-col--bookmark">북마크</span>
 				</div>
 
@@ -85,6 +86,7 @@
 							<fmt:formatDate value="${commBoardVO.boardUpdatedAt}" pattern="yyyy.MM.dd" />
 						</div>
 						<div class="content-list__col content-list__col--views" data-label="조회수">${commBoardVO.boardCnt}</div>
+						<div class="content-list__col content-list__col--replys" data-label="댓글수">${commBoardVO.boardReplyCnt}</div>
 						<div class="content-list__col content-list__col--bookmark" data-label="북마크">
 							<button class="bookmark-button ${commBoardVO.isBookmark == commBoardVO.boardId ? 'is-active' : ''}" data-category-id="G03005" data-target-id="${commBoardVO.boardId}">
 								<span class="bookmark-button__icon--active">

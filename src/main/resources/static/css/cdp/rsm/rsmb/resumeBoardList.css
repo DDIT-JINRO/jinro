@@ -51,6 +51,11 @@
 	flex: 0 0 80px;
 }
 
+
+.content-list__header-col--replys {
+	flex: 0 0 80px;
+}
+
 .content-list__header-col--bookmark {
 	flex: 0 0 80px;
 }
@@ -89,6 +94,10 @@
 }
 
 .content-list__col--views {
+	flex: 0 0 80px;
+}
+
+.content-list__col--replys {
 	flex: 0 0 80px;
 }
 
