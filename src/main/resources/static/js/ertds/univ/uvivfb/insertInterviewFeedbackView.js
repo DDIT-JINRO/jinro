@@ -22,6 +22,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		const interviewRating = window.getInterviewRating();
 		const files = document.querySelector("#file-input").files;
 
+		if (!univId) {
+		    alert("대학을 선택해 주세요.");
+		    return;
+		}
+		
 		if (!interviewDate) {
 			alert("면접 일자를 입력해 주세요.");
 			return;
@@ -221,14 +226,123 @@ document.addEventListener('DOMContentLoaded', function() {
 	let currentPage = 1;
 	let totalPages = 1;
 	let selectedUniversity = null;
-	let universities = []; // 전체 기업 데이터
+	let allUniversities = []; // 전체 대학 데이터 (한번만 로드)
+	let filteredUniversities = []; // 필터링된 대학 데이터
+	let searchTimeout;
 	const itemsPerPage = 5;
 
+	// 한글 검색 유틸리티 클래스
+	class HangulSearchUtil {
+		// 한글 자음/초성 검색 매칭
+		static matches(text, query) {
+			if (!text || typeof text !== 'string') {
+			    return false;
+			}
+			
+			const searchTerm = query.toLowerCase().trim();
+			if (!searchTerm) return true;
+
+			// 1. 일반 텍스트 매칭
+			if (text.toLowerCase().includes(searchTerm)) {
+				return true;
+			}
+
+			// Hangul.js가 로드되지 않았으면 일반 검색만 수행
+			if (typeof Hangul === 'undefined') {
+				return false;
+			}
+
+			try {
+				// 2. 자음만 입력한 경우 (예: "ㅅㅇ", "ㅎㅇ")
+				const consonantOnlyPattern = /^[ㄱ-ㅎ]+$/;
+				if (consonantOnlyPattern.test(searchTerm)) {
+					// 초성 검색
+					const initials = this.getInitials(text);
+					if (initials.includes(searchTerm)) {
+						return true;
+					}
+
+					// 모든 자음 검색
+					const allConsonants = this.getAllConsonants(text);
+					if (allConsonants.includes(searchTerm)) {
+						return true;
+					}
+				}
+
+				// 3. 부분 조합 검색 (예: "서울", "서ㅇ", "한ㅇ")
+				return this.matchesPartial(text, searchTerm);
+
+			} catch (error) {
+				console.error('Hangul 검색 오류:', error);
+				return false;
+			}
+		}
+
+		// 초성 추출
+		static getInitials(text) {
+			try {
+				const CHO = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+				let initials = '';
+
+				for (let i = 0; i < text.length; i++) {
+					const char = text[i];
+					const code = char.charCodeAt(0);
+
+					// 한글 완성형 범위
+					if (code >= 0xAC00 && code <= 0xD7A3) {
+						const syllableIndex = code - 0xAC00;
+						const choIndex = Math.floor(syllableIndex / (21 * 28));
+						initials += CHO[choIndex];
+					}
+					// 한글 자음
+					else if (code >= 0x3131 && code <= 0x314E) {
+						initials += char;
+					}
+				}
+
+				return initials;
+			} catch (error) {
+				return '';
+			}
+		}
+
+		// 모든 자음 추출
+		static getAllConsonants(text) {
+			try {
+				return Hangul.disassemble(text)
+					.filter(char => /[ㄱ-ㅎ]/.test(char))
+					.join('');
+			} catch (error) {
+				return '';
+			}
+		}
+
+		// 부분 조합 매칭
+		static matchesPartial(text, query) {
+			try {
+				const queryDisassembled = Hangul.disassemble(query);
+				const textDisassembled = Hangul.disassemble(text);
+
+				const queryStr = queryDisassembled.join('');
+				const textStr = textDisassembled.join('');
+
+				return textStr.includes(queryStr);
+			} catch (error) {
+				return false;
+			}
+		}
+	}
+
 	// 모달 열기
-	searchBtn.addEventListener('click', function() {
+	searchBtn.addEventListener('click', async function() {
 		modal.classList.add('is-active');
 		searchInput.focus();
-		loadUniversities('');
+
+		if (allUniversities.length === 0) {
+			await loadAllUniversities();
+		}
+
+		filterAndRenderUniversities('');
 	});
 
 	// 모달 닫기
@@ -249,9 +363,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	// 기업 검색
-	const searchUniversities = async (keyword) => {
+	const loadAllUniversities = async () => {
 		try {
-			const response = await fetch(url + "?univName=" + keyword, {
+			const response = await fetch(url + "?univName=", {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -265,61 +379,86 @@ document.addEventListener('DOMContentLoaded', function() {
 			const result = await response.json();
 
 			if (result.success && Array.isArray(result.universityList)) {
-				return result.universityList;
+				allUniversities = result.universityList;
 			} else {
 				console.error("API 응답에 문제가 있습니다.", result.message);
-				return [];
+				allUniversities = [];
 			}
 		} catch (error) {
-			console.error("기업 정보를 불러오는 중 에러가 발생하였습니다.", error.message);
-			return [];
+			console.error("대학 정보를 불러오는 중 에러가 발생하였습니다.", error.message);
+			universityList.innerHTML = '<li class="error-message">대학 정보를 불러오는데 실패했습니다.</li>';
+			allUniversities = [];
 		}
-	}
+	};
 
 	// 기업 목록 로드
-	const loadUniversities = async (keyword) => {
-		// 로딩 표시
-		universityList.innerHTML = '<li class="loading-message">검색 중...</li>';
+	function filterAndRenderUniversities(keyword) {
+	    if (!keyword.trim()) {
+	        filteredUniversities = [...allUniversities];
+	    } else {
+	        filteredUniversities = allUniversities.filter(university => {
+	            const univName = university.univName || '';
+	            return HangulSearchUtil.matches(univName, keyword);
+	        });
+	    }
 
-		universities = await searchUniversities(keyword);
+	    totalPages = Math.ceil(filteredUniversities.length / itemsPerPage);
+	    if (totalPages === 0) totalPages = 1;
 
-		totalPages = Math.ceil(universities.length / itemsPerPage);
-		if (totalPages === 0) totalPages = 1;
+	    currentPage = 1;
+	    renderUniversities();
+	    updatePagination();
+	}
 
-		currentPage = 1;
-		renderUniversities();
-		updatePagination();
+	// 선택된 대학을 입력 필드에 설정하고 모달 닫기
+	function selectUniversityAndClose(university) {
+		universityNameInput.value = university.univName;
+		universityNameInput.dataset.univId = university.univId;
+		closeModal();
 	}
 
 	// 기업 목록 렌더링
 	function renderUniversities() {
 		const startIndex = (currentPage - 1) * itemsPerPage;
 		const endIndex = startIndex + itemsPerPage;
-		const pageUniversities = universities.slice(startIndex, endIndex);
+		const pageUniversities = filteredUniversities.slice(startIndex, endIndex);
 
 		if (pageUniversities.length === 0) {
-			universityList.innerHTML = '<li class="empty-message">검색 결과가 없습니다.</li>';
+			const message = allUniversities.length === 0 ?
+				'대학 정보를 불러오는 중입니다...' :
+				'검색 결과가 없습니다.';
+			universityList.innerHTML = `<li class="empty-message">${message}</li>`;
 			return;
 		}
 
 		universityList.innerHTML = pageUniversities.map(university => `
-		    <li class="search-modal__list-item" data-univ-id="${university.univId}" data-univ-name="${university.univName}">
-		        <div class="search-modal__list-item-name">${university.univName}</div>
-		        <div class="search-modal__list-item-info">${university.univCampus} · ${university.univRegion}</div>
-		    </li>
+			<li class="search-modal__list-item" data-univ-id="${university.univId}" data-univ-name="${university.univName}">
+				<div class="search-modal__list-item-name">${university.univName}</div>
+				<div class="search-modal__list-item-info">${university.univCampus} · ${university.univRegion}</div>
+			</li>
 		`).join('');
-		
-		// 기업 선택 이벤트 추가
+
+		// 대학 선택 이벤트 추가
 		document.querySelectorAll('.search-modal__list-item').forEach(item => {
+			// 단일 클릭 이벤트
 			item.addEventListener('click', function() {
 				document.querySelectorAll('.search-modal__list-item').forEach(i => i.classList.remove('is-selected'));
 				this.classList.add('is-selected');
-				
+
 				selectedUniversity = {
 					univId: this.dataset.univId,
 					univName: this.dataset.univName
 				};
 				confirmBtn.disabled = false;
+			});
+
+			// 더블클릭 이벤트 (즉시 선택)
+			item.addEventListener('dblclick', function() {
+				const university = {
+					univId: this.dataset.univId,
+					univName: this.dataset.univName
+				};
+				selectUniversityAndClose(university);
 			});
 		});
 	}
@@ -328,17 +467,37 @@ document.addEventListener('DOMContentLoaded', function() {
 	function updatePagination() {
 		pageInfo.textContent = `${currentPage} / ${totalPages}`;
 		prevPageBtn.disabled = currentPage === 1;
-		nextPageBtn.disabled = currentPage === totalPages || universities.length === 0;
+		nextPageBtn.disabled = currentPage === totalPages || filteredUniversities.length === 0;
+	}
+	
+	function debounceFilter(keyword) {
+		clearTimeout(searchTimeout);
+		searchTimeout = setTimeout(() => {
+			filterAndRenderUniversities(keyword);
+		}, 150);
 	}
 
 	// 검색 이벤트
 	searchButton.addEventListener('click', function() {
-		loadUniversities(searchInput.value.trim());
+		clearTimeout(searchTimeout);
+		filterAndRenderUniversities(searchInput.value.trim());
+	});
+
+	// 실시간 검색
+	searchInput.addEventListener('input', function(e) {
+		debounceFilter(e.target.value);
+	});
+	
+	// 한글 조합 완료시 즉시 검색
+	searchInput.addEventListener('compositionend', function(e) {
+		clearTimeout(searchTimeout);
+		filterAndRenderUniversities(e.target.value);
 	});
 
 	searchInput.addEventListener('keypress', function(e) {
 		if (e.key === 'Enter') {
-			loadUniversities(searchInput.value.trim());
+			clearTimeout(searchTimeout);
+			filterAndRenderUniversities(searchInput.value.trim());
 		}
 	});
 
@@ -362,11 +521,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 확인 버튼
 	confirmBtn.addEventListener('click', function() {
 		if (selectedUniversity) {
-			universityNameInput.value = selectedUniversity.univName;
-			universityNameInput.dataset.univId = selectedUniversity.univId;
-
-
-			closeModal();
+			selectUniversityAndClose(selectedUniversity);
 		}
 	});
 
@@ -388,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // 자동완성 핸들러
 function autoCompleteHandler() {
 	// 1. '입학지원 대학 검색' 버튼 클릭 
-	document.getElementById('searchBtn').click();
+	document.getElementById('open-search-modal').click();
 
 	// 2. 모달이 열리는 것을 기다린 후, 대학을 선택
 	setTimeout(function() {
