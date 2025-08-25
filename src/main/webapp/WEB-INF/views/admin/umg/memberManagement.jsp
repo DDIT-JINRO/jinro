@@ -273,9 +273,9 @@
 							<th class="body-boardId">게시글ID</th>
 							<th class="body-memName">분류</th>
 							<th class="body-boardTitle">제목</th>
-							<th class="body-boardCnt">조회수</th>
-							<th class="body-status">작성일</th>
-							<th class="body-status">삭제여부</th>
+							<th class="body-boardCnt count">조회수</th>
+							<th class="body-status date">작성일</th>
+							<th class="body-status delYN">삭제여부</th>
 						</tr>
 					</thead>
 					<tbody class="userDetailList" id="userDetailBoardList">

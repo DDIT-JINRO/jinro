@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+th, td {
+	text-align: left;
+}
+
 .userOnlineChartCanvasSpace {
 	height: 550px;
 	margin-top: auto;
@@ -753,4 +757,12 @@
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.body-status.date, .body-status.delYN{
+	text-align: center;
+}
+
+.body-boardCnt.count{
+	text-align: right;
 }
