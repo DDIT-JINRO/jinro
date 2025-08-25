@@ -30,7 +30,7 @@
 					<span class="divider">|</span>
 					<span>
 						게시일:
-						<fmt:formatDate value="${cttDetail.contestCreatedAt}" pattern="yyyy.MM.dd" />
+						<fmt:formatDate value="${cttDetail.contestCreatedAt}" pattern="yyyy. M. d." />
 					</span>
 					<span class="divider">|</span>
 					<span class="detail-header__meta-item detail-header__meta-item--source">[ 출처: 씽굿(Thinkcontest.com), 대학문화신문사 ]</span>
@@ -67,7 +67,7 @@
 							</tr>
 							<tr>
 								<th>접수기간</th>
-								<td><fmt:formatDate value="${cttDetail.contestStartDate}" pattern="yyyy.MM.dd" /> ~ <fmt:formatDate value="${cttDetail.contestEndDate}" pattern="yyyy.MM.dd" /></td>
+								<td><fmt:formatDate value="${cttDetail.contestStartDate}" pattern="yyyy. M. d." /> ~ <fmt:formatDate value="${cttDetail.contestEndDate}" pattern="yyyy. M. d." /></td>
 							</tr>
 							<tr>
 								<th>참가자격</th>

@@ -270,7 +270,7 @@
 							<span class="group-meta-value">${stdBoardVO.boardCnt}</span>
 							<span class="group-meta-value">${stdBoardVO.replyCnt}</span>
 							<span class="group-meta-value">
-								<fmt:formatDate value="${stdBoardVO.boardCreatedAt}" pattern="yyyy.MM.dd" />
+								<fmt:formatDate value="${stdBoardVO.boardCreatedAt}" pattern="yyyy. M. d." />
 							</span>
 						</div>
 					</div>

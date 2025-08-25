@@ -135,12 +135,12 @@
 									<li>
 										<span class="info-label">접수기간</span>
 										<span class="info-value">
-											<fmt:formatDate value="${contest.contestStartDate}" pattern="yyyy.MM.dd" />
+											<fmt:formatDate value="${contest.contestStartDate}" pattern="yyyy. M. d." />
 											~
-											<fmt:formatDate value="${contest.contestEndDate}" pattern="yyyy.MM.dd" />
+											<fmt:formatDate value="${contest.contestEndDate}" pattern="yyyy. M. d." />
 										</span>
 									</li>
-									<li class="d-day-item" data-end-date="<fmt:formatDate value='${contest.contestEndDate}' pattern='yyyy-MM-dd' />">
+									<li class="d-day-item" data-end-date="<fmt:formatDate value='${contest.contestEndDate}' pattern='yyyy. M. d.' />">
 										<span class="info-label">마감까지</span>
 										<span class="info-value d-day-text">
 											<%-- JavaScript가 여기에 D-Day를 채웁니다. --%>
@@ -150,8 +150,8 @@
 										<span class="info-label">모집상태</span>
 										<span class="info-value">
 											<%-- 현재 날짜와 마감 날짜를 비교하여 진행/마감 표시 --%>
-											<fmt:formatDate value="${contest.contestEndDate}" pattern="yyyyMMdd" var="endDay" />
-											<fmt:formatDate value="${now}" pattern="yyyyMMdd" var="today" />
+											<fmt:formatDate value="${contest.contestEndDate}" pattern="yyyy. M. d." var="endDay" />
+											<fmt:formatDate value="${now}" pattern="yyyy. M. d." var="today" />
 											<c:choose>
 												<c:when test="${endDay < today}">
 													<span class="status-tag finished">마감</span>
@@ -169,7 +169,7 @@
 								<br />
 								<span class="meta-item">조회수 ${contest.contestRecruitCount}</span>
 								<span class="meta-item">
-									<fmt:formatDate value="${contest.contestCreatedAt}" pattern="yyyy. MM. dd" />
+									<fmt:formatDate value="${contest.contestCreatedAt}" pattern="yyyy. M. d." />
 								</span>
 							</div>
 						</div>
