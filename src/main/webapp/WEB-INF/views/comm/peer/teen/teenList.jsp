@@ -60,6 +60,7 @@
 					<span class="content-list__col content-list__col--agency">작성자</span>
 					<span class="content-list__col content-list__col--date">작성일</span>
 					<span class="content-list__col content-list__col--agency">조회수</span>
+					<span class="content-list__col content-list__col--agency">댓글수</span>
 				</div>
 
 				<c:forEach var="commBoardVO" varStatus="stat" items="${articlePage.content}">
@@ -83,6 +84,7 @@
 							<fmt:formatDate value="${commBoardVO.boardUpdatedAt}" pattern="yyyy.MM.dd" />
 						</div>
 						<div class="content-list__col content-list__col--agency" data-label="조회수">${commBoardVO.boardCnt}</div>
+						<div class="content-list__col content-list__col--agency" data-label="조회수">${commBoardVO.boardReplyCnt}</div>
 					</div>
 				</c:forEach>
 				<c:if test="${empty articlePage.content}">
