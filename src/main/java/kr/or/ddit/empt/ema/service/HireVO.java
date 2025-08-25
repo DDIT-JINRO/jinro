@@ -27,7 +27,7 @@ public class HireVO {
 	private String hireClassCodeName; // 직업대분류
 	private long dday;
 	private int memId;
-	
+
 	// 필터링
 	private String keyword; // 검색어 (제목 또는 기업명)
 	private List<String> hireTypeNames; // 채용 유형 (체크박스)
@@ -39,6 +39,9 @@ public class HireVO {
 	private int size = 5;
 	private int startNo;
 	private int endNo;
+
+	private String cpHiringStatus;
+	private String sortOrder;
 
 	// D-day를 계산하여 반환하는 getter 메서드
 	public long getDday() {

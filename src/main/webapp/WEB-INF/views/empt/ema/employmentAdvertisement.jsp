@@ -25,7 +25,7 @@
 		<div class="tab-container" id="tabs">
 			<h3 class="page-title-bar__title">채용 공고</h3>
 		</div>
-	
+
 		<div class="public-wrapper-main">
 			<form method="get" action="/empt/ema/employmentAdvertisement.do" class="search-filter__form">
 				<div class="search-filter__bar">
@@ -79,6 +79,34 @@
 											<span>${hireType.ccName}</span>
 										</label>
 									</c:forEach>
+								</div>
+							</div>
+
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">채용상태</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="checkbox" name="cpHiringStatus" value="Y">
+										<span>채용 중</span>
+									</label>
+								</div>
+							</div>
+
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬 순서</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="hireEndDesc" <c:if test="${paramValues.sortOrder[0] == 'hireEndDesc'}">checked</c:if> >
+										<span>마감일 임박순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="createdDesc" <c:if test="${paramValues.sortOrder[0] == 'createdDesc'}">checked</c:if> >
+										<span>최신 공고순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="createdAsc" <c:if test="${paramValues.sortOrder[0] == 'createdAsc'}">checked</c:if> >
+										<span>과거 공고순</span>
+									</label>
 								</div>
 							</div>
 
@@ -196,6 +224,9 @@
 					<c:forEach var="hireTypeNames" items="${paramValues.hireTypeNames}">
 						<c:param name="hireTypeNames" value="${hireTypeNames}" />
 					</c:forEach>
+					<c:if test="${not empty param.sortOrder}">
+						<c:param name="sortOrder" value="${param.sortOrder}" />
+					</c:if>
 				</c:url>
 				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
 
@@ -212,6 +243,9 @@
 						<c:forEach var="hireTypeNames" items="${paramValues.hireTypeNames}">
 							<c:param name="hireTypeNames" value="${hireTypeNames}" />
 						</c:forEach>
+						<c:if test="${not empty param.sortOrder}">
+							<c:param name="sortOrder" value="${param.sortOrder}" />
+						</c:if>
 					</c:url>
 					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
 				</c:forEach>
@@ -228,6 +262,9 @@
 					<c:forEach var="hireTypeNames" items="${paramValues.hireTypeNames}">
 						<c:param name="hireTypeNames" value="${hireTypeNames}" />
 					</c:forEach>
+					<c:if test="${not empty param.sortOrder}">
+						<c:param name="sortOrder" value="${param.sortOrder}" />
+					</c:if>
 				</c:url>
 				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
 			</div>

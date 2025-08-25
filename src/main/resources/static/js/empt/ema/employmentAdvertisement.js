@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			currentContent.classList.add('is-active');
 			header.classList.add('is-active');
 			currentToggle.classList.add('is-active');
-			
+
 			// 하이픈 줄바꿈 로직 적용
 			const descriptionSection = currentItem.querySelector('.hire-description-section p');
 			if (descriptionSection && !descriptionSection.dataset.isProcessed) {
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
 	// 필터 아코디언 토글 버튼
 	const toggleButton = document.getElementById('search-filter-toggle');
-	// 필터 패널 
+	// 필터 패널
 	const panel = document.getElementById('search-filter-panel');
 	// 필터 키워드
 	const filterCheckboxes = document.querySelectorAll('.search-filter__option input[type="checkbox"]');
@@ -58,6 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	const selectedFiltersContainer = document.querySelector('.search-filter__selected-tags');
 	// 초기화 버튼
 	const resetButton = document.querySelector('.search-filter__reset-button');
+
+
+	const orderByRadios = document.querySelectorAll('.search-filter__option input[type="radio"][name="sortOrder"]');
 
 	// 아코디언 토글 기능
 	if (toggleButton && panel) {
@@ -67,30 +70,54 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	}
 
-	// 필터 태그 추가
-	const createFilterTag = (text) => {
-		const filterTag = `<span class="search-filter__tag" data-filter="${text}">${text}<button type="button" class="search-filter__tag-remove">×</button></span>`;
-		selectedFiltersContainer.innerHTML += filterTag;
-	};
+	// 2. 선택된 필터 태그를 업데이트하는 함수
+	const updateSelectedFiltersDisplay = () => {
+		console.log('asdfasf');
+		if (!selectedFiltersContainer) return;
+	    selectedFiltersContainer.innerHTML = '';
 
-	// 필터 태그 삭제
-	const removeFilterTag = (text) => {
-		const tagToRemove = selectedFiltersContainer.querySelector(`[data-filter="${text}"]`);
-		if (tagToRemove) {
-			selectedFiltersContainer.removeChild(tagToRemove);
+	    const filterGroups = {
+	        hireClassCodeNames: { label: '직무' },
+	        regions: { label: '지역' },
+	        hireTypeNames: { label: '채용유형' },
+			hiringStatus : { label: '채용상태' },
+			sortOrder : { label: '정렬' },
+	    };
+
+		// 3. 필터 input에 변경 이벤트 리스너 추가
+		filterCheckboxes.forEach(checkbox => {
+		    if (checkbox.checked) {
+		        const groupName = checkbox.name;
+		        const groupLabel = filterGroups[groupName]?.label || '';
+		        const labelText = checkbox.nextElementSibling.textContent;
+
+		        const tagHTML = `<span class="search-filter__tag" data-name="${groupName}" data-value="${checkbox.value}">${groupLabel} > ${labelText}<button type="button" class="search-filter__tag-remove">×</button></span>`;
+		        selectedFiltersContainer.insertAdjacentHTML('beforeend', tagHTML);
+		    }
+		});
+
+		// 정렬 라디오
+		const checkedOrder = Array.from(orderByRadios).find(r => r.checked);
+		if (checkedOrder) {
+			checkedOrder.dataset.preChecked = 'true';
+			const labelText = checkedOrder.nextElementSibling.textContent;
+			const tagHTML = `<span class="search-filter__tag" data-name="sortOrder" data-value="${checkedOrder.value}">정렬 > ${labelText}<button type="button" class="search-filter__tag-remove">×</button></span>`;
+			selectedFiltersContainer.insertAdjacentHTML('beforeend', tagHTML);
 		}
 	};
 
-	// 체크박스 변경 시 이벤트 처리
-	filterCheckboxes.forEach(checkbox => {
-		checkbox.addEventListener('change', (e) => {
-			const labelText = e.target.nextElementSibling.textContent;
-			if (e.target.checked) {
-				createFilterTag(labelText);
-			} else {
-				removeFilterTag(labelText);
+	// 체크박스 변경 이벤트
+	filterCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateSelectedFiltersDisplay));
+	// 라디오 이벤트
+	orderByRadios.forEach(radio => {
+		radio.addEventListener('change', updateSelectedFiltersDisplay);
+		radio.addEventListener('click', function(e) {
+			if (radio.dataset.preChecked == 'true') {
+				radio.dataset.preChecked = '';
+				radio.checked = false;
+				updateSelectedFiltersDisplay();
 			}
-		});
+		})
 	});
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
@@ -118,23 +145,28 @@ document.addEventListener('DOMContentLoaded', function() {
 			filterCheckboxes.forEach(checkbox => {
 				checkbox.checked = false;
 			});
+			orderByRadios.forEach(radio => {
+				radio.checked = false;
+			})
 			selectedFiltersContainer.innerHTML = '';
 		});
 	}
 
 	// 페이지 리로드 후에도 필터 유지
 	const urlParams = new URLSearchParams(window.location.search);
-	filterCheckboxes.forEach(checkbox => {
-		const paramName = checkbox.name;
-		const paramValue = checkbox.value;
-		const paramValues = urlParams.getAll(paramName);
+	const firstLoad = () => {
+		filterCheckboxes.forEach(checkbox => {
+			const paramName = checkbox.name;
+			const paramValue = checkbox.value;
+			const paramValues = urlParams.getAll(paramName);
 
-		if (paramValues.includes(paramValue)) {
-			checkbox.checked = true;
-			const labelText = checkbox.nextElementSibling.textContent;
-			createFilterTag(labelText);
-		}
-	});
+			if (paramValues.includes(paramValue)) {
+				checkbox.checked = true;
+			}
+		});
+		updateSelectedFiltersDisplay();
+	}
+	firstLoad();// 쿼리파라미터에서 떼오는 로직이 js에 작성되어있음. 쿼리파라미터 챙겨서 checked상태 만든후 필터업데이트 호출
 
 	// 검색창 키워드 자동 채우기
 	const keywordInput = document.querySelector('input[name="keyword"]');
@@ -159,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			handleBookmarkToggle(this);
 		});
 	});
+
 });
 
 //북마크
@@ -167,7 +200,7 @@ const handleBookmarkToggle = (button) => {
 	    alert("북마크는 로그인 후 이용 하실 수 있습니다.");
 	    return;
 	}
-	
+
 	const bmCategoryId = button.dataset.categoryId;
 	const bmTargetId = button.dataset.targetId;
 

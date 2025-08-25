@@ -33,6 +33,9 @@
 	            	LEFT JOIN (SELECT BM_ID, BM_TARGET_ID FROM BOOKMARK WHERE BM_CATEGORY_ID='G03003' AND MEM_ID=#{memId})e ON a.HIRE_ID = e.BM_TARGET_ID
 	            	</if>
 	            <where>
+	            	<if test="cpHiringStatus != null">
+			        	AND TRUNC(SYSDATE) &lt; TRUNC(a.HIRE_END_DATE)
+			        </if>
 	                <if test="keyword != null and keyword != ''">
 	                    (a.hire_title LIKE '%' || #{keyword} || '%' OR b.cp_name LIKE '%' || #{keyword} || '%')
 	                </if>
@@ -55,16 +58,34 @@
 	                        </foreach>
 	                        )
 	                </if>
+
 	            </where>
 	            ORDER BY
-	            <if test="memId != null and memId != ''"> 
+	            <if test="memId != null and memId != ''">
 	            e.BM_ID,
 	            </if>
-	            CASE
-			        WHEN a.hire_end_date >= TRUNC(SYSDATE) THEN 0
-			        ELSE 1
-			    END ASC,
-	            a.hire_start_date DESC
+	            <choose>
+	            	<when test="sortOrder == 'hireEndDesc'">
+	            	CASE
+				        WHEN a.hire_end_date >= TRUNC(SYSDATE) THEN 0
+				        ELSE 1
+				    END ASC,
+		            a.hire_start_date DESC
+	            	</when>
+	            	<when test="sortOrder == 'createdDesc'">
+	            	a.hire_start_date DESC
+	            	</when>
+	            	<when test="sortOrder == 'createdAsc'">
+	            	a.hire_start_date ASC
+	            	</when>
+	            	<otherwise>
+		            CASE
+				        WHEN a.hire_end_date >= TRUNC(SYSDATE) THEN 0
+				        ELSE 1
+				    END ASC,
+		            a.hire_start_date DESC
+		            </otherwise>
+	            </choose>
 	        ) a
 	    )
 	    WHERE RNUM BETWEEN #{startNo} AND #{endNo}
@@ -79,6 +100,9 @@
 	        JOIN COM_CODE c ON a.HIRE_TYPE = c.CC_ID
 	        LEFT JOIN COM_CODE d ON a.HIRE_CLASS_CODE = d.CC_ID
 	    <where>
+	    	<if test="cpHiringStatus != null">
+	        	AND TRUNC(SYSDATE) &lt; TRUNC(a.HIRE_END_DATE)
+	        </if>
 	        <if test="keyword != null and keyword != ''">
 	            (a.hire_title LIKE '%' || #{keyword} || '%' OR b.cp_name LIKE '%' || #{keyword} || '%')
 	        </if>
@@ -103,42 +127,42 @@
 	        </if>
 	    </where>
 	</select>
-    
+
     <select id="selectCodeVOList" parameterType="kr.or.ddit.worldcup.service.ComCodeVO" resultType="kr.or.ddit.com.ComCodeVO">
     	select CC_ID, CL_CODE, CC_NAME, CC_ETC
 		from COM_CODE
 		where CL_CODE = #{clCode}
     </select>
-    
-    <select id="selectHireByBookMarkMemId" parameterType="String" resultType="kr.or.ddit.empt.ema.service.HireVO"> 
+
+    <select id="selectHireByBookMarkMemId" parameterType="String" resultType="kr.or.ddit.empt.ema.service.HireVO">
 		SELECT A.HIRE_ID, A.CP_ID, A.HIRE_TITLE, A.HIRE_END_DATE, B.CP_NAME
 			FROM HIRE A
 			JOIN COMPANY B
 			ON A.CP_ID = B.CP_ID
-			WHERE HIRE_ID IN 
+			WHERE HIRE_ID IN
 			    (SELECT BM_TARGET_ID
 			    FROM BOOKMARK
 			    WHERE MEM_ID = #{memId}
 			    AND BM_CATEGORY_ID ='G03003')
     </select>
-    
+
     <select id="getAllUserIds" resultType="String">
     	select distinct mem_id
 			from BOOKMARK
 			where BM_CATEGORY_ID ='G03003'
     </select>
-    
+
     <select id="checkHireByHireId" parameterType="kr.or.ddit.empt.ema.service.HireVO" resultType="kr.or.ddit.empt.ema.service.HireVO">
 	    select *
 			from hire
 			where HIRE_ID = #{hireId}
     </select>
-    
+
     <select id="getMaxHireId" resultType="int">
     	SELECT NVL(MAX(HIRE_ID),0)+1
 		FROM HIRE
     </select>
-    
+
     <update id="updateEmploymentAdvertisement" parameterType="kr.or.ddit.empt.ema.service.HireVO">
 		 MERGE INTO HIRE H
 	    USING DUAL
@@ -168,7 +192,7 @@
 	                H.HIRE_CLASS_CODE = #{hireClassCode},
 	            </if>
        		</set>
-				
+
     WHEN NOT MATCHED THEN
         INSERT (HIRE_ID, CP_ID
             <if test="hireTitle != null and hireTitle != ''">, HIRE_TITLE</if>
@@ -189,7 +213,7 @@
             <if test="hireClassCode != null and hireClassCode != ''">, #{hireClassCode}</if>
         )
 	</update>
-	
+
 	<delete id="deleteEmploymentAdvertisement" parameterType="kr.or.ddit.empt.ema.service.HireVO">
 		DELETE HIRE
 		WHERE HIRE_ID = #{hireId}
