@@ -25,7 +25,7 @@
 		<div class="tab-container" id="tabs">
 			<h3 class="page-title-bar__title">기업 정보</h3>
 		</div>
-		
+
 		<div class="public-wrapper-main">
 			<form method="get" action="/empt/enp/enterprisePosting.do" class="search-filter__form">
 				<div class="search-filter__bar">
@@ -79,6 +79,20 @@
 									<label class="search-filter__option">
 										<input type="checkbox" name="hiringStatus" value="N">
 										<span>채용 없음</span>
+									</label>
+								</div>
+							</div>
+
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬 순서</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="reviewCntDesc" <c:if test="${paramValues.sortOrder[0] == 'reviewCntDesc'}">checked</c:if> >
+										<span>후기 많은 순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="reviewAvgDesc" <c:if test="${paramValues.sortOrder[0] == 'reviewAvgDesc'}">checked</c:if> >
+										<span>평점 높은 순</span>
 									</label>
 								</div>
 							</div>
@@ -193,7 +207,7 @@
 															<span class="review-rating-text">${interviewReview.irRating} / 5.0</span>
 														</div>
 													</div>
-													
+
 													<p class="review-date">
 														<fmt:formatDate value="${interviewReview.irCreatedAt}" pattern="yyyy. MM. dd" />
 													</p>
@@ -219,6 +233,7 @@
 				<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
 				<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
 				<c:forEach var='hiringStatus' items='${paramValues.hiringStatus}'>&hiringStatus=${hiringStatus}</c:forEach>
+				<c:if test="${paramValues.sortOrder != null}">&sortOrder=${paramValues.sortOrder[0]}</c:if>
 				" class="pagination__link <c:if test='${articlePage.startPage < 6}'>pagination__link--disabled</c:if>"> ← Previous </a>
 
 				<c:forEach var="pNo" begin="${articlePage.startPage}" end="${articlePage.endPage}">
@@ -226,6 +241,7 @@
 					<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
 					<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
 					<c:forEach var='hiringStatus' items='${paramValues.hiringStatus}'>&hiringStatus=${hiringStatus}</c:forEach>
+					<c:if test="${paramValues.sortOrder != null}">&sortOrder=${paramValues.sortOrder[0]}</c:if>
 					" class="pagination__link <c:if test='${pNo == articlePage.currentPage}'>pagination__link--active</c:if>"> ${pNo} </a>
 				</c:forEach>
 
@@ -233,6 +249,7 @@
 				<c:forEach var='scaleId' items='${paramValues.scaleId}'>&scaleId=${scaleId}</c:forEach>
 				<c:forEach var='regionId' items='${paramValues.regionId}'>&regionId=${regionId}</c:forEach>
 				<c:forEach var='hiringStatus' items='${paramValues.hiringStatus}'>&hiringStatus=${hiringStatus}</c:forEach>
+				<c:if test="${paramValues.sortOrder != null}">&sortOrder=${paramValues.sortOrder[0]}</c:if>
 				" class="pagination__link <c:if test='${articlePage.endPage >= articlePage.totalPages}'>pagination__link--disabled</c:if>"> Next → </a>
 			</div>
 
@@ -244,5 +261,5 @@
 </html>
 <script type="text/javascript" src="/js/empt/enp/enterprisePosting.js"></script>
 <script>
-	
+
 </script>

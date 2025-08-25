@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 토글 버튼
 	const toggleButton = document.getElementById('search-filter-toggle');
 
-	// 필터 패널 
+	// 필터 패널
 	const panel = document.getElementById('search-filter-panel');
 
 	// 필터 키워드
@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 초기화 버튼
 	const resetButton = document.querySelector('.search-filter__reset-button');
 
+	const orderByRadios = document.querySelectorAll('.search-filter__option input[type="radio"][name="sortOrder"]');
+
 	// 아코디언 코드
 	if (toggleButton && panel) {
 	    toggleButton.addEventListener('click', function() {
@@ -22,7 +24,56 @@ document.addEventListener('DOMContentLoaded', function() {
 	    });
 	}
 
-	// 필터 태그 추가
+	// 2. 선택된 필터 태그를 업데이트하는 함수
+	const updateSelectedFiltersDisplay = () => {
+		console.log('asdfasf');
+		if (!selectedFiltersContainer) return;
+	    selectedFiltersContainer.innerHTML = '';
+
+	    const filterGroups = {
+	        scaleId: { label: '기업규모' },
+	        regionId: { label: '지역' },
+	        hiringStatus: { label: '채용여부' },
+			sortOrder : { label: '정렬' },
+	    };
+
+		// 3. 필터 input에 변경 이벤트 리스너 추가
+		filterCheckboxes.forEach(checkbox => {
+		    if (checkbox.checked) {
+		        const groupName = checkbox.name;
+		        const groupLabel = filterGroups[groupName]?.label || '';
+		        const labelText = checkbox.nextElementSibling.textContent;
+
+		        const tagHTML = `<span class="search-filter__tag" data-name="${groupName}" data-value="${checkbox.value}">${groupLabel} > ${labelText}<button type="button" class="search-filter__tag-remove">×</button></span>`;
+		        selectedFiltersContainer.insertAdjacentHTML('beforeend', tagHTML);
+		    }
+		});
+
+		// 정렬 라디오
+		const checkedOrder = Array.from(orderByRadios).find(r => r.checked);
+		if (checkedOrder) {
+			checkedOrder.dataset.preChecked = 'true';
+			const labelText = checkedOrder.nextElementSibling.textContent;
+			const tagHTML = `<span class="search-filter__tag" data-name="sortOrder" data-value="${checkedOrder.value}">정렬 > ${labelText}<button type="button" class="search-filter__tag-remove">×</button></span>`;
+			selectedFiltersContainer.insertAdjacentHTML('beforeend', tagHTML);
+		}
+	};
+
+	// 체크박스 변경 이벤트
+	filterCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateSelectedFiltersDisplay));
+
+	orderByRadios.forEach(radio => {
+		radio.addEventListener('change', updateSelectedFiltersDisplay);
+		radio.addEventListener('click', function(e) {
+			if (radio.dataset.preChecked == 'true') {
+				radio.dataset.preChecked = '';
+				radio.checked = false;
+				updateSelectedFiltersDisplay();
+			}
+		})
+	});
+
+	/*// 필터 태그 추가
 	const createFilterTag = (text) => {
 	    const filterTag = `<span class="search-filter__tag" data-filter="${text}">${text}<button type="button" class="search-filter__tag-remove">×</button></span>`;
 	    selectedFiltersContainer.innerHTML += filterTag;
@@ -46,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	            removeFilterTag(labelText);
 	        }
 	    });
-	});
+	});*/
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
 	selectedFiltersContainer.addEventListener('click', (e) => {
@@ -81,23 +132,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	//페이지 리로드 후에도 필터 유지
 	const urlParams = new URLSearchParams(window.location.search);
+	const firstLoad = () => {
+		filterCheckboxes.forEach(checkbox => {
+			const paramName = checkbox.name;
+			const paramValue = checkbox.value;
+			const paramValues = urlParams.getAll(paramName);
 
-	// 모든 필터 체크박스를 순회하며 URL 파라미터와 매칭
-	filterCheckboxes.forEach(checkbox => {
-		const paramName = checkbox.name; // 예: scaleId, regionId, hiringStatus
-		const paramValue = checkbox.value; // 예: CC001, 1, Y
+			if (paramValues.includes(paramValue)) {
+				checkbox.checked = true;
+			}
+		});
+		updateSelectedFiltersDisplay();
+	}
+	firstLoad();// 쿼리파라미터에서 떼오는 로직이 js에 작성되어있음. 쿼리파라미터 챙겨서 checked상태 만든후 필터업데이트 호출
 
-		// 'hiringStatus'는 단일 선택일 가능성이 높으므로 다르게 처리 (현재 JSP에서는 복수 선택 가능하도록 되어있음)
-		// 여기서는 모든 name에 대해 `getAll`을 사용하여 여러 값을 가져오도록 처리합니다.
-		const paramValues = urlParams.getAll(paramName);
-
-		if (paramValues.includes(paramValue)) {
-			checkbox.checked = true;
-			// 체크박스가 체크되면 해당 필터 태그를 생성
-			const labelText = checkbox.nextElementSibling.textContent;
-			createFilterTag(labelText, paramName, paramValue);
-		}
-	});
 
 	// 검색창 키워드 자동 채우기
 	const keywordInput = document.querySelector('input[name="keyword"]');

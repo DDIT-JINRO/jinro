@@ -40,10 +40,10 @@
 	            </if>
 		)
 	</select>
-	
+
 
 	<select id="selectCompanyList" parameterType="kr.or.ddit.empt.enp.service.CompanyVO" resultType="kr.or.ddit.empt.enp.service.CompanyVO">
-		SELECT * 
+		SELECT *
 			FROM (
 			    SELECT sub.*, ROWNUM AS RNUM
 			    FROM (
@@ -56,11 +56,31 @@
 			            a.cp_busino,
 			            a.cp_img_url,
 			            a.cp_region,
-			            CASE 
+			            (
+					    SELECT
+					        COUNT(*)
+					    FROM
+					        INTERVIEW_REVIEW
+					    WHERE
+					        IR_TYPE = 'G02002'
+					    AND
+					        TARGET_ID = A.CP_ID
+						)  AS REVIEW_CNT,
+			            (
+					    SELECT
+					        AVG(IR_RATING)
+					    FROM
+					        INTERVIEW_REVIEW
+					    WHERE
+					        IR_TYPE = 'G02002'
+					    AND
+					        TARGET_ID = A.CP_ID
+						) AS REVIEW_AVG,
+			            CASE
 			                WHEN c.cp_id IS NOT NULL THEN 'Y'
 			                ELSE 'N'
 			            END AS cp_hiring_status,
-			            CASE 
+			            CASE
 		                	WHEN i.target_id IS NOT NULL THEN 1
 		                	ELSE 0
 		            	END AS has_review
@@ -84,7 +104,7 @@
 				                #{id}
 				            </foreach>
 				        </if>
-				
+
 				        <if test="regionId != null and regionId.size() > 0">
 				            AND (
 				            <foreach collection="regionId" item="id" separator="OR">
@@ -92,7 +112,7 @@
 				            </foreach>
 				            )
 				        </if>
-				
+
 				        <if test="hiringStatus != null and hiringStatus.size() > 0">
 				            AND (CASE
 				                WHEN c.cp_id IS NOT NULL THEN 'Y'
@@ -102,30 +122,37 @@
 				                #{status}
 				            </foreach>
 			        	</if>
-			        ORDER BY 
+			        ORDER BY
 			        <if test="memId != null and memId != ''">
 			        d.BM_ID,
 			        </if>
-			         has_review DESC, a.cp_id
+			         has_review DESC -- 발표를 위해 리뷰있는 순으로 그대로 유지
+			         <choose>
+			         	<when test="sortOrder == 'reviewCntDesc' ">
+			         		,REVIEW_CNT DESC ,REVIEW_AVG DESC
+			         	</when>
+			         	<when test="sortOrder == 'reviewAvgDesc' ">
+			         		,REVIEW_AVG DESC ,REVIEW_CNT DESC
+			         	</when>
+			         </choose>
 			    ) sub
 			    WHERE ROWNUM <![CDATA[<]]>= #{endNo}
 			)
 			WHERE RNUM <![CDATA[>]]> #{startNo}
-
 	</select>
-	
+
 	<select id="selectCodeVOCompanyScaleList" resultType="kr.or.ddit.com.ComCodeVO">
 		select CC_ID, CL_CODE, CC_NAME, CC_ETC
 		from COM_CODE
 		where CL_CODE = 'G30'
 	</select>
-	
+
 	<select id="selectCodeVORegionList" resultType="kr.or.ddit.com.ComCodeVO">
 		select CC_ID, CL_CODE, CC_NAME, CC_ETC
 		from COM_CODE
 		where CL_CODE = 'G23'
 	</select>
-	
+
 	<update id="updateEnterprisePosting" parameterType="kr.or.ddit.empt.enp.service.CompanyVO">
 		 MERGE INTO COMPANY c
 	    USING DUAL
@@ -155,7 +182,7 @@
 	                c.CP_REGION = #{cpRegion},
 	            </if>
        		</set>
-				
+
     WHEN NOT MATCHED THEN
         INSERT (CP_ID, CP_NAME
             <if test="cpScale != null and cpScale != ''">, CP_SCALE</if>
@@ -174,30 +201,30 @@
             <if test="cpImgUrl != null and cpImgUrl != ''">, #{cpImgUrl}</if>
         )
 	</update>
-	
+
 	<select id="checkCompanyByCpId" parameterType="kr.or.ddit.empt.enp.service.CompanyVO" resultType="kr.or.ddit.empt.enp.service.CompanyVO">
 		select *
 		from company
 		where CP_ID = #{cpId}
 	</select>
-	
+
 	<select id="getMaxCpId" resultType="int">
 		SELECT NVL(MAX(CP_ID),0)+1
 		FROM COMPANY
 	</select>
-	
+
 	<delete id="deleteEnterprisePosting" parameterType="kr.or.ddit.empt.enp.service.CompanyVO">
 		DELETE COMPANY
 		WHERE CP_ID = #{cpId}
 	</delete>
-	
+
 	<select id="selectBookMarkVO" parameterType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO" resultType="kr.or.ddit.mpg.mat.bmk.service.BookMarkVO">
 		select BM_ID, MEM_ID, BM_CATEGORY_ID, BM_TARGET_ID
 		from BOOKMARK
 		where MEM_ID = #{memId}
 		and BM_CATEGORY_ID =#{bmCategoryId}
 	</select>
-	
+
 	<select id="selectEnpInterviewReview" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO" resultType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
 		SELECT
 			A.IR_ID
@@ -209,7 +236,7 @@
 			, A.IR_RATING
 			, B.MEM_NICKNAME
 		FROM (
-		    SELECT 
+		    SELECT
 		        IR_ID
 		        , MEM_ID
 		        , IR_TYPE
@@ -217,9 +244,9 @@
 		        , IR_CONTENT
 		        , IR_CREATED_AT
 		        , IR_RATING
-		    FROM 
-		        INTERVIEW_REVIEW 
-		    WHERE 
+		    FROM
+		        INTERVIEW_REVIEW
+		    WHERE
 		        IR_TYPE = #{irType}
 		    AND
 		        TARGET_ID = #{targetId}

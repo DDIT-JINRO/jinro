@@ -18,7 +18,7 @@ public class CompanyVO {
 	private String cpRegion;
 	private Long fileGroupId;
 	private int memId;
-	
+
 //	새로받는 값
 	private String cpHiringStatus; // 현재 채용 여부
 	private String ccName; // 기업규모 내용
@@ -31,9 +31,11 @@ public class CompanyVO {
 	private List<String> hiringStatus; // 채용 상태 선택
 	private boolean hasReview;
 
+	private String sortOrder;
+
 	//
 	private List<InterviewReviewVO> interviewReviewList; // 채용 상태 선택
-	
+
 	// 페이징
 	private int currentPage;
 	private int size;
