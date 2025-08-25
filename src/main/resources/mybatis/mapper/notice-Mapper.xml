@@ -20,7 +20,12 @@
 				AND TO_CHAR(NOTICE_UPDATED_AT, 'YYYY') = #{status}
 			</if>
 		</where>
-		ORDER BY NOTICE_ID DESC
+		ORDER BY
+        <choose>
+            <when test="sortOrder == 'oldest'">NOTICE_ID ASC</when>
+            <when test="sortOrder == 'cnt'">NOTICE_CNT DESC, NOTICE_ID DESC</when>
+            <otherwise>NOTICE_ID DESC</otherwise>
+        </choose>
 		) B
 		WHERE ROWNUM &lt;= #{endNo}
 		)

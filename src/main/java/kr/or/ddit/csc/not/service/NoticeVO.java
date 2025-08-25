@@ -31,6 +31,7 @@ public class NoticeVO {
 	
 	// 검색 키워드
 	private String keyword;
+	private String sortOrder;
 	
 	// 연도
 	private String status;

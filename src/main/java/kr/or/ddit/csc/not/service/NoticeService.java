@@ -5,7 +5,7 @@ import kr.or.ddit.util.ArticlePage;
 public interface NoticeService {
 	
 	// 1. 사용자 목록 조회
-	public ArticlePage<NoticeVO> getUserNoticePage(int currentPage, int size, String keyword);
+	public ArticlePage<NoticeVO> getUserNoticePage(int currentPage, int size, String keyword, String sortOrder);
 	
 	// 2. 관리자 목록 조회
 	public ArticlePage<NoticeVO> getAdminNoticePage(int currentPage, int size, String keyword, String status);

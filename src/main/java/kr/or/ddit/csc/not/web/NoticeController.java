@@ -32,17 +32,17 @@ public class NoticeController {
 	// 공지사항 리스트
 	@GetMapping("/noticeList.do")
 	public String noticeList(Model model,
-			@RequestParam(value="currentPage",required=false,defaultValue="1") int currentPage,
-			@RequestParam(value="size",required=false,defaultValue="5") int size,
-			@RequestParam(value="keyword",required=false) String keyword) {
+	        @RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
+	        @RequestParam(value="size", required=false, defaultValue="5") int size,
+	        @RequestParam(value="keyword", required=false) String keyword,
+	        @RequestParam(value="sortOrder", required=false, defaultValue="latest") String sortOrder) { // 추가
 
-		
-	    ArticlePage<NoticeVO> articlePage = noticeService.getUserNoticePage(currentPage, size, keyword);
+	    ArticlePage<NoticeVO> articlePage = noticeService.getUserNoticePage(currentPage, size, keyword, sortOrder); // 수정
 	    model.addAttribute("articlePage", articlePage);
 	    model.addAttribute("getAllNotice", articlePage.getTotal());
 	    model.addAttribute("getList", articlePage.getContent());
-		
-		return "csc/not/noticeList";
+
+	    return "csc/not/noticeList";
 	}
 	
 	// 공지사항 세부 화면

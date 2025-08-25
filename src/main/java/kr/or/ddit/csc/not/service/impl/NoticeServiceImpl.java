@@ -38,7 +38,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 	// 1. 사용자 목록 조회
 	@Override
-	public ArticlePage<NoticeVO> getUserNoticePage(int currentPage, int size, String keyword) {
+	public ArticlePage<NoticeVO> getUserNoticePage(int currentPage, int size, String keyword, String sortOrder) {
 		int startNo = (currentPage - 1) * size + 1;
 		int endNo = currentPage * size;
 
@@ -47,6 +47,7 @@ public class NoticeServiceImpl implements NoticeService {
 		map.put("currentPage", currentPage);
 		map.put("startNo", startNo);
 		map.put("endNo", endNo);
+		map.put("sortOrder", sortOrder);
 
 		// 리스트 불러오기
 		List<NoticeVO> list = noticeMapper.getList(map);
