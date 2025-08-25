@@ -510,6 +510,15 @@ function paymentStatistics() {
 				const datasets = [];
 				const colors = ['#2DCF97', '#727cf5', '#FE849C', '#FF6B6B', '#9C88FF'];
 				let colorIndex = 0;
+				
+				// 라벨 생성 직전
+				let labelsRaw = allPeriods;
+
+				// 분기 표시 보정
+				if (dateValue === 'quarterly') {
+				  // 백엔드가 "2025-Q1"처럼 내려주면 "2025 Q1"로 표기
+				  labelsRaw = labelsRaw.map(s => String(s).replace('-Q', ' Q'));
+				}
 
 				Object.keys(products).forEach(productName => {
 					const productData = allPeriods.map(period => {
@@ -529,7 +538,7 @@ function paymentStatistics() {
 				window.productChartInstance = new Chart(ctx, {
 					type: 'bar',
 					data: {
-						labels: allPeriods,
+						labels: labelsRaw,
 						datasets: datasets
 					},
 					options: {
@@ -607,15 +616,24 @@ function paymentStatistics() {
 
 				let labels;
 				let chartLabel;
+				let compareLabel;
 				if (dateValue === 'monthly') {
 					labels = responseData.map(item => formatMonthlyDate(item.dt));
 					chartLabel = '월별 구독자 수';
+					compareLabel = '전년 동일월';
+				} else if (dateValue === 'quarterly') {
+					// 혹시 분기 옵션 추가할 경우 대비
+					labels = responseData.map(item => String(item.dt).replace('-Q', ' Q')); // "2025 Q1" 형태일 때
+					chartLabel = '분기별 구독자 수';
+					compareLabel = '전년 동일 분기';
 				} else {
 					labels = responseData.map(item => formatDailyDate(item.dt));
 					chartLabel = '일별 구독자 수';
+					compareLabel = '전월 동일일';
 				}
 
 				const dataValues = responseData.map(item => item.count || 0);
+				const dataValuesPrev = responseData.map(item => item.countPrev || 0);
 
 				window.subscriberChartInstance = new Chart(ctx, {
 					type: 'line',
@@ -631,6 +649,15 @@ function paymentStatistics() {
 							pointRadius: 3,
 							pointHoverRadius: 6,
 							pointStyle: 'circle'
+						},
+						{
+							label: compareLabel,
+							data: dataValuesPrev,
+							fill: false,
+							borderColor: 'rgba(45, 207, 151, 0.4)',
+							borderDash: [4, 4],
+							tension: 0.4,
+							pointRadius: 0
 						}]
 					},
 					options: {
@@ -745,6 +772,8 @@ function paymentStatistics() {
 				const labels = responseData.map(item => {
 					if (dateValue === 'monthly') {
 						return formatMonthlyDate(item.dt);
+					} else if (dateValue === 'quarterly')	{
+						return String(item.dt).replace('-Q', ' Q');
 					} else {
 						return formatDailyDate(item.dt);
 					}

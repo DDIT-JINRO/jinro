@@ -84,6 +84,7 @@
 					id="subscriberChartDay">
 					<option value="daily">일별</option>
 					<option value="monthly">월별</option>
+					<option value="quarterly">분기별</option>
 					<option value="selectDays">기간선택</option>
 				</select> <select class="public-toggle-select" name="subscriberChartGender"
 					id="subscriberChartGender">
@@ -117,6 +118,7 @@
 				id="productChartDay">
 				<option value="daily">일별</option>
 				<option value="monthly">월별</option>
+				<option value="quarterly">분기별</option>
 				<option value="selectDays">기간선택</option>
 			</select> <select class="public-toggle-select" name="productChartGender"
 				id="productChartGender">
@@ -146,6 +148,7 @@
 				id="aiServiceChartDay">
 				<option value="daily">일별</option>
 				<option value="monthly">월별</option>
+				<option value="quarterly">분기별</option>
 				<option value="selectDays">기간선택</option>
 			</select> <select class="public-toggle-select" name="aiServiceChartGender"
 				id="aiServiceChartGender">
