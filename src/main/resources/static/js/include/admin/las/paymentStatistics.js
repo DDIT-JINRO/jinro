@@ -346,7 +346,7 @@ function paymentStatistics() {
 
 		// --- 그라데이션 적용 시작 ---
 		const gradientRevenue = ctx.createLinearGradient(0, 0, 0, 400);
-		gradientRevenue.addColorStop(0, 'rgba(114, 124, 245, 0.2)');
+		gradientRevenue.addColorStop(0, 'rgba(255, 99, 132, 0)');
 		gradientRevenue.addColorStop(1, 'rgba(114, 124, 245, 0)');
 		// --- 그라데이션 적용 끝 ---
 
@@ -393,11 +393,12 @@ function paymentStatistics() {
 							label: compareLabel,
 							data: dataValuesPrev,
 							fill: false,
-							borderColor: 'rgba(114, 124, 245, 0.4)',   // 비교선은 살짝 옅게
+							borderColor: 'rgba(255, 99, 132)',   // 비교선은 살짝 옅게
 							borderDash: [4, 4],
 							tension: 0.4,
 							pointRadius: 0
-						}]
+						}
+					]
 					},
 					options: {
 						responsive: true,
@@ -606,7 +607,7 @@ function paymentStatistics() {
 
 		// --- 그라데이션 적용 시작 ---
 		const gradientSubscriber = ctx.createLinearGradient(0, 0, 0, 600);
-		gradientSubscriber.addColorStop(0, 'rgba(45, 207, 151, 0.2)');
+		gradientSubscriber.addColorStop(0, 'rgba(114, 124, 245, 0)');
 		gradientSubscriber.addColorStop(1, 'rgba(45, 207, 151, 0)');
 		// --- 그라데이션 적용 끝 ---
 
@@ -654,7 +655,7 @@ function paymentStatistics() {
 							label: compareLabel,
 							data: dataValuesPrev,
 							fill: false,
-							borderColor: 'rgba(45, 207, 151, 0.4)',
+							borderColor: 'rgba(114, 124, 245)',
 							borderDash: [4, 4],
 							tension: 0.4,
 							pointRadius: 0
