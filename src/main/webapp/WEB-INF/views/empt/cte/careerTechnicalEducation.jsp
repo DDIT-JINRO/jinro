@@ -210,29 +210,13 @@
 							<div class="accordion-list__content-body">
 								<div class="education-detail-section">
 									<h4>교육 상세 정보</h4>
-									<p>
-										<strong>교육명:</strong>&nbsp; ${data.jtName}
-									</p>
-									<p>
-										<strong>교육기관:</strong>&nbsp; ${data.jtSchool}
-									</p>
-									<p>
-										<strong>정원:</strong>&nbsp; ${data.jtQuota}명
-									</p>
-									<p>
-										<strong>교육 대상:</strong>&nbsp; ${data.jtTarget}
-									</p>
-									<p>
-										<strong>교육 평점:</strong>&nbsp; ${data.jtScore}점
-									</p>
-									<p>
-										<strong>훈련비:</strong>&nbsp;
-										<fmt:formatNumber value="${data.jtFee}" type="currency" currencySymbol="" groupingUsed="true" />
-										원
-									</p>
-									<p>
-										<strong>교육기관 주소:</strong>&nbsp; ${data.jtAddress}
-									</p>
+									<p><strong>교육명:</strong>&nbsp; ${data.jtName}</p>
+									<p><strong>교육기관:</strong>&nbsp; ${data.jtSchool}</p>
+									<p><strong>정원:</strong>&nbsp; ${data.jtQuota}명</p>
+									<p><strong>교육 대상:</strong>&nbsp; ${data.jtTarget}</p>
+									<p><strong>교육 평점:</strong>&nbsp; ${data.jtScore}점</p>
+									<p><strong>훈련비:</strong>&nbsp; <fmt:formatNumber value="${data.jtFee}" type="currency" currencySymbol="" groupingUsed="true" /> 원</p>
+									<p><strong>교육기관 주소:</strong>&nbsp; ${data.jtAddress}</p>
 								</div>
 
 								<div class="education-url-section">

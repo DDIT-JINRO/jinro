@@ -1,6 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/common/insertInterviewFeedbackView.css">
+<section class="channel">
+	<div class="channel-title">
+		<div class="channel-title-text">취업 정보</div>
+	</div>
+	<div class="channel-sub-sections">
+		<div class="channel-sub-section-item">
+			<a href="/empt/ema/employmentAdvertisement.do">채용공고</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/empt/enp/enterprisePosting.do">기업정보</a>
+		</div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/empt/ivfb/interViewFeedback.do">면접후기</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/empt/cte/careerTechnicalEducation.do">직업교육</a>
+		</div>
+	</div>
+</section>
+
 <!-- 스타일 여기 적어주시면 가능 -->
 <div class="breadcrumb-container-space">
 	<nav class="breadcrumb-container" aria-label="breadcrumb">
@@ -11,7 +31,7 @@
 				</a>
 			</li>
 			<li class="breadcrumb-item">
-				<a href="/empt/ema/employmentAdvertisement.do">취업정보</a>
+				<a href="/empt/ema/employmentAdvertisement.do">취업 정보</a>
 			</li>
 			<li class="breadcrumb-item active">
 				<a href="/empt/ivfb/interViewFeedback.do">면접후기</a>
@@ -19,10 +39,11 @@
 		</ol>
 	</nav>
 </div>
+
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">면접 후기</h3>
+			<a class="tab active" href="/empt/ivfb/interViewFeedback.do">면접후기</a>
 		</div>
 		<div class="public-wrapper-main">
 			<div class="feedback-form">
