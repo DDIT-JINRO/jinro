@@ -13,5 +13,6 @@ public interface MemberJoinService {
 	Map<String, Object> identityCheck(String imp_uid);
 
 	int memberJoin(MemberVO memberVO);
-
+	
+	String formatPhoneNumber(String phoneNum);
 }

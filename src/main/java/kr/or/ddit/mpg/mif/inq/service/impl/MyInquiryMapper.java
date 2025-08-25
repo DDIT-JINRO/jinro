@@ -32,4 +32,6 @@ public interface MyInquiryMapper {
 
 	MemberVO getProfileFile(int memId);
 
+	int updateMemberPhone(MemberVO memberVO);
+
 }

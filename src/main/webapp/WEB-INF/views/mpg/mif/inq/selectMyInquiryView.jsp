@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/mpg/mif/inq/selectMyInquiryView.css">
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 
 <!-- 스타일 여기 적어주시면 가능 -->
-<section class="channel" data-success-message="${successMessage}" data-error-message="${errorMessage}">
+<section class="channel" >
 	<!-- 	여기가 네비게이션 역할을 합니다.  -->
 	<div class="channel-title">
 		<!-- 대분류 -->
@@ -23,7 +24,7 @@
 	</div>
 </section>
 <div>
-	<div class="public-wrapper">
+	<div class="public-wrapper" data-success-message="${successMessage}" data-error-message="${errorMessage}">
 		<!-- 여기는 소분류(tab이라 명칭지음)인데 사용안하는곳은 주석처리 하면됩니다 -->
 		<div class="tab-container" id="tabs">
 			<a class="tab active" href="/mpg/mif/inq/selectMyInquiryView.do">조회 및 수정</a>
@@ -86,7 +87,7 @@
 								<div class="info-item">
 									<label>연락처</label>
 									<span class="info-value">${member.memPhoneNumber}</span>
-									<button type="button" class="detail__action-button detail__action-button--auth">번호 변경</button>
+									<button type="button" class="detail__action-button detail__action-button--auth" id="phoneChangeBtn">번호 변경</button>
 								</div>
 								<div class="info-item">
 									<label>생년월일</label>

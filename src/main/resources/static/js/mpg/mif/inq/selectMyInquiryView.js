@@ -3,13 +3,13 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-    const channelSection = document.querySelector(".channel");
-    if (channelSection) {
-        const successMessage = channelSection.dataset.successMessage;
-        const errorMessage = channelSection.dataset.errorMessage;
-        if (successMessage) alert(successMessage);
-        if (errorMessage) alert(errorMessage);
-    }
+	const channelSection = document.querySelector(".public-wrapper");
+	if (channelSection) {
+		const successMessage = channelSection.dataset.successMessage;
+		const errorMessage = channelSection.dataset.errorMessage;
+		if (successMessage) alert(successMessage);
+		if (errorMessage) alert(errorMessage);
+	}
 
 	try {
 		if (memId == "anonymousUser") {
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	const moveSubBtn = document.querySelector("#move-sub-btn");
-	if(moveSubBtn) {
+	if (moveSubBtn) {
 		moveSubBtn.addEventListener("click", () => {
 			location.href = "/mpg/pay/selectPaymentView.do";
 		});
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const handleImgFileSelect = (event) => {
 	const files = event.target.files;
-    const profileImg = document.querySelector(".profile-img");
+	const profileImg = document.querySelector(".profile-img");
 
 	if (files.length === 0) {
 		alert("파일이 선택되지 않았습니다.");
@@ -67,17 +67,17 @@ const handleImgFileSelect = (event) => {
 	}).then(response => {
 		return response.json();
 	}).then(result => {
-        if (result.status === "success") {
-            alert(result.message);
-            if(profileImg) profileImg.src = result.imgPath; // 이미지 즉시 업데이트
-        } else {
-            alert(result.message || "프로필 사진 변경에 실패했습니다.");
-        }
-    })
-    .catch(error => {
-        console.error("프로필 이미지 업로드 중 에러 발생 : ", error);
-        alert("업로드 중 오류가 발생했습니다.");
-    });
+		if (result.status === "success") {
+			alert(result.message);
+			if (profileImg) profileImg.src = result.imgPath; // 이미지 즉시 업데이트
+		} else {
+			alert(result.message || "프로필 사진 변경에 실패했습니다.");
+		}
+	})
+		.catch(error => {
+			console.error("프로필 이미지 업로드 중 에러 발생 : ", error);
+			alert("업로드 중 오류가 발생했습니다.");
+		});
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -108,14 +108,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		errorMsg.textContent = '';
 	};
 
-	submitBtn.addEventListener('click', function (event) {
+	submitBtn.addEventListener('click', function(event) {
 		event.preventDefault();
 		openModal();
 	});
 
 	closeModalBtn.addEventListener('click', closeModal);
 
-	modalOverlay.addEventListener('click', function (event) {
+	modalOverlay.addEventListener('click', function(event) {
 		if (event.target === modalOverlay) {
 			closeModal();
 		}
@@ -161,30 +161,30 @@ const passwordCheckAPI = (password, errorMsg, passwordInput, closeModal) => {
 	}).then(response => {
 		return response.json()
 	}).then(result => {
-        if (result.status === "success") {
+		if (result.status === "success") {
 			closeModal();
-			
+
 			if (!nicknameRegex.test(nickname)) {
 				alert("닉네임은 한글, 영문, 숫자 조합 2~10자로 입력해주세요.");
 				return;
 			}
-			
+
 			if (!nameRegex.test(name)) {
 				alert("이름은 공백 없이 한글 또는 영문 2~20자로 입력해주세요.");
 				return;
 			}
 
-            mainForm.submit();
-        } else {
-            errorMsg.textContent = result.message || '비밀번호가 일치하지 않습니다.';
-            passwordInput.value = ''; // 입력 필드 초기화
-            passwordInput.focus();
-        }
-    })
-    .catch(error => {
-        console.error("비밀번호 인증 에러 :", error);
-        errorMsg.textContent = '인증 중 오류가 발생했습니다. 다시 시도해 주세요.';
-    });
+			mainForm.submit();
+		} else {
+			errorMsg.textContent = result.message || '비밀번호가 일치하지 않습니다.';
+			passwordInput.value = ''; // 입력 필드 초기화
+			passwordInput.focus();
+		}
+	})
+		.catch(error => {
+			console.error("비밀번호 인증 에러 :", error);
+			errorMsg.textContent = '인증 중 오류가 발생했습니다. 다시 시도해 주세요.';
+		});
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -204,14 +204,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		errorMsg.textContent = '';
 	};
 
-	interestsUpdateBtn.addEventListener('click', function (event) {
+	interestsUpdateBtn.addEventListener('click', function(event) {
 		event.preventDefault();
 		openModal();
 	});
 
 	closeModalBtn.addEventListener('click', closeModal);
 
-	modalOverlay.addEventListener('click', function (event) {
+	modalOverlay.addEventListener('click', function(event) {
 		if (event.target === modalOverlay) {
 			closeModal();
 		}
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
 	// 관심사 키워드 체크박스
 	const keywordCheckbox = document.querySelectorAll('.com-filter-item input[type="checkbox"]');
 
@@ -268,14 +268,58 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	const checkboxes = document.querySelectorAll('input[name="filter-keyword"]');
-	
+
 	checkboxes.forEach((checkbox) => {
 		checkbox.addEventListener("click", (event) => {
 			const selectCheckbox = document.querySelectorAll('input[name="filter-keyword"]:checked');
-			if(selectCheckbox.length > 5) {
+			if (selectCheckbox.length > 5) {
 				alert("관심사 최대 5개 까지만 선택 가능합니다.");
 				event.target.checked = false;
 			}
 		});
 	});
+
+});
+document.addEventListener("DOMContentLoaded", () => {
+	const phoneChangeBtn = document.getElementById('phoneChangeBtn');
+
+	phoneChangeBtn.addEventListener('click', function() {
+		IMP.init("imp52856231");
+
+		IMP.certification(
+			{
+
+				channelKey: "channel-key-bf054284-0b27-4e7e-b48e-49e954bef4dc",
+				merchant_uid: "ORD20180131-0000011",
+				popup: false,
+			},
+			function(rsp) {
+				if (rsp.success) {
+					axios.post('/mpg/mif/inq/updateMemberPhone.do', {
+						imp_uid: rsp.imp_uid
+					}).then(res => {
+						showConfirm2(res.data,
+							() => {
+								return;
+							},
+							() => {
+
+							}
+						);
+						location.reload();
+					})
+				} else {
+					showConfirm2('본인인증에 실패하였습니다.',
+						() => {
+							return;
+						},
+						() => {
+
+						}
+					);
+					return;
+				}
+			},
+		);
+	})
 });
