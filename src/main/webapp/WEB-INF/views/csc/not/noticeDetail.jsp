@@ -40,7 +40,7 @@
 				<span class="detail__meta-item">조회수: ${noticeDetail.noticeCnt}</span>
 				<span class="detail__meta-item">
 					작성일:
-					<fmt:formatDate value="${noticeDetail.noticeCreatedAt}" pattern="yyyy-MM-dd" />
+					<fmt:formatDate value="${noticeDetail.noticeCreatedAt}" pattern="yyyy. M. d." />
 				</span>
 			</div>
 		</div>

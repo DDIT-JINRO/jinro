@@ -60,7 +60,7 @@
 						</div>
 						<div class="content-list__col content-list__col--count" data-label="조회수">${notice.noticeCnt}</div>
 						<div class="content-list__col content-list__col--date" data-label="작성일">
-							<fmt:formatDate value="${notice.noticeCreatedAt}" pattern="yyyy.MM.dd" />
+							<fmt:formatDate value="${notice.noticeCreatedAt}" pattern="yyyy. M. d." />
 						</div>
 					</div>
 				</c:forEach>

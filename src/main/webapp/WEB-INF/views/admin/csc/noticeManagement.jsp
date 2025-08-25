@@ -34,7 +34,7 @@
 					<tr>
 						<th>번 호</th>
 						<th>제 목</th>
-						<th>조회수</th>
+						<th class="th-cnt">조회수</th>
 						<th>생성일(수정일)</th>
 					</tr>
 				</thead>
@@ -64,7 +64,7 @@
 					<th>번 호</th>
 					<th>제 목</th>
 					<th>생성일(수정일)</th>
-					<th>조회수</th>
+					<th class="th-cnt">조회수</th>
 				</tr>
 			</thead>
 			<tbody id="info-table-tbody">
