@@ -21,8 +21,6 @@ phoneAccessBtn.addEventListener('click', function() {
 
 
 function phoneAccess() {
-	console.log("phoneAccess 진입");
-
 	IMP.init("imp52856231");
 
 	IMP.certification(
@@ -42,7 +40,6 @@ function phoneAccess() {
 					imp_uid: rsp.imp_uid
 
 				}).then(res => {
-					console.log(res.data);
 					const data = res.data.data;
 					const userName = document.getElementById('name');
 					const userPhone = document.getElementById('phone');
@@ -84,13 +81,6 @@ function convertGenderToCode(gender) {
 	}
 }
 function updateSubmitButtonState() {
-
-	console.log("이메일", isEmailVerified);
-	console.log("닉네임", isNicknameValid);
-	console.log("비밀번호", isPasswordValid);
-	console.log("이용약관", isReqCheck);
-	console.log("전화번호", isPhoneValid);
-
 	const allValid = isEmailVerified && isNicknameValid && isPasswordValid && isReqCheck && isPhoneValid && isInfoReqCheck;
 
 	submitBtn.disabled = !allValid;
@@ -112,27 +102,6 @@ chkPrivacy.addEventListener("change", () => {
 
 const nameInput = document.getElementById("name");
 const nameError = document.getElementById("nameError");
-
-/*nameInput.addEventListener("input", () => {
-	const name = nameInput.value.trim();
-	const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
-
-	if (name === "") {
-		nameError.className = "name-message error";
-		nameError.textContent = "이름을 입력해주세요.";
-		isNameValid = false;
-	} else if (!nameRegex.test(name)) {
-		nameError.className = "name-message error";
-		nameError.textContent = "이름은 공백 없이 한글 또는 영문 2~20자로 입력해주세요.";
-		isNameValid = false;
-	} else {
-		nameError.className = "name-message success";
-		nameError.textContent = "사용 가능한 이름입니다.";
-		isNameValid = true;
-	}
-	updateSubmitButtonState();
-});*/
-
 
 const passwordInput = document.getElementById("password");
 const passwordConfirmInput = document.getElementById("passwordConfirm");
@@ -198,7 +167,6 @@ function emailCheck() {
 	})
 		.then(response => response.text())
 		.then(result => {
-			console.log(result)
 			if (result === "failed") {
 				emailError.className = "email-message error";
 				emailError.textContent = "중복된 이메일입니다.";
@@ -238,12 +206,18 @@ function showEmailModal(email) {
 		})
 			.then(res => res.text())
 			.then(result => {
-				console.log(result);
 				if (result === "sendOk") {
 					startTimer(180); // 3분
 					document.getElementById("authCodeBox").style.display = "block";
 				} else {
-					alert("메일 전송 실패");
+					showConfirm2('메일전송 실패.',
+						() => {
+							return;
+						},
+						() => {
+
+						}
+					);
 				}
 			})
 			.catch(err => {
@@ -279,7 +253,14 @@ closeBtn.onclick = () => {
 document.getElementById("verifyCodeBtn").onclick = () => {
 	const code = document.getElementById("authCodeInput").value.trim();
 	if (!code) {
-		showCustomAlert("인증코드를 입력해주세요.");
+		showConfirm2('인증코드를 입력해주세요.',
+			() => {
+				return;
+			},
+			() => {
+
+			}
+		);
 		return;
 	}
 
@@ -291,12 +272,25 @@ document.getElementById("verifyCodeBtn").onclick = () => {
 		.then(res => res.text())
 		.then(result => {
 			if (result === "success") {
-				alert("인증 완료");
+				showConfirm2('인증을 성공했습니다.',
+					() => {
+						return;
+					},
+					() => {
+					}
+				);
+
 				modal.style.display = "none";
 				clearInterval(timerInterval);
 				isEmailVerified = true;
 			} else {
-				showCustomAlert("인증 실패! 코드를 다시 확인해주세요.");
+				showConfirm2('인증을 실패했습니다.',
+					() => {
+						return;
+					},
+					() => {
+					}
+				);
 			}
 		});
 };
@@ -366,7 +360,7 @@ nicknameCheck.addEventListener("click", () => {
 		hiddenInput.name = 'memAlarm';
 		hiddenInput.value = promotionCode;
 		form.appendChild(hiddenInput);
-		
+
 		form.submit();
 	});
 });
