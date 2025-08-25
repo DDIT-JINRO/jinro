@@ -89,6 +89,23 @@
 								</div>
 							</div>
 							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬 순서</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="salDesc">
+										<span>연봉 높은 순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="prospectDesc">
+										<span>전망 높은 순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="staisDesc">
+										<span>만족도 높은 순</span>
+									</label>
+								</div>
+							</div>
+							<div class="search-filter__group">
 								<div class="search-filter__group-header">
 									<label class="search-filter__group-title">선택된 필터</label>
 									<button type="button" class="search-filter__reset-button">초기화</button>
@@ -114,7 +131,7 @@
 					</div>
 				</div>
 			</form>
-	
+
 			<span class="list-header__meta-item list-header__meta-item--source">[ 출처 : 한국고용정보원 고용24 (구 워크넷) ]</span>
 			<c:choose>
 				<c:when test="${empty articlePage.content || articlePage.content == null }">
@@ -205,6 +222,9 @@
 					<c:forEach var="jobSal" items="${paramValues.jobSals}">
 						<c:param name="jobSals" value="${jobSal}" />
 					</c:forEach>
+					<c:if test="${not empty param.sortOrder}">
+						<c:param name="sortOrder" value="${param.sortOrder}" />
+					</c:if>
 				</c:url>
 				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
 
@@ -223,6 +243,9 @@
 						<c:forEach var="jobSal" items="${paramValues.jobSals}">
 							<c:param name="jobSals" value="${jobSal}" />
 						</c:forEach>
+						<c:if test="${not empty param.sortOrder}">
+							<c:param name="sortOrder" value="${param.sortOrder}" />
+						</c:if>
 					</c:url>
 					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
 				</c:forEach>
@@ -241,6 +264,9 @@
 					<c:forEach var="jobSal" items="${paramValues.jobSals}">
 						<c:param name="jobSals" value="${jobSal}" />
 					</c:forEach>
+					<c:if test="${not empty param.sortOrder}">
+						<c:param name="sortOrder" value="${param.sortOrder}" />
+					</c:if>
 				</c:url>
 				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
 			</div>

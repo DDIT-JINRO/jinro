@@ -19,21 +19,33 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 토글 버튼
 	const toggleButton = document.querySelector('.search-filter__accordion-header');
 
-	// 필터 패널 
+	// 필터 패널
 	const panel = document.querySelector('.search-filter__accordion-panel');
 
 	// 필터 키워드
 	const allCheckboxGroups = {
 	    jobLclCategory: document.querySelectorAll('.search-filter__option input[type="checkbox"][name="jobLcls"]'),
 	    jobSalCategory: document.querySelectorAll('.search-filter__option input[type="checkbox"][name="jobSals"]'),
+	    jobOrderBy: document.querySelectorAll('.search-filter__option input[type="checkbox"][name="sortOrder"]'),
 	};
-	
+
 	// 선택 필터 영역
 	const selectedFiltersContainer = document.querySelector('.search-filter__selected-tags');
-	
+
 	// 초기화 버튼
 	const resetButton = document.querySelector('.search-filter__reset-button');
-	
+
+	// 라디오 타입의 정렬기능 input요소들
+	const orderByRadios = document.querySelectorAll('.search-filter__option input[type="radio"][name="sortOrder"]');
+
+	// 기존 체크박스 칩 업데이트 이후, 라디오(정렬) 1개만 추가
+	const checkedOrder = Array.from(orderByRadios).find(r => r.checked);
+	if (checkedOrder) {
+	  const text = '정렬 > ' + checkedOrder.nextElementSibling.textContent;
+	  const filterTagHTML = `<span class="search-filter__tag" data-group="sortOrder" data-value="${checkedOrder.value}">${text}<button type="button" class="search-filter__tag-remove">×</button></span>`;
+	  selectedFiltersContainer.innerHTML += filterTagHTML;
+	}
+
 	// 아코디언 코드
 	if (toggleButton && panel) {
 		toggleButton.addEventListener('click', function() {
@@ -62,11 +74,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (groupName === "jobLclCategory") {
                     text = "직업 대분류 > " + text;
                 }
-                
+
 				const filterTagHTML = `<span class="search-filter__tag" data-group="${groupName}" data-value="${checkbox.value}">${text}<button type="button" class="search-filter__tag-remove">×</button></span>`;
                 selectedFiltersContainer.innerHTML += filterTagHTML;
             });
 	    });
+
+		// 라디오 정렬 추가
+		const checkedOrder = Array.from(orderByRadios).find(r => r.checked);
+		if (checkedOrder) {
+		  const text = "정렬 > " + checkedOrder.nextElementSibling.textContent;
+		  const tag = `<span class="search-filter__tag" data-group="orderBy" data-value="${checkedOrder.value}">
+		                 ${text}<button type="button" class="search-filter__tag-remove">×</button>
+		               </span>`;
+		  selectedFiltersContainer.insertAdjacentHTML('beforeend', tag);
+		}
 	};
 
 	// 체크 박스 선택 시 이벤트
@@ -74,12 +96,16 @@ document.addEventListener('DOMContentLoaded', function() {
 		updateSelectedFiltersDisplay();
 	}
 
+
     // 이벤트 등록
     Object.values(allCheckboxGroups).forEach(checkboxList => {
         checkboxList.forEach(checkbox => {
             checkbox.addEventListener('change', handleCheckboxChange);
         });
     });
+
+	// 정렬라디오 도 등록
+	orderByRadios.forEach(radio => radio.addEventListener('change', updateSelectedFiltersDisplay));
 
 	// '선택된 필터' 영역에서 X 버튼 클릭 시 이벤트 처리 (이벤트 위임)
 	selectedFiltersContainer.addEventListener('click', (e) => {
@@ -93,7 +119,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	        if (checkboxToUncheck) {
 	            checkboxToUncheck.checked = false;
 	        }
-			
+
+			// (추가) 정렬 라디오도 해제
+			if (groupName === 'orderBy') {
+			  const radioToUncheck = Array.from(orderByRadios).find(r => r.value === value);
+			  if (radioToUncheck) radioToUncheck.checked = false;
+			}
+
 			updateSelectedFiltersDisplay();
 		}
 	});
@@ -106,11 +138,13 @@ document.addEventListener('DOMContentLoaded', function() {
 					checkbox.checked = false;
 				});
 			});
+			// 라디오도 체크해제 추가
+			orderByRadios.forEach(r => r.checked = false);
 
 			selectedFiltersContainer.innerHTML = '';
 		});
 	}
-	
+
 	document.querySelectorAll('.content-list__item').forEach(jobs => {
 		console.log("click")
 		jobs.addEventListener('click', (e) => {
@@ -128,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     bookmarkButtons.forEach(button => {
         button.addEventListener('click', function(event) {
-            event.preventDefault(); 
+            event.preventDefault();
             handleBookmarkToggle(this);
         });
     });
@@ -145,7 +179,7 @@ const handleBookmarkToggle = (button) => {
 
     // 현재 버튼이 'active' 클래스를 가지고 있는지 확인
     const isBookmarked = button.classList.contains('is-active');
-    
+
     const data = {
         bmCategoryId: bmCategoryId,
 		bmTargetId: bmTargetId
@@ -349,7 +383,7 @@ const deleteCompareCard = (itemId) => {
     if (removeItem) {
         removeItem.remove();
     }
-    
+
     const removeItemCheckbox = document.querySelector(`#compare-btn${itemId}`);
     if (removeItemCheckbox) {
         removeItemCheckbox.checked = false;
