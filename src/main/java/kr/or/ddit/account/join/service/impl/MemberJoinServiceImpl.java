@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,11 +27,13 @@ public class MemberJoinServiceImpl implements MemberJoinService {
 
 	@Autowired
 	MemberJoinMapper memberJoinMapper;
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Value("${imp.identity.key}")
 	private String IMP_IDENTITY_KEY;
 	@Value("${imp.identity.secret}")
 	private String IMP_IDENTITY_SECRET;
-	
+
 	@Override
 	public MemberVO selectUserEmail(String email) {
 		// TODO Auto-generated method stub
@@ -73,10 +76,10 @@ public class MemberJoinServiceImpl implements MemberJoinService {
 		Map<String, String> tokenBody = new HashMap<>();
 		tokenBody.put("imp_key", IMP_IDENTITY_KEY); // REST API 키
 		tokenBody.put("imp_secret", IMP_IDENTITY_SECRET);
-		
+
 		Gson gson = new Gson();
 		String jsonBody = gson.toJson(tokenBody);
-		
+
 		String accessToken = "";
 		try {
 			HttpEntity<String> tokenRequest = new HttpEntity<>(jsonBody, tokenHeaders);
@@ -123,6 +126,35 @@ public class MemberJoinServiceImpl implements MemberJoinService {
 		}
 
 		return finalResult;
+	}
+
+	@Override
+	public int memberJoin(MemberVO memberVO) {
+
+		log.info("회원가입 정보" + memberVO);
+		memberVO.setMemPassword(bCryptPasswordEncoder.encode(memberVO.getMemPassword()));
+		memberVO.setMemPhoneNumber(formatPhoneNumber(memberVO.getMemPhoneNumber()));
+		return memberJoinMapper.memberJoin(memberVO);
+	}
+
+	public static String formatPhoneNumber(String phoneNum) {
+
+		if (phoneNum == null || phoneNum.length() != 11) {
+			return null;
+		}
+
+		if (!phoneNum.matches("\\d+")) {
+			return null;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(phoneNum.substring(0, 3));
+		sb.append("-");
+		sb.append(phoneNum.substring(3, 7)); 
+		sb.append("-");
+		sb.append(phoneNum.substring(7));
+
+		return sb.toString();
 	}
 
 }

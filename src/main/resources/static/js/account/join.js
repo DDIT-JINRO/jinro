@@ -344,5 +344,29 @@ nicknameCheck.addEventListener("click", () => {
 			nicknameError.textContent = "닉네임 중복 확인 중 오류 발생";
 		});
 
+	document.getElementById('joinBtn').addEventListener('click', function(e) {
+		e.preventDefault();
 
+		let promotionCode = 'G12001';
+
+		const mailChecked = document.querySelector('input[value="mail"]').checked;
+		const kakaoChecked = document.querySelector('input[value="kakao"]').checked;
+
+		if (mailChecked && kakaoChecked) {
+			promotionCode = 'G12004';
+		} else if (mailChecked) {
+			promotionCode = 'G12002';
+		} else if (kakaoChecked) {
+			promotionCode = 'G12003';
+		}
+
+		const form = document.querySelector('form');
+		const hiddenInput = document.createElement('input');
+		hiddenInput.type = 'hidden';
+		hiddenInput.name = 'memAlarm';
+		hiddenInput.value = promotionCode;
+		form.appendChild(hiddenInput);
+		
+		form.submit();
+	});
 });

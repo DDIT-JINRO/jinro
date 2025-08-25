@@ -49,7 +49,7 @@
 
 						<div class="input-row">
 							<label for="nickname">닉네임</label>
-							<input type="text" class="inputWt" id="nickname" name="memNickName" placeholder="닉네임을 입력해주세요." />
+							<input type="text" class="inputWt" id="nickname" name="memNickname" placeholder="닉네임을 입력해주세요." />
 
 							<button id="nicknameCheck" type="button">중복 확인</button>
 						</div>
@@ -109,7 +109,7 @@
 							</div>
 							<div class="eventAgree">
 								<label>
-									<input type="checkbox" />
+									<input type="checkbox" value="mail"/>
 									이벤트 등 프로모션 메일 수신 동의
 									<span class="minimal">선택</span>
 								</label>
@@ -117,7 +117,7 @@
 							</div>
 							<div class="eventAgree">
 								<label>
-									<input type="checkbox" />
+									<input type="checkbox" value="kakao"/>
 									카카오톡 수신 동의
 									<span class="minimal">선택</span>
 								</label>

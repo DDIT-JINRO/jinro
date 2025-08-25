@@ -12,6 +12,6 @@ public interface MemberJoinService {
 
 	Map<String, Object> identityCheck(String imp_uid);
 
-	void memberJoin(MemberVO memberVO);
+	int memberJoin(MemberVO memberVO);
 
 }

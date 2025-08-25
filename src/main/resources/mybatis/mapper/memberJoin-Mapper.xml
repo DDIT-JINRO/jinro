@@ -19,4 +19,45 @@
 		WHERE MEM_NICKNAME = #{nickName}
 	</select>
 
+	<insert id="memberJoin"	parameterType="kr.or.ddit.main.service.MemberVO">
+		<selectKey keyProperty="memId" resultType="int"
+			order="BEFORE">
+			SELECT NVL(MAX(MEM_ID),0)+1 FROM MEMBER
+		</selectKey>
+		INSERT INTO MEMBER (
+		    MEM_ID
+		    , MEM_EMAIL
+		    , MEM_PASSWORD
+		    , MEM_NICKNAME
+		    , MEM_PHONE_NUMBER
+		    , MEM_NAME
+		    , MEM_GEN
+		    , MEM_BIRTH
+		    , MEM_ALARM
+		    , MEM_STUDENT
+		    , MEM_ROLE
+		    , MEM_POINT
+		    , CREATED_AT
+		    , PW_UPDATED_AT
+		    , DEL_YN
+		    , LOGIN_TYPE
+		) VALUES (
+		    #{memId}
+		  , #{memEmail}
+		  , #{memPassword}
+		  , #{memNickname}
+		  , #{memPhoneNumber}
+		  , #{memName}
+		  , #{memGen}
+		  , #{memBirth}
+		  , #{memAlarm}
+		  , 'N'
+		  , 'R01001'
+		  , 0
+		  , SYSDATE
+		  , SYSDATE
+		  , 'N'
+		  , 'G33001'
+		)
+	</insert>
 </mapper>

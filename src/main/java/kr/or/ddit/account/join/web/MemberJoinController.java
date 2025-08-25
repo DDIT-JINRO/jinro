@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +35,7 @@ public class MemberJoinController {
 
 	@Autowired
 	MemberJoinService memberJoinService;
-
+	
 	@GetMapping("/joinpage.do")
 	public String viewMemberJoinPage() {
 		return "account/join";
@@ -113,10 +114,15 @@ public class MemberJoinController {
 	}
 
 	@PostMapping("/memberJoin.do")
-	public String memberJoin(MemberVO memberVO) {
+	public String memberJoin(MemberVO memberVO, Model model) {
 		
-		memberJoinService.memberJoin(memberVO);
+		int result = memberJoinService.memberJoin(memberVO);
+		if (result > 0) {
+			model.addAttribute("registMessage", "가입이 완료되었습니다.");
+		} else {
+			model.addAttribute("registMessage", "가입이 실패하였습니다.");
+		}
 		
-		return "";
+		return "account/login";
 	}
 }
