@@ -47,6 +47,50 @@
 						</button>
 					</div>
 				</div>
+				<div class="search-filter__accordion">
+					<button type="button" class="search-filter__accordion-header is-active">
+						<span>상세검색</span>
+						<span class="search-filter__accordion-arrow">▼</span>
+					</button>
+					<div class="search-filter__accordion-panel">
+						<div class="search-filter__accordion-content">
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬 순서</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="InterviewedAtDesc" <c:if test="${paramValues.sortOrder[0] == 'InterviewedAtDesc'}">checked</c:if> >
+										<span>최신 면접순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="InterviewedAtAsc" <c:if test="${paramValues.sortOrder[0] == 'InterviewedAtAsc'}">checked</c:if> >
+										<span>과거 면접순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="createdAtDesc" <c:if test="${paramValues.sortOrder[0] == 'createdAtDesc'}">checked</c:if> >
+										<span>최신 작성순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="createdAtAsc" <c:if test="${paramValues.sortOrder[0] == 'createdAtAsc'}">checked</c:if> >
+										<span>과거 작성순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="reviewRateDesc" <c:if test="${paramValues.sortOrder[0] == 'reviewRateDesc'}">checked</c:if> >
+										<span>평점 높은순</span>
+									</label>
+								</div>
+							</div>
+							<div class="search-filter__group">
+								<div class="search-filter__group-header">
+									<label class="search-filter__group-title">선택된 필터</label>
+									<button type="button" class="search-filter__reset-button">초기화</button>
+								</div>
+								<div class="search-filter__selected-tags"></div>
+							</div>
+							<button type="submit" class="search-filter__submit-button">검색</button>
+						</div>
+					</div>
+				</div>
+
 			</form>
 
 			<div class="content-list">
@@ -163,11 +207,11 @@
 					<p class="content-list__no-results">면접 후기가 없습니다.</p>
 				</c:if>
 			</div>
-			
+
 			<div class="page-actions">
 				<button id="btnWrite" class="page-actions__button">면접 후기 공유하기</button>
 			</div>
-			
+
 			<div class="pagination">
 				<c:url var="prevUrl" value="${articlePage.url}">
 					<c:param name="currentPage" value="${articlePage.startPage - 5}" />

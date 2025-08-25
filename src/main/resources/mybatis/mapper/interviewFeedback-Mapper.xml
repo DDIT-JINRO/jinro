@@ -57,13 +57,32 @@
 				AND TARGET_ID = #{targetId}
 			</if>
 		ORDER BY
-			IR_MOD_AT DESC
+			<choose>
+				<when test="sortOrder=='InterviewedAtDesc' ">
+					IR_INTERVIEW_AT DESC, IR_CREATED_AT DESC
+				</when>
+				<when test="sortOrder=='InterviewedAtAsc' ">
+					IR_INTERVIEW_AT ASC, IR_CREATED_AT ASC
+				</when>
+				<when test="sortOrder=='createdAtDesc' ">
+					IR_CREATED_AT DESC, IR_INTERVIEW_AT DESC
+				</when>
+				<when test="sortOrder=='createdAtAsc' ">
+					IR_CREATED_AT ASC, IR_INTERVIEW_AT ASC
+				</when>
+				<when test="sortOrder=='reviewRateDesc' ">
+					IR_RATING DESC
+				</when>
+				<otherwise>
+					IR_INTERVIEW_AT DESC, IR_CREATED_AT DESC
+				</otherwise>
+			</choose>
 		OFFSET
 			#{startRow} - 1 ROWS
 		FETCH NEXT
 			#{endRow} - #{startRow} + 1 ROWS ONLY
 	</select>
-	
+
 	<select id="selectInterviewReviewListTotal" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO" resultType="int">
 	    SELECT
 	        COUNT(*)
@@ -73,7 +92,7 @@
             LEFT JOIN UNIVERSITY U ON A.TARGET_ID = U.UNIV_ID
             LEFT JOIN COMPANY C ON A.TARGET_ID = C.CP_ID
 	    WHERE
-	        IR_STATUS = #{irStatus} 
+	        IR_STATUS = #{irStatus}
 	    AND
 	        IR_TYPE = #{irType}
 	    <if test="keyword != null and keyword != ''">
@@ -105,7 +124,7 @@
 	    </if>
 	</select>
 
-	<select id="selectCompanyList" resultType="kr.or.ddit.empt.enp.service.CompanyVO" parameterType="string"> 
+	<select id="selectCompanyList" resultType="kr.or.ddit.empt.enp.service.CompanyVO" parameterType="string">
 		SELECT
 		    CP_ID
 		    , CP_NAME
@@ -125,7 +144,7 @@
             CP_NAME LIKE '%' || #{cpName} || '%'
 		</if>
 	</select>
-	
+
 	<select id="selectUniversityList" parameterType="string" resultType="kr.or.ddit.ertds.univ.uvsrch.service.UniversityVO">
 		SELECT
 		    UNIV_ID
@@ -139,12 +158,12 @@
             UNIV_NAME LIKE '%' || #{univName} || '%'
 		</if>
 	</select>
-	
+
 	<update id="updateInterviewFeedback" parameterType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
 	    <selectKey keyProperty="irId" resultType="int" order="BEFORE">
 	      SELECT NVL(MAX(IR_ID), 0) + 1 AS IR_ID FROM INTERVIEW_REVIEW
 	    </selectKey>
-	
+
 		MERGE INTO
 			INTERVIEW_REVIEW A
 		USING DUAL
@@ -181,7 +200,7 @@
 					, 'S06002'
 				)
 	</update>
-	
+
 	<update id="updateVerification" parameterType="kr.or.ddit.mpg.mif.inq.service.VerificationVO">
 		MERGE INTO
 			VERIFICATION A
@@ -209,7 +228,7 @@
 				    , #{veriCategory}
 				)
 	</update>
-	
+
 	<update id="deleteInterviewFeedback" parameterType="int">
 		UPDATE
 			INTERVIEW_REVIEW
@@ -218,7 +237,7 @@
 		WHERE
 			IR_ID = #{irId}
 	</update>
-	
+
 	<select id="selectInterviewFeedback" parameterType="int" resultType="kr.or.ddit.empt.enp.service.InterviewReviewVO">
 		SELECT
 		    A.IR_ID
