@@ -427,6 +427,60 @@
 	border-color: #ddd;
 }
 
+/* 로딩 및 오류 메시지 스타일 */
+.error-message,
+.empty-message {
+	padding: 30px 20px;
+	text-align: center;
+	color: #666;
+	font-style: italic;
+	background-color: #f8f9fa;
+	border-radius: 8px;
+	margin: 10px;
+}
+
+.error-message {
+	background-color: #ffebee;
+	color: #d32f2f;
+}
+
+.empty-message {
+	background-color: #fafafa;
+	color: #757575;
+}
+
+/* 검색 입력 필드 포커스 스타일 개선 */
+.search-modal__input:focus {
+	outline: none;
+	border-color: #7881f5;
+	box-shadow: 0 0 0 3px rgba(120, 129, 245, 0.1);
+	transition: all 0.2s ease;
+}
+
+/* 검색 버튼 로딩 상태 */
+.search-modal__button.loading {
+	background-color: #bbb;
+	cursor: not-allowed;
+	position: relative;
+	overflow: hidden;
+}
+
+.search-modal__button.loading::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+	animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+	0% { left: -100%; }
+	100% { left: 100%; }
+}
+
 /* ==================================
    반응형 스타일
    ================================== */
