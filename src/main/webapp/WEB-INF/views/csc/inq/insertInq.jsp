@@ -22,10 +22,29 @@
 		</div>
 	</div>
 </section>
+
+<div class="breadcrumb-container-space">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/csc/not/noticeList.do">고객센터</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/csc/inq/inqryList.do">1:1문의</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">1:1 문의 작성</h3>
+			<a class="tab active" href="/csc/inq/inqryList.do">1:1 문의</a>
 		</div>
 
 		<div class="public-wrapper-main">
