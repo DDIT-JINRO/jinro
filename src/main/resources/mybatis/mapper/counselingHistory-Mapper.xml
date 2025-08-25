@@ -110,7 +110,20 @@
 		            	AND A.COUNSEL_STATUS = #{counselStatus}
 		            </if>
 		            ORDER BY
-		            	A.COUNSEL_REQ_DATETIME DESC
+					<choose>
+				        <when test="sortOrder == 'createdAtAsc'">
+				            A.COUNSEL_CREATED_AT ASC
+				        </when>
+				        <when test="sortOrder == 'reqDateAsc'">
+				            A.COUNSEL_REQ_DATETIME ASC, A.COUNSEL_CREATED_AT DESC
+				        </when>
+				        <when test="sortOrder == 'reqDateDesc'">
+				            A.COUNSEL_REQ_DATETIME DESC, A.COUNSEL_CREATED_AT DESC
+				        </when>
+				        <otherwise>
+				            A.COUNSEL_CREATED_AT DESC
+				        </otherwise>
+				    </choose>
 		        ) D
 		    WHERE
 		        ROWNUM <![CDATA[<=]]> #{endRow}
@@ -126,33 +139,36 @@
 			COUNSELING A
 			LEFT JOIN MEMBER M1 ON A.MEM_ID = M1.MEM_ID
 			LEFT JOIN MEMBER M2 ON A.COUNSEL = M2.MEM_ID
-		WHERE
-			A.MEM_ID = #{memId}
-		<if test="keyword != null and keyword != ''">
-			<choose>
-				<when test="status == 'title'">
-					AND A.COUNSEL_TITLE LIKE '%' || #{keyword} || '%'
-				</when>
-				<when test="status == 'content'">
-					AND A.COUNSEL_DESCRIPTION LIKE '%' || #{keyword} || '%'
-				</when>
-				<when test="status == 'counsel'">
-					AND M2.COUNSEL_NAME LIKE '%' || #{keyword} || '%'
-				</when>
-				<otherwise>
-					AND (
-						A.COUNSEL_TITLE LIKE '%' || #{keyword} || '%'
-		 			OR A.COUNSEL_DESCRIPTION LIKE '%' || #{keyword} || '%'
-		 			OR A.COUNSEL LIKE '%' || #{keyword} || '%'
-					)
-				</otherwise>
-			</choose>
-		</if>
-		<if test="counselMethod != null and counselMethod != ''">
-			AND A.COUNSEL_METHOD = #{counselMethod}
-		</if>
-		<if test="counselCategory != null and counselCategory != ''">
-			AND A.COUNSEL_CATEGORY = #{counselCategory}
-		</if>
+        WHERE
+            A.MEM_ID = #{memId}
+        <if test="keyword != null and keyword != ''">
+        	<choose>
+        		<when test="status == 'title'">
+        			AND A.COUNSEL_TITLE LIKE '%' || #{keyword} || '%'
+        		</when>
+        		<when test="status == 'content'">
+        			AND A.COUNSEL_DESCRIPTION LIKE '%' || #{keyword} || '%'
+        		</when>
+        		<when test="status == 'counsel'">
+        			AND M2.COUNSEL_NAME LIKE '%' || #{keyword} || '%'
+        		</when>
+        		<otherwise>
+        			AND (
+        				A.COUNSEL_TITLE LIKE '%' || #{keyword} || '%'
+         			OR A.COUNSEL_DESCRIPTION LIKE '%' || #{keyword} || '%'
+         			OR A.COUNSEL LIKE '%' || #{keyword} || '%'
+        			)
+        		</otherwise>
+        	</choose>
+        </if>
+        <if test="counselMethod != null and counselMethod != ''">
+        	AND A.COUNSEL_METHOD = #{counselMethod}
+        </if>
+        <if test="counselCategory != null and counselCategory != ''">
+        	AND A.COUNSEL_CATEGORY = #{counselCategory}
+        </if>
+        <if test="counselStatus != null and counselStatus != ''">
+        	AND A.COUNSEL_STATUS = #{counselStatus}
+        </if>
 	</select>
 </mapper>

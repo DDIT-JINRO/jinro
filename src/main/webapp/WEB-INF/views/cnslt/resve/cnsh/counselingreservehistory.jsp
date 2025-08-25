@@ -100,6 +100,36 @@
 										</c:forEach>
 									</div>
 								</div>
+
+								<div class="search-filter__group">
+									<label class="search-filter__group-title">정렬 순서</label>
+									<div class="search-filter__options">
+										<label class="search-filter__option">
+											<input type="radio" name="sortOrder" value="createdAtDesc" ${param.sortOrder == 'createdAtDesc' ? 'checked' : ''} />
+											<span>신청일 최신순</span>
+										</label>
+										<label class="search-filter__option">
+											<input type="radio" name="sortOrder" value="createdAtAsc" ${param.sortOrder == 'createdAtAsc' ? 'checked' : ''} />
+											<span>신청일 오래된순</span>
+										</label>
+										<label class="search-filter__option">
+											<input type="radio" name="sortOrder" value="reqDateAsc" ${param.sortOrder == 'reqDateAsc' ? 'checked' : ''} />
+											<span>예약일 빠른순</span>
+										</label>
+										<label class="search-filter__option">
+											<input type="radio" name="sortOrder" value="reqDateDesc" ${param.sortOrder == 'reqDateDesc' ? 'checked' : ''} />
+											<span>예약일 늦은순</span>
+										</label>
+									</div>
+								</div>
+								<div class="search-filter__group">
+									<div class="search-filter__group-header">
+										<label class="search-filter__group-title">선택된 필터</label>
+										<button type="button" class="search-filter__reset-button">초기화</button>
+									</div>
+									<div class="search-filter__selected-tags"></div>
+								</div>
+
 								<button type="submit" class="search-filter__submit-button">검색</button>
 							</div>
 						</div>

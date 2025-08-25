@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-	// [수정] 필터 관련 클래스명을 userCommon.css 기준으로 변경
 	const filterOrder = ['counselStatus', 'counselCategory', 'counselMethod'];
 	const toggleButton = document.getElementById('search-filter-toggle');
 	const panel = document.getElementById('search-filter-panel');
 	const allRadioGroups = {
-		counselStatus: document.querySelectorAll('.search-filter__option input[type="radio"][name="counselStatus"]'),
-		counselCategory: document.querySelectorAll('.search-filter__option input[type="radio"][name="counselCategory"]'),
-		counselMethod: document.querySelectorAll('.search-filter__option input[type="radio"][name="counselMethod"]')
+	    counselStatus: document.querySelectorAll('.search-filter__option input[type="radio"][name="counselStatus"]'),
+	    counselCategory: document.querySelectorAll('.search-filter__option input[type="radio"][name="counselCategory"]'),
+	    counselMethod: document.querySelectorAll('.search-filter__option input[type="radio"][name="counselMethod"]'),
+	    sortOrder: document.querySelectorAll('.search-filter__option input[type="radio"][name="sortOrder"]')
 	};
 	const selectedFiltersContainer = document.getElementById('selected-filters');
 	const resetButton = document.querySelector('.search-filter__reset-button');
@@ -45,6 +45,22 @@ document.addEventListener('DOMContentLoaded', function() {
 				selectedFiltersContainer.innerHTML += filterTagHTML;
 			}
 		});
+		
+		const sortRadioList = allRadioGroups['sortOrder'];
+		if (sortRadioList) {
+		    const selectedSortRadio = Array.from(sortRadioList).find(radio => radio.checked);
+		    if (selectedSortRadio) {
+		        const text = selectedSortRadio.nextElementSibling.textContent;
+		        const groupText = '정렬';
+
+		        const filterTagHTML = `
+		            <span class="search-filter__tag" data-group="sortOrder">
+		                ${groupText} > ${text}
+		                <button type="button" class="search-filter__tag-remove">×</button>
+		            </span>`;
+		        selectedFiltersContainer.innerHTML += filterTagHTML;
+		    }
+		}
 	};
 
 	// 라디오 버튼 변경 시 이벤트 핸들러
