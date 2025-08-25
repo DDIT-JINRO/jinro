@@ -110,10 +110,10 @@
 				<thead>
 					<tr>
 						<th>학과명</th>
-						<th>평균 등록금</th>
-						<th>평균 장학금</th>
-						<th>입시 경쟁률</th>
-						<th>평균 취업률</th>
+						<th class="th-udTuition">평균 등록금</th>
+						<th class="th-udScholar">평균 장학금</th>
+						<th class="th-udCompetition">입시 경쟁률</th>
+						<th class="th-udEmpRate">평균 취업률</th>
 						<th style="display: none;"></th>
 					</tr>
 				</thead>

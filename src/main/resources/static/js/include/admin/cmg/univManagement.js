@@ -142,10 +142,10 @@ function univManagement() {
 					const rows = univDeptList.map(item => `
 														  <tr id="${item.udId}">
 															<td>${item.udName == null ? '데이터 없음' : item.udName}</td>
-															<td>${item.udTuition == null ? '데이터 없음' : formatNumberWithCommas(item.udTuition)}</td>											
-															<td>${item.udScholar == null ? '데이터 없음' : formatNumberWithCommas(item.udScholar)}</td>
-															<td>${item.udCompetition == null ? '데이터 없음' : item.udCompetition}</td>
-															<td>${item.udEmpRate == null ? '데이터 없음' : item.udEmpRate}</td>
+															<td style="text-align: right;">${item.udTuition == null ? '데이터 없음' : formatNumberWithCommas(item.udTuition)}</td>											
+															<td style="text-align: right;">${item.udScholar == null ? '데이터 없음' : formatNumberWithCommas(item.udScholar)}</td>
+															<td style="text-align: right;">${item.udCompetition == null ? '데이터 없음' : item.udCompetition}</td>
+															<td style="text-align: right;">${item.udEmpRate == null ? '데이터 없음' : item.udEmpRate}</td>
 															<td style="display:none;">${item.uddId == null ? '데이터 없음' : item.uddId}</td>														   
 														  </tr>`).join('');
 					tgDepart.innerHTML = rows;

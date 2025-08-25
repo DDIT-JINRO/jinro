@@ -36,3 +36,7 @@
     background-color: rgb(249, 249, 249);
     resize: none;
 }
+
+th, td {
+	text-align: left;
+}
