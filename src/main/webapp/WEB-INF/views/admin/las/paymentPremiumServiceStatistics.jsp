@@ -48,6 +48,7 @@
 					id="revenueChartDay">
 					<option value="daily">일별</option>
 					<option value="monthly">월별</option>
+					<option value="quarterly">분기별</option>
 					<option value="selectDays">기간선택</option>
 				</select> <select class="public-toggle-select" name="revenueChartGender"
 					id="revenueChartGender">

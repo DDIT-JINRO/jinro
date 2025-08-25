@@ -48,6 +48,9 @@
                             <when test="period == 'monthly'">
                                 ADD_MONTHS(TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'MM'), LEVEL - 1) AS dt
                             </when>
+				            <when test="period == 'quarterly'">
+				                ADD_MONTHS(TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'Q'), (LEVEL - 1) * 3) AS dt
+				            </when>
                             <otherwise>
                                 TO_DATE(#{startDate}, 'YYYY-MM-DD') + LEVEL - 1 AS dt
                             </otherwise>
@@ -58,15 +61,19 @@
                             <when test="period == 'monthly'">
                                 ADD_MONTHS(TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'MM'), LEVEL - 1) <![CDATA[ <= ]]> TRUNC(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 'MM')
                             </when>
+				            <when test="period == 'quarterly'">
+				                ADD_MONTHS(TRUNC(TO_DATE(#{startDate}, 'YYYY-MM-DD'), 'Q'), (LEVEL - 1) * 3) <![CDATA[ <= ]]> TRUNC(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 'Q')
+				            </when>
                             <otherwise>
                                 LEVEL <![CDATA[ <= ]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') - TO_DATE(#{startDate}, 'YYYY-MM-DD') + 1
                             </otherwise>
                         </choose>
                 ),
-                REVENUE_DATA AS (
+                CURRENT_DATA AS (
                     SELECT
                         <choose>
                             <when test="period == 'monthly'">TRUNC(p.PAY_DATE, 'MM')</when>
+						    <when test="period == 'quarterly'">TRUNC(p.PAY_DATE, 'Q')</when>
                             <otherwise>TRUNC(p.PAY_DATE)</otherwise>
                         </choose> AS dt,
                         SUM(p.PAY_AMOUNT) AS revenue
@@ -89,17 +96,69 @@
                     GROUP BY 
                         <choose>
                             <when test="period == 'monthly'">TRUNC(p.PAY_DATE, 'MM')</when>
+    						<when test="period == 'quarterly'">TRUNC(p.PAY_DATE, 'Q')</when>
                             <otherwise>TRUNC(p.PAY_DATE)</otherwise>
                         </choose>
-                )
+                ),
+				  PREV_DATA AS (
+				    SELECT
+				      <choose>
+				        <when test="period == 'monthly'">TRUNC(p.PAY_DATE, 'MM')</when>
+				        <when test="period == 'quarterly'">TRUNC(p.PAY_DATE, 'Q')</when>
+				        <otherwise>TRUNC(p.PAY_DATE)</otherwise>
+				      </choose> AS dt,
+				      SUM(p.PAY_AMOUNT) AS revenue
+				    FROM PAYMENT p
+				    JOIN MEMBER_SUBSCRIPTION ms ON p.MS_ID = ms.MS_ID
+				    JOIN MEMBER m ON ms.MEM_ID = m.MEM_ID
+				    WHERE p.PAY_AMOUNT > 0
+				      <!-- 비교 구간: 일별은 전월, 그 외(월/분기/selectDays)는 전년 -->
+				      <choose>
+				        <when test="period == 'monthly' or period == 'quarterly' or period == 'selectDays'">
+				          AND p.PAY_DATE >= ADD_MONTHS(TO_DATE(#{startDate}, 'YYYY-MM-DD'), -12)
+				          AND p.PAY_DATE <![CDATA[ < ]]> ADD_MONTHS(TO_DATE(#{endDate}, 'YYYY-MM-DD'), -12) + 1
+				        </when>
+				        <otherwise> <!-- daily -->
+				          AND p.PAY_DATE >= ADD_MONTHS(TO_DATE(#{startDate}, 'YYYY-MM-DD'), -1)
+				          AND p.PAY_DATE <![CDATA[ < ]]> ADD_MONTHS(TO_DATE(#{endDate}, 'YYYY-MM-DD'), -1) + 1
+				        </otherwise>
+				      </choose>
+				      <if test="gender != null and gender == 'male'">AND m.MEM_GEN = 'G11001'</if>
+				      <if test="gender != null and gender == 'female'">AND m.MEM_GEN = 'G11002'</if>
+				      <if test="ageGroup != null and ageGroup != '' and ageGroup == 'teen'">
+				        AND m.MEM_BIRTH IS NOT NULL
+				        AND TRUNC(MONTHS_BETWEEN(p.PAY_DATE, m.MEM_BIRTH) / 12) <![CDATA[ <= ]]> 19
+				      </if>
+				      <if test="ageGroup != null and ageGroup != '' and ageGroup == 'youth'">
+				        AND m.MEM_BIRTH IS NOT NULL
+				        AND TRUNC(MONTHS_BETWEEN(p.PAY_DATE, m.MEM_BIRTH) / 12) <![CDATA[ >= ]]> 20
+				      </if>
+				    GROUP BY
+				      <choose>
+				        <when test="period == 'monthly'">TRUNC(p.PAY_DATE, 'MM')</when>
+				        <when test="period == 'quarterly'">TRUNC(p.PAY_DATE, 'Q')</when>
+				        <otherwise>TRUNC(p.PAY_DATE)</otherwise>
+				      </choose>
+				  )
                 SELECT
                     <choose>
                         <when test="period == 'monthly'">TO_CHAR(dr.dt, 'YYYY-MM')</when>
+    					<when test="period == 'quarterly'">TO_CHAR(dr.dt, 'YYYY') || '-Q' || TO_CHAR(dr.dt, 'Q')</when>
                         <otherwise>TO_CHAR(dr.dt, 'YYYY-MM-DD')</otherwise>
                     </choose> AS "dt",
-                    NVL(rd.revenue, 0) AS "revenue"
+                    NVL(cd.revenue, 0) AS "revenue",
+   					NVL(pd.revenue, 0) AS "revenuePrev"
                 FROM DATE_RANGE dr
-                LEFT JOIN REVENUE_DATA rd ON dr.dt = rd.dt
+				LEFT JOIN CURRENT_DATA cd ON cd.dt = dr.dt
+				<!-- 비교 조인: 기간 유형에 맞춰 dt를 전월/전년으로 이동 -->
+				<choose>
+				  <when test="period == 'monthly' or period == 'quarterly' or period == 'selectDays'">
+				    LEFT JOIN PREV_DATA pd ON pd.dt = ADD_MONTHS(dr.dt, -12)
+				  </when>
+				  <otherwise> <!-- daily -->
+				    LEFT JOIN PREV_DATA pd ON pd.dt = ADD_MONTHS(dr.dt, -1)
+				  </otherwise>
+				</choose>
                 ORDER BY dr.dt ASC
             </when>
             <otherwise>
@@ -107,6 +166,7 @@
                 SELECT
                     <choose>
                         <when test="period == 'monthly'">TO_CHAR(p.PAY_DATE, 'YYYY-MM')</when>
+                        <when test="period == 'quarterly'">TO_CHAR(p.PAY_DATE, 'YYYY') || '-Q' || TO_CHAR(TRUNC(p.PAY_DATE, 'Q'), 'Q')</when>
                         <otherwise>TO_CHAR(p.PAY_DATE, 'YYYY-MM-DD')</otherwise>
                     </choose> AS "dt",
                     SUM(p.PAY_AMOUNT) AS "revenue"
@@ -127,6 +187,7 @@
                 GROUP BY 
                     <choose>
                         <when test="period == 'monthly'">TO_CHAR(p.PAY_DATE, 'YYYY-MM')</when>
+                        <when test="period == 'quarterly'">TO_CHAR(p.PAY_DATE, 'YYYY') || '-Q' || TO_CHAR(TRUNC(p.PAY_DATE, 'Q'), 'Q')</when>
                         <otherwise>TO_CHAR(p.PAY_DATE, 'YYYY-MM-DD')</otherwise>
                     </choose>
                 ORDER BY "dt" ASC
