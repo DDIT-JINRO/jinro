@@ -29,6 +29,8 @@ public class UniversityVO {
 	private int startNo;
 	private int endNo;
 
+	private String sortOrder;
+
 	public int getStartNo() {
 		return (this.currentPage - 1) * size;
 	}
