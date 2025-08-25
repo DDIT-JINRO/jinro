@@ -39,7 +39,7 @@
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">직업 상세</h3>
+			<a class="tab active" href="#">직업 상세</a>
 		</div>
 
 		<div class="public-wrapper-main">
