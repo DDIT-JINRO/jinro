@@ -214,4 +214,23 @@ public class NoticeServiceImpl implements NoticeService {
 		return result;
 	}
 
+	@Transactional
+	@Override
+	public boolean deleteFile(Long groupId, int seq, int noticeId) {
+		fileService.deleteFile(groupId, seq);
+
+		// 게시글 상세 조회
+		NoticeVO noticeDetail = noticeMapper.getNoticeDetail(noticeId);
+
+		// 파일 불러오기
+		List<FileDetailVO> getFileList = fileService.getFileList(noticeDetail.getFileGroupNo());
+		if (getFileList != null && getFileList.size() > 0) {
+			noticeDetail.setGetFileList(getFileList);
+		} else {
+			noticeMapper.updateNoticeFileGroup(noticeId, null);
+		}
+		
+		return false;
+	}
+
 }

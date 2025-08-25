@@ -24,4 +24,6 @@ public interface NoticeService {
 	
 	// 7. 공지사항 삭제
 	public int deleteNotice(NoticeVO noticeVo);
+
+	public boolean deleteFile(Long groupId, int seq, int noticeId);
 }

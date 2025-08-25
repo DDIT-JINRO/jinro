@@ -196,7 +196,12 @@ function filedownload(fileGroupId, fileSeq) {
 
 function deleteExistingFile(fileGroupId, seq, noticeId) {
 	axios.get('/csc/not/admin/deleteFile', {
-			params: { groupId: fileGroupId, seq }
+			params: {
+				groupId: fileGroupId,
+				seq: seq,
+				noticeId: noticeId
+				
+			}
 		})
 		.then(() => showDetail(noticeId))
 		.catch(console.error);

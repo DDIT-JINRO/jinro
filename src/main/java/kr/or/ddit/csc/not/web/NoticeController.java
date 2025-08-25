@@ -88,9 +88,9 @@ public class NoticeController {
 	//파일삭제
 	@ResponseBody
 	@GetMapping("/admin/deleteFile")
-	public boolean deleteFile(@RequestParam Long groupId, @RequestParam int seq) {
+	public boolean deleteFile(@RequestParam Long groupId, @RequestParam int seq, @RequestParam int noticeId) {
 
-		return fileService.deleteFile(groupId, seq);
+		return noticeService.deleteFile(groupId, seq, noticeId);
 	}
 	
 	//파일 수정
