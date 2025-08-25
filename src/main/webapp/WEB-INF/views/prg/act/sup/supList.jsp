@@ -83,6 +83,10 @@
 											<input type="radio" name="sortOrder" value="latest" ${checkedFilters.sortOrder == 'latest' ? 'checked' : ''} />
 											<span>최신 등록순</span>
 										</label>
+										<label class="search-filter__option">
+											<input type="radio" name="sortOrder" value="viewCount" ${checkedFilters.sortOrder == 'viewCount' ? 'checked' : ''} />
+											<span>조회수순</span>
+										</label>
 									</div>
 								</div>
 
