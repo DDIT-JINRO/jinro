@@ -105,11 +105,16 @@
 				<if test="status != null and status != '' and status == 2">
 					AND B.BOARD_CONTENT LIKE '%'||#{keyword}||'%'
 				</if>
-				ORDER BY
-				<if test="memId != null and memId != ''">
-					IS_BOOKMARK ,
-				</if>
-					B.BOARD_CREATED_AT DESC
+			    ORDER BY
+			    <if test="memId != null and memId != ''">
+			        IS_BOOKMARK DESC,
+			    </if>
+			    <choose>
+			        <when test="sortOrder == 'oldest'">B.BOARD_UPDATED_AT ASC</when>
+			        <when test="sortOrder == 'liked'">BOARD_LIKE_CNT DESC, B.BOARD_UPDATED_AT DESC</when>
+			        <when test="sortOrder == 'cnt'">B.BOARD_CNT DESC, B.BOARD_UPDATED_AT DESC</when>
+			        <otherwise>B.BOARD_UPDATED_AT DESC</otherwise>
+			    </choose>
 			) C
 			WHERE ROWNUM &lt;= #{endNo}
 		)

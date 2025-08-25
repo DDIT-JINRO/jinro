@@ -44,6 +44,38 @@
 						</button>
 					</div>
 				</div>
+				<div class="search-filter__accordion">
+					<button type="button" class="search-filter__accordion-header">
+						<span>상세검색</span>
+						<span class="search-filter__accordion-arrow">▲</span>
+					</button>
+					<div class="search-filter__accordion-panel">
+						<div class="search-filter__accordion-content">
+							<div class="search-filter__group">
+								<label class="search-filter__group-title">정렬 순서</label>
+								<div class="search-filter__options">
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="latest" <c:if test="${empty param.sortOrder or param.sortOrder == 'latest'}">checked</c:if>>
+										<span>최신순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="oldest" <c:if test="${param.sortOrder == 'oldest'}">checked</c:if>>
+										<span>오래된순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="liked" <c:if test="${param.sortOrder == 'liked'}">checked</c:if>>
+										<span>좋아요순</span>
+									</label>
+									<label class="search-filter__option">
+										<input type="radio" name="sortOrder" value="cnt" <c:if test="${param.sortOrder == 'cnt'}">checked</c:if>>
+										<span>조회수순</span>
+									</label>
+								</div>
+							</div>
+							<button type="submit" class="search-filter__submit-button">검색</button>
+						</div>
+					</div>
+				</div>
 			</form>
 			
 			<p class="content-list__total-count">해당 게시판은 진로/진학을 고민하고 논의하는 게시판입니다.</p>
@@ -93,6 +125,9 @@
 					<c:if test="${not empty param.status}">
 						<c:param name="status" value="${param.status}" />
 					</c:if>
+					<c:if test="${not empty param.sortOrder}">
+						<c:param name="sortOrder" value="${param.sortOrder}" />
+					</c:if>
 				</c:url>
 				<a href="${prevUrl}" class="pagination__link ${articlePage.startPage < 6 ? 'pagination__link--disabled' : ''}"> ← Previous </a>
 
@@ -105,6 +140,9 @@
 						<c:if test="${not empty param.status}">
 							<c:param name="status" value="${param.status}" />
 						</c:if>
+						<c:if test="${not empty param.sortOrder}">
+							<c:param name="sortOrder" value="${param.sortOrder}" />
+						</c:if>
 					</c:url>
 					<a href="${pageUrl}" class="pagination__link ${pNo == articlePage.currentPage ? 'pagination__link--active' : ''}"> ${pNo} </a>
 				</c:forEach>
@@ -116,6 +154,9 @@
 					</c:if>
 					<c:if test="${not empty param.status}">
 						<c:param name="status" value="${param.status}" />
+					</c:if>
+					<c:if test="${not empty param.sortOrder}">
+						<c:param name="sortOrder" value="${param.sortOrder}" />
 					</c:if>
 				</c:url>
 				<a href="${nextUrl}" class="pagination__link ${articlePage.endPage >= articlePage.totalPages ? 'pagination__link--disabled' : ''}"> Next → </a>
