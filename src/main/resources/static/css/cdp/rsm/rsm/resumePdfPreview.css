@@ -195,7 +195,7 @@ h2 {
 }
 /* Photo group은 오른쪽에 배치하거나 별도로 처리 */
 .photo-group {
-	float: right; /* 오른쪽으로 배치 */
+	float: left; /* 오른쪽으로 배치 */
 	width: 190px; /* 고정 너비 */
 	text-align: center;
 	margin-left: 20px; /* 왼쪽 여백 */

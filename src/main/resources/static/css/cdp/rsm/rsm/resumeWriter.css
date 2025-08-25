@@ -141,6 +141,17 @@
 }
 
 /* Photo Upload */
+.drop-zone {
+    border: 2px dashed #ccc;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.drop-zone.dragover {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+}
+
 .photo-group {
 	grid-column: span 1;
 	display: flex;

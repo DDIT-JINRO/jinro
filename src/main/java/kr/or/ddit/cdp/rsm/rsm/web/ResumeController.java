@@ -110,7 +110,6 @@ public class ResumeController {
 	@PostMapping("/deleteResume.do")
 	@ResponseBody
 	public Map<String, Object> deleteResume(@RequestBody ResumeVO resumeVO) {
-		log.info("resumeVO"+resumeVO);
 		Map<String, Object> result = new HashMap<>();
 		try {
 			int cnt = resumeService.deleteResumeById(resumeVO.getResumeId()); // 삭제 처리

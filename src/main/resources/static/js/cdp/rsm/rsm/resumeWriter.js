@@ -478,6 +478,85 @@ document.addEventListener("DOMContentLoaded", function() {
 			alert("PDF 미리보기 중 오류가 발생했습니다: " + err.message);
 		}
 	});
+	
+	const photoUploadArea = document.querySelector('.photo-upload-area');
+	    const photoInput = document.getElementById('photo-upload');
+
+	    // 기본 드래그 이벤트 방지
+	    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+	        photoUploadArea.addEventListener(eventName, preventDefaults, false);
+	    });
+
+	    function preventDefaults(e) {
+	        e.preventDefault();
+	        e.stopPropagation();
+	    }
+
+	    // 드래그 중인 상태 스타일 변경
+	    ['dragenter', 'dragover'].forEach(eventName => {
+	        photoUploadArea.addEventListener(eventName, highlight, false);
+	    });
+
+	    ['dragleave', 'drop'].forEach(eventName => {
+	        photoUploadArea.addEventListener(eventName, unhighlight, false);
+	    });
+
+	    function highlight(e) {
+	        photoUploadArea.classList.add('dragover');
+	    }
+
+	    function unhighlight(e) {
+	        photoUploadArea.classList.remove('dragover');
+	    }
+		
+		// 문서 전체에 드래그 이벤트 기본 동작 방지
+		document.addEventListener('dragenter', function(e) {
+		    e.preventDefault();
+		});
+
+		document.addEventListener('dragover', function(e) {
+		    e.preventDefault();
+			e.dataTransfer.dropEffect = 'none'; // 드래그 시 아이콘 숨기기
+		});
+
+		document.addEventListener('drop', function(e) {
+		    e.preventDefault();
+		});
+
+		// photoUploadArea에만 드롭을 허용하고 효과를 변경
+		photoUploadArea.addEventListener('dragover', function(e) {
+		    e.preventDefault();
+		    e.dataTransfer.dropEffect = 'copy'; // 사진 영역에서는 'copy' 아이콘 표시
+		});
+
+		photoUploadArea.addEventListener('drop', handleDrop);
+
+	    function handleDrop(e) {
+	        const dt = e.dataTransfer;
+	        const files = dt.files;
+
+	        if (files.length > 0) {
+	            const file = files[0];
+	            // 드롭된 파일이 이미지인지 확인
+	            if (file.type.startsWith('image/')) {
+	                const dataTransfer = new DataTransfer();
+	                dataTransfer.items.add(file);
+	                photoInput.files = dataTransfer.files;
+
+	                // 미리보기 이미지 업데이트
+	                const reader = new FileReader();
+	                reader.onload = function(event) {
+	                    const photoPreview = document.getElementById('photo-preview');
+	                    photoPreview.src = event.target.result;
+	                    photoPreview.style.display = 'block';
+	                    photoUploadArea.querySelector('.upload-placeholder').classList.add('hidden'); 
+	                };
+	                reader.readAsDataURL(file);
+	            } else {
+	                alert('이미지 파일만 드래그할 수 있습니다.');
+	            }
+	        }
+	    }
 
 });
 
