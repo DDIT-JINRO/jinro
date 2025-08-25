@@ -1,4 +1,8 @@
 function memberManagement() {
+	let personChartInstance = null;
+	let userOnlineChartInstance = null;
+	let pageVisitChartInstance = null;
+	let doughnutChart = null;
 
 	let currentSortOrder = 'asc';
 	let currentSortBy = 'id';
@@ -526,7 +530,9 @@ function memberManagement() {
 		const id = tds[0].textContent.trim();
 		let formData = new FormData();
 		formData.set("id", id);
+
 		userDetail(formData);
+
 		// 게시글 목록을 불러올 때 정렬 상태를 초기화하고 첫 페이지로 설정
 		const boardListIdBtn = document.getElementById('memDetailBoardList-orderBtn-id');
 		setActiveButton(boardListIdBtn);
@@ -545,8 +551,19 @@ function memberManagement() {
 			setActiveButton(replyListIdBtn);
 		}
 		userDetailReplyList(id, 1, 'replyId', 'asc');
+
+		// ▼▼▼ 이 부분을 추가해주세요 ▼▼▼
+		if (typeof createPersonActivityChart === 'function') {
+			document.getElementById('personChartDay').value = 'daily'; // 필터 기본값 설정
+			createPersonActivityChart(id, 'daily');
+		}
+		// ▲▲▲ 여기까지 ▲▲▲
 	});
 
+	const personChartDaySel = document.getElementById('personChartDay');
+	if (personChartDaySel) {
+		personChartDaySel.addEventListener('change', handlePersonChartFilterChange);
+	}
 
 	function userDetail(formData) {
 		axios.post('/admin/umg/getMemberDetail.do', formData)
@@ -607,9 +624,9 @@ function memberManagement() {
 				if (recentPenaltyDateEl) {
 					recentPenaltyDateEl.innerHTML = `<i class="fa-regular fa-clock"></i>&nbsp;` + (recentPenaltyDate ? formatDateMMDD(recentPenaltyDate) : '-');
 				}
-				
+
 				fetchPageLogList();
-				
+
 			})
 			.catch(error => {
 				console.error('회원 정보 불러오기 실패', error);
@@ -1197,12 +1214,13 @@ function memberManagement() {
 		const ageGroupValue = document.getElementById("userOnlineChartAgeGroup").value;
 		const startDateValue = document.getElementById("userOnlineChartStartDay").value;
 		const endDateValue = document.getElementById("userOnlineChartEndDay").value;
+
 		if (dateValue == 'selectDays' && !startDateValue) {
 			document.getElementById("userOnlineChartDay").value = "daily";
 			dateValue = "daily";
 		}
 		if (startDateValue && endDateValue && !chartRange) {
-			chartRange = formatDateRange(startDateValue, endDateValue);
+			chartRange = `${formatFullDate(startDateValue)} ~ ${formatFullDate(endDateValue)} 기간`;
 		}
 
 		const params = {
@@ -1213,35 +1231,40 @@ function memberManagement() {
 			ageGroup: ageGroupValue || '',
 		}
 
-		// 차트 캔버스 높이 설정 (안정적인 렌더링을 위해 추가)
-		ctx.canvas.style.minHeight = '400px';
-
-		// 캘린더 버튼 로직과 동일하게 공통 변수를 사용하여 기존 차트 파괴
-		if (window.userOnlineChartInstance) {
-			window.userOnlineChartInstance.destroy();
+		if (userOnlineChartInstance) {
+			userOnlineChartInstance.destroy();
 		}
 
-		axios.get('/admin/las/userInquiry.do', {
-			params: params
-		})
+		axios.get('/admin/las/userInquiry.do', { params })
 			.then(res => {
 				const responseData = res.data;
 
+				// ▼▼▼ 라벨 포맷 수정 ▼▼▼
 				let labels;
 				let chartLabel;
-				if (selectUserInquiry === 'monthly') {
-					labels = responseData.map(item => formatMonthlyDate(item.loginDate));
-					chartLabel = '월별 접속자 수';
-				} else {
-					labels = responseData.map(item => formatDailyDate(item.loginDate));
-					chartLabel = '일별 접속자 수';
+				switch (dateValue) {
+					case 'monthly':
+						labels = responseData.map(item => formatMonthOnly(item.loginDate));
+						chartLabel = '월별 접속자 수';
+						break;
+					case 'daily':
+						labels = responseData.map(item => formatMonthDay(item.loginDate));
+						chartLabel = '일별 접속자 수';
+						break;
+					case 'selectDays':
+						labels = responseData.map(item => formatFullDate(item.loginDate));
+						chartLabel = '기간별 접속자 수';
+						break;
+					default:
+						labels = responseData.map(item => formatMonthDay(item.loginDate));
+						chartLabel = '일별 접속자 수';
 				}
+				// ▲▲▲ 여기까지 ▲▲▲
 
 				const dataValues = responseData.map(item => item.userCount);
 
-				// 새 차트 생성 및 공통 변수에 저장
-				window.userOnlineChartInstance = new Chart(ctx, {
-					type: 'line', // 선 차트
+				userOnlineChartInstance = new Chart(ctx, {
+					type: 'line',
 					data: {
 						labels: labels,
 						datasets: [{
@@ -1256,45 +1279,35 @@ function memberManagement() {
 							pointStyle: 'circle'
 						}]
 					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						plugins: {
-							legend: {
-								display: true,
-								position: 'bottom',
-							},
-							title: {
-								display: true,
-								text: [
-									chartRange
-								],
-							},
-						},
-						scales: {
-							x: { grid: { display: false } },
-							y: {
-								beginAtZero: true,
-								// 이 부분을 추가하여 눈금 수를 제한합니다.
-								maxTicksLimit: 6,
-								ticks: {
-									// stepSize: 1,
-									callback: value => value + '명'
-								},
-								grid: {
-									borderDash: [3],
-									color: '#e5e5e5'
-								}
-							}
-						}
-					}
+					options: { /* ... (옵션은 이전과 동일) ... */ }
 				});
 			})
-			.catch(error => {
-				console.error("사용자 접속 통계 데이터 조회 중 에러:", error);
-			});
+			.catch(error => console.error("사용자 접속 통계 데이터 조회 중 에러:", error));
+	}
+	// 'YY.MM.DD' 형식 (기간별)
+	function formatFullDate(isoString) {
+		if (!isoString) return '';
+		const date = new Date(isoString);
+		const year = String(date.getFullYear()).substring(2);
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		return `${year}.${month}.${day}`;
+	}
+	// 'MM' 형식 (월별)
+	function formatMonthOnly(isoString) {
+		if (!isoString) return '';
+		const date = new Date(isoString);
+		return String(date.getMonth() + 1).padStart(2, '0');
 	}
 
+	// 'MM.DD' 형식 (일별)
+	function formatMonthDay(isoString) {
+		if (!isoString) return '';
+		const date = new Date(isoString);
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		return `${month}.${day}`;
+	}
 
 	// === 페이지별 방문자 수 차트 함수 시작 ===
 	// HTML에 캔버스 ID 추가 필요: <canvas id="pageVisitChartCanvas"></canvas>
@@ -1536,12 +1549,12 @@ function memberManagement() {
 	userOnlineChart();
 	pageVisitChart();
 
-	nicknameDbCkFn();
-	emailDbCkFn();
+	// nicknameDbCkFn();
+	// emailDbCkFn();
+	// addBtnFn();
+	// profileUploadFn();
 	searchUserFn();
 	modifyFn();
-	addBtnFn();
-	profileUploadFn();
 	fetchUserList();
 	fetchDailyStats();
 
@@ -1631,6 +1644,158 @@ function memberManagement() {
 			hiddenInput._flatpickr.clear();
 		}
 	}
+
+
+	function handlePersonChartFilterChange(e) {
+		const memId = document.getElementById('mem-id').value;
+		if (!memId) {
+			// alert('먼저 사용자를 선택해주세요.'); // 필요 시 활성화
+			return;
+		}
+
+		const selectEl = e.target;
+		const dateValue = selectEl.value;
+
+		if (dateValue === 'daily' || dateValue === 'monthly') {
+			document.getElementById("personChartStartDay").value = '';
+			document.getElementById("personChartEndDay").value = '';
+			createPersonActivityChart(memId, dateValue);
+		} else if (dateValue === 'selectDays') {
+			const hiddenInput = document.getElementById('comCalendarInput');
+			// flatpickr 로직 (기존 eventDateRangeSelect 함수 참고)
+			flatpickr(hiddenInput, {
+				mode: "range",
+				maxDate: "today",
+				positionElement: selectEl,
+				onChange: function(selectedDates) {
+					if (selectedDates.length === 2) {
+						const formattedStartDate = formatDateCal(selectedDates[0]);
+						const formattedEndDate = formatDateCal(selectedDates[1]);
+						document.getElementById('personChartStartDay').value = formattedStartDate;
+						document.getElementById('personChartEndDay').value = formattedEndDate;
+						createPersonActivityChart(memId, 'custom', formattedStartDate, formattedEndDate);
+					}
+				}
+			}).open();
+		}
+	}
+
+	function createPersonActivityChart(memId, type, startDate = '', endDate = '') {
+		const ctx = document.getElementById('usagePersonChartCanvas')?.getContext('2d');
+		if (!ctx) return;
+
+		if (personChartInstance) {
+			personChartInstance.destroy();
+		}
+
+		const params = { type, startDate, endDate };
+
+		axios.get(`/admin/las/user-activity-yoy/${memId}`, { params })
+			.then(res => {
+				const rawData = res.data;
+
+				const currentDataMap = new Map();
+				const previousDataMap = new Map();
+				const allDates = new Set();
+
+				rawData.forEach(item => {
+					const date = new Date(item.accessTime);
+					let key;
+					if (item.gubun === 'current') {
+						key = type === 'monthly' ? date.toISOString().substring(0, 7) : date.toISOString().substring(0, 10);
+						currentDataMap.set(key, (currentDataMap.get(key) || 0) + 1);
+						allDates.add(key);
+					} else { // previous
+						date.setFullYear(date.getFullYear() + 1);
+						key = type === 'monthly' ? date.toISOString().substring(0, 7) : date.toISOString().substring(0, 10);
+						previousDataMap.set(key, (previousDataMap.get(key) || 0) + 1);
+					}
+				});
+
+				let sortedDates = Array.from(allDates).sort();
+				let labels;
+				switch (type) {
+					case 'monthly':
+						labels = sortedDates.map(dateStr => formatMonthOnly(dateStr));
+						break;
+					case 'daily':
+						labels = sortedDates.map(dateStr => formatMonthDay(dateStr));
+						break;
+					case 'custom':
+						labels = sortedDates.map(dateStr => formatFullDate(dateStr));
+						break;
+					default:
+						labels = sortedDates.map(dateStr => formatMonthDay(dateStr));
+				}
+
+				const currentYearValues = sortedDates.map(label => currentDataMap.get(label) || 0);
+				const previousYearValues = sortedDates.map(label => previousDataMap.get(label) || 0);
+
+				personChartInstance = new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: labels,
+						// ▼▼▼ 데이터셋(datasets) 상세 설정 ▼▼▼
+						datasets: [
+							{
+								label: '올해 접속 횟수',
+								data: currentYearValues,
+								fill: true,
+								borderColor: 'rgb(114, 124, 245)', // 푸른색 계열
+								tension: 0.4,
+								backgroundColor: function(context) {
+									const { ctx, chartArea } = context.chart;
+									if (!chartArea) { return null; }
+									const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+									gradient.addColorStop(0, 'rgba(114, 124, 245, 0.5)');
+									gradient.addColorStop(1, 'rgba(114, 124, 245, 0)');
+									return gradient;
+								}
+							},
+							{
+								label: '작년 접속 횟수',
+								data: previousYearValues,
+								fill: true,
+								borderColor: 'rgb(255, 99, 132)', // 붉은색 계열
+								tension: 0.4,
+								backgroundColor: function(context) {
+									const { ctx, chartArea } = context.chart;
+									if (!chartArea) { return null; }
+									const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+									gradient.addColorStop(0, 'rgba(255, 99, 132, 0.5)');
+									gradient.addColorStop(1, 'rgba(255, 99, 132, 0)');
+									return gradient;
+								}
+							}
+						]
+					},
+					// ▼▼▼ 옵션(options) 상세 설정 ▼▼▼
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: true,
+								position: 'bottom'
+							}
+						},
+						scales: {
+							x: {
+								grid: { display: false }
+							},
+							y: {
+								beginAtZero: true,
+								ticks: {
+									precision: 0 // Y축 눈금을 정수로만 표시
+								}
+							}
+						}
+					}
+				});
+			})
+			.catch(error => console.error("개인 접속 통계 데이터 조회 중 에러:", error));
+	}
+
 }
 
 memberManagement();

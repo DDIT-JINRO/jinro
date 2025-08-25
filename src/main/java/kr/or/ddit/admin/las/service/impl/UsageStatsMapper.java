@@ -35,4 +35,6 @@ public interface UsageStatsMapper {
 
 	// 원하는 기간별 페이지 방문자 수
 	public List<VisitVO> customPageVisitCount(String startDate, String endDate, String gender, String ageGroup);
+
+	public List<Map<String, Object>> getSingleUserActivityYoY(Map<String, Object> params);
 }

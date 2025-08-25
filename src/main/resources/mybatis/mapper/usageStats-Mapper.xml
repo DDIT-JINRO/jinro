@@ -324,5 +324,33 @@
 	    ]]>
 	</select>
 
-
+	<select id="getSingleUserActivityYoY" parameterType="map" resultType="map">
+	    WITH params AS (
+	        SELECT
+	            <choose>
+	                <when test="type == 'daily'">TRUNC(SYSDATE) - 6</when>
+	                <when test="type == 'monthly'">TRUNC(SYSDATE, 'YY')</when>
+	                <when test="type == 'custom'">TO_DATE(#{startDate}, 'YYYY-MM-DD')</when>
+	            </choose> AS start_date,
+	            <choose>
+	                <when test="type == 'daily'">TRUNC(SYSDATE) + 1</when>
+	                <when test="type == 'monthly'">ADD_MONTHS(TRUNC(SYSDATE, 'YY'), 12)</when>
+	                <when test="type == 'custom'">TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1</when>
+	            </choose> AS end_date
+	        FROM DUAL
+	    )
+	    -- 올해 데이터 조회
+	    SELECT 'current' AS "gubun", LL_CREATED_AT AS "accessTime"
+	    FROM LOGIN_LOG, params
+	    WHERE MEM_ID = #{memId}
+	      AND LL_CREATED_AT &gt;= params.start_date
+	      AND LL_CREATED_AT &lt; params.end_date
+	    UNION ALL
+	    -- 작년 데이터 조회
+	    SELECT 'previous' AS "gubun", LL_CREATED_AT AS "accessTime"
+	    FROM LOGIN_LOG, params
+	    WHERE MEM_ID = #{memId}
+	      AND LL_CREATED_AT &gt;= ADD_MONTHS(params.start_date, -12)
+	      AND LL_CREATED_AT &lt; ADD_MONTHS(params.end_date, -12)
+	</select>
 </mapper>
