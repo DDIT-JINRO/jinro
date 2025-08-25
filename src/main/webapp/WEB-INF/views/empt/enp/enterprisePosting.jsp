@@ -195,7 +195,7 @@
 													</div>
 													
 													<p class="review-date">
-														<fmt:formatDate value="${interviewReview.irCreatedAt}" pattern="yyyy. MM. dd" />
+														<fmt:formatDate value="${interviewReview.irCreatedAt}" pattern="yyyy. M. d." />
 													</p>
 												</div>
 												<p class="review-content">${interviewReview.irContent}</p>

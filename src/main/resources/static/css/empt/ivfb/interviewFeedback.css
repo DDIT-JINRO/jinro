@@ -58,7 +58,7 @@
 
 .accordion-list__col--author {
 	display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     flex: 1;
 }
@@ -92,7 +92,7 @@
 
 .accordion-list__author {
 	display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     flex: 1;
 }

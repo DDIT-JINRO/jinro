@@ -177,7 +177,7 @@
 							</div>
 							<div class="accordion-list__col accordion-list__col--institution">${data.jtSchool}</div>
 							<div class="accordion-list__col accordion-list__col--deadline">
-								<fmt:formatDate value="${data.jtStartDate}" pattern="yyyy. MM. dd" />
+								<fmt:formatDate value="${data.jtStartDate}" pattern="yyyy. M. d." />
 							</div>
 							<div class="accordion-list__col accordion-list__col--score">${data.jtScore}</div>
 							<div class="accordion-list__col accordion-list__col--quota">${data.jtQuota}명</div>
@@ -217,11 +217,11 @@
 									<div class="date-container">
 										<label>
 											훈련 시작일 :
-											<fmt:formatDate value="${data.jtStartDate}" pattern="yyyy. MM. dd" />
+											<fmt:formatDate value="${data.jtStartDate}" pattern="yyyy. M. d." />
 										</label>
 										<label>
 											훈련 종료일 :
-											<fmt:formatDate value="${data.jtEndDate}" pattern="yyyy. MM. dd" />
+											<fmt:formatDate value="${data.jtEndDate}" pattern="yyyy. M. d." />
 										</label>
 									</div>
 								</div>
