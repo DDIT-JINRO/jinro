@@ -38,6 +38,7 @@
 
 .content-list__header-col--author {
 	flex: 1;
+	justify-content: left;
 }
 
 .content-list__header-col--date {
@@ -46,6 +47,7 @@
 
 .content-list__header-col--views {
 	flex: 0 0 80px;
+	justify-content: right;
 }
 
 .content-list__header-col--bookmark {
@@ -79,6 +81,7 @@
 
 .content-list__col--author {
 	flex: 1;
+	justify-content: left;
 }
 
 .content-list__col--date {
@@ -87,6 +90,7 @@
 
 .content-list__col--views {
 	flex: 0 0 80px;
+	justify-content: right;
 }
 
 .content-list__col--bookmark {

@@ -75,7 +75,7 @@
 						<div class="content-list__col content-list__col--likes" data-label="좋아요">${commBoardVO.boardLikeCnt}</div>
 						<div class="content-list__col content-list__col--author" data-label="작성자">${commBoardVO.memNickname}</div>
 						<div class="content-list__col content-list__col--date" data-label="작성일">
-							<fmt:formatDate value="${commBoardVO.boardUpdatedAt}" pattern="yyyy.MM.dd" />
+							<fmt:formatDate value="${commBoardVO.boardUpdatedAt}" pattern="yyyy. M. d." />
 						</div>
 						<div class="content-list__col content-list__col--views" data-label="조회수">${commBoardVO.boardCnt}</div>
 						<div class="content-list__col content-list__col--bookmark" data-label="북마크">

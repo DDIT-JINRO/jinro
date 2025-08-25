@@ -82,7 +82,7 @@
 								<div class="list-card__meta">
 									<div class="list-card__meta-item">
 										<span class="list-card__meta-label">수정일:</span>
-										<fmt:formatDate value="${resume.updatedAt}" pattern="yyyy.MM.dd (E) HH:mm" />
+										<fmt:formatDate value="${resume.updatedAt}" pattern="yyyy. M. d. (E) HH:mm" />
 									</div>
 									<div class="list-card__meta-item">
 										<span class="list-card__meta-label">상태:</span>
