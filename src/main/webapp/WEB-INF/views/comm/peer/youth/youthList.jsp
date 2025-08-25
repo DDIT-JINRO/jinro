@@ -57,10 +57,10 @@
 				<div class="content-list__header">
 					<span class="content-list__col content-list__col--no">번호</span>
 					<span class="content-list__col content-list__col--title">제목</span>
-					<span class="content-list__col content-list__col--agency">좋아요</span>
-					<span class="content-list__col content-list__col--agency">작성자</span>
+					<span class="content-list__col content-list__col--likes">좋아요</span>
+					<span class="content-list__col content-list__col--author">작성자</span>
 					<span class="content-list__col content-list__col--date">작성일</span>
-					<span class="content-list__col content-list__col--agency">조회수</span>
+					<span class="content-list__col content-list__col--views">조회수</span>
 				</div>
 				
 				<c:forEach var="commBoardVO" varStatus="stat" items="${articlePage.content}">
@@ -71,12 +71,12 @@
 						<div class="content-list__col content-list__col--title" data-label="제목">
 							<h3 class="content-list__title">${commBoardVO.boardTitle}</h3>
 						</div>
-						<div class="content-list__col content-list__col--agency" data-label="좋아요">${commBoardVO.boardLikeCnt}</div>
-						<div class="content-list__col content-list__col--agency" data-label="작성자">${commBoardVO.memNickname}</div>
+						<div class="content-list__col content-list__col--likes" data-label="좋아요">${commBoardVO.boardLikeCnt}</div>
+						<div class="content-list__col content-list__col--author" data-label="작성자">${commBoardVO.memNickname}</div>
 						<div class="content-list__col content-list__col--date" data-label="작성일">
-							<fmt:formatDate value="${commBoardVO.boardUpdatedAt}" pattern="yyyy.MM.dd" />
+							<fmt:formatDate value="${commBoardVO.boardUpdatedAt}" pattern="yyyy. M. d." />
 						</div>
-						<div class="content-list__col content-list__col--agency" data-label="조회수">${commBoardVO.boardCnt}</div>
+						<div class="content-list__col content-list__col--views" data-label="조회수">${commBoardVO.boardCnt}</div>
 					</div>
 				</c:forEach>
 				<c:if test="${empty articlePage.content}">
