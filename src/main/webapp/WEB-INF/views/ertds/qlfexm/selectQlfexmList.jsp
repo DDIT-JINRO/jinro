@@ -58,7 +58,7 @@
 						</div>
 						<div class="content-list__col content-list__col--agency" data-label="교육기관">${item.examAreaCode}</div>
 						<div class="content-list__col content-list__col--date" data-label="작성일">
-							<fmt:formatDate value="${item.examNotiDate}" pattern="yyyy.MM.dd" />
+							<fmt:formatDate value="${item.examNotiDate}" pattern="yyyy. M. d." />
 						</div>
 					</div>
 				</c:forEach>

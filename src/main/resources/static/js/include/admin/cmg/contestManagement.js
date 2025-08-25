@@ -311,7 +311,7 @@ function contestManagementInit () {
 	}
 
 	const formatDateOne = (date) => {
-		return date.substring(0, 10).replaceAll('-', '. ');
+		return date.substring(0, 10).replaceAll('-', '. ')+".";
 	}
 	
 	const formatDateTwo = (date) => {

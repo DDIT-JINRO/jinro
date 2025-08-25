@@ -21,7 +21,64 @@
 	box-shadow: 0 4px 12px rgba(120, 129, 245, 0.3);
 }
 
-/* content-list 헤더 컬럼 조정 - 6개 컬럼 구조 */
+/* ==========================================================================
+   페이지 전용 컴포넌트 - 5열 구조 재정의
+   ========================================================================== */
+.content-list__header,
+.content-list__item {
+	gap: 20px;
+}
+
+.content-list__title {
+	font-size: 1rem;
+	margin: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 100%;}
+
+/* --- 헤더 컬럼 스타일 --- */
+.content-list__header-col {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.content-list__header-col--no {
+	flex: 0 0 80px;
+}
+
+.content-list__header-col--title {
+	flex: 3;
+	justify-content: center;
+}
+
+.content-list__header-col--likes {
+	flex: 0 0 80px;
+}
+
+.content-list__header-col--author {
+	flex: 1;
+	justify-content: left;
+}
+
+.content-list__header-col--date {
+	flex: 1;
+}
+
+.content-list__header-col--views {
+	flex: 0 0 80px;
+	justify-content: right;
+}
+
+/* --- 아이템 컬럼 스타일 --- */
+.content-list__col {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* --- 각 컬럼 너비 지정 (5열 구조) --- */
 .content-list__col--no {
 	flex: 0 0 80px;
 }
@@ -29,18 +86,28 @@
 .content-list__col--title {
 	flex: 3;
 	justify-content: flex-start;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
 }
 
-.content-list__header .content-list__col--title {
-	justify-content: center;
+.content-list__col--likes {
+	flex: 0 0 80px;
 }
 
-.content-list__col--agency {
-	flex: 0 0 120px;
+.content-list__col--author {
+	flex: 1;
+	justify-content: left;
 }
 
 .content-list__col--date {
-	flex: 0 0 100px;
+	flex: 1;
+}
+
+.content-list__col--views {
+	flex: 0 0 80px;
+	justify-content: right;
 }
 
 /* ==========================================================================

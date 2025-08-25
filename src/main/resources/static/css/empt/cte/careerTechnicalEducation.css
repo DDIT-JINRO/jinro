@@ -20,7 +20,7 @@
 .accordion-list__header .accordion-list__col--institution {
 	flex: 1 1 0;
 	display: flex;
-	justify-content: center;
+	justify-content: left;
 	align-items: center;
 	font-weight: 500;
 	text-align: center;
@@ -49,7 +49,7 @@
 .accordion-list__header .accordion-list__col--score {
 	flex: 0 0 60px;
 	display: flex;
-	justify-content: center;
+	justify-content: right;
 	align-items: center;
 	text-align: center;
 }
@@ -83,7 +83,7 @@
 .accordion-list__item-header .accordion-list__col--institution {
 	flex: 1 1 0;
 	display: flex;
-	justify-content: center;
+	justify-content: left;
 	align-items: center;
 	font-weight: 500;
 	text-align: center;
@@ -123,7 +123,7 @@
 .accordion-list__item-header .accordion-list__col--score {
 	flex: 0 0 60px;
 	display: flex;
-	justify-content: center;
+	justify-content: right;
 	align-items: center;
 	text-align: center;
 }

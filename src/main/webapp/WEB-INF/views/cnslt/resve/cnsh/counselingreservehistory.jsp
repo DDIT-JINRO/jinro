@@ -127,12 +127,12 @@
 											<span class="divider">·</span>
 											<span>
 												신청일:
-												<fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy.MM.dd" />
+												<fmt:formatDate value="${content.counselCreatedAt}" pattern="yyyy. M. d." />
 											</span>
 											<span class="divider">·</span>
 											<span>
 												예약일:
-												<fmt:formatDate value="${content.counselReqDatetime}" pattern="yyyy.MM.dd (HH시)" />
+												<fmt:formatDate value="${content.counselReqDatetime}" pattern="yyyy. M. d. (HH시)" />
 											</span>
 										</div>
 									</div>

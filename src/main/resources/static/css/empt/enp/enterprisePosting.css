@@ -34,7 +34,7 @@
 .accordion-list__col--name {
 	flex: 1 1 0;
 	display: flex;
-	justify-content: center;
+	justify-content: left;
 	align-items: center;
 	font-weight: 600;
 }
@@ -43,7 +43,7 @@
 .accordion-list__col--scale {
 	flex: 1 1 0;
 	display: flex;
-	justify-content: center;
+	justify-content: left;
 	align-items: center;
 }
 

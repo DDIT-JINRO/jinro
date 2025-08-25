@@ -281,7 +281,14 @@ function counselorManagement() {
 		const y = d.getFullYear();
 		const m = String(d.getMonth() + 1).padStart(2, '0');
 		const day = String(d.getDate()).padStart(2, '0');
-		return `${y}-${m}-${day}`;
+		return `${y}. ${m}. ${day}.`;
+	}
+	function formatDate(iso) {
+		const d = new Date(iso);
+		const mm = String(d.getMonth() + 1).padStart(2, '0');
+		const dd = String(d.getDate()).padStart(2, '0');
+		const fullYear = String(d.getFullYear());
+		return `${fullYear}-${mm}-${dd}`;
 	}
 	function getRecentDaysRange(days = 7) {
 		const today = new Date();
@@ -501,7 +508,7 @@ function counselorManagement() {
 			if (hiddenInput._flatpickr) hiddenInput._flatpickr.destroy();
 			flatpickr(hiddenInput, {
 				mode: 'range',
-				dateFormat: 'Y-m-d',
+				dateFormat: 'Y. m. d.',
 				//maxDate: 'today',
 				positionElement: selectEl,  // 달력을 해당 셀렉트 바로 위에 띄움
 				//disable: [d => d > new Date()],
@@ -633,7 +640,7 @@ function counselorManagement() {
 			inputEmail && (inputEmail.value = data.counselorEmail ?? '-');
 			inputPhone && (inputPhone.value = data.counselorPhoneNumber ?? '-');
 			inputGen && (inputGen.value = data.counselorGen ?? '-');
-			inputBirth && (inputBirth.value = fmtYMD(data.counselorBirth));
+			inputBirth && (inputBirth.value = formatDate(data.counselorBirth));
 
 			// 집계
 			cnsCountEl && (cnsCountEl.value = String(data.counselCount ?? 0));

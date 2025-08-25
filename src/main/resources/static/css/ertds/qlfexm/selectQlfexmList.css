@@ -51,6 +51,7 @@
 
 .content-list__col--agency {
 	flex: 1;
+	justify-content: left;
 }
 
 .content-list__col--date {

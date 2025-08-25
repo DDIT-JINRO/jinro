@@ -58,7 +58,7 @@
 							<div class="accordion-list__col accordion-list__col--meta">
 								<div class="accordion-list__col accordion-list__author" data-label="작성자">${item.memName}</div>
 								<div class="accordion-list__col accordion-list__date" data-label="작성일">
-									<fmt:formatDate value="${item.contactAt}" pattern="yyyy.MM.dd" />
+									<fmt:formatDate value="${item.contactAt}" pattern="yyyy. M. d." />
 								</div>
 								<div class="accordion-list__col accordion-list__status" data-label="상태">
 									<c:choose>

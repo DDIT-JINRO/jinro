@@ -4,7 +4,7 @@ function formatDateMMDD(iso) {
 	const mm = String(d.getMonth() + 1).padStart(2, '0');
 	const dd = String(d.getDate()).padStart(2, '0');
 	const fullYear = String(d.getFullYear());
-	return `${fullYear}. ${mm}. ${dd}`;
+	return `${fullYear}. ${mm}. ${dd}.`;
 }
 
 // 전역 상태
@@ -39,7 +39,7 @@ function fetchNotices(page = 1) {
           <tr>
             <td>${item.noticeId}</td>
             <td><a href="javascript:showDetail(${item.noticeId})" style="cursor: pointer; text-decoration: none; color:black;">${item.noticeTitle}</a></td>
-            <td>${item.noticeCnt}</td>
+            <td style="text-align : right;">${item.noticeCnt}</td>
             <td>${formatDateMMDD(item.noticeUpdatedAt)}</td>
           </tr>`).join('');
 				listEl.innerHTML = rows;
@@ -147,7 +147,7 @@ function showDetail(noticeId) {
 	          <td>${resp.noticeId}</td>
 	          <td>${resp.noticeTitle}</td>
 	          <td>${formatDateMMDD(resp.noticeUpdatedAt)}</td>
-	          <td>${resp.noticeCnt}</td>
+	          <td style="text-align: right;">${resp.noticeCnt}</td>
 	        </tr>`;
 
 			document.querySelector('input[name="noticeTitle"]').value = resp.noticeTitle;

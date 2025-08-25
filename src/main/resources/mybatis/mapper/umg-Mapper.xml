@@ -338,6 +338,50 @@
 	  FROM filtered
 	  WHERE RNUM BETWEEN #{startNo} AND #{endNo}
 	</select>
+	
+	<select id="getReportVO" parameterType="String"
+		resultType="kr.or.ddit.com.report.service.ReportVO">
+		SELECT
+		R.REPORT_ID
+		, R.TARGET_TYPE
+		, R.TARGET_ID
+		,
+		R.REPORT_REASON
+		, R.REPORT_STATUS
+		, R.REPORT_CREATED_AT
+		,
+		R.REPORT_COMPLETE_AT
+		, R.REPORT_COMPLETE_ID
+		, R.MEM_ID
+		, M1.MEM_NAME AS
+		REPORTER_NAME
+		, R.FILE_GROUP_NO
+		, CASE
+		WHEN R.TARGET_TYPE = 'G10001' THEN
+		B.MEM_ID
+		WHEN R.TARGET_TYPE = 'G10002' THEN RP.MEM_ID
+		END AS
+		REPORTED_MEM_ID
+		, M2.MEM_NAME AS REPORTED_NAME
+		FROM REPORT R
+		LEFT JOIN
+		BOARD B
+		ON R.TARGET_TYPE = 'G10001'
+		AND R.TARGET_ID = B.BOARD_ID
+		LEFT
+		JOIN REPLY RP
+		ON R.TARGET_TYPE = 'G10002'
+		AND R.TARGET_ID = RP.REPLY_ID
+		LEFT JOIN MEMBER M1
+		ON R.MEM_ID = M1.MEM_ID
+		LEFT JOIN MEMBER M2
+		ON (CASE
+		WHEN R.TARGET_TYPE = 'G10001' THEN B.MEM_ID
+		WHEN R.TARGET_TYPE =
+		'G10002' THEN RP.MEM_ID
+		END) = M2.MEM_ID
+		WHERE REPORT_ID = #{reportId}
+	</select>
 
 	<select id="getAllReportList"
     parameterType="kr.or.ddit.com.report.service.ReportVO"

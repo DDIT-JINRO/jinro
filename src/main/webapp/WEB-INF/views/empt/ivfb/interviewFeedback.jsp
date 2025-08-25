@@ -72,7 +72,7 @@
 									<c:if test="${pageContext.request.userPrincipal.principal != content.memId}">${content.memNickname}</c:if>
 								</div>
 								<div class="accordion-list__col accordion-list__date" data-label="작성일">
-									<fmt:formatDate value="${content.irModAt}" pattern="yyyy.MM.dd" />
+									<fmt:formatDate value="${content.irModAt}" pattern="yyyy. M. d." />
 								</div>
 								<div class="accordion-list__col accordion-list__rating" data-label="평점">
 									<span class="rating__stars">
@@ -111,19 +111,19 @@
 									<div class="detail-item">
 										<div class="detail-label">면접일</div>
 										<div class="detail-value">
-											<fmt:formatDate value="${content.irInterviewAt}" pattern="yyyy.MM.dd" />
+											<fmt:formatDate value="${content.irInterviewAt}" pattern="yyyy. M. d." />
 										</div>
 									</div>
 									<div class="detail-item">
 										<div class="detail-label">작성일</div>
 										<div class="detail-value">
-											<fmt:formatDate value="${content.irCreatedAt}" pattern="yyyy.MM.dd HH:mm" />
+											<fmt:formatDate value="${content.irCreatedAt}" pattern="yyyy. M. d. HH:mm" />
 										</div>
 									</div>
 									<div class="detail-item">
 										<div class="detail-label">수정일</div>
 										<div class="detail-value">
-											<fmt:formatDate value="${content.irModAt}" pattern="yyyy. MM. dd HH:mm" />
+											<fmt:formatDate value="${content.irModAt}" pattern="yyyy. M. d. HH:mm" />
 										</div>
 									</div>
 									<div class="detail-item">

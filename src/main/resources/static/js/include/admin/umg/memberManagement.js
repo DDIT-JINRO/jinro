@@ -460,7 +460,7 @@ function memberManagement() {
 		const mm = String(d.getMonth() + 1).padStart(2, '0');
 		const dd = String(d.getDate()).padStart(2, '0');
 		const fullYear = String(d.getFullYear());
-		return `${fullYear}. ${mm}. ${dd}`;
+		return `${fullYear}. ${mm}. ${dd}.`;
 	}
 
 	function formatDate(iso) {
@@ -784,9 +784,9 @@ function memberManagement() {
 	// 삭제 여부(Y/N)에 따라 색상과 텍스트를 반환하는 함수
 	function renderBoardStatus(boardDelYn) {
 		if (boardDelYn === 'Y') {
-			return `<span style="color: red;">삭제</span>`;
+			return `<span style="color: red; text-align: center;">삭제</span>`;
 		} else if (boardDelYn === 'N') {
-			return `<span style="color: green;">게시</span>`;
+			return `<span style="color: green; text-align: center;">게시</span>`;
 		}
 		return boardDelYn; // Y, N이 아닌 경우 원본 값 반환
 	}
@@ -796,7 +796,7 @@ function memberManagement() {
 		if (replyDelYn === 'Y') {
 			return `<span style="color: red;">삭제</span>`;
 		} else if (replyDelYn === 'N') {
-			return `<span style="color: green;">게시</span>`;
+			return `<span style="color: green; ">게시</span>`;
 		}
 		return replyDelYn;
 	}
@@ -852,9 +852,9 @@ function memberManagement() {
 			                <td>${item.boardId}</td>
 			                <td>${convertCcIdToCategory(item.ccId)}</td>
 			                <td>${truncateTitle(item.boardTitle)}</td>
-			                <td>${item.boardCnt}</td>
-			                <td>${formatDateMMDD(item.boardCreatedAt)}</td>
-			                <td>${renderBoardStatus(item.boardDelYn)}</td>
+			                <td style="text-align: right;">${item.boardCnt}</td>
+			                <td style="text-align: center;">${formatDateMMDD(item.boardCreatedAt)}</td>
+			                <td style="text-align: center;">${renderBoardStatus(item.boardDelYn)}</td>
 			            </tr>
 			        `;
 				}).join('');
@@ -1461,7 +1461,7 @@ function memberManagement() {
 		const hours = String(date.getHours()).padStart(2, '0');
 		const minutes = String(date.getMinutes()).padStart(2, '0');
 		const seconds = String(date.getSeconds()).padStart(2, '0');
-		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+		return `${year}. ${month}. ${day}. ${hours}:${minutes}:${seconds}`;
 	}
 
 	// 페이지 로그 검색 버튼
@@ -1535,7 +1535,7 @@ function memberManagement() {
 		const y = d.getFullYear();
 		const m = String(d.getMonth() + 1).padStart(2, '0');
 		const day = String(d.getDate()).padStart(2, '0');
-		return `${y}-${m}-${day}`;
+		return `${y}. ${m}. ${day}.`;
 	}
 
 	function formatDateRange(fS, fE) {
