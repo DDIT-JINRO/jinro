@@ -12,7 +12,7 @@ async function initCalendar(){
 	window.dataRangePicker = flatpickr("#dateRange", {
 	  mode:    "range",    // 두 번 클릭으로 시작/종료 선택
 	  inline:  true,       // always visible
-	  dateFormat: "Y-m-d",
+	  dateFormat: "Y. m. d.",
 	  disable: window.disabledDates,
 	  minDate: today,      // 오늘 이전 날짜 금지
 
@@ -54,8 +54,8 @@ async function initCalendar(){
 		  const msPerDay = 1000 * 60 * 60 * 24;
 		  const diffDays = Math.round((end - start) / msPerDay) + 1;
 	      // 종료일 히든 필드에 저장
-	      document.getElementById('startDateInput').value = instance.formatDate(start, 'Y-m-d');
-	      document.getElementById('endDateInput').value = instance.formatDate(end, 'Y-m-d');
+	      document.getElementById('startDateInput').value = instance.formatDate(start, 'Y. m. d.');
+	      document.getElementById('endDateInput').value = instance.formatDate(end, 'Y. m. d.');
 	      document.getElementById('totalDateCnt').value = diffDays + " 일";
 
 		  instance.set('maxDate', null);
@@ -258,7 +258,7 @@ function formatDateMMDD(iso) {
 	const mm = String(d.getMonth() + 1).padStart(2, '0');
 	const dd = String(d.getDate()).padStart(2, '0');
 	const fullYear = String(d.getFullYear());
-	return `${fullYear}. ${mm}. ${dd}`;
+	return `${fullYear}. ${mm}. ${dd}.`;
 }
 
 // 실제 데이터 + 페이징 조회
