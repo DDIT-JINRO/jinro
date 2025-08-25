@@ -40,7 +40,7 @@
 
 <div class="public-wrapper">
 	<div class="tab-container" id="tabs">
-		<a class="tab active" href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a>
+		<a class="tab active" href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a>
 	</div>
 	<div class="public-wrapper-main">
 		<div class="detail__header-wrapper">
