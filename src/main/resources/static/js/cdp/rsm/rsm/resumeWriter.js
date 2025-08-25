@@ -508,9 +508,28 @@ document.addEventListener("DOMContentLoaded", function() {
 	    function unhighlight(e) {
 	        photoUploadArea.classList.remove('dragover');
 	    }
+		
+		// 문서 전체에 드래그 이벤트 기본 동작 방지
+		document.addEventListener('dragenter', function(e) {
+		    e.preventDefault();
+		});
 
-	    // 파일 드롭 처리
-	    photoUploadArea.addEventListener('drop', handleDrop, false);
+		document.addEventListener('dragover', function(e) {
+		    e.preventDefault();
+			e.dataTransfer.dropEffect = 'none'; // 드래그 시 아이콘 숨기기
+		});
+
+		document.addEventListener('drop', function(e) {
+		    e.preventDefault();
+		});
+
+		// photoUploadArea에만 드롭을 허용하고 효과를 변경
+		photoUploadArea.addEventListener('dragover', function(e) {
+		    e.preventDefault();
+		    e.dataTransfer.dropEffect = 'copy'; // 사진 영역에서는 'copy' 아이콘 표시
+		});
+
+		photoUploadArea.addEventListener('drop', handleDrop);
 
 	    function handleDrop(e) {
 	        const dt = e.dataTransfer;
@@ -530,7 +549,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	                    const photoPreview = document.getElementById('photo-preview');
 	                    photoPreview.src = event.target.result;
 	                    photoPreview.style.display = 'block';
-	                    photoUploadArea.querySelector('.upload-placeholder').style.display = 'none';
+	                    photoUploadArea.querySelector('.upload-placeholder').classList.add('hidden'); 
 	                };
 	                reader.readAsDataURL(file);
 	            } else {
