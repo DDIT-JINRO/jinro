@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				// 폼 생성
 				const form = document.createElement('form');
 				form.method = 'POST';
-				form.action = '/comm/peer/teen/teenBoardUpdate.do'; // 컨트롤러 매핑 주소
+				form.action = '/comm/peer/youth/youthBoardUpdate.do'; // 컨트롤러 매핑 주소
 
 				// boardId 파라미터 추가
 				const input = document.createElement('input');

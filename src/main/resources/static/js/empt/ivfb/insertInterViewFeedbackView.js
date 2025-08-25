@@ -22,6 +22,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		const interviewRating = window.getInterviewRating();
 		const files = document.querySelector("#file-input").files;
 
+		if (!cpId) {
+			alert("기업명을 선택해 주세요.");
+			return;
+		}
+		
 		if (!interviewDate) {
 			alert("면접 일자를 입력해 주세요.");
 			return;
@@ -204,30 +209,141 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
 	const url = "/empt/ivfb/selectCompanyList.do";
 
-	const modal            = document.querySelector('#search-modal');
-	const searchBtn        = document.querySelector('#company-search');
-	const closeBtn         = modal.querySelector('.search-modal__close-button');
-	const cancelBtn        = modal.querySelector('#modal-cancel-btn');
-	const confirmBtn       = modal.querySelector('#modal-confirm-btn');
-	const searchInput      = modal.querySelector('#company-search-input');
-	const searchButton     = modal.querySelector('#search-btn');
-	const companyList      = modal.querySelector('#company-list');
-	const prevPageBtn      = modal.querySelector('#prev-page');
-	const nextPageBtn      = modal.querySelector('#next-page');
-	const pageInfo         = modal.querySelector('#page-info');
+	const modal = document.querySelector('#search-modal');
+	const searchBtn = document.querySelector('#company-search');
+	const closeBtn = modal.querySelector('.search-modal__close-button');
+	const cancelBtn = modal.querySelector('#modal-cancel-btn');
+	const confirmBtn = modal.querySelector('#modal-confirm-btn');
+	const searchInput = modal.querySelector('#company-search-input');
+	const searchButton = modal.querySelector('#search-btn');
+	const companyList = modal.querySelector('#company-list');
+	const prevPageBtn = modal.querySelector('#prev-page');
+	const nextPageBtn = modal.querySelector('#next-page');
+	const pageInfo = modal.querySelector('#page-info');
 	const companyNameInput = document.querySelector('#company-name');
 
 	let currentPage = 1;
 	let totalPages = 1;
 	let selectedCompany = null;
-	let companies = []; // 전체 기업 데이터
+	let allCompanies = []; // 전체 기업 데이터
+	let filteredCompanies = []; // 필터링된 기업 데이터
+	let searchTimeout;
 	const itemsPerPage = 5;
 
+	// Hangul.js 사용 한글 검색 유틸리티
+	class HangulSearchUtil {
+		// 한글 자음/초성 검색 매칭
+		static matches(text, query) {
+			const searchTerm = query.toLowerCase().trim();
+			if (!searchTerm) return true;
+
+			// 1. 일반 텍스트 매칭
+			if (text.toLowerCase().includes(searchTerm)) {
+				return true;
+			}
+
+			// Hangul.js가 로드되지 않았으면 일반 검색만 수행
+			if (typeof Hangul === 'undefined') {
+				console.warn('Hangul.js가 로드되지 않았습니다.');
+				return false;
+			}
+
+			try {
+				// 2. 자음만 입력한 경우 (예: "ㅅㅅ", "ㅎㄷ", "ㅂㅈㅅㅁㅋ")
+				const consonantOnlyPattern = /^[ㄱ-ㅎ]+$/;
+				if (consonantOnlyPattern.test(searchTerm)) {
+					// 초성 검색 (정확한 매칭)
+					const initials = this.getInitials(text);
+					if (initials.startsWith(searchTerm) || initials.includes(searchTerm)) {
+						return true;
+					}
+
+					// 모든 자음 검색 (중성, 종성 포함)
+					const allConsonants = this.getAllConsonants(text);
+					if (allConsonants.includes(searchTerm)) {
+						return true;
+					}
+				}
+
+				// 3. 부분 조합 검색 (예: "삼", "삼ㅅ", "현ㄷ")
+				return this.matchesPartial(text, searchTerm);
+
+			} catch (error) {
+				console.error('Hangul 검색 오류:', error);
+				return false;
+			}
+		}
+
+		// 초성만 추출 (수정된 버전)
+		static getInitials(text) {
+			try {
+				const CHO = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+				let initials = '';
+				
+				for (let i = 0; i < text.length; i++) {
+					const char = text[i];
+					const code = char.charCodeAt(0);
+					
+					// 한글 완성형 범위 (가-힣)
+					if (code >= 0xAC00 && code <= 0xD7A3) {
+						const syllableIndex = code - 0xAC00;
+						const choIndex = Math.floor(syllableIndex / (21 * 28));
+						initials += CHO[choIndex];
+					}
+					// 한글 자음 (ㄱ-ㅎ)
+					else if (code >= 0x3131 && code <= 0x314E) {
+						initials += char;
+					}
+				}
+				
+				return initials;
+			} catch (error) {
+				console.error('초성 추출 오류:', error);
+				return '';
+			}
+		}
+
+		// 모든 자음 추출 (Hangul.js 사용)
+		static getAllConsonants(text) {
+			try {
+				return Hangul.disassemble(text)
+					.filter(char => /[ㄱ-ㅎ]/.test(char))
+					.join('');
+			} catch (error) {
+				console.error('자음 추출 오류:', error);
+				return '';
+			}
+		}
+
+		// 부분 조합 매칭 (예: "삼ㅅ"으로 "삼성" 찾기)
+		static matchesPartial(text, query) {
+			try {
+				// 검색어를 분해
+				const queryDisassembled = Hangul.disassemble(query);
+				const textDisassembled = Hangul.disassemble(text);
+
+				// 부분 일치 검사
+				const queryStr = queryDisassembled.join('');
+				const textStr = textDisassembled.join('');
+
+				return textStr.includes(queryStr);
+			} catch (error) {
+				console.error('부분 매칭 오류:', error);
+				return false;
+			}
+		}
+	}
+
 	// 모달 열기
-	searchBtn.addEventListener('click', function() {
+	searchBtn.addEventListener('click', async function() {
 		modal.classList.add('is-active');
 		searchInput.focus();
-		loadCompanies('');
+
+		if (allCompanies.length === 0) {
+			await loadAllCompanies();
+		}
+
+		filterAndRenderCompanies('');
 	});
 
 	// 모달 닫기
@@ -248,9 +364,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	// 기업 검색
-	const searchCompanies = async (keyword) => {
+	const loadAllCompanies = async () => {
 		try {
-			const response = await fetch(url + "?cpName=" + keyword, {
+			const response = await fetch(url + "?cpName=", {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -264,61 +380,95 @@ document.addEventListener('DOMContentLoaded', function() {
 			const result = await response.json();
 
 			if (result.success && Array.isArray(result.companyList)) {
-				return result.companyList;
+				allCompanies = result.companyList;
+				
+				if (typeof Hangul !== 'undefined') {
+					console.log('Hangul.js 로드 완료 - 한글 자음 검색 가능');
+				} else {
+					console.warn('Hangul.js 미로드 - 일반 검색만 가능');
+				}
 			} else {
 				console.error("API 응답에 문제가 있습니다.", result.message);
-				return [];
+				allCompanies = [];
 			}
 		} catch (error) {
 			console.error("기업 정보를 불러오는 중 에러가 발생하였습니다.", error.message);
-			return [];
+			companyList.innerHTML = '<li class="error-message">기업 정보를 불러오는데 실패했습니다.</li>';
+			allCompanies = [];
 		}
-	}
+	};
 
-	// 기업 목록 로드
-	const loadCompanies = async (keyword) => {
-		// 로딩 표시
-		companyList.innerHTML = '<li class="loading-message">검색 중...</li>';
+	// 4. 클라이언트 사이드 필터링 함수 추가
+	function filterAndRenderCompanies(keyword) {
+		if (!keyword.trim()) {
+			filteredCompanies = [...allCompanies];
+		} else {
+			filteredCompanies = allCompanies.filter(company =>
+				HangulSearchUtil.matches(company.cpName, keyword) ||
+				HangulSearchUtil.matches(company.cpScale, keyword) ||
+				HangulSearchUtil.matches(company.cpRegion, keyword)
+			);
+		}
 
-		companies = await searchCompanies(keyword);
-
-		totalPages = Math.ceil(companies.length / itemsPerPage);
+		// 페이징 계산
+		totalPages = Math.ceil(filteredCompanies.length / itemsPerPage);
 		if (totalPages === 0) totalPages = 1;
 
+		// 검색 결과가 변경되면 첫 페이지로 이동
 		currentPage = 1;
+
 		renderCompanies();
 		updatePagination();
+	}
+
+	// 선택된 기업을 입력 필드에 설정하고 모달 닫기
+	function selectCompanyAndClose(company) {
+		companyNameInput.value = company.cpName;
+		companyNameInput.dataset.cpId = company.cpId;
+		closeModal();
 	}
 
 	// 기업 목록 렌더링
 	function renderCompanies() {
 		const startIndex = (currentPage - 1) * itemsPerPage;
 		const endIndex = startIndex + itemsPerPage;
-		const pageCompanies = companies.slice(startIndex, endIndex);
+		const pageCompanies = filteredCompanies.slice(startIndex, endIndex);
+		const query = searchInput.value;
 
 		if (pageCompanies.length === 0) {
-			companyList.innerHTML = '<li class="empty-message">검색 결과가 없습니다.</li>';
+			const message = allCompanies.length === 0 ? '기업 정보를 불러오는 중입니다...' : '검색 결과가 없습니다.';
+			companyList.innerHTML = `<li class="empty-message">${message}</li>`;
 			return;
 		}
 
 		companyList.innerHTML = pageCompanies.map(company => `
-			<li class="search-modal__list-item" data-company-id="${company.cpId}" data-company-name="${company.cpName}">
-			    <div class="search-modal__list-item-name">${company.cpName}</div>
-			    <div class="search-modal__list-item-info">${company.cpScale} · ${company.cpRegion}</div>
-			</li>
-        `).join('');
+		    <li class="search-modal__list-item" data-company-id="${company.cpId}" data-company-name="${company.cpName}">
+		        <div class="search-modal__list-item-name">${company.cpName}</div>
+		        <div class="search-modal__list-item-info">${company.cpScale} · ${company.cpRegion}</div>
+		    </li>
+		`).join('');
 
 		// 기업 선택 이벤트 추가
 		document.querySelectorAll('.search-modal__list-item').forEach(item => {
+			// 단일 클릭 이벤트
 			item.addEventListener('click', function() {
 				document.querySelectorAll('.search-modal__list-item').forEach(i => i.classList.remove('is-selected'));
 				this.classList.add('is-selected');
-				
+
 				selectedCompany = {
 					cpId: this.dataset.companyId,
 					cpName: this.dataset.companyName
 				};
 				confirmBtn.disabled = false;
+			});
+
+			// 더블클릭 이벤트 (즉시 선택)
+			item.addEventListener('dblclick', function() {
+				const company = {
+					cpId: this.dataset.companyId,
+					cpName: this.dataset.companyName
+				};
+				selectCompanyAndClose(company);
 			});
 		});
 	}
@@ -327,17 +477,37 @@ document.addEventListener('DOMContentLoaded', function() {
 	function updatePagination() {
 		pageInfo.textContent = `${currentPage} / ${totalPages}`;
 		prevPageBtn.disabled = currentPage === 1;
-		nextPageBtn.disabled = currentPage === totalPages || companies.length === 0;
+		nextPageBtn.disabled = currentPage === totalPages || filteredCompanies.length === 0;
+	}
+
+	// 실시간 검색 기능을 위한 디바운스 타이머
+	function debounceFilter(keyword) {
+		clearTimeout(searchTimeout);
+		searchTimeout = setTimeout(() => {
+			filterAndRenderCompanies(keyword);
+		}, 150); // 더 빠른 반응을 위해 200ms로 단축
 	}
 
 	// 검색 이벤트
 	searchButton.addEventListener('click', function() {
-		loadCompanies(searchInput.value.trim());
+		clearTimeout(searchTimeout);
+		filterAndRenderCompanies(searchInput.value.trim());
 	});
 
+	// 실시간 검색 - input 이벤트로 변경
+	searchInput.addEventListener('input', function(e) {
+		debounceFilter(e.target.value);
+	});
+	
+	searchInput.addEventListener('compositionend', function(e) {
+		clearTimeout(searchTimeout);
+		filterAndRenderCompanies(e.target.value);
+	});
+	
 	searchInput.addEventListener('keypress', function(e) {
 		if (e.key === 'Enter') {
-			loadCompanies(searchInput.value.trim());
+			clearTimeout(searchTimeout);
+			filterAndRenderCompanies(searchInput.value.trim());
 		}
 	});
 
@@ -361,9 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	// 확인 버튼
 	confirmBtn.addEventListener('click', function() {
 		if (selectedCompany) {
-			companyNameInput.value = selectedCompany.cpName;
-			companyNameInput.dataset.cpId = selectedCompany.cpId;
-			closeModal();
+			selectCompanyAndClose(selectedCompany);
 		}
 	});
 

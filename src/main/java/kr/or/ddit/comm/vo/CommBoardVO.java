@@ -27,6 +27,8 @@ public class CommBoardVO {
 	private String status;
 	private String isBookmark;
 	
+	private int boardReplyCnt;
+	
 	//페이징
 	private int currentPage = 1;
 	private int size = 5;

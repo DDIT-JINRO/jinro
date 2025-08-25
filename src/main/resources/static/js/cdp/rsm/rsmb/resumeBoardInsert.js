@@ -3,7 +3,7 @@
  */
 document.addEventListener("DOMContentLoaded", function() {
 	let editorInstance;
-	const fileInput = document.getElementById('file-input');
+	const fileInput = document.getElementById('fileInput');
 
 	ClassicEditor
 		.create(document.querySelector('#editor'))

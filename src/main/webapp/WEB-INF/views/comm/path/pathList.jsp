@@ -57,6 +57,7 @@
 					<span class="content-list__col content-list__col--agency">작성자</span>
 					<span class="content-list__col content-list__col--date">작성일</span>
 					<span class="content-list__col content-list__col--agency">조회수</span>
+					<span class="content-list__col content-list__col--agency">댓글수</span>
 				</div>
 				
 				<c:forEach var="commBoardVO" varStatus="stat" items="${articlePage.content}">
@@ -65,7 +66,14 @@
 							<span class="badge--number">${commBoardVO.boardId}</span>
 						</div>
 						<div class="content-list__col content-list__col--title" data-label="제목">
-							<h3 class="content-list__title">${commBoardVO.boardTitle}</h3>
+							<h3 class="content-list__title">
+								${commBoardVO.boardTitle}
+							    <c:if test="${!empty commBoardVO.fileGroupId}">
+									<svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+									  <path d="M21.44 11.05l-9.19 9.19c-1.28 1.28-3.35 1.28-4.63 0s-1.28-3.35 0-4.63l9.19-9.19c.85-.85 2.23-.85 3.08 0s.85 2.23 0 3.08L12.8 16.6c-.42.42-1.1.42-1.52 0s-.42-1.1 0-1.52l7.07-7.07" stroke="gray" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+									</svg>
+								</c:if>
+							</h3>
 						</div>
 						<div class="content-list__col content-list__col--agency" data-label="좋아요">${commBoardVO.boardLikeCnt}</div>
 						<div class="content-list__col content-list__col--agency" data-label="작성자">${commBoardVO.memNickname}</div>
@@ -73,6 +81,7 @@
 							<fmt:formatDate value="${commBoardVO.boardUpdatedAt}" pattern="yyyy.MM.dd" />
 						</div>
 						<div class="content-list__col content-list__col--agency" data-label="조회수">${commBoardVO.boardCnt}</div>
+						<div class="content-list__col content-list__col--agency" data-label="댓글수">${commBoardVO.boardReplyCnt}</div>
 					</div>
 				</c:forEach>
 				<c:if test="${empty articlePage.content}">

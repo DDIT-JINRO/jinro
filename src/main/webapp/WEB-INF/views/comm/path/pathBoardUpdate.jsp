@@ -15,11 +15,11 @@
 	</div>
 	<div class="channel-sub-sections">
 		<!-- 중분류 -->
-		<div class="channel-sub-section-itemIn">
+		<div class="channel-sub-section-item">
 			<a href="/comm/peer/teen/teenList.do">또래 게시판</a>
 		</div>
 		<!-- 중분류 -->
-		<div class="channel-sub-section-item">
+		<div class="channel-sub-section-itemIn">
 			<a href="/comm/path/pathList.do">진로/진학 게시판</a>
 		</div>
 	</div>
@@ -37,7 +37,7 @@
 				<a href="/comm/peer/teen/teenList.do">커뮤니티</a>
 			</li>
 			<li class="breadcrumb-item active">
-				<a href="/comm/peer/teen/teenList.do">또래 게시판</a>
+				<a href="/comm/path/pathList.do">진로/진학 게시판</a>
 			</li>
 		</ol>
 	</nav>
@@ -46,9 +46,9 @@
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<a class="tab active" href="/comm/peer/teen/teenList.do">청소년 게시판</a>
-			<a class="tab" href="/comm/peer/youth/youthList.do">청년 게시판</a>
+			<a class="tab active" href="/comm/path/pathList.do">진로/진학 게시판</a>
 		</div>
+		
 		<div class="public-wrapper-main">
 			<div class="titleSpace">
 				<input type="hidden" id="boardId" name="boardId" value="${board.boardId}">

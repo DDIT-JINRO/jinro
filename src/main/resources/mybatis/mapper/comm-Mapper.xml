@@ -89,6 +89,14 @@
 							BM_TARGET_ID = B.BOARD_ID
 					) AS IS_BOOKMARK
 					</if>
+				    , (
+				        SELECT
+				            COUNT(*)
+				        FROM
+				            REPLY
+				        WHERE
+				            BOARD_ID = B.BOARD_ID
+				    ) AS BOARD_REPLY_CNT
 				FROM
 					BOARD B
 					JOIN MEMBER M ON B.MEM_ID = M.MEM_ID

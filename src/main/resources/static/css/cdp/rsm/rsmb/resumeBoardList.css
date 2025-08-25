@@ -14,7 +14,10 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	width: 100%;}
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
 
 /* --- 헤더 컬럼 스타일 --- */
 .content-list__header-col {
@@ -45,6 +48,11 @@
 }
 
 .content-list__header-col--views {
+	flex: 0 0 80px;
+}
+
+
+.content-list__header-col--replys {
 	flex: 0 0 80px;
 }
 
@@ -86,6 +94,10 @@
 }
 
 .content-list__col--views {
+	flex: 0 0 80px;
+}
+
+.content-list__col--replys {
 	flex: 0 0 80px;
 }
 
