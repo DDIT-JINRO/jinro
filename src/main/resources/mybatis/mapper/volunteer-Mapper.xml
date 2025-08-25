@@ -56,6 +56,9 @@
 						 	<when test="sortOrder == 'latest'">
 		                    	T1.CONTEST_END_DATE DESC -- '최신순' 선택 시: 등록일 내림차순
 						 	</when>
+ 	                        <when test="sortOrder == 'viewCount'">
+                            	T1.CONTEST_RECRUIT_COUNT DESC -- '조회수순'은 조회수(RECRUIT_COUNT) 기준
+                         	</when>
 						 	<otherwise>
 	                     		T1.CONTEST_END_DATE ASC,  -- '마감일순' 선택 시: 마감일 오름차순
               					T1.CONTEST_CREATED_AT DESC  -- (2차 정렬) 마감일이 같으면 최신 등록순

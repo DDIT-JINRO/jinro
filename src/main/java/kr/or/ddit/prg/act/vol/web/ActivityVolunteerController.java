@@ -33,7 +33,7 @@ public class ActivityVolunteerController {
 			@RequestParam(value = "contestGubunFilter", required = false) List<String> contestGubunFilter,
 			@RequestParam(value = "contestTargetFilter", required = false) List<String> contestTargetFilter,
 			@RequestParam(value = "contestStatusFilter", required = false) List<String> contestStatusFilter,
-			@RequestParam(value = "sortOrder", defaultValue = "deadline") String sortOrder) {
+			@RequestParam(value = "sortOrder", required = false) String sortOrder) {
 
 		ActivityVO activityVO = new ActivityVO();
 		activityVO.setKeyword(keyword);
