@@ -8,6 +8,26 @@ let selectedCounselorId; // 이 변수에는 DOM 로드 후 값이 할당될 것
 document.addEventListener('DOMContentLoaded', function() {
 	// 이 안의 코드는 HTML 문서가 완전히 로드된 후에 실행됩니다.
 
+	const btn = document.getElementById('goToCounselingReserveHistory');
+	if (btn) {
+	    btn.addEventListener("click", (e) => {
+	        if (!memId || memId === 'anonymousUser') {
+	            e.preventDefault(); // 기본 이동 막기
+	            showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+	                () => {
+	                    // 확인 클릭 시 컨트롤러 이동
+	                    location.href = btn.getAttribute('href');
+	                },
+	                () => {
+	                    // 취소 클릭 시 아무 동작 없음
+	                }
+	            );
+	        }
+	    });
+	}
+	
+	
+	
 	// 1. HTML 요소에 접근해서 변수에 할당
 	let counselorSelect = document.getElementById('counselorSelect');
 	selectedCounselorId = counselorSelect.value;
@@ -100,8 +120,15 @@ document.addEventListener('DOMContentLoaded', function() {
 		// 클릭 이벤트도 로그인 페이지로 이동하도록 변경합니다.
 		nextBtn.addEventListener('click', function(event) {
 			event.preventDefault();
-			alert('로그인이 필요한 서비스입니다.');
-			window.location.href = '/login';
+			showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+				() => {
+					sessionStorage.setItem("redirectUrl", location.href);
+					location.href = "/login";
+				},
+				() => {
+
+				}
+			);
 		});
 	} else {
 
@@ -111,15 +138,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			const counsel = document.getElementById('counselorSelect').value;
 
-
 			if (!memId || memId === 'anonymousUser') {
-				alert('로그인 해주세요');
+				showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+					() => {
+						sessionStorage.setItem("redirectUrl", location.href);
+						location.href = "/login";
+					},
+					
+					() => {
+
+					}
+				);
 				return;
 			}
 
 			if (!selectedTime) {
-				alert('모든 필수 정보를 선택해주세요.');
-				return;
+
+				showConfirm2('모든 필수 정보를 선택해주세요.',
+					() => {
+						return;
+					},
+					() => {
+
+					}
+				);
 			}
 
 			if (selectedDate && selectedTime) {
@@ -158,7 +200,13 @@ document.addEventListener('DOMContentLoaded', function() {
 						});
 				}
 			} else {
-				alert("날짜와 시간을 선택해주세요.");
+				showConfirm2("날짜와 시간을 선택해주세요.",
+					() => {
+					},
+					() => {
+
+					}
+				);
 			}
 
 		});
@@ -206,6 +254,3 @@ function renderTimeSlots(availableTimes) {
 		timeSlotButtonsContainer.innerHTML = '<div>예약 가능한 시간이 없습니다.</div>';
 	}
 }
-
-
-

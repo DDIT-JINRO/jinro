@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ public class EnterprisePostingController {
 	private final EnterprisePostingService enterprisePostingService;
 
 	@GetMapping("/enp/enterprisePosting.do")
-	public String enterprisePosting(@ModelAttribute CompanyVO companyVO,
+	public String enterprisePosting(@AuthenticationPrincipal String data,@ModelAttribute CompanyVO companyVO,
 			@RequestParam(value = "currentPage", defaultValue = "1") int currentPage, Model model,
 			Principal principal) {
 
@@ -68,6 +69,7 @@ public class EnterprisePostingController {
 		// 북마크 VO
 		List<BookMarkVO> bookMarkVOList = new ArrayList<>();
 
+		
 		if (principal != null && !principal.getName().equals("anonymousUser")) {
 			int memId = Integer.parseInt(principal.getName());
 			BookMarkVO bookMarkVO = new BookMarkVO();
@@ -79,7 +81,9 @@ public class EnterprisePostingController {
 		}
 
 		articlePage.setUrl("/empt/enp/enterprisePosting.do");
+		
 		model.addAttribute("bookMarkVOList", bookMarkVOList);
+		model.addAttribute("memId", data);
 		model.addAttribute("articlePage", articlePage);
 		model.addAttribute("codeVOCompanyScaleList", codeVOCompanyScaleList);
 		model.addAttribute("CodeVORegionList", CodeVORegionList);

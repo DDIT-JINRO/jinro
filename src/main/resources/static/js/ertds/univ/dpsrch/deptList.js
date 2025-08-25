@@ -104,7 +104,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const handleBookmarkToggle = (button) => {
 	if (memId == "" || memId == "anonymousUser") {
-        alert("북마크는 로그인 후 이용 하실 수 있습니다.");
+
+		showConfirm("로그인 후 이용 가능합니다.","로그인하시겠습니까?", 
+		    () => {
+		        sessionStorage.setItem("redirectUrl", location.href);
+		        location.href = "/login";
+		    },
+		    () => {
+		        
+		    }
+		);
         return;
     }
 	
@@ -136,7 +145,13 @@ const handleBookmarkToggle = (button) => {
 		})
 		.then(data => {
 			if (data.success) {
-				alert(data.message);
+				showConfirm2(data.message,
+					() => {
+					},
+					() => {
+
+					}
+				);
 				button.classList.toggle('is-active');
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');
@@ -227,7 +242,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const uddIds = Object.keys(currentCompareList);
 
         if (uddIds.length < 2) {
-            alert("비교할 학과를 2개 이상 선택해주세요.");
+			showConfirm2("비교할 학과를 2개 이상 선택해주세요.",
+				() => {
+				},
+				() => {
+
+				}
+			);
             return;
         }
 		
@@ -277,7 +298,14 @@ const createCompareCard = (button, compareListContainer) => {
     const compareList = getCompareList();
 
     if (Object.keys(compareList).length >= 5) {
-        alert("직업 비교는 최대 5개 까지만 가능합니다.");
+       
+		showConfirm2("직업 비교는 최대 5개 까지만 가능합니다.",
+			() => {
+			},
+			() => {
+
+			}
+		);
         button.checked = false;
         return;
     }

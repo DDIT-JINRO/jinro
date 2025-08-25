@@ -2,8 +2,6 @@
 /* ✅ 모달 컨테이너 display none, flex 로 조절 */
 #chat-modal {
   position: fixed;
-  bottom: 80px;
-  right: 20px;
   width: 900px;
   height: 700px;
   background: #fff;
@@ -14,6 +12,8 @@
   z-index: 1000;
   font-family: sans-serif;
   overflow: hidden; /* ✅ 강제 clip */
+  right: 20px;
+  bottom: 80px;
 }
 
 .chat-modal__close-button {
@@ -533,4 +533,24 @@
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 10px 40px rgba(0,0,0,.4);
+}
+
+/* 드래그/리사이즈 지원 */
+#chat-modal{
+  /* 이미 fixed/overflow:hidden 있음 */
+  resize: both;                     /* 크기 조절 핸들 */
+  min-width: 480px;
+  min-height: 420px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 20px);
+}
+
+.chat-header {
+	cursor: move;
+	user-select: none;
+}
+
+#chat-modal.dragging {
+	cursor: grabbing;
+	user-select: none;
 }

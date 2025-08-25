@@ -15,13 +15,26 @@ document.addEventListener("DOMContentLoaded", function() {
 		const crPublic = document.querySelector("input[name='cr-public']:checked").value.trim();
 		
 		if (crRate === 0) {
-			alert("상담 평가를 선택해 주세요.");
-			return;
+			showConfirm2("상담 평가를 선택해 주세요.", 
+			    () => {
+					return;
+					
+			    },
+			    () => {
+			        
+			    }
+			);
 		}
 	    
 	    if (!crContent) {
-	        alert("상담 후기를 입력해 주세요.");
-	        return;
+			showConfirm2("상담 후기를 입력해 주세요.", 
+			    () => {
+					return;
+			    },
+			    () => {
+			        
+			    }
+			);
 	    }
 
 	    // FormData 생성
@@ -41,8 +54,15 @@ document.addEventListener("DOMContentLoaded", function() {
 	            const result = await response.json();
 	            
 	            if (result.success) {
-	                alert("후기 수정이 완료되었습니다");
-	                window.location.href = "/cnslt/rvw/cnsReview.do";
+					showConfirm2("후기 수정이 완료되었습니다", 
+					    () => {
+							window.location.href = "/cnslt/rvw/cnsReview.do";
+							
+					    },
+					    () => {
+					        
+					    }
+					);
 	            } else {
 	                alert(result.message || "수정에 실패했습니다.");
 	            }

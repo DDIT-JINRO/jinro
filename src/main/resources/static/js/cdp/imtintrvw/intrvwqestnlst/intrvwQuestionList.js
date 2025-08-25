@@ -56,14 +56,28 @@ document.addEventListener('DOMContentLoaded', () => {
 			event.preventDefault(); // 기본 제출 동작을 막습니다.
 
 			if (!currentMemId) {
-				alert('로그인이 필요합니다.');
-				window.location.href = '/login';
-				return;
+				
+				showConfirm("로그인 후 이용 가능합니다.","로그인하시겠습니까?", 
+				    () => {
+				        sessionStorage.setItem("redirectUrl", location.href);
+				        location.href = "/login";
+				    },
+				    () => {
+				        
+				    }
+				);
 			}
 
 			if (selectedInterviewQuestions.length === 0) {
 				// 3. 알림 메시지 수정
-				alert('면접 질문을 하나 이상 선택해주세요.');
+				showConfirm2('면접 질문을 하나 이상 선택해주세요.', 
+				    () => {
+						
+				    },
+				    () => {
+				        
+				    }
+				);
 				return;
 			}
 

@@ -127,6 +127,13 @@ function startTest(type, title) {
 
 // 로그인 필요 알림 함수 (비로그인 시)
 function logReq() {
-	alert("로그인이 필요한 서비스입니다.");
-	location.href = "/login";
+	showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+		() => {
+			sessionStorage.setItem("redirectUrl", location.href);
+			location.href = "/login";
+		},
+		() => {
+
+		}
+	);
 }

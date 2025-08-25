@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,13 +36,14 @@ public class FAQController {
 	
 	// 사용자 FAQ 조회
 	@GetMapping("/faqList.do")
-	public String faqUserList(Model model,@RequestParam(value="keyword",required=false) String keyword) {
+	public String faqUserList(Model model,@RequestParam(value="keyword",required=false) String keyword,@AuthenticationPrincipal String memId) {
 		
 		List<FaqVO> faqList= faqService.getUserFaqList(keyword);
 		
 		log.info(faqList.toString());
 		
 		model.addAttribute("faqList", faqList);
+		model.addAttribute("memId", memId);
 		
 		return "csc/faq/faqList";
 	}

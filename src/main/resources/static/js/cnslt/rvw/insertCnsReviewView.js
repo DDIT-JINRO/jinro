@@ -6,18 +6,38 @@ document.addEventListener("DOMContentLoaded", function() {
 		const crPublic = document.querySelector("input[name='cr-public']:checked").value.trim();
 
 		if (!crId) {
-			alert("과거상담내역을 선택해 주세요.");
-			return;
+			showConfirm2("과거상담내역을 선택해 주세요.",
+				() => {
+				return;
+				},
+				() => {
+
+				}
+			);
 		}
 
 		if (crRate === 0) {
-			alert("상담 평가를 선택해 주세요.");
-			return;
+			showConfirm2("상담 평가를 선택해 주세요.",
+				() => {
+					return;
+				},
+				() => {
+
+				}
+			);
+			
 		}
 
 	    if (!crContent) {
-	        alert("상담 후기를 입력해 주세요.");
-	        return;
+			showConfirm2("상담 후기를 입력해 주세요.",
+				() => {
+					return;
+				},
+				() => {
+
+				}
+			);
+	        
 	    }
 
 	    // FormData 생성
@@ -37,8 +57,14 @@ document.addEventListener("DOMContentLoaded", function() {
 	            const result = await response.json();
 
 	            if (result.success) {
-	                alert("후기 등록이 완료되었습니다");
-	                window.location.href = "/cnslt/rvw/cnsReview.do";
+					showConfirm2("후기 등록이 완료되었습니다",
+						() => {
+						window.location.href = "/cnslt/rvw/cnsReview.do";
+						},
+						() => {
+
+						}
+					);
 	            } else {
 	                alert(result.message || "등록에 실패했습니다.");
 	            }
@@ -250,9 +276,17 @@ document.addEventListener('DOMContentLoaded', function() {
 				return result.counselingList;
 			} else {
 				console.error("API 응답에 문제가 있습니다.", result.message);
-				alert(result.message);
-				closeModal();
-				return [];
+
+				showConfirm2(data.message,
+					() => {
+						closeModal();
+						return [];
+					},
+					() => {
+
+					}
+				);
+				
 			}
 		} catch (error) {
 			console.error("기업 정보를 불러오는 중 에러가 발생하였습니다.", error.message);

@@ -68,12 +68,12 @@
 					</div>
 				</li>
 				<li class="main-nav__item main-nav__item--priority-low">
-					<a href="/cdp/rsm/rsm/resumeList.do" class="main-nav__link">경력관리</a>
+					<a href="/cdp/rsm/rsm/resumeList.do" class="main-nav__link" id="goTologin6">경력관리</a>
 					<div class="dropdown-submenu">
-						<a href="/cdp/rsm/rsm/resumeList.do">이력서</a>
-						<a href="/cdp/sint/qestnlst/questionList.do">자기소개서</a>
-						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">모의 면접</a>
-						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">AI 피드백</a>
+						<a href="/cdp/rsm/rsm/resumeList.do" id="goTologin7">이력서</a>
+						<a href="/cdp/sint/qestnlst/questionList.do" id="goTologin8">자기소개서</a>
+						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do" id="goTologin9">모의 면접</a>
+						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do" id="goTologin10">AI 피드백</a>
 					</div>
 				</li>
 				<li class="main-nav__item">
@@ -104,7 +104,7 @@
 					<div class="dropdown-submenu">
 						<a href="/csc/not/noticeList.do">공지사항</a>
 						<a href="/csc/faq/faqList.do">FAQ</a>
-						<a href="/csc/inq/inqryList.do">1:1 문의</a>
+						<a href="/csc/inq/inqryList.do" id="goTologin11">1:1 문의</a>
 					</div>
 				</li>
 			</ul>
@@ -160,7 +160,7 @@
 					<a href="/empt/ema/employmentAdvertisement.do">취업</a>
 				</li>
 				<li>
-					<a href="/cdp/rsm/rsm/resumeList.do">경력관리</a>
+					<a href="/cdp/rsm/rsm/resumeList.do" id="goTologin1">경력관리</a>
 				</li>
 				<li>
 					<a href="/cnslt/resve/crsv/reservation.do">상담</a>
@@ -250,16 +250,16 @@
 				<div class="mega-menu__category">
 					<div class="mega-menu__category-title">경력관리</div>
 					<div class="mega-menu__links">
-						<a href="/cdp/rsm/rsm/resumeList.do">
+						<a href="/cdp/rsm/rsm/resumeList.do" id="goTologin2" >
 							<span>이력서</span>
 						</a>
-						<a href="/cdp/sint/qestnlst/questionList.do">
+						<a href="/cdp/sint/qestnlst/questionList.do" id="goTologin3" >
 							<span>자기소개서</span>
 						</a>
-						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">
+						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do" id="goTologin4" >
 							<span>모의 면접</span>
 						</a>
-						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">
+						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do" id="goTologin5" >
 							<span>AI 피드백</span>
 						</a>
 					</div>
@@ -269,17 +269,14 @@
 				<div class="mega-menu__category">
 					<div class="mega-menu__category-title">상담</div>
 					<div class="mega-menu__links">
-						<a href="cdp/rsm/rsm/resumeList.do">
-							<span>오프라인 상담</span>
+						<a href="/cnslt/resve/crsv/reservation.do">
+							<span>상담 예약</span>
 						</a>
-						<a href="/cdp/sint/qestnlst/questionList.do">
-							<span>화상 상담</span>
-						</a>
-						<a href="/cdp/imtintrvw/intrvwitr/interviewIntro.do">
-							<span>채팅 상담</span>
-						</a>
-						<a href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do">
+						<a href="/cnslt/rvw/cnsReview.do">
 							<span>상담 후기</span>
+						</a>
+						<a href="/cnslt/aicns/aicns.do">
+							<span>AI 상담</span>
 						</a>
 					</div>
 				</div>
@@ -317,7 +314,7 @@
 						<a href="/csc/faq/faqList.do">
 							<span>자주 묻는 질문</span>
 						</a>
-						<a href="/csc/inq/inqryList.do">
+						<a href="/csc/inq/inqryList.do" id="goTologin12">
 							<span>1:1 문의</span>
 						</a>
 					</div>
@@ -337,6 +334,34 @@
 		<button class="floating-bar__button" id="roadmap">
 			<img src="/images/roadmapicon.png" alt="진로탐색">
 		</button>
+	</div>
+
+    <!-- 모달 -->
+    <div id="customConfirm" class="custom-confirm" style="display: none;">
+        <div class="custom-confirm__content">
+        	<h4>알 림</h4>
+        	<div class ="pData">
+	            <p id="confirmMessage1" style="margin-bottom: 0px;"></p>
+	            <p id="confirmMessage2"style="margin-top: 0px;">></p>
+            </div>
+            <div class="custom-confirm__buttons">
+                <button id="confirmCancel">취소</button>
+                <button id="confirmOk">확인</button>
+            </div>
+        </div>
+    </div>
+
+	<div id="customConfirm2" class="custom-confirm2" style="display: none;">
+
+		<div class="custom-confirm__content2">
+			<h4>알 림</h4>
+			<div class ="pData">
+				<p id="confirmMessage3"></p>
+			</div>
+			<div class="custom-confirm__buttons2">
+				<button id="confirmOk2">확인</button>
+			</div>
+		</div>
 	</div>
 
 	<%@ include file="/WEB-INF/views/include/chatModal.jsp"%>

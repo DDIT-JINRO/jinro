@@ -8,6 +8,7 @@ const target = document.getElementById("typing-js");
 let index = 0;
 let isDeleting = false;
 
+
 function typingLoop() {
 	if (isDeleting) {
 		target.textContent = text.substring(0, index--);
@@ -169,7 +170,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	fn_init();
 	fn_TopsWidget();
 	fn_ContestBanner();
-	fn_checkLoginBeforeAI();
     if(memId && memId !='anonymousUser') {
     	roadmapPopup();
 	}
@@ -183,8 +183,15 @@ const fn_init = () => {
 	const roadmap = document.querySelector('.roadmapBtn');
 	roadmap.addEventListener("click", () => {
 		if(!memId || memId=='anonymousUser') {
-			sessionStorage.setItem("redirectUrl", location.href);
-			location.href = "/login";
+			showConfirm("로그인 후 이용 가능합니다.","로그인하시겠습니까?", 
+			    () => {
+			        sessionStorage.setItem("redirectUrl", location.href);
+			        location.href = "/login";
+			    },
+			    () => {
+			        
+			    }
+			);
 		} else {
 			const roadmapUrl = 'http://localhost:5173/roadmap';
 
@@ -204,8 +211,15 @@ const fn_init = () => {
 	const worldcup = document.getElementById('worldcupBtn')
 	worldcup.addEventListener("click", () => {
 		if(!memId || memId=='anonymousUser') {
-			sessionStorage.setItem("redirectUrl", location.href);
-			location.href = "/login";
+			showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+				() => {
+					sessionStorage.setItem("redirectUrl", location.href);
+					location.href = "/login";
+				},
+				() => {
+
+				}
+			);
 		} else {
 			axios.post("/admin/las/worldCupVisitLog.do")
 			const worldcupUrl = 'http://localhost:5173/worldcup';
@@ -348,21 +362,6 @@ const fn_ContestBanner = async () =>{
 	slideContainer.innerHTML = banners + banners;
 }
 
-const fn_checkLoginBeforeAI = () =>{
-	const anchors = document.querySelectorAll(".ai-shortcuts__grid .ai-card");
-	anchors.forEach(a =>{
-		a.addEventListener('click', function(e){
-			const anchor = e.target.closest('a');
-			console.log(anchor);
-			if(!memId || memId =='anonymousUser') {
-				e.preventDefault();
-				location.href="/login";
-			}
-		})
-	})
-}
-
-
 // 유튜브
 async function yotubeInMain() {
 	let channelId = "";
@@ -454,4 +453,31 @@ function textLengthOverCut(txt, len, lastTxt) {
 getKeywordBtn.addEventListener("click", function() {
     const jobCode = this.value;
     location.href = `/pse/cr/crl/selectCareerDetail.do?jobCode=${jobCode}`;
+});
+
+/*AI 섹션 이동 */
+document.addEventListener('DOMContentLoaded', () => {
+	document.querySelectorAll('.ai-card').forEach(card => {
+		card.addEventListener('click', e => {
+			e.preventDefault(); // 기본 링크 이동 막기
+			const url = card.getAttribute('href');
+
+			if (!memId || memId === 'anonymousUser') {
+				// showConfirm가 로드되어 있어야 함
+				if (typeof showConfirm === 'function') {
+					showConfirm(
+						"로그인 후 이용 가능합니다.",
+						"로그인하시겠습니까?",
+						() => {
+							sessionStorage.setItem("redirectUrl", location.href);
+							location.href = "/login";
+						},
+						() => { }
+					);
+				}
+			} else {
+				location.href = url;
+			}
+		});
+	});
 });

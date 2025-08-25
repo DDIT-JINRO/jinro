@@ -65,8 +65,14 @@ document.addEventListener('DOMContentLoaded', function(){
 			})
 			.then(result =>{
 				if(result){
-					alert('정상적으로 삭제되었습니다');
-					location.href = '/prg/std/stdGroupList.do';
+					showConfirm2("정상적으로 삭제되었습니다",
+						() => {
+							location.href = '/prg/std/stdGroupList.do';
+						},
+						() => {
+
+						}
+					);	
 				}
 			})
 			.catch(err =>{
@@ -89,11 +95,26 @@ document.addEventListener('DOMContentLoaded', function(){
 	if(enterChatBtn){
 		enterChatBtn.addEventListener('click', function(){
 			if(this.classList.contains('disabled')) return;
-			if(!confirm("입장하시겠습니까?")) return;
+
 
 			if(!memId || memId =='anonymousUser'){
-				sessionStorage.setItem('redirectUrl', location.href);
-				location.href="/login";
+				showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+					() => {
+						sessionStorage.setItem("redirectUrl", location.href);
+						location.href = "/login";
+					},
+					() => {
+
+					}
+				);
+			}else {
+				showConfirm("로그인 입장하시겠습니까?", "",
+					() => {
+					},
+					() => {
+						return;
+					}
+				);
 			}
 			const data = {crId, memId};
 			fetch('/prg/std/api/enterStdGroup',{
@@ -185,7 +206,15 @@ document.addEventListener('DOMContentLoaded', function(){
 	if(boardReportBtn){
 		boardReportBtn.addEventListener('click', async() => {
 			if(!memId || memId == 'anonymousUser'){
-				alert('로그인이 필요합니다');
+				showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+					() => {
+						sessionStorage.setItem("redirectUrl", location.href);
+						location.href = "/login";
+					},
+					() => {
+
+					}
+				);
 				return;
 			}
 			const targetId = boardReportBtn.closest('.boardEtcContainer').dataset.boardId;
@@ -196,8 +225,14 @@ document.addEventListener('DOMContentLoaded', function(){
 			// @@@@@@@@@ fetch()로 해당 게시글 신고한적 있는지 체크하고 신고한적 있으면 alert 이미 신고한 게시물
 			const resp = await fetch('/api/report/selectReport',{method:'POST',body:formData});
 			if(resp.status==200){
-				alert('이미 신고한 게시글입니다');
-				return;
+				showConfirm2("이미 신고한 게시글입니다",
+					() => {
+						return;
+					},
+					() => {
+
+					}
+				);
 			}else{
 				setReportModal(targetId, 'G10001');
 				openModal();
@@ -234,9 +269,15 @@ function confirmReport(){
 	})
 	.then(result =>{
 		if(result){
-			alert('신고 완료');
-			// 신고 완료 시 새로고침
-			location.reload();
+			showConfirm2("신고 완료",
+				() => {
+					// 신고 완료 시 새로고침
+					location.reload();
+				},
+				() => {
+
+				}
+			);
 		}
 	})
 }
@@ -463,8 +504,17 @@ function eventEtcContainerClicked(e){
 	const action = el.textContent.trim();
 	if(!confirm(`이 댓글을 정말로 ${action} 하시겠습니까?`)) return;
 	if(!memId || memId == 'anonymousUser'){
-		alert('로그인이 필요합니다');
-		return;
+		showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+			() => {
+				sessionStorage.setItem("redirectUrl", location.href);
+				location.href = "/login";
+
+				return;
+			},
+			() => {
+				return;
+			}
+		);
 	}
 	const targetReply = el.closest('.reply-box');
 	const targetReplyChildBox = targetReply.nextElementSibling;
@@ -496,7 +546,15 @@ function eventEtcContainerClicked(e){
 				}
 
 				targetReply.remove();
-				setTimeout(()=>{alert('삭제되었습니다')})
+				setTimeout(() => {
+					showConfirm2("삭제되었습니다.",
+						() => {
+						},
+						() => {
+
+						}
+					);
+				})
 			}
 		})
 		.catch(err =>{
@@ -511,8 +569,14 @@ function eventEtcContainerClicked(e){
 			formData.append('targetType','G10002');
 			const resp = await fetch('/api/report/selectReport',{method:'POST',body:formData});
 			if(resp.status==200){
-				alert('이미 신고한 댓글입니다');
-				return;
+				showConfirm2("이미 신고한 댓글입니다.",
+					() => {
+						return;
+					},
+					() => {
+						return;
+					}
+				);
 			}else{
 				setReportModal(targetReplyId, 'G10002');
 				document.body.classList.add('scroll-lock');

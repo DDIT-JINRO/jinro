@@ -20,7 +20,7 @@
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
 			<a class="tab active" href="/pse/cr/crl/selectCareerList.do">직업 목록</a>
-			<a class="tab" href="/pse/cr/crr/selectCareerRcmList.do">추천 직업</a>
+			<a class="tab" id="goToRkJob" href="/pse/cr/crr/selectCareerRcmList.do">추천 직업</a>
 		</div>
 
 		<div class="public-wrapper-main">

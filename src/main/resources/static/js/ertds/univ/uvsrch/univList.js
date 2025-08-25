@@ -111,7 +111,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const handleBookmarkToggle = (button) => {
 	if (memId == "" || memId == "anonymousUser") {
-        alert("북마크는 로그인 후 이용 하실 수 있습니다.");
+		showConfirm("로그인 후 이용 가능합니다.", "로그인하시겠습니까?",
+			() => {
+				sessionStorage.setItem("redirectUrl", location.href);
+				location.href = "/login";
+			},
+			() => {
+
+			}
+		);
         return;
     }
 	const bmCategoryId = button.dataset.categoryId;
@@ -142,7 +150,13 @@ const handleBookmarkToggle = (button) => {
 		})
 		.then(data => {
 			if (data.success) {
-				alert(data.message);
+				showConfirm2(data.message,
+					() => {
+					},
+					() => {
+
+					}
+				);
 				button.classList.toggle('is-active');
 			} else {
 				alert(data.message || '북마크 처리에 실패했습니다.');

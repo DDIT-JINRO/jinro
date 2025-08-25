@@ -25,10 +25,16 @@ document.addEventListener('DOMContentLoaded', function() {
 	const btnDelete = mainForm.querySelector(".btn--danger");
 	if (btnDelete) {
 		btnDelete.addEventListener("click", () => {
-			if (confirm("정말 삭제하시겠습니까?")) {
-				mainForm.action = "/cdp/imtintrvw/intrvwqestnmn/delete.do";
-				mainForm.submit();
-			}
+
+			showConfirm("정말 삭제하시겠습니까?","",
+				() => {
+					mainForm.action = "/cdp/imtintrvw/intrvwqestnmn/delete.do";
+					mainForm.submit();
+				},
+				() => {
+
+				}
+			);
 		});
 	}
 

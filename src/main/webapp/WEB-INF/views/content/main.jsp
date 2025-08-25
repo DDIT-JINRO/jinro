@@ -2,6 +2,9 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/main.css" />
 <div class="mainContainer">
+
+
+
 	<!-- Trending Strip: 헤더와 메인 사이 -->
 	<div id="trending-strip" class="trending-strip" role="region" aria-label="인기 북마크/게시글 TOP5">
 		<!-- 직업 -->
@@ -154,54 +157,55 @@
 
 	<!-- AI 기능 바로가기 섹션 -->
 	<section id="ai-shortcuts" aria-labelledby="ai-shortcuts-title">
-	  <div class="ai-shortcuts__container">
-	    <div class="ai-shortcuts__head">
-	    <c:if test="${memId eq 'anonymousUser'}">
-	      <p class="ai-shortcuts__eyebrow">로그인이 필요한 서비스입니다</p>
-	    </c:if>
-	      <h2 id="ai-shortcuts-title" class="ai-shortcuts__title">AI와 함께 똑똑하게 준비하기</h2>
-	      <p class="ai-shortcuts__desc">AI 기반 커리어 도구를 지금 바로 경험해보세요.</p>
-	    </div>
+		<div class="ai-shortcuts__container">
+			<div class="ai-shortcuts__head">
+				<c:if test="${memId eq 'anonymousUser'}">
+					<p class="ai-shortcuts__eyebrow">로그인이 필요한 서비스입니다</p>
+				</c:if>
+				<h2 id="ai-shortcuts-title" class="ai-shortcuts__title">AI와 함께 똑똑하게 준비하기</h2>
+				<p class="ai-shortcuts__desc">AI 기반 커리어 도구를 지금 바로 경험해보세요.</p>
+			</div>
 
-	    <div class="ai-shortcuts__grid">
-	      <!-- 1. AI 모의면접 -->
-	      <a class="ai-card" href="/cdp/imtintrvw/aiimtintrvw/aiImitationInterview.do" aria-label="AI 모의면접 바로가기">
-	        <img class="ai-card__icon" src="/images/main/charactor5-aimockintrv.png" alt="" />
-	        <div class="ai-card__body">
-	          <h3 class="ai-card__title">AI 모의면접</h3>
-	          <p class="ai-card__text">실전 감각 · AI 피드백</p>
-	        </div>
-	      </a>
+			<div class="ai-shortcuts__grid">
+				<!-- 1. AI 모의면접 -->
+				<a class="ai-card" href="/cdp/imtintrvw/aiimtintrvw/aiImitationInterview.do" aria-label="AI 모의면접 바로가기"> 
+					<img class="ai-card__icon" src="/images/main/charactor5-aimockintrv.png" alt="" />
+					<div class="ai-card__body">
+						<h3 class="ai-card__title">AI 모의면접</h3>
+						<p class="ai-card__text">실전 감각 · AI 피드백</p>
+					</div>
+				</a>
 
-	      <!-- 2. AI 이력서 -->
-	      <a class="ai-card" href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do" aria-label="AI 이력서 바로가기">
-	        <img class="ai-card__icon" src="/images/main/charactor6-airesume.png" alt="" />
-	        <div class="ai-card__body">
-	          <h3 class="ai-card__title">AI 이력서 첨삭</h3>
-	          <p class="ai-card__text">키워드 보강 · 문장 다듬기</p>
-	        </div>
-	      </a>
+				<!-- 2. AI 이력서 -->
+				<a class="ai-card" href="/cdp/aifdbck/rsm/aiFeedbackResumeList.do" aria-label="AI 이력서 바로가기"> 
+					<img class="ai-card__icon" src="/images/main/charactor6-airesume.png" alt="" />
+					<div class="ai-card__body">
+						<h3 class="ai-card__title">AI 이력서 첨삭</h3>
+						<p class="ai-card__text">키워드 보강 · 문장 다듬기</p>
+					</div>
+				</a>
 
-	      <!-- 3. AI 자소서 -->
-	      <a class="ai-card" href="/cdp/aifdbck/sint/aiFeedbackSelfIntroList.do" aria-label="AI 자소서 바로가기">
-	        <img class="ai-card__icon" src="/images/main/charactor7-aiselfintro.png" alt="" />
-	        <div class="ai-card__body">
-	          <h3 class="ai-card__title">AI 자소서 첨삭</h3>
-	          <p class="ai-card__text">항목별 구조화 · 첨삭</p>
-	        </div>
-	      </a>
+				<!-- 3. AI 자소서 -->
+				<a class="ai-card" href="/cdp/aifdbck/sint/aiFeedbackSelfIntroList.do" aria-label="AI 자소서 바로가기"> 
+					<img class="ai-card__icon" src="/images/main/charactor7-aiselfintro.png" alt="" />
+					<div class="ai-card__body">
+						<h3 class="ai-card__title">AI 자소서 첨삭</h3>
+						<p class="ai-card__text">항목별 구조화 · 첨삭</p>
+					</div>
+				</a>
 
-	      <!-- 4. AI 상담 -->
-	      <a class="ai-card" href="/cnslt/aicns/aicns.do" aria-label="AI 상담 바로가기">
-	        <img class="ai-card__icon" src="/images/main/charactor8-aicounsel.png" alt="" />
-	        <div class="ai-card__body">
-	          <h3 class="ai-card__title">AI 24시 상담</h3>
-	          <p class="ai-card__text">진로·진학/취업 맞춤 조언</p>
-	        </div>
-	      </a>
-	    </div>
-	  </div>
+				<!-- 4. AI 상담 -->
+				<a class="ai-card" href="/cnslt/aicns/aicns.do" aria-label="AI 상담 바로가기"> 
+					<img class="ai-card__icon" src="/images/main/charactor8-aicounsel.png" alt="" />
+					<div class="ai-card__body">
+						<h3 class="ai-card__title">AI 24시 상담</h3>
+						<p class="ai-card__text">진로·진학/취업 맞춤 조언</p>
+					</div>
+				</a>
+			</div>
+		</div>
 	</section>
+
 
 	<section class="feature-slider">
 		<div class="feature-slider__header">

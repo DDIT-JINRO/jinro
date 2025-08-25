@@ -13,7 +13,12 @@
     opacity: 0;
     overflow: hidden;
 }
-
+.mainContainer{
+	animation: slideDownFade 1s ease-out forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+    overflow: hidden;
+}
 .main-banner__inner {
 	display: flex;
 	align-items: center;

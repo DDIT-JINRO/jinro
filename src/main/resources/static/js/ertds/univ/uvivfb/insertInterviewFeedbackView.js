@@ -23,27 +23,63 @@ document.addEventListener("DOMContentLoaded", function() {
 		const files = document.querySelector("#file-input").files;
 
 		if (!interviewDate) {
-			alert("면접 일자를 입력해 주세요.");
+			showConfirm2("면접 일자를 입력해 주세요.", 
+			    () => {
+					
+			    },
+			    () => {
+			        
+			    }
+			);
+
 			return;
 		}
 
 		if (interviewRating === 0) {
-			alert("대학 평가를 선택해 주세요.");
+			showConfirm2("대학 평가를 선택해 주세요.", 
+			    () => {
+					
+			    },
+			    () => {
+			        
+			    }
+			);
 			return;
 		}
 
 		if (!interviewDetail) {
-			alert("면접 후기를 입력해 주세요.");
+			showConfirm2("면접 후기를 입력해 주세요.", 
+			    () => {
+					
+			    },
+			    () => {
+			        
+			    }
+			);
 			return;
 		}
 
 		if (files.length === 0) {
-			alert("증빙자료를 첨부해 주세요.");
+			showConfirm2("증빙자료를 첨부해 주세요.", 
+			    () => {
+					
+			    },
+			    () => {
+			        
+			    }
+			);
 			return;
 		}
 
 		if (files.length > 1) {
-			alert("증빙자료는 1장만 첨부해 주세요.");
+			showConfirm2("증빙자료는 1장만 첨부해 주세요.", 
+			    () => {
+					
+			    },
+			    () => {
+			        
+			    }
+			);
 			return;
 		}
 
@@ -67,8 +103,14 @@ document.addEventListener("DOMContentLoaded", function() {
 				const result = await response.json();
 
 				if (result.success) {
-					alert("후기 등록 요청이 완료되었습니다");
-					window.location.href = "/ertds/univ/uvivfb/selectInterviewList.do";
+					showConfirm2("후기 등록 요청이 완료되었습니다", 
+					    () => {
+							window.location.href = "/ertds/univ/uvivfb/selectInterviewList.do";
+					    },
+					    () => {
+					        
+					    }
+					);
 				} else {
 					alert(result.message || "등록에 실패했습니다.");
 				}
@@ -408,7 +450,14 @@ function autoCompleteHandler() {
 			document.getElementById('modalConfirmBtn').click();
 		} else {
 			console.error('자동완성할 대학을 찾지 못했습니다.');
-			alert('자동완성할 대학을 찾지 못했습니다. 목록을 다시 확인해주세요.');
+			showConfirm2("자동완성할 대학을 찾지 못했습니다. 목록을 다시 확인해주세요.", 
+			    () => {
+					
+			    },
+			    () => {
+			        
+			    }
+			);
 			return;
 		}
 
