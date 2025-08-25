@@ -5,30 +5,49 @@ body {
 	background-color: #EDF2F9;
 }
 
+.topTitle {
+	color: gray;
+	font-size: 18px;
+	margin: 0;
+	line-height: 75px;
+}
+
+.breadcrumb-item::before {
+	font-family: 'Font Awesome 5 Free';
+	/* 폰트 어썸 폰트 지정 */
+	font-weight: 900;
+	/* 폰트 굵기 지정 (필수) */
+	content: '\f054';
+	/* 꺽쇠(>) 아이콘의 유니코드 */
+	padding: 0 8px;
+	color: #999;
+	line-height: 77px;
+}
+
 .admin-logoutBtn {
 	position: absolute;
 	display: flex;
-    justify-content: center;
-    top: 22px;
-    right: 20px;
-    width: 100px;
-    height: 15px;
-    padding: 10px 5px;
-    text-align: center;
-    align-items: center;
-    line-height: 1;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 4px;
-    color: white;
-    background-color: #727cf5; 
-    cursor: pointer;
+	justify-content: center;
+	top: 22px;
+	right: 20px;
+	width: 100px;
+	height: 15px;
+	padding: 10px 5px;
+	text-align: center;
+	align-items: center;
+	line-height: 1;
+	font-size: 14px;
+	font-weight: bold;
+	border-radius: 4px;
+	color: white;
+	background-color: #727cf5;
+	cursor: pointer;
 }
 
 .admin-logoutBtn:hover {
-    background-color: #666ed5;
-    color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	background-color: #666ed5;
+	color: #fff;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .main-content {
@@ -80,20 +99,20 @@ to {
 
 /* 스크롤바 전체 스타일 */
 ::-webkit-scrollbar {
-    width: 8px; /* 세로 스크롤바의 폭 */
-    height: 8px; /* 가로 스크롤바의 높이 */
+	width: 8px; /* 세로 스크롤바의 폭 */
+	height: 8px; /* 가로 스크롤바의 높이 */
 }
 
 /* 스크롤바 배경 트랙 */
 ::-webkit-scrollbar-track {
-    background: #F0F0F0;
-    border-radius: 10px;
+	background: #F0F0F0;
+	border-radius: 10px;
 }
 
 /* 스크롤바 엄지 (움직이는 부분) */
 ::-webkit-scrollbar-thumb {
-    background: #D3D3D3;
-    border-radius: 10px;
+	background: #D3D3D3;
+	border-radius: 10px;
 }
 
 /********************공통 부분 *********************/
@@ -227,7 +246,7 @@ to {
 }
 
 .dashboard-2 {
-	width: 1100px;
+	width: 1085px;
 }
 
 .dash2Flex {
@@ -646,6 +665,14 @@ tbody tr:hover {
 	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
 
+.dkwnrrhtlvek {
+	align-items: center;
+}
+
+.topBtnGroup {
+	margin-left: 20px;
+}
+
 .btn-primary {
 	background-color: #7c7cf5;
 	color: #fff;
@@ -659,9 +686,28 @@ tbody tr:hover {
 		0.3s ease;
 }
 
+.topBtn {
+	width: 100px;
+	padding: 10px 5px;
+	text-align: center;
+	align-items: center;
+	line-height: 1;
+	font-size: 14px;
+	font-weight: bold;
+	border-radius: 4px;
+	color: white;
+	background-color: #727cf5;
+}
+
+.topBtn:hover {
+    background-color: #666ed5;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 #localTimeDisplay {
 	color: #808080;
-    font-weight: 600;
+	font-weight: 600;
 }
 
 /***************************** 콘텐츠 이용 통계 도넛 ***************************************/

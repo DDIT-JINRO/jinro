@@ -4,7 +4,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="/js/include/admin/cmg/activityManagement.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">대외활동 관리</h2>
+<div class="flex">
+	<h2 class="topTitle">콘텐츠 관리</h2>
+	<div class="breadcrumb-item"></div>
+	<h2 class="topTitle">대외활동 관리</h2>
+</div>
 <body>
 	<div class="admin-actMng-1" style="margin-bottom: 20px;">
 		<div class="template-panel admin-actMng-1-1">

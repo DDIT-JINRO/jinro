@@ -44,6 +44,24 @@ function memberManagement() {
 	pageVisitChartGenderSel.addEventListener('change', pageVisitChart);
 	pageVisitChartAgeGroupSel.addEventListener('change', pageVisitChart);
 
+	const memberMngBtn = document.getElementById('memberMngBtn');
+	const memberChartAllBtn = document.getElementById('memberChartAllBtn');
+
+	const memberMngSpace = document.getElementById('memberMngSpace');
+	const memberChartAllSpace = document.getElementById('memberChartAllSpace');
+
+	memberMngBtn.addEventListener('click', function() {
+		memberChartAllSpace.style = "display:none;"
+		memberMngSpace.style = "display:block;"
+	});
+
+	memberChartAllBtn.addEventListener('click', function() {
+		memberMngSpace.style = "display:none;"
+		memberChartAllSpace.style = "display:block;"
+	});
+
+
+
 	replyListSortOrder.addEventListener('click', function() {
 		const userId = document.getElementById('mem-id').value;
 		if (!userId) {

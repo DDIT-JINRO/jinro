@@ -1,26 +1,24 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="css/admin/cmg/contestManagement.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="/js/include/admin/cmg/contestManagement.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">공모전 관리</h2>
+<div class="flex">
+	<h2 class="topTitle">콘텐츠 관리</h2>
+	<div class="breadcrumb-item"></div>
+	<h2 class="topTitle">공모전 관리</h2>
+</div>
 <body>
 	<div class="admin-actMng-1" style="margin-bottom: 20px;">
 		<div class="template-panel admin-actMng-1-1">
-			<div class="middleTitle flex act-mng-category-header">
-				공모전 리스트
-			</div>
+			<div class="middleTitle flex act-mng-category-header">공모전 리스트</div>
 			<div class="filter-box">
 				<input type="text" name="keyword" placeholder="제목으로 검색" />
 				<button type="button" class="btn-save" id="btnSearch">조회</button>
 			</div>
 			<div class="listEnt">
 				<div class="search-filter-bar">
-					<p class="ptag-list" style="margin-bottom: 10px">
-						총
-						<span id="cctList-count"></span>
-						건
+					<p class="ptag-list" style="margin-bottom: 10px">총 <span id="cctList-count"></span> 건
 					</p>
 				</div>
 				<div class="listEntBody">
@@ -55,18 +53,9 @@
 						</div>
 
 						<div class="profile-info">
-							<p>
-								<strong>주최사 : </strong>
-								<span id="contestHostProfile">-</span>
-							</p>
-							<p>
-								<strong>주관 : </strong>
-								<span id="contestOrganizerProfile">-</span>
-							</p>
-							<p>
-								<strong>일자 : </strong>
-								<span id="contestDate">-</span>
-							</p>
+							<p><strong>주최사 : </strong> <span id="contestHostProfile">-</span></p>
+							<p><strong>주관 : </strong> <span id="contestOrganizerProfile">-</span></p>
+							<p><strong>일자 : </strong> <span id="contestDate">-</span></p>
 						</div>
 					</div>
 				</div>
@@ -91,28 +80,26 @@
 						<input type="text" class="contest-form-input" id="contestTitle" placeholder="예) 2025년 커리어패스배 공모전">
 					</div>
 				</div>
-				
+
 				<div class="location-group">
 					<label>공모전 분류</label>
 					<div class="input-with-icon">
-						<i class="fas fa-expand"></i>
-						<select class="coords-select-group contest-form-input" id="contestType">
+						<i class="fas fa-expand"></i> <select class="coords-select-group contest-form-input" id="contestType">
 						</select>
 					</div>
 				</div>
-								
+
 				<div class="location-group">
 					<label>대상</label>
 					<div class="input-with-icon">
-						<i class="fas fa-expand"></i>
-						<select class="coords-select-group contest-form-input" id="contestTarget">
+						<i class="fas fa-expand"></i> <select class="coords-select-group contest-form-input" id="contestTarget">
 							<option value="G34001">전체</option>
 							<option value="G34002">청소년</option>
 							<option value="G34003">청년</option>
 						</select>
 					</div>
 				</div>
-				
+
 				<div class="input-group">
 					<label for="applicationMethod">접수 방법</label>
 					<div class="input-with-icon">
@@ -120,7 +107,7 @@
 						<input type="text" class="contest-form-input" id="applicationMethod" placeholder="예) 홈페이지 접수">
 					</div>
 				</div>
-				
+
 				<div class="input-group">
 					<label for="awardType">시상 종류</label>
 					<div class="input-with-icon">
@@ -128,7 +115,7 @@
 						<input type="text" class="contest-form-input" id="awardType" placeholder="예) OO 시장상">
 					</div>
 				</div>
-				
+
 				<div class="input-group">
 					<label for="contestUrl">홈페이지 URL</label>
 					<div class="input-with-icon">
@@ -136,7 +123,7 @@
 						<input type="text" class="contest-form-input" id="contestUrl" placeholder="예) https://www.careerpath.store">
 					</div>
 				</div>
-				
+
 				<div class="input-group">
 					<label for="contestHost">주최사</label>
 					<div class="input-with-icon">
@@ -144,7 +131,7 @@
 						<input type="text" class="contest-form-input" id="contestHost" placeholder="예) (주)커리어패스">
 					</div>
 				</div>
-				
+
 				<div class="input-group">
 					<label for="contestSponsor">후원사</label>
 					<div class="input-with-icon">
@@ -152,7 +139,7 @@
 						<input type="text" class="contest-form-input" id="contestSponsor" placeholder="예) 고용노동부, 일자리경제진흥원">
 					</div>
 				</div>
-				
+
 				<div class="input-group">
 					<label for="contestOrganizer">주관</label>
 					<div class="input-with-icon">
@@ -177,7 +164,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="form-textarea-section">
 					<div class="input-group">
 						<label for="contestDescription">공모전에 대한 설명</label>
@@ -187,19 +174,13 @@
 
 				<div class="flex" style="flex-direction: row-reverse; gap: 20px;">
 					<div class="form-actions">
-						<button type="button" id="btnRegister" class="btn-primary">
-							저장
-						</button>
+						<button type="button" id="btnRegister" class="btn-primary">저장</button>
 					</div>
 					<div class="form-actions">
-						<button type="button" id="btnReset" class="btn-warning">
-							초기화
-						</button>
+						<button type="button" id="btnReset" class="btn-warning">초기화</button>
 					</div>
 					<div class="form-actions">
-						<button type="button" id="btnDelete" class="btn-warning">
-							삭제
-						</button>
+						<button type="button" id="btnDelete" class="btn-warning">삭제</button>
 					</div>
 				</div>
 			</div>

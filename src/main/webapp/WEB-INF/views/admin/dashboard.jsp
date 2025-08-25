@@ -3,6 +3,7 @@
 <html>
 <head>
 <link rel="stylesheet" href="/css/admin/admDashboard.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <title>관리자 메인</title>
 </head>
 <%@ include file="/WEB-INF/views/include/admin/sidebar.jsp"%>

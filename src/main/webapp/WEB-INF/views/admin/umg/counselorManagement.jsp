@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="/css/admin/umg/counselorManagement.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <script src="/js/include/admin/umg/counselorManagement.js"></script>
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">상담사
-	관리</h2>
+<div class="flex">
+	<h2 class="topTitle">사용자 관리</h2>
+	<div class="breadcrumb-item"></div>
+	<h2 class="topTitle">상담사 관리</h2>
+</div>
 <input type="hidden" id="comCalendarInput" style="display: none;" />
 <body>
 	<div class="flex gap cnsMg-1" style="margin-bottom: 20px;">

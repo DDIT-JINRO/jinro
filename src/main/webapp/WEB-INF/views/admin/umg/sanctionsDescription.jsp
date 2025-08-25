@@ -1,32 +1,32 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="css/admin/umg/sanctionsDescription.css">
 <script src="/js/include/admin/umg/sanctionsDescription.js"></script>
 
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">제재
-	내역</h2>
+<div class="flex">
+	<h2 class="topTitle">사용자 관리</h2>
+	<div class="breadcrumb-item"></div>
+	<h2 class="topTitle">제재 내역</h2>
+</div>
+
 
 <div class="sancChartSpace flex gap">
-	<input type="hidden" id="comCalendarInput" style="display: none;"/>
+	<input type="hidden" id="comCalendarInput" style="display: none;" />
 	<div class="sancChart-1">
 		<div class="flex gap" style="margin-bottom: 20px;">
 			<div class="template-panel dailyReportCount">
 				<div class="middleTitle">오늘 접수된 신고 수</div>
-				<img class="public-card-icon" alt=""
-					src="/images/admin/admin-time.png">
+				<img class="public-card-icon" alt="" src="/images/admin/admin-time.png">
 				<div class="public-card-green-count" id="dailyReportCnt">123건</div>
 			</div>
 			<div class="template-panel delayReportCount">
 				<div class="middleTitle">처리 대기중 신고 수</div>
-				<img class="public-card-icon" alt=""
-					src="/images/admin/admin-warning.png">
+				<img class="public-card-icon" alt="" src="/images/admin/admin-warning.png">
 				<div class="public-card-red-count" id="delayReportCnt"></div>
 			</div>
 		</div>
 		<div class="template-panel penaltyMemberChart">
 			<div class="middleTitle">정지 회원 비율</div>
-			<img class="public-card-icon" alt=""
-					src="/images/admin/admin-stop.png">
+			<img class="public-card-icon" alt="" src="/images/admin/admin-stop.png">
 			<div class="flex chartDounutSpac">
 				<div class="penaltyMemberChart-2">
 					<canvas id="penaltyDounutChart"></canvas>
@@ -71,26 +71,19 @@
 				<option value="1">전체</option>
 				<option value="2">신고자명</option>
 				<option value="3">신고대상명</option>
-			</select> <input id="search" name="keywordReport" placeholder="검색어를 입력하세요" />
+			</select>
+			<input id="search" name="keywordReport" placeholder="검색어를 입력하세요" />
 			<button class="btn-save searchReportBtn">조회</button>
 		</div>
-		<p class="ptag-list">
-			총
-			<span id="reportList-count"></span>
-			건
+		<p class="ptag-list">총 <span id="reportList-count"></span> 건
 		</p>
-		<div
-			style="display: flex; justify-content: space-between; margin: 10px 0;">
+		<div style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 reportListBtnGroup">
-				<input class="public-toggle-button active" type="hidden" id="ReportListSortByStatus"
-						data-sort-by="status" />
-				<button class="public-toggle-button" id="ReportListSortByMemId"
-					data-sort-by="memId">신고자명</button>
-				<button class="public-toggle-button" id="ReportListSortByTargetName"
-					data-sort-by="plTitle">신고대상명</button>
-				<button class="public-toggle-button"
-					id="ReportListSortByRpCreatedAt" data-sort-by="plCreatedAt">신고일시</button>
+				<input class="public-toggle-button active" type="hidden" id="ReportListSortByStatus" data-sort-by="status" />
+				<button class="public-toggle-button" id="ReportListSortByMemId" data-sort-by="memId">신고자명</button>
+				<button class="public-toggle-button" id="ReportListSortByTargetName" data-sort-by="plTitle">신고대상명</button>
+				<button class="public-toggle-button" id="ReportListSortByRpCreatedAt" data-sort-by="plCreatedAt">신고일시</button>
 				<select class="public-toggle-select" id="ReportListSortOrder">
 					<option value="asc">오름차순</option>
 					<option value="desc">내림차순</option>
@@ -130,52 +123,45 @@
 			<div class="detail-item-group">
 				<div class="detail-item">
 					<span class="detail-label">신고 ID</span>
-					<input type="text" id="report-detail-mpId" class="detail-input"
-						readonly>
+					<input type="text" id="report-detail-mpId" class="detail-input" readonly>
 				</div>
 				<div class="detail-item">
 					<span class="detail-label">신고 대상 ID</span>
-					<input type="text" id="report-detail-targetId" class="detail-input"
-						readonly>
+					<input type="text" id="report-detail-targetId" class="detail-input" readonly>
 				</div>
 			</div>
 			<div class="detail-item-group">
 				<div class="detail-item">
 					<span class="detail-label">신고 타입</span>
-					<input type="text" id="report-detail-mpType" class="detail-input"
-						readonly>
+					<input type="text" id="report-detail-mpType" class="detail-input" readonly>
 				</div>
 				<div class="detail-item">
 					<span class="detail-label">신고 대상명</span>
-					<input type="text" id="report-detail-targetName"
-						class="detail-input" readonly>
+					<input type="text" id="report-detail-targetName" class="detail-input" readonly>
 				</div>
 			</div>
 			<div class="detail-item-group">
 				<div class="detail-item">
 					<span class="detail-label">신고자 ID</span>
-					<input type="text" id="report-detail-memId" class="detail-input"
-						readonly>
+					<input type="text" id="report-detail-memId" class="detail-input" readonly>
 				</div>
 				<div class="detail-item">
 					<span class="detail-label">신고 상태</span>
 					<select id="report-detail-status" class="detail-input-select" disabled>
 						<option value="S03001">접수</option>
 						<option value="S03002">반려</option>
-						<option value="S03003" title="승인은 신규 제제 등록으로 처리바랍니다" disabled >승인</option>
+						<option value="S03003" title="승인은 신규 제제 등록으로 처리바랍니다" disabled>승인</option>
 					</select>
 				</div>
 			</div>
 			<div class="detail-item-group">
 				<div class="detail-item">
 					<span class="detail-label">신고자명</span>
-					<input type="text" id="report-detail-memName" class="detail-input"
-						readonly>
+					<input type="text" id="report-detail-memName" class="detail-input" readonly>
 				</div>
 				<div class="detail-item">
 					<span class="detail-label">신고 일시</span>
-					<input type="text" id="report-detail-warnDate" class="detail-input"
-						readonly>
+					<input type="text" id="report-detail-warnDate" class="detail-input" readonly>
 				</div>
 			</div>
 
@@ -197,28 +183,22 @@
 	<div class="template-panel scdMng-2-1">
 		<div class="middleTitle">제재 이력 목록</div>
 		<div class="public-listSearch">
-			<button type="button" id="openNewPenaltyModalBtn" class="btn-save"
-				style="background-color: #FA5C7C; margin-right: 20px;">신규 제재 등록</button>
+			<button type="button" id="openNewPenaltyModalBtn" class="btn-save" style="background-color: #FA5C7C; margin-right: 20px;">신규 제재 등록</button>
 			<select name="statusPenalty" id="">
 				<option value="1">전체</option>
 				<option value="2">회원명</option>
-			</select> <input id="search" name="keywordPenalty" placeholder="회원명을 입력하세요" />
+			</select>
+			<input id="search" name="keywordPenalty" placeholder="회원명을 입력하세요" />
 			<button class="btn-save searchPenaltyBtn">조회</button>
 		</div>
 
-		<p class="ptag-list">
-			총
-			<span id="penaltyList-count"></span>
-			건
+		<p class="ptag-list">총 <span id="penaltyList-count"></span> 건
 		</p>
-		<div
-			style="display: flex; justify-content: space-between; margin: 10px 0;">
+		<div style="display: flex; justify-content: space-between; margin: 10px 0;">
 
 			<div class="btn-group flex gap5 penalListBtnGroup">
-				<button class="public-toggle-button active"
-					id="penaltyListSortByTargetName" data-sort-by="memName">회원명</button>
-				<button class="public-toggle-button"
-					id="penaltyListSortByRpCreatedAt" data-sort-by="mpWarnDate">제재일시</button>
+				<button class="public-toggle-button active" id="penaltyListSortByTargetName" data-sort-by="memName">회원명</button>
+				<button class="public-toggle-button" id="penaltyListSortByRpCreatedAt" data-sort-by="mpWarnDate">제재일시</button>
 				<select class="public-toggle-select" id="penaltyListSortOrder">
 					<option value="asc">오름차순</option>
 					<option value="desc">내림차순</option>
@@ -255,51 +235,43 @@
 			<div class="detail-item-group">
 				<div class="detail-item">
 					<span class="detail-label">이력 ID:</span>
-					<input type="text" id="penalty-detail-mpId" class="detail-input"
-						readonly>
+					<input type="text" id="penalty-detail-mpId" class="detail-input" readonly>
 				</div>
 				<div class="detail-item">
 					<span class="detail-label">회원 ID:</span>
-					<input type="text" id="penalty-detail-memId" class="detail-input"
-						readonly>
+					<input type="text" id="penalty-detail-memId" class="detail-input" readonly>
 				</div>
 			</div>
 			<div class="detail-item-group">
 				<div class="detail-item">
 					<span class="detail-label">회원명:</span>
-					<input type="text" id="penalty-detail-memName" class="detail-input"
-						readonly>
+					<input type="text" id="penalty-detail-memName" class="detail-input" readonly>
 				</div>
 				<div class="detail-item">
 					<span class="detail-label">제재 유형:</span>
-					<input type="text" id="penalty-detail-mpType" class="detail-input"
-						readonly>
+					<input type="text" id="penalty-detail-mpType" class="detail-input" readonly>
 				</div>
 			</div>
 			<div class="detail-item-group">
 				<div class="detail-item">
 					<span class="detail-label">제재 일시:</span>
-					<input type="text" id="penalty-detail-warnDate"
-						class="detail-input" readonly>
+					<input type="text" id="penalty-detail-warnDate" class="detail-input" readonly>
 				</div>
 				<div class="detail-item">
 					<span class="detail-label">정지 시작일:</span>
-					<input type="text" id="penalty-detail-startDate"
-						class="detail-input" readonly>
+					<input type="text" id="penalty-detail-startDate" class="detail-input" readonly>
 				</div>
 			</div>
 			<div class="detail-item-group">
 				<div class="detail-item">
 					<span class="detail-label">정지 종료일:</span>
-					<input type="text" id="penalty-detail-endDate" class="detail-input"
-						readonly>
+					<input type="text" id="penalty-detail-endDate" class="detail-input" readonly>
 				</div>
 			</div>
 
 			<div class="detail-reason-item">
 				<span class="detail-label">제재 사유:</span>
-				<textarea id="penalty-detail-reason" class="detail-textarea"
-					readonly></textarea>
+				<textarea id="penalty-detail-reason" class="detail-textarea" readonly></textarea>
 			</div>
 
 			<div class="detail-item-file">
@@ -315,8 +287,8 @@
 	<div class="penalty-modal-content">
 		<h3>신규 제재 등록</h3>
 		<div style="margin-bottom: 1rem;">
-			<label>대상 신고 ID</label> <select type="text" id="modalMemId"
-				style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"></select>
+			<label>대상 신고 ID</label>
+			<select type="text" id="modalMemId" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"></select>
 		</div>
 		<div style="margin-bottom: 1rem;">
 			<label>제재 유형</label>
@@ -326,12 +298,14 @@
 			</div>
 		</div>
 		<div id="suspensionFields" style="display: none; margin-bottom: 1rem;">
-			<label>정지 기간</label> <input type="datetime-local" id="modalStartDate">
-			~ <input type="datetime-local" id="modalEndDate">
+			<label>정지 기간</label>
+			<input type="datetime-local" id="modalStartDate">
+			~
+			<input type="datetime-local" id="modalEndDate">
 		</div>
 		<div style="margin-bottom: 1rem;">
-			<label>제재 사유</label> <select id="modalReason"
-				style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+			<label>제재 사유</label>
+			<select id="modalReason" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
 				<option value="부적절한 게시물" selected>부적절한 게시물</option>
 				<option value="욕설 및 비방">욕설 및 비방</option>
 				<option value="혐오 및 차별적 표현">혐오 및 차별적 표현</option>
@@ -345,15 +319,12 @@
 			</select>
 		</div>
 		<div class="modal-form-group">
-			<label>증빙 자료</label> <input type="file" id="evidenceFile" multiple
-				style="display: none;">
-			<button type="button" class="file-attach-btn"
-				onclick="document.getElementById('evidenceFile').click();">파일
-				선택</button>
+			<label>증빙 자료</label>
+			<input type="file" id="evidenceFile" multiple style="display: none;">
+			<button type="button" class="file-attach-btn" onclick="document.getElementById('evidenceFile').click();">파일 선택</button>
 			<div id="file-list"></div>
 		</div>
-		<div
-			style="margin-top: auto; padding-top: 1rem; border-top: 1px solid #eee; text-align: right;">
+		<div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid #eee; text-align: right;">
 			<div>
 				<button id="confirmBtn" class="btn-save">확인</button>
 				<button id="cancelBtn" class="btn-save">취소</button>

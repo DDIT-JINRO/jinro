@@ -5,13 +5,15 @@
 	
 </script>
 <!-- 제목입니다 -->
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">대학 관리</h2>
-<body>
+<div class="flex">
+	<h2 class="topTitle">콘텐츠 관리</h2>
+	<div class="breadcrumb-item"></div>
+	<h2 class="topTitle">대학 관리</h2>
+</div>
+
 	<div class="admin-univMng-1" style="margin-bottom: 20px;">
 		<div class="template-panel admin-univMng-1-1">
-			<div class="middleTitle act-mng-category-header">
-				대학 리스트
-			</div>
+			<div class="middleTitle act-mng-category-header">대학 리스트</div>
 			<div class="filter-box">
 				<select name="status">
 					<option value="1">전체</option>
@@ -23,10 +25,7 @@
 			</div>
 			<div class="listUniv">
 				<div class="search-filter-bar">
-					<p class="ptag-list" style="margin-bottom: 10px">
-						총
-						<span id="univList-count"></span>
-						건
+					<p class="ptag-list" style="margin-bottom: 10px">총 <span id="univList-count"></span> 건
 					</p>
 
 				</div>
@@ -52,9 +51,7 @@
 		</div>
 
 		<div class="template-panel admin-univMng-1-2 ">
-			<div class="middleTitle act-mng-category-header">
-				대학 상세
-			</div>
+			<div class="middleTitle act-mng-category-header">대학 상세</div>
 			<div class="detail-item">
 				<span class="detail-label">대학 ID:</span>
 				<input id="univ-detail-univId" placeholder="자동 입력" readonly="readonly" />
@@ -92,20 +89,18 @@
 				<span class="detail-label">URL 주소:</span>
 				<input id="univ-detail-univUrl" placeholder="URL 주소:" />
 			</div>
-			<div class="flex"style="gap:10px;">
-				  <button id="univSave" class="btn btn-success">저장</button>
-				  <button id="univDel" class="btn btn-danger">삭제</button>
-				  <button id="univReset" class="btn btn-danger">초기화</button>
-				  <button id="univDepInsert" class="btn btn-secondary" >학과 추가</button>				  
+			<div class="flex" style="gap: 10px;">
+				<button id="univSave" class="btn btn-success">저장</button>
+				<button id="univDel" class="btn btn-danger">삭제</button>
+				<button id="univReset" class="btn btn-danger">초기화</button>
+				<button id="univDepInsert" class="btn btn-secondary">학과 추가</button>
 			</div>
 		</div>
 	</div>
 
-	<div class="admin-univMng-1" style="display:flex; gap: 20px; margin-bottom: 20px;">
+	<div class="admin-univMng-1" style="display: flex; gap: 20px; margin-bottom: 20px;">
 		<div class="template-panel admin-univMng-2">
-			<div class="middleTitle act-mng-category-header" >
-				해당 대학 학과정보
-			</div>
+			<div class="middleTitle act-mng-category-header">해당 대학 학과정보</div>
 			<table>
 				<thead>
 					<tr>
@@ -124,11 +119,9 @@
 				<div class="panel-footer pagination univDeptPage"></div>
 			</div>
 		</div>
-		<div class="template-panel admin-univMng-3" >
+		<div class="template-panel admin-univMng-3">
 			<div>
-				<div class="middleTitle act-mng-category-header">
-					학과 정보
-				</div>
+				<div class="middleTitle act-mng-category-header">학과 정보</div>
 				<div class="parent-flex" style="display: flex;">
 					<input id="univ-dept-detail-uddId" style="display: none;" placeholder="자동 입력" readonly="readonly" />
 					<div class="detail-item">
@@ -196,4 +189,3 @@
 			</div>
 		</div>
 	</div>
-</body>

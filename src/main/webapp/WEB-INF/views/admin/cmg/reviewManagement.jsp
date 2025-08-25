@@ -2,7 +2,11 @@
 <script src="/js/include/admin/cmg/reviewManagement.js"></script>
 <link rel="stylesheet" href="/css/admin/cmg/reviewManagement.css">
 <link rel="stylesheet" href="css/admin/umg/sanctionsDescription.css">
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">후기 관리</h2>
+<div class="flex">
+	<h2 class="topTitle">콘텐츠 관리</h2>
+	<div class="breadcrumb-item"></div>
+	<h2 class="topTitle">후기 관리</h2>
+</div>
 <body>
 	<div class="review-management-card-wrapper flex gap">
 		<div class="template-panel review-card review-card-left">

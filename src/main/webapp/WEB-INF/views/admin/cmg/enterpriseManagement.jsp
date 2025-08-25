@@ -3,7 +3,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="/js/include/admin/cmg/enterpriseManagement.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<h2 style="color: gray; font-size: 18px; margin: 0; line-height: 75px;">기업 관리</h2>
+<div class="flex">
+	<h2 class="topTitle">콘텐츠 관리</h2>
+	<div class="breadcrumb-item"></div>
+	<h2 class="topTitle">기업 관리</h2>
+</div>
 <body>
 	<div class="admin-EntMng-1" style="margin-bottom: 20px;">
 		<div class="template-panel admin-entMng-1-1">
@@ -19,10 +23,7 @@
 			</div>
 			<div class="listEnt">
 				<div class="search-filter-bar">
-					<p class="ptag-list" style="margin-bottom: 10px">
-						총
-						<span id="entList-count"></span>
-						건
+					<p class="ptag-list" style="margin-bottom: 10px">총 <span id="entList-count"></span> 건
 					</p>
 				</div>
 				<div class="listEntBody">
@@ -64,18 +65,9 @@
 							</div>
 
 							<div class="profile-info">
-								<p>
-									<strong>기업ID:</strong>
-									<span id="entId">-</span>
-								</p>
-								<p>
-									<strong>기업명:</strong>
-									<span id="entName2">커리어패스</span>
-								</p>
-								<p>
-									<strong>주소:</strong>
-									<span id="entAddress">대전광역시 유성구 대학로 91</span>
-								</p>
+								<p><strong>기업ID:</strong> <span id="entId">-</span></p>
+								<p><strong>기업명:</strong> <span id="entName2">커리어패스</span></p>
+								<p><strong>주소:</strong> <span id="entAddress">대전광역시 유성구 대학로 91</span></p>
 							</div>
 
 
@@ -182,14 +174,10 @@
 				</div>
 				<div class="flex" style="flex-direction: row-reverse; gap: 20px;">
 					<div class="form-actions">
-						<button type="button" id="btnRegister" class="btn-primary">
-							저장
-						</button>
+						<button type="button" id="btnRegister" class="btn-primary">저장</button>
 					</div>
 					<div class="form-actions">
-						<button type="button" id="btnReset" class="btn-warning">
-							초기화
-						</button>
+						<button type="button" id="btnReset" class="btn-warning">초기화</button>
 					</div>
 				</div>
 			</div>
