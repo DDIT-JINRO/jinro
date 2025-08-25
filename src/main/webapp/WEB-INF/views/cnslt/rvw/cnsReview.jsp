@@ -137,7 +137,7 @@
 									</c:if>
 								</div>
 								<div class="accordion-list__col accordion-list__col--date">
-									<fmt:formatDate value="${content.crCreatedAt}" pattern="yyyy.MM.dd" />
+									<fmt:formatDate value="${content.crCreatedAt}" pattern="yyyy. M. d." />
 								</div>
 								<div class="accordion-list__col accordion-list__col--rating">
 									<span class="rating__stars">
