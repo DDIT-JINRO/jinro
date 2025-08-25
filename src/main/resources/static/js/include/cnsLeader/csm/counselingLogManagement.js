@@ -77,7 +77,7 @@ function formatDateMMDD(iso) {
 	const mm = String(d.getMonth() + 1).padStart(2, '0');
 	const dd = String(d.getDate()).padStart(2, '0');
 	const fullYear = String(d.getFullYear());
-	return `${fullYear}. ${mm}. ${dd}`;
+	return `${fullYear}. ${mm}. ${dd}.`;
 }
 
 // 결재상태 코드를 출력할 문자열로 변경

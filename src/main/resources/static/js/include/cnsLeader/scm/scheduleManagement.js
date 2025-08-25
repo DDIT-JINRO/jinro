@@ -214,7 +214,7 @@ var calendarInstance = null; // 전역 변수로 선언
 
 					let rows = schedules.map((item, idx) => {
 						const counselReqDate = new Date(item.counselReqDatetime);
-						const formattedDate = `${counselReqDate.getFullYear()}-${(counselReqDate.getMonth() + 1).toString().padStart(2, '0')}-${counselReqDate.getDate().toString().padStart(2, '0')} ${counselReqDate.getHours().toString().padStart(2, '0')}:${counselReqDate.getMinutes().toString().padStart(2, '0')}`;
+						const formattedDate = `${counselReqDate.getFullYear()}. ${(counselReqDate.getMonth() + 1).toString().padStart(2, '0')}. ${counselReqDate.getDate().toString().padStart(2, '0')}. ${counselReqDate.getHours().toString().padStart(2, '0')}:${counselReqDate.getMinutes().toString().padStart(2, '0')}`;
 
 
 						return `
@@ -294,7 +294,7 @@ function counselDetail(counselId) {
 
 			const counselDate = new Date(data.counselReqDatetime);
 			document.querySelector('.info-value-counselReqDate').textContent =
-				`${counselDate.getFullYear()}. ${(counselDate.getMonth() + 1).toString().padStart(2, '0')}. ${counselDate.getDate().toString().padStart(2, '0')}`;
+				`${counselDate.getFullYear()}. ${(counselDate.getMonth() + 1).toString().padStart(2, '0')}. ${counselDate.getDate().toString().padStart(2, '0')}.`;
 
 			document.querySelector('.info-value-counselReqtime').textContent =
 				`${counselDate.getHours().toString().padStart(2, '0')}:${counselDate.getMinutes().toString().padStart(2, '0')}`;
