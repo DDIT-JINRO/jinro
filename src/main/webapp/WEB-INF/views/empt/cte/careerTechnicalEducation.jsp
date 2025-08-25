@@ -20,10 +20,27 @@
 		</div>
 	</div>
 </section>
+<div class="breadcrumb-container-space" data-error-message="${errorMessage}">
+	<nav class="breadcrumb-container" aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="/">
+					<i class="fa-solid fa-house"></i> 홈
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="/empt/ema/employmentAdvertisement.do">취업 정보</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<a href="/empt/cte/careerTechnicalEducation.do">직업교육</a>
+			</li>
+		</ol>
+	</nav>
+</div>
 <div>
 	<div class="public-wrapper">
 		<div class="tab-container" id="tabs">
-			<h3 class="page-title-bar__title">직업교육</h3>
+			<a class="tab active" href="/empt/cte/careerTechnicalEducation.do">직업교육</a>
 		</div>
 
 		<div class="public-wrapper-main">
@@ -193,13 +210,29 @@
 							<div class="accordion-list__content-body">
 								<div class="education-detail-section">
 									<h4>교육 상세 정보</h4>
-									<p><strong>교육명:</strong>&nbsp; ${data.jtName}</p>
-									<p><strong>교육기관:</strong>&nbsp; ${data.jtSchool}</p>
-									<p><strong>정원:</strong>&nbsp; ${data.jtQuota}명</p>
-									<p><strong>교육 대상:</strong>&nbsp; ${data.jtTarget}</p>
-									<p><strong>교육 평점:</strong>&nbsp; ${data.jtScore}점</p>
-									<p><strong>훈련비:</strong>&nbsp; <fmt:formatNumber value="${data.jtFee}" type="currency" currencySymbol="" groupingUsed="true" /> 원</p>
-									<p><strong>교육기관 주소:</strong>&nbsp; ${data.jtAddress}</p>
+									<p>
+										<strong>교육명:</strong>&nbsp; ${data.jtName}
+									</p>
+									<p>
+										<strong>교육기관:</strong>&nbsp; ${data.jtSchool}
+									</p>
+									<p>
+										<strong>정원:</strong>&nbsp; ${data.jtQuota}명
+									</p>
+									<p>
+										<strong>교육 대상:</strong>&nbsp; ${data.jtTarget}
+									</p>
+									<p>
+										<strong>교육 평점:</strong>&nbsp; ${data.jtScore}점
+									</p>
+									<p>
+										<strong>훈련비:</strong>&nbsp;
+										<fmt:formatNumber value="${data.jtFee}" type="currency" currencySymbol="" groupingUsed="true" />
+										원
+									</p>
+									<p>
+										<strong>교육기관 주소:</strong>&nbsp; ${data.jtAddress}
+									</p>
 								</div>
 
 								<div class="education-url-section">

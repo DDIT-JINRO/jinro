@@ -75,8 +75,8 @@
 							<input class="inputWt2" type="text" id="name" readonly="readonly" name="memName" placeholder="전화번호 인증을 해주세요." />
 						</div>
 						<p id="nameError"></p>
-						<input class="inputWt2" type="text" id="birth" readonly="readonly" name="memBirth" />
-						<input class="inputWt2" type="text" id="gen" readonly="readonly" name="memGen"/>
+						<input class="inputWt2" type="hidden" id="birth" readonly="readonly" name="memBirth" />
+						<input class="inputWt2" type="hidden" id="gen" readonly="readonly" name="memGen"/>
 						<!-- 						<div class="input-gen"> -->
 						<!-- 							<div class="gender-wt">성별</div> -->
 						<!-- 							<div class="gender-row"> -->

@@ -2,6 +2,25 @@
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/common/selectDetailPage.css">
 <link rel="stylesheet" href="/css/ertds/hgschl/HighSchoolDetail.css">
+<section class="channel">
+	<!-- 	여기가 네비게이션 역할을 합니다.  -->
+	<div class="channel-title">
+		<!-- 대분류 -->
+		<div class="channel-title-text">진학 정보</div>
+	</div>
+	<!-- 중분류 -->
+	<div class="channel-sub-sections">
+		<div class="channel-sub-section-item">
+			<a href="/ertds/univ/uvsrch/selectUnivList.do">대학교 정보</a>
+		</div>
+		<div class="channel-sub-section-itemIn">
+			<a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/ertds/qlfexm/selectQlfexmList.do">검정고시</a>
+		</div>
+	</div>
+</section>
 <div class="breadcrumb-container-space">
 	<nav class="breadcrumb-container" aria-label="breadcrumb">
 		<ol class="breadcrumb">
@@ -11,7 +30,7 @@
 				</a>
 			</li>
 			<li class="breadcrumb-item">
-				<a href="/ertds/univ/uvsrch/selectUnivList.do">진학정보</a>
+				<a href="/ertds/univ/uvsrch/selectUnivList.do">진학 정보</a>
 			</li>
 			<li class="breadcrumb-item active">
 				<a href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a>
@@ -21,6 +40,9 @@
 </div>
 <div>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<a class="tab active" href="/ertds/hgschl/selectHgschList.do">고등학교 정보</a>
+		</div>
 		<div class="public-wrapper-main">
 			<span class="detail-header__meta-item detail-header__meta-item--source">[ 출처 : 나이스 교육정보 개방 포털(NEIS) ]</span>
 			<div class="detail-page" id="highSchoolDetailContainer" data-hs-name="${highSchool.hsName}" data-hs-addr="${highSchool.hsAddr}" data-hs-tel="${highSchool.hsTel}" data-hs-lat="${empty highSchool.hsLat ? 0 : highSchool.hsLat}" data-hs-lot="${empty highSchool.hsLot ? 0 : highSchool.hsLot}">

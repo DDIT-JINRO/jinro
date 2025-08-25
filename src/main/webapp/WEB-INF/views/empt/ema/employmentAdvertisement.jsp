@@ -1,6 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
 <link rel="stylesheet" href="/css/empt/ema/employmentAdvertisement.css">
+<section class="channel">
+	<div class="channel-title">
+		<div class="channel-title-text">취업 정보</div>
+	</div>
+	<div class="channel-sub-sections">
+		<div class="channel-sub-section-itemIn">
+			<a href="/empt/ema/employmentAdvertisement.do">채용공고</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/empt/enp/enterprisePosting.do">기업정보</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/empt/ivfb/interViewFeedback.do">면접후기</a>
+		</div>
+		<div class="channel-sub-section-item">
+			<a href="/empt/cte/careerTechnicalEducation.do">직업교육</a>
+		</div>
+	</div>
+</section>
 <div class="breadcrumb-container-space">
 	<nav class="breadcrumb-container" aria-label="breadcrumb">
 		<ol class="breadcrumb">
@@ -10,7 +29,7 @@
 				</a>
 			</li>
 			<li class="breadcrumb-item">
-				<a href="/empt/ema/employmentAdvertisement.do">취업정보</a>
+				<a href="/empt/ema/employmentAdvertisement.do">취업 정보</a>
 			</li>
 			<li class="breadcrumb-item active">
 				<a href="/empt/ema/employmentAdvertisement.do">채용공고</a>
@@ -20,6 +39,9 @@
 </div>
 <div>
 	<div class="public-wrapper">
+		<div class="tab-container" id="tabs">
+			<a class="tab active" href="/empt/ema/employmentAdvertisement.do">채용공고</a>
+		</div>
 		<div class="public-wrapper-main">
 			<form method="get" action="/empt/ema/employmentAdvertisement.do" class="search-filter__form">
 				<div class="search-filter__bar">
