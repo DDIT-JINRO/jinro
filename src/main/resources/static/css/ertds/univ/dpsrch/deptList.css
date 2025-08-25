@@ -25,18 +25,22 @@
 
 .content-list__col--field {
 	flex: 0.8;
+	justify-content: flex-start;
 }
 
 .content-list__col--admission {
 	flex: 0.8;
+    justify-content: right;
 }
 
 .content-list__col--employment {
 	flex: 0.8;
+    justify-content: right;
 }
 
 .content-list__col--salary {
 	flex: 0.8;
+    justify-content: right;
 }
 
 .content-list__col--bookmark {

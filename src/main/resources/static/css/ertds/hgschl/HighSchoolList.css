@@ -33,10 +33,12 @@
 
 .content-list__col--coed {
 	flex: 1;
+	justify-content: left;
 }
 
 .content-list__col--type {
 	flex: 1;
+	justify-content: left;
 }
 
 .content-list__col--found {
@@ -45,6 +47,7 @@
 
 .content-list__col--region {
 	flex: 1.2;
+	justify-content: left;
 }
 
 /* ==========================================================================
