@@ -63,7 +63,7 @@ public class FaqServiceImpl implements FaqService{
 		// 건수
 		int total = faqMapper.getAllFaq(map);
 		// 페이지 네이션
-		ArticlePage<FaqVO> articlePage = new ArticlePage<FaqVO>(total, currentPage, size, list, keyword);
+		ArticlePage<FaqVO> articlePage = new ArticlePage<FaqVO>(total, currentPage, size, list, keyword,10);
 		articlePage.setUrl("/csc/admin/faqList.do");
 		return articlePage;
 	}

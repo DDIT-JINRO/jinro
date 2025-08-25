@@ -89,7 +89,7 @@ public class CounselManagementServiceImpl implements CounselManagementService {
 		int total = counselManagementMapper.selectCounselorStatTotalCount(map);
 		List<Map<String, Object>> counselorStatList = counselManagementMapper.selectCounselorStatList(map);
 		
-		ArticlePage<Map<String, Object>> articlePage = new ArticlePage<>(total, currentPage, size, counselorStatList, keyword);
+		ArticlePage<Map<String, Object>> articlePage = new ArticlePage<>(total, currentPage, size, counselorStatList, keyword,10);
 		
 		return articlePage;
 	}
@@ -119,7 +119,7 @@ public class CounselManagementServiceImpl implements CounselManagementService {
 		int total = counselManagementMapper.selectCounselingListTotalCount(map);
 		List<Map<String, Object>> counselingList = counselManagementMapper.selectCounselingList(map);
 		
-		ArticlePage<Map<String, Object>> articlePage = new ArticlePage<>(total, currentPage, size, counselingList, null);
+		ArticlePage<Map<String, Object>> articlePage = new ArticlePage<>(total, currentPage, size, counselingList, null,10);
 		
 		return articlePage;
 	}

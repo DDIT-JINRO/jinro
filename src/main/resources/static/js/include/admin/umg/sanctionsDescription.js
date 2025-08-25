@@ -101,6 +101,7 @@ function sanctionsDescription() {
 			const config = {
 				type: 'doughnut',
 				data: data,
+				plugins: [ChartDataLabels],
 				options: {
 					responsive: true,
 					layout: {
@@ -126,6 +127,16 @@ function sanctionsDescription() {
 									return label;
 								}
 							}
+						},
+						datalabels: {
+							formatter: (value, ctx) => {
+								const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+								const pct = (value / sum * 100).toFixed(0) ;
+
+								return pct+'%';
+							},
+							color: '#fff',
+							font: { weight: 'bold' }
 						}
 					}
 				}

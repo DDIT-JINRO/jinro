@@ -2,6 +2,15 @@ let doughnutChart = null;
 
 document.addEventListener('DOMContentLoaded', function() {
 
+	/************************ PNG 다운로드 *******************************/
+	let monthPng = document.getElementById("monthPng");
+	function downloadCanvas(chart, filename, mime='image/png') {
+	  const link = document.createElement('a');
+	  link.href = chart.toBase64Image(mime); // Chart.js 내장
+	  link.download = filename;
+	  link.click();
+	}
+
 	/************************ 월별 사용자 통계 및 카드 데이터 *******************************/
 	axios.get('/admin/chart/getAdminDashboard.do').then(res => {
 		const chartData = res.data;
@@ -48,8 +57,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		const secessionUsersData = chartData.secessionChart.map(item => item.MONTHLY_DELETION_COUNT);
 		const monthLabels = chartData.monthlyChart.map(item => item.MONTH + '월');
 		const ctxUser = document.getElementById('lineChart');
+		
 		if (ctxUser) {
-			new Chart(ctxUser, {
+			 newChart = new Chart(ctxUser, {
 				type: 'line',
 				data: {
 					labels: monthLabels,
@@ -115,7 +125,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 		}
 	});
-
+	document.getElementById('monthPng').onclick = () =>{
+	    downloadCanvas(newChart, '월별이용자통계.png', 'image/png');
+	}
 	/********************* 결제/구독 통계 *******************************/
 	axios.get('/admin/las/payment/monthly-users').then(res => {
 		const responseData = res.data;
@@ -124,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const subscriberData = responseData.map(item => item.subscribers);
 		const ctxPayment = document.getElementById('revenueChart')?.getContext('2d');
 		if (ctxPayment) {
-			new Chart(ctxPayment, {
+			newMoneyChart= new Chart(ctxPayment, {
 				type: 'line',
 				data: {
 					labels: labels,
@@ -174,11 +186,12 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 		}
 	});
-
+	document.getElementById('moneyPng').onclick = () =>{
+	    downloadCanvas(newMoneyChart, '결제/구독 통계.png', 'image/png');
+	}
 	/********************* 컨텐츠 이용 통계 (도넛) *******************************/
 	const youthBtn = document.getElementById('youthBtn');
 	const teenBtn = document.getElementById('teenBtn');
-
 	function updateDoughnutChart(param) {
 		const ctxDoughnut = document.getElementById('nestedDoughnutChart');
 		if (!ctxDoughnut) return;
@@ -210,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						hoverOffset: 20
 					}]
 				},
+				plugins: [ChartDataLabels],
 				options: {
 					responsive: true,
 					maintainAspectRatio: false,
@@ -220,6 +234,18 @@ document.addEventListener('DOMContentLoaded', function() {
 							display: true,
 							position: 'bottom',
 							labels: { color: '#555', padding: 25, font: { size: 14 } }
+						}, 
+						datalabels: {
+							formatter: (value, ctx) => {
+								const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+								const pct = (value / sum * 100).toFixed(0) ;
+								if(pct <3){
+									return null;
+								}
+								return pct+'%';
+							},
+							color: '#fff',
+							font: { weight: 'bold' }
 						}
 					}
 				}
@@ -275,7 +301,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		setActiveButton(this);
 	});
 
-
+	document.getElementById('contentBtn').onclick = () =>{
+	    downloadCanvas(newMoneyChart, '컨텐츠 이용 통계.png', 'image/png');
+	}
 
 });
 

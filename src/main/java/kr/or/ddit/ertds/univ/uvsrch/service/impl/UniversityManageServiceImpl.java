@@ -26,7 +26,7 @@ public class UniversityManageServiceImpl implements UniversityManageService {
 	    int total = universityMapper.selectUniversityTotalCount(universityVO);
 	    
 	    return new ArticlePage<UniversityVO>(total, universityVO.getCurrentPage(), universityVO.getSize(), universityList,
-	            universityVO.getKeyword());
+	            universityVO.getKeyword(),10);
 	}
 
 	@Override

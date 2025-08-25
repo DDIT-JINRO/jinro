@@ -119,7 +119,7 @@ public class ContentsManagementController {
 		List<ComCodeVO> contestTargetList = contestService.getContestTargetList();
 		List<ComCodeVO> contestTypeList = contestService.getContestTypeList();
 		
-		ArticlePage<ActivityVO> articlePage = new ArticlePage<>(total, currentPage, 6, activityList, keyword);
+		ArticlePage<ActivityVO> articlePage = new ArticlePage<>(total, currentPage, 6, activityList, keyword,10);
 		response.put("success", true);
 		response.put("contestTargetList", contestTargetList);
 		response.put("articlePage", articlePage);
@@ -183,7 +183,7 @@ public class ContentsManagementController {
 		int total = contestService.selectCttCount(contestVO);
 		List<ComCodeVO> contestTypeList = contestService.getContestTypeList();
 		List<ComCodeVO> contestTargetList = contestService.getContestTargetList();
-		ArticlePage<ContestVO> articlePage = new ArticlePage<>(total, currentPage, size, contestList, keyword);
+		ArticlePage<ContestVO> articlePage = new ArticlePage<>(total, currentPage, size, contestList, keyword,10);
 
 		response.put("success", true);
 		response.put("contestTypeList", contestTypeList);

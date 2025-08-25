@@ -106,6 +106,27 @@ to {
 	font-size: 14px;
 	margin: 0;
 	font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+}
+
+.middleTitleBtn {
+	min-width: 45.77px;
+	height: 30px;
+	font-size: 12px;
+	font-weight: bold;
+	border: none;
+	border-radius: 2px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	padding: 7px 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: fit-content;
+	line-height: 1;
+	color: white;
+	background-color: #727cf5;
 }
 
 .filter-box {

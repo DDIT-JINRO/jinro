@@ -33,7 +33,7 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 		int total = contentsManagementMapper.getAllEntList(companyVO);
 
 		return new ArticlePage<CompanyVO>(total, companyVO.getCurrentPage(), companyVO.getSize(), companyList,
-				companyVO.getKeyword());
+				companyVO.getKeyword(),10);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class ContentsManagementServiceImpl implements ContentsManagementService 
 		
 		int total = contentsManagementMapper.selectReviewListTotal(interviewReviewVO);
 		
-		ArticlePage<InterviewReviewVO> articlePage = new ArticlePage<>(total, interviewReviewVO.getCurrentPage(), interviewReviewVO.getSize(), interviewReviewList, interviewReviewVO.getKeyword());
+		ArticlePage<InterviewReviewVO> articlePage = new ArticlePage<>(total, interviewReviewVO.getCurrentPage(), interviewReviewVO.getSize(), interviewReviewList, interviewReviewVO.getKeyword(),10);
 		
 		return articlePage;
 	}

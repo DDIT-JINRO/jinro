@@ -81,7 +81,7 @@ public class NoticeServiceImpl implements NoticeService {
 		// 건수
 		int total = noticeMapper.getAllNotice(map);
 		// 페이지 네이션
-		ArticlePage<NoticeVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword);
+		ArticlePage<NoticeVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword,10);
 		articlePage.setUrl("/csc/admin/noticeList.do");
 		return articlePage;
 	}

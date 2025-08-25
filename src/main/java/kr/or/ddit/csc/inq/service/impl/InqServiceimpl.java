@@ -86,7 +86,7 @@ public class InqServiceimpl implements InqService {
 		// 건수
 		int total = inqMapper.getAllInq(map);
 		// 페이지 네이션
-		ArticlePage<InqVO> articlePage = new ArticlePage<InqVO>(total, currentPage, size, list, keyword);
+		ArticlePage<InqVO> articlePage = new ArticlePage<InqVO>(total, currentPage, size, list, keyword,10);
 		articlePage.setUrl("/csc/admin/faqList.do");
 		return articlePage;
 	}

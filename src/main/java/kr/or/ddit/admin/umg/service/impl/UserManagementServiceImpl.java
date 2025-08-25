@@ -60,8 +60,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		// 건수
 		int total = userManagementMapper.getAlluserList(map);
 		// 페이지 네이션
-		ArticlePage<MemberVO> articlePage = new ArticlePage<MemberVO>(total, currentPage, size, list, keyword);
-
+		ArticlePage<MemberVO> articlePage = new ArticlePage<MemberVO>(total, currentPage, size, list, keyword,10);
 		return articlePage;
 	}
 
@@ -197,7 +196,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		// 건수
 		int total = userManagementMapper.getAllReportList(map);
 //		// 페이지 네이션
-		ArticlePage<ReportVO> articlePage = new ArticlePage<ReportVO>(total, currentPage, size, list, keyword);
+		ArticlePage<ReportVO> articlePage = new ArticlePage<ReportVO>(total, currentPage, size, list, keyword,10);
 
 		return articlePage;
 	}
@@ -247,7 +246,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	    int total = userManagementMapper.getAllMemberPenaltyList(map);
 	    // 페이지 네이션
 	    ArticlePage<MemberPenaltyVO> articlePage = new ArticlePage<MemberPenaltyVO>(total, currentPage, size,
-	            penaltyVOList, keyword);
+	            penaltyVOList, keyword,10);
 
 	    return articlePage;
 	}
@@ -429,9 +428,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 		List<MemberVO> list = userManagementMapper.getMemberActivityList(map);
 		int total = userManagementMapper.getAllMemberActivityList(map);
-
-		ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword);
-
+		log.info(size+"");
+		ArticlePage<MemberVO> articlePage = new ArticlePage<>(total, currentPage, size, list, keyword,10);
+		log.info(articlePage.getContent()+"");
 		return articlePage;
 	}
 
@@ -453,7 +452,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		List<CommBoardVO> list = userManagementMapper.getMemberDetailBoardList(map);
 		int total = userManagementMapper.selectBoardCountByMemId(map);
 
-		ArticlePage<CommBoardVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
+		ArticlePage<CommBoardVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "",10);
 
 		return articlePage;
 	}
@@ -476,7 +475,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		List<CommReplyVO> list = userManagementMapper.getMemberDetailReplyList(map);
 		int total = userManagementMapper.selectReplyCountByMemId(map);
 
-		ArticlePage<CommReplyVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "");
+		ArticlePage<CommReplyVO> articlePage = new ArticlePage<>(total, currentPage, size, list, "",10);
 
 		return articlePage;
 	}
@@ -499,7 +498,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 		List<PageLogVO> list = userManagementMapper.getMemberPageLogList(map);
 		int total = userManagementMapper.getAllMemberPageLogList(map);
 
-		return new ArticlePage<>(total, currentPage, size, list, keyword);
+		return new ArticlePage<>(total, currentPage, size, list, keyword,10);
 
 	}
 
