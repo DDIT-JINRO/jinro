@@ -289,6 +289,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		renderCompanies();
 		updatePagination();
 	}
+	
+	// 선택된 기업을 입력 필드에 설정하고 모달 닫기
+	function selectCompanyAndClose(company) {
+		companyNameInput.value = company.cpName;
+		companyNameInput.dataset.cpId = company.cpId;
+		closeModal();
+	}
 
 	// 기업 목록 렌더링
 	function renderCompanies() {
@@ -319,6 +326,14 @@ document.addEventListener('DOMContentLoaded', function() {
 					cpName: this.dataset.companyName
 				};
 				confirmBtn.disabled = false;
+			});
+			
+			item.addEventListener('dblclick', function() {
+				const company = {
+					cpId: this.dataset.companyId,
+					cpName: this.dataset.companyName
+				};
+				selectCompanyAndClose(company);
 			});
 		});
 	}
