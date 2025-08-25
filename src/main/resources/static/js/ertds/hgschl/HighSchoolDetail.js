@@ -260,7 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		const img = document.createElement('img');
 		img.setAttribute('crossorigin', 'anonymous'); // 동일 출처라 상관없지만 안전하게
 		img.style.cssText = 'width:100%;height:350px;object-fit:cover;border:1px solid #dee2e6;border-radius:8px;';
-		img.src = `/ertds/hgschl/static-map?lat=${lat}&lon=${lon}&w=800&h=350&level=3&label=${encodeURIComponent(shortLabel)}`;
+		img.src = `/ertds/hgschl/static-map?lat=${lat}&lon=${lon}&w=800&h=350&level=3`;
+
 
 		mapEl.replaceWith(img);
 		return { backup, placeholder: img };
@@ -296,9 +297,11 @@ document.addEventListener('DOMContentLoaded', () => {
 				logging: false,
 				backgroundColor: '#ffffff',
 				scrollX: 0,
-				scrollY: 0
+				scrollY: 0,
+				width: root.scrollWidth,
+				height: root.scrollHeight
 			},
-			jsPDF: { unit: 'mm', format: [220, 600], orientation: 'portrait' },
+			jsPDF: { unit: 'mm', format: [300, 400], orientation: 'portrait' },
 			pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
 		};
 	}
@@ -327,9 +330,11 @@ document.addEventListener('DOMContentLoaded', () => {
 				logging: false,
 				// 스크롤 오프셋 제거 (큰 상단 여백 방지)
 				scrollX: 0,
-				scrollY: 0
+				scrollY: 0,
+				width: root.scrollWidth,
+				height: root.scrollHeight
 			},
-			jsPDF: { unit: 'mm', format: [220, 600], orientation: 'portrait' },
+			jsPDF: { unit: 'mm', format: [300, 400], orientation: 'portrait' },
 			pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
 		};
 		const worker = html2pdf().set(opt).from(root).toPdf();
