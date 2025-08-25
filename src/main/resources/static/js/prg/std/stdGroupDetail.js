@@ -408,6 +408,18 @@ function closeReplyBtn(e){
 function submitCreateReply(e){
 	e.preventDefault();
 	if(!e.target.classList.contains('comment-form')) return false;
+	
+	if (!memId || memId === 'anonymousUser') {
+	    alert('로그인이 필요합니다.');
+	    
+	    const replyTextarea = document.querySelector("textarea[name='replyContent']");
+	    if(replyTextarea) {
+	        replyTextarea.value = "";
+	    }
+	    
+	    return;
+	}
+	
 	const formData = new FormData(e.target);
 	fetch(e.target.action,{
 		method : "POST",
