@@ -5,22 +5,18 @@
 let isEmailVerified = false;
 let isNicknameValid = false;
 let isPasswordValid = false;
-let isNameValid = false;
+/*let isNameValid = false;*/
 let isReqCheck = false;
-let isInfoCheck = false;
-// 	let isPhoneValid = false;
+let isPhoneValid = false;
+let isInfoReqCheck = false;
 
-
+const joinBtn = document.getElementById('joinBtn');
 const phoneAccessBtn = document.getElementById('phoneAccess');
-const submitBtn = document.querySelector(".btn-signup");
 
+const submitBtn = document.getElementById('joinBtn');
 
 phoneAccessBtn.addEventListener('click', function() {
-	axios.post('/join/identityCheck.do').then(res => {
-
-	})
-
-	/*phoneAccess();*/
+	phoneAccess();
 })
 
 
@@ -41,31 +37,61 @@ function phoneAccess() {
 		function(rsp) {
 			// callback
 			if (rsp.success) {
-				console.log('인증 성공', rsp.imp_uid);
 				axios.post('/join/identityCheck.do', {
 
 					imp_uid: rsp.imp_uid
 
+				}).then(res => {
+					console.log(res.data);
+					const data = res.data.data;
+					const userName = document.getElementById('name');
+					const userPhone = document.getElementById('phone');
+					const userBirth = document.getElementById('birth');
+					const userGen = document.getElementById('gen');
+
+					userName.value = data.name;
+					userPhone.value = data.phone;
+					userBirth.value = data.birthday;
+					userGen.value = convertGenderToCode(data.gender);
+					isPhoneValid = true;
+
 				})
 
 			} else {
-				// 인증 실패 시 로직
-				console.log('인증 실패', rsp);
+				showConfirm2('본인인증에 실패하였습니다.',
+					() => {
+						return;
+					},
+					() => {
+
+					}
+				);
+				return;
 			}
 		},
 	);
 }
 
+function convertGenderToCode(gender) {
+
+	const lowerCaseGender = gender.toLowerCase();
+	if (lowerCaseGender === 'male') {
+		return 'G11001';
+	} else if (lowerCaseGender === 'female') {
+		return 'G11002';
+	} else {
+		return null;
+	}
+}
 function updateSubmitButtonState() {
 
-	console.log(isEmailVerified);
-	console.log(isNicknameValid);
-	console.log(isPasswordValid);
-	console.log(isNameValid);
-	console.log(isReqCheck);
-	console.log(isInfoCheck);
+	console.log("이메일", isEmailVerified);
+	console.log("닉네임", isNicknameValid);
+	console.log("비밀번호", isPasswordValid);
+	console.log("이용약관", isReqCheck);
+	console.log("전화번호", isPhoneValid);
 
-	const allValid = isEmailVerified && isNicknameValid && isPasswordValid && isNameValid && isReqCheck && isInfoCheck;
+	const allValid = isEmailVerified && isNicknameValid && isPasswordValid && isReqCheck && isPhoneValid && isInfoReqCheck;
 
 	submitBtn.disabled = !allValid;
 
@@ -80,14 +106,14 @@ chkTerms.addEventListener("change", () => {
 });
 
 chkPrivacy.addEventListener("change", () => {
-	isInfoCheck = chkPrivacy.checked;
+	isInfoReqCheck = chkPrivacy.checked;
 	updateSubmitButtonState();
 });
 
 const nameInput = document.getElementById("name");
 const nameError = document.getElementById("nameError");
 
-nameInput.addEventListener("input", () => {
+/*nameInput.addEventListener("input", () => {
 	const name = nameInput.value.trim();
 	const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
 
@@ -105,7 +131,7 @@ nameInput.addEventListener("input", () => {
 		isNameValid = true;
 	}
 	updateSubmitButtonState();
-});
+});*/
 
 
 const passwordInput = document.getElementById("password");
@@ -311,11 +337,12 @@ nicknameCheck.addEventListener("click", () => {
 				nicknameError.className = "nickname-message success";
 				nicknameError.textContent = "사용 가능한 닉네임입니다.";
 				isNicknameValid = true;
-
 			}
 		})
 		.catch(err => {
 			console.error(err);
 			nicknameError.textContent = "닉네임 중복 확인 중 오류 발생";
 		});
+
+
 });
