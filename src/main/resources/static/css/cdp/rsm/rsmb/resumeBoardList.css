@@ -14,7 +14,10 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	width: 100%;}
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
 
 /* --- 헤더 컬럼 스타일 --- */
 .content-list__header-col {
