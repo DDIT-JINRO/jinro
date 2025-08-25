@@ -42,8 +42,26 @@ document.addEventListener("DOMContentLoaded", function () {
 				}
 			});
 			if (response.status === 200) {
-				alert("등록 성공");
-				window.location.href = "/comm/peer/teen/teenList.do";
+				console.log("response : ", response);
+				
+				const {ccId, success} = response.data;
+				
+				if(success) {
+					alert("등록 성공");
+					switch (ccId) {
+						case "G09001":
+							window.location.href = "/comm/peer/teen/teenList.do";
+							break;
+						case "G09002":
+							window.location.href = "/comm/path/pathList.do";
+							break;
+						case "G09006":
+							window.location.href = "/comm/peer/youth/youthList.do";
+							break;
+					}
+							
+				}
+				
 			}
 		} catch (error) {
 			console.error("등록 중 오류:", error);
