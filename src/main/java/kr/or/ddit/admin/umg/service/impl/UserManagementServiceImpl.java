@@ -503,4 +503,13 @@ public class UserManagementServiceImpl implements UserManagementService {
 
 	}
 
+	// 사용자별 로그인 기록 가져오기
+	@Override
+	public List<Map<String, Object>> getUserLoginChart(String selectUserInquiry, String startDate, String endDate,
+	        String memId) {
+
+	    // Mapper에서 selectList() 호출
+	    return userManagementMapper.getUserLoginChart(selectUserInquiry, startDate, endDate, memId);
+	}
+
 }

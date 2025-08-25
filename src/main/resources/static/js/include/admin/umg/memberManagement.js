@@ -329,7 +329,7 @@ function memberManagement() {
 	function fetchUserList(page = 1, sortBy = 'id', sortOrder = 'asc', inFilter = '') {
 		currentPage = page;
 
-		const pageSize = 5;
+		const pageSize = 10;
 		const keyword = document.querySelector('input[name="keyword"]').value;
 		const status = document.querySelector('select[name="status"]').value;
 		// fetchUserList 함수 내에서 userListStatus의 최신 값을 가져오도록 수정
@@ -531,7 +531,7 @@ function memberManagement() {
 		userDetailReplyList(id, 1, 'replyId', 'asc');
 	});
 
-
+	let currentMemId = null;
 	function userDetail(formData) {
 		axios.post('/admin/umg/getMemberDetail.do', formData)
 			.then(res => {
@@ -550,7 +550,7 @@ function memberManagement() {
 					recentLoginDate,
 					recentPenaltyDate
 				} = res.data;
-
+				currentMemId = memberDetail.memId;
 				const profileImgEl = document.getElementById('member-profile-img');
 				profileImgEl.src = filePath ? filePath : '/images/defaultProfileImg.png';
 				document.getElementById('mem-id').value = memberDetail.memId || '-';
@@ -592,12 +592,148 @@ function memberManagement() {
 					recentPenaltyDateEl.innerHTML = `<i class="fa-regular fa-clock"></i>&nbsp;` + (recentPenaltyDate ? formatDateMMDD(recentPenaltyDate) : '-');
 				}
 
+				// 차트 추가
+				user1OnlineChartCanvasSpace(currentMemId);
 			})
 			.catch(error => {
 				console.error('회원 정보 불러오기 실패', error);
 			});
 	}
+	
+	document.getElementById("user1OnlineChartDay").addEventListener("change", (e) => {    
+	    const selectEl = e.target;
+	    const dateValue = selectEl.value;
+	    
+	    if (dateValue == 'selectDays') {
+	        const hiddenInput1O = document.getElementById('user1OnlineChartStartDay'); 
+	        
+	        if (hiddenInput1O._flatpickr) {
+	            hiddenInput1O._flatpickr.destroy();
+	        }
 
+			flatpickr(hiddenInput1O, {
+			    mode: "range",
+			    maxDate: "today",
+			    disable: [date => date > new Date()],
+			    positionElement: selectEl,
+			    altInput: false, // 이 부분을 명시
+			    onChange: function(selectedDates) {
+			        if (selectedDates.length === 2) {
+			            const formattedStartDate = formatDateCal(selectedDates[0]);
+			            const formattedEndDate = formatDateCal(selectedDates[1]);
+
+			            document.getElementById('user1OnlineChartStartDay').value = formattedStartDate;
+			            document.getElementById('user1OnlineChartEndDay').value = formattedEndDate;
+			            
+			            user1OnlineChartCanvasSpace(currentMemId);
+			        }
+			    }
+			});
+
+	        hiddenInput1O._flatpickr.open();
+	        hiddenInput1O._flatpickr.clear();
+	    } else {
+	        // '일별' 또는 '월별' 옵션이 선택되었을 때 차트 함수 호출
+	        user1OnlineChartCanvasSpace(currentMemId, dateValue);
+	    }
+	});
+
+	
+	function user1OnlineChartCanvasSpace(memId) {
+		
+		// 기존 차트가 있으면 제거
+		if (window.user1OnlineChartInstance) {
+		    window.user1OnlineChartInstance.destroy();
+		    window.user1OnlineChartInstance = null;
+		}
+	    const dateValueEl = document.getElementById("user1OnlineChartDay");
+	    const startDateValueEl = document.getElementById("user1OnlineChartStartDay");
+	    const endDateValueEl = document.getElementById("user1OnlineChartEndDay");
+
+	    let dateValue = dateValueEl.value;
+	    const startDateValue = startDateValueEl.value;
+	    const endDateValue = endDateValueEl.value;
+
+	    // selectDays인데 시작일 없으면 daily로 fallback
+	    if (dateValue === 'selectDays' && !startDateValue) {
+	        dateValue = "daily";
+	        dateValueEl.value = "daily";
+	    }
+
+	    // 날짜 범위 계산
+	    const chartRange = (startDateValue && endDateValue) ? formatDateRange(startDateValue, endDateValue) : null;
+
+	    const params = {
+	        selectUserInquiry: dateValue,
+	        startDate: startDateValue || null,
+	        endDate: endDateValue || null,
+	        memId: memId,
+	        chartRange: chartRange
+	    };
+
+		axios.get('/admin/umg/getUserLoginChart.do', {
+			params: params
+		})
+			.then(res => {
+				const responseData = res.data;
+				console.log(responseData);
+				// y축 데이터
+				const dataValues = responseData.map(item => item.LOGIN_COUNT);
+
+				// x축 레이블
+				let labels;
+				let chartLabel;
+				if (dateValue === 'monthly') {
+				    labels = responseData.map(item => formatMonthlyDate(item.LOGIN_DATE));
+				    chartLabel = '월별 접속자 수';
+				} else {
+				    labels = responseData.map(item => formatDailyDate(item.LOGIN_DATE));
+				    chartLabel = '일별 접속자 수';
+				}
+				const ctx = document.getElementById("user1OnlineChartCanvasSpace");
+				// 새 차트 생성 및 공통 변수에 저장
+				window.user1OnlineChartInstance = new Chart(ctx, {
+				    type: 'line', // 선 차트
+				    data: {
+				        labels: labels,
+				        datasets: [{
+				            label: chartLabel,
+				            data: dataValues,
+				            fill: true,
+				            borderColor: 'rgb(142, 110, 228)',
+				            backgroundColor: 'rgba(142, 110, 228, 0.2)',
+				            tension: 0.4,
+				            pointRadius: 3,
+				            pointHoverRadius: 6,
+				            pointStyle: 'circle'
+				        }]
+				    },
+				    options: {
+				        responsive: true,
+				        maintainAspectRatio: false,
+				        plugins: {
+				            legend: { display: true, position: 'bottom' }				          
+				        },
+				        scales: {
+				            x: { grid: { display: false } },
+				            y: {
+				                beginAtZero: true,
+				                maxTicksLimit: 6,
+				                ticks: { callback: value => value + '회' },
+				                grid: { borderDash: [3], color: '#e5e5e5' }
+				            }
+				        }
+				    }
+				});
+
+
+			})
+			.catch(error => {
+				console.error("사용자 접속 통계 데이터 조회 중 에러:", error);
+			});
+		
+	}
+	
 	function addBtnFn() {
 		const addButton = document.querySelector('.add-btn');
 		addButton.addEventListener('click', function() {
@@ -1613,6 +1749,9 @@ function memberManagement() {
 			hiddenInput._flatpickr.clear();
 		}
 	}
+	
+	/*사용자 개인에 대한 차트*/
+
 }
 
 memberManagement();

@@ -109,4 +109,6 @@ public interface UserManagementMapper {
 	List<PageLogVO> getMemberPageLogList(Map<String, Object> map);
 
 	int getAllMemberPageLogList(Map<String, Object> map);
+
+	List<Map<String, Object>> getUserLoginChart(String selectUserInquiry, String startDate, String endDate, String memId);
 }

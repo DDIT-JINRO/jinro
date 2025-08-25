@@ -1,5 +1,6 @@
 package kr.or.ddit.admin.umg.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -46,5 +47,7 @@ public interface UserManagementService {
 
 	ArticlePage<PageLogVO> getMemberPageLogList(int currentPage, int size, String keyword, String sortBy,
 			String sortOrder);
+
+	List<Map<String, Object>> getUserLoginChart(String selectUserInquiry, String startDate, String endDate, String memId);
 
 }

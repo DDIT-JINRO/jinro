@@ -1,5 +1,7 @@
 package kr.or.ddit.admin.umg.web;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,6 +208,26 @@ public class UserManagementController {
 			@RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder) {
 
 		return userManagementService.getMemberPageLogList(currentPage, size, keyword, sortBy, sortOrder);
+	}
+
+	
+	/* 사용자 접속 및 페이지 방문 컨트롤러 */
+	@GetMapping("/getUserLoginChart.do")
+	public List<Map<String, Object>> getUserLoginChart(
+	        @RequestParam(value="selectUserInquiry", required=false) String selectUserInquiry,
+	        @RequestParam(value="startDate", required=false) String startDate,
+	        @RequestParam(value="endDate", required=false) String endDate,
+	        @RequestParam(value="memId", required=false) String memId) {
+
+	    // Service 호출 → List<Map<String,Object>> 반환
+	    List<Map<String, Object>> chartData = userManagementService.getUserLoginChart(
+	            selectUserInquiry, startDate, endDate, memId);
+
+	    log.info("====================================");
+	    log.info("chartData: {}", chartData);
+	    log.info("====================================");
+
+	    return chartData;
 	}
 
 }

@@ -1038,5 +1038,37 @@
 	        </if>
 	    </where>
 	</select>
-
+	<select id="getUserLoginChart" resultType="hashmap" parameterType="map">
+	    SELECT 
+	        <choose>
+	            <when test="selectUserInquiry == 'daily'">
+	                TRUNC(LL_CREATED_AT) AS login_date
+	            </when>
+	            <when test="selectUserInquiry == 'monthly'">
+	                TO_CHAR(LL_CREATED_AT, 'YYYY-MM') AS login_date
+	            </when>
+	            <when test="selectUserInquiry == 'selectDays'">
+	                TRUNC(LL_CREATED_AT) AS login_date
+	            </when>
+	        </choose>
+	        , COUNT(MEM_ID) AS login_count
+	    FROM LOGIN_LOG
+	    WHERE MEM_ID = #{memId}
+	      AND LL_STATUS = 'I'
+	      <if test="selectUserInquiry == 'daily'">
+	        AND LL_CREATED_AT >= TRUNC(SYSDATE) - 6
+	      </if>
+	      <if test="selectUserInquiry == 'selectDays'">
+	        AND LL_CREATED_AT BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') 
+	                              AND TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1 - 1/86400
+	      </if>
+	    <if test="selectUserInquiry == 'daily' or selectUserInquiry == 'selectDays'">
+	        GROUP BY TRUNC(LL_CREATED_AT)
+	        ORDER BY TRUNC(LL_CREATED_AT)
+	    </if>
+	    <if test="selectUserInquiry == 'monthly'">
+	        GROUP BY TO_CHAR(LL_CREATED_AT, 'YYYY-MM')
+	        ORDER BY TO_CHAR(LL_CREATED_AT, 'YYYY-MM')
+	    </if>
+	</select>
 </mapper>

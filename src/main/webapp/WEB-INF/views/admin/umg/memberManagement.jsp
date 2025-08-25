@@ -348,13 +348,46 @@
 					<div class="panel-footer pagination memDetailPaymentListPagenation"></div>
 				</div>
 			</div>
-
-
-
 		</div>
 	</div>
 </div>
-
+<div class="flex gap data" style="height: 685px; margin-bottom: 20px;">
+	<div class="template-panel" style="width: 792.5px;">
+		<div class="flex space-between">
+			<div class="middleTitle">사용자(개인) 접속 통계</div>
+			<div class="btn-group flex gap5 user1OnlineChart">
+				<input type="hidden" id="user1OnlineChartStartDay" /> 
+				<input type="hidden" id="user1OnlineChartEndDay" /> 
+				<select class="public-toggle-select" name="user1OnlineChartDay" id="user1OnlineChartDay">
+					<option value="daily">일별</option>
+					<option value="monthly">월별</option>
+					<option value="selectDays">기간</option>
+				</select>
+			</div>
+		</div>
+		<div class="user1OnlineChartCanvasSpace">
+			<canvas id="user1OnlineChartCanvasSpace"
+				style="min-height: 400px; display: block; box-sizing: border-box; height: 550px; width: 744px;"></canvas>
+		</div>
+	</div>
+	<div class="template-panel data" style="width: 792.5px;">
+		<div class="flex space-between">
+			<div class="middleTitle">사용자 페이지 방문 수</div>
+			<div class="btn-group flex gap5 pageVisitChart">
+				<input type="hidden" id="userPageVisitChartStartDay" /> 
+				<input type="hidden" id="userPageVisitChartEndDay" /> 
+				<select class="public-toggle-select" name="userPageVisitChartDay" id="pageVisitChartDay">
+					<option value="monthly">월간</option>
+					<option value="daily">일간</option>
+					<option value="selectDays">기간</option>
+				</select>
+			</div>
+		</div>
+		<div class="userPageVisitChartCanvasSpace">
+			<canvas id="userPageVisitChartCanvas"></canvas>
+		</div>
+	</div>
+</div>
 <div class="flex gap" style="height: 685px; margin-bottom: 20px;">
 	<div class="template-panel" style="width: 792.5px;">
 		<div class="flex space-between">
